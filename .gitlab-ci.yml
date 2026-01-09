@@ -1,5 +1,5 @@
 # .gitlab-ci.yml
-image: node:9.4.0
+image: node:24.12.0
 
 before_script:
   - yarn install --cache-folder .yarn
@@ -28,7 +28,6 @@ build:
   script:
     - yarn install
     - yarn build
-    - ssh  "command"
     - scp i $ID_RSA -o StrictHostKeyChecking=no ./dist $SERVER_USER@$SERVER_IP:/home/ubuntu/dist
   artifacts:
     when: always
