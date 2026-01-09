@@ -1,12 +1,5 @@
 import React, {useState} from "react";
-
-const baseStyle: React.CSSProperties = {
-    // Base styles for the button
-};
-
-const hoverStyle: React.CSSProperties = {
-    // Styles when the button is hovered
-};
+import {baseStyle, hoverStyle} from "../CSS.ts";
 
 interface OnClickButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     style?: React.CSSProperties;
