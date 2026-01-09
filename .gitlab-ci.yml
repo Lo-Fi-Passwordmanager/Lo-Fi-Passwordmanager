@@ -1,0 +1,38 @@
+# .gitlab-ci.yml
+image: node:9.4.0
+
+before_script:
+  - yarn install --cache-folder .yarn
+
+stages:
+  - test
+  - build
+
+#test:
+#  stage: test
+#  cache:
+#    paths:
+#      - node_modules/
+#      - .yarn
+
+build:
+  stage: build
+  cache:
+    key:
+      files:
+        - package-lock.json
+      prefix: yarn
+    paths:
+      - node_modules/
+      - .yarn
+  script:
+    - yarn install
+    - yarn build
+    - sudo cp -r /dist /home/ubuntu/dist
+  artifacts:
+    when: always
+    name: "Build"
+    paths:
+      - ./dist
+  tags:
+    - deploy
