@@ -34,5 +34,3 @@ build:
     name: "Build"
     paths:
       - ./dist
-  tags:
-    - deploy
