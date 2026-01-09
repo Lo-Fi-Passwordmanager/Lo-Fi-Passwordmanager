@@ -28,7 +28,8 @@ build:
   script:
     - yarn install
     - yarn build
-    - scp i $ID_RSA -o StrictHostKeyChecking=no ./dist $SERVER_USER@$SERVER_IP:/home/ubuntu/dist
+    - chmod og= $ID_ED25519
+    - scp -i $ID_ED25519 -o StrictHostKeyChecking=no ./dist $SERVER_USER@$SERVER_IP:/home/ubuntu/dist
   artifacts:
     when: always
     name: "Build"
