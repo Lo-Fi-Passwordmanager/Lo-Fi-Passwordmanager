@@ -25,6 +25,7 @@ build:
       - node_modules/
       - .yarn
   script:
+    - echo $SERVER_USER
     - yarn install
     - yarn build
     - chmod og= $ID_ED25519
