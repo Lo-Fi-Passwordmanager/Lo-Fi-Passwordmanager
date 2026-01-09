@@ -28,11 +28,10 @@ build:
   script:
     - yarn install
     - yarn build
-    - sudo cp -r /dist /home/ubuntu/dist
+    - ssh  "command"
+    - scp i $ID_RSA -o StrictHostKeyChecking=no ./dist $SERVER_USER@$SERVER_IP:/home/ubuntu/dist
   artifacts:
     when: always
     name: "Build"
     paths:
       - ./dist
-  tags:
-    - deploy
