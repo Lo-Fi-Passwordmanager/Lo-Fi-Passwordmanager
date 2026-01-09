@@ -25,11 +25,10 @@ build:
       - node_modules/
       - .yarn
   script:
-    - echo $SERVER_USER
     - yarn install
     - yarn build
     - chmod og= $ID_ED25519
-    - scp -i $ID_ED25519 -o StrictHostKeyChecking=no ./dist $SERVER_USER@$SERVER_IP:/home/ubuntu/dist
+    - scp -i $ID_ED25519 -o StrictHostKeyChecking=no ./dist ubuntu@localhost:/home/ubuntu/dist
   artifacts:
     when: always
     name: "Build"
