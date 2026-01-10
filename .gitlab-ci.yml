@@ -1,0 +1,36 @@
+image: node:24.12.0
+
+before_script:
+  - yarn install --cache-folder .yarn
+
+stages:
+  - test
+  - build
+
+#test:
+#  stage: test
+#  cache:
+#    paths:
+#      - node_modules/
+#      - .yarn
+
+build:
+  stage: build
+  cache:
+    key:
+      files:
+        - package-lock.json
+      prefix: yarn
+    paths:
+      - node_modules/
+      - .yarn
+  script:
+    - yarn install
+    - yarn build
+    - chmod og= $ID_ED25519
+    - scp -i $ID_ED25519 -o StrictHostKeyChecking=no ./dist/** $SERVER_USER@$SERVER_IP:/home/ubuntu/automerge/dist/
+  artifacts:
+    when: always
+    name: "Build"
+    paths:
+      - ./dist

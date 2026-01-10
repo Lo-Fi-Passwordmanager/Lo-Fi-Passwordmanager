@@ -1,7 +1,20 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+// vite.config.ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import wasm from "vite-plugin-wasm";
+import {viteSingleFile} from "vite-plugin-singlefile";
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
-})
+  build: {
+    target: "esnext",
+    minify: false,
+    sourcemap: true
+  },
+
+  plugins: [wasm(), react(), viteSingleFile()],
+
+  worker: {
+    format: "es",
+    plugins: () => [wasm()],
+  },
+});
