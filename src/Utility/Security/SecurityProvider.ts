@@ -3,15 +3,19 @@ import {Encrypter} from "./Encrypter.ts";
 import type {IKeyGen} from "./IKeyGen.ts";
 import {KeyGen} from "./KeyGen.ts";
 import {bytesToHex, hexToBytes} from "@noble/ciphers/utils.js"
+import {NoKeyError} from "./NoKeyError.ts";
 
 const DECRYPTION_FAILURE_MSG = "Decryption failed";
+const NO_KEY_DECRYPTION_MSG = "A decryption has been attempted but no key has been found";
+const NO_KEY_ENCRYPTION_MSG = "An encryption has been attempted but no key has been found";
+
 
 /**
  * Facade that implements all Functions needed for the Password-Managers Security.
  * @author urnzq
  */
 export class SecurityProvider {
-    private key: Uint8Array<ArrayBufferLike> | null;
+    #key: Uint8Array<ArrayBufferLike> | null;
 
     protected readonly encrypter: IEncrypter;
     protected readonly keyGen: IKeyGen;
@@ -22,7 +26,7 @@ export class SecurityProvider {
     constructor() {
         this.encrypter = new Encrypter
         this.keyGen = new KeyGen;
-        this.key = null;
+        this.#key = null;
     }
 
     /**
@@ -39,7 +43,7 @@ export class SecurityProvider {
      * @return a randomly generated value that was encrypted with a key derived the password and salt
      */
     getNewValidation(Password: string, Salt: string): string {
-        this.key = this.keyGen.generateKey(Password, hexToBytes(Salt));
+        this.#key = this.keyGen.generateKey(Password, hexToBytes(Salt));
         return this.encryptValue(bytesToHex(this.keyGen.getNewValidation()));
     }
     /**
@@ -49,7 +53,7 @@ export class SecurityProvider {
      * @param Validation the validation of the database that the user is attempting to log into
      */
     verifyMasterPassword(Password: string, Salt: string, Validation: string): boolean {
-        this.key = this.keyGen.generateKey(Password, hexToBytes(Salt));
+        this.#key = this.keyGen.generateKey(Password, hexToBytes(Salt));
         const decryptedValidation: string | null = this.decryptValue(Validation)
         return decryptedValidation != null;
     }
@@ -59,10 +63,10 @@ export class SecurityProvider {
      * @return a string containing the nonce and the encrypted value seperated by a space;
      */
     encryptValue(Value: string): string {
-        if (this.key == null) {
-            throw Error;
+        if (this.#key == null) {
+            throw new NoKeyError(NO_KEY_ENCRYPTION_MSG);
         }
-        return this.encrypter.encrypt(Value, this.key)
+        return this.encrypter.encrypt(Value, this.#key)
     }
 
     /**
@@ -71,12 +75,12 @@ export class SecurityProvider {
      * @return the decrypted value or null if decryption failed
      */
     decryptValue(Value: string): string | null{
-        if (this.key == null) {
-            throw Error;
+        if (this.#key == null) {
+            throw new NoKeyError(NO_KEY_DECRYPTION_MSG);
         }
         let result: string | null = null;
         try {
-            result = this.encrypter.encrypt(Value, this.key)
+            result = this.encrypter.encrypt(Value, this.#key)
         } catch {
             console.error(DECRYPTION_FAILURE_MSG)
         }
@@ -84,9 +88,10 @@ export class SecurityProvider {
     }
 
     /**
-     * Method to set the key to null when the user logs out.
+     * Method to set the key to null.
+     * Intended for when the user logs out.
      */
     resetKey(): void {
-        this.key = null;
+        this.#key = null;
     }
 }
