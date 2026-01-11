@@ -5,13 +5,13 @@ import {listingStyle} from "../CSS.ts";
 
 type DatabaseListingProps = {
     databases: Database[];
-    onOpen: (database: Database) => void;
+    onClick: (db: Database) => void;
 }
 
-const DatabaseListing: React.FC<DatabaseListingProps> = ({databases, onOpen}) => {
+const DatabaseListing: React.FC<DatabaseListingProps> = ({databases, onClick}) => {
 
     if (databases.length === 0) {
-        return <div style={listingStyle}>Keine Datenbanken vorhanden</div>;
+        return <div>Keine Datenbanken vorhanden</div>;
     }
 
     return (
@@ -19,7 +19,7 @@ const DatabaseListing: React.FC<DatabaseListingProps> = ({databases, onOpen}) =>
             {databases.map((db) => (
                 <OnClickButton
                     key={db.id + databases.indexOf(db)}
-                    //here onClick
+                    onClick={() => onClick(db)}
                 >
                     {db.getName()}
                 </OnClickButton>
