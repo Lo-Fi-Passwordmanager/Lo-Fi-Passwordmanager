@@ -7,7 +7,14 @@ const SettingsView: React.FC = () => {
     return (
         <div>
             <h1> Settings </h1>
-            <input type={"checkbox"} checked={viewmodel.darkMode} onClick={viewmodel.toggleDarkMode} onChange={viewmodel.toggleDarkMode}>Darkmode: </input>
+            <label>
+                <input
+                    type="checkbox"
+                    checked={viewmodel.darkMode}
+                    onChange={viewmodel.toggleDarkMode}
+                />
+                Dark mode
+            </label>
         </div>
 );
 }
