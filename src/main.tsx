@@ -5,6 +5,6 @@ import LoginView from './Components/Views/LoginView.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <LoginView />
+      <LoginView />
   </StrictMode>,
 )
