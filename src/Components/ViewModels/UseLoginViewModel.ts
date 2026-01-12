@@ -18,13 +18,7 @@ export const useLoginViewModel = () => {
     // creates a new database with the provided name and master password
     const createDatabase = (name: string, masterPassword: string) => {
 
-        //const salt = SecurityProvider.getNewSalt();
-        //const validationString = SecurityProvider.getNewValidation(masterPassword, salt);
-        //const newRoot = new DatabaseRoot(salt, validationString);
-
-        //const newDatabase = new Database(name, newRoot);
-        //setDatabases([...databases, newDatabase]);
-        //saveDatabaseFromTree(newRoot);
+        // implement logic to create a new database here
 
         setIsAddDialogOpen(false);
     }
