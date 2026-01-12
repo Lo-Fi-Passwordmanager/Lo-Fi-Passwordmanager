@@ -1,13 +1,52 @@
-html, body {
-    margin: 0;
+#root {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
 }
 
 :root {
-    --bg: #f5f5f5;
+    --bg: #19ffd9;
     --text: #111111;
-    --panel: #ffffff;
+    --panel: #19ffd9;
     --overlay: rgba(0, 0, 0, 0.3);
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+
+    color-scheme: light dark;
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #242424;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
+
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    place-items: center;
+    min-width: 320px;
+    min-height: 100vh;
+}
+
+.loginView {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    width: 100%;
+}
+
 
 [data-theme="dark"] {
     --bg: #282c34;
@@ -23,6 +62,9 @@ button:hover {
     filter: brightness(1.1);
 }
 button {
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
     padding: 10px 16px;
     border-radius: 6px;
     border: none;
@@ -31,15 +73,17 @@ button {
     color: var(--text);
 }
 
-.loginView {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: var(--bg);
-    color: var(--text);
-    height: 100vh;
-    width: 100vw;
+h1 {
+    font-size: 3.2em;
+    line-height: 1.1;
+}
+
+button:hover {
+    border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
 }
 .dialogOverlay {
     position: fixed;
@@ -85,6 +129,10 @@ button {
 .flexContainer {
     display: flex;
     flex-direction: column;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
     justify-content: center;
     align-items: center;
 }
