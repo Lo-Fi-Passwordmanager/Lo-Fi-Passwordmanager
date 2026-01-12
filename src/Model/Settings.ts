@@ -1,4 +1,4 @@
-class Settings {
+export class Settings {
     private static instance: Settings;
     private _synchronization: boolean;
     private _autoConflictResolution: boolean;
@@ -20,35 +20,35 @@ class Settings {
         return this.instance;
     }
 
-    get synchronization(): boolean {
+    public get synchronization(): boolean {
         return this._synchronization;
     }
 
-    set synchronization(value: boolean) {
+    public set synchronization(value: boolean) {
         this._synchronization = value;
     }
 
-    get autoConflictResolution(): boolean {
+    public get autoConflictResolution(): boolean {
         return this._autoConflictResolution;
     }
 
-    set autoConflictResolution(value: boolean) {
+    public set autoConflictResolution(value: boolean) {
         this._autoConflictResolution = value;
     }
 
-    get darkMode(): boolean {
+    public get darkMode(): boolean {
         return this._darkMode;
     }
 
-    set darkMode(value: boolean) {
+    public set darkMode(value: boolean) {
         this._darkMode = value;
     }
 
-    get timeoutActive(): boolean {
+    public get timeoutActive(): boolean {
         return this._timeoutActive;
     }
 
-    set timeoutActive(value: boolean) {
+    public set timeoutActive(value: boolean) {
         this._timeoutActive = value;
     }
 }
