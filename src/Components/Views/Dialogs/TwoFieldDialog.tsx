@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import OnClickButton from "../ButtonViews/OnClickButton.tsx";
+import {dialogOverlayStyle, dialogStyle} from "../CSS.ts";
 
 interface TwoFieldDialogProps {
     isOpen: boolean;
@@ -40,8 +41,8 @@ const TwoFieldDialog: React.FC<TwoFieldDialogProps> = ({
     };
 
     return (
-        <div>
-            <div>
+        <div style={dialogOverlayStyle}>
+            <div style={dialogStyle}>
                 <h3>{title}</h3>
                 <label>{label1}</label>
                 <input
