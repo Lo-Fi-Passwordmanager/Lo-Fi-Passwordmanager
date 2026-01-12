@@ -44,24 +44,47 @@ import { useState, useEffect } from 'react';
 
 export const useSettingsViewModel = () => {
 
-    const settingsModel = Settings.getSettings();
+    const settings = Settings.getSettings();
 
     // Reactive state to store values during runtime
-    const [darkMode, setDarkMode] = useState(settingsModel.getDarkMode());
+    const [darkMode, setDarkMode] = useState(settings.getDarkMode());
+    const [synchronisation, setSynchronisation] = useState(settings.getSynchronization());
+    const [autoConclictRes, setAutoConflictRes] = useState(settings.getAutoConflictResolution());
+    const [timeOutActive, setTimeOutActive] = useState(settings.getTimeoutActive());
 
-    // When darkMode is updated, update settingsModel
+    // When darkMode is updated, update settings
     useEffect(() => {
-        settingsModel.setDarkMode(darkMode)
-    }, [darkMode])
+        settings.setDarkMode(darkMode)
+        settings.setSynchronization(synchronisation);
+        settings.setAutoConflictResolution(autoConclictRes);
+        settings.setTimeoutActive(timeOutActive);
+    }, [darkMode, synchronisation, autoConclictRes, timeOutActive]);
+
 
     // Update darkMode
     function toggleDarkMode() {
-        setDarkMode(!darkMode)
+        setDarkMode(!darkMode);
+    }
+    function toggleSynchronisation() {
+        setSynchronisation(!synchronisation);
+    }
+    function toggleAutoConclictRes() {
+        setAutoConflictRes(!autoConclictRes);
+    }
+    function toggleTimeOutActive() {
+        setTimeOutActive(!timeOutActive);
     }
 
 
     return {
         darkMode,
-        toggleDarkMode
+        synchronisation,
+        autoConclictRes,
+        timeOutActive,
+
+        toggleDarkMode,
+        toggleSynchronisation,
+        toggleAutoConclictRes,
+        toggleTimeOutActive,
     };
 };
