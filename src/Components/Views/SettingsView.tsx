@@ -1,7 +1,7 @@
-import {SettingsViewModel} from "../ViewModels/SettingsViewModel.ts";
+import {useSettingsViewModel} from "../ViewModels/SettingsViewModel.ts";
 
 const SettingsView: React.FC = () => {
-    let viewmodel = new SettingsViewModel();
+    const viewmodel = useSettingsViewModel();
 
 
     return (
