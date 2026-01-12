@@ -13,6 +13,8 @@ export const listingStyle: React.CSSProperties = {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    width: '50vmin',
+    gap: '8px',
 }
 
 export const loginViewStyle: React.CSSProperties = {
