@@ -1,11 +1,10 @@
 import React from "react";
-import {Database} from "../../../Model/Database";
 import OnClickButton from "../ButtonViews/OnClickButton.tsx";
 import {listingStyle} from "../CSS.ts";
 
 type DatabaseListingProps = {
-    databases: Database[];
-    onClick: (db: Database) => void;
+    databases: string[];
+    onClick: (db: string) => void;
 }
 
 const DatabaseListing: React.FC<DatabaseListingProps> = ({databases, onClick}) => {
@@ -18,10 +17,10 @@ const DatabaseListing: React.FC<DatabaseListingProps> = ({databases, onClick}) =
         <div style={listingStyle}>
             {databases.map((db) => (
                 <OnClickButton
-                    key={db.id + databases.indexOf(db)}
+                    key={db + databases.indexOf(db)}
                     onClick={() => onClick(db)}
                 >
-                    {db.getName()}
+                    {db}
                 </OnClickButton>
             ))}
         </div>
