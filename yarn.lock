@@ -1717,6 +1717,11 @@ vite-plugin-singlefile@^2.3.0:
   dependencies:
     micromatch "^4.0.8"
 
+vite-plugin-wasm@^3.3.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/vite-plugin-wasm/-/vite-plugin-wasm-3.5.0.tgz#c72af91b1e3687e12f1c339a12e25937b5813ae5"
+  integrity sha512-X5VWgCnqiQEGb+omhlBVsvTfxikKtoOgAzQ95+BZ8gQ+VfMHIjSHr0wyvXFQCa0eKQ0fKyaL0kWcEnYqBac4lQ==
+
 vite@^7.2.4:
   version "7.3.1"
   resolved "https://registry.yarnpkg.com/vite/-/vite-7.3.1.tgz#7f6cfe8fb9074138605e822a75d9d30b814d6507"
