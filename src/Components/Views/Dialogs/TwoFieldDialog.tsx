@@ -61,7 +61,12 @@ const TwoFieldDialog: React.FC<TwoFieldDialogProps> = ({
                     placeholder={label2}
                 />
 
-                <div>
+                <div style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                }}>
                     <OnClickButton onClick={handleConfirm}>Bestätigen</OnClickButton>
                     <OnClickButton onClick={onCancel}>Abbrechen</OnClickButton>
                 </div>

@@ -19,18 +19,28 @@ const LoginView: React.FC = () => {
     return (
         <div style={loginViewStyle}>
             <header style={headerStyle}> Passwort Manager</header>
-
-            <main>
+            <main
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                }}
+            >
+                {/* Show a list of all available Documents */}
                 <DatabaseListing
                     databases={viewModel.databases}
                     onClick={viewModel.openOpenDialog}
                 />
+
+
+                {/* Button for adding new Database */}
                 <OnClickButton
                     onClick={viewModel.openAddDialog}
                 >
                     +
                 </OnClickButton>
 
+                {/* Popup Dialog for adding a new Database */}
                 <OneFieldDialog
                     isOpen={viewModel.isOpenDialogOpen}
                     title="Datenbank öffnen"
@@ -39,6 +49,7 @@ const LoginView: React.FC = () => {
                     onCancel={viewModel.closeOpenDialog}
                 />
 
+                {/* Pop Up Dialog for creating a new Database */}
                 <TwoFieldDialog
                     isOpen={viewModel.isAddDialogOpen}
                     title="Neue Datenbank erstellen"
