@@ -1,14 +1,14 @@
 import React from "react";
-import {LoginViewModel} from "../ViewModels/LoginViewModel.ts";
+import {useLoginViewModel} from "../ViewModels/UseLoginViewModel.ts";
 import EntryView from "./EntryView.tsx";
 import OnClickButton from "./ButtonViews/OnClickButton.tsx";
 import DatabaseListing from "./ListingViews/DatabaseListing.tsx";
-import TwoFieldDialog from "./Dialogs/TwoFieldDialog.tsx";
-import OneFieldDialog from "./Dialogs/OneFieldDialog.tsx";
+import CreateDatabaseDialog from "./Dialogs/CreateDatabaseDialog.tsx";
+import LoginDatabaseDialog from "./Dialogs/LoginDatabaseDialog.tsx";
 import {loginViewStyle, headerStyle} from "./CSS.ts";
 
 const LoginView: React.FC = () => {
-    const viewModel = LoginViewModel();
+    const viewModel = useLoginViewModel();
 
     if (viewModel.openedDatabase) {
         return (
@@ -41,7 +41,7 @@ const LoginView: React.FC = () => {
                 </OnClickButton>
 
                 {/* Popup Dialog for adding a new Database */}
-                <OneFieldDialog
+                <LoginDatabaseDialog
                     isOpen={viewModel.isOpenDialogOpen}
                     title="Datenbank öffnen"
                     label1="Masterpasswort"
@@ -50,7 +50,7 @@ const LoginView: React.FC = () => {
                 />
 
                 {/* Pop Up Dialog for creating a new Database */}
-                <TwoFieldDialog
+                <CreateDatabaseDialog
                     isOpen={viewModel.isAddDialogOpen}
                     title="Neue Datenbank erstellen"
                     label1="Datenbankname"

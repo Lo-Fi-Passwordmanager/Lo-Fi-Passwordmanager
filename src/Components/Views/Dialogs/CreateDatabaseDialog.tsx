@@ -11,7 +11,7 @@ interface TwoFieldDialogProps {
     onCancel: () => void;
 }
 
-const TwoFieldDialog: React.FC<TwoFieldDialogProps> = ({
+const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
     isOpen,
     title,
     label1,
@@ -74,4 +74,4 @@ const TwoFieldDialog: React.FC<TwoFieldDialogProps> = ({
         </div>
     )
 }
-export default TwoFieldDialog;
+export default CreateDatabaseDialog;

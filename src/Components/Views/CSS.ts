@@ -9,7 +9,10 @@ export const hoverStyle: React.CSSProperties = {
 };
 
 export const listingStyle: React.CSSProperties = {
-    // Styles for the database listing view
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
 }
 
 export const loginViewStyle: React.CSSProperties = {

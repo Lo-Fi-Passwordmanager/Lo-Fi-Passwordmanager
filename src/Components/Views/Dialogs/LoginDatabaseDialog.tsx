@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import OnClickButton from "../ButtonViews/OnClickButton.tsx";
+import {dialogOverlayStyle, dialogStyle} from "../CSS.ts";
 
 interface TwoFieldDialogProps {
     isOpen: boolean;
@@ -9,7 +10,7 @@ interface TwoFieldDialogProps {
     onCancel: () => void;
 }
 
-const OneFieldDialog: React.FC<TwoFieldDialogProps> = ({
+const LoginDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                                                            isOpen,
                                                            title,
                                                            label1,
@@ -36,8 +37,8 @@ const OneFieldDialog: React.FC<TwoFieldDialogProps> = ({
     };
 
     return (
-        <div>
-            <div>
+        <div style={dialogOverlayStyle}>
+            <div style={dialogStyle}>
                 <h3>{title}</h3>
                 <label>{label1}</label>
                 <input
@@ -48,7 +49,12 @@ const OneFieldDialog: React.FC<TwoFieldDialogProps> = ({
                     autoFocus
                 />
 
-                <div>
+                <div style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                }}>
                     <OnClickButton onClick={handleConfirm}>Bestätigen</OnClickButton>
                     <OnClickButton onClick={onCancel}>Abbrechen</OnClickButton>
                 </div>
@@ -56,4 +62,4 @@ const OneFieldDialog: React.FC<TwoFieldDialogProps> = ({
         </div>
     )
 }
-export default OneFieldDialog;
+export default LoginDatabaseDialog;

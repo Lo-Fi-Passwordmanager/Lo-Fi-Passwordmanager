@@ -10,7 +10,8 @@ type DatabaseListingProps = {
 const DatabaseListing: React.FC<DatabaseListingProps> = ({databases, onClick}) => {
 
     if (databases.length === 0) {
-        return <div>Keine Datenbanken vorhanden</div>;
+        //return <div>Keine Datenbanken vorhanden</div>;
+        databases = ["datenbank1", "datenbank2"];
     }
 
     return (
