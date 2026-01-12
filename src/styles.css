@@ -1,0 +1,90 @@
+html, body {
+    margin: 0;
+}
+
+:root {
+    --bg: #f5f5f5;
+    --text: #111111;
+    --panel: #ffffff;
+    --overlay: rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] {
+    --bg: #282c34;
+    --text: #ffffff;
+    --panel: #1f2229;
+    --overlay: rgba(0, 0, 0, 0.7);
+}
+header {
+    font-size: 3em;
+    margin-bottom: 20px;
+}
+button:hover {
+    filter: brightness(1.1);
+}
+button {
+    padding: 10px 16px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    background: var(--panel);
+    color: var(--text);
+}
+
+.loginView {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    width: 100vw;
+}
+.dialogOverlay {
+    position: fixed;
+    inset: 0;
+    background: var(--overlay);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+.dialog {
+    background: var(--panel);
+    color: var(--text);
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 300px;
+}
+.listing {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50vmin;
+    gap: 8px;
+}
+.settingsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    width: 50vmin;
+    gap: 12px;
+}
+.checkboxRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.flexContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

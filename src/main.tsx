@@ -6,6 +6,6 @@ import SettingsView from "./Components/Views/SettingsView.tsx";
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <SettingsView />
+      <LoginView />
   </StrictMode>,
 )
