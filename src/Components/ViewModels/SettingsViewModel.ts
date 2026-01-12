@@ -46,12 +46,15 @@ export const useSettingsViewModel = () => {
 
     const settingsModel = Settings.getSettings();
 
+    // Reactive state to store values during runtime
     const [darkMode, setDarkMode] = useState(settingsModel.getDarkMode());
 
+    // When darkMode is updated, update settingsModel
     useEffect(() => {
         settingsModel.setDarkMode(darkMode)
     }, [darkMode])
 
+    // Update darkMode
     function toggleDarkMode() {
         setDarkMode(!darkMode)
     }
