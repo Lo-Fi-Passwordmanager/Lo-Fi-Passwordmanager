@@ -5,7 +5,7 @@ import OnClickButton from "./ButtonViews/OnClickButton.tsx";
 import DatabaseListing from "./ListingViews/DatabaseListing.tsx";
 import CreateDatabaseDialog from "./Dialogs/CreateDatabaseDialog.tsx";
 import LoginDatabaseDialog from "./Dialogs/LoginDatabaseDialog.tsx";
-import {loginViewStyle, headerStyle} from "./CSS.ts";
+import {headerStyle} from "./CSS.ts";
 
 const LoginView: React.FC = () => {
     const viewModel = useLoginViewModel();
