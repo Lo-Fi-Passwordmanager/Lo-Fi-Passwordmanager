@@ -1,0 +1,32 @@
+image: node:24.12.0
+
+before_script:
+  - yarn install --cache-folder .yarn
+
+stages:
+  - test
+  - build
+
+#test:
+#  stage: test
+#  cache:
+#    paths:
+#      - node_modules/
+#      - .yarn
+
+build:
+  stage: build
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_COMMIT_BRANCH == 'main'
+  script:
+    - yarn install
+    - yarn build
+    - chmod og= $ID_ED25519
+    - scp -i $ID_ED25519 -o StrictHostKeyChecking=no ./dist/** $SERVER_USER@$SERVER_IP:/home/ubuntu/automerge/dist/
+  artifacts:
+    when: always
+    name: "Build"
+    paths:
+      - ./dist
