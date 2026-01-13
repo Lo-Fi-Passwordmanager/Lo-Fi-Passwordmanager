@@ -16,7 +16,7 @@ const LoginView: React.FC = () => {
     }
 
     return (
-        <div className="login-view">
+        <div className="loginView">
             <header> Passwort Manager</header>
             <main
                 className="flexContainer"

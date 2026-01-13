@@ -3,6 +3,8 @@
     margin: 0 auto;
     padding: 2rem;
     text-align: center;
+    width: 100vw;
+    height: 100vh;
 }
 
 /* LIGHT THEME (default) */
@@ -15,21 +17,23 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
-    --bg: #06ffef;
+    --bg: rgb(255, 255, 255);
     --text: #000000;
-    --panel: #5bffcb;
-    --overlay: rgba(0, 64, 64, 0.94);
+    --panel: rgba(149, 30, 30, 0.3);
+    --overlay: rgb(255, 255, 255);
     --outline: #818181;
+    --background: rgba(149, 30, 30, 0.3);
     background-color: var(--bg);
 }
 
 /* DARK THEME */
 [data-theme="dark"] {
-    --bg: #00a69b;
+    --bg: rgb(22, 24, 28);
     --text: #ffffff;
-    --panel: #3dac89;
-    --overlay: rgba(0, 64, 64, 0.94);
+    --panel: rgba(0, 92, 81, 0.5);
+    --overlay: rgb(14, 14, 14);
     --outline: #818181;
+    --background: #717171;
     background-color: var(--bg);
 }
 
@@ -45,6 +49,10 @@ html, body {
     min-height: 100vh;
 }
 
+.inputField {
+    background-color: var(--background);
+}
+
 .loginView {
     display: flex;
     flex-direction: column;
@@ -58,6 +66,7 @@ html, body {
 
 header {
     font-size: 3em;
+    font-weight: bold;
     margin-bottom: 20px;
 }
 button:hover {
@@ -141,4 +150,9 @@ button:focus-visible {
     text-align: center;
     justify-content: center;
     align-items: center;
+}
+
+.confirm-cancel-buttons {
+    display: flex;
+    flex-direction: row;
 }
