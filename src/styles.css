@@ -1,15 +1,16 @@
 #root {
-    max-width: 1280px;
+    max-width: 1980px;
     margin: 0 auto;
     padding: 2rem;
     text-align: center;
 }
 
 :root {
-    --bg: #19ffd9;
-    --text: #111111;
-    --panel: #19ffd9;
-    --overlay: rgba(0, 0, 0, 0.3);
+    --bg: #19ff24;
+    --text: #000000;
+    --panel: #25ffdd;
+    --overlay: rgba(22, 180, 180, 0.95);
+    --outline: #b2ffee;
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;
     font-weight: 400;
@@ -48,12 +49,12 @@ html, body {
 }
 
 
-[data-theme="dark"] {
-    --bg: #282c34;
-    --text: #ffffff;
-    --panel: #1f2229;
-    --overlay: rgba(0, 0, 0, 0.7);
-}
+/*[data-theme="dark"] {*/
+/*    --bg: #282c34;*/
+/*    --text: #ffffff;*/
+/*    --panel: #1f2229;*/
+/*    --overlay: rgba(0, 0, 0, 0.7);*/
+/*}*/
 header {
     font-size: 3em;
     margin-bottom: 20px;
@@ -71,6 +72,8 @@ button {
     cursor: pointer;
     background: var(--panel);
     color: var(--text);
+    outline: var(--outline);
+    outline-width: 10px;
 }
 
 h1 {
@@ -86,6 +89,8 @@ button:focus-visible {
     outline: 4px auto -webkit-focus-ring-color;
 }
 .dialogOverlay {
+    background: var(--panel);
+    color: var(--text);
     position: fixed;
     inset: 0;
     background: var(--overlay);
