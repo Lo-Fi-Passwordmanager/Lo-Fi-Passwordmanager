@@ -1,3 +1,8 @@
+const SYNCHRONISATION = "synchronisation";
+const AUTO_CONFLICT_RESOLUTION = "auto_conflict_resolution";
+const DARK_MODE = "dark_mode"
+const TIMEOUT_ACTIVE = "timeout_active"
+
 export class Settings {
     private static instance: Settings;
     private _synchronization: boolean;
@@ -7,10 +12,38 @@ export class Settings {
 
     private constructor() {
         //standard settings - think before changing
-        this._synchronization = true;
-        this._autoConflictResolution = true;
-        this._darkMode = true;
-        this._timeoutActive = true;
+        const synchronisation = localStorage.getItem(SYNCHRONISATION)
+        const autoConflictResolution = localStorage.getItem(AUTO_CONFLICT_RESOLUTION)
+        const darkMode = localStorage.getItem(DARK_MODE)
+        const timeoutActive = localStorage.getItem(TIMEOUT_ACTIVE)
+
+        if (synchronisation) {
+            this._synchronization = JSON.parse(synchronisation);
+        } else {
+            localStorage.setItem(SYNCHRONISATION, JSON.stringify(true))
+            this._synchronization = true
+        }
+
+        if (autoConflictResolution) {
+            this._autoConflictResolution = JSON.parse(autoConflictResolution);
+        } else {
+            localStorage.setItem(AUTO_CONFLICT_RESOLUTION, JSON.stringify(true))
+            this._autoConflictResolution = true
+        }
+
+        if (darkMode) {
+            this._darkMode = JSON.parse(darkMode);
+        } else {
+            localStorage.setItem(DARK_MODE, JSON.stringify(true))
+            this._darkMode = true
+        }
+
+        if (timeoutActive) {
+            this._timeoutActive = JSON.parse(timeoutActive);
+        } else {
+            localStorage.setItem(TIMEOUT_ACTIVE, JSON.stringify(true))
+            this._timeoutActive = true
+        }
     }
 
     public static getSettings(): Settings {
@@ -20,35 +53,39 @@ export class Settings {
         return this.instance;
     }
 
-    public get synchronization(): boolean {
+    public getSynchronization(): boolean {
         return this._synchronization;
     }
 
-    public set synchronization(value: boolean) {
+    public setSynchronization(value: boolean) {
         this._synchronization = value;
+        localStorage.setItem(SYNCHRONISATION, JSON.stringify(value))
     }
 
-    public get autoConflictResolution(): boolean {
+    public getAutoConflictResolution(): boolean {
         return this._autoConflictResolution;
     }
 
-    public set autoConflictResolution(value: boolean) {
+    public setAutoConflictResolution(value: boolean) {
         this._autoConflictResolution = value;
+        localStorage.setItem(AUTO_CONFLICT_RESOLUTION, JSON.stringify(value))
     }
 
-    public get darkMode(): boolean {
+    public getDarkMode(): boolean {
         return this._darkMode;
     }
 
-    public set darkMode(value: boolean) {
+    public setDarkMode(value: boolean) {
         this._darkMode = value;
+        localStorage.setItem(DARK_MODE, JSON.stringify(value))
     }
 
-    public get timeoutActive(): boolean {
+    public getTimeoutActive(): boolean {
         return this._timeoutActive;
     }
 
-    public set timeoutActive(value: boolean) {
+    public setTimeoutActive(value: boolean) {
         this._timeoutActive = value;
+        localStorage.setItem(TIMEOUT_ACTIVE, JSON.stringify(value))
     }
 }

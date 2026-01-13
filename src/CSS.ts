@@ -54,3 +54,19 @@ export const dialogStyle: React.CSSProperties = { /* ... */
     gap: 10,
     width: 300
 };
+
+export const settingsContainer: React.CSSProperties = {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',  // <-- left-align everything
+    justifyContent: 'center',
+    width: '50vmin',
+    gap: '12px',               // slightly bigger gap for readability
+};
+
+export const checkboxRowStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px'
+};
+
