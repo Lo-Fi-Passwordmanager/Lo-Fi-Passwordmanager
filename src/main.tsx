@@ -8,6 +8,8 @@ import "./styles.css"
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-      <LoginView />
+      <div data-theme={"dark"}>
+        <LoginView />
+      </div>
   </StrictMode>,
 )

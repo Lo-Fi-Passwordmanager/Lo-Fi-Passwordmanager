@@ -5,24 +5,32 @@
     text-align: center;
 }
 
+/* LIGHT THEME (default) */
 :root {
-    --bg: #19ff24;
-    --text: #000000;
-    --panel: #25ffdd;
-    --overlay: rgba(22, 180, 180, 0.95);
-    --outline: #b2ffee;
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;
     font-weight: 400;
-
-    color-scheme: light dark;
-    color: rgba(255, 255, 255, 0.87);
-    background-color: #242424;
-
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    --bg: #06ffef;
+    --text: #000000;
+    --panel: #5bffcb;
+    --overlay: rgba(0, 64, 64, 0.94);
+    --outline: #818181;
+    background-color: var(--bg);
+}
+
+/* DARK THEME */
+[data-theme="dark"] {
+    --bg: #00a69b;
+    --text: #ffffff;
+    --panel: #3dac89;
+    --overlay: rgba(0, 64, 64, 0.94);
+    --outline: #818181;
+    background-color: var(--bg);
 }
 
 
@@ -48,13 +56,6 @@ html, body {
     width: 100%;
 }
 
-
-/*[data-theme="dark"] {*/
-/*    --bg: #282c34;*/
-/*    --text: #ffffff;*/
-/*    --panel: #1f2229;*/
-/*    --overlay: rgba(0, 0, 0, 0.7);*/
-/*}*/
 header {
     font-size: 3em;
     margin-bottom: 20px;
