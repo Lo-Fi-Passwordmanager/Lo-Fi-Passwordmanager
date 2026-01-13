@@ -5,7 +5,6 @@ import {KeyGen} from "./KeyGen.ts";
 import {bytesToHex, hexToBytes} from "@noble/ciphers/utils.js"
 import {NoKeyError} from "./NoKeyError.ts";
 
-const DECRYPTION_FAILURE_MSG = "Decryption failed";
 const NO_KEY_DECRYPTION_MSG = "A decryption has been attempted but no key has been found";
 const NO_KEY_ENCRYPTION_MSG = "An encryption has been attempted but no key has been found";
 
@@ -70,7 +69,8 @@ export class SecurityProvider {
     }
 
     /**
-     * Method to decrypt a Value of the Password Manager
+     * Method to decrypt a Value of the Password Manager.
+     * If the decryption fails null is return and the decryption error is logged.
      * @param Value a string of Hex
      * @return the decrypted value or null if decryption failed
      */
@@ -80,9 +80,9 @@ export class SecurityProvider {
         }
         let result: string | null = null;
         try {
-            result = this.encrypter.encrypt(Value, this.#key)
-        } catch {
-            console.error(DECRYPTION_FAILURE_MSG)
+            result = this.encrypter.decrypt(Value, this.#key)
+        } catch (err) {
+            console.error((err as Error).message)
         }
         return result;
     }
@@ -91,7 +91,7 @@ export class SecurityProvider {
      * Method to set the key to null.
      * Intended for when the user logs out.
      */
-    resetKey(): void {
+    clearKey(): void {
         this.#key = null;
     }
 }
