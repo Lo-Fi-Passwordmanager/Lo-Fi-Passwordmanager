@@ -22,7 +22,7 @@ describe('Encrypter', () => {
     })
 
     it('should be able to encrypt a value', () => {
-        expect(encrypter.encrypt("value", key)).toMatch(ENCRYPTED_PATTERN);
+        expect(encrypter.encrypt(SAMPLE_VALUE, key)).toMatch(ENCRYPTED_PATTERN);
     })
 
     it('should be able to decrypt a value',() => {
