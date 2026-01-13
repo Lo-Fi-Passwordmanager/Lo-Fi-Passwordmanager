@@ -1,9 +1,9 @@
-abstract class Item {
+export abstract class Item {
     protected _title: string;
-    protected _created_at: number;
-    protected _edited_at: number;
+    protected _created_at: Date;
+    protected _edited_at: Date;
 
-    constructor(_title: string, _created_at: number, _edited_at: number) {
+    constructor(_title: string, _created_at: Date, _edited_at: Date) {
         this._title = _title;
         this._created_at = _created_at;
         this._edited_at = _edited_at;
@@ -18,19 +18,19 @@ abstract class Item {
         this._title = value;
     }
 
-    public get created_at(): number {
+    public get created_at(): Date {
         return this._created_at;
     }
 
-    public set created_at(value: number) {
+    public set created_at(value: Date) {
         this._created_at = value;
     }
 
-    public get edited_at(): number {
+    public get edited_at(): Date {
         return this._edited_at;
     }
 
-    public set edited_at(value: number) {
+    public set edited_at(value: Date) {
         this._edited_at = value;
     }
 }
