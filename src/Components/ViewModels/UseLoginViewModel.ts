@@ -26,6 +26,7 @@ export const useLoginViewModel = () => {
     // tries to open a database with the provided master password
     const tryOpenDatabase = (masterPassword: string): boolean => {
         // implement automerge facade unlock here
+        return false;
     }
 
     // opens a database

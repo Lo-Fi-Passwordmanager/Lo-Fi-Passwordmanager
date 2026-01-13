@@ -6,6 +6,14 @@ class Entry extends Item {
     private _url: string;
     private _note: string;
 
+    constructor(name: string, username:string, password:string, url:string, note:string) {
+        super(name, new Date(), new Date())
+        this._username = username;
+        this._password = password;
+        this._url = url;
+        this._note = note;
+    }
+
     public get username(): string {
         return this._username;
     }
