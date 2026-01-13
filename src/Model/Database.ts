@@ -1,17 +1,25 @@
-export default class Database {
-    private id: string;
-    private name: string;
+import DatabaseRoot from './DatabaseRoot';
 
-    constructor(id: string, name: string) {
-        this.id = id;
+export default class Database {
+    private url: string;
+    private name: string;
+    private root: DatabaseRoot;
+
+    constructor(url: string, name: string, root: DatabaseRoot) {
+        this.url = url;
         this.name = name;
+        this.root = root;
     }
 
     public getId(): string {
-        return this.id;
+        return this.url;
     }
 
     public getName(): string {
         return this.name;
+    }
+
+    public getRoot(): DatabaseRoot {
+        return this.root;
     }
 }
