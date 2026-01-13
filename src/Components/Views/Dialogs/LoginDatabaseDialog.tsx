@@ -37,8 +37,8 @@ const LoginDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
     };
 
     return (
-        <div style={dialogOverlayStyle}>
-            <div style={dialogStyle}>
+        <div className="dialogOverlay">
+            <div className="dialog">
                 <h3>{title}</h3>
                 <label>{label1}</label>
                 <input
@@ -49,12 +49,7 @@ const LoginDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                     autoFocus
                 />
 
-                <div style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center",
-                }}>
+                <div className="flexContainer">
                     <OnClickButton onClick={handleConfirm}>Bestätigen</OnClickButton>
                     <OnClickButton onClick={onCancel}>Abbrechen</OnClickButton>
                 </div>

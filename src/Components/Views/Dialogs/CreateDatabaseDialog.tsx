@@ -41,8 +41,8 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
     };
 
     return (
-        <div style={dialogOverlayStyle}>
-            <div style={dialogStyle}>
+        <div className="dialogOverlay">
+            <div className="dialog">
                 <h3>{title}</h3>
                 <label>{label1}</label>
                 <input
