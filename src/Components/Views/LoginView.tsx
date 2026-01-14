@@ -5,6 +5,7 @@ import OnClickButton from "./ButtonViews/OnClickButton.tsx";
 import DatabaseListing from "./ListingViews/DatabaseListing.tsx";
 import CreateDatabaseDialog from "./Dialogs/CreateDatabaseDialog.tsx";
 import LoginDatabaseDialog from "./Dialogs/LoginDatabaseDialog.tsx";
+import PWMLogo from "../../assets/logo_gelb.svg";
 
 const LoginView: React.FC = () => {
     const viewModel = useLoginViewModel();
@@ -17,6 +18,9 @@ const LoginView: React.FC = () => {
 
     return (
         <div className="loginView">
+            <a>
+                <img src={PWMLogo} className="logo" alt="Vite logo"/>
+            </a>
             <header> Passwort Manager</header>
             <main
                 className="flexContainer"

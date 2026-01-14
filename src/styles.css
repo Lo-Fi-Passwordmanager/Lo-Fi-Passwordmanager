@@ -1,7 +1,5 @@
 #root {
-    max-width: 1980px;
     margin: 0 auto;
-    padding: 2rem;
     text-align: center;
     width: 100vw;
     height: 100vh;
@@ -19,10 +17,11 @@
 
     --bg: rgb(255, 255, 255);
     --text: #000000;
-    --panel: rgba(149, 30, 30, 0.3);
-    --overlay: rgb(255, 255, 255);
+    --panel: rgb(250, 150, 150);
+    --overlay: rgba(255, 255, 255, 0.5);
     --outline: #818181;
-    --background: rgba(149, 30, 30, 0.3);
+    --input-field: rgb(253, 220, 220);
+    --dialog-bg: rgba(255, 200, 200);
     background-color: var(--bg);
 }
 
@@ -30,10 +29,11 @@
 [data-theme="dark"] {
     --bg: rgb(22, 24, 28);
     --text: #ffffff;
-    --panel: rgba(0, 92, 81, 0.5);
-    --overlay: rgb(14, 14, 14);
+    --panel: rgb(15, 76, 72);
+    --overlay: rgba(14, 14, 14, 0.5);
     --outline: #818181;
-    --background: #717171;
+    --input-field: rgb(15, 76, 72);
+    --dialog-bg: #1a2e2d;
     background-color: var(--bg);
 }
 
@@ -50,7 +50,7 @@ html, body {
 }
 
 .inputField {
-    background-color: var(--background);
+    background-color: var(--input-field);
 }
 
 .loginView {
@@ -73,6 +73,7 @@ button:hover {
     filter: brightness(1.1);
 }
 button {
+    justify-content: left;
     font-size: 1em;
     font-weight: 500;
     font-family: inherit;
@@ -99,18 +100,17 @@ button:focus-visible {
     outline: 4px auto -webkit-focus-ring-color;
 }
 .dialogOverlay {
-    background: var(--panel);
+    background: var(--overlay);
     color: var(--text);
     position: fixed;
     inset: 0;
-    background: var(--overlay);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 2000;
 }
 .dialog {
-    background: var(--panel);
+    background: var(--dialog-bg);
     color: var(--text);
     padding: 20px;
     border-radius: 8px;
@@ -155,4 +155,9 @@ button:focus-visible {
 .confirm-cancel-buttons {
     display: flex;
     flex-direction: row;
+}
+
+.logo {
+    width: 15vmin;
+    filter: drop-shadow(0 0 2em var(--panel));
 }

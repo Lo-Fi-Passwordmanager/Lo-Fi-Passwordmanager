@@ -50,12 +50,11 @@ const LoginDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                     autoFocus
                 />
 
-                <div className="flexContainer">
-                    <div className="confirm-cancel-buttons">
-                        <OnClickButton onClick={handleConfirm}>Bestätigen</OnClickButton>
-                        <OnClickButton onClick={onCancel}>Abbrechen</OnClickButton>
-                    </div>
+                <div className="confirm-cancel-buttons">
+                    <OnClickButton onClick={handleConfirm}>Bestätigen</OnClickButton>
+                    <OnClickButton onClick={onCancel}>Abbrechen</OnClickButton>
                 </div>
+
             </div>
         </div>
     )

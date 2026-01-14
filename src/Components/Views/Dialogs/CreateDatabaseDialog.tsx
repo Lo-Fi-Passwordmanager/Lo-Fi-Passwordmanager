@@ -12,13 +12,13 @@ interface TwoFieldDialogProps {
 }
 
 const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
-    isOpen,
-    title,
-    label1,
-    label2,
-    onConfirm,
-    onCancel
-}) => {
+                                                                 isOpen,
+                                                                 title,
+                                                                 label1,
+                                                                 label2,
+                                                                 onConfirm,
+                                                                 onCancel
+                                                             }) => {
 
     const [field1, setField1] = useState("");
     const [field2, setField2] = useState("");
@@ -62,12 +62,9 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                     onChange={(e) => setField2(e.target.value)}
                     placeholder={label2}
                 />
-
-                <div className="flexContainer">
-                    <div className="confirm-cancel-buttons">
-                        <OnClickButton onClick={handleConfirm}>Bestätigen</OnClickButton>
-                        <OnClickButton onClick={onCancel}>Abbrechen</OnClickButton>
-                    </div>
+                <div className="confirm-cancel-buttons">
+                    <OnClickButton onClick={handleConfirm}>Bestätigen</OnClickButton>
+                    <OnClickButton onClick={onCancel}>Abbrechen</OnClickButton>
                 </div>
             </div>
         </div>
