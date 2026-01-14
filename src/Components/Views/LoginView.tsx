@@ -17,9 +17,8 @@ const LoginView: React.FC = () => {
 
     return (
         <div className="loginView">
-            <a>
-                <img src={PWMLogo} className="logo" alt="Vite logo"/>
-            </a>
+
+            <img src={PWMLogo} className="logo" alt="Vite logo"/>
             <header> Passwort Manager</header>
             <main
                 className="flexContainer"

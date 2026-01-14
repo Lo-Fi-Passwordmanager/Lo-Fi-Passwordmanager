@@ -18,7 +18,7 @@
     --bg: rgb(255, 255, 255);
     --text: #000000;
     --panel: rgb(250, 150, 150);
-    --overlay: rgba(255, 255, 255, 0.5);
+    --overlay: rgba(0, 0, 0, 0.2);
     --outline: #818181;
     --input-field: rgb(253, 220, 220);
     --dialog-bg: rgba(255, 200, 200);
@@ -168,6 +168,7 @@ button:focus-visible {
 }
 
 .logo {
+    margin-top: 5em;
     width: 15vmin;
     filter: drop-shadow(0 0 2em var(--panel));
 }
