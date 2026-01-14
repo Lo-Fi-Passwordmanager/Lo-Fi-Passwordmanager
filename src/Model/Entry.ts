@@ -1,13 +1,13 @@
 import {Item} from "./Item";
 
-class Entry extends Item {
+export class Entry extends Item {
     private _username: string;
     private _password: string;
     private _url: string;
     private _note: string;
 
-    constructor(name: string, username:string, password:string, url:string, note:string) {
-        super(name, new Date(), new Date())
+    constructor(name: string, id: string | null, created_at: Date, edited_at: Date, username: string, password: string, url: string, note: string) {
+        super("entry", name, id, created_at, edited_at);
         this._username = username;
         this._password = password;
         this._url = url;

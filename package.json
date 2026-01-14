@@ -11,6 +11,8 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@automerge/automerge": "^3.2.2",
+    "@automerge/automerge-repo": "^2.5.1",
     "@automerge/react": "^2.5.1",
     "@noble/ciphers": "^2.1.1",
     "@noble/hashes": "^2.0.1",

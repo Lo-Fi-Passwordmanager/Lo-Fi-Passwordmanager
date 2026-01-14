@@ -1,19 +1,22 @@
 import {Folder} from './Folder';
 import type {Item} from "./Item.ts";
 
-class DatabaseRoot {
-    private _salt: string;
-    private rootFolder: Folder;
+export class DatabaseRoot {
+    private readonly _salt: string;
+    private _rootFolder: Folder;
 
-    constructor() {
-        this._salt = "default"; //%FIXME hier richtiges Salt bekommen
-        this.rootFolder = new Folder("root", []);
+    constructor(salt: string) {
+        this._salt = salt
+        this._rootFolder = new Folder("root", null)
     }
 
-    public addToRoot(item: Item) {
-        this.rootFolder.addItem(item);
+    public addItem(item: Item) {
+        this._rootFolder.addItem(item);
     }
 
+    public getChildById(id: string): Item | null {
+        return this._rootFolder.getChildById(id)
+    }
 
     get salt(): string {
         return this._salt;
