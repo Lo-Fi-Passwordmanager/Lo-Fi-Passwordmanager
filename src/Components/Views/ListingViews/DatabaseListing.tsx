@@ -1,5 +1,4 @@
 import React from "react";
-import OnClickButton from "../ButtonViews/OnClickButton.tsx";
 import {listingStyle} from "../../../CSS.ts";
 
 type DatabaseListingProps = {
@@ -17,13 +16,13 @@ const DatabaseListing: React.FC<DatabaseListingProps> = ({databases, onClick}) =
     return (
         <div style={listingStyle}>
             {databases.map((db) => (
-                <OnClickButton
+                <button
                     style={{width: "100%", margin: "auto"}}
                     key={db + databases.indexOf(db)}
                     onClick={() => onClick(db)}
                 >
                     {db}
-                </OnClickButton>
+                </button>
             ))}
         </div>
     )
