@@ -1,36 +1,37 @@
+import type {Folder} from "./Folder.ts";
+
 export abstract class Item {
+    protected _type: "entry" | "folder";
     protected _title: string;
-    protected _created_at: Date;
-    protected _edited_at: Date;
+    protected _id: string | null;
+    protected _createdAt: Date | null;
+    protected _editedAt: Date | null;
 
-    constructor(_title: string, _created_at: Date, _edited_at: Date) {
-        this._title = _title;
-        this._created_at = _created_at;
-        this._edited_at = _edited_at;
+    protected constructor(type: "entry" | "folder", title: string, id: string | null, createdAt: Date | null, editedAt: Date | null) {
+        this._type = type
+        this._title = title;
+        this._id = id
+        this._createdAt = createdAt;
+        this._editedAt = editedAt;
     }
-
 
     public get title(): string {
         return this._title;
     }
 
-    public set title(value: string) {
-        this._title = value;
+    get id(): string | null {
+        return this._id;
     }
 
-    public get created_at(): Date {
-        return this._created_at;
+    public get createdAt(): Date | null {
+        return this._createdAt;
     }
 
-    public set created_at(value: Date) {
-        this._created_at = value;
+    public get editedAt(): Date | null {
+        return this._editedAt;
     }
 
-    public get edited_at(): Date {
-        return this._edited_at;
-    }
-
-    public set edited_at(value: Date) {
-        this._edited_at = value;
+    public isFolder(): this is Folder {
+        return this._type === "folder"
     }
 }
