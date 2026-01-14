@@ -1,10 +1,12 @@
 import {type Doc, getObjectId, isValidAutomergeUrl, useDocument} from "@automerge/react";
-import {useEffect} from "react";
 import type {AutomergeDoc} from "../Model/Automerge/AutomergeDoc.ts";
 import {DatabaseRoot} from "../Model/DatabaseRoot.ts";
 import type {AutomergeItem} from "../Model/Automerge/AutomergeItem.ts";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
 import type {Item} from "../Model/Item.ts";
+import {Folder} from "../Model/Folder.ts";
+import {Entry} from "../Model/Entry.ts";
+import type {AutomergeEntry} from "../Model/Automerge/AutomergeEntry.ts";
 
 export const useAutomergeFacade = (automergeURL: AutomergeUrl) => {
     if (!isValidAutomergeUrl(automergeURL)) {
@@ -18,12 +20,6 @@ export const useAutomergeFacade = (automergeURL: AutomergeUrl) => {
     });
 
     const tree = buildDatabaseAsTree(doc)
-
-    // When darkMode is updated, update settingsModel
-    useEffect(() => {
-
-    }, [darkMode])
-
 
     return {
         automergeURL,
@@ -62,7 +58,21 @@ function buildDatabaseAsTree(automergeDoc: Doc<AutomergeDoc>): DatabaseRoot {
 }
 
 function databaseItemFromAutomergeItem(automergeItem: AutomergeItem): Item {
-    
+    const name = automergeItem.name;
+    const id = getObjectId(automergeItem);
+    const createdAt = automergeItem.createdAt;
+    const editedAt = automergeItem.editedAt;
+
+
+    if (isEntry(automergeItem)) {
+        return new Entry(name, id, createdAt, editedAt, automergeItem.username, automergeItem.password, automergeItem.url, automergeItem.note)
+    }
+
+    return new Folder(name, id, createdAt, editedAt)
+}
+
+function isEntry(automergeItem: AutomergeItem): automergeItem is AutomergeEntry {
+    return automergeItem.type === "entry"
 }
 
 function buildPath(item: AutomergeItem, itemsById: Map<string, AutomergeItem>): Array<string> {

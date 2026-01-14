@@ -4,15 +4,15 @@ export abstract class Item {
     private _type: "entry" | "folder";
     protected _title: string;
     private _id: string | null;
-    protected _created_at: number;
-    protected _edited_at: number;
+    protected _createdAt: number;
+    protected _editedAt: number;
 
-    protected constructor(type: "entry" | "folder", title: string, id: string | null, created_at: number, edited_at: number) {
+    protected constructor(type: "entry" | "folder", title: string, id: string | null, createdAt: number, editedAt: number) {
         this._type = type
         this._title = title;
         this._id = id
-        this._created_at = created_at;
-        this._edited_at = edited_at;
+        this._createdAt = createdAt;
+        this._editedAt = editedAt;
     }
 
 
@@ -32,20 +32,20 @@ export abstract class Item {
         this._id = value;
     }
 
-    public get created_at(): number {
-        return this._created_at;
+    public get createdAt(): number {
+        return this._createdAt;
     }
 
-    public set created_at(value: number) {
-        this._created_at = value;
+    public set createdAt(value: number) {
+        this._createdAt = value;
     }
 
-    public get edited_at(): number {
-        return this._edited_at;
+    public get editedAt(): number {
+        return this._editedAt;
     }
 
-    public set edited_at(value: number) {
-        this._edited_at = value;
+    public set editedAt(value: number) {
+        this._editedAt = value;
     }
 
     public isFolder(): this is Folder {

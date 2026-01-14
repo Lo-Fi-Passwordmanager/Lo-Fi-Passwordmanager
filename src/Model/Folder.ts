@@ -3,8 +3,8 @@ import {Item} from "./Item";
 export class Folder extends Item {
     private _entries: Item[];
 
-    public constructor(name: string, id: string | null, createdAt?: number, edited_at?: number) {
-        super("folder", name, id, createdAt ? createdAt : -1, edited_at ? edited_at : -1);
+    public constructor(name: string, id: string | null, createdAt?: number, editedAt?: number) {
+        super("folder", name, id, createdAt ? createdAt : -1, editedAt ? editedAt : -1);
         this._entries = []
     }
 
