@@ -1,5 +1,5 @@
-import {type Doc, getObjectId, isValidAutomergeUrl, useDocument} from "@automerge/react";
-import type {AutomergeDoc} from "../Model/Automerge/AutomergeDoc.ts";
+import {type Doc, getObjectId, isValidAutomergeUrl, Repo, useDocument} from "@automerge/react";
+import {AutomergeDoc} from "../Model/Automerge/AutomergeDoc.ts";
 import {DatabaseRoot} from "../Model/DatabaseRoot.ts";
 import type {AutomergeItem} from "../Model/Automerge/AutomergeItem.ts";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
@@ -8,7 +8,25 @@ import {Folder} from "../Model/Folder.ts";
 import {Entry} from "../Model/Entry.ts";
 import type {AutomergeEntry} from "../Model/Automerge/AutomergeEntry.ts";
 
-export const useAutomergeFacade = (automergeURL: AutomergeUrl) => {
+/**
+ * Returns a reactive instance of an automerge document with various helper functions.
+ *
+ * @remarks
+ * If {@code automergeURL} is left undefined, a new automerge document is created with the salt and validation string and the name, otherwise they are ignored.
+ *
+ * @param automergeURL the automergeURL of an existing document
+ * @param salt the salt of a new database (optional)
+ * @param validation the validation string of a new database (optional)
+ * @param name the name of a new database (optional)
+ */
+export const useAutomergeFacade = (repo: Repo, automergeURL?: AutomergeUrl, salt?: string, validation?: string, name?: string) => {
+
+    if (!automergeURL) {
+        const root = repo.create<AutomergeDoc>(new AutomergeDoc(salt!, validation!))
+        automergeURL = root.url
+        // TODO An dieser Stelle müsste die neu erstellte Datenbank in die Liste der verfügbaren Datebanken eingefügt werden.
+    }
+
     if (!isValidAutomergeUrl(automergeURL)) {
         throw new Error(`${automergeURL} is not a valid automerge URL.`)
     }
@@ -23,11 +41,19 @@ export const useAutomergeFacade = (automergeURL: AutomergeUrl) => {
 
     return {
         automergeURL,
+        salt,
+        validation,
         tree
     };
 
 }
 
+/**
+ * Takes an automerge document and parses it, to create a database tree structure.
+ * @param automergeDoc
+ *
+ * @returns a new {@link DatabaseRoot} that represents the automerge document
+ */
 function buildDatabaseAsTree(automergeDoc: Doc<AutomergeDoc>): DatabaseRoot {
 
     const root = new DatabaseRoot(automergeDoc.salt)
@@ -57,12 +83,16 @@ function buildDatabaseAsTree(automergeDoc: Doc<AutomergeDoc>): DatabaseRoot {
     return root;
 }
 
+/**
+ * Takes an automerge item and creates a new Database Item form it for internal use.
+ *
+ * @param automergeItem the automerge item that should be used for creation
+ */
 function databaseItemFromAutomergeItem(automergeItem: AutomergeItem): Item {
     const name = automergeItem.name;
     const id = getObjectId(automergeItem);
-    const createdAt = automergeItem.createdAt;
-    const editedAt = automergeItem.editedAt;
-
+    const createdAt = new Date(automergeItem.createdAt * 1000);
+    const editedAt = new Date(automergeItem.editedAt * 1000);
 
     if (isEntry(automergeItem)) {
         return new Entry(name, id, createdAt, editedAt, automergeItem.username, automergeItem.password, automergeItem.url, automergeItem.note)
@@ -71,10 +101,20 @@ function databaseItemFromAutomergeItem(automergeItem: AutomergeItem): Item {
     return new Folder(name, id, createdAt, editedAt)
 }
 
+/**
+ * Checks whether the provided {@link AutomergeItem} is an {@link AutomergeEntry}
+ * @param automergeItem the automerge item to check
+ */
 function isEntry(automergeItem: AutomergeItem): automergeItem is AutomergeEntry {
     return automergeItem.type === "entry"
 }
 
+/**
+ * Recursively traverses the itemsById map, to build a path from the document root to the items location in the tree.
+ *
+ * @param item the item whose path to calculate
+ * @param itemsById a map the maps ids to its corresponding item
+ */
 function buildPath(item: AutomergeItem, itemsById: Map<string, AutomergeItem>): Array<string> {
     if (item.parentId === null) {
         return []
@@ -83,8 +123,14 @@ function buildPath(item: AutomergeItem, itemsById: Map<string, AutomergeItem>): 
     return buildPath(itemsById.get(item.parentId)!, itemsById).concat(item.parentId)
 }
 
-function findNestedValue(d: DatabaseRoot, path: string[]): Item {
-    let currentValue: Item | null = d.getChildById(path[0]);
+/**
+ * Finds an item by its path (like the ones calculated by {@link buildPath}).
+ *
+ * @param databaseRoot the root element of a database
+ * @param path the path where an item is
+ */
+function findNestedValue(databaseRoot: DatabaseRoot, path: string[]): Item {
+    let currentValue: Item | null = databaseRoot.getChildById(path[0]);
 
     if (currentValue === null) {
         throw Error(`Child with ID ${path[0]} does not exist on DatabaseRoot.`)
@@ -107,8 +153,15 @@ function findNestedValue(d: DatabaseRoot, path: string[]): Item {
     return currentValue;
 }
 
-function insertNestedValue(d: DatabaseRoot, path: string[], insert: Item) {
-    const value = findNestedValue(d, path)
+/**
+ * Inserts an item at a path, if the new parent at the path is a folder.
+ *
+ * @param databaseRoot the root element of a database
+ * @param path the path where the new parent object is
+ * @param insert the item which to insert
+ */
+function insertNestedValue(databaseRoot: DatabaseRoot, path: string[], insert: Item) {
+    const value = findNestedValue(databaseRoot, path)
     if (!value.isFolder()) {
         throw Error("Cannot insert value into Entry.")
     }

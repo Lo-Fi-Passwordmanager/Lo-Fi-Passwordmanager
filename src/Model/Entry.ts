@@ -6,7 +6,7 @@ export class Entry extends Item {
     private _url: string;
     private _note: string;
 
-    constructor(name: string, id: string | null, created_at: number, edited_at: number, username: string, password: string, url: string, note: string) {
+    constructor(name: string, id: string | null, created_at: Date, edited_at: Date, username: string, password: string, url: string, note: string) {
         super("entry", name, id, created_at, edited_at);
         this._username = username;
         this._password = password;

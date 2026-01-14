@@ -6,10 +6,10 @@ export class AutomergeDoc {
     private _validation: string
     private _items: AutomergeItem[]
 
-    constructor(salt: string, validation: string, items: AutomergeItem[]) {
+    constructor(salt: string, validation: string) {
         this._salt = salt;
         this._validation = validation;
-        this._items = items;
+        this._items = [];
     }
 
     get salt(): string {
