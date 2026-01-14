@@ -52,6 +52,8 @@ export const useSettingsViewModel = () => {
     const [autoConclictRes, setAutoConflictRes] = useState(settings.getAutoConflictResolution());
     const [timeOutActive, setTimeOutActive] = useState(settings.getTimeoutActive());
 
+    document.getElementById("root")?.setAttribute("data-theme", darkMode ? "dark" : "light");
+
     // When darkMode is updated, update settings
     useEffect(() => {
         settings.setDarkMode(darkMode)
@@ -64,6 +66,7 @@ export const useSettingsViewModel = () => {
     // Update darkMode
     function toggleDarkMode() {
         setDarkMode(!darkMode);
+        document.getElementById("root")?.setAttribute("data-theme", darkMode ? "dark" : "light");
     }
     function toggleSynchronisation() {
         setSynchronisation(!synchronisation);
