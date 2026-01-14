@@ -20,6 +20,6 @@ export default defineConfig({
     plugins: () => [wasm()],
   },
     test: {
-        environment: "node",
+        environment: "jsdom",
     },
 });
