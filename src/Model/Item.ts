@@ -1,4 +1,5 @@
 import type {Folder} from "./Folder.ts";
+import type {Entry} from "./Entry.ts";
 
 export abstract class Item {
     protected _type: "entry" | "folder";
@@ -33,5 +34,8 @@ export abstract class Item {
 
     public isFolder(): this is Folder {
         return this._type === "folder"
+    }
+    public isEntry(): this is Entry {
+        return this._type === "entry"
     }
 }
