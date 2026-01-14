@@ -4,7 +4,7 @@ import EntryView from "./EntryView.tsx";
 import DatabaseListing from "./ListingViews/DatabaseListing.tsx";
 import CreateDatabaseDialog from "./Dialogs/CreateDatabaseDialog.tsx";
 import LoginDatabaseDialog from "./Dialogs/LoginDatabaseDialog.tsx";
-import PWMLogo from "../../assets/logo_gelb.svg";
+import PWMLogo from "../../assets/logo_gelb.svg?inline";
 
 type loginViewProps = {
     viewModel: LoginViewModelReturn
@@ -21,7 +21,7 @@ const LoginView: React.FC<loginViewProps> = ({viewModel}) => {
     return (
         <div className="loginView">
 
-            <img src={PWMLogo} className="logo" alt="Vite logo"/>
+            <img src={PWMLogo} className="logo" alt="Passwortmanager Logo"/>
             <header> Passwort Manager</header>
             <main
                 className="flexContainer"
