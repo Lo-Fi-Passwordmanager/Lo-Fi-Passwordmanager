@@ -1,6 +1,3 @@
-import {type Folder} from "./Folder.ts";
-import {type Entry} from "./Entry.ts";
-
 export abstract class Item {
     protected _type: "entry" | "folder";
     private _title: string;
@@ -44,11 +41,11 @@ export abstract class Item {
         return this._editedAt;
     }
 
-    public isFolder(): this is Folder {
+    public isFolder() {
         return this._type === "folder"
     }
 
-    public isEntry(): this is Entry {
+    public isEntry(){
         return this._type === "entry"
     }
 

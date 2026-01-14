@@ -1,6 +1,7 @@
-import {expect, it, describe, beforeEach, afterEach} from "vitest";
+import {expect, it, describe, beforeEach, afterEach, assert} from "vitest";
 import {Item} from "../../src/Model/Item";
 import {Entry} from "../../src/Model/Entry";
+import {v} from "vitest/dist/chunks/reporters.d.Rsi0PyxX";
 
 describe('Entry', () => {
     let item1: Item;
@@ -37,6 +38,12 @@ describe('Entry', () => {
         expect(entry1.password).toBe("password2");
         expect(entry1.url).toBe("url2");
         expect(entry1.note).toBe("note2");
+
+        const oldDate = entry1.editedAt;
+        entry1.username = "superCoolName";
+        assert.notEqual(oldDate, entry1.editedAt);
+        expect(oldDate).lessThanOrEqual(entry1.editedAt);
+        expect(entry1.username).toBe("superCoolName");
     })
 
 
