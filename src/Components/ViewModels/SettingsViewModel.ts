@@ -51,6 +51,9 @@ export const useSettingsViewModel = () => {
     const [synchronisation, setSynchronisation] = useState(settings.getSynchronization());
     const [autoConclictRes, setAutoConflictRes] = useState(settings.getAutoConflictResolution());
     const [timeOutActive, setTimeOutActive] = useState(settings.getTimeoutActive());
+    const [settingsOpen, setSettingsOpen] = useState(false);
+
+    document.getElementById("root")?.setAttribute("data-theme", darkMode ? "dark" : "light");
 
     document.getElementById("root")?.setAttribute("data-theme", darkMode ? "dark" : "light");
 
@@ -84,10 +87,12 @@ export const useSettingsViewModel = () => {
         synchronisation,
         autoConclictRes,
         timeOutActive,
+        settingsOpen,
 
         toggleDarkMode,
         toggleSynchronisation,
         toggleAutoConclictRes,
         toggleTimeOutActive,
+        setSettingsOpen,
     };
 };

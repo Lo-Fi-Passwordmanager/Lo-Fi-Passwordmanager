@@ -11,12 +11,12 @@ interface TwoFieldDialogProps {
 }
 
 const LoginDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
-                                                           isOpen,
-                                                           title,
-                                                           label1,
-                                                           onConfirm,
-                                                           onCancel
-                                                       }) => {
+                                                                isOpen,
+                                                                title,
+                                                                label1,
+                                                                onConfirm,
+                                                                onCancel
+                                                            }) => {
 
     const [field1, setField1] = useState("");
 
@@ -42,6 +42,7 @@ const LoginDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                 <h3>{title}</h3>
                 <label>{label1}</label>
                 <input
+                    className={"inputField"}
                     type="password"
                     value={field1}
                     onChange={(e) => setField1(e.target.value)}
@@ -49,10 +50,11 @@ const LoginDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                     autoFocus
                 />
 
-                <div className="flexContainer">
+                <div className="confirm-cancel-buttons">
                     <OnClickButton onClick={handleConfirm}>Bestätigen</OnClickButton>
                     <OnClickButton onClick={onCancel}>Abbrechen</OnClickButton>
                 </div>
+
             </div>
         </div>
     )

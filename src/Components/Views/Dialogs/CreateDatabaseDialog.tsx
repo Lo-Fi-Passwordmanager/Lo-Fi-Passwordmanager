@@ -12,13 +12,13 @@ interface TwoFieldDialogProps {
 }
 
 const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
-    isOpen,
-    title,
-    label1,
-    label2,
-    onConfirm,
-    onCancel
-}) => {
+                                                                 isOpen,
+                                                                 title,
+                                                                 label1,
+                                                                 label2,
+                                                                 onConfirm,
+                                                                 onCancel
+                                                             }) => {
 
     const [field1, setField1] = useState("");
     const [field2, setField2] = useState("");
@@ -46,6 +46,7 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                 <h3>{title}</h3>
                 <label>{label1}</label>
                 <input
+                    className="inputField"
                     type="text"
                     value={field1}
                     onChange={(e) => setField1(e.target.value)}
@@ -55,18 +56,13 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
 
                 <label>{label2}</label>
                 <input
+                    className="inputField"
                     type="password"
                     value={field2}
                     onChange={(e) => setField2(e.target.value)}
                     placeholder={label2}
                 />
-
-                <div style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center",
-                }}>
+                <div className="confirm-cancel-buttons">
                     <OnClickButton onClick={handleConfirm}>Bestätigen</OnClickButton>
                     <OnClickButton onClick={onCancel}>Abbrechen</OnClickButton>
                 </div>

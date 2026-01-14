@@ -1,8 +1,8 @@
 #root {
-    max-width: 1980px;
     margin: 0 auto;
-    padding: 2rem;
     text-align: center;
+    width: 100vw;
+    height: 100vh;
 }
 
 /* LIGHT THEME (default) */
@@ -15,22 +15,27 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
-    --bg: #06ffef;
+    --bg: rgb(255, 255, 255);
     --text: #000000;
-    --panel: #5bffcb;
-    --overlay: rgba(0, 64, 64, 0.94);
+    --panel: rgb(250, 150, 150);
+    --overlay: rgba(255, 255, 255, 0.5);
     --outline: #818181;
+    --input-field: rgb(253, 220, 220);
+    --dialog-bg: rgba(255, 200, 200);
     background-color: var(--bg);
 }
 
 /* DARK THEME */
 [data-theme="dark"] {
-    --bg: #00a69b;
+    --bg: rgb(22, 24, 28);
     --text: #ffffff;
-    --panel: #3dac89;
-    --overlay: rgba(0, 64, 64, 0.94);
+    --panel: rgb(15, 76, 72);
+    --overlay: rgba(14, 14, 14, 0.5);
     --outline: #818181;
+    --input-field: rgb(15, 76, 72);
+    --dialog-bg: #1a2e2d;
     background-color: var(--bg);
+    color: var(--text);
 }
 
 
@@ -45,6 +50,10 @@ html, body {
     min-height: 100vh;
 }
 
+.inputField {
+    background-color: var(--input-field);
+}
+
 .loginView {
     display: flex;
     flex-direction: column;
@@ -52,18 +61,20 @@ html, body {
     justify-content: center;
     background: var(--bg);
     color: var(--text);
-    height: 100vh;
     width: 100%;
 }
 
 header {
     font-size: 3em;
+    font-weight: bold;
     margin-bottom: 20px;
 }
 button:hover {
     filter: brightness(1.1);
 }
 button {
+    margin: 20px;
+    justify-content: left;
     font-size: 1em;
     font-weight: 500;
     font-family: inherit;
@@ -90,18 +101,17 @@ button:focus-visible {
     outline: 4px auto -webkit-focus-ring-color;
 }
 .dialogOverlay {
-    background: var(--panel);
+    background: var(--overlay);
     color: var(--text);
     position: fixed;
     inset: 0;
-    background: var(--overlay);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 2000;
 }
 .dialog {
-    background: var(--panel);
+    background: var(--dialog-bg);
     color: var(--text);
     padding: 20px;
     border-radius: 8px;
@@ -126,6 +136,15 @@ button:focus-visible {
     width: 50vmin;
     gap: 12px;
 }
+
+.settingsBackground {
+    background-color: var(--panel);
+    border-radius: 15px;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
 .checkboxRow {
     display: flex;
     align-items: center;
@@ -141,4 +160,14 @@ button:focus-visible {
     text-align: center;
     justify-content: center;
     align-items: center;
+}
+
+.confirm-cancel-buttons {
+    display: flex;
+    flex-direction: row;
+}
+
+.logo {
+    width: 15vmin;
+    filter: drop-shadow(0 0 2em var(--panel));
 }

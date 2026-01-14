@@ -1,10 +1,10 @@
 import React from "react";
 import {useLoginViewModel} from "../ViewModels/UseLoginViewModel.ts";
 import EntryView from "./EntryView.tsx";
-import OnClickButton from "./ButtonViews/OnClickButton.tsx";
 import DatabaseListing from "./ListingViews/DatabaseListing.tsx";
 import CreateDatabaseDialog from "./Dialogs/CreateDatabaseDialog.tsx";
 import LoginDatabaseDialog from "./Dialogs/LoginDatabaseDialog.tsx";
+import PWMLogo from "../../assets/logo_gelb.svg";
 
 const LoginView: React.FC = () => {
     const viewModel = useLoginViewModel();
@@ -16,7 +16,10 @@ const LoginView: React.FC = () => {
     }
 
     return (
-        <div className="login-view">
+        <div className="loginView">
+            <a>
+                <img src={PWMLogo} className="logo" alt="Vite logo"/>
+            </a>
             <header> Passwort Manager</header>
             <main
                 className="flexContainer"
@@ -29,11 +32,11 @@ const LoginView: React.FC = () => {
 
 
                 {/* Button for adding new Database */}
-                <OnClickButton
+                <button
                     onClick={viewModel.openAddDialog}
                 >
                     +
-                </OnClickButton>
+                </button>
 
                 {/* Popup Dialog for adding a new Database */}
                 <LoginDatabaseDialog
