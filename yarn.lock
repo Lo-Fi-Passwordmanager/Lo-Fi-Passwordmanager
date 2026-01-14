@@ -47,7 +47,7 @@
   dependencies:
     "@automerge/automerge-repo" "2.5.1"
 
-"@automerge/automerge-repo@2.5.1":
+"@automerge/automerge-repo@2.5.1", "@automerge/automerge-repo@^2.5.1":
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/@automerge/automerge-repo/-/automerge-repo-2.5.1.tgz#f124b426706be53e34b41f639b17989fe269d84b"
   integrity sha512-w242TXb2TaGHFux7dDtJIUVJMqSSq1iYvNia8FVYgVTUDvbm8chaGMe1kVdKMEINFiB/BNYPtsoJIPjJhQArLg==
@@ -65,6 +65,11 @@
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/@automerge/automerge/-/automerge-3.2.1.tgz#3fc2c93c61303d6f99900dcadf4ab23be93af436"
   integrity sha512-xsEZlZe8lWyVCbD7Z7roH4X6ZKlRxMmmumb0M5CuxJWptUEfYsf+1z9lFEJh4aDBbWTLAgxsXd+TBi6jKTj0+g==
+
+"@automerge/automerge@^3.2.2":
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/@automerge/automerge/-/automerge-3.2.2.tgz#31251e83bc9ff13b3bc9ff3eef22e66784e8c379"
+  integrity sha512-A6E2MDnX+IWmFV2GydrkJEf4ClO2hucROJkGmX3bWYoZfgvmCz3QFqew126/uXQAJxWq8WMFf34PuKa7c/cJfg==
 
 "@automerge/react@^2.5.1":
   version "2.5.1"

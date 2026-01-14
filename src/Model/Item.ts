@@ -1,12 +1,18 @@
-abstract class Item {
+import type {Folder} from "./Folder.ts";
+
+export abstract class Item {
+    private _type: "entry" | "folder";
     protected _title: string;
+    private _id: string | null;
     protected _created_at: number;
     protected _edited_at: number;
 
-    constructor(_title: string, _created_at: number, _edited_at: number) {
-        this._title = _title;
-        this._created_at = _created_at;
-        this._edited_at = _edited_at;
+    protected constructor(type: "entry" | "folder", title: string, id: string | null, created_at: number, edited_at: number) {
+        this._type = type
+        this._title = title;
+        this._id = id
+        this._created_at = created_at;
+        this._edited_at = edited_at;
     }
 
 
@@ -16,6 +22,14 @@ abstract class Item {
 
     public set title(value: string) {
         this._title = value;
+    }
+
+    get id(): string | null {
+        return this._id;
+    }
+
+    set id(value: string) {
+        this._id = value;
     }
 
     public get created_at(): number {
@@ -32,5 +46,9 @@ abstract class Item {
 
     public set edited_at(value: number) {
         this._edited_at = value;
+    }
+
+    public isFolder(): this is Folder {
+        return this._type === "folder"
     }
 }

@@ -1,18 +1,24 @@
 import {Item} from "./Item";
 
-class Folder extends Item {
-    private entries: Item[];
+export class Folder extends Item {
+    private _entries: Item[];
 
-    public getEntries() {
-        return this.entries.slice();
+    public constructor(name: string, id: string | null, createdAt?: number, edited_at?: number) {
+        super("folder", name, id, createdAt ? createdAt : -1, edited_at ? edited_at : -1);
+        this._entries = []
     }
 
-    public constructor(name: string) {
-        super(name, 0, 0);
+    public get entries() {
+        return this._entries.slice();
+    }
+
+    public getChildById(id: string): Item | null {
+        const child = this._entries.find((item) => item.id === id)
+        return child ? child : null
     }
 
     public addItem(item: Item) {
-        this.entries.push(item);
+        this._entries.push(item);
     }
 
 }
