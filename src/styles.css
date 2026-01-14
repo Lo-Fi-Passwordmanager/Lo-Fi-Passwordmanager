@@ -173,13 +173,33 @@ button:focus-visible {
     filter: drop-shadow(0 0 2em var(--panel));
 }
 
-.listViewContainer {
+.listViewTitleHeader {
     display: flex;
     flex-direction: column;
     background-color: var(--panel);
+    border-radius: 10px;
+    max-width: 20%;
+    padding-left: 20px;
 }
 .listViewEntry {
     display: flex;
     flex-direction: column;
     padding-left: 30px;
+    padding-right: 30px;
+    border-radius: 15px;
+    max-width: fit-content;
+    background-color: var(--dialog-bg);
+    text-align: left;
+
+}
+
+.listViewEntryWrapper {
+    /*The indent that each layer of the tree gets*/
+    padding-left: 50px;
+}
+
+.gridContainer {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 4px;
 }

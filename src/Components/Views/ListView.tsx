@@ -8,25 +8,30 @@ const ListView: React.FC<{ item: Item }> = ({item}) => {
     if (listViewModel.isItemEntry()) {
         let entry = listViewModel.getItem() as Entry;
         return (
-            <div className="listViewEntry">
-                <a>Titel: {entry.title}</a>
-                <a>ID: {entry.id}</a>
-                <a>Benutzername: {entry.username}</a>
-                <a>URL: {entry.url}</a>
-                <a>Notiz: {entry.note}</a>
+            <div className="listViewEntry gridContainer">
+                <span>Titel:</span>        <span>{entry.title}</span>
+                <span>ID:</span>           <span>{entry.id}</span>
+                <span>Benutzername:</span> <span>{entry.username}</span>
+                <span>URL:</span>          <span>{entry.url}</span>
+                <span>Notiz:</span>        <span>{entry.note}</span>
             </div>
 
         );
     } else if (listViewModel.isItemFolder()) {
         return (
             <>
-            <div className="listViewContainer">{listViewModel.getItem().title}:</div>
-            {listViewModel.getChildren() && listViewModel.getChildren()!.map((item: Item, index: number) => {
-                return <ListView key={index} item={item}/>
-            })
-            }
-        </>
-    );
+                <div className="listViewTitleHeader">
+                    {listViewModel.getItem().title}:
+                </div>
+
+                {/* Wrap children in a div with padding to create the indentation */}
+                <div className="listViewEntryWrapper">
+                    {listViewModel.getChildren() && listViewModel.getChildren()!.map((item: Item, index: number) => {
+                        return <ListView key={index} item={item}/>
+                    })}
+                </div>
+            </>
+        );
     }
 }
 
