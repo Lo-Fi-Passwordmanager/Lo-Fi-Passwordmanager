@@ -35,6 +35,7 @@
     --input-field: rgb(15, 76, 72);
     --dialog-bg: #1a2e2d;
     background-color: var(--bg);
+    color: var(--text);
 }
 
 
@@ -60,7 +61,6 @@ html, body {
     justify-content: center;
     background: var(--bg);
     color: var(--text);
-    height: 100vh;
     width: 100%;
 }
 
@@ -135,6 +135,15 @@ button:focus-visible {
     width: 50vmin;
     gap: 12px;
 }
+
+.settingsBackground {
+    background-color: var(--panel);
+    border-radius: 15px;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
 .checkboxRow {
     display: flex;
     align-items: center;
