@@ -1,6 +1,6 @@
 import React from "react";
 import OnClickButton from "../ButtonViews/OnClickButton.tsx";
-import {listingStyle} from "../CSS.ts";
+import {listingStyle} from "../../../CSS.ts";
 
 type DatabaseListingProps = {
     databases: string[];

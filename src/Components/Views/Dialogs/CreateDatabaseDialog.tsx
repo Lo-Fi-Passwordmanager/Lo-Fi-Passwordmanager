@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import OnClickButton from "../ButtonViews/OnClickButton.tsx";
-import {dialogOverlayStyle, dialogStyle} from "../CSS.ts";
+import {dialogOverlayStyle, dialogStyle} from "../../../CSS.ts";
 
 interface TwoFieldDialogProps {
     isOpen: boolean;
@@ -41,8 +41,8 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
     };
 
     return (
-        <div style={dialogOverlayStyle}>
-            <div style={dialogStyle}>
+        <div className="dialogOverlay">
+            <div className="dialog">
                 <h3>{title}</h3>
                 <label>{label1}</label>
                 <input

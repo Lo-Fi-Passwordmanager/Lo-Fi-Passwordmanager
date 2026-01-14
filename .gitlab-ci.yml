@@ -24,6 +24,7 @@ build:
     - yarn install
     - yarn build
     - chmod og= $ID_ED25519
+    - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'cd /home/ubuntu/automerge/dist/ && rm -rf *'
     - scp -i $ID_ED25519 -o StrictHostKeyChecking=no ./dist/** $SERVER_USER@$SERVER_IP:/home/ubuntu/automerge/dist/
   artifacts:
     when: always

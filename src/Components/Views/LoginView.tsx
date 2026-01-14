@@ -5,7 +5,6 @@ import OnClickButton from "./ButtonViews/OnClickButton.tsx";
 import DatabaseListing from "./ListingViews/DatabaseListing.tsx";
 import CreateDatabaseDialog from "./Dialogs/CreateDatabaseDialog.tsx";
 import LoginDatabaseDialog from "./Dialogs/LoginDatabaseDialog.tsx";
-import {loginViewStyle, headerStyle} from "./CSS.ts";
 
 const LoginView: React.FC = () => {
     const viewModel = useLoginViewModel();
@@ -17,14 +16,10 @@ const LoginView: React.FC = () => {
     }
 
     return (
-        <div style={loginViewStyle}>
-            <header style={headerStyle}> Passwort Manager</header>
+        <div className="login-view">
+            <header> Passwort Manager</header>
             <main
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                }}
+                className="flexContainer"
             >
                 {/* Show a list of all available Documents */}
                 <DatabaseListing
