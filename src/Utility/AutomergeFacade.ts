@@ -14,6 +14,7 @@ import type {AutomergeEntry} from "../Model/Automerge/AutomergeEntry.ts";
  * @remarks
  * If {@code automergeURL} is left undefined, a new automerge document is created with the salt and validation string and the name, otherwise they are ignored.
  *
+ * @param repo the automerge repo
  * @param automergeURL the automergeURL of an existing document
  * @param salt the salt of a new database (optional)
  * @param validation the validation string of a new database (optional)
