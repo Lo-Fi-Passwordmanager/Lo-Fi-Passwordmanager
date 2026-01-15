@@ -16,8 +16,9 @@ export abstract class Item {
         }
         if (editedAt === null || editedAt === undefined) {
             this._editedAt = new Date();
+        } else {
+            this._editedAt = editedAt;
         }
-        this._editedAt = editedAt;
     }
 
 
