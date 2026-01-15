@@ -209,3 +209,7 @@ button:focus-visible {
     grid-template-columns: 120px 1fr;
     gap: 4px;
 }
+
+.entryView {
+    width: 100%;
+}

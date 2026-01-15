@@ -1,13 +1,8 @@
-import {StrictMode} from 'react'
-import {createRoot} from 'react-dom/client'
-import './index.css'
-import SettingsView from "./Components/Views/SettingsView.tsx";
-import LoginView from './Components/Views/LoginView.tsx'
-import "./styles.css"
-import ListView from "./Components/Views/ListView.tsx";
-import {Folder} from "./Model/Folder.ts";
-import {Entry} from "./Model/Entry.ts";
-import PasswordView from "./Components/Views/PasswordView.tsx";
+import React from "react";
+import {Entry} from "../../Model/Entry.ts";
+import {Folder} from "../../Model/Folder.ts";
+import SettingsView from "./SettingsView.tsx";
+import ListView from "./ListView.tsx";
 
 
 const root = new Folder("krasser Titel", "123", new Date(), new Date())
@@ -26,8 +21,16 @@ root.addItem(entry);
 root.addItem(entry2);
 root.addItem(entry3);
 
-createRoot(document.getElementById('root')!).render(
-    <StrictMode>
-        <PasswordView></PasswordView>
-    </StrictMode>,
-)
+
+const EntryView: React.FC = () => {
+    return (
+        <div>
+            <div>
+                <ListView item={root}></ListView>
+                <EntryView></EntryView>
+            </div>
+        </div>
+    );
+}
+
+export default EntryView;
