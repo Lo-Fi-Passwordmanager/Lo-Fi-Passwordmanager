@@ -5,8 +5,7 @@ export const SPECIAL = "!@$%^&*()<>,?/[]{}-=_+"
 
 export function generatePassword(length: number, characters: string[]): string {
     let result: string = "";
-    const joinedChars = characters.join("")
-    const chars: string[] = joinedChars.split("");
+    const chars: string[] = characters.join("").split(""); //Joins all strings into one, then splits it into individual chars
     const offset = 255 - (255 % chars.length);
     while (result.length < length) {
         const randomNumber = crypto.getRandomValues(new Uint8Array(1))
