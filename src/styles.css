@@ -2,11 +2,14 @@
     margin: 0 auto;
     text-align: center;
     width: 100vw;
-    height: 100vh;
+    min-height: 100%;
+    height: max-content;
 }
 
 /* LIGHT THEME (default) */
 :root {
+    min-height: 100%;
+    height: max-content;
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;
     font-weight: 400;

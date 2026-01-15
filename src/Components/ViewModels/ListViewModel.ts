@@ -6,7 +6,7 @@ import {useState} from "react";
 export const useListViewModel = (topItem: Item) => {
 
     let item: Item = topItem;
-    const [extended, setExtended] = useState(true);
+    const [extended, setExtended] = useState(false);
 
 
     // Reactive state to store values during runtime
