@@ -19,25 +19,41 @@ export type LoginViewModelReturn = {
     closeOpenDialog: () => void
 }
 
-
+/**
+ * ViewModel for the LoginView
+ *
+ * @param repo the automerge repo
+ *
+ * @returns all data and functions required by the LoginView
+ *
+ * @author uwing
+ */
 export const useLoginViewModel = (repo: Repo): LoginViewModelReturn => {
+    // map of database names to their automerge urls
     const [databases, setDatabases] = useState(() => loadAllDatabases());
+    // names of all available databases to show in the listing
     const [databaseNames, setDatabaseNames] = useState<string[]>([]);
 
+    // currently opened database
     const [openedDatabase, setOpenedDatabase] = useState<Database | null>(null);
+    // database that was clicked to be opened
     const [clickedDatabase, setClickedDatabase] = useState<string | null>(null);
+    // whether the dialog to add a new database is open
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+    // whether the dialog to open a database is open
     const [isOpenDialogOpen, setIsOpenDialogOpen] = useState(false);
 
+    const securityProvider = new SecurityProvider();
+
+    // update the list of database names when the databases change
     useEffect(() => {
         setDatabaseNames(Array.from(databases.keys()));
     }, [databases]);
 
     // creates a new database with the provided name and master password
     const createDatabase = (name: string, masterPassword: string) => {
-        const sec = new SecurityProvider();
-        const salt = sec.getNewSalt();
-        const validation = sec.getNewValidation(masterPassword, salt);
+        const salt = securityProvider.getNewSalt();
+        const validation = securityProvider.getNewValidation(masterPassword, salt);
 
         const facade = useAutomergeFacade(repo, undefined, salt, validation, name);
 
@@ -52,7 +68,6 @@ export const useLoginViewModel = (repo: Repo): LoginViewModelReturn => {
 
     // tries to open a database with the provided master password
     const tryOpenDatabase = (masterPassword: string) => {
-        debugger;
         const name = clickedDatabase;
         if (!name) {
             throw new Error("No database selected");
@@ -63,8 +78,7 @@ export const useLoginViewModel = (repo: Repo): LoginViewModelReturn => {
         }
 
         const facade = useAutomergeFacade(repo, dbUrl);
-        const sec = new SecurityProvider();
-        if (sec.verifyMasterPassword(masterPassword, facade.salt!, facade.validation!)) {
+        if (securityProvider.verifyMasterPassword(masterPassword, facade.salt!, facade.validation!)) {
             const db = new Database(dbUrl, name, facade.tree);
             setOpenedDatabase(db);
             setIsOpenDialogOpen(false);
@@ -89,7 +103,6 @@ export const useLoginViewModel = (repo: Repo): LoginViewModelReturn => {
         setClickedDatabase(db);
         setIsOpenDialogOpen(true);
     }
-
     // Close the dialog to login to a database
     const closeOpenDialog = () => setIsOpenDialogOpen(false);
 
