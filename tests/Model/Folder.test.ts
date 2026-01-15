@@ -57,7 +57,6 @@ describe('Folder', ()=> {
     })
 
     it('should be able to return a child via the childs id', ()=> {
-        console.log(rootFolder.getChildById("id1"));
         expect(rootFolder.getChildById("id1")).toBe(folder1);
         expect(folder1.getChildById("id11")).toBe(subfolder1);
     })
