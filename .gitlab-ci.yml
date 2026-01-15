@@ -11,11 +11,6 @@ test:
   stage: test
   script:
     - yarn test:ci
-  artifacts:
-    when: always
-    name: "Test Results"
-    paths:
-      - ./test-output
 
 test-build:
   stage: test
