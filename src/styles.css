@@ -178,10 +178,13 @@ button:focus-visible {
 
 .listViewTitleHeader {
     display: flex;
+    align-items: center;
+    justify-content: flex-start;
     flex-direction: row;
     background-color: var(--panel);
     border-radius: 10px;
     max-width: 20%;
+    width: fit-content;
     padding-left: 20px;
 }
 .listViewEntry {

@@ -20,11 +20,10 @@ const ListView: React.FC<{ item: Item }> = ({item}) => {
     } else if (listViewModel.isItemFolder()) {
         return (
             <>
-                <div className="listViewTitleHeader gridContainer">
+                <div className="listViewTitleHeader">
                     <span>{listViewModel.getItem().title}:</span>
-                    <span><button onClick={() => listViewModel.toggleExtended()}>
-                        toggle
-                    </button></span>
+                    <span><button onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended()?">":"v"}</button></span>
+                    <span><button>+</button></span>
                 </div>
 
                 {listViewModel.getExtended() && (
