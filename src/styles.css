@@ -138,7 +138,6 @@ button:focus-visible {
 }
 
 .settingsBackground {
-    background-color: var(--panel);
     border-radius: 15px;
     padding: 10px;
     padding-left: 20px;
@@ -171,4 +170,11 @@ button:focus-visible {
     margin-top: 5em;
     width: 15vmin;
     filter: drop-shadow(0 0 2em var(--panel));
+}
+
+.settingsButton {
+    float: right;
+    position: fixed;
+    top: 10px;
+    right: 10px;
 }
