@@ -27,10 +27,10 @@ const PasswordView: React.FC = () => {
     return (
         <div>
             <div className="passwordView">
-                <div style={{width: "30%",}}>
+                <div className="borderBox" style={{width: "30%"}}>
                     <ListView item={root}></ListView>
                 </div>
-                <div style={{width: "70%"}}>
+                <div className="borderBox" style={{width: "70%"}}>
                     <EntryView entry={entry}></EntryView>
                 </div>
             </div>

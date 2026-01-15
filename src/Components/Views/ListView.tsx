@@ -8,22 +8,21 @@ const ListView: React.FC<{ item: Item }> = ({item}) => {
     if (listViewModel.isItemEntry()) {
         let entry = listViewModel.getItem() as Entry;
         return (
-            <div className="listViewEntry gridContainer">
+            <div className="listViewEntry">
                 <span>Titel:</span>        <span>{entry.title}</span>
                 <span>ID:</span>           <span>{entry.id}</span>
                 <span>Benutzername:</span> <span>{entry.username}</span>
                 <span>URL:</span>          <span>{entry.url}</span>
                 <span>Notiz:</span>        <span>{entry.note}</span>
             </div>
-
         );
     } else if (listViewModel.isItemFolder()) {
         return (
             <>
                 <div className="listViewTitleHeader">
                     <span>{listViewModel.getItem().title}:</span>
-                    <span><button onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended()?">":"v"}</button></span>
-                    <span><button>+</button></span>
+                    <button onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended()?">":"v"}</button>
+                    <button>+</button>
                 </div>
 
                 {listViewModel.getExtended() && (
