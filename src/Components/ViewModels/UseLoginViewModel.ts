@@ -1,12 +1,20 @@
-import {useState, useEffect} from 'react';
-import DatabaseRoot from '../../Model/DatabaseRoot';
+import {useState} from 'react';
 import Database from '../../Model/Database';
 import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import {useAutomergeFacade} from "../../Utility/AutomergeFacade.ts";
-//import {buildDatabaseAsTree, saveDatabaseFromTree, unlockDatabase} from '../../Utility/AutomergeFacade';
+import {loadAllDatabases} from "./PasswordManagerViewModel.ts";
+import {BroadcastChannelNetworkAdapter, IndexedDBStorageAdapter, Repo, WebSocketClientAdapter} from "@automerge/react";
+
+
+const repo = new Repo({
+    network: [new BroadcastChannelNetworkAdapter(),
+        new WebSocketClientAdapter("wss://sync.automerge.org"),
+    ],
+    storage: new IndexedDBStorageAdapter(),
+});
 
 export type LoginViewModelReturn = {
-    databases: string[],
+    databaseNames: string[],
     openedDatabase: Database | null,
     isAddDialogOpen: boolean,
     isOpenDialogOpen: boolean,
@@ -21,33 +29,30 @@ export type LoginViewModelReturn = {
 }
 
 export const useLoginViewModel = (): LoginViewModelReturn => {
-    const [databases, setDatabases] = useState<string[]>([]);
+    const [databases, setDatabases] = useState(() => loadAllDatabases());
+    const databaseNames = Array.from(databases.keys());
+
     const [openedDatabase, setOpenedDatabase] = useState<Database | null>(null);
     const [clickedDatabase, setClickedDatabase] = useState<string | null>(null);
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
     const [isOpenDialogOpen, setIsOpenDialogOpen] = useState(false);
-
-    useEffect(() => {
-        // implement load all databases from storage
-    }, []);
 
     // creates a new database with the provided name and master password
     const createDatabase = (name: string, masterPassword: string) => {
         const sec = new SecurityProvider();
         const salt = sec.getNewSalt();
         const validation = sec.getNewValidation(masterPassword, salt)
-        const root = new DatabaseRoot(salt, validation); // here we would create the initial automerge document
-        let newDb = new Database("automerge-url", name.trim(), root);
-        setDatabases((prev) => [...prev, newDb.getName()]);
-        setIsAddDialogOpen(false);
-
-        useAutomergeFacade()
+        const root = useAutomergeFacade(repo, undefined, salt, validation, masterPassword).tree;
+        const url = useAutomergeFacade(repo, undefined, salt, validation, name).automergeURL;
+        const newDatabase = new Database(url, name, root);
     }
 
     // tries to open a database with the provided master password
-    const tryOpenDatabase = (masterPassword: string): boolean => {
-        // implement automerge facade unlock here
-        return false;
+    const tryOpenDatabase = (databaseKey: string, masterPassword: string): boolean => {
+        if (!clickedDatabase) {
+            return false;
+        }
+        const automergeURL = databases.get(clickedDatabase);
     }
 
     // opens a database
@@ -77,7 +82,7 @@ export const useLoginViewModel = (): LoginViewModelReturn => {
     const closeOpenDialog = () => setIsOpenDialogOpen(false);
 
     return {
-        databases,
+        databaseNames,
         openedDatabase,
         isAddDialogOpen,
         isOpenDialogOpen,

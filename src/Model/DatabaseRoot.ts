@@ -22,3 +22,4 @@ export class DatabaseRoot {
         return this._salt;
     }
 }
+export default DatabaseRoot;

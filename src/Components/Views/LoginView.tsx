@@ -28,7 +28,7 @@ const LoginView: React.FC<loginViewProps> = ({viewModel}) => {
             >
                 {/* Show a list of all available Documents */}
                 <DatabaseListing
-                    databases={viewModel.databases}
+                    databases={viewModel.databaseNames}
                     onClick={viewModel.openOpenDialog}
                 />
 

@@ -1,13 +1,11 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import SettingsView from "./Components/Views/SettingsView.tsx";
-import LoginView from './Components/Views/LoginView.tsx'
+import PasswordManagerView from './Components/Views/PasswodManagerView.tsx'
 import "./styles.css"
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-          <LoginView />
-          <SettingsView />
+          <PasswordManagerView/>
   </StrictMode>,
 )
