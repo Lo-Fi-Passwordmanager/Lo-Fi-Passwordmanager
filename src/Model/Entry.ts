@@ -20,6 +20,7 @@ export class Entry extends Item {
 
     public set username(value: string) {
         this._username = value;
+        this.updateEditedAt();
     }
 
     public get password(): string {
@@ -28,6 +29,7 @@ export class Entry extends Item {
 
     public set password(value: string) {
         this._password = value;
+        this.updateEditedAt();
     }
 
     public get url(): string {
@@ -36,6 +38,7 @@ export class Entry extends Item {
 
     public set url(value: string) {
         this._url = value;
+        this.updateEditedAt();
     }
 
     public get note(): string {
@@ -44,5 +47,6 @@ export class Entry extends Item {
 
     public set note(value: string) {
         this._note = value;
+        this.updateEditedAt();
     }
 }
