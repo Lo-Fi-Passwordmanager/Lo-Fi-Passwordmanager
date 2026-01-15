@@ -1,6 +1,4 @@
 import {useSettingsViewModel} from "../ViewModels/SettingsViewModel.ts";
-import {checkboxRowStyle, settingsContainer} from "../../CSS.ts";
-import OnClickButton from "./ButtonViews/OnClickButton.tsx";
 
 const SettingsView: React.FC = () => {
     const viewmodel = useSettingsViewModel();
@@ -12,9 +10,9 @@ const SettingsView: React.FC = () => {
                 <button onClick={() => viewmodel.setSettingsOpen(false)}>Einstellungen Schließen</button>
                 <h1 style={{ fontSize: "2em", marginBottom: "20px" }}>Settings</h1>
 
-                <div style={settingsContainer}>
+                <div className="settingsContainer">
                     <div>
-                        <label style={checkboxRowStyle}>
+                        <label className="checkboxRow">
                             <input
                                 type="checkbox"
                                 checked={viewmodel.darkMode}
@@ -25,7 +23,7 @@ const SettingsView: React.FC = () => {
                     </div>
 
                     <div>
-                        <label style={checkboxRowStyle}>
+                        <label className="checkboxRow">
                             <input
                                 type="checkbox"
                                 checked={viewmodel.synchronisation}
@@ -36,7 +34,7 @@ const SettingsView: React.FC = () => {
                     </div>
 
                     <div>
-                        <label style={checkboxRowStyle}>
+                        <label className="checkboxRow">
                             <input
                                 type="checkbox"
                                 checked={viewmodel.autoConclictRes}
@@ -47,7 +45,7 @@ const SettingsView: React.FC = () => {
                     </div>
 
                     <div>
-                        <label style={checkboxRowStyle}>
+                        <label className="checkboxRow">
                             <input
                                 type="checkbox"
                                 checked={viewmodel.timeOutActive}
