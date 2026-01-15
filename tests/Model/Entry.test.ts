@@ -11,7 +11,8 @@ describe('Entry', () => {
     let entry2: Entry;
 
     beforeEach(() => {
-        item1 = new Entry("Entry1", "id2", new Date(), new Date(), "entryName1", "password1", "url1", "note1")
+        item1 = new Entry("Entry1", "id2", new Date(), new Date(), "entryName1", "password1", "url1", "note1");
+        item2 = new Entry("Entry2", "id3", null, null, "entryName", "password", "url", "note");
 
         entry1 = new Entry("Name1", "id123", new Date(), new Date(), "benutzer1", "password2", "url2", "note2");
         entry2 = new Entry("Name2", "id234", new Date(), new Date(), "name2", "password3", "url3", "note3");
