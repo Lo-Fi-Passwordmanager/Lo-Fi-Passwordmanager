@@ -21,5 +21,12 @@ export default defineConfig({
   },
     test: {
         environment: "jsdom",
+      coverage: {
+        provider: 'v8',
+        include: ['src/**/*.{ts,tsx}'],
+        exclude: ['scryptConfig.ts'],
+        reporter: ['text', 'html', 'lcov'],
+        reportsDirectory: './coverage',
+      },
     },
 });
