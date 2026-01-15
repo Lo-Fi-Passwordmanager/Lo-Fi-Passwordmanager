@@ -20,16 +20,21 @@ const ListView: React.FC<{ item: Item }> = ({item}) => {
     } else if (listViewModel.isItemFolder()) {
         return (
             <>
-                <div className="listViewTitleHeader">
-                    {listViewModel.getItem().title}:
+                <div className="listViewTitleHeader gridContainer">
+                    <span>{listViewModel.getItem().title}:</span>
+                    <span><button onClick={() => listViewModel.toggleExtended()}>
+                        toggle
+                    </button></span>
                 </div>
 
-                {/* Wrap children in a div with padding to create the indentation */}
-                <div className="listViewEntryWrapper">
-                    {listViewModel.getChildren() && listViewModel.getChildren()!.map((item: Item, index: number) => {
-                        return <ListView key={index} item={item}/>
-                    })}
-                </div>
+                {listViewModel.getExtended() && (
+                    <div className="listViewEntryWrapper">
+                        {listViewModel.getChildren() &&
+                            listViewModel.getChildren()!.map((item: Item, index: number) => {
+                                return <ListView key={index} item={item} />;
+                            })}
+                    </div>
+                )}
             </>
         );
     }

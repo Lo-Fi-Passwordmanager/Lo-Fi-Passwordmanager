@@ -1,10 +1,12 @@
 import {Item} from "../../Model/Item.ts";
 import {Folder} from "../../Model/Folder.ts";
 import type {Entry} from "../../Model/Entry.ts";
+import {useState} from "react";
 
 export const useListViewModel = (topItem: Item) => {
 
     let item: Item = topItem;
+    const [extended, setExtended] = useState(true);
 
 
     // Reactive state to store values during runtime
@@ -13,6 +15,14 @@ export const useListViewModel = (topItem: Item) => {
         if (item.isFolder()) {
             return item.entries;
         }
+    }
+
+    function toggleExtended() {
+         setExtended(!extended);
+    }
+
+    function getExtended() {
+         return extended;
     }
 
     function getItem() {
@@ -31,5 +41,7 @@ export const useListViewModel = (topItem: Item) => {
         isItemFolder,
         isItemEntry,
         getItem,
+        toggleExtended,
+        getExtended,
     };
 };
