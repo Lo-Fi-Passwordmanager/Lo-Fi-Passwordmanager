@@ -4,7 +4,7 @@ export class Folder extends Item {
     private _entries: Item[];
 
     public constructor(name: string, id: string | null, createdAt?: Date, editedAt?: Date) {
-        super("folder", name, id, createdAt ? createdAt : null, editedAt ? editedAt : null);
+        super("folder", name, id, createdAt ? createdAt : new Date(), editedAt ? editedAt : new Date());
         this._entries = []
     }
 
@@ -19,6 +19,17 @@ export class Folder extends Item {
 
     public addItem(item: Item) {
         this._entries.push(item);
+        this.updateEditedAt();
+    }
+
+    public removeItem(item: Item): boolean {
+        const index = this._entries.indexOf(item);
+        this.updateEditedAt();
+        if (index >= 0) {
+            this._entries.splice(index, 1);
+            return true;
+        }
+        return false;
     }
 
 }

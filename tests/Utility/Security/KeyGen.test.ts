@@ -1,7 +1,6 @@
 import {expect, it, describe, beforeEach, afterEach} from "vitest";
 import {KeyGen} from "../../../src/Utility/Security/KeyGen";
 
-
 const SALT_LENGTH = 32; //Length in Bytes of the Salt used to derive the Key from the password.
 const VALIDATION_LENGTH = 32; //Length in Bytes of the Validation used for Login
 const KEY_LENGTH = 32;

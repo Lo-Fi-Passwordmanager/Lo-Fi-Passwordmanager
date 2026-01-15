@@ -17,9 +17,7 @@ export const useLoginViewModel = () => {
 
     // creates a new database with the provided name and master password
     const createDatabase = (name: string, masterPassword: string) => {
-
         // implement logic to create a new database here
-
         setIsAddDialogOpen(false);
     }
 

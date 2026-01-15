@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from "react";
 import OnClickButton from "../ButtonViews/OnClickButton.tsx";
-import {dialogOverlayStyle, dialogStyle} from "../../../CSS.ts";
 
 interface TwoFieldDialogProps {
     isOpen: boolean;
