@@ -7,7 +7,7 @@ import {
     UPPER_CASE_LETTERS
 } from "../../src/Utility/PasswordGenerator";
 
-const PASSWORD_LENGTH = 20;
+const PASSWORD_LENGTH = 40;
 
 const characters = [UPPER_CASE_LETTERS, LOWER_CASE_LETTERS, NUMBERS, SPECIAL]
 const concatChars = characters.concat();
