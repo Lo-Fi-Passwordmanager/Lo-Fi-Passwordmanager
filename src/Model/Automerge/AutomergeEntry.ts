@@ -7,7 +7,7 @@ export class AutomergeEntry extends AutomergeItem {
     private _note: string;
 
     constructor(name: string, createdAt: number, editedAt: number, parentId: string, username: string, password: string, url: string, note: string) {
-        super("folder", name, createdAt, editedAt, parentId);
+        super("entry", name, createdAt, editedAt, parentId);
         this._username = username;
         this._password = password;
         this._url = url;
