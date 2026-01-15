@@ -202,6 +202,7 @@ button:focus-visible {
 .listViewEntryWrapper {
     /*The indent that each layer of the tree gets*/
     padding-left: 50px;
+    flex-direction: row;
 }
 
 .gridContainer {
@@ -210,6 +211,7 @@ button:focus-visible {
     gap: 4px;
 }
 
-.entryView {
-    width: 100%;
+.passwordView {
+    display: flex;
+    flex-direction: row;
 }
