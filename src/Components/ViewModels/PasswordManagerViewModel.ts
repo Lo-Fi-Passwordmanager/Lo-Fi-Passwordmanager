@@ -1,17 +1,22 @@
 import type Database from "../../Model/Database.ts";
 import {useLoginViewModel} from "./UseLoginViewModel.ts";
+import {BroadcastChannelNetworkAdapter, IndexedDBStorageAdapter, Repo, WebSocketClientAdapter} from "@automerge/react";
+import {useAutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 
 export const usePasswordManagerViewModel = () => {
 
-    const loginViewModel = useLoginViewModel();
+    const repo = new Repo({
+        network: [new BroadcastChannelNetworkAdapter(),
+            new WebSocketClientAdapter("wss://5bcaaf94-60ef-4757-b55c-5f2e443c480c.ka.bw-cloud-instance.org/"),
+        ],
+        storage: new IndexedDBStorageAdapter(),
+    });
+
+    const loginViewModel = useLoginViewModel(repo);
 
     return {
         loginViewModel,
     };
-}
-
-function createNewDatabase(name: string, password: string) {
-
 }
 
 /**

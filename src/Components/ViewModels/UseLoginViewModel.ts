@@ -3,15 +3,7 @@ import Database from '../../Model/Database';
 import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import {useAutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {loadAllDatabases} from "./PasswordManagerViewModel.ts";
-import {BroadcastChannelNetworkAdapter, IndexedDBStorageAdapter, Repo, WebSocketClientAdapter} from "@automerge/react";
-
-
-const repo = new Repo({
-    network: [new BroadcastChannelNetworkAdapter(),
-        new WebSocketClientAdapter("wss://sync.automerge.org"),
-    ],
-    storage: new IndexedDBStorageAdapter(),
-});
+import type {Repo} from "@automerge/react";
 
 export type LoginViewModelReturn = {
     databaseNames: string[],
@@ -28,12 +20,13 @@ export type LoginViewModelReturn = {
     closeOpenDialog: () => void
 }
 
-export const useLoginViewModel = (): LoginViewModelReturn => {
+
+export const useLoginViewModel = (repo: Repo): LoginViewModelReturn => {
     const [databases, setDatabases] = useState(() => loadAllDatabases());
     const databaseNames = Array.from(databases.keys());
 
     const [openedDatabase, setOpenedDatabase] = useState<Database | null>(null);
-    const [clickedDatabase, setClickedDatabase] = useState<string | null>(null);
+    const [clickedDatabase, setClickedDatabase] = useState<Database | null>(null);
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
     const [isOpenDialogOpen, setIsOpenDialogOpen] = useState(false);
 
@@ -42,9 +35,14 @@ export const useLoginViewModel = (): LoginViewModelReturn => {
         const sec = new SecurityProvider();
         const salt = sec.getNewSalt();
         const validation = sec.getNewValidation(masterPassword, salt)
-        const root = useAutomergeFacade(repo, undefined, salt, validation, masterPassword).tree;
-        const url = useAutomergeFacade(repo, undefined, salt, validation, name).automergeURL;
-        const newDatabase = new Database(url, name, root);
+
+        const facade = useAutomergeFacade(repo, undefined, salt, validation, masterPassword);
+
+        const url = facade.automergeURL;
+        const root = facade.tree;
+
+        setClickedDatabase(new Database(url, name, root));
+        setIsOpenDialogOpen(true);
     }
 
     // tries to open a database with the provided master password
