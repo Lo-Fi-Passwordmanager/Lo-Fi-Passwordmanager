@@ -1,7 +1,6 @@
-import type Database from "../../Model/Database.ts";
 import {useLoginViewModel} from "./UseLoginViewModel.ts";
 import {BroadcastChannelNetworkAdapter, IndexedDBStorageAdapter, Repo, WebSocketClientAdapter} from "@automerge/react";
-import {useAutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import type {AutomergeUrl} from "@automerge/automerge-repo";
 
 export const usePasswordManagerViewModel = () => {
 
@@ -25,13 +24,13 @@ export const usePasswordManagerViewModel = () => {
  *
  * @author uwing
  */
-export function loadAllDatabases(): Map<string, string> {
+export function loadAllDatabases(): Map<string, AutomergeUrl> {
     const raw = localStorage.getItem('databases');
     if (!raw) {
         return new Map();
     }
     try {
-        const parsed = new Map(JSON.parse(raw) as [string, string][]);
+        const parsed = new Map(JSON.parse(raw) as [string, AutomergeUrl][]);
         return new Map(parsed);
     } catch (e) {
         console.error(e);
@@ -45,7 +44,13 @@ export function loadAllDatabases(): Map<string, string> {
  *
  * @author uwing
  */
-export function saveDatabases(databases: Map<string, string>): void {
+export function saveDatabases(databases: Map<string, AutomergeUrl>): void {
     const toStore = JSON.stringify(Array.from(databases.entries()));
     localStorage.setItem('databases', toStore);
+}
+
+export function storeDatabase(name: string, autoMergeUrl: AutomergeUrl): void {
+    const databases = loadAllDatabases();
+    databases.set(name, autoMergeUrl);
+    saveDatabases(databases);
 }

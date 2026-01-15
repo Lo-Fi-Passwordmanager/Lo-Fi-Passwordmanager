@@ -7,6 +7,8 @@ import type {Item} from "../Model/Item.ts";
 import {Folder} from "../Model/Folder.ts";
 import {Entry} from "../Model/Entry.ts";
 import type {AutomergeEntry} from "../Model/Automerge/AutomergeEntry.ts";
+import {storeDatabase} from "../Components/ViewModels/PasswordManagerViewModel.ts";
+
 
 /**
  * Returns a reactive instance of an automerge document with various helper functions.
@@ -25,7 +27,7 @@ export const useAutomergeFacade = (repo: Repo, automergeURL?: AutomergeUrl, salt
     if (!automergeURL) {
         const root = repo.create<AutomergeDoc>(new AutomergeDoc(salt!, validation!))
         automergeURL = root.url
-        // TODO An dieser Stelle müsste die neu erstellte Datenbank in die Liste der verfügbaren Datebanken eingefügt werden.
+        storeDatabase(name!, automergeURL)
     }
 
     if (!isValidAutomergeUrl(automergeURL)) {

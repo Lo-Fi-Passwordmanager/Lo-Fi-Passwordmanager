@@ -4,7 +4,7 @@ import {randomBytes} from "@noble/ciphers/utils.js";
 
 const SALT_LENGTH = 32; //Length in Bytes of the Salt used to derive the Key from the password.
 const VALIDATION_LENGTH = 32; //Length in Bytes of the Validation used for Login
-const SCRYPT_N: number = 2**18; //Work factor that should be modified
+const SCRYPT_N: number = 2**15; //Work factor that should be modified //TODO wieder auf 2^18
 const SCRYPT_R: number = 8; //Work factor that should stay at 8.
 const SCRYPT_P: number = 1; //should always be 1 since parallelization is not implemented in scrypt.
 const KEY_LENGTH: number = 32; //length of the Key derived
