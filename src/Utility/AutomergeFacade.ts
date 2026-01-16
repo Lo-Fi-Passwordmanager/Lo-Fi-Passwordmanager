@@ -7,7 +7,6 @@ import type {Item} from "../Model/Item.ts";
 import {Folder} from "../Model/Folder.ts";
 import {Entry} from "../Model/Entry.ts";
 import type {AutomergeEntry} from "../Model/Automerge/AutomergeEntry.ts";
-import {storeDatabase} from "../Components/ViewModels/PasswordManagerViewModel.ts";
 
 export class AutomergeFacade {
     private readonly _repo: Repo
@@ -33,7 +32,7 @@ export class AutomergeFacade {
         const automergeURL = handle.url
         this._salt = salt
         this._validation = validation
-        storeDatabase(name!, automergeURL)
+        // storeDatabase(name!, automergeURL) TODO Kommentar entfernen wenn !17 gemerged wird
     }
 
     get automergeURL(): AutomergeUrl | null {
@@ -189,10 +188,10 @@ function findNestedValue(databaseRoot: DatabaseRoot, path: string[]): Item {
 
     path.slice(1).forEach((id) => {
         if (currentValue!.isFolder()) {
-            const nestedValue = currentValue.getChildById(id)
+            const nestedValue = (currentValue! as Folder).getChildById(id)
 
             if (nestedValue === null) {
-                throw Error(`Child with ID ${id} does not exist on Element with ID ${currentValue.id}.`)
+                throw Error(`Child with ID ${id} does not exist on Element with ID ${currentValue!.id}.`)
             }
 
             currentValue = nestedValue;
@@ -216,5 +215,5 @@ function insertNestedValue(databaseRoot: DatabaseRoot, path: string[], insert: I
     if (!value.isFolder()) {
         throw Error("Cannot insert value into Entry.")
     }
-    value.addItem(insert)
+    (value as Folder).addItem(insert)
 }
