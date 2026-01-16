@@ -189,10 +189,10 @@ function findNestedValue(databaseRoot: DatabaseRoot, path: string[]): Item {
 
     path.slice(1).forEach((id) => {
         if (currentValue!.isFolder()) {
-            const nestedValue = currentValue.getChildById(id)
+            const nestedValue = (currentValue! as Folder).getChildById(id)
 
             if (nestedValue === null) {
-                throw Error(`Child with ID ${id} does not exist on Element with ID ${currentValue.id}.`)
+                throw Error(`Child with ID ${id} does not exist on Element with ID ${currentValue!.id}.`)
             }
 
             currentValue = nestedValue;
@@ -216,5 +216,5 @@ function insertNestedValue(databaseRoot: DatabaseRoot, path: string[], insert: I
     if (!value.isFolder()) {
         throw Error("Cannot insert value into Entry.")
     }
-    value.addItem(insert)
+    (value as Folder).addItem(insert)
 }

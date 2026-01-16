@@ -26,7 +26,7 @@ export class Encrypter implements IEncrypter{
         try {
             result = cipher.decrypt(pureCipher);
         } catch {
-            throw DecryptionError;
+            throw new DecryptionError;
         }
         return bytesToUtf8(result);
     }

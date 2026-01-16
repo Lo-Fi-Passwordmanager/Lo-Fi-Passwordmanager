@@ -1,12 +1,15 @@
 #root {
     margin: 0 auto;
     text-align: center;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    min-height: 100%;
+    height: max-content;
 }
 
 /* LIGHT THEME (default) */
 :root {
+    min-height: 100%;
+    height: max-content;
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;
     font-weight: 400;
@@ -138,7 +141,6 @@ button:focus-visible {
 }
 
 .settingsBackground {
-    background-color: var(--panel);
     border-radius: 15px;
     padding: 10px;
     padding-left: 20px;
@@ -171,4 +173,95 @@ button:focus-visible {
     margin-top: 5em;
     width: 15vmin;
     filter: drop-shadow(0 0 2em var(--panel));
+}
+
+.settingsButton {
+    float: right;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+}
+
+.listViewTitleHeader {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row;
+    background-color: var(--panel);
+    border-radius: 10px;
+    max-width: 20%;
+    width: fit-content;
+    padding-left: 10px;
+    margin: 2px;
+
+    max-width: fit-content;
+}
+
+.listViewTitleHeader button {
+    margin: 5px;
+    padding: 4px 8px; /* Smaller padding for buttons */
+    outline-width: 2px; /* Reduce the outline so it stays inside the box */
+}
+.listViewEntry {
+    flex-direction: column;
+    padding-left: 30px;
+    padding-right: 30px;
+    border-radius: 10px;
+    max-width: fit-content;
+    background-color: var(--dialog-bg);
+    text-align: left;
+    margin: 2px;
+
+    /*grid formatting*/
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 4px;
+}
+
+.listViewEntryWrapper {
+    /*The indent that each layer of the tree gets*/
+    padding-left: 50px;
+    flex-direction: row;
+}
+
+.passwordView {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 80vh
+}
+
+.borderBox {
+    border: 4px solid var(--panel);
+    border-right: 0px;
+
+}
+
+.entryViewEntry {
+    font-size: 2em;
+    padding: 50px 50px 0 50px;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: minmax(40%, auto) 1fr;
+    flex-direction: column;
+    background-color: var(--dialog-bg);
+    text-align: left;
+    gap: 10px 20px;
+    box-sizing: border-box; /* Ensures padding doesn't break the 100% width */
+
+    word-break: break-all;
+    white-space: normal;
+}
+
+
+.entryViewEntry span:nth-child(odd) {
+    font-weight: bold;
+    color: var(--text);
+}
+
+.scrollableContainer {
+    overflow: auto;
+    scrollbar-color: var(--panel) var(--bg);
+    scrollbar-width: thin;
 }
