@@ -11,7 +11,7 @@ const LoginView: React.FC = () => {
 
     if (viewModel.openedDatabase) {
         return (
-            <EntryView/>
+            <a>Hier provisorischer Text? Wann wird das hier überhaupt gecalled?</a>
         );
     }
 
