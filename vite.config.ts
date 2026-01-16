@@ -29,5 +29,6 @@ export default defineConfig({
         reporter: ['text', 'html', 'lcov'],
         reportsDirectory: './coverage',
       },
+      setupFiles: ['./tests/idbSetup.ts'],
     },
 });
