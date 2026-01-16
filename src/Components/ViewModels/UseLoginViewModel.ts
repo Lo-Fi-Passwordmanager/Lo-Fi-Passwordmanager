@@ -57,7 +57,11 @@ export const useLoginViewModel = (repo: Repo): LoginViewModelReturn => {
 
         const url = facade.automergeURL!;
 
-        setDatabases(databases.set(name, url));
+        setDatabases(prev => {
+            const copy = new Map(prev);
+            copy.set(name, url);
+            return copy;
+        });
         setIsAddDialogOpen(false);
 
         setClickedDatabase(name);
