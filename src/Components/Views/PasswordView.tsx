@@ -4,6 +4,7 @@ import {Folder} from "../../Model/Folder.ts";
 import SettingsView from "./SettingsView.tsx";
 import ListView from "./ListView.tsx";
 import EntryView from "./EntryView.tsx";
+import {usePasswortViewModel} from "../ViewModels/PasswordViewModel.ts";
 
 
 const root = new Folder("krasser Titel", "123", new Date(), new Date())
@@ -24,14 +25,16 @@ root.addItem(entry3);
 
 
 const PasswordView: React.FC = () => {
+    const passwordViewModel = usePasswortViewModel(entry)
+
     return (
         <div>
             <div className="passwordView">
                 <div className="borderBox" style={{width: "30%"}}>
-                    <ListView item={root}></ListView>
+                    <ListView item={root} onSetEntry={passwordViewModel.setCurEntry}/>
                 </div>
                 <div className="borderBox" style={{width: "70%"}}>
-                    <EntryView entry={entry}></EntryView>
+                    <EntryView entry={passwordViewModel.getCurEntry()} />
                 </div>
             </div>
         </div>

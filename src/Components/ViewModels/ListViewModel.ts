@@ -5,7 +5,7 @@ import {useState} from "react";
 
 export const useListViewModel = (topItem: Item) => {
 
-    let item: Item = topItem;
+    const item: Item = topItem;
     const [extended, setExtended] = useState(true);
 
 
@@ -13,7 +13,7 @@ export const useListViewModel = (topItem: Item) => {
 
      function getChildren() {
         if (item.isFolder()) {
-            return item.entries;
+            return (item as Folder).entries;
         }
     }
 

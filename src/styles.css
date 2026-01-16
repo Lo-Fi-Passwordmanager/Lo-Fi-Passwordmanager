@@ -192,15 +192,17 @@ button:focus-visible {
     max-width: 20%;
     width: fit-content;
     padding-left: 20px;
+    margin: 2px;
 }
 .listViewEntry {
     flex-direction: column;
     padding-left: 30px;
     padding-right: 30px;
-    border-radius: 15px;
+    border-radius: 10px;
     max-width: fit-content;
     background-color: var(--dialog-bg);
     text-align: left;
+    margin: 2px;
 
     /*grid formatting*/
     display: grid;
@@ -217,6 +219,8 @@ button:focus-visible {
 .passwordView {
     display: flex;
     flex-direction: row;
+    width: 100vw;
+    height: 80vh
 }
 
 .borderBox {
