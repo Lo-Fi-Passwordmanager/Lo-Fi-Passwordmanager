@@ -10,6 +10,11 @@ import {usePasswortViewModel} from "../ViewModels/PasswordViewModel.ts";
 const root = new Folder("krasser Titel", "123", new Date(), new Date())
 const subFolder1 = new Folder("subFolder 1", "123", new Date(), new Date())
 const subFolder2 = new Folder("subFolder 2", "123", new Date(), new Date())
+const subFolder3 = new Folder("subFolder 2", "123", new Date(), new Date())
+const subFolder4 = new Folder("subFolder 2", "123", new Date(), new Date())
+const subFolder5 = new Folder("subFolder 2", "123", new Date(), new Date())
+const subFolder6 = new Folder("subFolder 2", "123", new Date(), new Date())
+const subFolder7 = new Folder("subFolder 2", "123", new Date(), new Date())
 const entry = new Entry("Name1", "id123", new Date(), new Date(), "benutzer1", "password", "url", "note");
 const entry3 = new Entry("Name3", "id123", new Date(), new Date(), "benutzer1", "password", "url", "note");
 const entry2 = new Entry("Name2", "id234", new Date(), new Date(), "name2", "password", "url", "note");
@@ -22,6 +27,11 @@ subFolder1.addItem(subFolder2);
 root.addItem(entry);
 root.addItem(entry2);
 root.addItem(entry3);
+subFolder2.addItem(subFolder3);
+subFolder3.addItem(subFolder4);
+subFolder4.addItem(subFolder5);
+subFolder5.addItem(subFolder6);
+subFolder6.addItem(subFolder7);
 
 
 const PasswordView: React.FC = () => {
@@ -30,7 +40,7 @@ const PasswordView: React.FC = () => {
     return (
         <div>
             <div className="passwordView">
-                <div className="borderBox" style={{width: "30%"}}>
+                <div className="borderBox scrollableContainer" style={{width: "30%"}}>
                     <ListView item={root} onSetEntry={passwordViewModel.setCurEntry}/>
                 </div>
                 <div className="borderBox" style={{width: "70%"}}>

@@ -191,8 +191,16 @@ button:focus-visible {
     border-radius: 10px;
     max-width: 20%;
     width: fit-content;
-    padding-left: 20px;
+    padding-left: 10px;
     margin: 2px;
+
+    max-width: fit-content;
+}
+
+.listViewTitleHeader button {
+    margin: 5px;
+    padding: 4px 8px; /* Smaller padding for buttons */
+    outline-width: 2px; /* Reduce the outline so it stays inside the box */
 }
 .listViewEntry {
     flex-direction: column;
@@ -250,4 +258,10 @@ button:focus-visible {
 .entryViewEntry span:nth-child(odd) {
     font-weight: bold;
     color: var(--text);
+}
+
+.scrollableContainer {
+    overflow: auto;
+    scrollbar-color: var(--panel) var(--bg);
+    scrollbar-width: thin;
 }
