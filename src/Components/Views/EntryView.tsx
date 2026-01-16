@@ -1,6 +1,11 @@
 import React from "react";
 import type {Entry} from "../../Model/Entry.ts";
 
+
+/**
+ * The View that depicts an Entry with all its attributes at large scale
+ * @param entry the entry that should be depicted
+ */
 const EntryView: React.FC<{ entry: Entry }> = ({entry}) => {
     return (
         <div className="entryViewEntry">

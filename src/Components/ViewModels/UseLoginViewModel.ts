@@ -21,11 +21,8 @@ export type LoginViewModelReturn = {
 
 /**
  * ViewModel for the LoginView
- *
  * @param repo the automerge repo
- *
  * @returns all data and functions required by the LoginView
- *
  * @author uwing
  */
 export const useLoginViewModel = (repo: Repo): LoginViewModelReturn => {
@@ -60,7 +57,11 @@ export const useLoginViewModel = (repo: Repo): LoginViewModelReturn => {
 
         const url = facade.automergeURL!;
 
-        setDatabases(databases.set(name, url));
+        setDatabases(prev => {
+            const copy = new Map(prev);
+            copy.set(name, url);
+            return copy;
+        });
         setIsAddDialogOpen(false);
 
         setClickedDatabase(name);
