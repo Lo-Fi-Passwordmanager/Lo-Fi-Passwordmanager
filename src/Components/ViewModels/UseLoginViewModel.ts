@@ -9,14 +9,14 @@ export type LoginViewModelReturn = {
     databaseNames: string[],
     openedDatabase: Database | null,
     isAddDialogOpen: boolean,
-    isOpenDialogOpen: boolean,
+    isEnterPasswordDialogOpen: boolean,
     createDatabase: (name: string, masterPassword: string) => void,
     tryOpenDatabase: (masterPassword: string) => void,
     closeDatabase: () => void,
     openAddDialog: () => void,
     closeAddDialog: () => void,
-    openOpenDialog: (db: string) => void,
-    closeOpenDialog: () => void
+    openEnterPasswordDialog: (db: string) => void,
+    closeEnterPasswordDialog: () => void
 }
 
 /**
@@ -34,11 +34,11 @@ export const useLoginViewModel = (repo: Repo): LoginViewModelReturn => {
     // currently opened database
     const [openedDatabase, setOpenedDatabase] = useState<Database | null>(null);
     // database that was clicked to be opened
-    const [clickedDatabase, setClickedDatabase] = useState<string | null>(null);
+    const [selectedDatabase, setSelectedDatabase] = useState<string | null>(null);
     // whether the dialog to add a new database is open
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
     // whether the dialog to open a database is open
-    const [isOpenDialogOpen, setIsOpenDialogOpen] = useState(false);
+    const [isEnterPasswordDialogOpen, setIsEnterPasswordDialogOpen] = useState(false);
 
     const securityProvider = new SecurityProvider();
 
@@ -47,15 +47,19 @@ export const useLoginViewModel = (repo: Repo): LoginViewModelReturn => {
         setDatabaseNames(Array.from(databases.keys()));
     }, [databases]);
 
-    // creates a new database with the provided name and master password
+    /**
+     * creates a new database with the provided name and master password
+     * @param name the name of the database
+     * @param masterPassword the masterpassword that gets used for encryption
+     */
     const createDatabase = (name: string, masterPassword: string) => {
         const salt = securityProvider.getNewSalt();
         const validation = securityProvider.getNewValidation(masterPassword, salt);
 
-        const facade = new AutomergeFacade(repo);
-        facade.createDatabase(salt, validation, name)
+        const automergeFacade = new AutomergeFacade(repo);
+        automergeFacade.createDatabase(salt, validation, name)
 
-        const url = facade.automergeURL!;
+        const url = automergeFacade.automergeURL!;
 
         setDatabases(prev => {
             const copy = new Map(prev);
@@ -64,17 +68,16 @@ export const useLoginViewModel = (repo: Repo): LoginViewModelReturn => {
         });
         setIsAddDialogOpen(false);
 
-        setClickedDatabase(name);
-        setIsOpenDialogOpen(true);
+        setSelectedDatabase(name);
+        setIsEnterPasswordDialogOpen(true);
     }
 
     // tries to open a database with the provided master password
     const tryOpenDatabase = async (masterPassword: string) => {
-        const name = clickedDatabase;
-        if (!name) {
+        if (!selectedDatabase) {
             throw new Error("No database selected");
         }
-        const dbUrl = databases.get(name);
+        const dbUrl = databases.get(selectedDatabase);
 
         if (!dbUrl) {
             throw new Error("Database doesn't exist");
@@ -82,10 +85,10 @@ export const useLoginViewModel = (repo: Repo): LoginViewModelReturn => {
 
         const facade = new AutomergeFacade(repo, dbUrl)
         if (securityProvider.verifyMasterPassword(masterPassword, await facade.getSalt()!, await facade.getValidation()!)) {
-            const db = new Database(dbUrl, name);
+            const db = new Database(dbUrl, selectedDatabase);
             setOpenedDatabase(db);
-            setIsOpenDialogOpen(false);
-            setClickedDatabase(null);
+            setIsEnterPasswordDialogOpen(false);
+            setSelectedDatabase(null);
         } else {
             alert("Falsches Masterpasswort!");
         }
@@ -102,25 +105,25 @@ export const useLoginViewModel = (repo: Repo): LoginViewModelReturn => {
     const closeAddDialog = () => setIsAddDialogOpen(false);
 
     // Open the dialog to login to a database
-    const openOpenDialog = (db: string) => {
-        setClickedDatabase(db);
-        setIsOpenDialogOpen(true);
+    const openEnterPasswordDialog = (db: string) => {
+        setSelectedDatabase(db);
+        setIsEnterPasswordDialogOpen(true);
     }
     // Close the dialog to login to a database
-    const closeOpenDialog = () => setIsOpenDialogOpen(false);
+    const closeEnterPasswordDialog = () => setIsEnterPasswordDialogOpen(false);
 
     return {
         databaseNames,
         openedDatabase,
         isAddDialogOpen,
-        isOpenDialogOpen,
+        isEnterPasswordDialogOpen,
 
         createDatabase,
         tryOpenDatabase,
         closeDatabase,
         openAddDialog,
         closeAddDialog,
-        openOpenDialog,
-        closeOpenDialog
+        openEnterPasswordDialog,
+        closeEnterPasswordDialog
     };
 }

@@ -8,7 +8,7 @@ const PasswordManagerView: React.FC = () => {
 
     const viewModel = usePasswordManagerViewModel();
 
-    if (viewModel.getLoggedIn()) {
+    if (!viewModel.getLoggedIn()) {
         return (
             <>
                 <SettingsView/>

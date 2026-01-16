@@ -1,4 +1,3 @@
-import {useLoginViewModel} from "./UseLoginViewModel.ts";
 import {BroadcastChannelNetworkAdapter, IndexedDBStorageAdapter, Repo, WebSocketClientAdapter} from "@automerge/react";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
 import {useState} from "react";
@@ -15,14 +14,8 @@ export const usePasswordManagerViewModel = () => {
         storage: new IndexedDBStorageAdapter(),
     });
 
-    const loginViewModel = useLoginViewModel(repo);
-
     function getLoggedIn(): boolean {
         return loggedIn;
-    }
-
-    function setLoggedIn(loggedIn: boolean): void {
-        setLoggedIn(loggedIn);
     }
 
     return {

@@ -1,5 +1,5 @@
 import React from "react";
-import {type LoginViewModelReturn, useLoginViewModel} from "../ViewModels/UseLoginViewModel.ts";
+import {useLoginViewModel} from "../ViewModels/UseLoginViewModel.ts";
 import DatabaseListing from "./ListingViews/DatabaseListing.tsx";
 import CreateDatabaseDialog from "./Dialogs/CreateDatabaseDialog.tsx";
 import LoginDatabaseDialog from "./Dialogs/LoginDatabaseDialog.tsx";
@@ -9,7 +9,7 @@ import type {Repo} from "@automerge/react";
 
 const LoginView: React.FC<{repo: Repo}> = ({repo}) => {
 
-    const viewmodel = useLoginViewModel(repo);
+    const viewModel = useLoginViewModel(repo);
 
     if (viewModel.openedDatabase) {
         return (
@@ -28,7 +28,7 @@ const LoginView: React.FC<{repo: Repo}> = ({repo}) => {
                 {/* Show a list of all available Documents */}
                 <DatabaseListing
                     databases={viewModel.databaseNames}
-                    onClick={viewModel.openOpenDialog}
+                    openDatabase={viewModel.openEnterPasswordDialog}
                 />
 
 
@@ -41,11 +41,11 @@ const LoginView: React.FC<{repo: Repo}> = ({repo}) => {
 
                 {/* Popup Dialog for adding a new Database */}
                 <LoginDatabaseDialog
-                    isOpen={viewModel.isOpenDialogOpen}
+                    isOpen={viewModel.isEnterPasswordDialogOpen}
                     title="Datenbank öffnen"
                     label1="Masterpasswort"
                     onConfirm={viewModel.tryOpenDatabase}
-                    onCancel={viewModel.closeOpenDialog}
+                    onCancel={viewModel.closeEnterPasswordDialog}
                 />
 
                 {/* Pop Up Dialog for creating a new Database */}
