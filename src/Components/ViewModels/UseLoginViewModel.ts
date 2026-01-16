@@ -21,11 +21,8 @@ export type LoginViewModelReturn = {
 
 /**
  * ViewModel for the LoginView
- *
  * @param repo the automerge repo
- *
  * @returns all data and functions required by the LoginView
- *
  * @author uwing
  */
 export const useLoginViewModel = (repo: Repo): LoginViewModelReturn => {

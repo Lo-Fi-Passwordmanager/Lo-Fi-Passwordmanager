@@ -1,47 +1,11 @@
 import {Settings} from "../../Model/Settings";
 
-// export class SettingsViewModel {
-//     private settingsInstance: Settings;
-//
-//     constructor() {
-//         this.settingsInstance =  Settings.getSettings();
-//     }
-//
-//     public toggleSynchronisation() {
-//         this.settingsInstance.synchronization = !this.settingsInstance.synchronization;
-//     }
-//
-//     public toggleAutoConflictRes() {
-//         this.settingsInstance.autoConflictResolution = !this.settingsInstance.autoConflictResolution;
-//     }
-//
-//     public toggleDarkMode() {
-//         this.settingsInstance.darkMode = !this.settingsInstance.darkMode;
-//     }
-//
-//     public toggleTimeout() {
-//         this.settingsInstance.timeoutActive = !this.settingsInstance.timeoutActive;
-//     }
-//
-//     public get synchronization(): boolean {
-//         return this.settingsInstance.synchronization;
-//     }
-//
-//     public get autoConflictResolution(): boolean {
-//         return this.settingsInstance.autoConflictResolution;
-//     }
-//
-//     public get darkMode(): boolean {
-//         return this.settingsInstance.darkMode;
-//     }
-//
-//     public get timeoutActive(): boolean {
-//         return this.settingsInstance.timeoutActive;
-//     }
-// }
-
 import { useState, useEffect } from 'react';
 
+/**
+ * The ViewModel that is used for interfacing the {@link Settings} singleton.
+ * It uses states to reload react when chaning settings, so that they get applied
+ */
 export const useSettingsViewModel = () => {
 
     const settings = Settings.getSettings();
