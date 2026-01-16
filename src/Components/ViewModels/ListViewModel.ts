@@ -3,6 +3,10 @@ import {Folder} from "../../Model/Folder.ts";
 import type {Entry} from "../../Model/Entry.ts";
 import {useState} from "react";
 
+/**
+ * The viewmodel used by the ListView. It has the utility needed for correctly deciding and differentiating {@link Entry} and {@link Folder}
+ * @param topItem the item that is on top of the list to be shown. Shows this item and all below
+ */
 export const useListViewModel = (topItem: Item) => {
 
     const item: Item = topItem;

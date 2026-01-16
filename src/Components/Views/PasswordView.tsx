@@ -33,16 +33,20 @@ subFolder4.addItem(subFolder5);
 subFolder5.addItem(subFolder6);
 subFolder6.addItem(subFolder7);
 
-
+/**
+ * The view that should be shown, when the user opened a database successfully and shows the whole structure and one selected entry
+ */
 const PasswordView: React.FC = () => {
     const passwordViewModel = usePasswortViewModel(entry)
 
     return (
         <div>
             <div className="passwordView">
+                {/* the left 30% of the screen should be the list, showing the structure */}
                 <div className="borderBox scrollableContainer" style={{width: "30%"}}>
                     <ListView item={root} onSetEntry={passwordViewModel.setCurEntry}/>
                 </div>
+                {/* The right 70% are showing the Entry in a big representation */}
                 <div className="borderBox" style={{width: "70%"}}>
                     <EntryView entry={passwordViewModel.getCurEntry()} />
                 </div>
