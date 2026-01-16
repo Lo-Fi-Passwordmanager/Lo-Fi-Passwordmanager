@@ -1,14 +1,14 @@
 export default class Database {
-    private id: string;
+    private url: string;
     private name: string;
 
-    constructor(id: string, name: string) {
-        this.id = id;
+    constructor(url: string, name: string) {
+        this.url = url;
         this.name = name;
     }
 
     public getId(): string {
-        return this.id;
+        return this.url;
     }
 
     public getName(): string {
