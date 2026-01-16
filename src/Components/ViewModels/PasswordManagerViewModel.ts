@@ -1,8 +1,12 @@
 import {useLoginViewModel} from "./UseLoginViewModel.ts";
 import {BroadcastChannelNetworkAdapter, IndexedDBStorageAdapter, Repo, WebSocketClientAdapter} from "@automerge/react";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
+import {useState} from "react";
 
 export const usePasswordManagerViewModel = () => {
+
+    const [loggedIn, setLoggedIn] = useState<boolean>(false);
+
 
     const repo = new Repo({
         network: [new BroadcastChannelNetworkAdapter(),
@@ -13,8 +17,18 @@ export const usePasswordManagerViewModel = () => {
 
     const loginViewModel = useLoginViewModel(repo);
 
+    function getLoggedIn(): boolean {
+        return loggedIn;
+    }
+
+    function setLoggedIn(loggedIn: boolean): void {
+        setLoggedIn(loggedIn);
+    }
+
     return {
-        loginViewModel,
+        repo,
+        getLoggedIn,
+        setLoggedIn,
     };
 }
 
@@ -25,13 +39,13 @@ export const usePasswordManagerViewModel = () => {
  * @author uwing
  */
 export function loadAllDatabases(): Map<string, AutomergeUrl> {
-    const raw = localStorage.getItem('databases');
-    if (!raw) {
+    const rawDatabases = localStorage.getItem('databases');
+    if (!rawDatabases) {
         return new Map();
     }
     try {
-        const parsed = new Map(JSON.parse(raw) as [string, AutomergeUrl][]);
-        return new Map(parsed);
+        const parsedDatabases = new Map(JSON.parse(rawDatabases) as [string, AutomergeUrl][]);
+        return new Map(parsedDatabases);
     } catch (e) {
         console.error(e);
         return new Map();

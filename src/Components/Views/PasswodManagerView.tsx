@@ -8,15 +8,22 @@ const PasswordManagerView: React.FC = () => {
 
     const viewModel = usePasswordManagerViewModel();
 
-    return (
-        <>
-            <LoginView
-                viewModel={viewModel.loginViewModel}
-            />
-            <SettingsView/>
-            <PasswordView/>
-        </>
-    );
+    if (viewModel.getLoggedIn()) {
+        return (
+            <>
+                <SettingsView/>
+                <LoginView repo={viewModel.repo} />
+            </>
+        );
+    } else {
+        return (
+            <>
+                <SettingsView/>
+                <PasswordView/>
+            </>
+        );
+    }
+
 }
 
 export default PasswordManagerView;
