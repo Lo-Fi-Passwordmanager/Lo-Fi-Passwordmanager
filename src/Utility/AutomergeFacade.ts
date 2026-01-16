@@ -9,36 +9,84 @@ import {Entry} from "../Model/Entry.ts";
 import type {AutomergeEntry} from "../Model/Automerge/AutomergeEntry.ts";
 import {storeDatabase} from "../Components/ViewModels/PasswordManagerViewModel.ts";
 
+export class AutomergeFacade {
+    private readonly _repo: Repo
+    private _salt: string | null
+    private _validation: string | null
+    private readonly _automergeURL: AutomergeUrl | null
+
+    constructor(repo: Repo, automergeURL?: AutomergeUrl | string) {
+        this._repo = repo
+
+        if (automergeURL && !isValidAutomergeUrl(automergeURL)) {
+            throw new Error(`${automergeURL} is not a valid automerge URL.`)
+        }
+
+        this._automergeURL = automergeURL ? automergeURL as AutomergeUrl : null
+        this._salt = null
+        this._validation = null
+
+    }
+
+    createDatabase(salt: string, validation: string, name: string) {
+        const handle = this._repo.create<AutomergeDoc>(new AutomergeDoc(salt!, validation!))
+        const automergeURL = handle.url
+        this._salt = salt
+        this._validation = validation
+        storeDatabase(name!, automergeURL)
+    }
+
+    get automergeURL(): AutomergeUrl | null {
+        return this._automergeURL
+    }
+
+    async getSalt(): Promise<string> {
+        if (this._salt === null) {
+            if (this._automergeURL === null) {
+                throw new Error("No automergeURL found.")
+            }
+            const handle = await this._repo.find<AutomergeDoc>(this._automergeURL)
+            this._salt = handle.doc().salt;
+        }
+
+        return this._salt
+    }
+
+    async getValidation(): Promise<string> {
+        if (this._validation === null) {
+            if (this._automergeURL === null) {
+                throw new Error("No automergeURL found.")
+            }
+            const handle = await this._repo.find<AutomergeDoc>(this._automergeURL)
+            this._validation = handle.doc().validation;
+        }
+
+        return this._validation
+    }
+}
 
 /**
  * Returns a reactive instance of an automerge document with various helper functions.
  *
- * @remarks
- * If {@code automergeURL} is left undefined, a new automerge document is created with the salt and validation string and the name, otherwise they are ignored.
- *
- * @param repo the automerge repo
- * @param automergeURL the automergeURL of an existing document
- * @param salt the salt of a new database (optional)
- * @param validation the validation string of a new database (optional)
- * @param name the name of a new database (optional)
+ * @param automergeFacade an {@link AutomergeFacade} initialized with a databank
  */
-export const useAutomergeFacade = (repo: Repo, automergeURL?: AutomergeUrl, salt?: string, validation?: string, name?: string) => {
+export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
 
-    if (!automergeURL) {
-        const root = repo.create<AutomergeDoc>(new AutomergeDoc(salt!, validation!))
-        automergeURL = root.url
-        storeDatabase(name!, automergeURL)
+
+    if (automergeFacade.automergeURL === null) {
+        throw new Error('The facade was not properly initialized is not a valid automerge URL.')
     }
 
-    if (!isValidAutomergeUrl(automergeURL)) {
-        throw new Error(`${automergeURL} is not a valid automerge URL.`)
-    }
-
-    const [doc, changeDoc] = useDocument<AutomergeDoc>(automergeURL, {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [doc, changeDoc] = useDocument<AutomergeDoc>(automergeFacade.automergeURL, {
         // This hooks the `useDocument` into reacts suspense infrastructure so the whole component
         // only renders once the document is loaded
         suspense: true,
     });
+
+    const automergeURL = automergeFacade.automergeURL
+    const salt = doc.salt
+    const validation = doc.validation
 
     const tree = buildDatabaseAsTree(doc)
 

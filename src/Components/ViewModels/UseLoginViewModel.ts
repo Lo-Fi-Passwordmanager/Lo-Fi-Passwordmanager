@@ -3,7 +3,7 @@ import Database from '../../Model/Database';
 import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import {loadAllDatabases} from "./PasswordManagerViewModel.ts";
 import type {Repo} from "@automerge/react";
-import {useAutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 
 export type LoginViewModelReturn = {
     databaseNames: string[],
@@ -55,9 +55,10 @@ export const useLoginViewModel = (repo: Repo): LoginViewModelReturn => {
         const salt = securityProvider.getNewSalt();
         const validation = securityProvider.getNewValidation(masterPassword, salt);
 
-        const facade = useAutomergeFacade(repo, undefined, salt, validation, name);
+        const facade = new AutomergeFacade(repo);
+        facade.createDatabase(salt, validation, name)
 
-        const url = facade.automergeURL;
+        const url = facade.automergeURL!;
 
         setDatabases(databases.set(name, url));
         setIsAddDialogOpen(false);
@@ -67,19 +68,20 @@ export const useLoginViewModel = (repo: Repo): LoginViewModelReturn => {
     }
 
     // tries to open a database with the provided master password
-    const tryOpenDatabase = (masterPassword: string) => {
+    const tryOpenDatabase = async (masterPassword: string) => {
         const name = clickedDatabase;
         if (!name) {
             throw new Error("No database selected");
         }
         const dbUrl = databases.get(name);
+
         if (!dbUrl) {
             throw new Error("Database doesn't exist");
         }
 
-        const facade = useAutomergeFacade(repo, dbUrl);
-        if (securityProvider.verifyMasterPassword(masterPassword, facade.salt!, facade.validation!)) {
-            const db = new Database(dbUrl, name, facade.tree);
+        const facade = new AutomergeFacade(repo, dbUrl)
+        if (securityProvider.verifyMasterPassword(masterPassword, await facade.getSalt()!, await facade.getValidation()!)) {
+            const db = new Database(dbUrl, name);
             setOpenedDatabase(db);
             setIsOpenDialogOpen(false);
             setClickedDatabase(null);
