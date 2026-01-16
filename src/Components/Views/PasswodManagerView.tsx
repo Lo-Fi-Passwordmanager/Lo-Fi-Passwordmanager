@@ -12,7 +12,7 @@ const PasswordManagerView: React.FC = () => {
         return (
             <>
                 <SettingsView/>
-                <LoginView repo={viewModel.repo} />
+                <LoginView repo={viewModel.repo} setLoggedIn={viewModel.setLoggedIn} />
             </>
         );
     } else {

@@ -2,11 +2,11 @@ import React, {useState, useEffect} from "react";
 import OnClickButton from "../ButtonViews/OnClickButton.tsx";
 
 interface TwoFieldDialogProps {
-    isOpen: boolean;
-    title: string;
-    label1: string;
-    onConfirm: (field1: string) => void;
-    onCancel: () => void;
+    isOpen: boolean,
+    title: string,
+    label1: string,
+    onConfirm: (field1: string) => void,
+    onCancel: () => void,
 }
 
 const LoginDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
@@ -14,7 +14,8 @@ const LoginDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                                                                 title,
                                                                 label1,
                                                                 onConfirm,
-                                                                onCancel
+                                                                onCancel,
+
                                                             }) => {
 
     const [field1, setField1] = useState("");

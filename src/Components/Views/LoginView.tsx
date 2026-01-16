@@ -7,9 +7,12 @@ import PWMLogo from "../../assets/logo_gelb.svg?inline";
 import type {Repo} from "@automerge/react";
 
 
-const LoginView: React.FC<{repo: Repo}> = ({repo}) => {
+const LoginView: React.FC<{
+    repo: Repo,
+    setLoggedIn?: (value: (((prevState: boolean) => boolean) | boolean)) => void
+}> = ({repo, setLoggedIn}) => {
 
-    const viewModel = useLoginViewModel(repo);
+    const viewModel = useLoginViewModel(repo, setLoggedIn);
 
     if (viewModel.openedDatabase) {
         return (
