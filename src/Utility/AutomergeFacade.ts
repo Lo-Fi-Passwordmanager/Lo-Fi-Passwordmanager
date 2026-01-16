@@ -7,6 +7,7 @@ import type {Item} from "../Model/Item.ts";
 import {Folder} from "../Model/Folder.ts";
 import {Entry} from "../Model/Entry.ts";
 import type {AutomergeEntry} from "../Model/Automerge/AutomergeEntry.ts";
+import {storeDatabase} from "../Components/ViewModels/PasswordManagerViewModel.ts";
 
 export class AutomergeFacade {
     private readonly _repo: Repo
@@ -32,7 +33,7 @@ export class AutomergeFacade {
         const automergeURL = handle.url
         this._salt = salt
         this._validation = validation
-        // storeDatabase(name!, automergeURL) TODO Kommentar entfernen wenn !17 gemerged wird
+        storeDatabase(name!, automergeURL)
     }
 
     get automergeURL(): AutomergeUrl | null {

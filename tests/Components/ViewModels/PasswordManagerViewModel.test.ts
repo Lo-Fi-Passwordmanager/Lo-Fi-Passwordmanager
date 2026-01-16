@@ -1,12 +1,14 @@
 import {expect, it, describe, beforeEach, afterEach} from "vitest";
 
 import {loadAllDatabases, saveDatabases} from "../../../src/Components/ViewModels/PasswordManagerViewModel";
+import {AutomergeUrl} from "@automerge/automerge-repo";
 
-const testMap = new Map<string, string>();
+const testMap = new Map<string, AutomergeUrl>();
 
 describe("PasswordManagerViewModel", () => {
     beforeEach(() => {
-        testMap.set("TestDB1", "automerge-id-1");
+        const url1: AutomergeUrl = "automerge-id-1" as AutomergeUrl;
+        testMap.set("TestDB1", url1);
     })
 
     afterEach(() => {
@@ -22,7 +24,7 @@ describe("PasswordManagerViewModel", () => {
     it('should save an edited map of databases to localStorage', () => {
         saveDatabases(testMap);
         const loadedMap = loadAllDatabases();
-        loadedMap.set("TestDB2", "automerge-id-2");
+        loadedMap.set("TestDB2", "automerge-id-2" as AutomergeUrl);
         saveDatabases(loadedMap);
         const reloadedMap = loadAllDatabases();
         expect(reloadedMap.size).toBe(2);

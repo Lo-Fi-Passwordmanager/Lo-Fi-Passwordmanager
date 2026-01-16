@@ -1,13 +1,16 @@
 import React from "react";
-import {useLoginViewModel} from "../ViewModels/UseLoginViewModel.ts";
+import {type LoginViewModelReturn} from "../ViewModels/UseLoginViewModel.ts";
+import EntryView from "./EntryView.tsx";
 import DatabaseListing from "./ListingViews/DatabaseListing.tsx";
 import CreateDatabaseDialog from "./Dialogs/CreateDatabaseDialog.tsx";
 import LoginDatabaseDialog from "./Dialogs/LoginDatabaseDialog.tsx";
 import PWMLogo from "../../assets/logo_gelb.svg?inline";
-import {useRepo} from "@automerge/react";
 
-const LoginView: React.FC = () => {
-    const viewModel = useLoginViewModel(useRepo());
+type loginViewProps = {
+    viewModel: LoginViewModelReturn
+}
+
+const LoginView: React.FC<loginViewProps> = ({viewModel}) => {
 
     if (viewModel.openedDatabase) {
         return (
