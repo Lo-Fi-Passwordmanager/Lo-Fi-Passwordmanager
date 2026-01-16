@@ -13,7 +13,7 @@ export class AutomergeFacade {
     private readonly _repo: Repo
     private _salt: string | null
     private _validation: string | null
-    private readonly _automergeURL: AutomergeUrl | null
+    private _automergeURL: AutomergeUrl | null
 
     constructor(repo: Repo, automergeURL?: AutomergeUrl | string) {
         this._repo = repo
@@ -30,10 +30,10 @@ export class AutomergeFacade {
 
     createDatabase(salt: string, validation: string, name: string) {
         const handle = this._repo.create<AutomergeDoc>(new AutomergeDoc(salt!, validation!))
-        const automergeURL = handle.url
+        this._automergeURL = handle.url
         this._salt = salt
         this._validation = validation
-        storeDatabase(name!, automergeURL)
+        storeDatabase(name!, this._automergeURL)
     }
 
     get automergeURL(): AutomergeUrl | null {
