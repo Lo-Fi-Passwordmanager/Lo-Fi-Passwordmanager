@@ -1,15 +1,23 @@
 import {useSettingsViewModel} from "../ViewModels/SettingsViewModel.ts";
 
+
+/**
+ * The view that links to the {@link Settings} singleton and toggles its values.
+ */
 const SettingsView: React.FC = () => {
     const viewmodel = useSettingsViewModel();
 
 
+    /**
+     * Checks if the settingsmenu should be open or not
+     */
     if (viewmodel.settingsOpen) {
         return (
             <div className="settingsBackground dialogOverlay">
                 <div className="dialog">
-                    <h1 style={{ fontSize: "2em", marginBottom: "20px" }}>Settings</h1>
+                    <h1 style={{fontSize: "2em", marginBottom: "20px"}}>Einstellungen</h1>
 
+                    {/* Following are the checkboxes and their description */}
                     <div className="settingsContainer">
                         <div>
                             <label className="checkboxRow">
@@ -59,6 +67,10 @@ const SettingsView: React.FC = () => {
                 </div>
             </div>
         );
+
+        /**
+         * If settingsmenu should not be open, only the button to open it, is seen in the top right corner
+         */
     } else {
         return (
             <button
