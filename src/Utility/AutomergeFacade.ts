@@ -117,15 +117,18 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
      * @param item das neu einzusetzende Item
      * @param parentId die ID des Parent Items
      */
-    function insertItem(item: Item, parentId: string) {
+    function insertItem(item: Item, parentId: string | null) {
         const automergeItem = automergeItemFromDatabaseItem(item, parentId);
-        const parent = itemsById.get(parentId)
+        let parent: AutomergeItem | undefined | null = null
+        if (parentId != null) {
+            parent = itemsById.get(parentId)
+        }
 
         if (parent === undefined) {
             throw new Error(`Cannot find parent object with ID ${parentId}`)
         }
 
-        if (!isFolder(parent)) {
+        if (parent && !isFolder(parent)) {
             throw new Error(`Cannot insert item into Item with ID ${parentId}, as it is not a folder.`)
         }
 
@@ -235,7 +238,7 @@ function databaseItemFromAutomergeItem(automergeItem: AutomergeItem): Item {
  *
  * @param item the item that should be used for creation
  */
-function automergeItemFromDatabaseItem(item: Item, parentId: string): AutomergeItem {
+function automergeItemFromDatabaseItem(item: Item, parentId: string | null): AutomergeItem {
     const name = item.title;
     const createdAt = item.createdAt!.getTime() / 1000;
     const editedAt = item.editedAt!.getTime() / 1000;
@@ -325,8 +328,8 @@ function insertNestedValue(databaseRoot: DatabaseRoot, path: string[], insert: I
     (value as Folder).addItem(insert)
 }
 
-function insertValue(d: AutomergeDoc, parentItem: AutomergeFolder, insert: AutomergeItem) {
-    insert.parentId = getObjectId(parentItem)!;
+function insertValue(d: AutomergeDoc, parentItem: AutomergeFolder | null, insert: AutomergeItem) {
+    insert.parentId = getObjectId(parentItem);
     d.items.push(insert)
 }
 
