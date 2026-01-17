@@ -15,6 +15,7 @@ export const usePasswordManagerViewModel = () => {
 
     return {
         loginViewModel,
+        repo
     };
 }
 
