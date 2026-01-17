@@ -1,6 +1,6 @@
 import  {type Item} from "../../Model/Item.ts";
 import {useListViewModel} from "../ViewModels/ListViewModel.ts";
-import  {type Entry} from "../../Model/Entry.ts";
+import  {Entry} from "../../Model/Entry.ts";
 
 
 /**
@@ -10,10 +10,16 @@ import  {type Entry} from "../../Model/Entry.ts";
  */
 const ListView: React.FC<{
     item: Item,
-    onSetEntry: (entry: Entry) => void,
-    addEntry?: () => void
-}> = ({item, onSetEntry, addEntry}) => {
+    setCurEntry: (entry: Entry) => void,
+    setItemCreationDialog: () => void,
+    setCurrentParent?: (item: Item) => void
+}> = ({item, setCurEntry, setItemCreationDialog, setCurrentParent}) => {
     const listViewModel = useListViewModel(item);
+
+    function addButtonPressed() {
+        setItemCreationDialog();
+        setCurrentParent!(item);
+    }
 
     /**
      * If the item to be shown is of type entry, than only its name will be shown
@@ -21,7 +27,7 @@ const ListView: React.FC<{
     if (listViewModel.isItemEntry()) {
         const entry = listViewModel.getItem() as Entry;
         return (
-            <div className="listViewEntry" onClick={() => onSetEntry(entry)}>
+            <div className="listViewEntry" onClick={() => setCurEntry(entry)}>
                 <span>Titel:</span> <span>{entry.title}</span>
             </div>
         );
@@ -35,9 +41,8 @@ const ListView: React.FC<{
                 {/* Name and Buttons */}
                 <div className="listViewTitleHeader">
                     <span>{listViewModel.getItem().title}:</span>
-                    <button
-                        onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? ">" : "v"}</button>
-                    <button onClick={addEntry}>+</button>
+                    <button onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? ">" : "v"}</button>
+                    <button onClick={() => addButtonPressed() }>+</button>
                 </div>
 
                 {/* Recursive call of children with indent to visualizes depth in the tree */}
@@ -45,7 +50,7 @@ const ListView: React.FC<{
                     <div className="listViewEntryWrapper">
                         {listViewModel.getChildren() &&
                             listViewModel.getChildren()!.map((item: Item, index: number) => {
-                                return <ListView key={index} item={item} onSetEntry={onSetEntry}/>;
+                                return <ListView key={index} item={item} setCurEntry={setCurEntry} setItemCreationDialog={setItemCreationDialog} setCurrentParent={setCurrentParent} />;
                             })}
                     </div>
                 )}
