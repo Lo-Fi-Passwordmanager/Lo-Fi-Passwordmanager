@@ -3,11 +3,15 @@ import type {Item} from "./Item.ts";
 
 export class DatabaseRoot {
     private readonly _salt: string;
-    private _rootFolder: Folder;
+    private readonly _rootFolder: Folder;
 
     constructor(salt: string) {
         this._salt = salt
-        this._rootFolder = new Folder("root", null)
+        this._rootFolder = new Folder("root", "")
+    }
+
+    get rootFolder(): Folder {
+        return this._rootFolder
     }
 
     public addItem(item: Item) {
@@ -22,4 +26,3 @@ export class DatabaseRoot {
         return this._salt;
     }
 }
-export default DatabaseRoot;

@@ -21,8 +21,8 @@
     "@noble/hashes": "^2.0.1",
     "hdd": "^0.0.0",
     "jsdom": "^27.4.0",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "vite-plugin-wasm": "^3.3.0"
   },
   "devDependencies": {
@@ -40,7 +40,8 @@
     "typescript-eslint": "^8.46.4",
     "vite": "^7.2.4",
     "vite-plugin-singlefile": "^2.3.0",
-    "vitest": "^4.0.17"
+    "vitest": "^4.0.17",
+    "vitest-indexeddb": "^0.0.1"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

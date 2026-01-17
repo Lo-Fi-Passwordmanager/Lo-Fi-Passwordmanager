@@ -1,22 +1,34 @@
 import React from "react";
-import {type LoginViewModelReturn} from "../ViewModels/UseLoginViewModel.ts";
-import EntryView from "./EntryView.tsx";
+import {useLoginViewModel} from "../ViewModels/UseLoginViewModel.ts";
 import DatabaseListing from "./ListingViews/DatabaseListing.tsx";
 import CreateDatabaseDialog from "./Dialogs/CreateDatabaseDialog.tsx";
 import LoginDatabaseDialog from "./Dialogs/LoginDatabaseDialog.tsx";
 import PWMLogo from "../../assets/logo_gelb.svg?inline";
+import type {Repo} from "@automerge/react";
+import  {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import type {AutomergeUrl} from "@automerge/automerge-repo";
 
-type loginViewProps = {
-    viewModel: LoginViewModelReturn
-}
 
-const LoginView: React.FC<loginViewProps> = ({viewModel}) => {
+const LoginView: React.FC<{
+    repo: Repo,
+    setLoggedIn?: (value: (((prevState: boolean) => boolean) | boolean)) => void,
+    setAutomergeFacade?: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void,
+    storeDatabase: (name: string, autoMergeUrl: AutomergeUrl) => void
+}> = ({repo, setLoggedIn, setAutomergeFacade, storeDatabase}) => {
+
+    const viewModel = useLoginViewModel(repo, setLoggedIn, setAutomergeFacade);
 
     if (viewModel.openedDatabase) {
         return (
             <a>Hier provisorischer Text? Wann wird das hier überhaupt gecalled?</a>
         );
     }
+
+    function storeDatabaseAndCloseCreateDialog(databaseName:string, automergeurl: AutomergeUrl) {
+        viewModel.closeAddDialog();
+        storeDatabase(databaseName, automergeurl)
+    }
+
 
     return (
         <div className="loginView">
@@ -29,7 +41,7 @@ const LoginView: React.FC<loginViewProps> = ({viewModel}) => {
                 {/* Show a list of all available Documents */}
                 <DatabaseListing
                     databases={viewModel.databaseNames}
-                    onClick={viewModel.openOpenDialog}
+                    openDatabase={viewModel.openEnterPasswordDialog}
                 />
 
 
@@ -42,11 +54,11 @@ const LoginView: React.FC<loginViewProps> = ({viewModel}) => {
 
                 {/* Popup Dialog for adding a new Database */}
                 <LoginDatabaseDialog
-                    isOpen={viewModel.isOpenDialogOpen}
+                    isOpen={viewModel.isEnterPasswordDialogOpen}
                     title="Datenbank öffnen"
                     label1="Masterpasswort"
                     onConfirm={viewModel.tryOpenDatabase}
-                    onCancel={viewModel.closeOpenDialog}
+                    onCancel={viewModel.closeEnterPasswordDialog}
                 />
 
                 {/* Pop Up Dialog for creating a new Database */}
@@ -55,8 +67,9 @@ const LoginView: React.FC<loginViewProps> = ({viewModel}) => {
                     title="Neue Datenbank erstellen"
                     label1="Datenbankname"
                     label2="Masterpasswort"
-                    onConfirm={viewModel.createDatabase}
+                    createDatabase={viewModel.createDatabase}
                     onCancel={viewModel.closeAddDialog}
+                    storeDatabase={storeDatabaseAndCloseCreateDialog}
                 />
             </main>
         </div>

@@ -2,10 +2,10 @@ import React from "react";
 
 type DatabaseListingProps = {
     databases: string[];
-    onClick: (db: string) => void;
+    openDatabase: (db: string) => void;
 }
 
-const DatabaseListing: React.FC<DatabaseListingProps> = ({databases, onClick}) => {
+const DatabaseListing: React.FC<DatabaseListingProps> = ({databases, openDatabase}) => {
 
     if (databases.length === 0) {
         return <div>Keine Datenbanken vorhanden</div>;
@@ -17,7 +17,7 @@ const DatabaseListing: React.FC<DatabaseListingProps> = ({databases, onClick}) =
                 <button
                     style={{width: "100%", margin: "auto"}}
                     key={db + databases.indexOf(db)}
-                    onClick={() => onClick(db)}
+                    onClick={() => openDatabase(db)}
                 >
                     {db}
                 </button>

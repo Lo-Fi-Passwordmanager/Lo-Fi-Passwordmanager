@@ -6,9 +6,15 @@ import type {AutomergeUrl} from "@automerge/automerge-repo";
 import type {Item} from "../Model/Item.ts";
 import {Folder} from "../Model/Folder.ts";
 import {Entry} from "../Model/Entry.ts";
-import type {AutomergeEntry} from "../Model/Automerge/AutomergeEntry.ts";
+import {AutomergeEntry} from "../Model/Automerge/AutomergeEntry.ts";
 import {storeDatabase} from "../Components/ViewModels/PasswordManagerViewModel.ts";
+import {AutomergeFolder} from "../Model/Automerge/AutomergeFolder.ts";
 
+export type Attribute = 'name'|'createdAt'|'editedAt'|'parentId'|'username'|'password'|'url'|'note'
+
+/**
+ * Eine Klasse zum Erstellen und verifizieren von Automerge Dokumenten.
+ */
 export class AutomergeFacade {
     private readonly _repo: Repo
     private _salt: string | null
@@ -28,6 +34,12 @@ export class AutomergeFacade {
 
     }
 
+    /**
+     * Erstellt eine Datenbank mit einem Salt, einem validation String und einem Namen und setzt dabei auch die {@code automergeURL}.
+     * @param salt das Salt der neuen Datenbank
+     * @param validation die Validation der neuen Datenbank
+     * @param name der Anzeigename der neuen Datenbank
+     */
     createDatabase(salt: string, validation: string, name: string) {
         const handle = this._repo.create<AutomergeDoc>(new AutomergeDoc(salt!, validation!))
         this._automergeURL = handle.url
@@ -36,14 +48,20 @@ export class AutomergeFacade {
         storeDatabase(name!, this._automergeURL)
     }
 
+    /**
+     * Die {@link AutomergeUrl} der Datenbank die geöffnet oder neu erstellt wurde. Ist {@code null} wenn keine geöffnet und noch keine erstellt wurde.
+     */
     get automergeURL(): AutomergeUrl | null {
         return this._automergeURL
     }
 
-    async getSalt(): Promise<string> {
+    /**
+     * Das Salt der gerade geöffneten Datenbank. Ist {@code null} wenn keine geöffnet und noch keine erstellt wurde.
+     */
+    async getSalt(): Promise<string | null> {
         if (this._salt === null) {
             if (this._automergeURL === null) {
-                throw new Error("No automergeURL found.")
+                return null
             }
             const handle = await this._repo.find<AutomergeDoc>(this._automergeURL)
             this._salt = handle.doc().salt;
@@ -52,10 +70,13 @@ export class AutomergeFacade {
         return this._salt
     }
 
-    async getValidation(): Promise<string> {
+    /**
+     * Der validation String der aktuell geöffneten Datenbank. Ist {@code null} wenn keine geöffnet und noch keine erstellt wurde.
+     */
+    async getValidation(): Promise<string | null> {
         if (this._validation === null) {
             if (this._automergeURL === null) {
-                throw new Error("No automergeURL found.")
+                return null
             }
             const handle = await this._repo.find<AutomergeDoc>(this._automergeURL)
             this._validation = handle.doc().validation;
@@ -77,7 +98,6 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
         throw new Error('The facade was not properly initialized is not a valid automerge URL.')
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [doc, changeDoc] = useDocument<AutomergeDoc>(automergeFacade.automergeURL, {
         // This hooks the `useDocument` into reacts suspense infrastructure so the whole component
         // only renders once the document is loaded
@@ -88,13 +108,72 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
     const salt = doc.salt
     const validation = doc.validation
 
-    const tree = buildDatabaseAsTree(doc)
+
+    const [tree, itemsById]: [DatabaseRoot, Map<string, AutomergeItem>] = buildDatabaseAsTree(doc)
+
+    /**
+     * Fügt neue Items ins Automerge Dokument ein.
+     *
+     * @param item das neu einzusetzende Item
+     * @param parentId die ID des Parent Items
+     */
+    function insertItem(item: Item, parentId: string) {
+        const automergeItem = automergeItemFromDatabaseItem(item, parentId);
+        let parent: AutomergeItem | undefined | null = null
+        if (parentId !== "") {
+            parent = itemsById.get(parentId)
+        }
+
+        if (parent === undefined) {
+            throw new Error(`Cannot find parent object with ID ${parentId}`)
+        }
+
+        if (parent && !isFolder(parent)) {
+            throw new Error(`Cannot insert item into Item with ID ${parentId}, as it is not a folder.`)
+        }
+
+        changeDoc((doc) => insertValue(doc, parent, automergeItem))
+    }
+
+    /**
+     * Löscht das angegebene Item und alle Children rekursiv.
+     *
+     * @param itemId die ID des Items
+     */
+    function deleteItem(itemId: string) {
+        changeDoc((doc) => deleteValue(doc, itemId, itemsById))
+    }
+
+    /**
+     * Ändert den Wert eines bestimmten Attributes eines Items
+     *
+     * @param itemId das Item, dessen Attribut geändert werden soll
+     * @param changes die Werte die abgeändert werden sollen
+     */
+    function updateItem(itemId: string, changes: [Attribute, (string | Date)][]) {
+        changeDoc((doc) => changes.forEach(([attr, val]) => updateValue(doc, itemId, itemsById, attr, val)))
+    }
 
     return {
+        /**
+         * Die {@link AutomergeUrl} der gerade geöffneten Datenbank.
+         */
         automergeURL,
+        /**
+         * Das Salt der gerade geöffneten Datenbank.
+         */
         salt,
+        /**
+         * Der validation String der aktuell geöffneten Datenbank.
+         */
         validation,
-        tree
+        /**
+         * Die Datenbank als {@link DatabaseRoot}. Reagiert auf Änderungen im Automerge Doc
+         */
+        tree,
+        insertItem,
+        deleteItem,
+        updateItem
     };
 
 }
@@ -103,9 +182,9 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
  * Takes an automerge document and parses it, to create a database tree structure.
  * @param automergeDoc
  *
- * @returns a new {@link DatabaseRoot} that represents the automerge document
+ * @returns a new {@link DatabaseRoot} that represents the automerge document and a map with all {@link AutomergeItem}s mapped to their ID.
  */
-function buildDatabaseAsTree(automergeDoc: Doc<AutomergeDoc>): DatabaseRoot {
+function buildDatabaseAsTree(automergeDoc: Doc<AutomergeDoc>): [DatabaseRoot, Map<string, AutomergeItem>] {
 
     const root = new DatabaseRoot(automergeDoc.salt)
 
@@ -131,7 +210,7 @@ function buildDatabaseAsTree(automergeDoc: Doc<AutomergeDoc>): DatabaseRoot {
         insertNestedValue(root, path, databaseItemFromAutomergeItem(item)) // gleiche fkt wie früher
     }
 
-    return root;
+    return [root, itemsById];
 }
 
 /**
@@ -141,15 +220,37 @@ function buildDatabaseAsTree(automergeDoc: Doc<AutomergeDoc>): DatabaseRoot {
  */
 function databaseItemFromAutomergeItem(automergeItem: AutomergeItem): Item {
     const name = automergeItem.name;
-    const id = getObjectId(automergeItem);
+    const id = getObjectId(automergeItem)!;
     const createdAt = new Date(automergeItem.createdAt * 1000);
     const editedAt = new Date(automergeItem.editedAt * 1000);
+
+    // TODO Hier muss decryption der einzenen einträge stattfinden @Valerie
 
     if (isEntry(automergeItem)) {
         return new Entry(name, id, createdAt, editedAt, automergeItem.username, automergeItem.password, automergeItem.url, automergeItem.note)
     }
 
     return new Folder(name, id, createdAt, editedAt)
+}
+
+/**
+ * Takes an item and creates a new {@link AutomergeItem} form it for internal use.
+ *
+ * @param item the item that should be used for creation
+ */
+function automergeItemFromDatabaseItem(item: Item, parentId: string): AutomergeItem {
+    const name = item.title;
+    const createdAt = item.createdAt!.getTime() / 1000;
+    const editedAt = item.editedAt!.getTime() / 1000;
+
+    // TODO Hier muss encryption der einzenen einträge stattfinden @Valerie
+
+    if (item.isEntry()) {
+        const entry = item as Entry
+        return new AutomergeEntry(name, createdAt, editedAt, parentId, entry.username, entry.password, entry.url, entry.note)
+    }
+
+    return new AutomergeFolder(name, createdAt, editedAt, parentId)
 }
 
 /**
@@ -161,13 +262,21 @@ function isEntry(automergeItem: AutomergeItem): automergeItem is AutomergeEntry 
 }
 
 /**
+ * Checks whether the provided {@link AutomergeItem} is an {@link AutomergeFolder}
+ * @param automergeItem the automerge item to check
+ */
+function isFolder(automergeItem: AutomergeItem): automergeItem is AutomergeFolder {
+    return automergeItem.type === "folder"
+}
+
+/**
  * Recursively traverses the itemsById map, to build a path from the document root to the items location in the tree.
  *
  * @param item the item whose path to calculate
  * @param itemsById a map the maps ids to its corresponding item
  */
 function buildPath(item: AutomergeItem, itemsById: Map<string, AutomergeItem>): Array<string> {
-    if (item.parentId === null) {
+    if (item.parentId === null || item.parentId === "") {
         return []
     }
 
@@ -181,6 +290,10 @@ function buildPath(item: AutomergeItem, itemsById: Map<string, AutomergeItem>): 
  * @param path the path where an item is
  */
 function findNestedValue(databaseRoot: DatabaseRoot, path: string[]): Item {
+    if (path.length === 0) {
+        return databaseRoot.rootFolder
+    }
+
     let currentValue: Item | null = databaseRoot.getChildById(path[0]);
 
     if (currentValue === null) {
@@ -217,4 +330,68 @@ function insertNestedValue(databaseRoot: DatabaseRoot, path: string[], insert: I
         throw Error("Cannot insert value into Entry.")
     }
     (value as Folder).addItem(insert)
+}
+
+function insertValue(d: AutomergeDoc, parentItem: AutomergeFolder | null, insert: AutomergeItem) {
+    if (parentItem === null) {
+        insert.parentId = "";
+    } else {
+        insert.parentId = getObjectId(parentItem)!;
+    }
+
+    d.items.push(insert)
+}
+
+function deleteValue(d: AutomergeDoc, itemId: string, itemsById: Map<string, AutomergeItem>) {
+
+    const item = itemsById.get(itemId)
+
+    if (item === undefined) {
+        throw new Error(`Cannot find parent object with ID ${itemId}`)
+    }
+
+    const index = d.items.indexOf(item)
+
+    d.items.splice(index, 1)
+
+    if (isFolder(item)) {
+        for (const value of d.items) {
+            if (value.parentId === itemId) {
+                deleteValue(d, getObjectId(value)!, itemsById)
+            }
+        }
+    }
+}
+
+function updateValue(doc: AutomergeDoc, itemId: string, itemsById: Map<string, AutomergeItem>, attribute: Attribute, newValue: string | Date) {
+    const item = itemsById.get(itemId)
+
+    if (item === undefined) {
+        throw new Error(`Cannot find parent object with ID ${itemId}`)
+    }
+
+    if ((attribute === 'createdAt' || attribute === 'editedAt')) {
+        // Attribut is eines der Attribute, die ein Datum nehmen
+        if (typeof newValue === 'string') {
+            throw new Error(`Cannot assign value of type 'string' to value of type 'Date'`)
+        }
+
+        item[attribute] = (newValue.getTime() / 1000)
+
+    } else {
+        // Attribut is eines der Attribute, die einen String nehmen
+        if (typeof newValue !== 'string') {
+            throw new Error(`Cannot assign value of type 'Date' to value of type 'string'`)
+
+        } else if (isFolder(item)) {
+            if (attribute === 'name' || attribute === 'parentId') {
+                item[attribute] = newValue
+            }
+
+            throw new Error(`This attribute does not exist on folders.`)
+
+        } else {
+            (item as AutomergeEntry)[attribute] = newValue
+        }
+    }
 }
