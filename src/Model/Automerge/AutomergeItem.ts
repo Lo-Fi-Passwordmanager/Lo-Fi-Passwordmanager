@@ -3,9 +3,9 @@ export abstract class AutomergeItem {
     name: string;
     createdAt: number;
     editedAt: number;
-    parentId: string | null;
+    parentId: string;
 
-    protected constructor(type: "entry" | "folder", name: string, createdAt: number, editedAt: number, parentId: string | null) {
+    protected constructor(type: "entry" | "folder", name: string, createdAt: number, editedAt: number, parentId: string) {
         this.type = type;
         this.name = name;
         this.createdAt = createdAt;

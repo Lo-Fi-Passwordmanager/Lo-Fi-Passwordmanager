@@ -117,10 +117,10 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
      * @param item das neu einzusetzende Item
      * @param parentId die ID des Parent Items
      */
-    function insertItem(item: Item, parentId: string | null) {
+    function insertItem(item: Item, parentId: string) {
         const automergeItem = automergeItemFromDatabaseItem(item, parentId);
         let parent: AutomergeItem | undefined | null = null
-        if (parentId != null) {
+        if (parentId !== "") {
             parent = itemsById.get(parentId)
         }
 
@@ -238,7 +238,7 @@ function databaseItemFromAutomergeItem(automergeItem: AutomergeItem): Item {
  *
  * @param item the item that should be used for creation
  */
-function automergeItemFromDatabaseItem(item: Item, parentId: string | null): AutomergeItem {
+function automergeItemFromDatabaseItem(item: Item, parentId: string): AutomergeItem {
     const name = item.title;
     const createdAt = item.createdAt!.getTime() / 1000;
     const editedAt = item.editedAt!.getTime() / 1000;
@@ -276,7 +276,7 @@ function isFolder(automergeItem: AutomergeItem): automergeItem is AutomergeFolde
  * @param itemsById a map the maps ids to its corresponding item
  */
 function buildPath(item: AutomergeItem, itemsById: Map<string, AutomergeItem>): Array<string> {
-    if (item.parentId === null) {
+    if (item.parentId === "") {
         return []
     }
 
@@ -333,7 +333,12 @@ function insertNestedValue(databaseRoot: DatabaseRoot, path: string[], insert: I
 }
 
 function insertValue(d: AutomergeDoc, parentItem: AutomergeFolder | null, insert: AutomergeItem) {
-    insert.parentId = getObjectId(parentItem);
+    if (parentItem === null) {
+        insert.parentId = "";
+    } else {
+        insert.parentId = getObjectId(parentItem)!;
+    }
+
     d.items.push(insert)
 }
 
