@@ -3,7 +3,7 @@ import Database from '../../Model/Database';
 import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import {loadAllDatabases} from "./PasswordManagerViewModel.ts";
 import type {Repo} from "@automerge/react";
-import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import {AutomergeFacade, useAutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 
 export type LoginViewModelReturn = {
     databaseNames: string[],
