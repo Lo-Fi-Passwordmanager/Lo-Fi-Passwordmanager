@@ -19,13 +19,14 @@ const ItemCreationDialog: React.FC = ({addItem, curParent, cancelItemCreation}: 
 
     function handleConfirm() {
         addItem!(new Entry(title, "willBeAutomaticallySet", new Date(), new Date(), username, password, url, note), curParent!.id)
+        cancelItemCreation!();
     }
 
 
     return (
         <div className="dialogOverlay">
             <div className="dialog">
-                <h3>{title}</h3>
+                <h3>Neuer Eintrag</h3>
                 <label>Titel</label>
                 <input
                     className="inputField"

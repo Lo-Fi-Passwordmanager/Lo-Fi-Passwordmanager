@@ -48,6 +48,10 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         return curParent;
     }
 
+    function deleteItem(item: Item) {
+        reactiveFacade.deleteItem(item.id);
+    }
+
     return {
         setCurEntry,
         getCurEntry,
@@ -59,5 +63,6 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setInItemCreation,
         setCurParent,
         getCurParent,
+        deleteItem,
     };
 };

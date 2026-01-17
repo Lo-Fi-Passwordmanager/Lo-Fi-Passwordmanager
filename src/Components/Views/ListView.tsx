@@ -13,7 +13,8 @@ const ListView: React.FC<{
     setCurEntry: (entry: Entry) => void,
     setItemCreationDialog: () => void,
     setCurrentParent?: (item: Item) => void
-}> = ({item, setCurEntry, setItemCreationDialog, setCurrentParent}) => {
+    deleteItem: (item: Item) => void,
+}> = ({item, setCurEntry, setItemCreationDialog, setCurrentParent, deleteItem}) => {
     const listViewModel = useListViewModel(item);
 
     function addButtonPressed() {
@@ -29,6 +30,7 @@ const ListView: React.FC<{
         return (
             <div className="listViewEntry" onClick={() => setCurEntry(entry)}>
                 <span>Titel:</span> <span>{entry.title}</span>
+                <button onClick={() => deleteItem(item)}>🗑️</button>
             </div>
         );
         /**
@@ -43,6 +45,8 @@ const ListView: React.FC<{
                     <span>{listViewModel.getItem().title}:</span>
                     <button onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? ">" : "v"}</button>
                     <button onClick={() => addButtonPressed() }>+</button>
+                    {/* Delete button should not be rendered for the root */}
+                    {(item.title != "root") && <button onClick={() => deleteItem(item)}>🗑️</button>}
                 </div>
 
                 {/* Recursive call of children with indent to visualizes depth in the tree */}
@@ -50,7 +54,7 @@ const ListView: React.FC<{
                     <div className="listViewEntryWrapper">
                         {listViewModel.getChildren() &&
                             listViewModel.getChildren()!.map((item: Item, index: number) => {
-                                return <ListView key={index} item={item} setCurEntry={setCurEntry} setItemCreationDialog={setItemCreationDialog} setCurrentParent={setCurrentParent} />;
+                                return <ListView key={index} item={item} setCurEntry={setCurEntry} setItemCreationDialog={setItemCreationDialog} setCurrentParent={setCurrentParent} deleteItem={deleteItem} />;
                             })}
                     </div>
                 )}
