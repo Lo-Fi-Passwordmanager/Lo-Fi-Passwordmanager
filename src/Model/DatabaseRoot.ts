@@ -7,7 +7,7 @@ export class DatabaseRoot {
 
     constructor(salt: string) {
         this._salt = salt
-        this._rootFolder = new Folder("root", "0")
+        this._rootFolder = new Folder("root", null)
     }
 
     get rootFolder(): Folder {

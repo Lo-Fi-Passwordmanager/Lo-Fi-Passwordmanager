@@ -290,6 +290,10 @@ function buildPath(item: AutomergeItem, itemsById: Map<string, AutomergeItem>): 
  * @param path the path where an item is
  */
 function findNestedValue(databaseRoot: DatabaseRoot, path: string[]): Item {
+    if (path.length === 0) {
+        return databaseRoot.rootFolder
+    }
+
     let currentValue: Item | null = databaseRoot.getChildById(path[0]);
 
     if (currentValue === null) {
