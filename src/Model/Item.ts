@@ -2,7 +2,7 @@ export abstract class Item {
     protected _type: "entry" | "folder";
     private _title: string;
     protected _id: string | null;
-    protected _createdAt: Date | null;
+    protected _createdAt: Date;
     protected _editedAt: Date | null;
 
     protected constructor(type: "entry" | "folder", title: string, id: string | null, createdAt: Date | null, editedAt: Date | null) {
@@ -11,12 +11,14 @@ export abstract class Item {
         this._id = id
         if (createdAt === null || createdAt === undefined) {
             this._createdAt = new Date();
+        } else {
+            this._createdAt = createdAt;
         }
         if (editedAt === null || editedAt === undefined) {
             this._editedAt = new Date();
+        } else {
+            this._editedAt = editedAt;
         }
-        this._createdAt = createdAt;
-        this._editedAt = editedAt;
     }
 
 
@@ -33,7 +35,7 @@ export abstract class Item {
         return this._id;
     }
 
-    public get createdAt(): Date | null {
+    public get createdAt(): Date {
         return this._createdAt;
     }
 
