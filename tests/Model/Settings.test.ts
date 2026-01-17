@@ -1,0 +1,53 @@
+import {afterEach, beforeEach, describe, it, expect} from "vitest";
+import {Settings} from "../../src/Model/Settings";
+
+
+describe('Settings', () => {
+    let settings: Settings;
+    //TODO settings vom local storage testen
+    beforeEach(()=> {
+        settings = Settings.getSettings();
+    })
+
+    afterEach(()=> {
+        settings = null;
+    })
+
+    it('should be able to get Settings', () => {
+        expect(settings).toBeInstanceOf(Settings);
+    })
+
+    it('should be a Singleton', () => {
+        const settings2 = Settings.getSettings();
+        expect(settings2).toBe(settings);
+    })
+
+
+    it('should be able to set and get dark mode', () => {
+        settings.setDarkMode(true);
+        expect(settings.getDarkMode()).toBe(true);
+        settings.setDarkMode(false);
+        expect(settings.getDarkMode()).toBe(false);
+    })
+
+    it('should be able to set and get the Synchronisation', () => {
+        settings.setSynchronization(true);
+        expect(settings.getSynchronization()).toBe(true);
+        settings.setSynchronization(false);
+        expect(settings.getSynchronization()).toBe(false);
+    })
+
+    it('should be able to set and get conflict res', () => {
+        settings.setAutoConflictResolution(true);
+        expect(settings.getAutoConflictResolution()).toBe(true);
+        settings.setAutoConflictResolution(false);
+        expect(settings.getAutoConflictResolution()).toBe(false);
+    })
+
+    it('should be able to set and get auto timeout', () => {
+        settings.setTimeoutActive(true);
+        expect(settings.getTimeoutActive()).toBe(true);
+        settings.setTimeoutActive(false);
+        expect(settings.getTimeoutActive()).toBe(false);
+    })
+})

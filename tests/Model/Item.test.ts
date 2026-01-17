@@ -1,4 +1,4 @@
-import {expect, it, describe, beforeEach, afterEach} from "vitest";
+import {expect, it, describe, beforeEach, afterEach, assert} from "vitest";
 import {Item} from "../../src/Model/Item";
 import {Folder} from "../../src/Model/Folder";
 import {Entry} from "../../src/Model/Entry";
@@ -75,4 +75,10 @@ describe('Item', () => {
         expect(root.entries.includes(subFolder2)).toBe(true);
     })
 
+    it('should correctly handle its creation and last edited date', () =>{
+        const testEntry = new Entry("Entry", "id000", new Date(), new Date(), "entryName", "password", "url", "note");
+        expect(testEntry.createdAt).toStrictEqual(testEntry.editedAt);
+        testEntry.password = "test";
+        assert.notEqual(testEntry.createdAt, testEntry.editedAt);
+    })
 })
