@@ -40,7 +40,7 @@ interface PasswordViewProps {
 /**
  * The view that should be shown, when the user opened a database successfully and shows the whole structure and one selected entry
  */
-const PasswordView: React.FC = ({automergeFacade}: PasswordViewProps) => {
+const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade}) => {
     const passwordViewModel = usePasswortViewModel(entry, automergeFacade as AutomergeFacade);
     // Zu testzwecken eingefügt
     // const facade = useAutomergeFacade(automergeFacade)

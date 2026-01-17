@@ -25,7 +25,7 @@ export const usePasswortViewModel = (entry: Entry, automergeFacade: AutomergeFac
     }
 
     function addEntry() {
-        reactiveFacade.insertItem(new Entry("test", "123", new Date(), new Date(), "username", "password", "url", "notiz"), reactiveFacade.tree.rootFolder.id as string);
+        reactiveFacade.insertItem(new Entry("test", "123", new Date(), new Date(), "username", "password", "url", "notiz"), reactiveFacade.tree.rootFolder.id);
     }
 
     return {
