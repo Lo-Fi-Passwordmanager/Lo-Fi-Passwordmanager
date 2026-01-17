@@ -5,14 +5,16 @@ import CreateDatabaseDialog from "./Dialogs/CreateDatabaseDialog.tsx";
 import LoginDatabaseDialog from "./Dialogs/LoginDatabaseDialog.tsx";
 import PWMLogo from "../../assets/logo_gelb.svg?inline";
 import type {Repo} from "@automerge/react";
+import type {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 
 
 const LoginView: React.FC<{
     repo: Repo,
-    setLoggedIn?: (value: (((prevState: boolean) => boolean) | boolean)) => void
-}> = ({repo, setLoggedIn}) => {
+    setLoggedIn?: (value: (((prevState: boolean) => boolean) | boolean)) => void,
+    setAutomergeFacade?: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void
+}> = ({repo, setLoggedIn, setAutomergeFacade}) => {
 
-    const viewModel = useLoginViewModel(repo, setLoggedIn);
+    const viewModel = useLoginViewModel(repo, setLoggedIn, setAutomergeFacade);
 
     if (viewModel.openedDatabase) {
         return (

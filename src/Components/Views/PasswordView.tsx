@@ -33,11 +33,15 @@ subFolder4.addItem(subFolder5);
 subFolder5.addItem(subFolder6);
 subFolder6.addItem(subFolder7);
 
+interface PasswordViewProps {
+    automergeFacade?: AutomergeFacade | null
+}
+
 /**
  * The view that should be shown, when the user opened a database successfully and shows the whole structure and one selected entry
  */
-const PasswordView: React.FC = () => {
-    const passwordViewModel = usePasswortViewModel(entry)
+const PasswordView: React.FC = ({automergeFacade}: PasswordViewProps) => {
+    const passwordViewModel = usePasswortViewModel(entry, automergeFacade as AutomergeFacade);
     // Zu testzwecken eingefügt
     // const facade = useAutomergeFacade(automergeFacade)
 
@@ -47,11 +51,11 @@ const PasswordView: React.FC = () => {
                 {/* the left 30% of the screen should be the list, showing the structure */}
                 <div className="borderBox scrollableContainer" style={{width: "30%"}}>
                     {/* Zu testzwecken eingefügt <ListView item={facade.tree.rootFolder} onSetEntry={passwordViewModel.setCurEntry}/>*/}
-                    <ListView item={root} onSetEntry={passwordViewModel.setCurEntry}/>
+                    <ListView item={passwordViewModel.getRootFolder()} onSetEntry={passwordViewModel.setCurEntry} addEntry={passwordViewModel.addEntry}/>
                 </div>
                 {/* The right 70% are showing the Entry in a big representation */}
                 <div className="borderBox" style={{width: "70%"}}>
-                    <EntryView entry={passwordViewModel.getCurEntry()} />
+                    <EntryView entry={passwordViewModel.getCurEntry()}/>
                 </div>
             </div>
         </div>

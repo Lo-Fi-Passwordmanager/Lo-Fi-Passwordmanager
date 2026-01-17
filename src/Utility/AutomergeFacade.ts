@@ -98,7 +98,6 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
         throw new Error('The facade was not properly initialized is not a valid automerge URL.')
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [doc, changeDoc] = useDocument<AutomergeDoc>(automergeFacade.automergeURL, {
         // This hooks the `useDocument` into reacts suspense infrastructure so the whole component
         // only renders once the document is loaded

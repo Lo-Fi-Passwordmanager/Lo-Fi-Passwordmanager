@@ -1,6 +1,6 @@
-import type {Item} from "../../Model/Item.ts";
+import  {type Item} from "../../Model/Item.ts";
 import {useListViewModel} from "../ViewModels/ListViewModel.ts";
-import type {Entry} from "../../Model/Entry.ts";
+import  {type Entry} from "../../Model/Entry.ts";
 
 
 /**
@@ -10,15 +10,16 @@ import type {Entry} from "../../Model/Entry.ts";
  */
 const ListView: React.FC<{
     item: Item,
-    onSetEntry: (entry: Entry) => void // This matches the signature of your ViewModel function
-}> = ({item, onSetEntry}) => {
+    onSetEntry: (entry: Entry) => void,
+    addEntry?: () => void
+}> = ({item, onSetEntry, addEntry}) => {
     const listViewModel = useListViewModel(item);
 
     /**
      * If the item to be shown is of type entry, than only its name will be shown
      */
     if (listViewModel.isItemEntry()) {
-        let entry = listViewModel.getItem() as Entry;
+        const entry = listViewModel.getItem() as Entry;
         return (
             <div className="listViewEntry" onClick={() => onSetEntry(entry)}>
                 <span>Titel:</span> <span>{entry.title}</span>
@@ -36,7 +37,7 @@ const ListView: React.FC<{
                     <span>{listViewModel.getItem().title}:</span>
                     <button
                         onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? ">" : "v"}</button>
-                    <button>+</button>
+                    <button onClick={addEntry}>+</button>
                 </div>
 
                 {/* Recursive call of children with indent to visualizes depth in the tree */}

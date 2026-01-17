@@ -1,10 +1,12 @@
 import {BroadcastChannelNetworkAdapter, IndexedDBStorageAdapter, Repo, WebSocketClientAdapter} from "@automerge/react";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
 import {useState} from "react";
+import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 
 export const usePasswordManagerViewModel = () => {
 
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
+    const [automergeFacade, setAutomergeFacade] = useState<AutomergeFacade | null>(null);
 
 
     const repo = new Repo({
@@ -18,10 +20,16 @@ export const usePasswordManagerViewModel = () => {
         return loggedIn;
     }
 
+    function getAutomergeFacade(): AutomergeFacade | null {
+        return automergeFacade;
+    }
+
     return {
         repo,
         getLoggedIn,
         setLoggedIn,
+        setAutomergeFacade,
+        getAutomergeFacade
     };
 }
 

@@ -23,10 +23,14 @@ export type LoginViewModelReturn = {
  * ViewModel for the LoginView
  * @param repo the automerge repo
  * @param setLoggedIn the function to update the View to switch from loginView to PasswordView
+ * @param setAutomergeFacade the function to update the automergeFacade of the used database on correct Login
  * @returns all data and functions required by the LoginView
  * @author uwing
  */
-export const useLoginViewModel = (repo: Repo, setLoggedIn?: (value: (((prevState: boolean) => boolean) | boolean)) => void): LoginViewModelReturn => {
+export const useLoginViewModel = (
+    repo: Repo, setLoggedIn?: (value: (((prevState: boolean) => boolean) | boolean)) => void,
+    setAutomergeFacade?: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void
+): LoginViewModelReturn => {
     // map of database names to their automerge urls
     const [databases, setDatabases] = useState(() => loadAllDatabases());
     // names of all available databases to show in the listing
@@ -89,6 +93,7 @@ export const useLoginViewModel = (repo: Repo, setLoggedIn?: (value: (((prevState
             const db = new Database(dbUrl, selectedDatabase);
             setOpenedDatabase(db);
             setLoggedIn!(true);
+            setAutomergeFacade!(facade);
             setIsEnterPasswordDialogOpen(false);
             setSelectedDatabase(null);
         } else {
