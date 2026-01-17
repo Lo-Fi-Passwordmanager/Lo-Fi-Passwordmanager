@@ -7,7 +7,7 @@ describe('DatabaseRoot', ()=> {
     let folder;
 
     beforeEach(()=> {
-        root = new DatabaseRoot();
+        root = new DatabaseRoot("salt");
         folder = new Folder("name", "id")
     })
 
@@ -16,5 +16,8 @@ describe('DatabaseRoot', ()=> {
         expect(root.getChildById("id")).toBe(folder);
     })
 
+    it('should be able to return the salt', ()=>{
+        expect(root.salt).toBe("salt");
+    })
 
 })

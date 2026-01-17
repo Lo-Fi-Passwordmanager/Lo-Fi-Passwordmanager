@@ -2,9 +2,11 @@ import {Folder} from './Folder';
 import type {Item} from "./Item.ts";
 
 export class DatabaseRoot {
+    private readonly _salt: string;
     private _rootFolder: Folder;
 
-    constructor() {
+    constructor(salt: string) {
+        this._salt = salt
         this._rootFolder = new Folder("root", null)
     }
 
@@ -15,4 +17,9 @@ export class DatabaseRoot {
     public getChildById(id: string): Item | null {
         return this._rootFolder.getChildById(id)
     }
+
+    get salt(): string {
+        return this._salt;
+    }
 }
+export default DatabaseRoot;
