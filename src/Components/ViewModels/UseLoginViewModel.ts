@@ -1,9 +1,10 @@
 import {useEffect, useState} from 'react';
 import Database from '../../Model/Database';
 import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
-import {loadAllDatabases} from "./PasswordManagerViewModel.ts";
+import {loadAllDatabases, storeDatabase} from "./PasswordManagerViewModel.ts";
 import type {Repo} from "@automerge/react";
 import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import type {AutomergeUrl} from "@automerge/automerge-repo";
 
 export type LoginViewModelReturn = {
     databaseNames: string[],
@@ -17,6 +18,7 @@ export type LoginViewModelReturn = {
     closeAddDialog: () => void,
     openEnterPasswordDialog: (db: string) => void,
     closeEnterPasswordDialog: () => void
+    importDatabaseFromURL: (databaseName:string, automergeurl: AutomergeUrl) => void,
 }
 
 /**
@@ -58,6 +60,11 @@ export const useLoginViewModel = (
      * @param masterPassword the masterpassword that gets used for encryption
      */
     const createDatabase = (name: string, masterPassword: string) => {
+
+        if (!isNameAvailable(name)) {
+            return;
+        }
+
         const salt = securityProvider.getNewSalt();
         const validation = securityProvider.getNewValidation(masterPassword, salt);
 
@@ -66,12 +73,7 @@ export const useLoginViewModel = (
 
         const url = automergeFacade.automergeURL!;
 
-        setDatabases(prev => {
-            const copy = new Map(prev);
-            copy.set(name, url);
-            return copy;
-        });
-        setIsAddDialogOpen(false);
+        updateDatabaseListing(name, url);
 
         setSelectedDatabase(name);
         setIsEnterPasswordDialogOpen(true);
@@ -99,6 +101,45 @@ export const useLoginViewModel = (
         } else {
             alert("Falsches Masterpasswort!");
         }
+    }
+
+    /**
+     * Imports a database from an automerge url and stores it in localStorage
+     * @param name the name of the database
+     * @param automergeurl the automerge url of the database
+     */
+    function importDatabaseFromURL(name:string, automergeurl: AutomergeUrl) {
+        if (!isNameAvailable(name)) {
+            return;
+        }
+        updateDatabaseListing(name, automergeurl);
+        storeDatabase(name, automergeurl)
+    }
+
+    /**
+     * Updates the database listing with a new database
+     * @param name the name of the new database
+     * @param url the automerge url of the new database
+     */
+    function updateDatabaseListing(name: string, url: AutomergeUrl) {
+        setDatabases(prev => {
+            const copy = new Map(prev);
+            copy.set(name, url);
+            return copy;
+        });
+        closeAddDialog();
+    }
+
+    /**
+     * Checks if a database name is available
+     * @param name the name to check
+     */
+    function isNameAvailable(name: string): boolean {
+        if (databases.has(name)) {
+            alert("Datenbank mit diesem Namen existiert bereits!");
+            return false;
+        }
+        return true;
     }
 
     // close the currently opened database
@@ -133,5 +174,6 @@ export const useLoginViewModel = (
         closeAddDialog,
         openEnterPasswordDialog,
         closeEnterPasswordDialog,
+        importDatabaseFromURL,
     };
 }
