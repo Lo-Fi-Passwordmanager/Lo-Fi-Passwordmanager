@@ -6,9 +6,15 @@ import type {AutomergeUrl} from "@automerge/automerge-repo";
 import type {Item} from "../Model/Item.ts";
 import {Folder} from "../Model/Folder.ts";
 import {Entry} from "../Model/Entry.ts";
-import type {AutomergeEntry} from "../Model/Automerge/AutomergeEntry.ts";
+import {AutomergeEntry} from "../Model/Automerge/AutomergeEntry.ts";
 import {storeDatabase} from "../Components/ViewModels/PasswordManagerViewModel.ts";
+import {AutomergeFolder} from "../Model/Automerge/AutomergeFolder.ts";
 
+export type Attribute = 'name'|'createdAt'|'editedAt'|'parentId'|'username'|'password'|'url'|'note'
+
+/**
+ * Eine Klasse zum Erstellen und verifizieren von Automerge Dokumenten.
+ */
 export class AutomergeFacade {
     private readonly _repo: Repo
     private _salt: string | null
@@ -103,7 +109,48 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
     const salt = doc.salt
     const validation = doc.validation
 
-    const tree = buildDatabaseAsTree(doc)
+
+    const [tree, itemsById]: [DatabaseRoot, Map<string, AutomergeItem>] = buildDatabaseAsTree(doc)
+
+    /**
+     * Fügt neue Items ins Automerge Dokument ein.
+     *
+     * @param item das neu einzusetzende Item
+     * @param parentId die ID des Parent Items
+     */
+    function insertItem(item: Item, parentId: string) {
+        const automergeItem = automergeItemFromDatabaseItem(item, parentId);
+        const parent = itemsById.get(parentId)
+
+        if (parent === undefined) {
+            throw new Error(`Cannot find parent object with ID ${parentId}`)
+        }
+
+        if (!isFolder(parent)) {
+            throw new Error(`Cannot insert item into Item with ID ${parentId}, as it is not a folder.`)
+        }
+
+        changeDoc((doc) => insertValue(doc, parent, automergeItem))
+    }
+
+    /**
+     * Löscht das angegebene Item und alle Children rekursiv.
+     *
+     * @param itemId die ID des Items
+     */
+    function deleteItem(itemId: string) {
+        changeDoc((doc) => deleteValue(doc, itemId, itemsById))
+    }
+
+    /**
+     * Ändert den Wert eines bestimmten Attributes eines Items
+     *
+     * @param itemId das Item, dessen Attribut geändert werden soll
+     * @param changes die Werte die abgeändert werden sollen
+     */
+    function updateItem(itemId: string, changes: [Attribute, (string | Date)][]) {
+        changeDoc((doc) => changes.forEach(([attr, val]) => updateValue(doc, itemId, itemsById, attr, val)))
+    }
 
     return {
         /**
@@ -118,7 +165,13 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
          * Der validation String der aktuell geöffneten Datenbank.
          */
         validation,
-        tree
+        /**
+         * Die Datenbank als {@link DatabaseRoot}. Reagiert auf Änderungen im Automerge Doc
+         */
+        tree,
+        insertItem,
+        deleteItem,
+        updateItem
     };
 
 }
@@ -155,7 +208,7 @@ function buildDatabaseAsTree(automergeDoc: Doc<AutomergeDoc>): [DatabaseRoot, Ma
         insertNestedValue(root, path, databaseItemFromAutomergeItem(item)) // gleiche fkt wie früher
     }
 
-    return root;
+    return [root, itemsById];
 }
 
 /**
@@ -176,6 +229,26 @@ function databaseItemFromAutomergeItem(automergeItem: AutomergeItem): Item {
     }
 
     return new Folder(name, id, createdAt, editedAt)
+}
+
+/**
+ * Takes an item and creates a new {@link AutomergeItem} form it for internal use.
+ *
+ * @param item the item that should be used for creation
+ */
+function automergeItemFromDatabaseItem(item: Item, parentId: string): AutomergeItem {
+    const name = item.title;
+    const createdAt = item.createdAt!.getTime() / 1000;
+    const editedAt = item.editedAt!.getTime() / 1000;
+
+    // TODO Hier muss encryption der einzenen einträge stattfinden @Valerie
+
+    if (item.isEntry()) {
+        const entry = item as Entry
+        return new AutomergeEntry(name, createdAt, editedAt, parentId, entry.username, entry.password, entry.url, entry.note)
+    }
+
+    return new AutomergeFolder(name, createdAt, editedAt, parentId)
 }
 
 /**
@@ -251,4 +324,63 @@ function insertNestedValue(databaseRoot: DatabaseRoot, path: string[], insert: I
         throw Error("Cannot insert value into Entry.")
     }
     (value as Folder).addItem(insert)
+}
+
+function insertValue(d: AutomergeDoc, parentItem: AutomergeFolder, insert: AutomergeItem) {
+    insert.parentId = getObjectId(parentItem)!;
+    d.items.push(insert)
+}
+
+function deleteValue(d: AutomergeDoc, itemId: string, itemsById: Map<string, AutomergeItem>) {
+
+    const item = itemsById.get(itemId)
+
+    if (item === undefined) {
+        throw new Error(`Cannot find parent object with ID ${itemId}`)
+    }
+
+    const index = d.items.indexOf(item)
+
+    d.items.splice(index, 1)
+
+    if (isFolder(item)) {
+        for (const value of d.items) {
+            if (value.parentId === itemId) {
+                deleteValue(d, getObjectId(value)!, itemsById)
+            }
+        }
+    }
+}
+
+function updateValue(doc: AutomergeDoc, itemId: string, itemsById: Map<string, AutomergeItem>, attribute: Attribute, newValue: string | Date) {
+    const item = itemsById.get(itemId)
+
+    if (item === undefined) {
+        throw new Error(`Cannot find parent object with ID ${itemId}`)
+    }
+
+    if ((attribute === 'createdAt' || attribute === 'editedAt')) {
+        // Attribut is eines der Attribute, die ein Datum nehmen
+        if (typeof newValue === 'string') {
+            throw new Error(`Cannot assign value of type 'string' to value of type 'Date'`)
+        }
+
+        item[attribute] = (newValue.getTime() / 1000)
+
+    } else {
+        // Attribut is eines der Attribute, die einen String nehmen
+        if (typeof newValue !== 'string') {
+            throw new Error(`Cannot assign value of type 'Date' to value of type 'string'`)
+
+        } else if (isFolder(item)) {
+            if (attribute === 'name' || attribute === 'parentId') {
+                item[attribute] = newValue
+            }
+
+            throw new Error(`This attribute does not exist on folders.`)
+
+        } else {
+            (item as AutomergeEntry)[attribute] = newValue
+        }
+    }
 }
