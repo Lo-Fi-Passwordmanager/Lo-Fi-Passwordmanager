@@ -13,7 +13,6 @@ const EntryView: React.FC<{ entry: Entry, inEditablePasswordView: boolean }> = (
                 <span>Benutzername:</span> <span>{entry.username}</span>
                 <span>URL:</span>          <span>{entry.url}</span>
                 <span>Notiz:</span>        <span>{entry.note}</span>
-                <span>Id:</span>           <span>{entry.id}</span>
             </div>
         );
 }

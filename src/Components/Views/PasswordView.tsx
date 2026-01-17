@@ -21,7 +21,13 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade}) => {
 
         return (
             <div>
-                {passwordViewModel.getInItemCreation() && <ItemCreationDialog addItem={passwordViewModel.addItem} curParent={passwordViewModel.getCurParent()} cancelItemCreation={() => passwordViewModel.setInItemCreation(false)}/>}
+                {passwordViewModel.getInItemCreation() &&
+                    <ItemCreationDialog
+                    addItem={passwordViewModel.addItem}
+                    curParent={passwordViewModel.getCurParent()}
+                    cancelItemCreation={() => passwordViewModel.setInItemCreation(false)}
+                    setCurEntry={passwordViewModel.setCurEntry}
+                    />}
                 <div className="passwordView">
                     <div className="borderBox scrollableContainer" style={{width: "30%"}}>
                         <ListView
