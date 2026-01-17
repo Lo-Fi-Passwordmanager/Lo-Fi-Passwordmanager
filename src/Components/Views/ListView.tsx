@@ -10,11 +10,11 @@ import  {Entry} from "../../Model/Entry.ts";
  */
 const ListView: React.FC<{
     item: Item,
-    setCurEntry: (entry: Entry) => void,
+    setCurItem: (entry: Entry) => void,
     setItemCreationDialog: () => void,
     setCurrentParent?: (item: Item) => void
     deleteItem: (item: Item) => void,
-}> = ({item, setCurEntry, setItemCreationDialog, setCurrentParent, deleteItem}) => {
+}> = ({item, setCurItem, setItemCreationDialog, setCurrentParent, deleteItem}) => {
     const listViewModel = useListViewModel(item);
 
     function addButtonPressed() {
@@ -28,7 +28,7 @@ const ListView: React.FC<{
     if (listViewModel.isItemEntry()) {
         const entry = listViewModel.getItem() as Entry;
         return (
-            <div className="listViewEntry" onClick={() => setCurEntry(entry)}>
+            <div className="listViewEntry" onClick={() => setCurItem(entry)}>
                 <span>Titel:</span> <span>{entry.title}</span>
                 <button onClick={() => deleteItem(item)}>🗑️</button>
             </div>
@@ -54,7 +54,7 @@ const ListView: React.FC<{
                     <div className="listViewEntryWrapper">
                         {listViewModel.getChildren() &&
                             listViewModel.getChildren()!.map((item: Item, index: number) => {
-                                return <ListView key={index} item={item} setCurEntry={setCurEntry} setItemCreationDialog={setItemCreationDialog} setCurrentParent={setCurrentParent} deleteItem={deleteItem} />;
+                                return <ListView key={index} item={item} setCurItem={setCurItem} setItemCreationDialog={setItemCreationDialog} setCurrentParent={setCurrentParent} deleteItem={deleteItem} />;
                             })}
                     </div>
                 )}

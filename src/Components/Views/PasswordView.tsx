@@ -26,20 +26,20 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade}) => {
                     addItem={passwordViewModel.addItem}
                     curParent={passwordViewModel.getCurParent()}
                     cancelItemCreation={() => passwordViewModel.setInItemCreation(false)}
-                    setCurEntry={passwordViewModel.setCurEntry}
+                    setCurItem={passwordViewModel.setCurItem}
                     />}
                 <div className="passwordView">
                     <div className="borderBox scrollableContainer" style={{width: "30%"}}>
                         <ListView
                             item={passwordViewModel.getRootFolder()}
-                            setCurEntry={passwordViewModel.setCurEntry}
+                            setCurItem={passwordViewModel.setCurItem}
                             setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
                             setCurrentParent={passwordViewModel.setCurParent}
                             deleteItem={passwordViewModel.deleteItem}
                         />
                     </div>
                     <div className="borderBox" style={{width: "70%"}}>
-                        <EntryView entry={passwordViewModel.getCurEntry()} inEditablePasswordView={passwordViewModel.getInEditablePasswordView()}/>
+                        <EntryView item={passwordViewModel.getCurEntry()}/>
                     </div>
                 </div>
             </div>

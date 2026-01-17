@@ -1,18 +1,16 @@
 import React, {useState} from "react";
-import OnClickButton from "../ButtonViews/OnClickButton.tsx";
 import {type Item} from "../../../Model/Item.ts";
 import {Entry} from "../../../Model/Entry.ts";
 import {Folder} from "../../../Model/Folder.ts";
-import {it} from "vitest";
 
 interface ItemCreationDialogProps {
     addItem?: (item: Item, id: string) => void
     curParent?: Item
     cancelItemCreation?: () => void
-    setCurEntry: (newEntry: Entry) => void;
+    setCurItem: (newItem: Item) => void;
 }
 
-const ItemCreationDialog: React.FC = ({addItem, curParent, cancelItemCreation, setCurEntry}: ItemCreationDialogProps) => {
+const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({addItem, curParent, cancelItemCreation, setCurItem}: ItemCreationDialogProps) => {
 
     const [typeOfItem, setTypeOfItem] = useState("entry")
     const [title, setTitle] = useState("");
@@ -25,7 +23,7 @@ const ItemCreationDialog: React.FC = ({addItem, curParent, cancelItemCreation, s
         if (typeOfItem === "entry") {
             const entry: Entry = new Entry(title, "willBeAutomaticallySet", new Date(), new Date(), username, password, url, note)
             addItem!(entry, curParent!.id)
-            setCurEntry(entry);
+            setCurItem(entry);
         } else if (typeOfItem === "folder") {
             addItem!(new Folder(title, "willBeAutomaticallySet", new Date(), new Date()), curParent!.id)
         }

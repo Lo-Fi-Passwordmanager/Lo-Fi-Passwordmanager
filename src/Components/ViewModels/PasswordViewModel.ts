@@ -1,7 +1,8 @@
-import {Entry} from "../../Model/Entry.ts";
 import {useState} from "react";
 import {AutomergeFacade, useAutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import type {Item} from "../../Model/Item.ts";
+import type {Entry} from "../../Model/Entry.ts";
+import type {Folder} from "../../Model/Folder.ts";
 
 
 /**
@@ -14,14 +15,14 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     const [inEditablePasswordView, setInEditablePasswordView] = useState(false);
     const [inItemCreation, setInItemCreation] = useState(false);
     const reactiveFacade = useAutomergeFacade(automergeFacade);
-    const [curEntry, setCurEntry] = useState(reactiveFacade.tree.rootFolder);
-    const [curParent, setCurParent] = useState(reactiveFacade.tree.rootFolder);
+    const [curItem, setCurItem] = useState<Item>(reactiveFacade.tree.rootFolder);
+    const [curParent, setCurParent] = useState<Item>(reactiveFacade.tree.rootFolder);
 
     /**
      * returns the current entry that should be shown
      */
     function getCurEntry() {
-        return curEntry;
+        return curItem;
     }
     function getInItemCreation() {
         return inItemCreation;
@@ -53,7 +54,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     }
 
     return {
-        setCurEntry,
+        setCurItem,
         getCurEntry,
         getRootFolder,
         addItem,
