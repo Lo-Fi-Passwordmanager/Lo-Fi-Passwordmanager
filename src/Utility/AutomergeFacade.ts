@@ -276,7 +276,7 @@ function isFolder(automergeItem: AutomergeItem): automergeItem is AutomergeFolde
  * @param itemsById a map the maps ids to its corresponding item
  */
 function buildPath(item: AutomergeItem, itemsById: Map<string, AutomergeItem>): Array<string> {
-    if (item.parentId === "") {
+    if (item.parentId === null || item.parentId === "") {
         return []
     }
 
