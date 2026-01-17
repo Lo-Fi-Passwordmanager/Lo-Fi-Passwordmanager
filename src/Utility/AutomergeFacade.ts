@@ -28,6 +28,12 @@ export class AutomergeFacade {
 
     }
 
+    /**
+     * Erstellt eine Datenbank mit einem Salt, einem validation String und einem Namen und setzt dabei auch die {@code automergeURL}.
+     * @param salt das Salt der neuen Datenbank
+     * @param validation die Validation der neuen Datenbank
+     * @param name der Anzeigename der neuen Datenbank
+     */
     createDatabase(salt: string, validation: string, name: string) {
         const handle = this._repo.create<AutomergeDoc>(new AutomergeDoc(salt!, validation!))
         this._automergeURL = handle.url
@@ -36,14 +42,20 @@ export class AutomergeFacade {
         storeDatabase(name!, this._automergeURL)
     }
 
+    /**
+     * Die {@link AutomergeUrl} der Datenbank die geöffnet oder neu erstellt wurde. Ist {@code null} wenn keine geöffnet und noch keine erstellt wurde.
+     */
     get automergeURL(): AutomergeUrl | null {
         return this._automergeURL
     }
 
-    async getSalt(): Promise<string> {
+    /**
+     * Das Salt der gerade geöffneten Datenbank. Ist {@code null} wenn keine geöffnet und noch keine erstellt wurde.
+     */
+    async getSalt(): Promise<string | null> {
         if (this._salt === null) {
             if (this._automergeURL === null) {
-                throw new Error("No automergeURL found.")
+                return null
             }
             const handle = await this._repo.find<AutomergeDoc>(this._automergeURL)
             this._salt = handle.doc().salt;
@@ -52,10 +64,13 @@ export class AutomergeFacade {
         return this._salt
     }
 
-    async getValidation(): Promise<string> {
+    /**
+     * Der validation String der aktuell geöffneten Datenbank. Ist {@code null} wenn keine geöffnet und noch keine erstellt wurde.
+     */
+    async getValidation(): Promise<string | null> {
         if (this._validation === null) {
             if (this._automergeURL === null) {
-                throw new Error("No automergeURL found.")
+                return null
             }
             const handle = await this._repo.find<AutomergeDoc>(this._automergeURL)
             this._validation = handle.doc().validation;
@@ -91,8 +106,17 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
     const tree = buildDatabaseAsTree(doc)
 
     return {
+        /**
+         * Die {@link AutomergeUrl} der gerade geöffneten Datenbank.
+         */
         automergeURL,
+        /**
+         * Das Salt der gerade geöffneten Datenbank.
+         */
         salt,
+        /**
+         * Der validation String der aktuell geöffneten Datenbank.
+         */
         validation,
         tree
     };
@@ -103,9 +127,9 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
  * Takes an automerge document and parses it, to create a database tree structure.
  * @param automergeDoc
  *
- * @returns a new {@link DatabaseRoot} that represents the automerge document
+ * @returns a new {@link DatabaseRoot} that represents the automerge document and a map with all {@link AutomergeItem}s mapped to their ID.
  */
-function buildDatabaseAsTree(automergeDoc: Doc<AutomergeDoc>): DatabaseRoot {
+function buildDatabaseAsTree(automergeDoc: Doc<AutomergeDoc>): [DatabaseRoot, Map<string, AutomergeItem>] {
 
     const root = new DatabaseRoot(automergeDoc.salt)
 
@@ -141,9 +165,11 @@ function buildDatabaseAsTree(automergeDoc: Doc<AutomergeDoc>): DatabaseRoot {
  */
 function databaseItemFromAutomergeItem(automergeItem: AutomergeItem): Item {
     const name = automergeItem.name;
-    const id = getObjectId(automergeItem);
+    const id = getObjectId(automergeItem)!;
     const createdAt = new Date(automergeItem.createdAt * 1000);
     const editedAt = new Date(automergeItem.editedAt * 1000);
+
+    // TODO Hier muss decryption der einzenen einträge stattfinden @Valerie
 
     if (isEntry(automergeItem)) {
         return new Entry(name, id, createdAt, editedAt, automergeItem.username, automergeItem.password, automergeItem.url, automergeItem.note)
@@ -158,6 +184,14 @@ function databaseItemFromAutomergeItem(automergeItem: AutomergeItem): Item {
  */
 function isEntry(automergeItem: AutomergeItem): automergeItem is AutomergeEntry {
     return automergeItem.type === "entry"
+}
+
+/**
+ * Checks whether the provided {@link AutomergeItem} is an {@link AutomergeFolder}
+ * @param automergeItem the automerge item to check
+ */
+function isFolder(automergeItem: AutomergeItem): automergeItem is AutomergeFolder {
+    return automergeItem.type === "folder"
 }
 
 /**
