@@ -19,6 +19,7 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                                                                  onCancel
                                                              }) => {
 
+    const [createNewDatabase, setCreateNewDatabase] = useState(true);
     const [field1, setField1] = useState("");
     const [field2, setField2] = useState("");
 
@@ -32,41 +33,76 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
     if (!isOpen) return null;
 
     const handleConfirm = () => {
-        if (!field1 || !field2) {
-            alert("Bitte alle Felder ausfüllen.");
-            return;
+        if (!createNewDatabase) {
+            if (!field1 || !field2) {
+                alert("Bitte alle Felder ausfüllen.");
+                return;
+            }
+            onConfirm(field1, field2);
+        } else {
+            //FIXME hier logik um Datenbank von URL zu laden
+            if (!field1) {
+                alert("Bitte alle Felder ausfüllen.");
+                return;
+            }
         }
-        onConfirm(field1, field2);
+
     };
 
-    return (
-        <div className="dialogOverlay">
-            <div className="dialog">
-                <h3>{title}</h3>
-                <label>{label1}</label>
-                <input
-                    className="inputField"
-                    type="text"
-                    value={field1}
-                    onChange={(e) => setField1(e.target.value)}
-                    placeholder={label1}
-                    autoFocus
-                />
+    if (createNewDatabase) {
+        return (
+            <div className="dialogOverlay">
+                <div className="dialog">
+                    <button onClick={() => setCreateNewDatabase(false)}>Existierende Datenbank laden</button>
+                    <h3>{title}</h3>
+                    <label>{label1}</label>
+                    <input
+                        className="inputField"
+                        type="text"
+                        value={field1}
+                        onChange={(e) => setField1(e.target.value)}
+                        placeholder={label1}
+                        autoFocus
+                    />
 
-                <label>{label2}</label>
-                <input
-                    className="inputField"
-                    type="password"
-                    value={field2}
-                    onChange={(e) => setField2(e.target.value)}
-                    placeholder={label2}
-                />
-                <div className="confirm-cancel-buttons">
-                    <OnClickButton onClick={handleConfirm}>Bestätigen</OnClickButton>
-                    <OnClickButton onClick={onCancel}>Abbrechen</OnClickButton>
+                    <label>{label2}</label>
+                    <input
+                        className="inputField"
+                        type="password"
+                        value={field2}
+                        onChange={(e) => setField2(e.target.value)}
+                        placeholder={label2}
+                    />
+                    <div className="confirm-cancel-buttons">
+                        <OnClickButton onClick={handleConfirm}>Bestätigen</OnClickButton>
+                        <OnClickButton onClick={onCancel}>Abbrechen</OnClickButton>
+                    </div>
                 </div>
             </div>
-        </div>
-    )
+        );
+    } else {
+        return(
+            <div className="dialogOverlay">
+                <div className="dialog">
+                    <button onClick={() => setCreateNewDatabase(true)}>Neue Datenbank erstellen</button>
+                    <h3>Existierende Datenbank laden</h3>
+                    <label>Automerge Url</label>
+                    <input
+                        className="inputField"
+                        type="text"
+                        value={field1}
+                        onChange={(e) => setField1(e.target.value)}
+                        placeholder={"Automerge Url"}
+                        autoFocus
+                    />
+                    <div className="confirm-cancel-buttons">
+                        <OnClickButton onClick={handleConfirm}>Bestätigen</OnClickButton>
+                        <OnClickButton onClick={onCancel}>Abbrechen</OnClickButton>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
 }
 export default CreateDatabaseDialog;
