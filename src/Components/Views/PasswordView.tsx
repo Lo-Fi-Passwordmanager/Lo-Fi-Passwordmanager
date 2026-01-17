@@ -1,10 +1,10 @@
 import React from "react";
 import {Entry} from "../../Model/Entry.ts";
 import {Folder} from "../../Model/Folder.ts";
-import SettingsView from "./SettingsView.tsx";
 import ListView from "./ListView.tsx";
 import EntryView from "./EntryView.tsx";
 import {usePasswortViewModel} from "../ViewModels/PasswordViewModel.ts";
+import {AutomergeFacade, useAutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 
 
 const root = new Folder("krasser Titel", "123", new Date(), new Date())
@@ -38,12 +38,15 @@ subFolder6.addItem(subFolder7);
  */
 const PasswordView: React.FC = () => {
     const passwordViewModel = usePasswortViewModel(entry)
+    // Zu testzwecken eingefügt
+    // const facade = useAutomergeFacade(automergeFacade)
 
     return (
         <div>
             <div className="passwordView">
                 {/* the left 30% of the screen should be the list, showing the structure */}
                 <div className="borderBox scrollableContainer" style={{width: "30%"}}>
+                    {/* Zu testzwecken eingefügt <ListView item={facade.tree.rootFolder} onSetEntry={passwordViewModel.setCurEntry}/>*/}
                     <ListView item={root} onSetEntry={passwordViewModel.setCurEntry}/>
                 </div>
                 {/* The right 70% are showing the Entry in a big representation */}

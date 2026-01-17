@@ -85,7 +85,7 @@ export const useLoginViewModel = (repo: Repo, setLoggedIn?: (value: (((prevState
         }
 
         const facade = new AutomergeFacade(repo, dbUrl)
-        if (securityProvider.verifyMasterPassword(masterPassword, await facade.getSalt()!, await facade.getValidation()!)) {
+        if (securityProvider.verifyMasterPassword(masterPassword, (await facade.getSalt())!, (await facade.getValidation())!)) {
             const db = new Database(dbUrl, selectedDatabase);
             setOpenedDatabase(db);
             setLoggedIn!(true);
