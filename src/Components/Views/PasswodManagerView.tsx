@@ -16,7 +16,7 @@ const PasswordManagerView: React.FC = () => {
                 viewModel={viewModel.loginViewModel}
             />
             <SettingsView/>
-            <PasswordView automergeFacade={new AutomergeFacade(viewModel.repo, "automerge:3gmJfiZUByG475hszEYVRoJ81uV6")}/>
+            <PasswordView/>
         </RepoContext.Provider>
     );
 }
