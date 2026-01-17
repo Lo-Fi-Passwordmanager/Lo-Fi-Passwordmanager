@@ -5,14 +5,16 @@ import CreateDatabaseDialog from "./Dialogs/CreateDatabaseDialog.tsx";
 import LoginDatabaseDialog from "./Dialogs/LoginDatabaseDialog.tsx";
 import PWMLogo from "../../assets/logo_gelb.svg?inline";
 import type {Repo} from "@automerge/react";
-import type {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import  {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import type {AutomergeUrl} from "@automerge/automerge-repo";
 
 
 const LoginView: React.FC<{
     repo: Repo,
     setLoggedIn?: (value: (((prevState: boolean) => boolean) | boolean)) => void,
-    setAutomergeFacade?: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void
-}> = ({repo, setLoggedIn, setAutomergeFacade}) => {
+    setAutomergeFacade?: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void,
+    storeDatabase: (name: string, autoMergeUrl: AutomergeUrl) => void
+}> = ({repo, setLoggedIn, setAutomergeFacade, storeDatabase}) => {
 
     const viewModel = useLoginViewModel(repo, setLoggedIn, setAutomergeFacade);
 
@@ -21,6 +23,12 @@ const LoginView: React.FC<{
             <a>Hier provisorischer Text? Wann wird das hier überhaupt gecalled?</a>
         );
     }
+
+    function storeDatabaseAndCloseCreateDialog(databaseName:string, automergeurl: AutomergeUrl) {
+        viewModel.closeAddDialog();
+        storeDatabase(databaseName, automergeurl)
+    }
+
 
     return (
         <div className="loginView">
@@ -59,8 +67,9 @@ const LoginView: React.FC<{
                     title="Neue Datenbank erstellen"
                     label1="Datenbankname"
                     label2="Masterpasswort"
-                    onConfirm={viewModel.createDatabase}
+                    createDatabase={viewModel.createDatabase}
                     onCancel={viewModel.closeAddDialog}
+                    storeDatabase={storeDatabaseAndCloseCreateDialog}
                 />
             </main>
         </div>

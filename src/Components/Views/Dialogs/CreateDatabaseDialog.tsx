@@ -1,13 +1,15 @@
 import React, {useState, useEffect} from "react";
 import OnClickButton from "../ButtonViews/OnClickButton.tsx";
+import type {AutomergeUrl} from "@automerge/automerge-repo";
 
 interface TwoFieldDialogProps {
-    isOpen: boolean;
-    title: string;
-    label1: string;
-    label2: string;
-    onConfirm: (field1: string, field2: string) => void;
-    onCancel: () => void;
+    isOpen: boolean,
+    title: string,
+    label1: string,
+    label2: string,
+    createDatabase: (field1: string, field2: string) => void,
+    onCancel: () => void,
+    storeDatabase: (name: string, autoMergeUrl: AutomergeUrl) => void
 }
 
 const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
@@ -15,8 +17,9 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                                                                  title,
                                                                  label1,
                                                                  label2,
-                                                                 onConfirm,
-                                                                 onCancel
+                                                                 createDatabase,
+                                                                 onCancel,
+                                                                 storeDatabase
                                                              }) => {
 
     const [createNewDatabase, setCreateNewDatabase] = useState(true);
@@ -33,18 +36,15 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
     if (!isOpen) return null;
 
     const handleConfirm = () => {
-        if (!createNewDatabase) {
-            if (!field1 || !field2) {
-                alert("Bitte alle Felder ausfüllen.");
-                return;
-            }
-            onConfirm(field1, field2);
+        if (!field1 || !field2) {
+            alert("Bitte alle Felder ausfüllen.");
+            return;
+        }
+        if (createNewDatabase) {
+            createDatabase(field1, field2);
         } else {
-            //FIXME hier logik um Datenbank von URL zu laden
-            if (!field1) {
-                alert("Bitte alle Felder ausfüllen.");
-                return;
-            }
+            storeDatabase(field1, ("automerge:" + field2) as AutomergeUrl);
+            return;
         }
 
     };
@@ -80,18 +80,30 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                 </div>
             </div>
         );
+
+
+
     } else {
-        return(
+        return (
             <div className="dialogOverlay">
                 <div className="dialog">
                     <button onClick={() => setCreateNewDatabase(true)}>Neue Datenbank erstellen</button>
                     <h3>Existierende Datenbank laden</h3>
-                    <label>Automerge Url</label>
+                    <label>Name</label>
                     <input
                         className="inputField"
                         type="text"
                         value={field1}
                         onChange={(e) => setField1(e.target.value)}
+                        placeholder={"Name"}
+                        autoFocus
+                    />
+                    <label>Automerge Url</label>
+                    <input
+                        className="inputField"
+                        type="text"
+                        value={field2}
+                        onChange={(e) => setField2(e.target.value)}
                         placeholder={"Automerge Url"}
                         autoFocus
                     />

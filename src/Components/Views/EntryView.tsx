@@ -15,6 +15,7 @@ const EntryView: React.FC<{ item: Item}> = ({item}) => {
                     <div className="entryViewEntry">
                             <span>Titel:</span>        <span>{entry.title}</span>
                             <span>Benutzername:</span> <span>{entry.username}</span>
+                            <span>Passwort:</span>     <span>{entry.password}</span>
                             <span>URL:</span>          <span>{entry.url}</span>
                             <span>Notiz:</span>        <span>{entry.note}</span>
                     </div>

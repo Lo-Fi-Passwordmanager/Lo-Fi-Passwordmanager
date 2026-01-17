@@ -29,7 +29,8 @@ export const usePasswordManagerViewModel = () => {
         getLoggedIn,
         setLoggedIn,
         setAutomergeFacade,
-        getAutomergeFacade
+        getAutomergeFacade,
+        storeDatabase
     };
 }
 

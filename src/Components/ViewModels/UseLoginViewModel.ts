@@ -132,6 +132,6 @@ export const useLoginViewModel = (
         openAddDialog,
         closeAddDialog,
         openEnterPasswordDialog,
-        closeEnterPasswordDialog
+        closeEnterPasswordDialog,
     };
 }
