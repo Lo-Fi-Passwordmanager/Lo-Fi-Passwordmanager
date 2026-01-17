@@ -98,7 +98,6 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
         throw new Error('The facade was not properly initialized is not a valid automerge URL.')
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [doc, changeDoc] = useDocument<AutomergeDoc>(automergeFacade.automergeURL, {
         // This hooks the `useDocument` into reacts suspense infrastructure so the whole component
         // only renders once the document is loaded
@@ -120,13 +119,16 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
      */
     function insertItem(item: Item, parentId: string) {
         const automergeItem = automergeItemFromDatabaseItem(item, parentId);
-        const parent = itemsById.get(parentId)
+        let parent: AutomergeItem | undefined | null = null
+        if (parentId !== "") {
+            parent = itemsById.get(parentId)
+        }
 
         if (parent === undefined) {
             throw new Error(`Cannot find parent object with ID ${parentId}`)
         }
 
-        if (!isFolder(parent)) {
+        if (parent && !isFolder(parent)) {
             throw new Error(`Cannot insert item into Item with ID ${parentId}, as it is not a folder.`)
         }
 
@@ -274,7 +276,7 @@ function isFolder(automergeItem: AutomergeItem): automergeItem is AutomergeFolde
  * @param itemsById a map the maps ids to its corresponding item
  */
 function buildPath(item: AutomergeItem, itemsById: Map<string, AutomergeItem>): Array<string> {
-    if (item.parentId === null) {
+    if (item.parentId === "") {
         return []
     }
 
@@ -288,6 +290,10 @@ function buildPath(item: AutomergeItem, itemsById: Map<string, AutomergeItem>): 
  * @param path the path where an item is
  */
 function findNestedValue(databaseRoot: DatabaseRoot, path: string[]): Item {
+    if (path.length === 0) {
+        return databaseRoot.rootFolder
+    }
+
     let currentValue: Item | null = databaseRoot.getChildById(path[0]);
 
     if (currentValue === null) {
@@ -326,8 +332,13 @@ function insertNestedValue(databaseRoot: DatabaseRoot, path: string[], insert: I
     (value as Folder).addItem(insert)
 }
 
-function insertValue(d: AutomergeDoc, parentItem: AutomergeFolder, insert: AutomergeItem) {
-    insert.parentId = getObjectId(parentItem)!;
+function insertValue(d: AutomergeDoc, parentItem: AutomergeFolder | null, insert: AutomergeItem) {
+    if (parentItem === null) {
+        insert.parentId = "";
+    } else {
+        insert.parentId = getObjectId(parentItem)!;
+    }
+
     d.items.push(insert)
 }
 

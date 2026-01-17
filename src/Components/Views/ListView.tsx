@@ -1,6 +1,6 @@
-import type {Item} from "../../Model/Item.ts";
+import  {type Item} from "../../Model/Item.ts";
 import {useListViewModel} from "../ViewModels/ListViewModel.ts";
-import type {Entry} from "../../Model/Entry.ts";
+import  {Entry} from "../../Model/Entry.ts";
 
 
 /**
@@ -10,18 +10,27 @@ import type {Entry} from "../../Model/Entry.ts";
  */
 const ListView: React.FC<{
     item: Item,
-    onSetEntry: (entry: Entry) => void // This matches the signature of your ViewModel function
-}> = ({item, onSetEntry}) => {
+    setCurItem: (entry: Entry) => void,
+    setItemCreationDialog: () => void,
+    setCurrentParent?: (item: Item) => void
+    deleteItem: (item: Item) => void,
+}> = ({item, setCurItem, setItemCreationDialog, setCurrentParent, deleteItem}) => {
     const listViewModel = useListViewModel(item);
+
+    function addButtonPressed() {
+        setItemCreationDialog();
+        setCurrentParent!(item);
+    }
 
     /**
      * If the item to be shown is of type entry, than only its name will be shown
      */
     if (listViewModel.isItemEntry()) {
-        let entry = listViewModel.getItem() as Entry;
+        const entry = listViewModel.getItem() as Entry;
         return (
-            <div className="listViewEntry" onClick={() => onSetEntry(entry)}>
+            <div className="listViewEntry" onClick={() => setCurItem(entry)}>
                 <span>Titel:</span> <span>{entry.title}</span>
+                <button onClick={() => deleteItem(item)}>🗑️</button>
             </div>
         );
         /**
@@ -34,9 +43,10 @@ const ListView: React.FC<{
                 {/* Name and Buttons */}
                 <div className="listViewTitleHeader">
                     <span>{listViewModel.getItem().title}:</span>
-                    <button
-                        onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? ">" : "v"}</button>
-                    <button>+</button>
+                    <button onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? ">" : "v"}</button>
+                    <button onClick={() => addButtonPressed() }>+</button>
+                    {/* Delete button should not be rendered for the root */}
+                    {(item.title != "root") && <button onClick={() => deleteItem(item)}>🗑️</button>}
                 </div>
 
                 {/* Recursive call of children with indent to visualizes depth in the tree */}
@@ -44,7 +54,7 @@ const ListView: React.FC<{
                     <div className="listViewEntryWrapper">
                         {listViewModel.getChildren() &&
                             listViewModel.getChildren()!.map((item: Item, index: number) => {
-                                return <ListView key={index} item={item} onSetEntry={onSetEntry}/>;
+                                return <ListView key={index} item={item} setCurItem={setCurItem} setItemCreationDialog={setItemCreationDialog} setCurrentParent={setCurrentParent} deleteItem={deleteItem} />;
                             })}
                     </div>
                 )}

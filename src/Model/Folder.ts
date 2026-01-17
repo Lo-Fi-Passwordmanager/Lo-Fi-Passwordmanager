@@ -3,7 +3,7 @@ import {Item} from "./Item";
 export class Folder extends Item {
     private _entries: Item[];
 
-    public constructor(name: string, id: string | null, createdAt?: Date, editedAt?: Date) {
+    public constructor(name: string, id: string, createdAt?: Date, editedAt?: Date) {
         super("folder", name, id, createdAt ? createdAt : new Date(), editedAt ? editedAt : new Date());
         this._entries = []
     }

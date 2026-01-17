@@ -167,6 +167,8 @@ button:focus-visible {
 .confirm-cancel-buttons {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
 .logo {
@@ -202,6 +204,11 @@ button:focus-visible {
     padding: 4px 8px; /* Smaller padding for buttons */
     outline-width: 2px; /* Reduce the outline so it stays inside the box */
 }
+.listViewEntry button {
+    margin: 5px;
+    padding: 4px 8px; /* Smaller padding for buttons */
+    outline-width: 2px; /* Reduce the outline so it stays inside the box */
+}
 .listViewEntry {
     flex-direction: column;
     padding-left: 30px;
@@ -214,7 +221,7 @@ button:focus-visible {
 
     /*grid formatting*/
     display: grid;
-    grid-template-columns: 120px 1fr;
+    grid-template-columns: 120px 1fr 1fr;
     gap: 4px;
 }
 
