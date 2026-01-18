@@ -19,7 +19,7 @@ describe('DatabaseRoot', ()=> {
     it('should be able to return the salt', ()=>{
         expect(root.salt).toBe("salt");
     })
-
+    //TODO might fail because createdAt/editedAdd are not the same some times
     it("should be able to return the root folder", ()=> {
         const folder = new Folder("root", "")
         expect(root.rootFolder).toStrictEqual(folder);
