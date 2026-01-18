@@ -1,5 +1,4 @@
 import {useEffect, useState} from 'react';
-import Database from '../../Model/Database';
 import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import {loadAllDatabases, storeDatabase} from "./PasswordManagerViewModel.ts";
 import type {Repo} from "@automerge/react";
@@ -8,7 +7,6 @@ import type {AutomergeUrl} from "@automerge/automerge-repo";
 
 export type LoginViewModelReturn = {
     databaseNames: string[],
-    openedDatabase: Database | null,
     isAddDialogOpen: boolean,
     isEnterPasswordDialogOpen: boolean,
     createDatabase: (name: string, masterPassword: string) => void,
@@ -26,20 +24,20 @@ export type LoginViewModelReturn = {
  * @param repo the automerge repo
  * @param setLoggedIn the function to update the View to switch from loginView to PasswordView
  * @param setAutomergeFacade the function to update the automergeFacade of the used database on correct Login
+ * @param passwordViewSecurityProvider
  * @returns all data and functions required by the LoginView
  * @author uwing
  */
 export const useLoginViewModel = (
-    repo: Repo, setLoggedIn?: (value: (((prevState: boolean) => boolean) | boolean)) => void,
-    setAutomergeFacade?: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void
+    repo: Repo, setLoggedIn: (value: (((prevState: boolean) => boolean) | boolean)) => void,
+    setAutomergeFacade: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void,
+    passwordViewSecurityProvider: SecurityProvider,
 ): LoginViewModelReturn => {
     // map of database names to their automerge urls
     const [databases, setDatabases] = useState(() => loadAllDatabases());
     // names of all available databases to show in the listing
     const [databaseNames, setDatabaseNames] = useState<string[]>([]);
 
-    // currently opened database
-    const [openedDatabase, setOpenedDatabase] = useState<Database | null>(null);
     // database that was clicked to be opened
     const [selectedDatabase, setSelectedDatabase] = useState<string | null>(null);
     // whether the dialog to add a new database is open
@@ -47,7 +45,7 @@ export const useLoginViewModel = (
     // whether the dialog to open a database is open
     const [isEnterPasswordDialogOpen, setIsEnterPasswordDialogOpen] = useState(false);
 
-    const securityProvider = new SecurityProvider();
+    const securityProvider = passwordViewSecurityProvider;
 
     // update the list of database names when the databases change
     useEffect(() => {
@@ -88,8 +86,6 @@ export const useLoginViewModel = (
 
         const facade = new AutomergeFacade(repo, dbUrl)
         if (securityProvider.verifyMasterPassword(masterPassword, (await facade.getSalt())!, (await facade.getValidation())!)) {
-            const db = new Database(dbUrl, selectedDatabase);
-            setOpenedDatabase(db);
             setLoggedIn!(true);
             setAutomergeFacade!(facade);
             setIsEnterPasswordDialogOpen(false);
@@ -154,8 +150,8 @@ export const useLoginViewModel = (
 
     // close the currently opened database
     const closeDatabase = () => {
-        setOpenedDatabase(null);
         setLoggedIn!(false);
+        securityProvider.clearKey();
     };
 
     // Open the dialog to create a new database
@@ -173,7 +169,6 @@ export const useLoginViewModel = (
 
     return {
         databaseNames,
-        openedDatabase,
         isAddDialogOpen,
         isEnterPasswordDialogOpen,
 
