@@ -55,19 +55,7 @@ const DatabaseListing: React.FC<DatabaseListingProps> = ({databases, openDatabas
             ))}
 
             {showToast && (
-                <div style={{
-                    position: "fixed",
-                    bottom: "20px",
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    backgroundColor: "#333",
-                    color: "#fff",
-                    padding: "10px 20px",
-                    borderRadius: "8px",
-                    boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-                    zIndex: 1000,
-                    fontSize: "0.9rem"
-                }}>
+                <div className="floatingToast">
                     URL in die Zwischenablage kopiert!
                 </div>
             )}
