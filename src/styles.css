@@ -18,7 +18,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
-    --bg: rgb(255, 255, 255);
+    --bg: rgb(230, 223, 199);
     --text: #000000;
     --panel: rgb(250, 150, 150);
     --overlay: rgba(0, 0, 0, 0.2);
@@ -111,7 +111,7 @@ button:focus-visible {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 2000;
+    z-index: 100;
 }
 .dialog {
     background: var(--dialog-bg);
@@ -285,20 +285,11 @@ button:focus-visible {
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #333;
-    color: #fff;
+    background-color: var(--panel);
+    color: var(--text);
     padding: 10px 20px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    z-index: 1000;
-    font-size: 0.9rem;
-}
-
-/* Show the snackbar when clicking on a button (class added with JavaScript) */
-.floatingToast.show {
-    visibility: visible; /* Show the snackbar */
-    /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
-    However, delay the fade out process for 2.5 seconds */
-    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    z-index: 200;
+    font-size: 1.5rem;
 }

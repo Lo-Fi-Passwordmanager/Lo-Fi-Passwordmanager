@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from "react";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
+import React, {useState} from "react";
+import ToastDialog from "../Dialogs/ToastDialog.tsx";
 
 type DatabaseListingProps = {
     databases: Map<string, AutomergeUrl>,
@@ -7,16 +8,7 @@ type DatabaseListingProps = {
 }
 
 const DatabaseListing: React.FC<DatabaseListingProps> = ({databases, openDatabase}) => {
-
     const [showToast, setShowToast] = useState(false);
-
-    // Automatically hide toast after 2 seconds
-    useEffect(() => {
-        if (showToast) {
-            const timer = setTimeout(() => setShowToast(false), 2000);
-            return () => clearTimeout(timer);
-        }
-    }, [showToast]);
 
     if (databases.size === 0) {
         return <div>Keine Datenbanken vorhanden</div>;
@@ -40,12 +32,13 @@ const DatabaseListing: React.FC<DatabaseListingProps> = ({databases, openDatabas
                     }}
                 >
                     <button
-                        style={{ width: "100%", margin: "auto" }}
+                        style={{ width: "100%", padding: "0.6rem", margin: "1%" }}
                         onClick={() => openDatabase(db)}
                     >
                         {db}
                     </button>
                     <button
+                        style={{padding: "0.6rem", margin: "1%" }}
                         onClick={() => copyToClipboard(url)}
                         title="Copy URL"
                     >
@@ -53,13 +46,11 @@ const DatabaseListing: React.FC<DatabaseListingProps> = ({databases, openDatabas
                     </button>
                 </div>
             ))}
-
-            {showToast && (
-                <div className="floatingToast">
-                    URL in die Zwischenablage kopiert!
-                </div>
-            )}
-
+            <ToastDialog
+                message="URL in die Zwischenablage kopiert!"
+                isVisible={showToast}
+                onClose={() => setShowToast(false)}
+            />
         </div>
     );
 }
