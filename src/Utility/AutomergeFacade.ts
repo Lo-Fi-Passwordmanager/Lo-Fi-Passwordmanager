@@ -103,7 +103,7 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
 
 
     if (automergeFacade.automergeURL === null) {
-        throw new Error('The facade was not properly initialized is not a valid automerge URL.')
+        throw new Error('The facade was not properly initialized. There is no valid automerge URL.')
     }
 
     const [doc, changeDoc] = useDocument<AutomergeDoc>(automergeFacade.automergeURL, {
