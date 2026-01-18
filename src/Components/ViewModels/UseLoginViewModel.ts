@@ -67,7 +67,7 @@ export const useLoginViewModel = (
         const validation = securityProvider.getNewValidation(masterPassword, salt);
 
         const automergeFacade = new AutomergeFacade(repo);
-        automergeFacade.createDatabase(salt, validation, name)
+        automergeFacade.createDatabase(salt, validation)
 
         const url = automergeFacade.automergeURL!;
 
@@ -104,7 +104,6 @@ export const useLoginViewModel = (
         if (!isNameAvailable(name) || !isAutomergeUrlAvailable(automergeurl)) {
             return;
         }
-        storeDatabase(name, automergeurl)
         addDatabase(name, automergeurl);
     }
 
@@ -114,6 +113,8 @@ export const useLoginViewModel = (
      * @param url the automerge url of the new database
      */
     function addDatabase(name: string, url: AutomergeUrl) {
+        storeDatabase(name, url);
+
         setDatabases(prev => {
             const copy = new Map(prev);
             copy.set(name, url);

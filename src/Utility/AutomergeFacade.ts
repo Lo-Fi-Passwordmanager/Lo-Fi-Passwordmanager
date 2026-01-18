@@ -7,8 +7,8 @@ import type {Item} from "../Model/Item.ts";
 import {Folder} from "../Model/Folder.ts";
 import {Entry} from "../Model/Entry.ts";
 import {AutomergeEntry} from "../Model/Automerge/AutomergeEntry.ts";
-import {storeDatabase} from "../Components/ViewModels/PasswordManagerViewModel.ts";
 import {AutomergeFolder} from "../Model/Automerge/AutomergeFolder.ts";
+import {storeDatabase} from "./Storage.ts";
 
 export type Attribute = 'name'|'createdAt'|'editedAt'|'parentId'|'username'|'password'|'url'|'note'
 
@@ -40,12 +40,11 @@ export class AutomergeFacade {
      * @param validation die Validation der neuen Datenbank
      * @param name der Anzeigename der neuen Datenbank
      */
-    createDatabase(salt: string, validation: string, name: string) {
+    createDatabase(salt: string, validation: string) {
         const handle = this._repo.create<AutomergeDoc>(new AutomergeDoc(salt!, validation!))
         this._automergeURL = handle.url
         this._salt = salt
         this._validation = validation
-        storeDatabase(name!, this._automergeURL)
     }
 
     /**
