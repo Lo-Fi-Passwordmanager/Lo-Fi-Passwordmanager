@@ -11,7 +11,7 @@ import {storeDatabase} from "../Components/ViewModels/PasswordManagerViewModel.t
 import {AutomergeFolder} from "../Model/Automerge/AutomergeFolder.ts";
 import {SecurityProvider} from "./Security/SecurityProvider.ts";
 
-export type Attribute = 'name'|'createdAt'|'editedAt'|'parentId'|'username'|'password'|'url'|'note'
+export type Attribute = 'name' | 'createdAt' | 'editedAt' | 'parentId' | 'username' | 'password' | 'url' | 'note'
 
 /**
  * Eine Klasse zum Erstellen und verifizieren von Automerge Dokumenten.
@@ -21,8 +21,9 @@ export class AutomergeFacade {
     private _salt: string | null
     private _validation: string | null
     private _automergeURL: AutomergeUrl | null
+    private _securityProvider: SecurityProvider | null = null
 
-    constructor(repo: Repo, automergeURL?: AutomergeUrl | string) {
+    constructor(repo: Repo, automergeURL?: AutomergeUrl | string, securityProvider?: SecurityProvider) {
         this._repo = repo
 
         if (automergeURL && !isValidAutomergeUrl(automergeURL)) {
@@ -30,6 +31,7 @@ export class AutomergeFacade {
         }
 
         this._automergeURL = automergeURL ? automergeURL as AutomergeUrl : null
+        this._securityProvider = securityProvider ? securityProvider : null
         this._salt = null
         this._validation = null
 
@@ -85,6 +87,10 @@ export class AutomergeFacade {
 
         return this._validation
     }
+
+    getSecurityProvider(): SecurityProvider | null {
+        return this._securityProvider
+    }
 }
 
 /**
@@ -110,7 +116,7 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
     const validation = doc.validation
 
 
-    const [tree, itemsById]: [DatabaseRoot, Map<string, AutomergeItem>] = buildDatabaseAsTree(doc)
+    const [tree, itemsById]: [DatabaseRoot, Map<string, AutomergeItem>] = buildDatabaseAsTree(doc, automergeFacade.getSecurityProvider()!);
 
     /**
      * Fügt neue Items ins Automerge Dokument ein.
@@ -119,7 +125,7 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
      * @param parentId die ID des Parent Items
      */
     function insertItem(item: Item, parentId: string) {
-        const automergeItem = automergeItemFromDatabaseItem(item, parentId);
+        const automergeItem = automergeItemFromDatabaseItem(item, parentId, automergeFacade.getSecurityProvider()!);
         let parent: AutomergeItem | undefined | null = null
         if (parentId !== "") {
             parent = itemsById.get(parentId)
@@ -185,7 +191,7 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
  *
  * @returns a new {@link DatabaseRoot} that represents the automerge document and a map with all {@link AutomergeItem}s mapped to their ID.
  */
-function buildDatabaseAsTree(automergeDoc: Doc<AutomergeDoc>): [DatabaseRoot, Map<string, AutomergeItem>] {
+function buildDatabaseAsTree(automergeDoc: Doc<AutomergeDoc>, securityProvider: SecurityProvider): [DatabaseRoot, Map<string, AutomergeItem>] {
 
     const root = new DatabaseRoot(automergeDoc.salt)
 
@@ -208,7 +214,7 @@ function buildDatabaseAsTree(automergeDoc: Doc<AutomergeDoc>): [DatabaseRoot, Ma
 
     // Der pfadlänge nach in den passwordmanagerroot einsetzen
     for (const [item, path] of sortedByPathLength) {
-        insertNestedValue(root, path, databaseItemFromAutomergeItem(item)) // gleiche fkt wie früher
+        insertNestedValue(root, path, databaseItemFromAutomergeItem(item, securityProvider)) // gleiche fkt wie früher
     }
 
     return [root, itemsById];
@@ -219,16 +225,23 @@ function buildDatabaseAsTree(automergeDoc: Doc<AutomergeDoc>): [DatabaseRoot, Ma
  *
  * @param automergeItem the automerge item that should be used for creation
  */
-function databaseItemFromAutomergeItem(automergeItem: AutomergeItem): Item {
-    const name = automergeItem.name;
-    const id = getObjectId(automergeItem)!;
+function databaseItemFromAutomergeItem(automergeItem: AutomergeItem, securityProvider: SecurityProvider): Item {
+    const name = securityProvider.decryptValue(automergeItem.name) as string;
+    const id = securityProvider.decryptValue(getObjectId(automergeItem)!) as string;
     const createdAt = new Date(automergeItem.createdAt * 1000);
     const editedAt = new Date(automergeItem.editedAt * 1000);
 
-    // TODO Hier muss decryption der einzelnen einträge stattfinden @Valerie
-
     if (isEntry(automergeItem)) {
-        return new Entry(name, id, createdAt, editedAt, automergeItem.username, automergeItem.password, automergeItem.url, automergeItem.note)
+        return new Entry(
+            name,
+            id,
+            createdAt,
+            editedAt,
+            securityProvider.decryptValue(automergeItem.username) as string,
+            securityProvider.decryptValue(automergeItem.password) as string,
+            securityProvider.decryptValue(automergeItem.url) as string,
+            securityProvider.decryptValue(automergeItem.note) as string
+        )
     }
 
     return new Folder(name, id, createdAt, editedAt)
@@ -240,16 +253,23 @@ function databaseItemFromAutomergeItem(automergeItem: AutomergeItem): Item {
  * @param item the item that should be used for creation
  * @param parentId the id that the item should get
  */
-function automergeItemFromDatabaseItem(item: Item, parentId: string): AutomergeItem {
-    const name = item.title;
+function automergeItemFromDatabaseItem(item: Item, parentId: string, securityProvider: SecurityProvider): AutomergeItem {
+    const name = securityProvider.encryptValue(item.title);
     const createdAt = item.createdAt!.getTime() / 1000;
     const editedAt = item.editedAt!.getTime() / 1000;
 
-    // TODO Hier muss encryption der einzelnen einträge stattfinden @Valerie
-
     if (item.isEntry()) {
         const entry = item as Entry
-        return new AutomergeEntry(name, createdAt, editedAt, parentId, entry.username, entry.password, entry.url, entry.note)
+        return new AutomergeEntry(
+            name,
+            createdAt,
+            editedAt,
+            securityProvider.encryptValue(parentId),
+            securityProvider.encryptValue(entry.username),
+            securityProvider.encryptValue(entry.password),
+            securityProvider.encryptValue(entry.url),
+            securityProvider.encryptValue(entry.note)
+        )
     }
 
     return new AutomergeFolder(name, createdAt, editedAt, parentId)

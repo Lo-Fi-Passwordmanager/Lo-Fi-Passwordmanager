@@ -1,7 +1,6 @@
 import {useState} from "react";
 import {AutomergeFacade, useAutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import type {Item} from "../../Model/Item.ts";
-import type {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 
 
 /**
@@ -9,7 +8,7 @@ import type {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts"
  *
  * @param automergeFacade the Automergefacade that contains the database to be used
  */
-export const usePasswortViewModel = (automergeFacade: AutomergeFacade, security: SecurityProvider) => {
+export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
 
     const [inEditablePasswordView, setInEditablePasswordView] = useState(false);
     const [inItemCreation, setInItemCreation] = useState(false);

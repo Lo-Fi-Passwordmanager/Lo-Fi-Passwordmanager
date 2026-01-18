@@ -84,7 +84,7 @@ export const useLoginViewModel = (
             throw new Error("Database doesn't exist");
         }
 
-        const facade = new AutomergeFacade(repo, dbUrl)
+        const facade = new AutomergeFacade(repo, dbUrl, securityProvider)
         if (securityProvider.verifyMasterPassword(masterPassword, (await facade.getSalt())!, (await facade.getValidation())!)) {
             setLoggedIn!(true);
             setAutomergeFacade!(facade);
