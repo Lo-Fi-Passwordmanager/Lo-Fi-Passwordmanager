@@ -20,4 +20,9 @@ describe('DatabaseRoot', ()=> {
         expect(root.salt).toBe("salt");
     })
 
+    it("should be able to return the root folder", ()=> {
+        const folder = new Folder("root", "")
+        expect(root.rootFolder).toStrictEqual(folder);
+    })
+
 })
