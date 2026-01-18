@@ -32,9 +32,6 @@ function createNoUrlRepo() {
 describe('AutomergeFacade', ()=> {
     let automergeFacade;
     let repo;
-    repo = new Repo({
-        storage: new IndexedDBStorageAdapter(),
-    });
 
     beforeEach(()=> {
         repo = createMockRepo();
