@@ -1,4 +1,4 @@
-import {afterEach, beforeEach, describe, expect, it} from "vitest";
+import {afterEach, beforeEach, describe, it} from "vitest";
 import {IndexedDBStorageAdapter, Repo} from "@automerge/react";
 import {AutomergeFacade} from "../../src/Utility/AutomergeFacade";
 import {SecurityProvider} from "../../src/Utility/Security/SecurityProvider";

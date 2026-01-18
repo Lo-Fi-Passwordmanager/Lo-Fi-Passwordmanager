@@ -1,5 +1,4 @@
 import {useEffect, useState} from 'react';
-import Database from '../../Model/Database';
 import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import {loadAllDatabases} from "./PasswordManagerViewModel.ts";
 import type {Repo} from "@automerge/react";
@@ -89,7 +88,6 @@ export const useLoginViewModel = (
 
         const facade = new AutomergeFacade(repo, dbUrl)
         if (securityProvider.verifyMasterPassword(masterPassword, (await facade.getSalt())!, (await facade.getValidation())!)) {
-            const db = new Database(dbUrl, selectedDatabase);
             setLoggedIn!(true);
             setAutomergeFacade!(facade);
             setIsEnterPasswordDialogOpen(false);

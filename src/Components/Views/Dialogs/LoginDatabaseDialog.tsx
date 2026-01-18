@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from "react";
-import OnClickButton from "../ButtonViews/OnClickButton.tsx";
 
 interface TwoFieldDialogProps {
     isOpen: boolean,
@@ -51,8 +50,8 @@ const LoginDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                 />
 
                 <div className="confirm-cancel-buttons">
-                    <OnClickButton onClick={handleConfirm}>Bestätigen</OnClickButton>
-                    <OnClickButton onClick={onCancel}>Abbrechen</OnClickButton>
+                    <button onClick={handleConfirm}>Bestätigen</button>
+                    <button onClick={onCancel}>Abbrechen</button>
                 </div>
 
             </div>
