@@ -26,7 +26,7 @@ export const useSettingsViewModel = () => {
         settings.setSynchronization(synchronisation);
         settings.setAutoConflictResolution(autoConclictRes);
         settings.setTimeoutActive(timeOutActive);
-    }, [darkMode, synchronisation, autoConclictRes, timeOutActive]);
+    }, [darkMode, synchronisation, autoConclictRes, timeOutActive, settings]);
 
 
     // Update darkMode
