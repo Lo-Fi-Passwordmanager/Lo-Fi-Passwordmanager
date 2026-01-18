@@ -114,12 +114,8 @@ export const useLoginViewModel = (
      */
     function addDatabase(name: string, url: AutomergeUrl) {
         storeDatabase(name, url);
+        setDatabases(loadAllDatabases);
 
-        setDatabases(prev => {
-            const copy = new Map(prev);
-            copy.set(name, url);
-            return copy;
-        });
         closeAddDialog();
 
         setSelectedDatabase(name);
