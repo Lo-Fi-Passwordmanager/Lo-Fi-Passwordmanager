@@ -28,7 +28,7 @@ const LoginView: React.FC<{
             >
                 {/* Show a list of all available Documents */}
                 <DatabaseListing
-                    databases={viewModel.databaseNames}
+                    databases={viewModel.databases}
                     openDatabase={viewModel.openEnterPasswordDialog}
                 />
 

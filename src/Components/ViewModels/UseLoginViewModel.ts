@@ -7,6 +7,7 @@ import {loadAllDatabases, storeDatabase} from "../../Utility/Storage.ts";
 
 export type LoginViewModelReturn = {
     databaseNames: string[],
+    databases: Map<string, AutomergeUrl>,
     isAddDialogOpen: boolean,
     isEnterPasswordDialogOpen: boolean,
     createDatabase: (name: string, masterPassword: string) => void,
@@ -168,6 +169,7 @@ export const useLoginViewModel = (
         databaseNames,
         isAddDialogOpen,
         isEnterPasswordDialogOpen,
+        databases,
 
         createDatabase,
         tryOpenDatabase,
