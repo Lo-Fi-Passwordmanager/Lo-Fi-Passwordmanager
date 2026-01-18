@@ -224,10 +224,11 @@ function buildDatabaseAsTree(automergeDoc: Doc<AutomergeDoc>, securityProvider: 
  * Takes an automerge item and creates a new Database Item form it for internal use.
  *
  * @param automergeItem the automerge item that should be used for creation
+ * @param securityProvider the security provider that should be used for decryption
  */
 function databaseItemFromAutomergeItem(automergeItem: AutomergeItem, securityProvider: SecurityProvider): Item {
     const name = securityProvider.decryptValue(automergeItem.name) as string;
-    const id = securityProvider.decryptValue(getObjectId(automergeItem)!) as string;
+    const id = getObjectId(automergeItem)!; //FIXME einfach nicht entschlüsseln? XD
     const createdAt = new Date(automergeItem.createdAt * 1000);
     const editedAt = new Date(automergeItem.editedAt * 1000);
 
@@ -252,6 +253,7 @@ function databaseItemFromAutomergeItem(automergeItem: AutomergeItem, securityPro
  *
  * @param item the item that should be used for creation
  * @param parentId the id that the item should get
+ * @param securityProvider the security provider that should be used for encryption
  */
 function automergeItemFromDatabaseItem(item: Item, parentId: string, securityProvider: SecurityProvider): AutomergeItem {
     const name = securityProvider.encryptValue(item.title);
