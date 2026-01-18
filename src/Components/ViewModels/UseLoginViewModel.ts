@@ -105,7 +105,7 @@ export const useLoginViewModel = (
      * @param automergeurl the automerge url of the database
      */
     function importDatabaseFromURL(name:string, automergeurl: AutomergeUrl) {
-        if (!isNameAvailable(name)) {
+        if (!isNameAvailable(name) || !isAutomergeUrlAvailable(automergeurl)) {
             return;
         }
         storeDatabase(name, automergeurl)
@@ -138,6 +138,16 @@ export const useLoginViewModel = (
         if (databases.has(name)) {
             alert("Datenbank mit diesem Namen existiert bereits!");
             return false;
+        }
+        return true;
+    }
+
+    function isAutomergeUrlAvailable(url: AutomergeUrl) {
+        for (const value of databases.values()) {
+            if (value === url) {
+                alert("Datenbank mit dieser Url existiert bereits!");
+                return false;
+            }
         }
         return true;
     }
