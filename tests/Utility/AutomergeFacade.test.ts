@@ -77,7 +77,7 @@ describe('AutomergeFacade', ()=> {
         }).toThrow("invalid-url is not a valid automerge URL.");
     })
 
-    /*it("should be able to get salt/validation from a repo without a url",async ()=> {
+    /*it("should be able to get salt/validtion from a repo without a url",async ()=> {
         const repo = createNoUrlRepo();
 
         automergeFacade = new AutomergeFacade(repo, "automerge://test-document");
