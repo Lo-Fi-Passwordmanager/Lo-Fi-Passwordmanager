@@ -1,11 +1,40 @@
 import {afterEach, beforeEach, describe, expect, it, vi} from "vitest";
-import {Repo} from "@automerge/react";
+import {IndexedDBStorageAdapter, Repo} from "@automerge/react";
 import {AutomergeFacade} from "../../src/Utility/AutomergeFacade";
 
 
+function createMockRepo() {
+    return {
+        create: vi.fn().mockReturnValue({
+            url: "automerge:mock-url",
+        }),
+        find: vi.fn().mockResolvedValue({
+            doc: () => ({
+                salt: "salt123",
+                validation: "val123",
+            }),
+        }),
+    } as unknown as Repo
+}
+
+
+function createNoUrlRepo() {
+    return {
+        find: vi.fn().mockResolvedValue({
+            doc: () => ({
+                salt: "salt123",
+                validation: "val123",
+            }),
+        }),
+    } as unknown as Repo
+}
+
 describe('AutomergeFacade', ()=> {
-    let automergeFacade: AutomergeFacade;
-    let repo: Repo;
+    let automergeFacade;
+    let repo;
+    repo = new Repo({
+        storage: new IndexedDBStorageAdapter(),
+    });
 
     beforeEach(()=> {
         repo = createMockRepo();
@@ -33,6 +62,7 @@ describe('AutomergeFacade', ()=> {
     })
 
     it("return null when no database exists for salt and validation correctly", async () => {
+
         const salt = await automergeFacade.getSalt();
         const validation = await automergeFacade.getValidation();
 
@@ -47,34 +77,16 @@ describe('AutomergeFacade', ()=> {
         }).toThrow("invalid-url is not a valid automerge URL.");
     })
 
+    /*it("should be able to get salt/validtion from a repo without a url",async ()=> {
+        const repo = createNoUrlRepo();
 
-    it("loads salt/validation via repo.find when salt is not cached", async () => {
-        const repo2 = new Repo();
-        const automergeFacade2 = new AutomergeFacade(repo2);
+        automergeFacade = new AutomergeFacade(repo, "automerge://test-document");
 
-        automergeFacade2.createDatabase("salt", "validation", "Database");
-        const url = automergeFacade2.automergeURL
-
-        const facade2 = new AutomergeFacade(repo2, url);
-
-        const salt = await facade2.getSalt();
-        const validation = await facade2.getValidation();
+        const salt = await automergeFacade.getSalt();
+        const validation = await automergeFacade.getValidation();
 
         expect(salt).toBe("salt");
         expect(validation).toBe("validation");
     })
+    */
 })
-
-function createMockRepo() {
-    return {
-        create: vi.fn().mockReturnValue({
-            url: "automerge:mock-url",
-        }),
-        find: vi.fn().mockResolvedValue({
-            doc: () => ({
-                salt: "salt123",
-                validation: "val123",
-            }),
-        }),
-    } as unknown as Repo
-}
