@@ -1,5 +1,4 @@
 import {beforeEach, describe, expect, it} from "vitest";
-import {AutomergeItem} from "../../../src/Model/Automerge/AutomergeItem";
 import {AutomergeEntry} from "../../../src/Model/Automerge/AutomergeEntry";
 import {AutomergeFolder} from "../../../src/Model/Automerge/AutomergeFolder";
 

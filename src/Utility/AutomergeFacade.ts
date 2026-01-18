@@ -7,7 +7,6 @@ import type {Item} from "../Model/Item.ts";
 import {Folder} from "../Model/Folder.ts";
 import {Entry} from "../Model/Entry.ts";
 import {AutomergeEntry} from "../Model/Automerge/AutomergeEntry.ts";
-import {storeDatabase} from "../Components/ViewModels/PasswordManagerViewModel.ts";
 import {AutomergeFolder} from "../Model/Automerge/AutomergeFolder.ts";
 
 export type Attribute = 'name'|'createdAt'|'editedAt'|'parentId'|'username'|'password'|'url'|'note'
@@ -40,12 +39,11 @@ export class AutomergeFacade {
      * @param validation die Validation der neuen Datenbank
      * @param name der Anzeigename der neuen Datenbank
      */
-    createDatabase(salt: string, validation: string, name: string) {
+    createDatabase(salt: string, validation: string) {
         const handle = this._repo.create<AutomergeDoc>(new AutomergeDoc(salt!, validation!))
         this._automergeURL = handle.url
         this._salt = salt
         this._validation = validation
-        storeDatabase(name!, this._automergeURL)
     }
 
     /**
@@ -203,10 +201,10 @@ function buildDatabaseAsTree(automergeDoc: Doc<AutomergeDoc>): [DatabaseRoot, Ma
     }
 
     // Nach pfadlänge sortieren, damit auf jeden fall immer die eltern zuerst eingesetzt werden
-    const sortedByPathLenght = new Map([...pathByItem.entries()].sort((a, b) => a[1].length - b[1].length));
+    const sortedByPathLength = new Map([...pathByItem.entries()].sort((a, b) => a[1].length - b[1].length));
 
     // Der pfadlänge nach in den passwordmanagerroot einsetzen
-    for (const [item, path] of sortedByPathLenght) {
+    for (const [item, path] of sortedByPathLength) {
         insertNestedValue(root, path, databaseItemFromAutomergeItem(item)) // gleiche fkt wie früher
     }
 
@@ -224,7 +222,7 @@ function databaseItemFromAutomergeItem(automergeItem: AutomergeItem): Item {
     const createdAt = new Date(automergeItem.createdAt * 1000);
     const editedAt = new Date(automergeItem.editedAt * 1000);
 
-    // TODO Hier muss decryption der einzenen einträge stattfinden @Valerie
+    // TODO Hier muss decryption der einzelnen einträge stattfinden @Valerie
 
     if (isEntry(automergeItem)) {
         return new Entry(name, id, createdAt, editedAt, automergeItem.username, automergeItem.password, automergeItem.url, automergeItem.note)
@@ -237,13 +235,14 @@ function databaseItemFromAutomergeItem(automergeItem: AutomergeItem): Item {
  * Takes an item and creates a new {@link AutomergeItem} form it for internal use.
  *
  * @param item the item that should be used for creation
+ * @param parentId the id that the item should get
  */
 function automergeItemFromDatabaseItem(item: Item, parentId: string): AutomergeItem {
     const name = item.title;
     const createdAt = item.createdAt!.getTime() / 1000;
     const editedAt = item.editedAt!.getTime() / 1000;
 
-    // TODO Hier muss encryption der einzenen einträge stattfinden @Valerie
+    // TODO Hier muss encryption der einzelnen einträge stattfinden @Valerie
 
     if (item.isEntry()) {
         const entry = item as Entry

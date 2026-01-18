@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
-import OnClickButton from "../ButtonViews/OnClickButton.tsx";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
+import {isValidAutomergeUrl} from "@automerge/react";
 
 interface TwoFieldDialogProps {
     isOpen: boolean,
@@ -43,6 +43,10 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
         if (createNewDatabase) {
             createDatabase(field1, field2);
         } else {
+            if (!isValidAutomergeUrl(("automerge:" + field2) as AutomergeUrl)) {
+                alert("Keine valide AutomergeUrl.");
+                return;
+            }
             storeDatabase(field1, ("automerge:" + field2) as AutomergeUrl);
             return;
         }
@@ -74,8 +78,8 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                         placeholder={label2}
                     />
                     <div className="confirm-cancel-buttons">
-                        <OnClickButton onClick={handleConfirm}>Bestätigen</OnClickButton>
-                        <OnClickButton onClick={onCancel}>Abbrechen</OnClickButton>
+                        <button onClick={handleConfirm}>Bestätigen</button>
+                        <button onClick={onCancel}>Abbrechen</button>
                     </div>
                 </div>
             </div>
@@ -108,8 +112,8 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                         autoFocus
                     />
                     <div className="confirm-cancel-buttons">
-                        <OnClickButton onClick={handleConfirm}>Bestätigen</OnClickButton>
-                        <OnClickButton onClick={onCancel}>Abbrechen</OnClickButton>
+                        <button onClick={handleConfirm}>Bestätigen</button>
+                        <button onClick={onCancel}>Abbrechen</button>
                     </div>
                 </div>
             </div>
