@@ -22,7 +22,6 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({addItem, curPare
     const [note, setNote] = useState("");
 
     function handleConfirm() {
-        debugger; //FIXME key null
         if (typeOfItem === "entry") {
             const entry: Entry = new Entry(security.encryptValue(title), "willBeAutomaticallySet", new Date(), new Date(), security.encryptValue(username), security.encryptValue(password), security.encryptValue(url), security.encryptValue(note));
             addItem!(entry, curParent!.id)
