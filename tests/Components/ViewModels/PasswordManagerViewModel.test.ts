@@ -1,6 +1,6 @@
 import {expect, it, describe, beforeEach, afterEach} from "vitest";
 
-import {loadAllDatabases, saveDatabases} from "../../../src/Components/ViewModels/PasswordManagerViewModel";
+import {loadAllDatabases, saveDatabases} from "../../../src/Utility/Storage";
 import {AutomergeUrl} from "@automerge/automerge-repo";
 
 const testMap = new Map<string, AutomergeUrl>();
