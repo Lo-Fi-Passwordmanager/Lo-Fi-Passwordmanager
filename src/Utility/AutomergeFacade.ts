@@ -8,7 +8,6 @@ import {Folder} from "../Model/Folder.ts";
 import {Entry} from "../Model/Entry.ts";
 import {AutomergeEntry} from "../Model/Automerge/AutomergeEntry.ts";
 import {AutomergeFolder} from "../Model/Automerge/AutomergeFolder.ts";
-import {storeDatabase} from "./Storage.ts";
 
 export type Attribute = 'name'|'createdAt'|'editedAt'|'parentId'|'username'|'password'|'url'|'note'
 
