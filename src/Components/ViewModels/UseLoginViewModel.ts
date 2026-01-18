@@ -1,9 +1,9 @@
 import {useEffect, useState} from 'react';
 import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
-import {loadAllDatabases, storeDatabase} from "./PasswordManagerViewModel.ts";
 import type {Repo} from "@automerge/react";
 import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
+import {loadAllDatabases, storeDatabase} from "../../Utility/Storage.ts";
 
 export type LoginViewModelReturn = {
     databaseNames: string[],

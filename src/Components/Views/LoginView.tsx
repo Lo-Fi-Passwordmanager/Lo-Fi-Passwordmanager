@@ -6,7 +6,6 @@ import LoginDatabaseDialog from "./Dialogs/LoginDatabaseDialog.tsx";
 import PWMLogo from "../../assets/logo_gelb.svg?inline";
 import type {Repo} from "@automerge/react";
 import  {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
-import type {AutomergeUrl} from "@automerge/automerge-repo";
 import type {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 
 
@@ -14,18 +13,10 @@ const LoginView: React.FC<{
     repo: Repo,
     setLoggedIn: (value: (((prevState: boolean) => boolean) | boolean)) => void,
     setAutomergeFacade: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void,
-    storeDatabase: (name: string, autoMergeUrl: AutomergeUrl) => void,
     securityProvider: SecurityProvider
-}> = ({repo, setLoggedIn, setAutomergeFacade, storeDatabase, securityProvider}) => {
+}> = ({repo, setLoggedIn, setAutomergeFacade, securityProvider}) => {
 
     const viewModel = useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, securityProvider);
-
-
-    function storeDatabaseAndCloseCreateDialog(databaseName:string, automergeurl: AutomergeUrl) {
-        viewModel.closeAddDialog();
-        storeDatabase(databaseName, automergeurl)
-    }
-
 
     return (
         <div className="loginView">
@@ -66,7 +57,7 @@ const LoginView: React.FC<{
                     label2="Masterpasswort"
                     createDatabase={viewModel.createDatabase}
                     onCancel={viewModel.closeAddDialog}
-                    storeDatabase={storeDatabaseAndCloseCreateDialog}
+                    storeDatabase={viewModel.importDatabaseFromURL}
                 />
             </main>
         </div>
