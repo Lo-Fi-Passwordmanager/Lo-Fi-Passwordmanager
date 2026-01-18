@@ -73,10 +73,7 @@ export const useLoginViewModel = (
 
         const url = automergeFacade.automergeURL!;
 
-        updateDatabaseListing(name, url);
-
-        setSelectedDatabase(name);
-        setIsEnterPasswordDialogOpen(true);
+        addDatabase(name, url);
     }
 
     // tries to open a database with the provided master password
@@ -85,7 +82,6 @@ export const useLoginViewModel = (
             throw new Error("No database selected");
         }
         const dbUrl = databases.get(selectedDatabase);
-
         if (!dbUrl) {
             throw new Error("Database doesn't exist");
         }
@@ -112,26 +108,30 @@ export const useLoginViewModel = (
         if (!isNameAvailable(name)) {
             return;
         }
-        updateDatabaseListing(name, automergeurl);
         storeDatabase(name, automergeurl)
+        addDatabase(name, automergeurl);
     }
 
     /**
-     * Updates the database listing with a new database
+     * Adds a new database to the list of available databases and opens the enter password dialog
      * @param name the name of the new database
      * @param url the automerge url of the new database
      */
-    function updateDatabaseListing(name: string, url: AutomergeUrl) {
+    function addDatabase(name: string, url: AutomergeUrl) {
         setDatabases(prev => {
             const copy = new Map(prev);
             copy.set(name, url);
             return copy;
         });
         closeAddDialog();
+
+        setSelectedDatabase(name);
+        setIsEnterPasswordDialogOpen(true);
     }
 
     /**
      * Checks if a database name is available
+     *
      * @param name the name to check
      */
     function isNameAvailable(name: string): boolean {
