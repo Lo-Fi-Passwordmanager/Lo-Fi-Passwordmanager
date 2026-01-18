@@ -24,13 +24,19 @@ export const usePasswordManagerViewModel = () => {
         return automergeFacade;
     }
 
+    function closeLoggedIn(): void {
+        setLoggedIn(false);
+        setAutomergeFacade(null);
+    }
+
     return {
         repo,
         getLoggedIn,
         setLoggedIn,
         setAutomergeFacade,
         getAutomergeFacade,
-        storeDatabase
+        storeDatabase,
+        closeLoggedIn,
     };
 }
 

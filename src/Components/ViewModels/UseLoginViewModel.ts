@@ -7,7 +7,6 @@ import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 
 export type LoginViewModelReturn = {
     databaseNames: string[],
-    openedDatabase: Database | null,
     isAddDialogOpen: boolean,
     isEnterPasswordDialogOpen: boolean,
     createDatabase: (name: string, masterPassword: string) => void,
@@ -36,8 +35,6 @@ export const useLoginViewModel = (
     // names of all available databases to show in the listing
     const [databaseNames, setDatabaseNames] = useState<string[]>([]);
 
-    // currently opened database
-    const [openedDatabase, setOpenedDatabase] = useState<Database | null>(null);
     // database that was clicked to be opened
     const [selectedDatabase, setSelectedDatabase] = useState<string | null>(null);
     // whether the dialog to add a new database is open
@@ -91,7 +88,6 @@ export const useLoginViewModel = (
         const facade = new AutomergeFacade(repo, dbUrl)
         if (securityProvider.verifyMasterPassword(masterPassword, (await facade.getSalt())!, (await facade.getValidation())!)) {
             const db = new Database(dbUrl, selectedDatabase);
-            setOpenedDatabase(db);
             setLoggedIn!(true);
             setAutomergeFacade!(facade);
             setIsEnterPasswordDialogOpen(false);
@@ -103,7 +99,6 @@ export const useLoginViewModel = (
 
     // close the currently opened database
     const closeDatabase = () => {
-        setOpenedDatabase(null);
         setLoggedIn!(false);
     };
 
@@ -122,7 +117,6 @@ export const useLoginViewModel = (
 
     return {
         databaseNames,
-        openedDatabase,
         isAddDialogOpen,
         isEnterPasswordDialogOpen,
 

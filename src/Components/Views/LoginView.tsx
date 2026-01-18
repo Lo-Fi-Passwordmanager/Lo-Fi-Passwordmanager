@@ -18,11 +18,6 @@ const LoginView: React.FC<{
 
     const viewModel = useLoginViewModel(repo, setLoggedIn, setAutomergeFacade);
 
-    if (viewModel.openedDatabase) {
-        return (
-            <a>Hier provisorischer Text? Wann wird das hier überhaupt gecalled?</a>
-        );
-    }
 
     function storeDatabaseAndCloseCreateDialog(databaseName:string, automergeurl: AutomergeUrl) {
         viewModel.closeAddDialog();

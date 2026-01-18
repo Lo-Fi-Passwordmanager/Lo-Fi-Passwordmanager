@@ -25,6 +25,7 @@ const PasswordManagerView: React.FC = () => {
             <>
                 <Suspense fallback={<p>Loading passwords...</p>}>
                     <RepoContext.Provider value={viewModel.repo}>
+                        <button className="closeButton" onClick={viewModel.closeLoggedIn}>Datenbank schließen</button>
                         <SettingsView/>
                         <PasswordView automergeFacade={viewModel.getAutomergeFacade()}/>
                     </RepoContext.Provider>

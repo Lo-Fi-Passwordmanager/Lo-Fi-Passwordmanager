@@ -180,8 +180,8 @@ button:focus-visible {
 .settingsButton {
     float: right;
     position: fixed;
-    top: 10px;
-    right: 10px;
+    top: 1%;
+    right: 0.5%;
 }
 
 .listViewTitleHeader {
@@ -271,4 +271,11 @@ button:focus-visible {
     overflow: auto;
     scrollbar-color: var(--panel) var(--bg);
     scrollbar-width: thin;
+}
+
+.closeButton {
+    float: left;
+    position: fixed;
+    top: 1%;
+    left: 0.5%;
 }
