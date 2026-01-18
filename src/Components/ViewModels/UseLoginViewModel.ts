@@ -29,7 +29,7 @@ export type LoginViewModelReturn = {
 export const useLoginViewModel = (
     repo: Repo, setLoggedIn: (value: (((prevState: boolean) => boolean) | boolean)) => void,
     setAutomergeFacade: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void,
-    passwordViewSecurityProvider: SecurityProvider,
+    securityProvider: SecurityProvider,
 ): LoginViewModelReturn => {
     // map of database names to their automerge urls
     const [databases, setDatabases] = useState(() => loadAllDatabases());
@@ -42,8 +42,6 @@ export const useLoginViewModel = (
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
     // whether the dialog to open a database is open
     const [isEnterPasswordDialogOpen, setIsEnterPasswordDialogOpen] = useState(false);
-
-    const securityProvider = passwordViewSecurityProvider;
 
     // update the list of database names when the databases change
     useEffect(() => {

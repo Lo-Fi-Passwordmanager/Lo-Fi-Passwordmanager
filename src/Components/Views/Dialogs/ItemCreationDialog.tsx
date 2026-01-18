@@ -2,15 +2,17 @@ import React, {useState} from "react";
 import {type Item} from "../../../Model/Item.ts";
 import {Entry} from "../../../Model/Entry.ts";
 import {Folder} from "../../../Model/Folder.ts";
+import {SecurityProvider} from "../../../Utility/Security/SecurityProvider.ts";
 
 interface ItemCreationDialogProps {
     addItem?: (item: Item, id: string) => void
     curParent?: Item
     cancelItemCreation?: () => void
     setCurItem: (newItem: Item) => void;
+    security: SecurityProvider
 }
 
-const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({addItem, curParent, cancelItemCreation, setCurItem}: ItemCreationDialogProps) => {
+const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({addItem, curParent, cancelItemCreation, setCurItem, security}: ItemCreationDialogProps) => {
 
     const [typeOfItem, setTypeOfItem] = useState("entry")
     const [title, setTitle] = useState("");
@@ -20,8 +22,9 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({addItem, curPare
     const [note, setNote] = useState("");
 
     function handleConfirm() {
+        debugger; //FIXME key null
         if (typeOfItem === "entry") {
-            const entry: Entry = new Entry(title, "willBeAutomaticallySet", new Date(), new Date(), username, password, url, note)
+            const entry: Entry = new Entry(security.encryptValue(title), "willBeAutomaticallySet", new Date(), new Date(), security.encryptValue(username), security.encryptValue(password), security.encryptValue(url), security.encryptValue(note));
             addItem!(entry, curParent!.id)
             setCurItem(entry);
         } else if (typeOfItem === "folder") {

@@ -9,6 +9,7 @@ import {Entry} from "../Model/Entry.ts";
 import {AutomergeEntry} from "../Model/Automerge/AutomergeEntry.ts";
 import {storeDatabase} from "../Components/ViewModels/PasswordManagerViewModel.ts";
 import {AutomergeFolder} from "../Model/Automerge/AutomergeFolder.ts";
+import {SecurityProvider} from "./Security/SecurityProvider.ts";
 
 export type Attribute = 'name'|'createdAt'|'editedAt'|'parentId'|'username'|'password'|'url'|'note'
 

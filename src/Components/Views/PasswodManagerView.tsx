@@ -28,7 +28,7 @@ const PasswordManagerView: React.FC = () => {
                     <RepoContext.Provider value={viewModel.repo}>
                         <button className="closeButton" onClick={viewModel.closeLoggedIn}>Datenbank schließen</button>
                         <SettingsView/>
-                        <PasswordView automergeFacade={viewModel.getAutomergeFacade()}/>
+                        <PasswordView automergeFacade={viewModel.getAutomergeFacade()} security={viewModel.securityProvider}/>
                     </RepoContext.Provider>
                 </Suspense>
             </>

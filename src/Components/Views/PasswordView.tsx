@@ -4,17 +4,19 @@ import EntryView from "./EntryView.tsx";
 import {usePasswortViewModel} from "../ViewModels/PasswordViewModel.ts";
 import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import ItemCreationDialog from "./Dialogs/ItemCreationDialog.tsx";
+import type {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 
 
 interface PasswordViewProps {
     automergeFacade?: AutomergeFacade | null
+    security?: SecurityProvider | null
 }
 
 /**
  * The view that should be shown, when the user opened a database successfully and shows the whole structure and one selected entry
  */
-const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade}) => {
-    const passwordViewModel = usePasswortViewModel(automergeFacade as AutomergeFacade);
+const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, security}) => {
+    const passwordViewModel = usePasswortViewModel(automergeFacade as AutomergeFacade, security as SecurityProvider);
     // Zu testzwecken eingefügt
     // const facade = useAutomergeFacade(automergeFacade)
 
@@ -27,6 +29,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade}) => {
                     curParent={passwordViewModel.getCurParent()}
                     cancelItemCreation={() => passwordViewModel.setInItemCreation(false)}
                     setCurItem={passwordViewModel.setCurItem}
+                    security={security as SecurityProvider}
                     />}
                 <div className="passwordView">
                     <div className="borderBox scrollableContainer" style={{width: "30%"}}>
