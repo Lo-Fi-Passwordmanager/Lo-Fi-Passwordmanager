@@ -16,7 +16,8 @@ const PasswordManagerView: React.FC = () => {
                     <SettingsView/>
                     <LoginView repo={viewModel.repo} setLoggedIn={viewModel.setLoggedIn}
                                setAutomergeFacade={viewModel.setAutomergeFacade}
-                               storeDatabase={viewModel.storeDatabase}/>
+                               storeDatabase={viewModel.storeDatabase}
+                               securityProvider={viewModel.securityProvider}/>
                 </RepoContext.Provider>
             </>
         );

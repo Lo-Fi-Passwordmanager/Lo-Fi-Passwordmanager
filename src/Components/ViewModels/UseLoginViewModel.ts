@@ -23,12 +23,14 @@ export type LoginViewModelReturn = {
  * @param repo the automerge repo
  * @param setLoggedIn the function to update the View to switch from loginView to PasswordView
  * @param setAutomergeFacade the function to update the automergeFacade of the used database on correct Login
+ * @param passwordViewSecurityProvider
  * @returns all data and functions required by the LoginView
  * @author uwing
  */
 export const useLoginViewModel = (
-    repo: Repo, setLoggedIn?: (value: (((prevState: boolean) => boolean) | boolean)) => void,
-    setAutomergeFacade?: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void
+    repo: Repo, setLoggedIn: (value: (((prevState: boolean) => boolean) | boolean)) => void,
+    setAutomergeFacade: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void,
+    passwordViewSecurityProvider: SecurityProvider,
 ): LoginViewModelReturn => {
     // map of database names to their automerge urls
     const [databases, setDatabases] = useState(() => loadAllDatabases());
@@ -42,7 +44,7 @@ export const useLoginViewModel = (
     // whether the dialog to open a database is open
     const [isEnterPasswordDialogOpen, setIsEnterPasswordDialogOpen] = useState(false);
 
-    const securityProvider = new SecurityProvider();
+    const securityProvider = passwordViewSecurityProvider;
 
     // update the list of database names when the databases change
     useEffect(() => {
@@ -100,6 +102,7 @@ export const useLoginViewModel = (
     // close the currently opened database
     const closeDatabase = () => {
         setLoggedIn!(false);
+        securityProvider.clearKey();
     };
 
     // Open the dialog to create a new database
