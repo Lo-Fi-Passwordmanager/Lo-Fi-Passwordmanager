@@ -312,7 +312,7 @@ button:focus-visible {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 100;
+    z-index: 101;
 }
 
 .loadingSpinner {
@@ -320,11 +320,13 @@ button:focus-visible {
     aspect-ratio: 1;
     fill: white;
     animation: 3s linear infinite spinner-rotation;
+    z-index: 102;
 }
 
 .loadingText {
     width: 77.75px;
     text-align: start;
+    z-index: 102;
 
     &::after {
         /* Ellipsis Character */
