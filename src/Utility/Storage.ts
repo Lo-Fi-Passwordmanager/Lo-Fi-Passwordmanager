@@ -40,3 +40,14 @@ export function storeDatabase(name: string, autoMergeUrl: AutomergeUrl): void {
     databases.set(name, autoMergeUrl);
     saveDatabases(databases);
 }
+
+/**
+ * Removes a database name and its automerge url from localStorage
+ *
+ * @param name the name of the database to remove
+ */
+export function removeDatabase(name: string): void {
+    const databases = loadAllDatabases();
+    databases.delete(name);
+    saveDatabases(databases);
+}
