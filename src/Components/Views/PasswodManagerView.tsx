@@ -4,6 +4,7 @@ import LoginView from "./LoginView.tsx";
 import SettingsView from "./SettingsView.tsx";
 import PasswordView from "./PasswordView.tsx";
 import {RepoContext} from "@automerge/react";
+import DatabaseSettingsView from "./DatabaseSettingsView.tsx";
 
 const PasswordManagerView: React.FC = () => {
 
@@ -27,6 +28,9 @@ const PasswordManagerView: React.FC = () => {
                     <RepoContext.Provider value={viewModel.repo}>
                         <button className="closeButton" onClick={viewModel.closeLoggedIn}>Datenbank schließen</button>
                         <SettingsView/>
+                        <DatabaseSettingsView
+                            autoMergeFacade={viewModel.getAutomergeFacade()}
+                        />
                         <PasswordView automergeFacade={viewModel.getAutomergeFacade()}/>
                     </RepoContext.Provider>
                 </Suspense>
