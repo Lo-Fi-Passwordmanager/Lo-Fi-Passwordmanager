@@ -17,14 +17,14 @@ describe('AutomergeFacade', ()=> {
     })
 
     it("creates a new database and sets the automergeURL correctly", () => {
-        automergeFacade.createDatabase("salt", "validation", "Database");
+        automergeFacade.createDatabase("salt", "validation");
 
         expect(automergeFacade.automergeURL).toBe("automerge:mock-url")
         expect(repo.create).toHaveBeenCalled()
     })
 
     it("creates a new database and sets salt and validation correctly", async () => {
-        automergeFacade.createDatabase("salt", "validation", "Database");
+        automergeFacade.createDatabase("salt", "validation");
         const salt = await automergeFacade.getSalt();
         const validation = await automergeFacade.getValidation();
 
@@ -52,7 +52,7 @@ describe('AutomergeFacade', ()=> {
         const repo2 = new Repo();
         const automergeFacade2 = new AutomergeFacade(repo2);
 
-        automergeFacade2.createDatabase("salt", "validation", "Database");
+        automergeFacade2.createDatabase("salt", "validation");
         const url = automergeFacade2.automergeURL
 
         const facade2 = new AutomergeFacade(repo2, url);
