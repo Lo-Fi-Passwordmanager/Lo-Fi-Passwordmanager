@@ -126,6 +126,7 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
      */
     function insertItem(item: Item, parentId: string) {
         const automergeItem = automergeItemFromDatabaseItem(item, parentId, automergeFacade.getSecurityProvider()!);
+        debugger;
         let parent: AutomergeItem | undefined | null = null
         if (parentId !== "") {
             parent = itemsById.get(parentId)
@@ -228,7 +229,7 @@ function buildDatabaseAsTree(automergeDoc: Doc<AutomergeDoc>, securityProvider: 
  */
 function databaseItemFromAutomergeItem(automergeItem: AutomergeItem, securityProvider: SecurityProvider): Item {
     const name = securityProvider.decryptValue(automergeItem.name) as string;
-    const id = getObjectId(automergeItem)!; //FIXME einfach nicht entschlüsseln? XD
+    const id = getObjectId(automergeItem)!;
     const createdAt = new Date(automergeItem.createdAt * 1000);
     const editedAt = new Date(automergeItem.editedAt * 1000);
 
@@ -274,7 +275,7 @@ function automergeItemFromDatabaseItem(item: Item, parentId: string, securityPro
         )
     }
 
-    return new AutomergeFolder(name, createdAt, editedAt, parentId)
+    return new AutomergeFolder(name, createdAt, editedAt, securityProvider.encryptValue(parentId))
 }
 
 /**
@@ -300,6 +301,7 @@ function isFolder(automergeItem: AutomergeItem): automergeItem is AutomergeFolde
  * @param itemsById a map the maps ids to its corresponding item
  */
 function buildPath(item: AutomergeItem, itemsById: Map<string, AutomergeItem>): Array<string> {
+    debugger;
     if (item.parentId === null || item.parentId === "") {
         return []
     }
