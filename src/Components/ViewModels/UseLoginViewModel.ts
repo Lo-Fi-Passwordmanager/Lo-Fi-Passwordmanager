@@ -22,6 +22,7 @@ export type LoginViewModelReturn = {
     showToast: boolean,
     setShowToast: (showToast: boolean) => void,
     toastMessage: string,
+    setToastMessage: (message: string) => void,
 }
 
 /**
@@ -217,6 +218,7 @@ export const useLoginViewModel = (
         closeAddDialog,
         openEnterPasswordDialog,
         closeEnterPasswordDialog,
-        importDatabaseFromURL
+        importDatabaseFromURL,
+        setToastMessage,
     };
 };

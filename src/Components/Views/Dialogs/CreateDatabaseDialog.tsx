@@ -10,6 +10,8 @@ interface TwoFieldDialogProps {
     createDatabase: (field1: string, field2: string) => void,
     onCancel: () => void,
     storeDatabase: (name: string, autoMergeUrl: AutomergeUrl) => void
+    setToastMessage: (message: string) => void,
+    setShowToast: (show: boolean) => void,
 }
 
 const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
@@ -19,7 +21,9 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                                                                  label2,
                                                                  createDatabase,
                                                                  onCancel,
-                                                                 storeDatabase
+                                                                 storeDatabase,
+                                                                 setToastMessage,
+                                                                 setShowToast,
                                                              }) => {
 
     const [createNewDatabase, setCreateNewDatabase] = useState(true);
@@ -37,14 +41,16 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
 
     const handleConfirm = () => {
         if (!field1 || !field2) {
-            alert("Bitte alle Felder ausfüllen.");
+            setToastMessage("Bitte alle Felder ausfüllen.")
+            setShowToast(true);
             return;
         }
         if (createNewDatabase) {
             createDatabase(field1, field2);
         } else {
             if (!isValidAutomergeUrl(("automerge:" + field2) as AutomergeUrl)) {
-                alert("Keine valide AutomergeUrl.");
+                setToastMessage("Keine valide AutomergeUrl.")
+                setShowToast(true);
                 return;
             }
             storeDatabase(field1, ("automerge:" + field2) as AutomergeUrl);
@@ -84,7 +90,6 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                 </div>
             </div>
         );
-
 
 
     } else {
