@@ -1,12 +1,10 @@
-import {describe, it, beforeEach, afterEach} from "vitest";
-//import {useListViewModel} from "../../../src/Components/ViewModels/ListViewModel";
+import {describe, it, beforeEach, afterEach, expect} from "vitest";
 import {Folder} from "../../../src/Model/Folder";
 import {Entry} from "../../../src/Model/Entry";
 import {renderHook, act} from "@testing-library/react";
 import {useListViewModel} from "../../../src/Components/ViewModels/ListViewModel";
 
 describe('ListViewModel', ()=> {
-    //let listViewModel;
 
     const root = new Folder("krasser Titel", "123", new Date(), new Date())
     const subFolder1 = new Folder("subFolder 1", "123", new Date(), new Date())
