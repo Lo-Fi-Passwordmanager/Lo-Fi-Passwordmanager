@@ -1,12 +1,16 @@
 import {useSettingsViewModel} from "../ViewModels/SettingsViewModel.ts";
+import React from "react";
 
 
 /**
  * The view that links to the {@link Settings} singleton and toggles its values.
  */
-const SettingsView: React.FC = () => {
-    const viewmodel = useSettingsViewModel();
+const SettingsView: React.FC<
+    {
+        getSync: (value: boolean) => void
+    }> = ({getSync}) => {
 
+    const viewmodel = useSettingsViewModel(getSync);
 
     /**
      * Checks if the settingsmenu should be open or not
@@ -45,8 +49,8 @@ const SettingsView: React.FC = () => {
                             <label className="checkboxRow">
                                 <input
                                     type="checkbox"
-                                    checked={viewmodel.autoConclictRes}
-                                    onChange={viewmodel.toggleAutoConclictRes}
+                                    checked={viewmodel.autoConflictRes}
+                                    onChange={viewmodel.toggleAutoConflictRes}
                                 />
                                 Konfliktauflösung
                             </label>
