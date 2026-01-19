@@ -185,7 +185,8 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
 
 /**
  * Takes an automerge document and parses it, to create a database tree structure.
- * @param automergeDoc
+ * @param automergeDoc the automerge document that should be parsed
+ * @param securityProvider the security provider that should be used for decryption
  *
  * @returns a new {@link DatabaseRoot} that represents the automerge document and a map with all {@link AutomergeItem}s mapped to their ID.
  */
