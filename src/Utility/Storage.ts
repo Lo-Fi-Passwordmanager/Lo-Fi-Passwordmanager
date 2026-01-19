@@ -47,7 +47,7 @@ export function storeDatabase(name: string, autoMergeUrl: AutomergeUrl): void {
  * @param oldName the current name of the database
  * @param newName the new name of the database
  */
-export function renameDatabase(oldName: string, newName: string): void { {
+export function renameDatabase(oldName: string, newName: string): void {
     const databases = loadAllDatabases();
     const autoMergeUrl = databases.get(oldName);
     if (autoMergeUrl) {
