@@ -3,7 +3,7 @@ import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import type {Repo} from "@automerge/react";
 import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
-import {loadAllDatabases, storeDatabase} from "../../Utility/Storage.ts";
+import {loadAllDatabases, storeDatabase, removeDatabase} from "../../Utility/Storage.ts";
 import {useLoadingScreen} from "./LoadingScreenProviderViewModel.ts";
 
 export type LoginViewModelReturn = {
@@ -23,6 +23,7 @@ export type LoginViewModelReturn = {
     setShowToast: (showToast: boolean) => void,
     toastMessage: string,
     setToastMessage: (message: string) => void,
+   deleteDatabase: (name: string) => void,
 }
 
 /**
@@ -153,9 +154,23 @@ export const useLoginViewModel = (
         closeAddDialog();
 
         // TODO, wollen wir die Datenbank hier nicht direkt öffnen? glaube das wäre schöner (wenn die gerade erstellt wurde)
+        // also ohne nochmal das Passwort eingeben zu müssen? - fion
 
         setSelectedDatabase(name);
         setIsEnterPasswordDialogOpen(true);
+    }
+
+    /**
+     * Removes a database from the list of available databases
+     *
+     * @param name the name of the database to remove
+     */
+    function deleteDatabase(name: string) {
+        const updatedDatabases = new Map(databases);
+        updatedDatabases.delete(name);
+        setDatabases(updatedDatabases);
+        removeDatabase(name);
+        //TODO: AutomergeDoc löschen
     }
 
     /**
@@ -220,5 +235,6 @@ export const useLoginViewModel = (
         closeEnterPasswordDialog,
         importDatabaseFromURL,
         setToastMessage,
+        deleteDatabase,
     };
 };

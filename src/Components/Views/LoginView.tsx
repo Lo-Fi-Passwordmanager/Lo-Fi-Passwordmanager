@@ -31,6 +31,7 @@ const LoginView: React.FC<{
                 <DatabaseListing
                     databases={viewModel.databases}
                     openDatabase={viewModel.openEnterPasswordDialog}
+                    removeDatabase={viewModel.deleteDatabase}
                 />
 
 

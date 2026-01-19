@@ -1,14 +1,14 @@
 import type {AutomergeUrl} from "@automerge/automerge-repo";
 import React, {useState} from "react";
 import ToastDialog from "../Dialogs/ToastDialog.tsx";
-import {removeDatabase} from "../../../Utility/Storage.ts";
 
 type DatabaseListingProps = {
     databases: Map<string, AutomergeUrl>,
     openDatabase: (db: string) => void;
+    removeDatabase: (db: string) => void;
 }
 
-const DatabaseListing: React.FC<DatabaseListingProps> = ({databases, openDatabase}) => {
+const DatabaseListing: React.FC<DatabaseListingProps> = ({databases, openDatabase, removeDatabase}) => {
     const [showToast, setShowToast] = useState(false);
 
     if (databases.size === 0) {
