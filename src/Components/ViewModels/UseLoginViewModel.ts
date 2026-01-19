@@ -23,7 +23,7 @@ export type LoginViewModelReturn = {
     setShowToast: (showToast: boolean) => void,
     toastMessage: string,
     setToastMessage: (message: string) => void,
-   deleteDatabase: (name: string) => void,
+    deleteDatabase: (name: string) => void,
 }
 
 /**
@@ -83,51 +83,56 @@ export const useLoginViewModel = (
             automergeFacade.createDatabase(salt, validation);
 
             const url = automergeFacade.automergeURL!;
-            addDatabase(name, url);
+            addDatabase(name, url, masterPassword);
         }, 0);
 
         setLoadingScreenActive(false);
     };
 
     // tries to open a database with the provided master password
-    const tryOpenDatabase = async (masterPassword: string) => {
-        if (!selectedDatabase) {
-            throw new Error("No database selected");
-        }
-        const dbUrl = databases.get(selectedDatabase);
-        if (!dbUrl) {
-            throw new Error("Database doesn't exist");
-        }
+    const tryOpenDatabase = async (masterPassword: string, name?: string) => {
+        let dbUrl: AutomergeUrl | undefined;
+            if (name) {
+                dbUrl = loadAllDatabases().get(name);
+            } else if (!name && selectedDatabase) {
+                dbUrl = databases.get(selectedDatabase);
+            } else {
+                throw new Error("No database selected");
+            }
+            if (!dbUrl) {
+                throw new Error("Database doesn't exist");
+            }
 
-        setLoadingScreenActive(true);
+            setLoadingScreenActive(true);
 
-        const facade = new AutomergeFacade(repo, dbUrl, securityProvider);
-        const salt = (await facade.getSalt())!;
-        const validation = (await facade.getValidation())!;
+            const facade = new AutomergeFacade(repo, dbUrl, securityProvider);
+            const salt = (await facade.getSalt())!;
+            const validation = (await facade.getValidation())!;
 
-        // Das Timeout an dieser Stelle sorgt dafür, dass der enthaltene Codeblock ans Ende der aktuell auszuführenden Aktionen geschoben wird,
-        // wodurch das Rendering des Ladescreens ermöglicht wird, bevor der SecurityProvider den Thread blockiert.
-        setTimeout(() => {
-            try {
-                if (securityProvider.verifyMasterPassword(masterPassword, salt, validation)) {
-                    setLoggedIn!(true);
-                    setAutomergeFacade!(facade);
-                    setLoadingScreenActive(false);
-                    setIsEnterPasswordDialogOpen(false);
-                    setSelectedDatabase(null);
-                } else {
+            // Das Timeout an dieser Stelle sorgt dafür, dass der enthaltene Codeblock ans Ende der aktuell auszuführenden Aktionen geschoben wird,
+            // wodurch das Rendering des Ladescreens ermöglicht wird, bevor der SecurityProvider den Thread blockiert.
+            setTimeout(() => {
+                try {
+                    if (securityProvider.verifyMasterPassword(masterPassword, salt, validation)) {
+                        setLoggedIn!(true);
+                        setAutomergeFacade!(facade);
+                        setLoadingScreenActive(false);
+                        setIsEnterPasswordDialogOpen(false);
+                        setSelectedDatabase(null);
+                    } else {
+                        setLoadingScreenActive(false);
+                        setShowToast(true);
+                        setToastMessage("Falsches Masterpasswort!");
+                    }
+                } catch (error) {
+                    console.error(error);
                     setLoadingScreenActive(false);
                     setShowToast(true);
-                    setToastMessage("Falsches Masterpasswort!");
+                    setToastMessage("Die Datenbank konnte nicht geladen werden");
                 }
-            } catch (error) {
-                console.error(error);
-                setLoadingScreenActive(false);
-                setShowToast(true);
-                setToastMessage("Die Datenbank konnte nicht geladen werden");
-            }
-        }, 0);
-    };
+            }, 0);
+        }
+    ;
 
     /**
      * Imports a database from an automerge url and stores it in localStorage
@@ -147,18 +152,17 @@ export const useLoginViewModel = (
      * @param name the name of the new database
      * @param url the automerge url of the new database
      */
-    function addDatabase(name: string, url: AutomergeUrl) {
+    function addDatabase(name: string, url: AutomergeUrl, masterPassword?: string) {
         storeDatabase(name, url);
         setDatabases(loadAllDatabases);
-
         closeAddDialog();
-
-        // TODO, wollen wir die Datenbank hier nicht direkt öffnen? glaube das wäre schöner (wenn die gerade erstellt wurde)
-        // also ohne nochmal das Passwort eingeben zu müssen? - fion
-
         setSelectedDatabase(name);
-        setIsEnterPasswordDialogOpen(true);
+
+        if (masterPassword) {
+            tryOpenDatabase(masterPassword, name);
+        }
     }
+
 
     /**
      * Removes a database from the list of available databases

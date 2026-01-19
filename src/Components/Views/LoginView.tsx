@@ -5,7 +5,7 @@ import CreateDatabaseDialog from "./Dialogs/CreateDatabaseDialog.tsx";
 import LoginDatabaseDialog from "./Dialogs/LoginDatabaseDialog.tsx";
 import PWMLogo from "../../assets/logo_gelb.svg?inline";
 import type {Repo} from "@automerge/react";
-import  {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import type {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import ToastDialog from "./Dialogs/ToastDialog.tsx";
 
@@ -54,17 +54,17 @@ const LoginView: React.FC<{
                 />
 
                 {/* Pop Up Dialog for creating a new Database */}
-                <CreateDatabaseDialog
-                    isOpen={viewModel.isAddDialogOpen}
-                    title="Neue Datenbank erstellen"
-                    label1="Datenbankname"
-                    label2="Masterpasswort"
-                    createDatabase={viewModel.createDatabase}
-                    onCancel={viewModel.closeAddDialog}
-                    storeDatabase={viewModel.importDatabaseFromURL}
-                    setToastMessage={viewModel.setToastMessage}
-                    setShowToast={viewModel.setShowToast}
-                />
+                    <CreateDatabaseDialog
+                        isOpen={viewModel.isAddDialogOpen}
+                        title="Neue Datenbank erstellen"
+                        label1="Datenbankname"
+                        label2="Masterpasswort"
+                        createDatabase={viewModel.createDatabase}
+                        onCancel={viewModel.closeAddDialog}
+                        storeDatabase={viewModel.importDatabaseFromURL}
+                        setToastMessage={viewModel.setToastMessage}
+                        setShowToast={viewModel.setShowToast}
+                    />
             </main>
             <ToastDialog message={viewModel.toastMessage}
                          isVisible={viewModel.showToast}
