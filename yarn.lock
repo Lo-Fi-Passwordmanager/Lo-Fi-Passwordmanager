@@ -67,7 +67,7 @@
     isomorphic-ws "^5.0.0"
     ws "^8.7.0"
 
-"@automerge/automerge-repo-react-hooks@2.5.1":
+"@automerge/automerge-repo-react-hooks@2.5.1", "@automerge/automerge-repo-react-hooks@^2.5.1":
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/@automerge/automerge-repo-react-hooks/-/automerge-repo-react-hooks-2.5.1.tgz#34777ef91e95b53cf7b918feb66eaa453d2f030c"
   integrity sha512-IthUQEjXsKk0btVvkuOt+YFzuVbcO+em2BLrHQv7sqO0inUnw3CqsAxQXaISCnpotV5Cz8Xy7AAYhPR5Qtw+KA==
