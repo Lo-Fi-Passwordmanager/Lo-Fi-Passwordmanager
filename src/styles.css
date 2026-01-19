@@ -72,9 +72,11 @@ header {
     font-weight: bold;
     margin-bottom: 20px;
 }
+
 button:hover {
     filter: brightness(1.1);
 }
+
 button {
     margin: 20px;
     justify-content: left;
@@ -99,10 +101,12 @@ h1 {
 button:hover {
     border-color: #646cff;
 }
+
 button:focus,
 button:focus-visible {
     outline: 4px auto -webkit-focus-ring-color;
 }
+
 .dialogOverlay {
     background: var(--overlay);
     color: var(--text);
@@ -113,6 +117,7 @@ button:focus-visible {
     align-items: center;
     z-index: 100;
 }
+
 .dialog {
     background: var(--dialog-bg);
     color: var(--text);
@@ -123,6 +128,7 @@ button:focus-visible {
     gap: 10px;
     width: 300px;
 }
+
 .listing {
     display: flex;
     flex-direction: column;
@@ -131,6 +137,7 @@ button:focus-visible {
     width: 50vmin;
     gap: 8px;
 }
+
 .settingsContainer {
     display: flex;
     flex-direction: column;
@@ -203,11 +210,13 @@ button:focus-visible {
     padding: 4px 8px; /* Smaller padding for buttons */
     outline-width: 2px; /* Reduce the outline so it stays inside the box */
 }
+
 .listViewEntry button {
     margin: 5px;
     padding: 4px 8px; /* Smaller padding for buttons */
     outline-width: 2px; /* Reduce the outline so it stays inside the box */
 }
+
 .listViewEntry {
     flex-direction: column;
     padding-left: 30px;
@@ -289,7 +298,70 @@ button:focus-visible {
     color: var(--text);
     padding: 10px 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 200;
     font-size: 1.5rem;
+}
+
+.loadingOverlay {
+    background: color-mix(in srgb, transparent, black 90%);
+    color: white;
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 101;
+}
+
+.loadingSpinner {
+    width: 100px;
+    aspect-ratio: 1;
+    fill: white;
+    animation: 3s linear infinite spinner-rotation;
+    z-index: 102;
+}
+
+.loadingText {
+    width: 77.75px;
+    text-align: start;
+    z-index: 102;
+
+    &::after {
+        /* Ellipsis Character */
+        content: "";
+        overflow: hidden;
+        display: inline-block;
+        vertical-align: bottom;
+        animation: steps(3, end) 1500ms infinite ellipsis;
+    }
+}
+
+@keyframes ellipsis {
+    0% {
+        content: "";
+    }
+    25% {
+        content: ".";
+    }
+    50% {
+        content: "..";
+    }
+    75% {
+        content: "...";
+    }
+    75% {
+        content: "...";
+    }
+}
+
+
+@keyframes spinner-rotation {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }

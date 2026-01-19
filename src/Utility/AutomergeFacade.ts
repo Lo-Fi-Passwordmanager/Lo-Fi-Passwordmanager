@@ -43,7 +43,6 @@ export class AutomergeFacade {
      * Erstellt eine Datenbank mit einem Salt, einem validation String und einem Namen und setzt dabei auch die {@code automergeURL}.
      * @param salt das Salt der neuen Datenbank
      * @param validation die Validation der neuen Datenbank
-     * @param name der Anzeigename der neuen Datenbank
      */
     createDatabase(salt: string, validation: string) {
         const handle = this._repo.create<AutomergeDoc>(new AutomergeDoc(salt!, validation!))
@@ -159,7 +158,7 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
      * @param changes die Werte die abgeändert werden sollen
      */
     function updateItem(itemId: string, changes: [Attribute, (string | Date)][]) {
-        changeDoc((doc) => changes.forEach(([attr, val]) => updateValue(doc, itemId, itemsById, attr, val)))
+        changeDoc(() => changes.forEach(([attr, val]) => updateValue(itemId, itemsById, attr, val)))
     }
 
     return {
@@ -389,7 +388,7 @@ function deleteValue(d: AutomergeDoc, itemId: string, itemsById: Map<string, Aut
     }
 }
 
-function updateValue(doc: AutomergeDoc, itemId: string, itemsById: Map<string, AutomergeItem>, attribute: Attribute, newValue: string | Date) {
+function updateValue(itemId: string, itemsById: Map<string, AutomergeItem>, attribute: Attribute, newValue: string | Date) {
     const item = itemsById.get(itemId)
 
     if (item === undefined) {
