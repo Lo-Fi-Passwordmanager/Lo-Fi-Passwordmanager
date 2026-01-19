@@ -1,6 +1,7 @@
 import type {AutomergeUrl} from "@automerge/automerge-repo";
 import React, {useState} from "react";
 import ToastDialog from "../Dialogs/ToastDialog.tsx";
+import {removeDatabase} from "../../../Utility/Storage.ts";
 
 type DatabaseListingProps = {
     databases: Map<string, AutomergeUrl>,
@@ -43,6 +44,10 @@ const DatabaseListing: React.FC<DatabaseListingProps> = ({databases, openDatabas
                         title="Copy URL"
                     >
                         🔗
+                    </button>
+                    <button style={{padding: "0.6rem", margin: "1%" }}
+                    onClick={() => removeDatabase(db)}>
+                        🗑️
                     </button>
                 </div>
             ))}
