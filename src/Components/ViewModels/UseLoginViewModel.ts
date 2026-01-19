@@ -67,6 +67,7 @@ export const useLoginViewModel = (
     const createDatabase = (name: string, masterPassword: string) => {
         setLoadingScreenActive(true);
         if (!isNameAvailable(name)) {
+            setLoadingScreenActive(false);
             return;
         }
 
@@ -133,6 +134,7 @@ export const useLoginViewModel = (
      */
     function importDatabaseFromURL(name: string, automergeurl: AutomergeUrl) {
         if (!isNameAvailable(name) || !isAutomergeUrlAvailable(automergeurl)) {
+            setLoadingScreenActive(false);
             return;
         }
         addDatabase(name, automergeurl);
