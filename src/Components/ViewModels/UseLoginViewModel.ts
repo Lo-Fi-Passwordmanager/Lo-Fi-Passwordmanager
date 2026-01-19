@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import type {Repo} from "@automerge/react";
-import {AutomergeFacade, useAutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
 import {loadAllDatabases, storeDatabase} from "../../Utility/Storage.ts";
 
@@ -17,7 +17,7 @@ export type LoginViewModelReturn = {
     closeAddDialog: () => void,
     openEnterPasswordDialog: (db: string) => void,
     closeEnterPasswordDialog: () => void
-    importDatabaseFromURL: (databaseName:string, automergeurl: AutomergeUrl) => void,
+    importDatabaseFromURL: (databaseName: string, automergeurl: AutomergeUrl) => void,
     showToast: boolean,
     setShowToast: (showToast: boolean) => void,
     toastMessage: string,
@@ -99,8 +99,7 @@ export const useLoginViewModel = (
                 setShowToast(true);
                 setToastMessage("Falsches Masterpasswort!")
             }
-        }
-        catch (error) {
+        } catch (error) {
             console.error(error);
             setShowToast(true);
             setToastMessage("Die Datenbank konnte nicht geladen werden")
@@ -113,7 +112,7 @@ export const useLoginViewModel = (
      * @param name the name of the database
      * @param automergeurl the automerge url of the database
      */
-    function importDatabaseFromURL(name:string, automergeurl: AutomergeUrl) {
+    function importDatabaseFromURL(name: string, automergeurl: AutomergeUrl) {
         if (!isNameAvailable(name) || !isAutomergeUrlAvailable(automergeurl)) {
             return;
         }

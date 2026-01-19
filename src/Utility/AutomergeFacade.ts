@@ -156,7 +156,7 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
      * @param changes die Werte die abgeändert werden sollen
      */
     function updateItem(itemId: string, changes: [Attribute, (string | Date)][]) {
-        changeDoc((doc) => changes.forEach(([attr, val]) => updateValue(doc, itemId, itemsById, attr, val)))
+        changeDoc(() => changes.forEach(([attr, val]) => updateValue(itemId, itemsById, attr, val)))
     }
 
     return {
@@ -385,7 +385,7 @@ function deleteValue(d: AutomergeDoc, itemId: string, itemsById: Map<string, Aut
     }
 }
 
-function updateValue(doc: AutomergeDoc, itemId: string, itemsById: Map<string, AutomergeItem>, attribute: Attribute, newValue: string | Date) {
+function updateValue(itemId: string, itemsById: Map<string, AutomergeItem>, attribute: Attribute, newValue: string | Date) {
     const item = itemsById.get(itemId)
 
     if (item === undefined) {
