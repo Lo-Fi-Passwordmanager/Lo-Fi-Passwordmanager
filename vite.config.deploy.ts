@@ -8,7 +8,8 @@ import wasm from "vite-plugin-wasm";
 export default defineConfig({
     build: {
         target: "esnext",
-        minify: true
+        minify: false,
+        sourcemap: "inline"
     },
 
     plugins: [wasm(), react()],

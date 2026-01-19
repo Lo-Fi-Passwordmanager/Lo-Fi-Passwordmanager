@@ -11,6 +11,9 @@ import {AutomergeFolder} from "../Model/Automerge/AutomergeFolder.ts";
 import {SecurityProvider} from "./Security/SecurityProvider.ts";
 
 export type Attribute = 'name' | 'createdAt' | 'editedAt' | 'parentId' | 'username' | 'password' | 'url' | 'note'
+// FIXME Hier waren im entwurf überflüssige funktionen??
+// FIXME Schwierigkeit: traditionelle viewmodel mit react hooks vereinen
+// TODO Doku
 
 /**
  * Eine Klasse zum Erstellen und verifizieren von Automerge Dokumenten.
