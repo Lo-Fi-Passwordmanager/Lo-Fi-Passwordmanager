@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import type {Repo} from "@automerge/react";
-import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import {AutomergeFacade, useAutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
 import {loadAllDatabases, storeDatabase} from "../../Utility/Storage.ts";
 
@@ -18,6 +18,9 @@ export type LoginViewModelReturn = {
     openEnterPasswordDialog: (db: string) => void,
     closeEnterPasswordDialog: () => void
     importDatabaseFromURL: (databaseName:string, automergeurl: AutomergeUrl) => void,
+    showToast: boolean,
+    setShowToast: (showToast: boolean) => void,
+    toastMessage: string,
 }
 
 /**
@@ -45,6 +48,8 @@ export const useLoginViewModel = (
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
     // whether the dialog to open a database is open
     const [isEnterPasswordDialogOpen, setIsEnterPasswordDialogOpen] = useState(false);
+    const [showToast, setShowToast] = useState<boolean>(false);
+    const [toastMessage, setToastMessage] = useState<string>("");
 
     const securityProvider = passwordViewSecurityProvider;
 
@@ -86,14 +91,23 @@ export const useLoginViewModel = (
         }
 
         const facade = new AutomergeFacade(repo, dbUrl)
-        if (securityProvider.verifyMasterPassword(masterPassword, (await facade.getSalt())!, (await facade.getValidation())!)) {
-            setLoggedIn!(true);
-            setAutomergeFacade!(facade);
-            setIsEnterPasswordDialogOpen(false);
-            setSelectedDatabase(null);
-        } else {
-            alert("Falsches Masterpasswort!");
+        try {
+            if (securityProvider.verifyMasterPassword(masterPassword, (await facade.getSalt())!, (await facade.getValidation())!)) {
+                setLoggedIn!(true);
+                setAutomergeFacade!(facade);
+                setIsEnterPasswordDialogOpen(false);
+                setSelectedDatabase(null);
+            } else {
+                setShowToast(true);
+                setToastMessage("Falsches Masterpasswort!")
+            }
         }
+        catch (error) {
+            console.error(error);
+            setShowToast(true);
+            setToastMessage("Die Datenbank konnte nicht geladen werden")
+        }
+
     }
 
     /**
@@ -130,7 +144,8 @@ export const useLoginViewModel = (
      */
     function isNameAvailable(name: string): boolean {
         if (databases.has(name)) {
-            alert("Datenbank mit diesem Namen existiert bereits!");
+            setShowToast(true);
+            setToastMessage("Datenbank mit diesem Namen existiert bereits!");
             return false;
         }
         return true;
@@ -139,7 +154,8 @@ export const useLoginViewModel = (
     function isAutomergeUrlAvailable(url: AutomergeUrl) {
         for (const value of databases.values()) {
             if (value === url) {
-                alert("Datenbank mit dieser Url existiert bereits!");
+                setShowToast(true);
+                setToastMessage("Datenbank mit dieser Url existiert bereits!");
                 return false;
             }
         }
@@ -170,7 +186,10 @@ export const useLoginViewModel = (
         isAddDialogOpen,
         isEnterPasswordDialogOpen,
         databases,
+        showToast,
+        toastMessage,
 
+        setShowToast,
         createDatabase,
         tryOpenDatabase,
         closeDatabase,
