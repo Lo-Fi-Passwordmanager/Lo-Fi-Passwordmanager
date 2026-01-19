@@ -43,7 +43,6 @@ export class AutomergeFacade {
      * Erstellt eine Datenbank mit einem Salt, einem validation String und einem Namen und setzt dabei auch die {@code automergeURL}.
      * @param salt das Salt der neuen Datenbank
      * @param validation die Validation der neuen Datenbank
-     * @param name der Anzeigename der neuen Datenbank
      */
     createDatabase(salt: string, validation: string) {
         const handle = this._repo.create<AutomergeDoc>(new AutomergeDoc(salt!, validation!))
