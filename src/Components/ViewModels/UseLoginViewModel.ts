@@ -93,7 +93,7 @@ export const useLoginViewModel = (
     const tryOpenDatabase = async (masterPassword: string, name?: string) => {
         let dbUrl: AutomergeUrl | undefined;
             if (name) {
-                dbUrl = loadAllDatabases().get(name);
+                dbUrl = loadAllDatabases().get(name); // der state aktuellisiert sich nicht schnell genug, deswegen so. Falls das anders geht, gerne
             } else if (!name && selectedDatabase) {
                 dbUrl = databases.get(selectedDatabase);
             } else {
