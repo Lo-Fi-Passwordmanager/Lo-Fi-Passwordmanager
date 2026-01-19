@@ -1,9 +1,9 @@
 import {type Context, createContext, useContext, useState} from "react";
 
-type LoadingScreenContext = (visible: boolean) => void
+type LoadingScreenContext = (active: boolean) => void
 
 // @ts-expect-error variable is necessary for type compatibility
-export const LoadingContext: Context<LoadingScreenContext> = createContext((visible) => {});
+export const LoadingContext: Context<LoadingScreenContext> = createContext((active) => {});
 
 export function useLoadingScreen() {
     const context = useContext(LoadingContext);
@@ -16,8 +16,8 @@ export function useLoadingScreen() {
 export const useLoadingScreenProviderViewModel = () => {
     const [loading, setLoading] = useState(false);
 
-    function setLoadingScreen(visible: boolean) {
-        setLoading(visible);
+    function setLoadingScreen(active: boolean) {
+        setLoading(active);
     }
 
     return {
