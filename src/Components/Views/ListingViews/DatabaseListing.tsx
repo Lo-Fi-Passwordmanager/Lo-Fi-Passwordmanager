@@ -1,28 +1,57 @@
-import React from "react";
+import type {AutomergeUrl} from "@automerge/automerge-repo";
+import React, {useState} from "react";
+import ToastDialog from "../Dialogs/ToastDialog.tsx";
 
 type DatabaseListingProps = {
-    databases: string[];
+    databases: Map<string, AutomergeUrl>,
     openDatabase: (db: string) => void;
 }
 
 const DatabaseListing: React.FC<DatabaseListingProps> = ({databases, openDatabase}) => {
+    const [showToast, setShowToast] = useState(false);
 
-    if (databases.length === 0) {
+    if (databases.size === 0) {
         return <div>Keine Datenbanken vorhanden</div>;
     }
 
+    const copyToClipboard = (url: string) => {
+        navigator.clipboard.writeText(url.replace("automerge:", ""));
+        setShowToast(true);
+    };
+
     return (
         <div className="listing">
-            {databases.map((db) => (
-                <button
-                    style={{width: "100%", margin: "auto"}}
-                    key={db + databases.indexOf(db)}
-                    onClick={() => openDatabase(db)}
+            {Array.from(databases).map(([db, url]) => (
+                <div
+                    key={db}
+                    style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        width: "100%",
+                        alignItems: "stretch"
+                    }}
                 >
-                    {db}
-                </button>
+                    <button
+                        style={{ width: "100%", padding: "0.6rem", margin: "1%" }}
+                        onClick={() => openDatabase(db)}
+                    >
+                        {db}
+                    </button>
+                    <button
+                        style={{padding: "0.6rem", margin: "1%" }}
+                        onClick={() => copyToClipboard(url)}
+                        title="Copy URL"
+                    >
+                        🔗
+                    </button>
+                </div>
             ))}
+            <ToastDialog
+                message="URL in die Zwischenablage kopiert!"
+                isVisible={showToast}
+                onClose={() => setShowToast(false)}
+            />
         </div>
-    )
+    );
 }
 export default DatabaseListing;

@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
+import {isValidAutomergeUrl} from "@automerge/react";
 
 interface TwoFieldDialogProps {
     isOpen: boolean,
@@ -42,6 +43,10 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
         if (createNewDatabase) {
             createDatabase(field1, field2);
         } else {
+            if (!isValidAutomergeUrl(("automerge:" + field2) as AutomergeUrl)) {
+                alert("Keine valide AutomergeUrl.");
+                return;
+            }
             storeDatabase(field1, ("automerge:" + field2) as AutomergeUrl);
             return;
         }

@@ -1,11 +1,13 @@
 import {useEffect, useState} from 'react';
 import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
-import {loadAllDatabases} from "./PasswordManagerViewModel.ts";
 import type {Repo} from "@automerge/react";
-import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import {AutomergeFacade, useAutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import type {AutomergeUrl} from "@automerge/automerge-repo";
+import {loadAllDatabases, storeDatabase} from "../../Utility/Storage.ts";
 
 export type LoginViewModelReturn = {
     databaseNames: string[],
+    databases: Map<string, AutomergeUrl>,
     isAddDialogOpen: boolean,
     isEnterPasswordDialogOpen: boolean,
     createDatabase: (name: string, masterPassword: string) => void,
@@ -15,6 +17,10 @@ export type LoginViewModelReturn = {
     closeAddDialog: () => void,
     openEnterPasswordDialog: (db: string) => void,
     closeEnterPasswordDialog: () => void
+    importDatabaseFromURL: (databaseName:string, automergeurl: AutomergeUrl) => void,
+    showToast: boolean,
+    setShowToast: (showToast: boolean) => void,
+    toastMessage: string,
 }
 
 /**
@@ -42,6 +48,8 @@ export const useLoginViewModel = (
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
     // whether the dialog to open a database is open
     const [isEnterPasswordDialogOpen, setIsEnterPasswordDialogOpen] = useState(false);
+    const [showToast, setShowToast] = useState<boolean>(false);
+    const [toastMessage, setToastMessage] = useState<string>("");
 
     // update the list of database names when the databases change
     useEffect(() => {
@@ -54,23 +62,20 @@ export const useLoginViewModel = (
      * @param masterPassword the masterpassword that gets used for encryption
      */
     const createDatabase = (name: string, masterPassword: string) => {
+
+        if (!isNameAvailable(name)) {
+            return;
+        }
+
         const salt = securityProvider.getNewSalt();
         const validation = securityProvider.getNewValidation(masterPassword, salt);
 
         const automergeFacade = new AutomergeFacade(repo);
-        automergeFacade.createDatabase(salt, validation, name)
+        automergeFacade.createDatabase(salt, validation)
 
         const url = automergeFacade.automergeURL!;
 
-        setDatabases(prev => {
-            const copy = new Map(prev);
-            copy.set(name, url);
-            return copy;
-        });
-        setIsAddDialogOpen(false);
-
-        setSelectedDatabase(name);
-        setIsEnterPasswordDialogOpen(true);
+        addDatabase(name, url);
     }
 
     // tries to open a database with the provided master password
@@ -79,20 +84,80 @@ export const useLoginViewModel = (
             throw new Error("No database selected");
         }
         const dbUrl = databases.get(selectedDatabase);
-
         if (!dbUrl) {
             throw new Error("Database doesn't exist");
         }
 
         const facade = new AutomergeFacade(repo, dbUrl, securityProvider)
-        if (securityProvider.verifyMasterPassword(masterPassword, (await facade.getSalt())!, (await facade.getValidation())!)) {
-            setLoggedIn!(true);
-            setAutomergeFacade!(facade);
-            setIsEnterPasswordDialogOpen(false);
-            setSelectedDatabase(null);
-        } else {
-            alert("Falsches Masterpasswort!");
+        try {
+            if (securityProvider.verifyMasterPassword(masterPassword, (await facade.getSalt())!, (await facade.getValidation())!)) {
+                setLoggedIn!(true);
+                setAutomergeFacade!(facade);
+                setIsEnterPasswordDialogOpen(false);
+                setSelectedDatabase(null);
+            } else {
+                setShowToast(true);
+                setToastMessage("Falsches Masterpasswort!")
+            }
         }
+        catch (error) {
+            console.error(error);
+            setShowToast(true);
+            setToastMessage("Die Datenbank konnte nicht geladen werden")
+        }
+
+    }
+
+    /**
+     * Imports a database from an automerge url and stores it in localStorage
+     * @param name the name of the database
+     * @param automergeurl the automerge url of the database
+     */
+    function importDatabaseFromURL(name:string, automergeurl: AutomergeUrl) {
+        if (!isNameAvailable(name) || !isAutomergeUrlAvailable(automergeurl)) {
+            return;
+        }
+        addDatabase(name, automergeurl);
+    }
+
+    /**
+     * Adds a new database to the list of available databases and opens the enter password dialog
+     * @param name the name of the new database
+     * @param url the automerge url of the new database
+     */
+    function addDatabase(name: string, url: AutomergeUrl) {
+        storeDatabase(name, url);
+        setDatabases(loadAllDatabases);
+
+        closeAddDialog();
+
+        setSelectedDatabase(name);
+        setIsEnterPasswordDialogOpen(true);
+    }
+
+    /**
+     * Checks if a database name is available
+     *
+     * @param name the name to check
+     */
+    function isNameAvailable(name: string): boolean {
+        if (databases.has(name)) {
+            setShowToast(true);
+            setToastMessage("Datenbank mit diesem Namen existiert bereits!");
+            return false;
+        }
+        return true;
+    }
+
+    function isAutomergeUrlAvailable(url: AutomergeUrl) {
+        for (const value of databases.values()) {
+            if (value === url) {
+                setShowToast(true);
+                setToastMessage("Datenbank mit dieser Url existiert bereits!");
+                return false;
+            }
+        }
+        return true;
     }
 
     // close the currently opened database
@@ -118,7 +183,11 @@ export const useLoginViewModel = (
         databaseNames,
         isAddDialogOpen,
         isEnterPasswordDialogOpen,
+        databases,
+        showToast,
+        toastMessage,
 
+        setShowToast,
         createDatabase,
         tryOpenDatabase,
         closeDatabase,
@@ -126,5 +195,6 @@ export const useLoginViewModel = (
         closeAddDialog,
         openEnterPasswordDialog,
         closeEnterPasswordDialog,
+        importDatabaseFromURL,
     };
 }
