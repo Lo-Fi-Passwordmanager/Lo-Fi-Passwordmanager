@@ -7,7 +7,7 @@ export const usePasswordManagerViewModel = () => {
 
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
     const [automergeFacade, setAutomergeFacade] = useState<AutomergeFacade | null>(null);
-    const securityProvider = new SecurityProvider();
+    const [securityProvider] = useState(() => new SecurityProvider());
 
     const repo = new Repo({
         network: [new BroadcastChannelNetworkAdapter(),

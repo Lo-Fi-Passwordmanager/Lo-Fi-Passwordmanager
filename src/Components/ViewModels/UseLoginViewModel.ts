@@ -35,7 +35,7 @@ export type LoginViewModelReturn = {
 export const useLoginViewModel = (
     repo: Repo, setLoggedIn: (value: (((prevState: boolean) => boolean) | boolean)) => void,
     setAutomergeFacade: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void,
-    passwordViewSecurityProvider: SecurityProvider,
+    securityProvider: SecurityProvider,
 ): LoginViewModelReturn => {
     // map of database names to their automerge urls
     const [databases, setDatabases] = useState(() => loadAllDatabases());
@@ -50,8 +50,6 @@ export const useLoginViewModel = (
     const [isEnterPasswordDialogOpen, setIsEnterPasswordDialogOpen] = useState(false);
     const [showToast, setShowToast] = useState<boolean>(false);
     const [toastMessage, setToastMessage] = useState<string>("");
-
-    const securityProvider = passwordViewSecurityProvider;
 
     // update the list of database names when the databases change
     useEffect(() => {
@@ -90,7 +88,7 @@ export const useLoginViewModel = (
             throw new Error("Database doesn't exist");
         }
 
-        const facade = new AutomergeFacade(repo, dbUrl)
+        const facade = new AutomergeFacade(repo, dbUrl, securityProvider)
         try {
             if (securityProvider.verifyMasterPassword(masterPassword, (await facade.getSalt())!, (await facade.getValidation())!)) {
                 setLoggedIn!(true);

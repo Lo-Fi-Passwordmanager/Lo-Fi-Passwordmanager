@@ -21,7 +21,7 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({addItem, curPare
 
     function handleConfirm() {
         if (typeOfItem === "entry") {
-            const entry: Entry = new Entry(title, "willBeAutomaticallySet", new Date(), new Date(), username, password, url, note)
+            const entry: Entry = new Entry(title, "willBeAutomaticallySet", new Date(), new Date(), username, password, url, note);
             addItem!(entry, curParent!.id)
             setCurItem(entry);
         } else if (typeOfItem === "folder") {
