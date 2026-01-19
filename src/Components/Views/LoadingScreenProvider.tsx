@@ -1,30 +1,14 @@
-// LoadingContext.js
-import React, {type Context, createContext, useContext, useState} from "react";
-
-type LoadingScreenContext = (visible: boolean) => void
-
-const LoadingContext: Context<LoadingScreenContext> = createContext((visible) => {
-});
+import LoadingScreen from "./Dialogs/LoadingScreen.tsx";
+import {LoadingContext, useLoadingScreenProviderViewModel} from "../ViewModels/LoadingScreenProviderViewModel.ts";
+import React from "react";
 
 export const LoadingScreenProvider: React.FC<{ children: React.ReactNode }> = ({children}) => {
-    const [loading, setLoading] = useState(false);
-
-    function setLoadingScreen(visible: boolean) {
-        setLoading(visible)
-    }
+    const viewModel = useLoadingScreenProviderViewModel();
 
     return (
-        <LoadingContext.Provider value={setLoadingScreen}>
-
+        <LoadingContext.Provider value={viewModel.setLoadingScreen}>
+            {viewModel.loading && <LoadingScreen/>}
             {children}
         </LoadingContext.Provider>
     );
-}
-
-export function useLoading() {
-    const context = useContext(LoadingContext);
-    if (!context) {
-        throw new Error("useLoading must be used within LoadingProvider");
-    }
-    return context;
-}
+};
