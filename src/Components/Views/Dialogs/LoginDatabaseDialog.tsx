@@ -6,6 +6,8 @@ interface TwoFieldDialogProps {
     label1: string,
     onConfirm: (field1: string) => void,
     onCancel: () => void,
+    setToastMessage: (message: string) => void,
+    setShowToast: (message: boolean) => void,
 }
 
 const LoginDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
@@ -14,6 +16,8 @@ const LoginDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                                                                 label1,
                                                                 onConfirm,
                                                                 onCancel,
+                                                                setToastMessage,
+                                                                setShowToast,
 
                                                             }) => {
 
@@ -29,7 +33,8 @@ const LoginDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
 
     const handleConfirm = () => {
         if (!field1) {
-            alert("Bitte alle Felder ausfüllen.");
+            setToastMessage("Bitte ein Password eingeben.");
+            setShowToast(true);
             return;
         }
         onConfirm(field1);

@@ -48,6 +48,8 @@ const LoginView: React.FC<{
                     label1="Masterpasswort"
                     onConfirm={viewModel.tryOpenDatabase}
                     onCancel={viewModel.closeEnterPasswordDialog}
+                    setToastMessage={viewModel.setToastMessage}
+                    setShowToast={viewModel.setShowToast}
                 />
 
                 {/* Pop Up Dialog for creating a new Database */}
@@ -59,6 +61,8 @@ const LoginView: React.FC<{
                     createDatabase={viewModel.createDatabase}
                     onCancel={viewModel.closeAddDialog}
                     storeDatabase={viewModel.importDatabaseFromURL}
+                    setToastMessage={viewModel.setToastMessage}
+                    setShowToast={viewModel.setShowToast}
                 />
             </main>
             <ToastDialog message={viewModel.toastMessage}
