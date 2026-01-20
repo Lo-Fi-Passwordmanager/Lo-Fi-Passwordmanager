@@ -4,6 +4,7 @@ import EntryView from "./EntryView.tsx";
 import {usePasswortViewModel} from "../ViewModels/PasswordViewModel.ts";
 import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import ItemCreationDialog from "./Dialogs/ItemCreationDialog.tsx";
+import ToastDialog from "./Dialogs/ToastDialog.tsx";
 
 
 interface PasswordViewProps {
@@ -39,8 +40,13 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade}) => {
                         />
                     </div>
                     <div className="borderBox" style={{width: "70%"}}>
-                        <EntryView item={passwordViewModel.getCurEntry()}/>
+                        <EntryView item={passwordViewModel.getCurEntry()}
+                        copyAndClearClipboard={passwordViewModel.copyToClipboardAndClear}/>
                     </div>
+                    <ToastDialog message={passwordViewModel.toastMessage}
+                                 isVisible={passwordViewModel.toastVisible}
+                                 onClose={()=>passwordViewModel.setToastVisible(false)}>
+                    </ToastDialog>
                 </div>
             </div>
         );
