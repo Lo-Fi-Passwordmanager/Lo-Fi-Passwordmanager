@@ -84,14 +84,14 @@ export const useLoginViewModel = (
 
             const url = automergeFacade.automergeURL!;
             addDatabase(name, url, masterPassword);
-        }, 50);
+        }, 0);
     };
 
     // tries to open a database with the provided master password
     const tryOpenDatabase = async (masterPassword: string, name?: string) => {
         let dbUrl: AutomergeUrl | undefined;
             if (name) {
-                dbUrl = loadAllDatabases().get(name); // der state aktuellisiert sich nicht schnell genug, deswegen so. Falls das anders geht, gerne
+                dbUrl = loadAllDatabases().get(name); // react states update asynchronously, so we have to load directly here
             } else if (selectedDatabase) {
                 dbUrl = databases.get(selectedDatabase);
             } else {
