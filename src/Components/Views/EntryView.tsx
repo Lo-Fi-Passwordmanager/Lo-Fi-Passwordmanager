@@ -1,7 +1,7 @@
 import React from "react";
 import  {type Entry} from "../../Model/Entry.ts";
 import type {Item} from "../../Model/Item.ts";
-import type {Folder} from "../../Model/Folder.ts";
+import Logo from "../../assets/logo_gelb.svg?inline";
 
 
 /**
@@ -21,10 +21,12 @@ const EntryView: React.FC<{ item: Item}> = ({item}) => {
                     </div>
                 );
         } else if (item.isFolder()) {
-                const folder = item as Folder;
                 return (
-                    <div className="entryViewEntry">
-                            <span>Titel:</span>        <span>{folder.title}</span>
+                    <div style={{display: "flex", flexDirection: "column", justifyContent: "center",
+                        alignItems: "center", width: "100%", height: "100%",
+                        fontSize: "2em", color: "gray"}}>
+                            <span>Bitte Eintrag auswählen</span>
+                            <img className="logo" style={{width: "30vmin", marginTop: "2em"}} src={Logo} alt={"Logo"}/>
                     </div>
                 );
         }
