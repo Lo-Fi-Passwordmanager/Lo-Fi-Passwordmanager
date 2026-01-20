@@ -58,7 +58,6 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({addItem, curPare
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         placeholder={"Benutzername"}
-                        autoFocus
                     />
                     <div
                     style={{display: "flex", alignItems: "flex-end"}}>
@@ -71,7 +70,6 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({addItem, curPare
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder={"Passwort"}
-                        autoFocus
                     />
                     </div>
                     <button
@@ -88,7 +86,6 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({addItem, curPare
                         value={url}
                         onChange={(e) => setUrl(e.target.value)}
                         placeholder={"URL"}
-                        autoFocus
                     />
                     <label>Notiz</label>
                     <input
@@ -97,7 +94,6 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({addItem, curPare
                         value={note}
                         onChange={(e) => setNote(e.target.value)}
                         placeholder={"Notiz"}
-                        autoFocus
                     />
                     <div className="confirm-cancel-buttons">
                         <button onClick={handleConfirm}>Bestätigen</button>
