@@ -14,16 +14,19 @@ export interface PasswordGenDialogProps {
 
 export const usePasswordGenViewModel = (newPassword: (password: string) => void) => {
 
-    const [length, setLength] = useState("");
+    const [length, setLength] = useState("20");
     const [uppercase, setUppercase] = useState(true);
     const [lowercase, setLowercase] = useState(true);
     const [numbers, setNumbers] = useState(true);
     const [special, setSpecial] = useState(true);
+    const [toastMessage, setToastMessage] = useState("");
+    const [toastVisible, setToastVisible] = useState(false);
 
     function handleConfirm() {
         if(!uppercase && !lowercase && !numbers && !special) {
-            alert("No characters selected!");
-            //TODO toast einfügen/schön machen
+            setToastMessage("Keine Zeichengruppe ausgewählt!");
+            setToastVisible(true);
+            return;
         }
         const characters: string[] = getCharacters(uppercase, lowercase, numbers, special);
         newPassword(generatePassword(Number(length), characters));
@@ -68,7 +71,11 @@ export const usePasswordGenViewModel = (newPassword: (password: string) => void)
         lowercase,
         numbers,
         special,
+        toastMessage,
+        toastVisible,
 
+        setToastVisible,
+        setToastMessage,
         setLength,
         toggleUppercase,
         toggleLowercase,
