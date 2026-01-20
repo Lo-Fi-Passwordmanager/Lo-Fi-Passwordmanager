@@ -32,8 +32,8 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         return reactiveFacade.tree.rootFolder;
     }
 
-    function addItem(item: Item, id: string) {
-        reactiveFacade.insertItem(item, id);
+    function addItem(item: Item, parentId: string) {
+        reactiveFacade.insertItem(item, parentId);
         toggleEditablePasswordView();
     }
 
@@ -49,8 +49,11 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         return curParent;
     }
 
+
+
     function deleteItem(item: Item) {
         reactiveFacade.deleteItem(item.id);
+        item.deleted = true;
     }
 
     return {
