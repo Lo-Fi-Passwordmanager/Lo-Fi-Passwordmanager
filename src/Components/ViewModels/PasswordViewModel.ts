@@ -1,4 +1,4 @@
-import {useCallback, useState} from "react";
+import {useState} from "react";
 import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {useAutomergeFacade} from "../../Utility/useAutomergeFacade.ts";
 import type {Item} from "../../Model/Item.ts";
@@ -49,14 +49,12 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         return curParent;
     }
 
-    const deleteItem = useCallback(async (item: Item) => {
-        await reactiveFacade.deleteItem(item.id);
-        // FIXME: bitte lösch button nur in entry view und nciht list view, dann funktioniert das hier auch
-        if (curItem.id === item.id || curItem.id === "willBeAutomaticallySet") {
-            setCurItem(curParent);
-            setCurParent(curParent);
-        }
-    }, [curItem.id, curParent, reactiveFacade]);
+
+
+    function deleteItem(item: Item) {
+        reactiveFacade.deleteItem(item.id);
+        item.deleted = true;
+    }
 
     return {
         setCurItem,
