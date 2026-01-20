@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {type Item} from "../../../Model/Item.ts";
 import {Entry} from "../../../Model/Entry.ts";
 import {Folder} from "../../../Model/Folder.ts";
+import PasswordGenDialog from "./PasswordGenDialog.tsx";
 
 interface ItemCreationDialogProps {
     addItem?: (item: Item, id: string) => void
@@ -18,6 +19,7 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({addItem, curPare
     const [password, setPassword] = useState("");
     const [url, setUrl] = useState("");
     const [note, setNote] = useState("");
+    const [inPasswordGen, setInPasswordGen] = useState(false);
 
     function handleConfirm() {
         if (typeOfItem === "entry") {
@@ -32,7 +34,7 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({addItem, curPare
 
 
     if (typeOfItem === "entry") {
-        return (
+        return (<>
             <div className="dialogOverlay">
                 <div className="dialog">
                     <div className="confirm-cancel-buttons">
@@ -58,6 +60,10 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({addItem, curPare
                         placeholder={"Benutzername"}
                         autoFocus
                     />
+                    <div
+                    style={{display: "flex", alignItems: "flex-end"}}>
+                        <div
+                        style={{display: "flex", flexDirection: "column", flex: 1}}>
                     <label>Passwort</label>
                     <input
                         className="inputField"
@@ -67,6 +73,14 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({addItem, curPare
                         placeholder={"Passwort"}
                         autoFocus
                     />
+                    </div>
+                    <button
+                        className="passwordGenButton"
+                        onClick={() => setInPasswordGen(true)}
+                        >
+                        +
+                    </button>
+                    </div>
                     <label>URL</label>
                     <input
                         className="inputField"
@@ -91,6 +105,14 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({addItem, curPare
                     </div>
                 </div>
             </div>
+                {inPasswordGen &&
+                    <PasswordGenDialog
+                        newPassword={(password) =>
+                        {setPassword(password);
+                            setInPasswordGen(false)}}
+                        cancelPasswordGen={() => setInPasswordGen(false)}
+                    />}
+            </>
         );
     } else {
         return (
