@@ -31,7 +31,7 @@ export type LoginViewModelReturn = {
  * @param repo the automerge repo
  * @param setLoggedIn the function to update the View to switch from loginView to PasswordView
  * @param setAutomergeFacade the function to update the automergeFacade of the used database on correct Login
- * @param passwordViewSecurityProvider
+ * @param securityProvider
  * @returns all data and functions required by the LoginView
  * @author uwing
  */
@@ -134,20 +134,21 @@ export const useLoginViewModel = (
     /**
      * Imports a database from an automerge url and stores it in localStorage
      * @param name the name of the database
-     * @param automergeurl the automerge url of the database
+     * @param url the automerge url of the database
      */
-    function importDatabaseFromURL(name: string, automergeurl: AutomergeUrl) {
-        if (!isNameAvailable(name) || !isAutomergeUrlAvailable(automergeurl)) {
+    function importDatabaseFromURL(name: string, url: AutomergeUrl) {
+        if (!isNameAvailable(name) || !isAutomergeUrlAvailable(url)) {
             setLoadingScreenActive(false);
             return;
         }
-        addDatabase(name, automergeurl);
+        addDatabase(name, url);
     }
 
     /**
      * Adds a new database to the list of available databases and opens the enter password dialog
      * @param name the name of the new database
      * @param url the automerge url of the new database
+     * @param masterPassword
      */
     function addDatabase(name: string, url: AutomergeUrl, masterPassword?: string) {
         closeAddDialog();
