@@ -18,7 +18,7 @@ export type LoginViewModelReturn = {
     closeAddDialog: () => void,
     openEnterPasswordDialog: (db: string) => void,
     closeEnterPasswordDialog: () => void
-    importDatabaseFromURL: (databaseName: string, automergeurl: AutomergeUrl) => void,
+    importDatabaseFromURL: (databaseName: string, url: AutomergeUrl) => void,
     showToast: boolean,
     setShowToast: (showToast: boolean) => void,
     toastMessage: string,
@@ -33,7 +33,6 @@ export type LoginViewModelReturn = {
  * @param setAutomergeFacade the function to update the automergeFacade of the used database on correct Login
  * @param securityProvider
  * @returns all data and functions required by the LoginView
- * @author uwing
  */
 export const useLoginViewModel = (
     repo: Repo, setLoggedIn: (value: (((prevState: boolean) => boolean) | boolean)) => void,
@@ -212,12 +211,12 @@ export const useLoginViewModel = (
     // Close the dialog to create a new database
     const closeAddDialog = () => setIsAddDialogOpen(false);
 
-    // Open the dialog to login to a database
+    // Open the dialog to log in to a database
     const openEnterPasswordDialog = (db: string) => {
         setSelectedDatabase(db);
         setIsEnterPasswordDialogOpen(true);
     };
-    // Close the dialog to login to a database
+    // Close the dialog to log in to a database
     const closeEnterPasswordDialog = () => setIsEnterPasswordDialogOpen(false);
 
     return {
