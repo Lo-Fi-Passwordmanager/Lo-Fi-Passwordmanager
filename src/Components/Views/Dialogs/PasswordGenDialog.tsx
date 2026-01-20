@@ -1,5 +1,6 @@
 import React from "react";
 import {type PasswordGenDialogProps, usePasswordGenViewModel} from "../../ViewModels/Dialog/PasswordGenViewModel.ts";
+import ToastDialog from "./ToastDialog.tsx";
 
 
 
@@ -20,7 +21,6 @@ const PasswordGenDialog: React.FC<PasswordGenDialogProps> = ({newPassword, cance
                         min="0"
                         max="100"
                         step="1"
-                        placeholder={"20"}
                         autoFocus
                     />
                     <label>Großbuchstaben:</label>
@@ -53,6 +53,11 @@ const PasswordGenDialog: React.FC<PasswordGenDialogProps> = ({newPassword, cance
                     <button onClick={cancelPasswordGen}>Abbrechen</button>
                 </div>
             </div>
+            <ToastDialog message={viewModel.toastMessage}
+                         isVisible={viewModel.toastVisible}
+                         onClose={() => viewModel.setToastVisible(false)}>
+
+            </ToastDialog>
         </div>
     );
 }
