@@ -84,9 +84,7 @@ export const useLoginViewModel = (
 
             const url = automergeFacade.automergeURL!;
             addDatabase(name, url, masterPassword);
-        }, 0);
-
-        setLoadingScreenActive(false);
+        }, 50);
     };
 
     // tries to open a database with the provided master password
@@ -94,7 +92,7 @@ export const useLoginViewModel = (
         let dbUrl: AutomergeUrl | undefined;
             if (name) {
                 dbUrl = loadAllDatabases().get(name); // der state aktuellisiert sich nicht schnell genug, deswegen so. Falls das anders geht, gerne
-            } else if (!name && selectedDatabase) {
+            } else if (selectedDatabase) {
                 dbUrl = databases.get(selectedDatabase);
             } else {
                 throw new Error("No database selected");
@@ -117,7 +115,6 @@ export const useLoginViewModel = (
                         setLoggedIn!(true);
                         setAutomergeFacade!(facade);
                         setLoadingScreenActive(false);
-                        setIsEnterPasswordDialogOpen(false);
                         setSelectedDatabase(null);
                     } else {
                         setLoadingScreenActive(false);
@@ -153,9 +150,10 @@ export const useLoginViewModel = (
      * @param url the automerge url of the new database
      */
     function addDatabase(name: string, url: AutomergeUrl, masterPassword?: string) {
+        closeAddDialog();
+
         storeDatabase(name, url);
         setDatabases(loadAllDatabases);
-        closeAddDialog();
         setSelectedDatabase(name);
 
         if (masterPassword) {
