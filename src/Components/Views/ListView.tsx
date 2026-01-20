@@ -29,7 +29,7 @@ const ListView: React.FC<{
         const entry = listViewModel.getItem() as Entry;
         return (
             <div className="listViewEntry" onClick={() => setCurItem(entry)}>
-                <span>Titel:</span> <span>{entry.title}</span>
+                <span>{entry.title}</span>
                 <button onClick={() => deleteItem(item)}>🗑️</button>
             </div>
         );
@@ -42,7 +42,7 @@ const ListView: React.FC<{
             <>
                 {/* Name and Buttons */}
                 <div className="listViewTitleHeader">
-                    <span>{listViewModel.getItem().title}:</span>
+                    <span>{listViewModel.getItem().title}</span>
                     <button onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? ">" : "v"}</button>
                     <button onClick={() => addButtonPressed() }>+</button>
                     {/* Delete button should not be rendered for the root */}

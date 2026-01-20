@@ -198,11 +198,12 @@ button:focus-visible {
     flex-direction: row;
     background-color: var(--panel);
     border-radius: 10px;
-    width: fit-content;
     padding-left: 10px;
-    margin: 2px;
-
-    max-width: fit-content;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+    font-weight: bold;
 }
 
 .listViewTitleHeader button {
@@ -215,6 +216,8 @@ button:focus-visible {
     margin: 5px;
     padding: 4px 8px; /* Smaller padding for buttons */
     outline-width: 2px; /* Reduce the outline so it stays inside the box */
+    justify-self: flex-end;
+    min-width: 0;
 }
 
 .listViewEntry {
@@ -222,20 +225,24 @@ button:focus-visible {
     padding-left: 30px;
     padding-right: 30px;
     border-radius: 10px;
-    max-width: fit-content;
     background-color: var(--dialog-bg);
     text-align: left;
-    margin: 2px;
+    font-weight: bold;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
 
     /*grid formatting*/
     display: grid;
-    grid-template-columns: 120px 1fr 1fr;
+    grid-template-columns: 100% 1fr 1fr;
     gap: 4px;
+    align-items: center;
 }
 
 .listViewEntryWrapper {
     /*The indent that each layer of the tree gets*/
-    padding-left: 50px;
+    padding-left: 10%;
     flex-direction: row;
 }
 
