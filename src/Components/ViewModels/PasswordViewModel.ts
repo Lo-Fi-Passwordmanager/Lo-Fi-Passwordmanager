@@ -52,7 +52,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     const deleteItem = useCallback(async (item: Item) => {
         await reactiveFacade.deleteItem(item.id);
         // FIXME: bitte lösch button nur in entry view und nciht list view, dann funktioniert das hier auch
-        if (curItem.id === item.id) {
+        if (curItem.id === item.id || curItem.id === "willBeAutomaticallySet") {
             setCurItem(curParent);
             setCurParent(curParent);
         }
