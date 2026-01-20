@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useCallback, useState} from "react";
 import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {useAutomergeFacade} from "../../Utility/useAutomergeFacade.ts";
 import type {Item} from "../../Model/Item.ts";
@@ -32,8 +32,8 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         return reactiveFacade.tree.rootFolder;
     }
 
-    function addItem(item: Item, id: string) {
-        reactiveFacade.insertItem(item, id);
+    function addItem(item: Item, parentId: string) {
+        reactiveFacade.insertItem(item, parentId);
         toggleEditablePasswordView();
     }
 
@@ -49,9 +49,14 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         return curParent;
     }
 
-    function deleteItem(item: Item) {
-        reactiveFacade.deleteItem(item.id);
-    }
+    const deleteItem = useCallback(async (item: Item) => {
+        await reactiveFacade.deleteItem(item.id);
+        // FIXME: bitte lösch button nur in entry view und nciht list view, dann funktioniert das hier auch
+        if (curItem.id === item.id) {
+            setCurItem(curParent);
+            setCurParent(curParent);
+        }
+    }, [curItem.id, curParent, reactiveFacade]);
 
     return {
         setCurItem,
