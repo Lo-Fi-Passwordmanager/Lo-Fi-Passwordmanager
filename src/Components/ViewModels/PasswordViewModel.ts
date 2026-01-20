@@ -1,5 +1,6 @@
 import {useState} from "react";
-import {AutomergeFacade, useAutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import {useAutomergeFacade} from "../../Utility/useAutomergeFacade.ts";
 import type {Item} from "../../Model/Item.ts";
 
 
