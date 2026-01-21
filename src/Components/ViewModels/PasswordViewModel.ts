@@ -52,8 +52,8 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         return curParent;
     }
 
-    function updateItemAttribute(itemId: string, attribute: Attribute, value: string) {
-        reactiveFacade.updateItem(itemId, [[attribute, value]])
+    function updateItemAttribute(itemId: string, changes: [Attribute, string | Date][]) {
+        reactiveFacade.updateItem(itemId, changes);
     }
 
     function deleteItem(item: Item) {
