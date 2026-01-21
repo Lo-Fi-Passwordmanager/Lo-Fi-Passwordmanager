@@ -34,7 +34,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade}) => {
                             getCurSortCriterion={passwordViewModel.getCurSortCriterion}
                             setCurSortCriterion={passwordViewModel.setCurSortCriterion}
                             toggleOrder={passwordViewModel.toggleOrder}
-                            getOrder={passwordViewModel.ascendingSort}
+                            getOrder={passwordViewModel.isAscending}
                         />
                     </div>
                     <div>
@@ -45,7 +45,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade}) => {
                             setCurrentParent={passwordViewModel.setCurParent}
                             deleteItem={passwordViewModel.deleteItem}
                             sortCriterion={passwordViewModel.getCurSortCriterion()}
-                            isAscending={passwordViewModel.ascendingSort}
+                            isAscending={passwordViewModel.isAscending}
                         />
                     </div>
                 </div>

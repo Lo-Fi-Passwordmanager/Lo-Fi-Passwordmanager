@@ -18,23 +18,23 @@ export const useListViewModel = (topItem: Item, currentSortCrit: SortCriteria, i
     // Reactive state to store values during runtime
     function getChildren() {
         if (item.isFolder()) {
-            switch (currentSortCrit && isAscending) {
-                case SortCriteria.Name && true:
+            switch (`${currentSortCrit}-${isAscending}`) {
+                case `${SortCriteria.Name}-true`:
                     return (item as Folder).entries.slice().sort((a, b) => a.title.localeCompare(b.title));
 
-                case SortCriteria.Name && false:
+                case `${SortCriteria.Name}-false`:
                     return (item as Folder).entries.slice().sort((a, b) => b.title.localeCompare(a.title));
 
-                case SortCriteria.CreatedAt && true:
+                case `${SortCriteria.CreatedAt}-true`:
                     return (item as Folder).entries.slice().sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
 
-                case SortCriteria.CreatedAt && false:
+                case `${SortCriteria.CreatedAt}-false`:
                     return (item as Folder).entries.slice().sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 
-                case SortCriteria.EditedAt && true:
+                case `${SortCriteria.EditedAt}-true`:
                     return (item as Folder).entries.slice().sort((a, b) => a.editedAt.getTime() - b.editedAt.getTime());
 
-                case SortCriteria.EditedAt && false:
+                case `${SortCriteria.EditedAt}-false`:
                     return (item as Folder).entries.slice().sort((a, b) => b.editedAt.getTime() - a.editedAt.getTime());
             }
         }
