@@ -1,6 +1,6 @@
 import {afterEach, beforeEach, describe, it, expect, vi} from "vitest";
 import {Repo} from "@automerge/react";
-import {AutomergeFacade} from "../../src/Utility/AutomergeFacade";
+import {Attribute, AutomergeFacade} from "../../src/Utility/AutomergeFacade";
 import {act, renderHook} from "@testing-library/react";
 import {useAutomergeFacade} from "../../src/Utility/useAutomergeFacade";
 import {Entry} from "../../src/Model/Entry";
@@ -61,7 +61,7 @@ describe('useAutomergeFacade', ()=> {
         act(()=> {
             result.current.insertItem(folder, "");
         })
-        result.current.tree.getChildById("01")
+        expect(result.current.tree.getChildById("01")).toBeInstanceOf(Folder);
     })
 
     it('should throw if the inserts parent is undefinded', ()=> {
@@ -89,10 +89,36 @@ describe('useAutomergeFacade', ()=> {
     })
 
     it('should be able to delete an item', ()=> {
-
+        const {result} = renderHook(() => useAutomergeFacade(automergeFacade));
+        act(() => {
+            result.current.insertItem(entry, "");
+        })
+        act(()=> {
+            expect(result.current.tree.getChildById("00")).toBeInstanceOf(Entry);
+        })
+        act(() => {
+            result.current.deleteItem("00");
+        })
+        act(()=> {
+            expect(result.current.tree.getChildById("00")).toBe(null);
+        })
     })
 
     it('should be able to update an item', ()=> {
-
+        const {result} = renderHook(() => useAutomergeFacade(automergeFacade));
+        let changedEntry;
+        act(() => {
+            result.current.insertItem(entry, "");
+        })
+        act(()=> {
+            expect(result.current.tree.getChildById("00")).toBeInstanceOf(Entry);
+        })
+        act(() => {
+            result.current.updateItem("00", [["name", "newName"]]);
+        })
+        act(()=> {
+            changedEntry = result.current.tree.getChildById;
+        })
+        expect(changedEntry.name).toBe("newName");
     })
 })
