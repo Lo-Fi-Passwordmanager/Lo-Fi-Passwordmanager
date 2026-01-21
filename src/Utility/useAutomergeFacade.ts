@@ -23,18 +23,18 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
 
 
     if (automergeFacade.automergeURL === null) {
-        throw new Error('The facade was not properly initialized. There is no valid automerge URL.')
+        throw new Error("The facade was not properly initialized. There is no valid automerge URL.");
     }
 
     const [doc, changeDoc] = useDocument<AutomergeDoc>(automergeFacade.automergeURL, {
         // This hooks the `useDocument` into reacts suspense infrastructure so the whole component
         // only renders once the document is loaded
-        suspense: true,
+        suspense: true
     });
 
-    const automergeURL = automergeFacade.automergeURL
-    const salt = doc.salt
-    const validation = doc.validation
+    const automergeURL = automergeFacade.automergeURL;
+    const salt = doc.salt;
+    const validation = doc.validation;
 
 
     const [tree, itemsById]: [DatabaseRoot, Map<string, AutomergeItem>] = buildDatabaseAsTree(doc, automergeFacade.getSecurityProvider()!);
@@ -47,20 +47,20 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
      */
     function insertItem(item: Item, parentId: string) {
         const automergeItem = automergeItemFromDatabaseItem(item, parentId, automergeFacade.getSecurityProvider()!);
-        let parent: AutomergeItem | undefined | null = null
+        let parent: AutomergeItem | undefined | null = null;
         if (parentId !== "") {
-            parent = itemsById.get(parentId)
+            parent = itemsById.get(parentId);
         }
 
         if (parent === undefined) {
-            throw new Error(`Cannot find parent object with ID ${parentId}`)
+            throw new Error(`Cannot find parent object with ID ${parentId}`);
         }
 
         if (parent && !isFolder(parent)) {
-            throw new Error(`Cannot insert item into Item with ID ${parentId}, as it is not a folder.`)
+            throw new Error(`Cannot insert item into Item with ID ${parentId}, as it is not a folder.`);
         }
 
-        changeDoc((doc) => insertValue(doc, parent, automergeItem))
+        changeDoc((doc) => insertValue(doc, parent, automergeItem));
     }
 
     /**
@@ -69,7 +69,7 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
      * @param itemId die ID des Items
      */
     function deleteItem(itemId: string) {
-        changeDoc((doc) => deleteValue(doc, itemId, itemsById))
+        changeDoc((doc) => deleteValue(doc, itemId, itemsById));
     }
 
     /**
@@ -111,4 +111,4 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
         updateItem
     };
 
-}
+};

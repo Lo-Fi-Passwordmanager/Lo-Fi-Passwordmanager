@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect, useState} from "react";
 
 interface TwoFieldDialogProps {
     isOpen: boolean,
@@ -11,15 +11,15 @@ interface TwoFieldDialogProps {
 }
 
 const LoginDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
-                                                                isOpen,
-                                                                title,
-                                                                label1,
-                                                                onConfirm,
-                                                                onCancel,
-                                                                setToastMessage,
-                                                                setShowToast,
+    isOpen,
+    title,
+    label1,
+    onConfirm,
+    onCancel,
+    setToastMessage,
+    setShowToast
 
-                                                            }) => {
+}) => {
 
     const [field1, setField1] = useState("");
 
@@ -61,6 +61,6 @@ const LoginDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
 
             </div>
         </div>
-    )
-}
+    );
+};
 export default LoginDatabaseDialog;

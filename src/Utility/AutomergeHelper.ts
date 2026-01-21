@@ -20,20 +20,20 @@ import type {Attribute} from "./AutomergeFacade.ts";
  */
 export function buildDatabaseAsTree(automergeDoc: Doc<AutomergeDoc>, securityProvider: SecurityProvider): [DatabaseRoot, Map<string, AutomergeItem>] {
 
-    const root = new DatabaseRoot(automergeDoc.salt)
+    const root = new DatabaseRoot(automergeDoc.salt);
 
-    const itemsById = new Map<string, AutomergeItem>()
+    const itemsById = new Map<string, AutomergeItem>();
     // Die items in eine map packen, wo sie schnell nach id erreichbar sind
     for (const item of automergeDoc.items) {
-        const id = getObjectId(item)!
+        const id = getObjectId(item)!;
         itemsById.set(id, item);
     }
 
-    const pathByItem = new Map<AutomergeItem, Array<string>>()
+    const pathByItem = new Map<AutomergeItem, Array<string>>();
     // Eine map aufbauen, in der zu jedem item der pfad steht (pfad so wie vorher, also array an ids)
     for (const item of automergeDoc.items) {
-        const path = buildPath(item, itemsById)
-        pathByItem.set(item, path)
+        const path = buildPath(item, itemsById);
+        pathByItem.set(item, path);
     }
 
     // Nach pfadlänge sortieren, damit auf jeden fall immer die eltern zuerst eingesetzt werden
@@ -41,7 +41,7 @@ export function buildDatabaseAsTree(automergeDoc: Doc<AutomergeDoc>, securityPro
 
     // Der pfadlänge nach in den passwordmanagerroot einsetzen
     for (const [item, path] of sortedByPathLength) {
-        insertNestedValue(root, path, databaseItemFromAutomergeItem(item, securityProvider)) // gleiche fkt wie früher
+        insertNestedValue(root, path, databaseItemFromAutomergeItem(item, securityProvider)); // gleiche fkt wie früher
     }
 
     return [root, itemsById];
@@ -69,10 +69,10 @@ export function databaseItemFromAutomergeItem(automergeItem: AutomergeItem, secu
             securityProvider.decryptValue(automergeItem.password) as string,
             securityProvider.decryptValue(automergeItem.url) as string,
             securityProvider.decryptValue(automergeItem.note) as string
-        )
+        );
     }
 
-    return new Folder(name, id, createdAt, editedAt)
+    return new Folder(name, id, createdAt, editedAt);
 }
 
 /**
@@ -88,7 +88,7 @@ export function automergeItemFromDatabaseItem(item: Item, parentId: string, secu
     const editedAt = item.editedAt!.getTime() / 1000;
 
     if (item.isEntry()) {
-        const entry = item as Entry
+        const entry = item as Entry;
         return new AutomergeEntry(
             name,
             createdAt,
@@ -98,10 +98,10 @@ export function automergeItemFromDatabaseItem(item: Item, parentId: string, secu
             securityProvider.encryptValue(entry.password),
             securityProvider.encryptValue(entry.url),
             securityProvider.encryptValue(entry.note)
-        )
+        );
     }
 
-    return new AutomergeFolder(name, createdAt, editedAt, securityProvider.encryptValue(parentId))
+    return new AutomergeFolder(name, createdAt, editedAt, securityProvider.encryptValue(parentId));
 }
 
 /**
@@ -109,7 +109,7 @@ export function automergeItemFromDatabaseItem(item: Item, parentId: string, secu
  * @param automergeItem the automerge item to check
  */
 function isEntry(automergeItem: AutomergeItem): automergeItem is AutomergeEntry {
-    return automergeItem.type === "entry"
+    return automergeItem.type === "entry";
 }
 
 /**
@@ -117,7 +117,7 @@ function isEntry(automergeItem: AutomergeItem): automergeItem is AutomergeEntry 
  * @param automergeItem the automerge item to check
  */
 export function isFolder(automergeItem: AutomergeItem): automergeItem is AutomergeFolder {
-    return automergeItem.type === "folder"
+    return automergeItem.type === "folder";
 }
 
 /**
@@ -128,10 +128,10 @@ export function isFolder(automergeItem: AutomergeItem): automergeItem is Automer
  */
 function buildPath(item: AutomergeItem, itemsById: Map<string, AutomergeItem>): Array<string> {
     if (item.parentId === null || item.parentId === "") {
-        return []
+        return [];
     }
 
-    return buildPath(itemsById.get(item.parentId)!, itemsById).concat(item.parentId)
+    return buildPath(itemsById.get(item.parentId)!, itemsById).concat(item.parentId);
 }
 
 /**
@@ -142,28 +142,28 @@ function buildPath(item: AutomergeItem, itemsById: Map<string, AutomergeItem>): 
  */
 function findNestedValue(databaseRoot: DatabaseRoot, path: string[]): Item {
     if (path.length === 0) {
-        return databaseRoot.rootFolder
+        return databaseRoot.rootFolder;
     }
 
     let currentValue: Item | null = databaseRoot.getChildById(path[0]);
 
     if (currentValue === null) {
-        throw Error(`Child with ID ${path[0]} does not exist on DatabaseRoot.`)
+        throw Error(`Child with ID ${path[0]} does not exist on DatabaseRoot.`);
     }
 
     path.slice(1).forEach((id) => {
         if (currentValue!.isFolder()) {
-            const nestedValue = (currentValue! as Folder).getChildById(id)
+            const nestedValue = (currentValue! as Folder).getChildById(id);
 
             if (nestedValue === null) {
-                throw Error(`Child with ID ${id} does not exist on Element with ID ${currentValue!.id}.`)
+                throw Error(`Child with ID ${id} does not exist on Element with ID ${currentValue!.id}.`);
             }
 
             currentValue = nestedValue;
         } else {
-            throw Error("Cannot index into Entry because it has no children")
+            throw Error("Cannot index into Entry because it has no children");
         }
-    })
+    });
 
     return currentValue;
 }
@@ -176,11 +176,11 @@ function findNestedValue(databaseRoot: DatabaseRoot, path: string[]): Item {
  * @param insert the item which to insert
  */
 function insertNestedValue(databaseRoot: DatabaseRoot, path: string[], insert: Item) {
-    const value = findNestedValue(databaseRoot, path)
+    const value = findNestedValue(databaseRoot, path);
     if (!value.isFolder()) {
-        throw Error("Cannot insert value into Entry.")
+        throw Error("Cannot insert value into Entry.");
     }
-    (value as Folder).addItem(insert)
+    (value as Folder).addItem(insert);
 }
 
 export function insertValue(d: AutomergeDoc, parentItem: AutomergeFolder | null, insert: AutomergeItem) {
@@ -190,25 +190,25 @@ export function insertValue(d: AutomergeDoc, parentItem: AutomergeFolder | null,
         insert.parentId = getObjectId(parentItem)!;
     }
 
-    d.items.push(insert)
+    d.items.push(insert);
 }
 
 export function deleteValue(d: AutomergeDoc, itemId: string, itemsById: Map<string, AutomergeItem>) {
 
-    const item = itemsById.get(itemId)
+    const item = itemsById.get(itemId);
 
     if (item === undefined) {
-        throw new Error(`Cannot find parent object with ID ${itemId}`)
+        throw new Error(`Cannot find parent object with ID ${itemId}`);
     }
 
-    const index = d.items.indexOf(item)
+    const index = d.items.indexOf(item);
 
-    d.items.splice(index, 1)
+    d.items.splice(index, 1);
 
     if (isFolder(item)) {
         for (const value of d.items) {
             if (value.parentId === itemId) {
-                deleteValue(d, getObjectId(value)!, itemsById)
+                deleteValue(d, getObjectId(value)!, itemsById);
             }
         }
     }
@@ -218,32 +218,32 @@ export function updateValue(d: AutomergeDoc, itemId: string, itemsById: Map<stri
     const item = itemsById.get(itemId);
 
     if (item === undefined) {
-        throw new Error(`Cannot find parent object with ID ${itemId}`)
+        throw new Error(`Cannot find parent object with ID ${itemId}`);
     }
 
     const index = d.items.indexOf(item);
 
     const docItem = d.items[index];
 
-    if ((attribute === 'createdAt' || attribute === 'editedAt')) {
+    if ((attribute === "createdAt" || attribute === "editedAt")) {
         // Attribut is eines der Attribute, die ein Datum nehmen
-        if (typeof newValue === 'string') {
-            throw new Error(`Cannot assign value of type 'string' to value of type 'Date'`)
+        if (typeof newValue === "string") {
+            throw new Error(`Cannot assign value of type 'string' to value of type 'Date'`);
         }
 
         docItem[attribute] = (newValue.getTime() / 1000);
 
     } else {
         // Attribut is eines der Attribute, die einen String nehmen
-        if (typeof newValue !== 'string') {
-            throw new Error(`Cannot assign value of type 'Date' to value of type 'string'`)
+        if (typeof newValue !== "string") {
+            throw new Error(`Cannot assign value of type 'Date' to value of type 'string'`);
 
         } else if (isFolder(docItem)) {
             if (attribute === "name" || attribute === "parentId") {
                 docItem[attribute] = newValue;
             }
 
-            throw new Error(`This attribute does not exist on folders.`)
+            throw new Error(`This attribute does not exist on folders.`);
 
         } else {
             (docItem as AutomergeEntry)[attribute] = newValue;
