@@ -2,7 +2,7 @@ import React from "react";
 import {
     type TwoFieldDialogProps,
     useCreateDatabaseViewModel
-} from "../../ViewModels/Dialog/CreateDatabaseDialogViewModel.ts";
+} from "../../ViewModels/Dialog/CreateDatabaseViewModel.ts";
 
 
 const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({

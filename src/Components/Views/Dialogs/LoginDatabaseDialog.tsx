@@ -1,14 +1,7 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
+import {useLoginDatabaseViewModel} from "../../ViewModels/Dialog/LoginDatabaseViewModel.ts";
+import type {TwoFieldDialogProps} from "../../ViewModels/Dialog/LoginDatabaseViewModel.ts";
 
-interface TwoFieldDialogProps {
-    isOpen: boolean,
-    title: string,
-    label1: string,
-    onConfirm: (field1: string) => void,
-    onCancel: () => void,
-    setToastMessage: (message: string) => void,
-    setShowToast: (message: boolean) => void,
-}
 
 const LoginDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                                                                 isOpen,
@@ -21,24 +14,9 @@ const LoginDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
 
                                                             }) => {
 
-    const [field1, setField1] = useState("");
-
-    useEffect(() => {
-        if (isOpen) {
-            setField1("");
-        }
-    }, [isOpen]);
+    const viewModel = useLoginDatabaseViewModel(isOpen, onConfirm, setToastMessage, setShowToast);
 
     if (!isOpen) return null;
-
-    const handleConfirm = () => {
-        if (!field1) {
-            setToastMessage("Bitte ein Password eingeben.");
-            setShowToast(true);
-            return;
-        }
-        onConfirm(field1);
-    };
 
     return (
         <div className="dialogOverlay">
@@ -48,14 +26,14 @@ const LoginDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                 <input
                     className={"inputField"}
                     type="password"
-                    value={field1}
-                    onChange={(e) => setField1(e.target.value)}
+                    value={viewModel.field1}
+                    onChange={(e) => viewModel.setField1(e.target.value)}
                     placeholder={label1}
                     autoFocus
                 />
 
                 <div className="confirm-cancel-buttons">
-                    <button onClick={handleConfirm}>Bestätigen</button>
+                    <button onClick={viewModel.handleConfirm}>Bestätigen</button>
                     <button onClick={onCancel}>Abbrechen</button>
                 </div>
 
