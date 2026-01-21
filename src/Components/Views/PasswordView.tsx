@@ -39,12 +39,12 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade}) => {
                     />
                 </div>
                 <div className="borderBox" style={{width: "70%"}}>
-                    {!passwordViewModel.getInEditablePasswordView() &&
+                    {!passwordViewModel.inEditable &&
                         <EntryView item={passwordViewModel.getCurEntry()}
                                    copyAndClearClipboard={passwordViewModel.copyToClipboardAndClear}
                                    setEditableView={() => passwordViewModel.setInEditable(true)}/>}
 
-                    {passwordViewModel.getInEditablePasswordView() &&
+                    {passwordViewModel.inEditable &&
                         <EditablePasswordView item={passwordViewModel.getCurEntry()}
                                               updateItemAttribute={passwordViewModel.updateItemAttribute}
                                               copyAndClearClipboard={passwordViewModel.copyToClipboardAndClear}

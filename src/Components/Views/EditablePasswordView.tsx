@@ -40,26 +40,23 @@ const EditablePasswordView: React.FC<{
                     zIndex: 10,
                     fontSize: "0.8em"// Ensures it sits on top of the div content
                 }}>
-                    ✏️
+                    💾
                 </button>
-                <input>Fortnite:</input> <input>{entry.title}</input>
+                <span>Fortnite:</span> <input type={"text"} value={entry.title}></input>
                 <button onClick={() => copyAndClearClipboard(entry.title)}>🔗</button>
 
-                <input>Benutzername:</input> <input>{entry.username}</input>
+                <span>Benutzername:</span> <input type={"text"} value={entry.username}></input>
                 <button onClick={() => copyAndClearClipboard(entry.username)}>🔗</button>
 
-                <input>Passwort:</input> <input>{entry.password}</input>
+                <span>Passwort:</span> <input type={"text"} value={entry.password}></input>
                 <button onClick={() => copyAndClearClipboard(entry.password)}>🔗</button>
 
                 {/* adds https://www. to the start of the link*/}
-                <input>URL:</input> <a
-                href={entry.url.includes("www.") ? (entry.url.startsWith("http") ? entry.url : ("https://" + entry.url)) : ("https://www." + entry.url)}
-                target="_blank" rel="noopener noreferrer"
-                style={{textDecoration: "underline", color: "inherit"}}>
-                {entry.url}</a>
+                <span>URL:</span> <input type={"text"} value={entry.url}
+                style={{textDecoration: "underline", color: "inherit"}}></input>
                 <button onClick={() => copyAndClearClipboard(entry.url)}>🔗</button>
 
-                <input>Notiz:</input> <input>{entry.note}</input>
+                <span>Notiz:</span> <input type={"text"} value={entry.note}></input>
                 <button onClick={() => copyAndClearClipboard(entry.note)}>🔗</button>
             </div>
         );
