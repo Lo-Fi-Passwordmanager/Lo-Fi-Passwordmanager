@@ -41,9 +41,9 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         return reactiveFacade.tree.rootFolder;
     }
 
-    function addItem(item: Item, parentId: string) {
-        reactiveFacade.insertItem(item, parentId);
+    function addItem(item: Item, parentId: string): string {
         toggleEditablePasswordView();
+        return reactiveFacade.insertItem(item, parentId);
     }
 
     function toggleEditablePasswordView() {

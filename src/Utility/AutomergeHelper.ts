@@ -183,7 +183,7 @@ function insertNestedValue(databaseRoot: DatabaseRoot, path: string[], insert: I
     (value as Folder).addItem(insert);
 }
 
-export function insertValue(d: AutomergeDoc, parentItem: AutomergeFolder | null, insert: AutomergeItem) {
+export function insertValue(d: AutomergeDoc, parentItem: AutomergeFolder | null, insert: AutomergeItem): string {
     if (parentItem === null) {
         insert.parentId = "";
     } else {
@@ -191,6 +191,8 @@ export function insertValue(d: AutomergeDoc, parentItem: AutomergeFolder | null,
     }
 
     d.items.push(insert);
+
+    return getObjectId(d.items[d.items.length - 1])!;
 }
 
 export function deleteValue(d: AutomergeDoc, itemId: string, itemsById: Map<string, AutomergeItem>) {

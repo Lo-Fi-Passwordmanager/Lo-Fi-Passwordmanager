@@ -45,7 +45,7 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
      * @param item das neu einzusetzende Item
      * @param parentId die ID des Parent Items
      */
-    function insertItem(item: Item, parentId: string) {
+    function insertItem(item: Item, parentId: string): string {
         const automergeItem = automergeItemFromDatabaseItem(item, parentId, automergeFacade.getSecurityProvider()!);
         let parent: AutomergeItem | undefined | null = null;
         if (parentId !== "") {
@@ -60,7 +60,11 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
             throw new Error(`Cannot insert item into Item with ID ${parentId}, as it is not a folder.`);
         }
 
-        changeDoc((doc) => insertValue(doc, parent, automergeItem));
+        let newItemId = "";
+
+        changeDoc((doc) => {newItemId = insertValue(doc, parent, automergeItem);});
+
+        return newItemId;
     }
 
     /**
