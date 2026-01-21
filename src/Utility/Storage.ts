@@ -51,3 +51,21 @@ export function removeDatabase(name: string): void {
     databases.delete(name);
     saveDatabases(databases);
 }
+
+/**
+ * Loads the current sort criterion from localStorage
+ *
+ * @returns the current sort criterion or null if not set
+ */
+export function loadCurrentSortCriterion(): string | null {
+    return localStorage.getItem('currentSortCriterion');
+}
+
+/**
+ * Saves the current sort criterion to localStorage
+ *
+ * @param criterion the current sort criterion
+ */
+export function saveCurrentSortCriterion(criterion: string): void {
+    localStorage.setItem('currentSortCriterion', criterion);
+}

@@ -1,6 +1,7 @@
 import React from "react";
 import ListView from "./ListView.tsx";
 import EntryView from "./EntryView.tsx";
+import OrganizeListView from "./OrganizeListView.tsx";
 import {usePasswortViewModel} from "../ViewModels/PasswordViewModel.ts";
 import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import ItemCreationDialog from "./Dialogs/ItemCreationDialog.tsx";
@@ -28,13 +29,25 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade}) => {
                 />}
             <div className="passwordView">
                 <div className="borderBox scrollableContainer" style={{width: "30%"}}>
-                    <ListView
-                        item={passwordViewModel.getRootFolder()}
-                        setCurItem={passwordViewModel.setCurItem}
-                        setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
-                        setCurrentParent={passwordViewModel.setCurParent}
-                        deleteItem={passwordViewModel.deleteItem}
-                    />
+                    <div>
+                        <OrganizeListView
+                            getCurSortCriterion={passwordViewModel.getCurSortCriterion}
+                            setCurSortCriterion={passwordViewModel.setCurSortCriterion}
+                            toggleOrder={passwordViewModel.toggleOrder}
+                            getOrder={passwordViewModel.ascendingSort}
+                        />
+                    </div>
+                    <div>
+                        <ListView
+                            item={passwordViewModel.getRootFolder()}
+                            setCurItem={passwordViewModel.setCurItem}
+                            setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
+                            setCurrentParent={passwordViewModel.setCurParent}
+                            deleteItem={passwordViewModel.deleteItem}
+                            sortCriterion={passwordViewModel.getCurSortCriterion()}
+                            isAscending={passwordViewModel.ascendingSort}
+                        />
+                    </div>
                 </div>
                 <div className="borderBox" style={{width: "70%"}}>
                     <EntryView item={passwordViewModel.getCurEntry()}

@@ -41,7 +41,7 @@ export abstract class Item {
         return this._createdAt;
     }
 
-    public get editedAt(): Date | null {
+    public get editedAt(): Date {
         return this._editedAt;
     }
 
