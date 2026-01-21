@@ -78,7 +78,7 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
      * @param changes die Werte die abgeändert werden sollen
      */
     function updateItem(itemId: string, changes: [Attribute, (string | Date)][]) {
-        changeDoc(() => changes.forEach(([attr, val]) => updateValue(itemId, itemsById, attr, val)))
+        changeDoc(() => changes.forEach(([attr, val]) => updateValue(itemId, itemsById, attr, automergeFacade.getSecurityProvider()!.encryptValue(val))))
     }
 
     return {

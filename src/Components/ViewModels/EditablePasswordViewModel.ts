@@ -14,7 +14,7 @@ export const useEditablePasswordViewModel = (item: Item, updateItemAttribute: (i
     const [note, setNote] = useState(entry.note);
 
     function updateItemInAutomerge() {
-        updateItemAttribute(item.id, [['name', title], ['username', username], ['password', password], ['url', url], ['note', note], ['editedAt', new Date()]]);
+        updateItemAttribute(item.id, [['name', title], ['username', username], ['password', password], ['url', url], ['note', note]]);
     }
 
 
