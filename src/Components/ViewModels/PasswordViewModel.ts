@@ -19,7 +19,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     const [toastVisible, setToastVisible] = useState(false);
     const clipboardTimerRef = useRef<number | null>(null);
     const [inEditable, setInEditable] = useState(false);
-    const [dirtyItemId, setDirtyItemId] = useState<number | null>(null);
+    const [dirtyItemId, setDirtyItemId] = useState<string | null>(null);
 
     function setCurItem(item: Item) {
         _setCurItem(item);

@@ -34,7 +34,6 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade}) => {
                         setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
                         setCurrentParent={passwordViewModel.setCurParent}
                         deleteItem={passwordViewModel.deleteItem}
-                        selectedEntryId={passwordViewModel.getCurEntry().id}
                         dirtyItemId={passwordViewModel.dirtyItemId}
                     />
                 </div>

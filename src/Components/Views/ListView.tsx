@@ -14,7 +14,7 @@ const ListView: React.FC<{
     setItemCreationDialog: () => void,
     setCurrentParent?: (item: Item) => void
     deleteItem: (item: Item) => void,
-    dirtyItemId: number | null,
+    dirtyItemId: string | null,
 }> = ({item, setCurItem, setItemCreationDialog, setCurrentParent, deleteItem, dirtyItemId}) => {
     const listViewModel = useListViewModel(item, dirtyItemId, setCurItem);
 
