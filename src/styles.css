@@ -73,9 +73,6 @@ header {
     margin-bottom: 20px;
 }
 
-button:hover {
-    filter: brightness(1.1);
-}
 
 button {
     margin: 20px;
@@ -99,6 +96,7 @@ h1 {
 }
 
 button:hover {
+    filter: brightness(1.2);
     border-color: #646cff;
 }
 
@@ -399,4 +397,21 @@ button:focus-visible {
     cursor: pointer;
 
     margin-bottom: 0;
+}
+
+select {
+    margin: 20px;
+    justify-content: left;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    padding: 10px 16px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    background: var(--panel);
+    color: var(--text);
+    outline: var(--outline);
+    outline-width: 10px;
+    border-right: 10px solid transparent
 }
