@@ -7,12 +7,14 @@ stages:
   - test
   - build
 
-test:
+tests:
   stage: test
   script:
     - yarn test:ci
 
 test-build:
+  dependencies:
+    - tests
   stage: test
   rules:
     - if: $CI_COMMIT_TAG
@@ -29,6 +31,8 @@ test-build:
 
 build:
   stage: build
+  dependencies:
+    - tests
   rules:
     - if: $CI_COMMIT_TAG
       when: never
