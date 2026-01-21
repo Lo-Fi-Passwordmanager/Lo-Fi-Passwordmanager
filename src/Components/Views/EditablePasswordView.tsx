@@ -58,7 +58,6 @@ const EditablePasswordView: React.FC<{
 
                 {/* adds https://www. to the start of the link*/}
                 <span>URL:</span> <input type={"text"} value={viewmodel.url}
-                style={{textDecoration: "underline", color: "inherit"}}
                                          onChange={(e) => viewmodel.setUrl(e.target.value)}></input>
                 <button onClick={() => copyAndClearClipboard(viewmodel.url)}>🔗</button>
 
