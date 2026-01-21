@@ -1,6 +1,6 @@
 import {afterEach, beforeEach, describe, it, expect, vi} from "vitest";
 import {Repo} from "@automerge/react";
-import {Attribute, AutomergeFacade} from "../../src/Utility/AutomergeFacade";
+import {AutomergeFacade} from "../../src/Utility/AutomergeFacade";
 import {act, renderHook} from "@testing-library/react";
 import {useAutomergeFacade} from "../../src/Utility/useAutomergeFacade";
 import {Entry} from "../../src/Model/Entry";
