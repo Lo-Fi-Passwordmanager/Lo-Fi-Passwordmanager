@@ -8,6 +8,7 @@ import Logo from "../../assets/logo_gelb.svg?inline";
  * The View that depicts an Entry with all its attributes at large scale
  * @param item the entry that should be depicted
  * @param copyAndClearClipboard the function that copies a string to the clipboard and clears it afterwards
+ * @param setEditableView a command to toggle the editable view to on
  */
 const EntryView: React.FC<{
     item: Item,
@@ -28,15 +29,15 @@ const EntryView: React.FC<{
         );
     } else if (item.isEntry()) {
         const entry = item as Entry;
-        return (
+        return (<>
             <div className="entryViewEntry" style={{position: 'relative'}}>
                 <button onClick={setEditableView}
                         style={{
                     position: "absolute",
-                    top: "10px",   // Distance from the top edge
-                    left: "10px",  // Distance from the left edge
+                    top: "10px",
+                    left: "10px",
                     zIndex: 10,
-                    fontSize: "0.8em"// Ensures it sits on top of the div content
+                    fontSize: "0.8em"
                 }}>
                     ✏️
                 </button>
@@ -60,6 +61,11 @@ const EntryView: React.FC<{
                 <span>Notiz:</span> <span>{entry.note}</span>
                 <button onClick={() => copyAndClearClipboard(entry.note)}>🔗</button>
             </div>
+            <div className="entryDateViewEntry">
+                <span>Erstellt am: {item.createdAt.toDateString()}</span>
+                <span>Bearbeitet am: {item.editedAt.toDateString()}</span>
+            </div>
+            </>
         );
     }
 

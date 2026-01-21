@@ -72,13 +72,15 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
     }
 
     /**
-     * Ändert den Wert eines bestimmten Attributes eines Items
+     * Ändert den Wert eines bestimmten Attributes eines Items.
+     * Das Attribut "editedAt" wird automatische gesetzt.
      *
      * @param itemId das Item, dessen Attribut geändert werden soll
      * @param changes die Werte die abgeändert werden sollen
      */
-    function updateItem(itemId: string, changes: [Attribute, (string | Date)][]) {
+    function updateItem(itemId: string, changes: [Attribute, (string)][]) {
         changeDoc(() => changes.forEach(([attr, val]) => updateValue(itemId, itemsById, attr, automergeFacade.getSecurityProvider()!.encryptValue(val))))
+        changeDoc(()=> updateValue(itemId, itemsById, 'editedAt', new Date()));
     }
 
     return {

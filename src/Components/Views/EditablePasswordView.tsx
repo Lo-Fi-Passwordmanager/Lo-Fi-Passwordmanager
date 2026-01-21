@@ -8,7 +8,9 @@ import {useEditablePasswordViewModel} from "../ViewModels/EditablePasswordViewMo
 /**
  * The View that depicts an Entry with all its attributes at large scale while beeing editable
  * @param item the entry that should be depicted
+ * @param updateItemAttribute the function on the active {@link AutomergeFacade} to update a item in the doc
  * @param copyAndClearClipboard the function that copies a string to the clipboard and clears it afterwards
+ * @param setEditableView the function to close the editable passwordview
  */
 const EditablePasswordView: React.FC<{
     item: Item,

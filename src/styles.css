@@ -192,8 +192,6 @@ button:focus-visible {
 }
 
 .listViewTitleHeader {
-    display: flex;
-    align-items: center;
     justify-content: flex-start;
     flex-direction: row;
     background-color: var(--panel);
@@ -201,7 +199,7 @@ button:focus-visible {
     padding-left: 10px;
     padding-right: 10px;
     margin: 2px;
-    height: 6vh;
+    height: 4vh;
     width: 20vw;
     max-width: fit-content;
     white-space: nowrap;
@@ -224,7 +222,7 @@ button:focus-visible {
     padding-left: 10px;
     padding-right: 10px;
     border-radius: 10px;
-    height: 6vh;
+    height: 4vh;
     width: 20vw;
     background-color: var(--dialog-bg);
     text-align: left;
@@ -241,7 +239,7 @@ button:focus-visible {
 .listViewEntry button {
     margin: 5px;
     padding: 4px 8px; /* Smaller padding for buttons */
-    outline-width: 2px; /* Reduce the outline so it stays inside the box */
+    height: 100%;
 }
 
 .listViewEntryWrapper {
@@ -267,7 +265,7 @@ button:focus-visible {
     font-size: 2em;
     padding-right: 5%;
     width: 100%;
-    height: 100%;
+    height: 90%;
     display: grid;
     grid-template-columns: minmax(40%, auto) 6fr 1fr;
     flex-direction: column;
@@ -400,4 +398,19 @@ button:focus-visible {
     cursor: pointer;
 
     margin-bottom: 0;
+}
+
+.entryDateViewEntry {
+    color: gray;
+    font-size: 1em;
+    width: 100%;
+    height: 10%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    flex-direction: column;
+    background-color: var(--dialog-bg);
+    text-align: left;
+    gap: 10px 20px;
+    align-items: center;
+    justify-items: center;
 }
