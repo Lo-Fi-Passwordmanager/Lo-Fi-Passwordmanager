@@ -33,6 +33,9 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     const [curSortCrit, setCurSortCrit] = useState<SortCriteria>(initSortCriterion);
     const [isAscending, setIsAscending] = useState<boolean>(initIsAscending);
 
+    /**
+     * initializes the sort criterion from the local storage, or uses the default value
+     */
     function initSortCriterion() {
         const savedCriterion = loadCurrentSortCriterion();
         if (isCriterion(savedCriterion)) {
@@ -41,10 +44,17 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
             return SortCriteria.Name;
         }
     }
+
+    /**
+     * type guard to check if a string is a valid SortCriterion
+     */
     function isCriterion(value: string | null): value is SortCriteria {
         return Object.values(SortCriteria).includes(value as SortCriteria);
     }
 
+    /**
+     * initializes the isAscending boolean from the local storage, or uses the default value
+     */
     function initIsAscending() {
         const savedBoolean = loadIsAscending();
         if (isBoolean(savedBoolean)) {
@@ -54,15 +64,24 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         }
     }
 
+    /**
+     * type guard to check if a value is a boolean
+     */
     function isBoolean(value: boolean | null): value is boolean {
         return typeof value === 'boolean';
     }
 
+    /**
+     * sets and stores the current sort criterion
+     */
     function setAndStoreSortCriterion(criterion: SortCriteria) {
         setCurSortCrit(criterion);
         saveCurrentSortCriterion(criterion)
     }
 
+    /**
+     * returns the current sort criterion
+     */
     function getCurSortCriterion() {
         return curSortCrit;
     }
