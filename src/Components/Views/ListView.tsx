@@ -14,8 +14,9 @@ const ListView: React.FC<{
     setItemCreationDialog: () => void,
     setCurrentParent?: (item: Item) => void
     deleteItem: (item: Item) => void,
-}> = ({item, setCurItem, setItemCreationDialog, setCurrentParent, deleteItem}) => {
-    const listViewModel = useListViewModel(item);
+    dirtyItemId: number | null,
+}> = ({item, setCurItem, setItemCreationDialog, setCurrentParent, deleteItem, dirtyItemId}) => {
+    const listViewModel = useListViewModel(item, dirtyItemId, setCurItem);
 
     function addButtonPressed() {
         setItemCreationDialog();
@@ -59,7 +60,9 @@ const ListView: React.FC<{
                                              setCurItem={setCurItem}
                                              setItemCreationDialog={setItemCreationDialog}
                                              setCurrentParent={setCurrentParent}
-                                             deleteItem={deleteItem}/>;
+                                             deleteItem={deleteItem}
+                                             dirtyItemId={dirtyItemId}
+                            />;
                         })}
                 </div>
             </>

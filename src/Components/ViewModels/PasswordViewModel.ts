@@ -13,12 +13,18 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     const [inEditablePasswordView, setInEditablePasswordView] = useState(false);
     const [inItemCreation, setInItemCreation] = useState(false);
     const reactiveFacade = useAutomergeFacade(automergeFacade);
-    const [curItem, setCurItem] = useState<Item>(reactiveFacade.tree.rootFolder);
+    const [curItem, _setCurItem] = useState<Item>(reactiveFacade.tree.rootFolder);
     const [curParent, setCurParent] = useState<Item>(reactiveFacade.tree.rootFolder);
     const [toastMessage, setToastMessage] = useState("");
     const [toastVisible, setToastVisible] = useState(false);
     const clipboardTimerRef = useRef<number | null>(null);
     const [inEditable, setInEditable] = useState(false);
+    const [dirtyItemId, setDirtyItemId] = useState<number | null>(null);
+
+    function setCurItem(item: Item) {
+        _setCurItem(item);
+        setDirtyItemId(null);
+    }
 
     /**
      * returns the current entry that should be shown
@@ -54,6 +60,9 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
 
     function updateItemAttribute(itemId: string, changes: [Attribute, string | Date][]) {
         reactiveFacade.updateItem(itemId, changes);
+        const id = curItem.id;
+        setCurItem(getRootFolder());
+        setDirtyItemId(id);
     }
 
     function deleteItem(item: Item) {
@@ -96,6 +105,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     }
 
     return {
+        dirtyItemId,
         copyToClipboardAndClear,
         setCurItem,
         getCurEntry,
