@@ -1,5 +1,5 @@
 import {useRef, useState} from "react";
-import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import {type Attribute, AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {useAutomergeFacade} from "../../Utility/useAutomergeFacade.ts";
 import type {Item} from "../../Model/Item.ts";
 
@@ -18,6 +18,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     const [toastMessage, setToastMessage] = useState("");
     const [toastVisible, setToastVisible] = useState(false);
     const clipboardTimerRef = useRef<number | null>(null);
+    const [inEditable, setInEditable] = useState(false);
 
     /**
      * returns the current entry that should be shown
@@ -51,7 +52,9 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         return curParent;
     }
 
-
+    function updateItemAttribute(itemId: string, attribute: Attribute, value: string) {
+        reactiveFacade.updateItem(itemId, [[attribute, value]])
+    }
 
     function deleteItem(item: Item) {
         reactiveFacade.deleteItem(item.id);
@@ -99,7 +102,10 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setToastMessage,
         setToastVisible,
         toastVisible,
+        inEditable,
+        setInEditable,
         toastMessage,
+        updateItemAttribute,
         toggleEditablePasswordView,
         getInEditablePasswordView,
         getInItemCreation,
