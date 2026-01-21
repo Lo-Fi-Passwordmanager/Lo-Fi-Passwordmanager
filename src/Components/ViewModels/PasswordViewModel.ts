@@ -52,7 +52,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         return curParent;
     }
 
-    function updateItemAttribute(itemId: string, changes: [Attribute, string][]) {
+    function updateItemAttribute(itemId: string, changes: [Attribute, string | Date][]) {
         reactiveFacade.updateItem(itemId, changes);
     }
 
@@ -83,11 +83,13 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
             } else {
                 // If user is away, wait until they come back
                 setToastMessage("Löschen ausstehend (bitte Tab fokussieren)");
-                window.addEventListener('focus',
-                    () => {navigator.clipboard.writeText("");
-                    setToastMessage("Zwischenablage gelöscht");
-                    setToastVisible(true);},
-                    { once: true });
+                window.addEventListener("focus",
+                    () => {
+                        navigator.clipboard.writeText("");
+                        setToastMessage("Zwischenablage gelöscht");
+                        setToastVisible(true);
+                    },
+                    {once: true});
                 clipboardTimerRef.current = null;
             }
         }, timeout);
@@ -112,6 +114,6 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setInItemCreation,
         setCurParent,
         getCurParent,
-        deleteItem,
+        deleteItem
     };
 };
