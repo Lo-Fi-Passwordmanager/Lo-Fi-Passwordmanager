@@ -86,7 +86,7 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
                     ([attr, val]) => updateValue(doc, itemId, itemsById, attr, (typeof val == "string") ? automergeFacade.getSecurityProvider()!.encryptValue(val) : val)
                 )
         );
-        changeDoc(() => updateValue(doc, itemId, itemsById, "editedAt", new Date()));
+        changeDoc((doc) => updateValue(doc, itemId, itemsById, "editedAt", new Date()));
     }
 
     return {

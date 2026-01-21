@@ -46,7 +46,6 @@ const LoginDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                 <h3>{title}</h3>
                 <label>{label1}</label>
                 <input
-                    className={"inputField"}
                     type="password"
                     value={field1}
                     onChange={(e) => setField1(e.target.value)}

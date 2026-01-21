@@ -25,7 +25,6 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({addItem, curPare
                     <h3>Neuer Eintrag</h3>
                     <label>Titel</label>
                     <input
-                        className="inputField"
                         type="text"
                         value={viewmodel.title}
                         onChange={(e) => viewmodel.setTitle(e.target.value)}
@@ -34,7 +33,6 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({addItem, curPare
                     />
                     <label>Benutzername</label>
                     <input
-                        className="inputField"
                         type="text"
                         value={viewmodel.username}
                         onChange={(e) => viewmodel.setUsername(e.target.value)}
@@ -47,7 +45,6 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({addItem, curPare
                         style={{display: "flex", flexDirection: "column", flex: 1}}>
                     <label>Passwort</label>
                     <input
-                        className="inputField"
                         type="text"
                         value={viewmodel.password}
                         onChange={(e) => viewmodel.setPassword(e.target.value)}
@@ -64,7 +61,6 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({addItem, curPare
                     </div>
                     <label>URL</label>
                     <input
-                        className="inputField"
                         type="text"
                         value={viewmodel.url}
                         onChange={(e) => viewmodel.setUrl(e.target.value)}
@@ -73,7 +69,6 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({addItem, curPare
                     />
                     <label>Notiz</label>
                     <input
-                        className="inputField"
                         type="text"
                         value={viewmodel.note}
                         onChange={(e) => viewmodel.setNote(e.target.value)}
@@ -106,7 +101,6 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({addItem, curPare
                     <h3>Neuer Ordner</h3>
                     <label>Titel</label>
                     <input
-                        className="inputField"
                         type="text"
                         value={viewmodel.title}
                         onChange={(e) => viewmodel.setTitle(e.target.value)}

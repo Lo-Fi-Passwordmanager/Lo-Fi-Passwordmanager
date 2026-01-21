@@ -34,41 +34,47 @@ const EditablePasswordView: React.FC<{
         );
     } else if (item.isEntry()) {
         return (
-            <div className="entryViewEntry" style={{position: "relative"}}>
-                <button onClick={() => {
-                    viewmodel.updateItemInAutomerge();
-                    setEditableView();
-                }}
-                        style={{
-                            position: "absolute",
-                            top: "10px",   // Distance from the top edge
-                            left: "10px",  // Distance from the left edge
-                            zIndex: 10,
-                            fontSize: "0.8em"// Ensures it sits on top of the div content
-                        }}>
-                    💾
-                </button>
-                <span>Fortnite:</span> <input type={"text"} value={viewmodel.title}
-                                              onChange={(e) => viewmodel.setTitle(e.target.value)}></input>
-                <button onClick={() => copyAndClearClipboard(viewmodel.title)}>🔗</button>
+            <>
+                <div className="entryViewEntry" style={{position: "relative"}}>
+                    <button onClick={() => {
+                        viewmodel.updateItemInAutomerge();
+                        setEditableView();
+                    }}
+                            style={{
+                                position: "absolute",
+                                top: "10px",   // Distance from the top edge
+                                left: "10px",  // Distance from the left edge
+                                zIndex: 10,
+                                fontSize: "0.8em"// Ensures it sits on top of the div content
+                            }}>
+                        💾
+                    </button>
+                    <span>Fortnite:</span> <input type={"text"} value={viewmodel.title}
+                                                  onChange={(e) => viewmodel.setTitle(e.target.value)}></input>
+                    <button onClick={() => copyAndClearClipboard(viewmodel.title)}>🔗</button>
 
-                <span>Benutzername:</span> <input type={"text"} value={viewmodel.username}
-                                                  onChange={(e) => viewmodel.setUsername(e.target.value)}></input>
-                <button onClick={() => copyAndClearClipboard(viewmodel.username)}>🔗</button>
+                    <span>Benutzername:</span> <input type={"text"} value={viewmodel.username}
+                                                      onChange={(e) => viewmodel.setUsername(e.target.value)}></input>
+                    <button onClick={() => copyAndClearClipboard(viewmodel.username)}>🔗</button>
 
-                <span>Passwort:</span> <input type={"text"} value={viewmodel.password}
-                                              onChange={(e) => viewmodel.setPassword(e.target.value)}></input>
-                <button onClick={() => copyAndClearClipboard(viewmodel.password)}>🔗</button>
+                    <span>Passwort:</span> <input type={"text"} value={viewmodel.password}
+                                                  onChange={(e) => viewmodel.setPassword(e.target.value)}></input>
+                    <button onClick={() => copyAndClearClipboard(viewmodel.password)}>🔗</button>
 
-                {/* adds https://www. to the start of the link*/}
-                <span>URL:</span> <input type={"text"} value={viewmodel.url}
-                                         onChange={(e) => viewmodel.setUrl(e.target.value)}></input>
-                <button onClick={() => copyAndClearClipboard(viewmodel.url)}>🔗</button>
+                    {/* adds https://www. to the start of the link*/}
+                    <span>URL:</span> <input type={"text"} value={viewmodel.url}
+                                             onChange={(e) => viewmodel.setUrl(e.target.value)}></input>
+                    <button onClick={() => copyAndClearClipboard(viewmodel.url)}>🔗</button>
 
-                <span>Notiz:</span> <input type={"text"} value={viewmodel.note}
-                                           onChange={(e) => viewmodel.setNote(e.target.value)}></input>
-                <button onClick={() => copyAndClearClipboard(viewmodel.note)}>🔗</button>
-            </div>
+                    <span>Notiz:</span> <input type={"text"} value={viewmodel.note}
+                                               onChange={(e) => viewmodel.setNote(e.target.value)}></input>
+                    <button onClick={() => copyAndClearClipboard(viewmodel.note)}>🔗</button>
+                </div>
+                <div className="entryDateViewEntry">
+                    <span>Erstellt am: {item.createdAt.toDateString()}</span>
+                    <span>Bearbeitet am: {item.editedAt.toDateString()}</span>
+                </div>
+            </>
         );
     }
 

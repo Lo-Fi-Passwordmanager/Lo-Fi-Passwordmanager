@@ -53,8 +53,13 @@ html, body {
     min-height: 100vh;
 }
 
-.inputField {
+input {
     background-color: var(--input-field);
+    color: var(--text);
+}
+
+input {
+
 }
 
 .loginView {
