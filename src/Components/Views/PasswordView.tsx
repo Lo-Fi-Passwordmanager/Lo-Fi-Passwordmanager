@@ -32,7 +32,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade}) => {
                     <div>
                         <OrganizeListView
                             getCurSortCriterion={passwordViewModel.getCurSortCriterion}
-                            setCurSortCriterion={passwordViewModel.setCurSortCriterion}
+                            setCurSortCriterion={passwordViewModel.setAndStoreSortCriterion}
                             toggleOrder={passwordViewModel.toggleOrder}
                             getOrder={passwordViewModel.isAscending}
                         />

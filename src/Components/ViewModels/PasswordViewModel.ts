@@ -2,7 +2,12 @@ import {useState} from "react";
 import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {useAutomergeFacade} from "../../Utility/useAutomergeFacade.ts";
 import type {Item} from "../../Model/Item.ts";
-import {loadCurrentSortCriterion, saveCurrentSortCriterion} from "../../Utility/Storage.ts";
+import {
+    loadCurrentSortCriterion,
+    loadIsAscending,
+    saveCurrentSortCriterion,
+    saveIsAscending
+} from "../../Utility/Storage.ts";
 
 export const SortCriteria = {
     Name: "NAME",
@@ -26,27 +31,40 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     const [curParent, setCurParent] = useState<Item>(reactiveFacade.tree.rootFolder);
 
     const [curSortCrit, setCurSortCrit] = useState<SortCriteria>(initSortCriterion);
-    const [isAscending, setIsAscending] = useState<boolean>(true);
+    const [isAscending, setIsAscending] = useState<boolean>(initIsAscending);
 
     function initSortCriterion() {
         const savedCriterion = loadCurrentSortCriterion();
-        if (savedCriterion && isCriterion(savedCriterion)) {
+        if (isCriterion(savedCriterion)) {
             return savedCriterion;
         } else {
             return SortCriteria.Name;
         }
     }
-
-    function isCriterion(value: string): value is SortCriteria {
+    function isCriterion(value: string | null): value is SortCriteria {
         return Object.values(SortCriteria).includes(value as SortCriteria);
     }
-    function getCurSortCriterion() {
-        return curSortCrit;
+
+    function initIsAscending() {
+        const savedBoolean = loadIsAscending();
+        if (isBoolean(savedBoolean)) {
+            return savedBoolean;
+        } else {
+            return true;
+        }
     }
 
-    function setCurSortCriterion(criterion: SortCriteria) {
+    function isBoolean(value: boolean | null): value is boolean {
+        return typeof value === 'boolean';
+    }
+
+    function setAndStoreSortCriterion(criterion: SortCriteria) {
         setCurSortCrit(criterion);
         saveCurrentSortCriterion(criterion)
+    }
+
+    function getCurSortCriterion() {
+        return curSortCrit;
     }
 
     /**
@@ -89,9 +107,12 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
 
     function toggleOrder() {
         setIsAscending(!isAscending);
+        saveIsAscending(!isAscending);
     }
 
     return {
+        isAscending,
+
         setCurItem,
         getCurEntry,
         getRootFolder,
@@ -103,9 +124,8 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setCurParent,
         getCurParent,
         deleteItem,
-        getCurSortCriterion,
-        setCurSortCriterion,
-        isAscending,
+        setAndStoreSortCriterion,
         toggleOrder,
+        getCurSortCriterion
     };
 };
