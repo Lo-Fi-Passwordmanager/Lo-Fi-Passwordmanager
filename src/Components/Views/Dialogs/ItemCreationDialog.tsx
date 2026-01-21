@@ -22,12 +22,19 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({addItem, curPare
     const [inPasswordGen, setInPasswordGen] = useState(false);
 
     function handleConfirm() {
+        let tempTitle = title;
         if (typeOfItem === "entry") {
-            const entry: Entry = new Entry(title, "willBeAutomaticallySet", new Date(), new Date(), username, password, url, note);
+            if (tempTitle.trim() === "") {
+                tempTitle = "Neuer Eintrag";
+            }
+            const entry: Entry = new Entry(tempTitle, "willBeAutomaticallySet", new Date(), new Date(), username, password, url, note);
             addItem!(entry, curParent!.id)
             setCurItem(entry);
         } else if (typeOfItem === "folder") {
-            addItem!(new Folder(title, "willBeAutomaticallySet", new Date(), new Date()), curParent!.id)
+            if (tempTitle.trim() === "") {
+                tempTitle = "Neuer Ordner";
+            }
+            addItem!(new Folder(tempTitle, "willBeAutomaticallySet", new Date(), new Date()), curParent!.id)
         }
         cancelItemCreation!();
     }
