@@ -1,32 +1,34 @@
 import {Settings} from "../../Model/Settings";
 
-import { useState, useEffect } from 'react';
+import {useEffect, useState} from "react";
 
 /**
  * The ViewModel that is used for interfacing the {@link Settings} singleton.
  * It uses states to reload react when chaning settings, so that they get applied
  */
-export const useSettingsViewModel = () => {
+export const useSettingsViewModel = (setSync: (value: boolean) => void) => {
 
     const settings = Settings.getSettings();
 
     // Reactive state to store values during runtime
     const [darkMode, setDarkMode] = useState(settings.getDarkMode());
     const [synchronisation, setSynchronisation] = useState(settings.getSynchronization());
-    const [autoConclictRes, setAutoConflictRes] = useState(settings.getAutoConflictResolution());
+    const [autoConflictRes, setAutoConflictRes] = useState(settings.getAutoConflictResolution());
     const [timeOutActive, setTimeOutActive] = useState(settings.getTimeoutActive());
     const [settingsOpen, setSettingsOpen] = useState(false);
+
+    setSync(synchronisation);
 
     document.getElementsByTagName("html")[0]?.setAttribute("data-theme", darkMode ? "dark" : "light");
 
 
     // When darkMode is updated, update settings
     useEffect(() => {
-        settings.setDarkMode(darkMode)
+        settings.setDarkMode(darkMode);
         settings.setSynchronization(synchronisation);
-        settings.setAutoConflictResolution(autoConclictRes);
+        settings.setAutoConflictResolution(autoConflictRes);
         settings.setTimeoutActive(timeOutActive);
-    }, [darkMode, synchronisation, autoConclictRes, timeOutActive, settings]);
+    }, [darkMode, synchronisation, autoConflictRes, timeOutActive, settings]);
 
 
     // Update darkMode
@@ -34,12 +36,16 @@ export const useSettingsViewModel = () => {
         setDarkMode(!darkMode);
         document.getElementsByTagName("html")[0]?.setAttribute("data-theme", darkMode ? "dark" : "light");
     }
+
     function toggleSynchronisation() {
         setSynchronisation(!synchronisation);
+        setSync(!synchronisation);
     }
-    function toggleAutoConclictRes() {
-        setAutoConflictRes(!autoConclictRes);
+
+    function toggleAutoConflictRes() {
+        setAutoConflictRes(!autoConflictRes);
     }
+
     function toggleTimeOutActive() {
         setTimeOutActive(!timeOutActive);
     }
@@ -48,14 +54,14 @@ export const useSettingsViewModel = () => {
     return {
         darkMode,
         synchronisation,
-        autoConclictRes,
+        autoConflictRes,
         timeOutActive,
         settingsOpen,
 
         toggleDarkMode,
         toggleSynchronisation,
-        toggleAutoConclictRes,
+        toggleAutoConflictRes,
         toggleTimeOutActive,
-        setSettingsOpen,
+        setSettingsOpen
     };
 };
