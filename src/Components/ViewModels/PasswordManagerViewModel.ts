@@ -9,14 +9,14 @@ export const usePasswordManagerViewModel = () => {
     const [automergeFacade, setAutomergeFacade] = useState<AutomergeFacade | null>(null);
     const [securityProvider] = useState(() => new SecurityProvider());
     const [synchronization, setSynchronization] = useState<boolean>(localStorage.getItem("synchronization") === "true");
-    
+
     const repo = new Repo({
         network: [
             new BroadcastChannelNetworkAdapter(),
-            new WebSocketClientAdapter("wss://5bcaaf94-60ef-4757-b55c-5f2e443c480c.ka.bw-cloud-instance.org/"),
+            new WebSocketClientAdapter("wss://5bcaaf94-60ef-4757-b55c-5f2e443c480c.ka.bw-cloud-instance.org/")
         ],
-        storage: 
-            new IndexedDBStorageAdapter(),
+        storage:
+            new IndexedDBStorageAdapter()
     });
 
     useEffect(() => {
@@ -26,10 +26,10 @@ export const usePasswordManagerViewModel = () => {
             } else {
                 repo.networkSubsystem.disconnect();
             }
-        } catch (error) {
-            console.error("Error toggling synchronization:", error);
+        } catch {
+            console.log("Repo was already disconnected.");
         }
-    }, [repo.networkSubsystem, synchronization]);
+    }, [synchronization]);
 
     function getLoggedIn(): boolean {
         return loggedIn;
@@ -59,6 +59,6 @@ export const usePasswordManagerViewModel = () => {
         setAutomergeFacade,
         getAutomergeFacade,
         closeLoggedIn,
-        getSyncSetting,
+        getSyncSetting
     };
-}
+};
