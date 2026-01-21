@@ -9,7 +9,8 @@ import {
     buildDatabaseAsTree,
     deleteValue,
     insertValue,
-    isFolder, updateValue
+    isFolder,
+    updateValue
 } from "./AutomergeHelper.ts";
 
 
@@ -78,8 +79,13 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
      * @param itemId das Item, dessen Attribut geändert werden soll
      * @param changes die Werte die abgeändert werden sollen
      */
-    function updateItem(itemId: string, changes: [Attribute, (string)][]) {
-        changeDoc(() => changes.forEach(([attr, val]) => updateValue(itemId, itemsById, attr, automergeFacade.getSecurityProvider()!.encryptValue(val))))
+    function updateItem(itemId: string, changes: [Attribute, (string | Date)][]) {
+        changeDoc(
+            (doc) => changes
+                .forEach(
+                    ([attr, val]) => updateValue(doc, itemId, itemsById, attr, (typeof val == "string") ? automergeFacade.getSecurityProvider()!.encryptValue(val) : val)
+                )
+        );
         changeDoc(()=> updateValue(itemId, itemsById, 'editedAt', new Date()));
     }
 

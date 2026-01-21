@@ -214,12 +214,16 @@ export function deleteValue(d: AutomergeDoc, itemId: string, itemsById: Map<stri
     }
 }
 
-export function updateValue(itemId: string, itemsById: Map<string, AutomergeItem>, attribute: Attribute, newValue: string | Date) {
-    const item = itemsById.get(itemId)
+export function updateValue(d: AutomergeDoc, itemId: string, itemsById: Map<string, AutomergeItem>, attribute: Attribute, newValue: string | Date) {
+    const item = itemsById.get(itemId);
 
     if (item === undefined) {
         throw new Error(`Cannot find parent object with ID ${itemId}`)
     }
+
+    const index = d.items.indexOf(item);
+
+    const docItem = d.items[index];
 
     if ((attribute === 'createdAt' || attribute === 'editedAt')) {
         // Attribut is eines der Attribute, die ein Datum nehmen
@@ -227,22 +231,22 @@ export function updateValue(itemId: string, itemsById: Map<string, AutomergeItem
             throw new Error(`Cannot assign value of type 'string' to value of type 'Date'`)
         }
 
-        item[attribute] = (newValue.getTime() / 1000)
+        docItem[attribute] = (newValue.getTime() / 1000);
 
     } else {
         // Attribut is eines der Attribute, die einen String nehmen
         if (typeof newValue !== 'string') {
             throw new Error(`Cannot assign value of type 'Date' to value of type 'string'`)
 
-        } else if (isFolder(item)) {
-            if (attribute === 'name' || attribute === 'parentId') {
-                item[attribute] = newValue
+        } else if (isFolder(docItem)) {
+            if (attribute === "name" || attribute === "parentId") {
+                docItem[attribute] = newValue;
             }
 
             throw new Error(`This attribute does not exist on folders.`)
 
         } else {
-            (item as AutomergeEntry)[attribute] = newValue
+            (docItem as AutomergeEntry)[attribute] = newValue;
         }
     }
 }

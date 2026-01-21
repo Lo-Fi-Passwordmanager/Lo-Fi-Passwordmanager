@@ -34,16 +34,18 @@ const EditablePasswordView: React.FC<{
         );
     } else if (item.isEntry()) {
         return (
-            <div className="entryViewEntry" style={{position: 'relative'}}>
-                <button onClick={() => {viewmodel.updateItemInAutomerge();
-                                                setEditableView();}}
+            <div className="entryViewEntry" style={{position: "relative"}}>
+                <button onClick={() => {
+                    viewmodel.updateItemInAutomerge();
+                    setEditableView();
+                }}
                         style={{
-                    position: "absolute",
-                    top: "10px",   // Distance from the top edge
-                    left: "10px",  // Distance from the left edge
-                    zIndex: 10,
-                    fontSize: "0.8em"// Ensures it sits on top of the div content
-                }}>
+                            position: "absolute",
+                            top: "10px",   // Distance from the top edge
+                            left: "10px",  // Distance from the left edge
+                            zIndex: 10,
+                            fontSize: "0.8em"// Ensures it sits on top of the div content
+                        }}>
                     💾
                 </button>
                 <span>Fortnite:</span> <input type={"text"} value={viewmodel.title}
@@ -70,6 +72,6 @@ const EditablePasswordView: React.FC<{
         );
     }
 
-}
+};
 
 export default EditablePasswordView;
