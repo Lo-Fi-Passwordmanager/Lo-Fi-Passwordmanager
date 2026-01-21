@@ -7,10 +7,10 @@ import React from "react";
  */
 const SettingsView: React.FC<
     {
-        getSync: (value: boolean) => void
-    }> = ({getSync}) => {
+        setSync: (value: boolean) => void
+    }> = ({setSync}) => {
 
-    const viewmodel = useSettingsViewModel(getSync);
+    const viewmodel = useSettingsViewModel(setSync);
 
     /**
      * Checks if the settingsmenu should be open or not
@@ -81,9 +81,9 @@ const SettingsView: React.FC<
                 className="settingsButton"
                 onClick={() => viewmodel.setSettingsOpen(true)}>Einstellungen Öffnen
             </button>
-        )
+        );
     }
 
-}
+};
 
 export default SettingsView;

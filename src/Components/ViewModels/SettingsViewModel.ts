@@ -1,12 +1,12 @@
 import {Settings} from "../../Model/Settings";
 
-import {useState, useEffect} from 'react';
+import {useEffect, useState} from "react";
 
 /**
  * The ViewModel that is used for interfacing the {@link Settings} singleton.
  * It uses states to reload react when chaning settings, so that they get applied
  */
-export const useSettingsViewModel = (getSync: (value: boolean) => void) => {
+export const useSettingsViewModel = (setSync: (value: boolean) => void) => {
 
     const settings = Settings.getSettings();
 
@@ -17,12 +17,14 @@ export const useSettingsViewModel = (getSync: (value: boolean) => void) => {
     const [timeOutActive, setTimeOutActive] = useState(settings.getTimeoutActive());
     const [settingsOpen, setSettingsOpen] = useState(false);
 
+    setSync(synchronisation);
+
     document.getElementsByTagName("html")[0]?.setAttribute("data-theme", darkMode ? "dark" : "light");
 
 
     // When darkMode is updated, update settings
     useEffect(() => {
-        settings.setDarkMode(darkMode)
+        settings.setDarkMode(darkMode);
         settings.setSynchronization(synchronisation);
         settings.setAutoConflictResolution(autoConflictRes);
         settings.setTimeoutActive(timeOutActive);
@@ -37,7 +39,7 @@ export const useSettingsViewModel = (getSync: (value: boolean) => void) => {
 
     function toggleSynchronisation() {
         setSynchronisation(!synchronisation);
-        getSync(!synchronisation);
+        setSync(!synchronisation);
     }
 
     function toggleAutoConflictRes() {
@@ -60,6 +62,6 @@ export const useSettingsViewModel = (getSync: (value: boolean) => void) => {
         toggleSynchronisation,
         toggleAutoConflictRes,
         toggleTimeOutActive,
-        setSettingsOpen,
+        setSettingsOpen
     };
 };
