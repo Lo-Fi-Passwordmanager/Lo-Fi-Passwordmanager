@@ -19,29 +19,30 @@ export const useListViewModel = (topItem: Item, dirtyItemId: number | null, setC
 
     // Reactive state to store values during runtime
 
-     function getChildren() {
+    function getChildren() {
         if (item.isFolder()) {
             return (item as Folder).entries;
         }
     }
 
     function toggleExtended() {
-         setExtended(!extended);
+        setExtended(!extended);
     }
 
     function getExtended() {
-         return extended;
+        return extended;
     }
 
     function getItem() {
-         return item;
+        return item;
     }
 
     function isItemFolder(): this is Folder {
-         return item.isFolder();
+        return item.isFolder();
     }
+
     function isItemEntry(): this is Entry {
-         return item.isEntry();
+        return item.isEntry();
     }
 
     return {
@@ -50,6 +51,6 @@ export const useListViewModel = (topItem: Item, dirtyItemId: number | null, setC
         isItemEntry,
         getItem,
         toggleExtended,
-        getExtended,
+        getExtended
     };
 };

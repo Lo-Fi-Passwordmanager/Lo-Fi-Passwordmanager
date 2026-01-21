@@ -52,7 +52,8 @@ const ListView: React.FC<{
                 </div>
 
                 {/* Recursive call of children with indent to visualizes depth in the tree */}
-                <div className="listViewEntryWrapper" style={{display: (listViewModel.getExtended()?"block":"none")}}>
+                <div className="listViewEntryWrapper"
+                     style={{display: (listViewModel.getExtended() ? "block" : "none")}}>
                     {listViewModel.getChildren() &&
                         listViewModel.getChildren()!.map((item: Item, index: number) => {
                             return <ListView key={index} item={item}
@@ -67,6 +68,6 @@ const ListView: React.FC<{
             </>
         );
     }
-}
+};
 
 export default ListView;

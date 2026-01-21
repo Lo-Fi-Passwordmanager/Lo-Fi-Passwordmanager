@@ -1,4 +1,4 @@
-import type { Item } from "../../Model/Item.ts";
+import type {Item} from "../../Model/Item.ts";
 import {type Attribute} from "../../Utility/AutomergeFacade.ts";
 import {useState} from "react";
 import type {Entry} from "../../Model/Entry.ts";
@@ -14,7 +14,7 @@ export const useEditablePasswordViewModel = (item: Item, updateItemAttribute: (i
     const [note, setNote] = useState(entry.note);
 
     function updateItemInAutomerge() {
-        updateItemAttribute(item.id, [['name', title], ['username', username], ['password', password], ['url', url], ['note', note]]);
+        updateItemAttribute(item.id, [["name", title], ["username", username], ["password", password], ["url", url], ["note", note]]);
     }
 
 
@@ -29,6 +29,6 @@ export const useEditablePasswordViewModel = (item: Item, updateItemAttribute: (i
         setPassword,
         setUrl,
         setNote,
-        updateItemInAutomerge,
+        updateItemInAutomerge
     };
 };

@@ -1,4 +1,4 @@
-import {Folder} from './Folder';
+import {Folder} from "./Folder";
 import type {Item} from "./Item.ts";
 
 export class DatabaseRoot {
@@ -6,12 +6,12 @@ export class DatabaseRoot {
     private readonly _rootFolder: Folder;
 
     constructor(salt: string) {
-        this._salt = salt
-        this._rootFolder = new Folder("root", "")
+        this._salt = salt;
+        this._rootFolder = new Folder("root", "");
     }
 
     get rootFolder(): Folder {
-        return this._rootFolder
+        return this._rootFolder;
     }
 
     public addItem(item: Item) {
@@ -19,7 +19,7 @@ export class DatabaseRoot {
     }
 
     public getChildById(id: string): Item | null {
-        return this._rootFolder.getChildById(id)
+        return this._rootFolder.getChildById(id);
     }
 
     get salt(): string {

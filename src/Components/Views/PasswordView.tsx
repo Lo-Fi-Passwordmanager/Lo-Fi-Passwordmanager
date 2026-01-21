@@ -8,7 +8,7 @@ import ToastDialog from "./Dialogs/ToastDialog.tsx";
 import EditablePasswordView from "./EditablePasswordView.tsx";
 
 interface PasswordViewProps {
-    automergeFacade?: AutomergeFacade | null
+    automergeFacade?: AutomergeFacade | null;
 }
 
 /**
@@ -58,6 +58,6 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade}) => {
         </div>
     );
 
-}
+};
 
 export default PasswordView;
