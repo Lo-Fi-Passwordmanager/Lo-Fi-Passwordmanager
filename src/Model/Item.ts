@@ -4,6 +4,7 @@ export abstract class Item {
     protected _id: string;
     protected _createdAt: Date;
     protected _editedAt: Date;
+    protected _deleted: boolean;
 
     protected constructor(type: "entry" | "folder", title: string, id: string, createdAt: Date | null, editedAt: Date | null) {
         this._type = type
@@ -19,6 +20,7 @@ export abstract class Item {
         } else {
             this._editedAt = editedAt;
         }
+        this._deleted = false;
     }
 
 
@@ -53,5 +55,14 @@ export abstract class Item {
 
     protected updateEditedAt() {
         this._editedAt = new Date();
+    }
+
+
+    public set deleted(deleted: boolean) {
+        this._deleted = deleted;
+    }
+
+    get deleted(): boolean {
+        return this._deleted;
     }
 }

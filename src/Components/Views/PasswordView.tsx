@@ -6,7 +6,6 @@ import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import ItemCreationDialog from "./Dialogs/ItemCreationDialog.tsx";
 import ToastDialog from "./Dialogs/ToastDialog.tsx";
 
-
 interface PasswordViewProps {
     automergeFacade?: AutomergeFacade | null
 }
@@ -19,11 +18,10 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade}) => {
     // Zu testzwecken eingefügt
     // const facade = useAutomergeFacade(automergeFacade)
 
-
-        return (
-            <div>
-                {passwordViewModel.getInItemCreation() &&
-                    <ItemCreationDialog
+    return (
+        <div>
+            {passwordViewModel.getInItemCreation() &&
+                <ItemCreationDialog
                     addItem={passwordViewModel.addItem}
                     curParent={passwordViewModel.getCurParent()}
                     cancelItemCreation={() => passwordViewModel.setInItemCreation(false)}
