@@ -6,11 +6,12 @@
     height: max-content;
 }
 
-/* LIGHT THEME (default) */
+/* LIGHT THEME (Your Original Palette) */
 :root {
     min-height: 100%;
     height: max-content;
-    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    /* Updated Typography */
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     line-height: 1.5;
     font-weight: 400;
     font-synthesis: none;
@@ -25,10 +26,14 @@
     --outline: #818181;
     --input-field: rgb(253, 220, 220);
     --dialog-bg: rgba(255, 200, 200);
+
+    /* Subtle shadows for depth */
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
     background-color: var(--bg);
 }
 
-/* DARK THEME */
+/* DARK THEME (Your Original Palette) */
 [data-theme="dark"] {
     --bg: rgb(22, 24, 28);
     --text: #ffffff;
@@ -37,6 +42,9 @@
     --outline: #818181;
     --input-field: rgb(15, 76, 72);
     --dialog-bg: #1a2e2d;
+
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+
     background-color: var(--bg);
     color: var(--text);
 }
@@ -55,6 +63,15 @@ html, body {
 
 .inputField {
     background-color: var(--input-field);
+    /* Modernized rounding and border */
+    border-radius: 10px;
+    border: 1px solid rgba(0,0,0,0.1);
+    transition: box-shadow 0.2s ease;
+}
+
+.inputField:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--panel);
 }
 
 .loginView {
@@ -69,46 +86,80 @@ html, body {
 
 header {
     font-size: 3em;
-    font-weight: bold;
+    font-weight: 800; /* Bolder modern weight */
+    letter-spacing: -0.02em;
     margin-bottom: 20px;
-}
-
-button:hover {
-    filter: brightness(1.1);
 }
 
 button {
     margin: 20px;
     justify-content: left;
     font-size: 1em;
-    font-weight: 500;
+    font-weight: 600;
     font-family: inherit;
     padding: 10px 16px;
-    border-radius: 6px;
+    /* Modernized Rounding */
+    border-radius: 14px;
     border: none;
     cursor: pointer;
     background: var(--panel);
     color: var(--text);
-    outline: var(--outline);
-    outline-width: 10px;
+
+    /* Modern Interaction Style */
+    box-shadow: var(--shadow);
+    transition: transform 0.1s active, filter 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+button:active {
+    transform: translateY(0);
 }
 
 h1 {
     font-size: 3.2em;
     line-height: 1.1;
+    letter-spacing: -0.03em;
 }
 
-button:hover {
-    border-color: #646cff;
-}
-
-button:focus,
+/* Focused elements use a cleaner ring */
 button:focus-visible {
-    outline: 4px auto -webkit-focus-ring-color;
+    outline: 3px solid var(--panel);
+    outline-offset: 2px;
+}
+input {
+    background-color: var(--input-field);
+    color: var(--text);
+    border: 2px solid transparent; /* Keeps layout stable */
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 1rem;
+    font-family: inherit;
+    width: 100%;
+    box-sizing: border-box;
+    transition: all 0.2s ease-in-out;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+input:focus {
+    outline: none;
+    background-color: var(--bg); /* Shifts slightly for contrast */
+    border-color: var(--panel);  /* Uses your accent color */
+    box-shadow: 0 0 0 4px rgba(250, 150, 150, 0.2); /* Soft glow using --panel */
+}
+
+input::placeholder {
+    color: var(--text);
+    opacity: 0.5;
 }
 
 .dialogOverlay {
     background: var(--overlay);
+    backdrop-filter: blur(4px); /* Modern blur effect */
     color: var(--text);
     position: fixed;
     inset: 0;
@@ -122,7 +173,9 @@ button:focus-visible {
     background: var(--dialog-bg);
     color: var(--text);
     padding: 20px;
-    border-radius: 8px;
+    /* Increased Rounding */
+    border-radius: 24px;
+    box-shadow: var(--shadow);
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -148,10 +201,11 @@ button:focus-visible {
 }
 
 .settingsBackground {
-    border-radius: 15px;
+    border-radius: 20px; /* Modernized rounding */
     padding: 10px;
     padding-left: 20px;
     padding-right: 20px;
+    box-shadow: var(--shadow);
 }
 
 .checkboxRow {
@@ -181,7 +235,8 @@ button:focus-visible {
 .logo {
     margin-top: 5em;
     width: 15vmin;
-    filter: drop-shadow(0 0 2em var(--panel));
+    filter: drop-shadow(0 0 1.5em var(--panel));
+    transition: filter 0.3s ease;
 }
 
 .settingsButton {
@@ -197,47 +252,51 @@ button:focus-visible {
     justify-content: flex-start;
     flex-direction: row;
     background-color: var(--dialog-bg);
-    border-radius: 10px;
+    /* Modernized rounding */
+    border-radius: 12px;
     padding-left: 10px;
     margin-top: 5px;
     margin-bottom: 5px;
     margin-left: 10px;
     margin-right: 10px;
-    font-weight: bold;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .listViewTitleHeader:hover {
-    filter: brightness(1.1);
+    filter: brightness(1.03);
 }
 
 .listViewTitleHeader button {
     margin: 5px;
-    padding: 4px 8px; /* Smaller padding for buttons */
-    outline-width: 2px; /* Reduce the outline so it stays inside the box */
+    padding: 4px 8px;
+    border-radius: 8px;
 }
 
 .listViewEntry button {
     margin: 5px;
-    padding: 4px 8px; /* Smaller padding for buttons */
-    outline-width: 2px; /* Reduce the outline so it stays inside the box */
+    padding: 4px 8px;
+    border-radius: 8px;
     justify-self: flex-end;
     min-width: 0;
 }
-
-
 
 .listViewEntry {
     flex-direction: column;
     padding-left: 30px;
     padding-right: 30px;
-    border-radius: 10px;
+    /* Modernized rounding */
+    border-radius: 14px;
     background-color: var(--dialog-bg);
     text-align: left;
-    font-weight: bold;
+    font-weight: 500;
     margin-top: 5px;
     margin-bottom: 5px;
     margin-left: 10px;
     margin-right: 10px;
+    border: 1px solid transparent;
+    transition: border-color 0.2s ease, transform 0.1s ease;
 
     /*grid formatting*/
     display: grid;
@@ -247,15 +306,16 @@ button:focus-visible {
 }
 
 .listViewEntry:hover {
-    filter: brightness(1.1);
+    filter: brightness(1.05);
+    border-color: var(--panel);
 }
 
 .listViewEntry.selected {
     background-color: var(--panel);
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
 }
 
 .listViewEntryWrapper {
-    /*The indent that each layer of the tree gets*/
     padding-left: 10%;
     flex-direction: row;
 }
@@ -268,9 +328,10 @@ button:focus-visible {
 }
 
 .borderBox {
-    border: 4px solid var(--panel);
+    /* Slightly thinner, more elegant border */
+    border: 2px solid var(--panel);
     border-right: 0;
-
+    border-radius: 20px 0 0 20px;
 }
 
 .entryViewEntry {
@@ -284,7 +345,7 @@ button:focus-visible {
     background-color: var(--dialog-bg);
     text-align: left;
     gap: 10px 20px;
-    box-sizing: border-box; /* Ensures padding doesn't break the 100% width */
+    box-sizing: border-box;
 
     word-break: break-all;
     white-space: normal;
@@ -292,8 +353,9 @@ button:focus-visible {
 
 
 .entryViewEntry span:nth-child(odd) {
-    font-weight: bold;
+    font-weight: 700;
     color: var(--text);
+    opacity: 0.7; /* Distinguishes label from value */
 }
 
 .scrollableContainer {
@@ -309,23 +371,26 @@ button:focus-visible {
     left: 0.5%;
 }
 
-/* The snackbar - position it at the bottom and in the middle of the screen */
+/* The snackbar */
 .floatingToast {
     position: fixed;
-    bottom: 20px;
+    bottom: 24px;
     left: 50%;
     transform: translateX(-50%);
     background-color: var(--panel);
     color: var(--text);
-    padding: 10px 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 12px 24px;
+    /* Pill Shape */
+    border-radius: 50px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
     z-index: 200;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
+    font-weight: 600;
 }
 
 .loadingOverlay {
-    background: color-mix(in srgb, transparent, black 90%);
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
     color: white;
     position: fixed;
     inset: 0;
@@ -337,10 +402,10 @@ button:focus-visible {
 }
 
 .loadingSpinner {
-    width: 100px;
+    width: 80px;
     aspect-ratio: 1;
-    fill: white;
-    animation: 3s linear infinite spinner-rotation;
+    fill: var(--panel);
+    animation: 2s linear infinite spinner-rotation;
     z-index: 102;
 }
 
@@ -348,9 +413,10 @@ button:focus-visible {
     width: 77.75px;
     text-align: start;
     z-index: 102;
+    font-weight: 600;
+    letter-spacing: 0.05em;
 
     &::after {
-        /* Ellipsis Character */
         content: "";
         overflow: hidden;
         display: inline-block;
@@ -360,33 +426,16 @@ button:focus-visible {
 }
 
 @keyframes ellipsis {
-    0% {
-        content: "";
-    }
-    25% {
-        content: ".";
-    }
-    50% {
-        content: "..";
-    }
-    75% {
-        content: "...";
-    }
-    75% {
-        content: "...";
-    }
+    0% { content: ""; }
+    25% { content: "."; }
+    50% { content: ".."; }
+    75% { content: "..."; }
 }
-
 
 @keyframes spinner-rotation {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
-
 
 .passwordGen {
     display: grid;
@@ -396,17 +445,18 @@ button:focus-visible {
 }
 
 .passwordGenButton {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     padding: 0;
+    /* Circle shape */
+    border-radius: 50%;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    font-size: 20px;
+    font-size: 18px;
     line-height: 1;
     cursor: pointer;
-
     margin-bottom: 0;
 }
