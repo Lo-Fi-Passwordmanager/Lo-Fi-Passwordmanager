@@ -196,7 +196,7 @@ button:focus-visible {
     align-items: center;
     justify-content: flex-start;
     flex-direction: row;
-    background-color: var(--panel);
+    background-color: var(--dialog-bg);
     border-radius: 10px;
     padding-left: 10px;
     margin-top: 5px;
@@ -248,6 +248,10 @@ button:focus-visible {
 
 .listViewEntry:hover {
     filter: brightness(1.1);
+}
+
+.listViewEntry.selected {
+    background-color: var(--panel);
 }
 
 .listViewEntryWrapper {

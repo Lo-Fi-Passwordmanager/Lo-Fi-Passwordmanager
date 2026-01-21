@@ -46,6 +46,7 @@ export const useListViewModel = (topItem: Item) => {
         isItemEntry,
         getItem,
         toggleExtended,
+        setExtended,
         getExtended,
     };
 };

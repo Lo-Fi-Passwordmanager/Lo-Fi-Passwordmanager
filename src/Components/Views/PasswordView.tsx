@@ -31,6 +31,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade}) => {
                     <ListView
                         item={passwordViewModel.getRootFolder()}
                         setCurItem={passwordViewModel.setCurItem}
+                        getCurItem={passwordViewModel.getCurEntry}
                         setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
                         setCurrentParent={passwordViewModel.setCurParent}
                         deleteItem={passwordViewModel.deleteItem}
