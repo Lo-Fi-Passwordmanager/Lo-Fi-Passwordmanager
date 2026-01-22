@@ -7,37 +7,42 @@ import {useState} from "react";
  * The viewmodel used by the ListView. It has the utility needed for correctly deciding and differentiating {@link Entry} and {@link Folder}
  * @param topItem the item that is on top of the list to be shown. Shows this item and all below
  */
-export const useListViewModel = (topItem: Item) => {
+export const useListViewModel = (topItem: Item, dirtyItemId: string | null, setCurrItem: (entry: Entry) => void) => {
 
     const item: Item = topItem;
     const [extended, setExtended] = useState(true);
 
+    if (dirtyItemId && item.id === dirtyItemId) {
+        setCurrItem(item as Entry);
+    }
+
 
     // Reactive state to store values during runtime
 
-     function getChildren() {
+    function getChildren() {
         if (item.isFolder()) {
             return (item as Folder).entries;
         }
     }
 
     function toggleExtended() {
-         setExtended(!extended);
+        setExtended(!extended);
     }
 
     function getExtended() {
-         return extended;
+        return extended;
     }
 
     function getItem() {
-         return item;
+        return item;
     }
 
     function isItemFolder(): this is Folder {
-         return item.isFolder();
+        return item.isFolder();
     }
+
     function isItemEntry(): this is Entry {
-         return item.isEntry();
+        return item.isEntry();
     }
 
     return {
@@ -46,7 +51,6 @@ export const useListViewModel = (topItem: Item) => {
         isItemEntry,
         getItem,
         toggleExtended,
-        setExtended,
-        getExtended,
+        getExtended
     };
 };

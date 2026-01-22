@@ -6,7 +6,7 @@
     height: max-content;
 }
 
-/* LIGHT THEME (Your Original Palette) */
+/* LIGHT THEME (default) */
 :root {
     min-height: 100%;
     height: max-content;
@@ -61,8 +61,10 @@ html, body {
     min-height: 100vh;
 }
 
-.inputField {
+input {
     background-color: var(--input-field);
+    color: var(--text);
+
     /* Modernized rounding and border */
     border-radius: 10px;
     border: 1px solid rgba(0,0,0,0.1);
@@ -247,14 +249,13 @@ input::placeholder {
 }
 
 .listViewTitleHeader {
-    display: flex;
-    align-items: center;
     justify-content: flex-start;
     flex-direction: row;
     background-color: var(--dialog-bg);
     /* Modernized rounding */
     border-radius: 12px;
     padding-left: 10px;
+    padding-right: 10px;
     margin-top: 5px;
     margin-bottom: 5px;
     margin-left: 10px;
@@ -263,9 +264,17 @@ input::placeholder {
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
-
+    height: 4vh;
+    width: 20vw;
 .listViewTitleHeader:hover {
     filter: brightness(1.03);
+    white-space: nowrap;
+
+    display: grid;
+    grid-template-columns: 8vw 2.5vw 2.5vw 2.5vw;
+    gap: 4px;
+    align-items: center;
+    justify-items: start;
 }
 
 .listViewTitleHeader button {
@@ -288,6 +297,11 @@ input::placeholder {
     padding-right: 30px;
     /* Modernized rounding */
     border-radius: 14px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 10px;
+    height: 4vh;
+    width: 20vw;
     background-color: var(--dialog-bg);
     text-align: left;
     font-weight: 500;
@@ -300,7 +314,7 @@ input::placeholder {
 
     /*grid formatting*/
     display: grid;
-    grid-template-columns: 100% 1fr 1fr;
+    grid-template-columns: 20% 50% 30%;
     gap: 4px;
     align-items: center;
 }
@@ -313,6 +327,14 @@ input::placeholder {
 .listViewEntry.selected {
     background-color: var(--panel);
     box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+    align-items: center;
+    white-space: nowrap;
+}
+
+.listViewEntry button {
+    margin: 5px;
+    padding: 4px 8px; /* Smaller padding for buttons */
+    height: 100%;
 }
 
 .listViewEntryWrapper {
@@ -349,10 +371,12 @@ input::placeholder {
 
     word-break: break-all;
     white-space: normal;
+    align-items: center;  /* Centers items vertically (top to bottom) */
+    justify-items: center; /* Centers items horizontally (left to right) */
 }
 
 
-.entryViewEntry span:nth-child(odd) {
+.entryViewEntry span:nth-child(3n+1) {
     font-weight: 700;
     color: var(--text);
     opacity: 0.7; /* Distinguishes label from value */
@@ -459,4 +483,19 @@ input::placeholder {
     line-height: 1;
     cursor: pointer;
     margin-bottom: 0;
+}
+
+.entryDateViewEntry {
+    color: gray;
+    font-size: 1em;
+    width: 100%;
+    height: 10%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    flex-direction: column;
+    background-color: var(--dialog-bg);
+    text-align: left;
+    gap: 10px 20px;
+    align-items: center;
+    justify-items: center;
 }
