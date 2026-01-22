@@ -55,8 +55,8 @@ export class Settings {
         if (timeoutLength != null) {
             this._timeoutLength = JSON.parse(timeoutLength);
         } else {
-            localStorage.setItem(TIMEOUT_LENGTH, JSON.stringify(1))
-            this._timeoutLength = 1;
+            localStorage.setItem(TIMEOUT_LENGTH, JSON.stringify(10))
+            this._timeoutLength = 10;
         }
     }
 
