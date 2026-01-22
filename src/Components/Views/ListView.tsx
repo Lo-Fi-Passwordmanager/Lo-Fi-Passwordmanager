@@ -55,17 +55,18 @@ const ListView: React.FC<{
             <>
                 {/* Name and Buttons */}
                 <div className="listViewTitleHeader">
+                    <button style={{marginRight: "15px"}}
+                            onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? ">" : "v"}</button>
                     <span>{listViewModel.getItem().title}</span>
-                    <button
-                        onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? ">" : "v"}</button>
-                    <button onClick={() => {
-                        addButtonPressed();
-                        listViewModel.setExtended(true);
-                    }}>+
-                    </button>
-                    {/* Delete button should not be rendered for the root */}
-                    {(item.title != "root") && <button onClick={() => deleteItem(item)}>🗑️</button>}
-                    {/*FIXME: wenn man einen Folder 'root' nennt, kann man ihn nicht mehr löschen*/}
+                    <div className="btnWrapper">
+                        <button onClick={() => {
+                            addButtonPressed();
+                            listViewModel.setExtended(true);
+                        }}>+
+                        </button>
+                        {/* Delete button should not be rendered for the root */}
+                        {(item.title != "root") && <button onClick={() => deleteItem(item)}>🗑️</button>}
+                        {/*FIXME: wenn man einen Folder 'root' nennt, kann man ihn nicht mehr löschen*/}</div>
                 </div>
 
                 {/* Recursive call of children with indent to visualizes depth in the tree */}
@@ -82,6 +83,6 @@ const ListView: React.FC<{
             </>
         );
     }
-}
+};
 
 export default ListView;
