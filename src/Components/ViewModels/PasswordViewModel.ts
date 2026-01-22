@@ -1,8 +1,7 @@
-import {useState} from "react";
-import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import {useRef, useState} from "react";
+import {type Attribute, AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {useAutomergeFacade} from "../../Utility/useAutomergeFacade.ts";
 import type {Item} from "../../Model/Item.ts";
-
 
 /**
  * The viewmodel for the PasswordView, which stores the currently displayed entry
@@ -14,8 +13,18 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     const [inEditablePasswordView, setInEditablePasswordView] = useState(false);
     const [inItemCreation, setInItemCreation] = useState(false);
     const reactiveFacade = useAutomergeFacade(automergeFacade);
-    const [curItem, setCurItem] = useState<Item>(reactiveFacade.tree.rootFolder);
+    const [curItem, _setCurItem] = useState<Item>(reactiveFacade.tree.rootFolder);
     const [curParent, setCurParent] = useState<Item>(reactiveFacade.tree.rootFolder);
+    const [toastMessage, setToastMessage] = useState("");
+    const [toastVisible, setToastVisible] = useState(false);
+    const clipboardTimerRef = useRef<number | null>(null);
+    const [inEditable, setInEditable] = useState(false);
+    const [dirtyItemId, setDirtyItemId] = useState<string | null>(null);
+
+    function setCurItem(item: Item) {
+        _setCurItem(item);
+        setDirtyItemId(null);
+    }
 
     /**
      * returns the current entry that should be shown
@@ -32,9 +41,9 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         return reactiveFacade.tree.rootFolder;
     }
 
-    function addItem(item: Item, parentId: string) {
-        reactiveFacade.insertItem(item, parentId);
+    function addItem(item: Item, parentId: string): string {
         toggleEditablePasswordView();
+        return reactiveFacade.insertItem(item, parentId);
     }
 
     function toggleEditablePasswordView() {
@@ -49,7 +58,12 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         return curParent;
     }
 
-
+    function updateItemAttribute(itemId: string, changes: [Attribute, string | Date][]) {
+        reactiveFacade.updateItem(itemId, changes);
+        const id = curItem.id;
+        setCurItem(getRootFolder());
+        setDirtyItemId(id);
+    }
 
     function deleteItem(item: Item) {
         reactiveFacade.deleteItem(item.id);
@@ -57,17 +71,59 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setCurItem(getRootFolder());
     }
 
+    function copyToClipboardAndClear(text: string, timeout: number = 10000) {
+        //If a timer is already running, cancel it. This is important for copying twice so that the first copy doesnt delete the second one
+        if (clipboardTimerRef.current) {
+            window.clearTimeout(clipboardTimerRef.current);
+        }
+
+        setToastMessage("In die Zwischenablage kopiert");
+        setToastVisible(true);
+        navigator.clipboard.writeText(text);
+
+
+        //after the timeout check for focus and clear the clipboard when focused
+        clipboardTimerRef.current = window.setTimeout(() => {
+            if (document.hasFocus()) {
+                navigator.clipboard.writeText("");
+                setToastMessage("Zwischenablage gelöscht");
+                setToastVisible(true);
+                clipboardTimerRef.current = null;
+            } else {
+                // If user is away, wait until they come back
+                setToastMessage("Löschen ausstehend (bitte Tab fokussieren)");
+                window.addEventListener("focus",
+                    () => {
+                        navigator.clipboard.writeText("");
+                        setToastMessage("Zwischenablage gelöscht");
+                        setToastVisible(true);
+                    },
+                    {once: true});
+                clipboardTimerRef.current = null;
+            }
+        }, timeout);
+    }
+
     return {
+        dirtyItemId,
+        copyToClipboardAndClear,
         setCurItem,
         getCurEntry,
         getRootFolder,
         addItem,
+        setToastMessage,
+        setToastVisible,
+        toastVisible,
+        inEditable,
+        setInEditable,
+        toastMessage,
+        updateItemAttribute,
         toggleEditablePasswordView,
         getInEditablePasswordView,
         getInItemCreation,
         setInItemCreation,
         setCurParent,
         getCurParent,
-        deleteItem,
+        deleteItem
     };
 };

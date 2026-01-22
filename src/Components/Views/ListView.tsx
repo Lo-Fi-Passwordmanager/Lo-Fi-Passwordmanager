@@ -14,8 +14,9 @@ const ListView: React.FC<{
     setItemCreationDialog: () => void,
     setCurrentParent?: (item: Item) => void
     deleteItem: (item: Item) => void,
-}> = ({item, setCurItem, setItemCreationDialog, setCurrentParent, deleteItem}) => {
-    const listViewModel = useListViewModel(item);
+    dirtyItemId: string | null,
+}> = ({item, setCurItem, setItemCreationDialog, setCurrentParent, deleteItem, dirtyItemId}) => {
+    const listViewModel = useListViewModel(item, dirtyItemId, setCurItem);
 
     function addButtonPressed() {
         setItemCreationDialog();
@@ -47,24 +48,27 @@ const ListView: React.FC<{
                         onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? ">" : "v"}</button>
                     <button onClick={() => addButtonPressed()}>+</button>
                     {/* Delete button should not be rendered for the root */}
-                    {(item.title != "root") && <button onClick={() => deleteItem(item)}>🗑️</button>}
-                    {/*FIXME: wenn man einen Folder 'root' nennt, kann man ihn nicht mehr löschen*/}
+                    {(item.id != "") && <button onClick={() => deleteItem(item)}>🗑️</button>}
+                    {/* FIXME: Löschbestätigung einbauen */}
                 </div>
 
                 {/* Recursive call of children with indent to visualizes depth in the tree */}
-                <div className="listViewEntryWrapper" style={{display: (listViewModel.getExtended()?"block":"none")}}>
+                <div className="listViewEntryWrapper"
+                     style={{display: (listViewModel.getExtended() ? "block" : "none")}}>
                     {listViewModel.getChildren() &&
                         listViewModel.getChildren()!.map((item: Item, index: number) => {
                             return <ListView key={index} item={item}
                                              setCurItem={setCurItem}
                                              setItemCreationDialog={setItemCreationDialog}
                                              setCurrentParent={setCurrentParent}
-                                             deleteItem={deleteItem}/>;
+                                             deleteItem={deleteItem}
+                                             dirtyItemId={dirtyItemId}
+                            />;
                         })}
                 </div>
             </>
         );
     }
-}
+};
 
 export default ListView;

@@ -7,9 +7,9 @@ export abstract class Item {
     protected _deleted: boolean;
 
     protected constructor(type: "entry" | "folder", title: string, id: string, createdAt: Date | null, editedAt: Date | null) {
-        this._type = type
+        this._type = type;
         this._title = title;
-        this._id = id
+        this._id = id;
         if (createdAt === null || createdAt === undefined) {
             this._createdAt = new Date();
         } else {
@@ -37,20 +37,24 @@ export abstract class Item {
         return this._id;
     }
 
+    set id(id: string) {
+        this._id = id;
+    }
+
     public get createdAt(): Date {
         return this._createdAt;
     }
 
-    public get editedAt(): Date | null {
+    public get editedAt(): Date {
         return this._editedAt;
     }
 
     public isFolder() {
-        return this._type === "folder"
+        return this._type === "folder";
     }
 
-    public isEntry(){
-        return this._type === "entry"
+    public isEntry() {
+        return this._type === "entry";
     }
 
     protected updateEditedAt() {

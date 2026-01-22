@@ -4,15 +4,15 @@ import type {TwoFieldDialogProps} from "../../ViewModels/Dialog/LoginDatabaseVie
 
 
 const LoginDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
-                                                                isOpen,
-                                                                title,
-                                                                label1,
-                                                                onConfirm,
-                                                                onCancel,
-                                                                setToastMessage,
-                                                                setShowToast,
+    isOpen,
+    title,
+    label1,
+    onConfirm,
+    onCancel,
+    setToastMessage,
+    setShowToast
 
-                                                            }) => {
+}) => {
 
     const viewModel = useLoginDatabaseViewModel(isOpen, onConfirm, setToastMessage, setShowToast);
 
@@ -24,7 +24,6 @@ const LoginDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                 <h3>{title}</h3>
                 <label>{label1}</label>
                 <input
-                    className={"inputField"}
                     type="password"
                     value={viewModel.field1}
                     onChange={(e) => viewModel.setField1(e.target.value)}
@@ -39,6 +38,6 @@ const LoginDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
 
             </div>
         </div>
-    )
-}
+    );
+};
 export default LoginDatabaseDialog;
