@@ -20,7 +20,7 @@ const PasswordManagerView: React.FC = () => {
     if (!viewModel.getLoggedIn()) {
         return (
             <RepoContext.Provider value={viewModel.repo}>
-                <SettingsView setSync={viewModel.setSyncSetting}/>
+                <SettingsView/>
                 <LoginView repo={viewModel.repo} setLoggedIn={viewModel.setLoggedIn}
                            setAutomergeFacade={viewModel.setAutomergeFacade}
                            securityProvider={viewModel.securityProvider}/>
@@ -36,7 +36,7 @@ const PasswordManagerView: React.FC = () => {
             <Suspense fallback={<LoadingScreen/>}>
                 <RepoContext.Provider value={viewModel.repo}>
                     <button className="closeButton" onClick={viewModel.closeLoggedIn}>Datenbank schließen</button>
-                    <SettingsView setSync={viewModel.setSyncSetting}/>
+                    <SettingsView />
                     <PasswordView automergeFacade={viewModel.getAutomergeFacade()}/>
                 </RepoContext.Provider>
             </Suspense>

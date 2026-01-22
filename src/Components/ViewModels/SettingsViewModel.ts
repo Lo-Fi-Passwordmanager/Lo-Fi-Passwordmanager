@@ -6,7 +6,7 @@ import {useEffect, useState} from "react";
  * The ViewModel that is used for interfacing the {@link Settings} singleton.
  * It uses states to reload react when chaning settings, so that they get applied
  */
-export const useSettingsViewModel = (setSync: (value: boolean) => void) => {
+export const useSettingsViewModel = () => {
 
     const settings = Settings.getSettings();
 
@@ -18,7 +18,6 @@ export const useSettingsViewModel = (setSync: (value: boolean) => void) => {
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [timeoutLength, setTimeoutLength] = useState(settings.getTimeoutLength());
 
-    setSync(synchronisation);
 
     document.getElementsByTagName("html")[0]?.setAttribute("data-theme", darkMode ? "dark" : "light");
 
@@ -41,7 +40,6 @@ export const useSettingsViewModel = (setSync: (value: boolean) => void) => {
 
     function toggleSynchronisation() {
         setSynchronisation(!synchronisation);
-        setSync(!synchronisation);
     }
 
     function toggleAutoConflictRes() {
