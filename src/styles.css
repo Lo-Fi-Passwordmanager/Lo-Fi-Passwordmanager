@@ -78,12 +78,8 @@ header {
     margin-bottom: 20px;
 }
 
-button:hover {
-    filter: brightness(1.1);
-}
 
 button {
-    margin: 20px;
     justify-content: left;
     font-size: 1em;
     font-weight: 500;
@@ -104,6 +100,7 @@ h1 {
 }
 
 button:hover {
+    filter: brightness(1.2);
     border-color: #646cff;
 }
 
@@ -403,6 +400,49 @@ button:focus-visible {
     cursor: pointer;
 
     margin-bottom: 0;
+}
+
+.SortContainer {
+    display: grid;
+    grid-template-columns: 85% 15%;
+    gap: 8px;
+    padding: 8px;
+}
+
+.SearchContainer {
+    display: grid;
+    grid-template-columns: 100%;
+    gap: 8px;
+    padding: 8px;
+}
+
+.OrganizedListView {
+    display: grid;
+    grid-template-columns: 9fr 1fr;
+    grid-template-rows: auto;
+    gap: 8px;
+    padding: 8px;
+}
+
+/* First element fills the entire first row */
+.OrganizedListView > :first-child {
+    grid-column: 1 / -1;
+}
+
+select {
+    justify-content: left;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    padding: 10px 16px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    background: var(--panel);
+    color: var(--text);
+    outline: var(--outline);
+    outline-width: 10px;
+    border-right: 10px solid transparent
 }
 
 .entryDateViewEntry {

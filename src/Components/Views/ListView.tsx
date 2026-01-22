@@ -1,7 +1,8 @@
 import {type Item} from "../../Model/Item.ts";
 import {useListViewModel} from "../ViewModels/ListViewModel.ts";
 import {Entry} from "../../Model/Entry.ts";
-
+import React from "react";
+import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
 
 /**
  * The View that represents the whole database, which is represented by {@link Entry}/{@link Folder} Class Instances
@@ -14,9 +15,11 @@ const ListView: React.FC<{
     setItemCreationDialog: () => void,
     setCurrentParent?: (item: Item) => void
     deleteItem: (item: Item) => void,
+    sortCriterion: SortCriteria,
+    isAscending: boolean,
     dirtyItemId: string | null,
-}> = ({item, setCurItem, setItemCreationDialog, setCurrentParent, deleteItem, dirtyItemId}) => {
-    const listViewModel = useListViewModel(item, dirtyItemId, setCurItem);
+}> = ({item, setCurItem, setItemCreationDialog, setCurrentParent, deleteItem, sortCriterion, isAscending, dirtyItemId}) => {
+    const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem);
 
     function addButtonPressed() {
         setItemCreationDialog();
@@ -53,19 +56,23 @@ const ListView: React.FC<{
                 </div>
 
                 {/* Recursive call of children with indent to visualizes depth in the tree */}
-                <div className="listViewEntryWrapper"
-                     style={{display: (listViewModel.getExtended() ? "block" : "none")}}>
-                    {listViewModel.getChildren() &&
-                        listViewModel.getChildren()!.map((item: Item, index: number) => {
-                            return <ListView key={index} item={item}
-                                             setCurItem={setCurItem}
-                                             setItemCreationDialog={setItemCreationDialog}
-                                             setCurrentParent={setCurrentParent}
-                                             deleteItem={deleteItem}
-                                             dirtyItemId={dirtyItemId}
-                            />;
-                        })}
-                </div>
+                <div className="listViewEntryWrapper" style={{display: (listViewModel.getExtended()?"block":"none")}}>
+                        {listViewModel.getChildren() &&
+                            listViewModel.getChildren()!.map((item: Item, index: number) => {
+                                return <ListView
+                                    key={index}
+                                    item={item}
+                                    setCurItem={setCurItem}
+                                    setItemCreationDialog={setItemCreationDialog}
+                                    setCurrentParent={setCurrentParent}
+                                    deleteItem={deleteItem}
+                                    sortCriterion={sortCriterion}
+                                    isAscending={isAscending}
+                                    dirtyItemId={dirtyItemId}
+                                />;
+                            })}
+                    </div>
+
             </>
         );
     }
