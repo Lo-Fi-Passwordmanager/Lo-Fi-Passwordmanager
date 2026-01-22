@@ -264,8 +264,7 @@ input::placeholder {
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
-    height: 4vh;
-    width: 20vw;
+
 .listViewTitleHeader:hover {
     filter: brightness(1.03);
     white-space: nowrap;
@@ -362,7 +361,7 @@ input::placeholder {
     width: 100%;
     height: 100%;
     display: grid;
-    grid-template-columns: minmax(40%, auto) 1fr;
+    grid-template-columns: minmax(40%, auto) 1fr 1fr;
     flex-direction: column;
     background-color: var(--dialog-bg);
     text-align: left;
