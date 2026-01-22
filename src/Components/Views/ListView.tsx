@@ -49,6 +49,7 @@ const ListView: React.FC<{
                     {/* Delete button should not be rendered for the root */}
                     {(item.title != "root") && <button onClick={() => deleteItem(item)}>🗑️</button>}
                     {/*FIXME: wenn man einen Folder 'root' nennt, kann man ihn nicht mehr löschen*/}
+                    {/* FIXME: Löschbestätigung einbauen */}
                 </div>
 
                 {/* Recursive call of children with indent to visualizes depth in the tree */}
