@@ -14,7 +14,7 @@ const PasswordGenDialog: React.FC<PasswordGenDialogProps> = ({newPassword, cance
 
                     <label>Passwort-Länge:</label>
                     <input
-                        className="inputField"
+
                         type="number"
                         value={viewModel.length}
                         onChange={(e) => viewModel.setLength(e.target.value)}
