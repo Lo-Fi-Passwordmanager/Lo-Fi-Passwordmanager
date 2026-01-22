@@ -21,9 +21,9 @@ const DatabaseListing: React.FC<DatabaseListingProps> = ({databases, openDatabas
     };
 
     return (
-        <div>
+        <div className="DatabaseListing">
             {Array.from(databases).map(([db, url]) => (
-                <div className={"listing"} key={db}>
+                <div className={"DatabaseAndOptions"} key={db}>
                     <button onClick={() => openDatabase(db)}>
                         {db}
                     </button>
