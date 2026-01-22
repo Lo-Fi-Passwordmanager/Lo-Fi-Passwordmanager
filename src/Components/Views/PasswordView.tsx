@@ -6,6 +6,7 @@ import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import ItemCreationDialog from "./Dialogs/ItemCreationDialog.tsx";
 import ToastDialog from "./Dialogs/ToastDialog.tsx";
 import EditablePasswordView from "./EditablePasswordView.tsx";
+import {useRepo} from "@automerge/automerge-repo-react-hooks";
 
 interface PasswordViewProps {
     automergeFacade?: AutomergeFacade | null;
@@ -16,6 +17,13 @@ interface PasswordViewProps {
  */
 const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade}) => {
     const passwordViewModel = usePasswortViewModel(automergeFacade as AutomergeFacade);
+
+    // Fügt das Repo als zu global hinzu, sodass man im Browser einfach auf das Repo zugreifen kann, zum debuggen.
+    // Nur während 'yarn dev' verfügbar, nach dem build nicht mehr
+    if (import.meta.env.DEV) {
+        window.handle = useRepo().find(automergeFacade!.automergeURL!);
+        window.history2 = automergeFacade!.getHistory();
+    }
 
     return (
         <div>
