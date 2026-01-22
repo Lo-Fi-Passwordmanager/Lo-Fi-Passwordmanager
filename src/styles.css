@@ -412,6 +412,19 @@ button:focus-visible {
     padding: 8px;
 }
 
+.OrganizedListView {
+    display: grid;
+    grid-template-columns: 9fr 1fr;
+    grid-template-rows: auto;
+    gap: 8px;
+    padding: 8px;
+}
+
+/* First element fills the entire first row */
+.OrganizedListView > :first-child {
+    grid-column: 1 / -1;
+}
+
 select {
     justify-content: left;
     font-size: 1em;

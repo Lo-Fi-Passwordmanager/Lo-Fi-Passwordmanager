@@ -23,7 +23,7 @@ const FilteredListView: React.FC<{
     const filteredFolders = viewModel.getFilteredFolders();
 
     return (
-        <div>
+        <div className="FilderedListView">
             <ListView item={filteredEntries}
                       setCurItem={setCurItem}
                       setItemCreationDialog={setItemCreationDialog}
@@ -32,6 +32,7 @@ const FilteredListView: React.FC<{
                       sortCriterion={sortCriterion}
                       isAscending={isAscending}
             />
+            <div className={"divider"}/>
             <div>
                 {filteredFolders.entries.map((item: Item, index: number) => {
                 return <div className="listViewTitleHeader" key={index}>

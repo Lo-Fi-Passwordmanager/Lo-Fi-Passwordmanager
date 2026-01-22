@@ -11,11 +11,9 @@ const OrganizeListView: React.FC<{
 
     return (
         <div className={"borderBox"} style={{borderLeft: "0", borderTop: "0"}}>
-            <div className={"SearchContainer"}>
+            <div className={"OrganizedListView"}>
                 <input className="search-bar" type="text" placeholder="Suchen..."
-                onChange={(event => setLiveSearchValue(event.target.value))}/>
-            </div>
-            <div className="SortContainer">
+                       onChange={(event => setLiveSearchValue(event.target.value))}/>
                 <select className="sort-menu"
                         value={getCurSortCriterion()}
                         onChange={(e) => setCurSortCriterion(e.target.value as SortCriteria)}>
