@@ -16,18 +16,9 @@ const ListView: React.FC<{
     setItemCreationDialog: () => void,
     setCurrentParent?: (item: Item) => void
     deleteItem: (item: Item) => void,
-}> = ({item, setCurItem, getCurItem, setItemCreationDialog, setCurrentParent, deleteItem}) => {
-    const listViewModel = useListViewModel(item);
-    const [isSelected, setIsSelected] = useState(false);
-
-    useEffect(() => {
-        if (getCurItem().id === item.id && item.isEntry()) {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
-            setIsSelected(true);
-        } else {
-            setIsSelected(false);
-        }
-    }, [getCurItem, item]);
+    dirtyItemId: string | null,
+}> = ({item, setCurItem, setItemCreationDialog, setCurrentParent, deleteItem, dirtyItemId}) => {
+    const listViewModel = useListViewModel(item, dirtyItemId, setCurItem);
 
     function addButtonPressed() {
         setItemCreationDialog();
@@ -40,9 +31,8 @@ const ListView: React.FC<{
     if (listViewModel.isItemEntry()) {
         const entry = listViewModel.getItem() as Entry;
         return (
-            <div className={`listViewEntry ${isSelected ? "selected" : ""}`}
-                 onClick={() => setCurItem(entry)}>
-                <span>{entry.title}</span>
+            <div className="listViewEntry" onClick={() => setCurItem(entry)}>
+                <span>Titel:</span> <span>{entry.title}</span>
                 <button onClick={() => deleteItem(item)}>🗑️</button>
             </div>
         );
@@ -65,24 +55,27 @@ const ListView: React.FC<{
                         }}>+
                         </button>
                         {/* Delete button should not be rendered for the root */}
-                        {(item.title != "root") && <button onClick={() => deleteItem(item)}>🗑️</button>}
-                        {/*FIXME: wenn man einen Folder 'root' nennt, kann man ihn nicht mehr löschen*/}</div>
+                        {(item.id != "") && <button onClick={() => deleteItem(item)}>🗑️</button>}
+                        {/* FIXME: Löschbestätigung einbauen */}</div>
                 </div>
 
                 {/* Recursive call of children with indent to visualizes depth in the tree */}
-                {listViewModel.getExtended() && (
-                    <div className="listViewEntryWrapper">
-                        {listViewModel.getChildren() &&
-                            listViewModel.getChildren()!.map((item: Item, index: number) => {
-                                return <ListView key={index} item={item} setCurItem={setCurItem} getCurItem={getCurItem}
-                                                 setItemCreationDialog={setItemCreationDialog}
-                                                 setCurrentParent={setCurrentParent} deleteItem={deleteItem}/>;
-                            })}
-                    </div>
-                )}
+                <div className="listViewEntryWrapper"
+                     style={{display: (listViewModel.getExtended() ? "block" : "none")}}>
+                    {listViewModel.getChildren() &&
+                        listViewModel.getChildren()!.map((item: Item, index: number) => {
+                            return <ListView key={index} item={item}
+                                             setCurItem={setCurItem}
+                                             setItemCreationDialog={setItemCreationDialog}
+                                             setCurrentParent={setCurrentParent}
+                                             deleteItem={deleteItem}
+                                             dirtyItemId={dirtyItemId}
+                            />;
+                        })}
+                </div>
             </>
         );
     }
-};
+}
 
 export default ListView;

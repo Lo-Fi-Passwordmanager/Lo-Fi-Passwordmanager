@@ -67,7 +67,6 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                     <h3>{title}</h3>
                     <label>{label1}</label>
                     <input
-                        className="inputField"
                         type="text"
                         value={field1}
                         onChange={(e) => setField1(e.target.value)}
@@ -77,7 +76,6 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
 
                     <label>{label2}</label>
                     <input
-                        className="inputField"
                         type="password"
                         value={field2}
                         onChange={(e) => setField2(e.target.value)}
@@ -100,7 +98,6 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                     <h3>Existierende Datenbank laden</h3>
                     <label>Name</label>
                     <input
-                        className="inputField"
                         type="text"
                         value={field1}
                         onChange={(e) => setField1(e.target.value)}
@@ -109,7 +106,6 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                     />
                     <label>Automerge Url</label>
                     <input
-                        className="inputField"
                         type="text"
                         value={field2}
                         onChange={(e) => setField2(e.target.value)}
