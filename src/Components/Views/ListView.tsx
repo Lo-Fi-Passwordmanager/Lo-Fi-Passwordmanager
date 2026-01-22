@@ -49,6 +49,7 @@ const ListView: React.FC<{
                     <button onClick={() => addButtonPressed()}>+</button>
                     {/* Delete button should not be rendered for the root */}
                     {(item.id != "") && <button onClick={() => deleteItem(item)}>🗑️</button>}
+                    {/* FIXME: Löschbestätigung einbauen */}
                 </div>
 
                 {/* Recursive call of children with indent to visualizes depth in the tree */}
