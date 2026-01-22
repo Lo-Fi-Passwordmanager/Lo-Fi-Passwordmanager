@@ -51,3 +51,43 @@ export function removeDatabase(name: string): void {
     databases.delete(name);
     saveDatabases(databases);
 }
+
+/**
+ * Loads the current sort criterion from localStorage
+ *
+ * @returns the current sort criterion or null if not set
+ */
+export function loadCurrentSortCriterion(): string | null {
+    return localStorage.getItem('currentSortCriterion');
+}
+
+/**
+ * Saves the current sort criterion to localStorage
+ *
+ * @param criterion the current sort criterion
+ */
+export function saveCurrentSortCriterion(criterion: string): void {
+    localStorage.setItem('currentSortCriterion', criterion);
+}
+
+/**
+ * Loads the isAscending flag from localStorage
+ *
+ * @returns the isAscending flag or null if not set
+ */
+export function loadIsAscending(): boolean | null {
+    const value = localStorage.getItem('isAscending');
+    if (value === null) {
+        return null;
+    }
+    return value === 'true';
+}
+
+/**
+ * Saves the isAscending flag to localStorage
+ *
+ * @param isAscending the isAscending flag
+ */
+export function saveIsAscending(isAscending: boolean): void {
+    localStorage.setItem('isAscending', isAscending.toString());
+}

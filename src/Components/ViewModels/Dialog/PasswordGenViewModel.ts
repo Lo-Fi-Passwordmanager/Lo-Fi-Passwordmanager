@@ -8,8 +8,8 @@ import {
 } from "../../../Utility/PasswordGenerator.ts";
 
 export interface PasswordGenDialogProps {
-    newPassword?: (password: string) => void;
-    cancelPasswordGen?: () => void;
+    newPassword: (password: string) => void;
+    cancelPasswordGen: () => void;
 }
 
 export const usePasswordGenViewModel = (newPassword: (password: string) => void) => {
