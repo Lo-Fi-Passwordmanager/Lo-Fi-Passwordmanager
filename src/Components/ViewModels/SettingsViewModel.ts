@@ -16,6 +16,7 @@ export const useSettingsViewModel = () => {
     const [autoConclictRes, setAutoConflictRes] = useState(settings.getAutoConflictResolution());
     const [timeOutActive, setTimeOutActive] = useState(settings.getTimeoutActive());
     const [settingsOpen, setSettingsOpen] = useState(false);
+    const [timeoutLength, setTimeoutLength] = useState(settings.getTimeoutLength());
 
     document.getElementsByTagName("html")[0]?.setAttribute("data-theme", darkMode ? "dark" : "light");
 
@@ -26,7 +27,8 @@ export const useSettingsViewModel = () => {
         settings.setSynchronization(synchronisation);
         settings.setAutoConflictResolution(autoConclictRes);
         settings.setTimeoutActive(timeOutActive);
-    }, [darkMode, synchronisation, autoConclictRes, timeOutActive, settings]);
+        settings.setTimeoutLength(timeoutLength);
+    }, [darkMode, synchronisation, autoConclictRes, timeOutActive, settings, timeoutLength]);
 
 
     // Update darkMode
@@ -43,6 +45,13 @@ export const useSettingsViewModel = () => {
     function toggleTimeOutActive() {
         setTimeOutActive(!timeOutActive);
     }
+    //Checks that timeout cant be 0 or less since that causes the whole app to be unusable
+    function setTimeOutLengthVM(newLength: string) {
+        const length:number = Number(newLength);
+        if(length >= 1) {
+            setTimeoutLength(length);
+        }
+    }
 
 
     return {
@@ -51,11 +60,13 @@ export const useSettingsViewModel = () => {
         autoConclictRes,
         timeOutActive,
         settingsOpen,
+        timeoutLength,
 
         toggleDarkMode,
         toggleSynchronisation,
         toggleAutoConclictRes,
         toggleTimeOutActive,
         setSettingsOpen,
+        setTimeOutLengthVM,
     };
 };

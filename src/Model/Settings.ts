@@ -2,6 +2,9 @@ const SYNCHRONISATION = "synchronisation";
 const AUTO_CONFLICT_RESOLUTION = "auto_conflict_resolution";
 const DARK_MODE = "dark_mode"
 const TIMEOUT_ACTIVE = "timeout_active"
+const TIMEOUT_LENGTH = "timeout_length"
+
+type SettingsListener = () => void;
 
 export class Settings {
     private static instance: Settings;
@@ -9,6 +12,9 @@ export class Settings {
     private _autoConflictResolution: boolean;
     private _darkMode: boolean;
     private _timeoutActive: boolean;
+    private _timeoutLength: number;
+
+    private listeners: SettingsListener[] = [];
 
     private constructor() {
         //standard settings - think before changing
@@ -16,6 +22,7 @@ export class Settings {
         const autoConflictResolution = localStorage.getItem(AUTO_CONFLICT_RESOLUTION)
         const darkMode = localStorage.getItem(DARK_MODE)
         const timeoutActive = localStorage.getItem(TIMEOUT_ACTIVE)
+        const timeoutLength = localStorage.getItem(TIMEOUT_LENGTH);
 
         if (synchronisation) {
             this._synchronization = JSON.parse(synchronisation);
@@ -43,6 +50,13 @@ export class Settings {
         } else {
             localStorage.setItem(TIMEOUT_ACTIVE, JSON.stringify(true))
             this._timeoutActive = true
+        }
+
+        if (timeoutLength != null) {
+            this._timeoutLength = JSON.parse(timeoutLength);
+        } else {
+            localStorage.setItem(TIMEOUT_LENGTH, JSON.stringify(1))
+            this._timeoutLength = 1;
         }
     }
 
@@ -87,5 +101,26 @@ export class Settings {
     public setTimeoutActive(value: boolean) {
         this._timeoutActive = value;
         localStorage.setItem(TIMEOUT_ACTIVE, JSON.stringify(value))
+    }
+
+    public getTimeoutLength(): number {
+        return this._timeoutLength;
+    }
+
+    public setTimeoutLength(length: number) {
+        this._timeoutLength = length;
+        localStorage.setItem(TIMEOUT_LENGTH, JSON.stringify(length));
+        this.notify();
+    }
+
+    subscribe(listener: SettingsListener) {
+        this.listeners.push(listener);
+        return () => {
+            this.listeners = this.listeners.filter(l => l !== listener);
+        };
+    }
+
+    private notify() {
+        this.listeners.forEach(l => l());
     }
 }

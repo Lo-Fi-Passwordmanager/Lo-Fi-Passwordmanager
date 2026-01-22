@@ -5,6 +5,7 @@ import SettingsView from "./SettingsView.tsx";
 import PasswordView from "./PasswordView.tsx";
 import {RepoContext} from "@automerge/react";
 import LoadingScreen from "./Dialogs/LoadingScreen.tsx";
+import ToastDialog from "./Dialogs/ToastDialog.tsx";
 
 const PasswordManagerView: React.FC = () => {
 
@@ -17,7 +18,12 @@ const PasswordManagerView: React.FC = () => {
                 <LoginView repo={viewModel.repo} setLoggedIn={viewModel.setLoggedIn}
                            setAutomergeFacade={viewModel.setAutomergeFacade}
                            securityProvider={viewModel.securityProvider}/>
+                <ToastDialog message={viewModel.toastMessage}
+                             isVisible={viewModel.toastVisible}
+                             onClose={() => viewModel}>
+                </ToastDialog>
             </RepoContext.Provider>
+
         );
     } else {
         return (
