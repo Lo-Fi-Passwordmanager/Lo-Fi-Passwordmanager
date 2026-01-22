@@ -113,7 +113,7 @@ button {
 }
 
 button:hover {
-    filter: brightness(1.08);
+    filter: brightness(1.1);
     transform: translateY(-1px);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
 }
@@ -262,23 +262,23 @@ input::placeholder {
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-}
-
-.btnWrapper {
-    width: 100%;
-    display: flex;
-    justify-content: end;
-}
-
-.listViewTitleHeader:hover {
-    filter: brightness(1.03);
-    white-space: nowrap;
 
     display: grid;
     grid-template-columns: 8vw 2.5vw 2.5vw 2.5vw;
     gap: 4px;
     align-items: center;
     justify-items: start;
+    white-space: nowrap;
+}
+
+.listViewTitleHeader:hover {
+    filter: brightness(1.1);
+}
+
+.btnWrapper {
+    width: 100%;
+    display: flex;
+    justify-content: end;
 }
 
 .listViewTitleHeader button {
