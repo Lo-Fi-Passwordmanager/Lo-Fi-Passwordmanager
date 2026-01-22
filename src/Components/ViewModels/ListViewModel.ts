@@ -51,6 +51,7 @@ export const useListViewModel = (topItem: Item, dirtyItemId: string | null, setC
         isItemEntry,
         getItem,
         toggleExtended,
-        getExtended
+        getExtended,
+        setExtended
     };
 };
