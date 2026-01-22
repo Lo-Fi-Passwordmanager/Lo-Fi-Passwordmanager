@@ -33,6 +33,8 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     const [curSortCrit, setCurSortCrit] = useState<SortCriteria>(initSortCriterion);
     const [isAscending, setIsAscending] = useState<boolean>(initIsAscending);
 
+    const [searchValue, setSearchValue] = useState<string>("");
+
     /**
      * initializes the sort criterion from the local storage, or uses the default value
      */
@@ -131,7 +133,9 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
 
     return {
         isAscending,
+        searchValue,
 
+        setSearchValue,
         setCurItem,
         getCurEntry,
         getRootFolder,

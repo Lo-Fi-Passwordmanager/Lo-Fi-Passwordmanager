@@ -5,6 +5,7 @@ import OrganizeListView from "./OrganizeListView.tsx";
 import {usePasswortViewModel} from "../ViewModels/PasswordViewModel.ts";
 import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import ItemCreationDialog from "./Dialogs/ItemCreationDialog.tsx";
+import FilteredListView from "./FilteredListView.tsx";
 
 interface PasswordViewProps {
     automergeFacade?: AutomergeFacade | null
@@ -29,25 +30,32 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade}) => {
                 />}
             <div className="passwordView">
                 <div className="borderBox scrollableContainer" style={{width: "30%"}}>
-                    <div>
-                        <OrganizeListView
-                            getCurSortCriterion={passwordViewModel.getCurSortCriterion}
-                            setCurSortCriterion={passwordViewModel.setAndStoreSortCriterion}
-                            toggleOrder={passwordViewModel.toggleOrder}
-                            getOrder={passwordViewModel.isAscending}
-                        />
-                    </div>
-                    <div>
-                        <ListView
-                            item={passwordViewModel.getRootFolder()}
-                            setCurItem={passwordViewModel.setCurItem}
-                            setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
-                            setCurrentParent={passwordViewModel.setCurParent}
-                            deleteItem={passwordViewModel.deleteItem}
-                            sortCriterion={passwordViewModel.getCurSortCriterion()}
-                            isAscending={passwordViewModel.isAscending}
-                        />
-                    </div>
+                    <OrganizeListView
+                        getCurSortCriterion={passwordViewModel.getCurSortCriterion}
+                        setCurSortCriterion={passwordViewModel.setAndStoreSortCriterion}
+                        toggleOrder={passwordViewModel.toggleOrder}
+                        getOrder={passwordViewModel.isAscending}
+                        setLiveSearchValue={passwordViewModel.setSearchValue}
+                    />
+                    {passwordViewModel.searchValue.length > 0 && <FilteredListView
+                        root={passwordViewModel.getRootFolder()}
+                        setCurItem={passwordViewModel.setCurItem}
+                        setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
+                        setCurrentParent={passwordViewModel.setCurParent}
+                        deleteItem={passwordViewModel.deleteItem}
+                        sortCriterion={passwordViewModel.getCurSortCriterion()}
+                        isAscending={passwordViewModel.isAscending}
+                        filterText={passwordViewModel.searchValue}
+                    />}
+                    {passwordViewModel.searchValue.length === 0 && <ListView
+                        item={passwordViewModel.getRootFolder()}
+                        setCurItem={passwordViewModel.setCurItem}
+                        setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
+                        setCurrentParent={passwordViewModel.setCurParent}
+                        deleteItem={passwordViewModel.deleteItem}
+                        sortCriterion={passwordViewModel.getCurSortCriterion()}
+                        isAscending={passwordViewModel.isAscending}
+                    />}
                 </div>
                 <div className="borderBox" style={{width: "70%"}}>
                     <EntryView item={passwordViewModel.getCurEntry()}

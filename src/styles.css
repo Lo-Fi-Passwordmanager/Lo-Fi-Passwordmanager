@@ -75,7 +75,6 @@ header {
 
 
 button {
-    margin: 20px;
     justify-content: left;
     font-size: 1em;
     font-weight: 500;
@@ -399,8 +398,21 @@ button:focus-visible {
     margin-bottom: 0;
 }
 
+.SortContainer {
+    display: grid;
+    grid-template-columns: 85% 15%;
+    gap: 8px;
+    padding: 8px;
+}
+
+.SearchContainer {
+    display: grid;
+    grid-template-columns: 100%;
+    gap: 8px;
+    padding: 8px;
+}
+
 select {
-    margin: 20px;
     justify-content: left;
     font-size: 1em;
     font-weight: 500;

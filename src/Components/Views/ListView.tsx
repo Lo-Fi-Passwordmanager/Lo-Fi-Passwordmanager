@@ -17,7 +17,6 @@ const ListView: React.FC<{
     deleteItem: (item: Item) => void,
     sortCriterion: SortCriteria,
     isAscending: boolean,
-
 }> = ({item, setCurItem, setItemCreationDialog, setCurrentParent, deleteItem, sortCriterion, isAscending}) => {
     const listViewModel = useListViewModel(item, sortCriterion, isAscending);
 
