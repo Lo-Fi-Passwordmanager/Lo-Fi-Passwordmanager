@@ -250,25 +250,16 @@ input::placeholder {
 }
 
 .listViewTitleHeader {
-    justify-content: flex-start;
     flex-direction: row;
     background-color: var(--dialog-bg);
-    /* Modernized rounding */
+    display: flex;
     border-radius: 12px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin: 5px 10px;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-
-    display: grid;
-    grid-template-columns: 8vw 2.5vw 2.5vw 2.5vw;
-    gap: 4px;
-    align-items: center;
-    justify-items: start;
     white-space: nowrap;
+    align-items: center;
 }
 
 .listViewTitleHeader:hover {
@@ -281,45 +272,26 @@ input::placeholder {
     justify-content: end;
 }
 
-.listViewTitleHeader button {
+.listViewTitleHeader button, .listViewEntry button {
     margin: 5px;
     padding: 4px 8px;
     border-radius: 8px;
-}
-
-.listViewEntry button {
-    margin: 5px;
-    padding: 4px 8px;
-    border-radius: 8px;
-    justify-self: flex-end;
-    min-width: 0;
 }
 
 .listViewEntry {
-    flex-direction: column;
-    padding-left: 30px;
-    padding-right: 30px;
-    /* Modernized rounding */
-    border-radius: 14px;
+    flex-direction: row;
     padding-left: 10px;
-    padding-right: 10px;
     border-radius: 10px;
     height: 4vh;
-    width: 20vw;
     background-color: var(--dialog-bg);
     text-align: left;
     font-weight: 500;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin: 5px 10px;
     border: 1px solid transparent;
     transition: border-color 0.2s ease, transform 0.1s ease;
 
     /*grid formatting*/
-    display: grid;
-    grid-template-columns: 20% 50% 30%;
-    gap: 4px;
+    display: flex;
     align-items: center;
 }
 
@@ -333,12 +305,6 @@ input::placeholder {
     box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
     align-items: center;
     white-space: nowrap;
-}
-
-.listViewEntry button {
-    margin: 5px;
-    padding: 4px 8px; /* Smaller padding for buttons */
-    height: 100%;
 }
 
 .listViewEntryWrapper {
@@ -387,7 +353,7 @@ input::placeholder {
 
     word-break: break-all;
     white-space: normal;
-    align-items: center;  /* Centers items vertically (top to bottom) */
+    align-items: center; /* Centers items vertically (top to bottom) */
     justify-items: center; /* Centers items horizontally (left to right) */
 }
 
