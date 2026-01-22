@@ -60,12 +60,12 @@ const SettingsView: React.FC = () => {
                                     checked={viewmodel.timeOutActive}
                                     onChange={viewmodel.toggleTimeOutActive}
                                 />
-                                Sperren der App bei Inaktivität
+                                Bei Inaktivität abmelden
                             </label>
                         </div>
 
-                        <div>
-                            <label>Min. bis Sperre: </label>
+                        {viewmodel.timeOutActive && <div>
+                            <label>Minuten bis Abmeldung: </label>
                             <input
                                 className="inputField"
                                 type="number"
@@ -75,9 +75,11 @@ const SettingsView: React.FC = () => {
                                 max="120"
                                 step="1"
                             />
-                        </div>
+                        </div>}
                     </div>
-                    <button onClick={() => viewmodel.setSettingsOpen(false)} style={{marginTop:"1em"}}>Einstellungen Schließen</button>
+                    <button onClick={() => viewmodel.setSettingsOpen(false)} style={{marginTop: "1em"}}>Einstellungen
+                        Schließen
+                    </button>
                 </div>
             </div>
         );
