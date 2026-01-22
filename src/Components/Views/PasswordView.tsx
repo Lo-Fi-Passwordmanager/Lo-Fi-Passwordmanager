@@ -56,7 +56,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade}) => {
                         sortCriterion={passwordViewModel.getCurSortCriterion()}
                         isAscending={passwordViewModel.isAscending}
                         dirtyItemId={passwordViewModel.dirtyItemId}
-                    />
+                    />}
                 </div>
                 <div className="borderBox" style={{width: "70%"}}>
                     {!passwordViewModel.inEditable &&
