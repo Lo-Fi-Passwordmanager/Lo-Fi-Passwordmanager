@@ -45,7 +45,7 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                     />
                     <div className="confirm-cancel-buttons">
                         <button onClick={viewModel.handleConfirm}>Bestätigen</button>
-                        <button onClick={onCancel}>Abbrechen</button>
+                        <button onClick={onCancel} style={{background:"gray"}}>Abbrechen</button>
                     </div>
                 </div>
             </div>

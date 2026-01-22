@@ -132,12 +132,20 @@ button:focus-visible {
 }
 
 .listing {
+    justify-content: center;
+    width: 50vmin;
+
+    display: grid;
+    grid-template-columns: 7fr 1.5fr 1.5fr;
+    gap: 8px;
+}
+
+.databaseSelection {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 50vmin;
-    gap: 8px;
+    gap: 12px;
 }
 
 .settingsContainer {
@@ -178,6 +186,8 @@ button:focus-visible {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    gap: 2em;
+    margin-top: 1em;
 }
 
 .logo {
