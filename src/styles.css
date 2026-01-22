@@ -122,7 +122,7 @@ button, select {
     transition: transform 0.1s active, filter 0.2s ease, box-shadow 0.2s ease;
 }
 select {
-
+    border-right: 10px solid transparent
 }
 
 button:hover {
