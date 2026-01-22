@@ -5,7 +5,7 @@ import ToastDialog from "./ToastDialog.tsx";
 
 
 const PasswordGenDialog: React.FC<PasswordGenDialogProps> = ({newPassword, cancelPasswordGen}: PasswordGenDialogProps) => {
-    const viewModel = usePasswordGenViewModel(newPassword!);
+    const viewModel = usePasswordGenViewModel(newPassword);
 
     return (
         <div className="dialogOverlay">

@@ -1,15 +1,17 @@
 import {afterEach, beforeEach, describe, expect, it, vi} from "vitest";
 import {Repo} from "@automerge/react";
 import {AutomergeFacade} from "../../src/Utility/AutomergeFacade";
+import {SecurityProvider} from "../../src/Utility/Security/SecurityProvider";
 
 
 describe('AutomergeFacade', ()=> {
     let automergeFacade: AutomergeFacade;
     let repo: Repo;
+    const secProvider = new SecurityProvider();
 
     beforeEach(()=> {
         repo = createMockRepo();
-        automergeFacade = new AutomergeFacade(repo);
+        automergeFacade = new AutomergeFacade(repo, undefined, secProvider);
     })
 
     afterEach(()=> {
@@ -62,6 +64,10 @@ describe('AutomergeFacade', ()=> {
 
         expect(salt).toBe("salt");
         expect(validation).toBe("validation");
+    })
+
+    it('should be able to return the SecurityProvider', ()=> {
+        expect(automergeFacade.getSecurityProvider()).toBeInstanceOf(SecurityProvider)
     })
 })
 
