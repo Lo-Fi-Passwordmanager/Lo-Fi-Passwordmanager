@@ -30,9 +30,8 @@ const FilteredListView: React.FC<{
                       setCurrentParent={setCurrentParent}
                       deleteItem={deleteItem}
                       sortCriterion={sortCriterion}
-                      isAscending={isAscending}
-            />
-            <div className={"divider"}/>
+                      isAscending={isAscending} dirtyItemId={null}            />
+            <div className={"divider"} style={{width:'100%'}}/>
             <div>
                 {filteredFolders.entries.map((item: Item, index: number) => {
                 return <div className="listViewTitleHeader" key={index}>
