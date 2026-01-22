@@ -77,7 +77,7 @@ const SettingsView: React.FC = () => {
                             />
                         </div>
                     </div>
-                    <button onClick={() => viewmodel.setSettingsOpen(false)}>Einstellungen Schließen</button>
+                    <button onClick={() => viewmodel.setSettingsOpen(false)} style={{marginTop:"1em"}}>Einstellungen Schließen</button>
                 </div>
             </div>
         );
