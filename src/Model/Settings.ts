@@ -14,14 +14,15 @@ export function useSettings() {
 
     useEffect(() => {
         // Subscribe to changes in the Singleton
-        const unsubscribe = Settings.getSettings().subscribe(() => {
+        const subscribe = Settings.getSettings().subscribe(() => {
             // When notify() is called, we update state to trigger a re-render
+            //The code below moves the settings object to a new address in memory, forcing react to rerender it
+            //FIXME somehow this should just be able to rerender by increasing a counter or smth but I couldnt do it ~Jesko
             setSettings(Object.assign(Object.create(Object.getPrototypeOf(Settings.getSettings())), Settings.getSettings()));
-            // Simpler: just trigger a counter to force update
-            // setUpdateTick(tick => tick + 1);
+
         });
 
-        return () => unsubscribe(); // Cleanup on unmount
+        return () => subscribe(); // Cleanup on unmount
     }, []);
 
     return settings;
