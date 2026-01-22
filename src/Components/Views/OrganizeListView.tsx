@@ -9,7 +9,7 @@ const OrganizeListView: React.FC<{
 }> = ({getCurSortCriterion, setCurSortCriterion, toggleOrder, getOrder: isAscending}) => {
 
     return (
-        <div>
+        <div className="borderBox" style={{borderLeft: "0", borderTop: "0"}}>
             <select className="sort-menu"
             value={getCurSortCriterion()}
             onChange={(e) => setCurSortCriterion(e.target.value as SortCriteria)}>
