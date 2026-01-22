@@ -53,8 +53,13 @@ html, body {
     min-height: 100vh;
 }
 
-.inputField {
+input {
     background-color: var(--input-field);
+    color: var(--text);
+}
+
+input {
+
 }
 
 .loginView {
@@ -189,8 +194,6 @@ button:focus-visible {
 }
 
 .listViewTitleHeader {
-    display: flex;
-    align-items: center;
     justify-content: flex-start;
     flex-direction: row;
     background-color: var(--panel);
@@ -198,7 +201,7 @@ button:focus-visible {
     padding-left: 10px;
     padding-right: 10px;
     margin: 2px;
-    height: 6vh;
+    height: 4vh;
     width: 20vw;
     max-width: fit-content;
     white-space: nowrap;
@@ -221,7 +224,7 @@ button:focus-visible {
     padding-left: 10px;
     padding-right: 10px;
     border-radius: 10px;
-    height: 6vh;
+    height: 4vh;
     width: 20vw;
     background-color: var(--dialog-bg);
     text-align: left;
@@ -238,7 +241,7 @@ button:focus-visible {
 .listViewEntry button {
     margin: 5px;
     padding: 4px 8px; /* Smaller padding for buttons */
-    outline-width: 2px; /* Reduce the outline so it stays inside the box */
+    height: 100%;
 }
 
 .listViewEntryWrapper {
@@ -262,23 +265,24 @@ button:focus-visible {
 
 .entryViewEntry {
     font-size: 2em;
-    padding: 50px 50px 0 50px;
+    padding-right: 5%;
     width: 100%;
-    height: 100%;
+    height: 90%;
     display: grid;
-    grid-template-columns: minmax(40%, auto) 1fr;
+    grid-template-columns: minmax(40%, auto) 6fr 1fr;
     flex-direction: column;
     background-color: var(--dialog-bg);
     text-align: left;
     gap: 10px 20px;
     box-sizing: border-box; /* Ensures padding doesn't break the 100% width */
-
     word-break: break-all;
     white-space: normal;
+    align-items: center;  /* Centers items vertically (top to bottom) */
+    justify-items: center; /* Centers items horizontally (left to right) */
 }
 
 
-.entryViewEntry span:nth-child(odd) {
+.entryViewEntry span:nth-child(3n+1) {
     font-weight: bold;
     color: var(--text);
 }
@@ -439,4 +443,19 @@ select {
     outline: var(--outline);
     outline-width: 10px;
     border-right: 10px solid transparent
+}
+
+.entryDateViewEntry {
+    color: gray;
+    font-size: 1em;
+    width: 100%;
+    height: 10%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    flex-direction: column;
+    background-color: var(--dialog-bg);
+    text-align: left;
+    gap: 10px 20px;
+    align-items: center;
+    justify-items: center;
 }

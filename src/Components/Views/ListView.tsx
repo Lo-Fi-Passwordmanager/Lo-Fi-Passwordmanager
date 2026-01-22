@@ -17,8 +17,9 @@ const ListView: React.FC<{
     deleteItem: (item: Item) => void,
     sortCriterion: SortCriteria,
     isAscending: boolean,
-}> = ({item, setCurItem, setItemCreationDialog, setCurrentParent, deleteItem, sortCriterion, isAscending}) => {
-    const listViewModel = useListViewModel(item, sortCriterion, isAscending);
+    dirtyItemId: string | null,
+}> = ({item, setCurItem, setItemCreationDialog, setCurrentParent, deleteItem, sortCriterion, isAscending, dirtyItemId}) => {
+    const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem);
 
     function addButtonPressed() {
         setItemCreationDialog();
@@ -50,8 +51,8 @@ const ListView: React.FC<{
                         onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? ">" : "v"}</button>
                     <button onClick={() => addButtonPressed()}>+</button>
                     {/* Delete button should not be rendered for the root */}
-                    {(item.title != "root") && <button onClick={() => deleteItem(item)}>🗑️</button>}
-                    {/*FIXME: wenn man einen Folder 'root' nennt, kann man ihn nicht mehr löschen*/}
+                    {(item.id != "") && <button onClick={() => deleteItem(item)}>🗑️</button>}
+                    {/* FIXME: Löschbestätigung einbauen */}
                 </div>
 
                 {/* Recursive call of children with indent to visualizes depth in the tree */}
@@ -67,6 +68,7 @@ const ListView: React.FC<{
                                     deleteItem={deleteItem}
                                     sortCriterion={sortCriterion}
                                     isAscending={isAscending}
+                                    dirtyItemId={dirtyItemId}
                                 />;
                             })}
                     </div>
@@ -74,6 +76,6 @@ const ListView: React.FC<{
             </>
         );
     }
-}
+};
 
 export default ListView;

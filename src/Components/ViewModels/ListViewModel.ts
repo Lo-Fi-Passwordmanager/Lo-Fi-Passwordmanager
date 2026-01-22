@@ -10,10 +10,14 @@ import {SortCriteria} from "./PasswordViewModel.ts";
  * @param currentSortCrit the current sort criterion to be used
  * @param isAscending whether the sorting should be ascending or descending
  */
-export const useListViewModel = (topItem: Item, currentSortCrit: SortCriteria, isAscending: boolean) => {
+export const useListViewModel = (topItem: Item, currentSortCrit: SortCriteria, isAscending: boolean, dirtyItemId: string | null, setCurrItem: (entry: Entry) => void) => {
 
     const item: Item = topItem;
     const [extended, setExtended] = useState(true);
+
+    if (dirtyItemId && item.id === dirtyItemId) {
+        setCurrItem(item as Entry);
+    }
 
     // Reactive state to store values during runtime
     function getChildren() {
@@ -66,6 +70,6 @@ export const useListViewModel = (topItem: Item, currentSortCrit: SortCriteria, i
         isItemEntry,
         getItem,
         toggleExtended,
-        getExtended,
+        getExtended
     };
 };

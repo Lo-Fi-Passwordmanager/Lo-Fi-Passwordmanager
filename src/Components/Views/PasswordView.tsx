@@ -5,10 +5,12 @@ import OrganizeListView from "./OrganizeListView.tsx";
 import {usePasswortViewModel} from "../ViewModels/PasswordViewModel.ts";
 import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import ItemCreationDialog from "./Dialogs/ItemCreationDialog.tsx";
+import ToastDialog from "./Dialogs/ToastDialog.tsx";
+import EditablePasswordView from "./EditablePasswordView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
 
 interface PasswordViewProps {
-    automergeFacade?: AutomergeFacade | null
+    automergeFacade?: AutomergeFacade | null;
 }
 
 /**
@@ -16,8 +18,6 @@ interface PasswordViewProps {
  */
 const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade}) => {
     const passwordViewModel = usePasswortViewModel(automergeFacade as AutomergeFacade);
-    // Zu testzwecken eingefügt
-    // const facade = useAutomergeFacade(automergeFacade)
 
     return (
         <div>
@@ -55,16 +55,29 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade}) => {
                         deleteItem={passwordViewModel.deleteItem}
                         sortCriterion={passwordViewModel.getCurSortCriterion()}
                         isAscending={passwordViewModel.isAscending}
-                    />}
-                </div>
-                <div className="borderBox" style={{width: "70%"}}>
-                    <EntryView item={passwordViewModel.getCurEntry()}
+                        dirtyItemId={passwordViewModel.dirtyItemId}
                     />
                 </div>
+                <div className="borderBox" style={{width: "70%"}}>
+                    {!passwordViewModel.inEditable &&
+                        <EntryView item={passwordViewModel.getCurEntry()}
+                                   copyAndClearClipboard={passwordViewModel.copyToClipboardAndClear}
+                                   setEditableView={() => passwordViewModel.setInEditable(true)}/>}
+
+                    {passwordViewModel.inEditable &&
+                        <EditablePasswordView item={passwordViewModel.getCurEntry()}
+                                              updateItemAttribute={passwordViewModel.updateItemAttribute}
+                                              copyAndClearClipboard={passwordViewModel.copyToClipboardAndClear}
+                                              setEditableView={() => passwordViewModel.setInEditable(false)}/>}
+                </div>
+                <ToastDialog message={passwordViewModel.toastMessage}
+                             isVisible={passwordViewModel.toastVisible}
+                             onClose={() => passwordViewModel.setToastVisible(false)}>
+                </ToastDialog>
             </div>
         </div>
     );
 
-}
+};
 
 export default PasswordView;
