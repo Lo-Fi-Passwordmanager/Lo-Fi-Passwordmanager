@@ -5,12 +5,9 @@ import React from "react";
 /**
  * The view that links to the {@link Settings} singleton and toggles its values.
  */
-const SettingsView: React.FC<
-    {
-        setSync: (value: boolean) => void
-    }> = ({setSync}) => {
+const SettingsView: React.FC = () => {
 
-    const viewmodel = useSettingsViewModel(setSync);
+    const viewmodel = useSettingsViewModel();
 
     /**
      * Checks if the settingsmenu should be open or not

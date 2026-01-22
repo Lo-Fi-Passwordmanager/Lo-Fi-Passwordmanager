@@ -9,17 +9,17 @@ import {useEffect, useState} from "react";
 import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import {useIdleTimer} from "react-idle-timer";
-import {Settings} from "../../Model/Settings.ts";
+import {Settings, useSettings} from "../../Model/Settings.ts";
 
 export const usePasswordManagerViewModel = () => {
-    const settings = Settings.getSettings();
+    const settings = useSettings();
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
     const [automergeFacade, setAutomergeFacade] = useState<AutomergeFacade | null>(null);
     const [securityProvider] = useState(() => new SecurityProvider());
     const [timeout, setTimeout] = useState(Settings.getSettings().getTimeoutLength() * 60000);
     const [toastMessage, setToastMessage] = useState("");
     const [toastVisible, setToastVisible] = useState(false);
-    const [synchronization, setSynchronization] = useState<boolean>(localStorage.getItem("synchronization") === "true");
+    const [synchronization] = useState<boolean>(settings.getSynchronization());
     const [openedDatabaseName, setOpenedDatabaseName] = useState<string>("");
 
     const initialNetworkAdapters = [
@@ -30,13 +30,13 @@ export const usePasswordManagerViewModel = () => {
     const [networkAdapters, setNetworkAdapters] = useState<NetworkAdapterInterface[] | undefined>(synchronization ? initialNetworkAdapters : undefined);
 
     useEffect(() => {
-        if (synchronization) {
+        if (settings.getSynchronization()) {
             // Does not cause cascading renders (apparently) => ignore error
             setNetworkAdapters(initialNetworkAdapters);
         } else {
             setNetworkAdapters(undefined);
         }
-    }, [synchronization]);
+    }, [settings]);
 
     const repo = new Repo({
         network: networkAdapters,
@@ -56,10 +56,6 @@ export const usePasswordManagerViewModel = () => {
         setLoggedIn(false);
         setAutomergeFacade(null);
         securityProvider.clearKey();
-    }
-
-    function setSyncSetting(value: boolean): void {
-        setSynchronization(value);
     }
 
     const onIdle = () => {
@@ -102,7 +98,6 @@ export const usePasswordManagerViewModel = () => {
         setAutomergeFacade,
         getAutomergeFacade,
         closeLoggedIn,
-        setSyncSetting,
         setToastVisible,
     };
 };
