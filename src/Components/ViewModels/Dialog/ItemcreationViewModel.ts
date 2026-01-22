@@ -1,12 +1,12 @@
 import {useState} from "react";
 import {Entry} from "../../../Model/Entry.ts";
 import {Folder} from "../../../Model/Folder.ts";
-import type { Item } from "../../../Model/Item.ts";
+import type {Item} from "../../../Model/Item.ts";
 
 export const useItemcreationViewModel = (
-    addItem: ((item: Item, id: string) => void), setCurItem: (newItem: Item) => void, curParent: Item, cancelItemCreation: () => void) => {
+    addItem: ((item: Item, id: string) => string), setCurItem: (newItem: Item) => void, curParent: Item, cancelItemCreation: () => void) => {
 
-    const [typeOfItem, setTypeOfItem] = useState("entry")
+    const [typeOfItem, setTypeOfItem] = useState("entry");
     const [title, setTitle] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -19,14 +19,15 @@ export const useItemcreationViewModel = (
         // Temp var must be created, because the react hook is updated only after the functino is fully executed
         let newTitle = title.trim();
         if (newTitle === "") {
-            newTitle = "Neuer " + ((typeOfItem === "entry")? "Eintrag":"Ordner");
+            newTitle = "Neuer " + ((typeOfItem === "entry") ? "Eintrag" : "Ordner");
         }
         if (typeOfItem === "entry") {
             const entry: Entry = new Entry(newTitle, "willBeAutomaticallySet", new Date(), new Date(), username, password, url, note);
-            addItem(entry, curParent.id)
+            const newId = addItem(entry, curParent.id);
+            entry.id = newId;
             setCurItem(entry);
         } else if (typeOfItem === "folder") {
-            addItem(new Folder(newTitle, "willBeAutomaticallySet", new Date(), new Date()), curParent!.id)
+            addItem(new Folder(newTitle, "willBeAutomaticallySet", new Date(), new Date()), curParent!.id);
         }
         cancelItemCreation();
     }
@@ -46,6 +47,6 @@ export const useItemcreationViewModel = (
         setUsername,
         setTitle,
         setTypeOfItem,
-        handleConfirm,
-    }
-}
+        handleConfirm
+    };
+};

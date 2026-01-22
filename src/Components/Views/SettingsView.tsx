@@ -5,9 +5,12 @@ import React from "react";
 /**
  * The view that links to the {@link Settings} singleton and toggles its values.
  */
-const SettingsView: React.FC = () => {
-    const viewmodel = useSettingsViewModel();
+const SettingsView: React.FC<
+    {
+        setSync: (value: boolean) => void
+    }> = ({setSync}) => {
 
+    const viewmodel = useSettingsViewModel(setSync);
 
     /**
      * Checks if the settingsmenu should be open or not
@@ -46,8 +49,8 @@ const SettingsView: React.FC = () => {
                             <label className="checkboxRow">
                                 <input
                                     type="checkbox"
-                                    checked={viewmodel.autoConclictRes}
-                                    onChange={viewmodel.toggleAutoConclictRes}
+                                    checked={viewmodel.autoConflictRes}
+                                    onChange={viewmodel.toggleAutoConflictRes}
                                 />
                                 Konfliktauflösung
                             </label>
@@ -93,9 +96,9 @@ const SettingsView: React.FC = () => {
                 className="settingsButton"
                 onClick={() => viewmodel.setSettingsOpen(true)}>Einstellungen Öffnen
             </button>
-        )
+        );
     }
 
-}
+};
 
 export default SettingsView;
