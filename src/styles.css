@@ -235,7 +235,7 @@ button:focus-visible {
 
 .listViewTitleHeader {
     flex-direction: row;
-    background-color: var(--dialog-bg);
+    background-color: var(--panel);
     display: flex;
     border-radius: 12px;
     margin: 5px 10px;
@@ -260,6 +260,10 @@ button:focus-visible {
     margin: 5px;
     padding: 4px 8px;
     border-radius: 8px;
+}
+.listViewEntry span {
+    text-align: start;
+    white-space: nowrap;
 }
 
 .listViewEntry {
@@ -312,7 +316,7 @@ button:focus-visible {
     display: flex;
     flex-direction: row;
     width: 100%;
-    height: 80vh
+    height: 100%;
 }
 
 .borderBox {
@@ -325,7 +329,7 @@ button:focus-visible {
     font-size: 2em;
     padding: 50px 50px 0 50px;
     width: 100%;
-    height: 100%;
+    height: 90%;
     display: grid;
     grid-template-columns: minmax(40%, auto) 1fr 1fr;
     flex-direction: column;

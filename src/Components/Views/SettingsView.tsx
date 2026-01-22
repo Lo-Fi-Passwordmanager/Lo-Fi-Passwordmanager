@@ -68,7 +68,7 @@ const SettingsView: React.FC<
                         </div>
 
                         <div>
-                            <label>Min. bis Sperre:  </label>
+                            <label>Min. bis Sperre: </label>
                             <input
                                 className="inputField"
                                 type="number"
@@ -77,10 +77,8 @@ const SettingsView: React.FC<
                                 min="1"
                                 max="120"
                                 step="1"
-                                autoFocus
                             />
-                    </div>
-
+                        </div>
                     </div>
                     <button onClick={() => viewmodel.setSettingsOpen(false)}>Einstellungen Schließen</button>
                 </div>

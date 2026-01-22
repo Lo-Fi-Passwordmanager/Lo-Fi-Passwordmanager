@@ -11,17 +11,19 @@ import FilteredListView from "./FilteredListView.tsx";
 
 interface PasswordViewProps {
     automergeFacade?: AutomergeFacade | null,
-    openedDbName: string
+    openedDbName: string,
+    closeDatabase: () => void
 }
 
 /**
  * The view that should be shown, when the user opened a database successfully and shows the whole structure and one selected entry
  */
-const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbName}) => {
+const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbName, closeDatabase}) => {
     const passwordViewModel = usePasswortViewModel(automergeFacade as AutomergeFacade);
 
     return (
-        <div>
+        <div style={{margin: "10px", height: "95vh"}}>
+            {/*Dialog for creating a new Entry*/}
             {passwordViewModel.getInItemCreation() &&
                 <ItemCreationDialog
                     addItem={passwordViewModel.addItem}
@@ -29,15 +31,22 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                     cancelItemCreation={() => passwordViewModel.setInItemCreation(false)}
                     setCurItem={passwordViewModel.setCurItem}
                 />}
+
+
             <div className="passwordView">
                 <div className="borderBox scrollableContainer" style={{width: "30%"}}>
+                    {/*Container for every related to the search/Sort features */}
                     <OrganizeListView
                         getCurSortCriterion={passwordViewModel.getCurSortCriterion}
                         setCurSortCriterion={passwordViewModel.setAndStoreSortCriterion}
                         toggleOrder={passwordViewModel.toggleOrder}
                         getOrder={passwordViewModel.isAscending}
                         setLiveSearchValue={passwordViewModel.setSearchValue}
+                        closeDatabase={closeDatabase}
                     />
+
+
+                    {/*Shows only the Views, that match the given search input*/}
                     {passwordViewModel.searchValue.length > 0 && <FilteredListView
                         root={passwordViewModel.getRootFolder()}
                         setCurItem={passwordViewModel.setCurItem}
@@ -48,6 +57,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                         isAscending={passwordViewModel.isAscending}
                         filterText={passwordViewModel.searchValue}
                     />}
+                    {/*The basic ListView which shows all Items and Folders in their hierarchy*/}
                     {passwordViewModel.searchValue.length === 0 && <ListView
                         item={passwordViewModel.getRootFolder()}
                         setCurItem={passwordViewModel.setCurItem}
@@ -61,7 +71,10 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                         openedDbName={openedDbName}
                     />}
                 </div>
+
+
                 <div className="borderBox" style={{width: "70%"}}>
+                    {/*Depending on the state, either shows the editable or the normal/noneditable passwordView*/}
                     {!passwordViewModel.inEditable &&
                         <EntryView item={passwordViewModel.getCurEntry()}
                                    copyAndClearClipboard={passwordViewModel.copyToClipboardAndClear}
@@ -73,6 +86,8 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                                               copyAndClearClipboard={passwordViewModel.copyToClipboardAndClear}
                                               setEditableView={() => passwordViewModel.setInEditable(false)}/>}
                 </div>
+
+                {/*A Toast that may be called at any time with a given message*/}
                 <ToastDialog message={passwordViewModel.toastMessage}
                              isVisible={passwordViewModel.toastVisible}
                              onClose={() => passwordViewModel.setToastVisible(false)}>

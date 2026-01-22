@@ -30,12 +30,15 @@ const FilteredListView: React.FC<{
                       setCurrentParent={setCurrentParent}
                       deleteItem={deleteItem}
                       sortCriterion={sortCriterion}
-                      isAscending={isAscending} dirtyItemId={null}            />
+                      isAscending={isAscending} dirtyItemId={null}
+                      getCurItem={() => {console.error("Used Function on Filtered List View which should not be called");
+                      return new Folder("Error", "Error")}}
+                      openedDbName={""}            />
             <div className={"divider"} style={{width:'100%'}}/>
             <div>
                 {filteredFolders.entries.map((item: Item, index: number) => {
                 return <div className="listViewTitleHeader" key={index}>
-                    <span>Titel:</span> <span>{item.title}</span>
+                    <span style={{marginLeft: "5px"}}>Titel:</span> <span>{item.title}</span>
                     <button onClick={() => deleteItem(item)}>🗑️</button>
                 </div>
             })}
