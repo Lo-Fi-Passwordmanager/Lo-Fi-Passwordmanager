@@ -121,6 +121,9 @@ button, select {
     box-shadow: var(--shadow);
     transition: transform 0.1s active, filter 0.2s ease, box-shadow 0.2s ease;
 }
+select {
+
+}
 
 button:hover {
     filter: brightness(1.2);
@@ -226,6 +229,13 @@ button:focus-visible {
     transition: filter 0.3s ease;
 }
 
+.divider {
+    height: 1px;
+    background-color: var(--panel);
+    margin: 10px 0;
+    width: 100%;
+}
+
 .settingsButton {
     float: right;
     position: absolute;
@@ -245,6 +255,7 @@ button:focus-visible {
     letter-spacing: 0.05em;
     white-space: nowrap;
     align-items: center;
+    padding-left: 10px;
 }
 
 .listViewTitleHeader:hover {
@@ -467,20 +478,6 @@ button:focus-visible {
     margin-bottom: 0;
 }
 
-.SortContainer {
-    display: grid;
-    grid-template-columns: 85% 15%;
-    gap: 8px;
-    padding: 8px;
-}
-
-.SearchContainer {
-    display: grid;
-    grid-template-columns: 100%;
-    gap: 8px;
-    padding: 8px;
-}
-
 .OrganizedListView {
     display: grid;
     grid-template-columns: 9fr 1fr;
@@ -492,6 +489,15 @@ button:focus-visible {
 /* First element fills the entire first row */
 .OrganizedListView > :first-child {
     grid-column: 1 / -1;
+}
+
+.FilteredListView__header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin: 12px;
+    margin-bottom: 8px;
+    color: var(--outline);
 }
 
 .entryDateViewEntry {

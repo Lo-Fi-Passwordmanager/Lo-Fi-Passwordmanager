@@ -46,7 +46,7 @@ const ListView: React.FC<{
         const entry = listViewModel.getItem() as Entry;
         return (
             <div className="listViewEntry" onClick={() => setCurItem(entry)}>
-                <span style={{marginRight: "1ch"}}>Titel:</span> <span>{entry.title}</span>
+                <span style={{marginRight: "1ch"}}></span> <span>{entry.title}</span>
                 <div className="btnWrapper">
                     <button onClick={() => deleteItem(item)}>🗑️</button>
                 </div>
