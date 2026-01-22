@@ -15,7 +15,7 @@ const LoginView: React.FC<{
     setLoggedIn: (value: (((prevState: boolean) => boolean) | boolean)) => void,
     setAutomergeFacade: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void,
     securityProvider: SecurityProvider,
-    setOpenedDbName?: (value: (((prevState: string) => string) | string)) => void
+    setOpenedDbName: (value: (((prevState: string) => string) | string)) => void
 }> = ({repo, setLoggedIn, setAutomergeFacade, securityProvider, setOpenedDbName}) => {
 
     const viewModel = useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, securityProvider, setOpenedDbName);

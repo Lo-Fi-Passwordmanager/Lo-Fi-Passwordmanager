@@ -228,9 +228,10 @@ button:focus-visible {
 
 .settingsButton {
     float: right;
-    position: fixed;
+    position: absolute;
     top: 1%;
     right: 0.5%;
+    z-index: 90;
 }
 
 .listViewTitleHeader {

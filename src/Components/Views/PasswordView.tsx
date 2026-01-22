@@ -8,6 +8,7 @@ import ItemCreationDialog from "./Dialogs/ItemCreationDialog.tsx";
 import ToastDialog from "./Dialogs/ToastDialog.tsx";
 import EditablePasswordView from "./EditablePasswordView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
+import SettingsView from "./SettingsView.tsx";
 
 interface PasswordViewProps {
     automergeFacade?: AutomergeFacade | null,
@@ -73,7 +74,8 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                 </div>
 
 
-                <div className="borderBox" style={{width: "70%"}}>
+                <div className="borderBox" style={{width: "70%", position: "relative"}}>
+                    <SettingsView />
                     {/*Depending on the state, either shows the editable or the normal/noneditable passwordView*/}
                     {!passwordViewModel.inEditable &&
                         <EntryView item={passwordViewModel.getCurEntry()}

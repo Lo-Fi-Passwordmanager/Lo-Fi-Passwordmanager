@@ -89,7 +89,7 @@ const SettingsView: React.FC = () => {
         return (
             <button
                 className="settingsButton"
-                onClick={() => viewmodel.setSettingsOpen(true)}>Einstellungen Öffnen
+                onClick={() => viewmodel.setSettingsOpen(true)}>⚙️
             </button>
         );
     }
