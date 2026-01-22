@@ -66,6 +66,21 @@ const SettingsView: React.FC<
                                 Sperren der App bei Inaktivität
                             </label>
                         </div>
+
+                        <div>
+                            <label>Min. bis Sperre:  </label>
+                            <input
+                                className="inputField"
+                                type="number"
+                                value={viewmodel.timeoutLength}
+                                onChange={(e) => viewmodel.setTimeOutLengthVM(e.target.value)}
+                                min="1"
+                                max="120"
+                                step="1"
+                                autoFocus
+                            />
+                    </div>
+
                     </div>
                     <button onClick={() => viewmodel.setSettingsOpen(false)}>Einstellungen Schließen</button>
                 </div>
