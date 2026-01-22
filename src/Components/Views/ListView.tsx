@@ -14,12 +14,24 @@ const ListView: React.FC<{
     setCurItem: (entry: Entry) => void,
     getCurItem: () => Item,
     setItemCreationDialog: () => void,
-    setCurrentParent?: (item: Item) => void
+    setCurrentParent?: (item: Item) => void,
     deleteItem: (item: Item) => void,
     sortCriterion: SortCriteria,
     isAscending: boolean,
     dirtyItemId: string | null,
-}> = ({item, setCurItem, getCurItem, setItemCreationDialog, setCurrentParent, deleteItem, sortCriterion, isAscending, dirtyItemId}) => {
+    openedDbName: string,
+}> = ({
+          item,
+          setCurItem,
+          getCurItem,
+          setItemCreationDialog,
+          setCurrentParent,
+          deleteItem,
+          sortCriterion,
+          isAscending,
+          dirtyItemId,
+          openedDbName
+      }) => {
     const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem);
 
     function addButtonPressed() {
@@ -49,16 +61,18 @@ const ListView: React.FC<{
             <>
                 {/* Name and Buttons */}
                 <div className="listViewTitleHeader">
+                    {(item.id != "") &&
                     <button style={{marginRight: "15px"}}
-                            onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? ">" : "v"}</button>
-                    <span>{listViewModel.getItem().title}</span>
+                            onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? ">" : "v"}</button>}
+
+                    <span style={{marginLeft: ((item.id != "")?"":"10px" )}}>{ (item.id != "") ? listViewModel.getItem().title : openedDbName}</span>
+
                     <div className="btnWrapper">
                         <button onClick={() => {
                             addButtonPressed();
                             listViewModel.setExtended(true);
                         }}>+
                         </button>
-                        {/* Delete button should not be rendered for the root */}
                         {(item.id != "") && <button onClick={() => deleteItem(item)}>🗑️</button>}
                         {/* FIXME: Löschbestätigung einbauen */}</div>
                 </div>
@@ -72,13 +86,12 @@ const ListView: React.FC<{
                                     item={item}
                                     setCurItem={setCurItem}
                                     getCurItem={getCurItem}
-                                             setItemCreationDialog={setItemCreationDialog}
-                                             setCurrentParent={setCurrentParent}
-                                             deleteItem={deleteItem}
+                                    setItemCreationDialog={setItemCreationDialog}
+                                    setCurrentParent={setCurrentParent}
+                                    deleteItem={deleteItem}
                                     sortCriterion={sortCriterion}
                                     isAscending={isAscending}
-                                    dirtyItemId={dirtyItemId}
-                                />;
+                                    dirtyItemId={dirtyItemId} openedDbName={""}                                />;
                             })}
                     </div>
             </>

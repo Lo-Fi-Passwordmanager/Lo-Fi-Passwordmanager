@@ -10,13 +10,14 @@ import EditablePasswordView from "./EditablePasswordView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
 
 interface PasswordViewProps {
-    automergeFacade?: AutomergeFacade | null;
+    automergeFacade?: AutomergeFacade | null,
+    openedDbName: string
 }
 
 /**
  * The view that should be shown, when the user opened a database successfully and shows the whole structure and one selected entry
  */
-const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade}) => {
+const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbName}) => {
     const passwordViewModel = usePasswortViewModel(automergeFacade as AutomergeFacade);
 
     return (
@@ -56,6 +57,8 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade}) => {
                         sortCriterion={passwordViewModel.getCurSortCriterion()}
                         isAscending={passwordViewModel.isAscending}
                         dirtyItemId={passwordViewModel.dirtyItemId}
+                        getCurItem={passwordViewModel.getCurEntry}
+                        openedDbName={openedDbName}
                     />}
                 </div>
                 <div className="borderBox" style={{width: "70%"}}>

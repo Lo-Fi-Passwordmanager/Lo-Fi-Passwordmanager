@@ -20,6 +20,7 @@ export const usePasswordManagerViewModel = () => {
     const [toastMessage, setToastMessage] = useState("");
     const [toastVisible, setToastVisible] = useState(false);
     const [synchronization, setSynchronization] = useState<boolean>(localStorage.getItem("synchronization") === "true");
+    const [openedDatabaseName, setOpenedDatabaseName] = useState<string>("");
 
     const initialNetworkAdapters = [
         new BroadcastChannelNetworkAdapter(),
@@ -94,7 +95,8 @@ export const usePasswordManagerViewModel = () => {
         securityProvider,
         toastMessage,
         toastVisible,
-
+        openedDatabaseName,
+        setOpenedDatabaseName,
         getLoggedIn,
         setLoggedIn,
         setAutomergeFacade,

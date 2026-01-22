@@ -6,7 +6,7 @@ import LoginDatabaseDialog from "./Dialogs/LoginDatabaseDialog.tsx";
 import PWMLogo from "../../assets/logo_gelb.svg?inline";
 import type {Repo} from "@automerge/react";
 import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
-import type {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
+import  {type SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import ToastDialog from "./Dialogs/ToastDialog.tsx";
 
 
@@ -14,10 +14,11 @@ const LoginView: React.FC<{
     repo: Repo,
     setLoggedIn: (value: (((prevState: boolean) => boolean) | boolean)) => void,
     setAutomergeFacade: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void,
-    securityProvider: SecurityProvider
-}> = ({repo, setLoggedIn, setAutomergeFacade, securityProvider}) => {
+    securityProvider: SecurityProvider,
+    setOpenedDbName?: (value: (((prevState: string) => string) | string)) => void
+}> = ({repo, setLoggedIn, setAutomergeFacade, securityProvider, setOpenedDbName}) => {
 
-    const viewModel = useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, securityProvider);
+    const viewModel = useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, securityProvider, setOpenedDbName);
 
     return (
         <div className="loginView">

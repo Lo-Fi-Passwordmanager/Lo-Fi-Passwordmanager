@@ -29,16 +29,17 @@ export type LoginViewModelReturn = {
 /**
  * ViewModel for the LoginView
  * @param repo the automerge repo
- * @param setLoggedIn the function to update the View to switch from loginView to PasswordView
- * @param setAutomergeFacade the function to update the automergeFacade of the used database on correct Login
- * @param securityProvider
+ * @param setLoggedIn the function to update the View to switch from loginView to PasswordView.
+ * @param setAutomergeFacade the function to update the automergeFacade of the used database on correct Login.
+ * @param securityProvider the security Provider to encrypt/decrypt with the given master password.
+ * @param setOpenedDbName the function that sets the Database name on the PasswordManager.
  * @returns all data and functions required by the LoginView
  */
 export const useLoginViewModel = (
     repo: Repo, setLoggedIn: (value: (((prevState: boolean) => boolean) | boolean)) => void,
     setAutomergeFacade: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void,
     securityProvider: SecurityProvider
-): LoginViewModelReturn => {
+    , setOpenedDbName: ((value: (((prevState: string) => string) | string)) => void)): LoginViewModelReturn => {
     // map of database names to their automerge urls
     const [databases, setDatabases] = useState(() => loadAllDatabases());
     // names of all available databases to show in the listing
@@ -101,7 +102,7 @@ export const useLoginViewModel = (
             }
 
             setLoadingScreenActive(true);
-
+            setOpenedDbName(selectedDatabase!);
             const facade = new AutomergeFacade(repo, dbUrl, securityProvider);
             const salt = (await facade.getSalt())!;
             const validation = (await facade.getValidation())!;
