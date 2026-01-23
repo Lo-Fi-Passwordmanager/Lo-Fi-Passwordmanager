@@ -10,8 +10,13 @@ import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import {useIdleTimer} from "react-idle-timer";
 import {Settings, useSettings} from "../../Model/Settings.ts";
+import Peer from "peerjs";
+import {PeerjsNetworkAdapter} from "automerge-repo-network-peerjs";
 
 export const usePasswordManagerViewModel = () => {
+    const [peer, setPeer] = useState(new Peer("GubiFortnite"));
+    const [connector] = useState(peer.connect("Fortnite"))
+
     const settings = useSettings();
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
     const [automergeFacade, setAutomergeFacade] = useState<AutomergeFacade | null>(null);
@@ -22,9 +27,20 @@ export const usePasswordManagerViewModel = () => {
     const [synchronization] = useState<boolean>(settings.getSynchronization());
     const [openedDatabaseName, setOpenedDatabaseName] = useState<string>("");
 
+    peer.on("connection", (conn) => {
+        conn.on("data", (data) => {
+            // Will print 'hi!'
+            console.log("data:" + data);
+        });
+        conn.on("open", () => {
+            conn.send("open");
+        });
+    });
+
     const initialNetworkAdapters = [
         new BroadcastChannelNetworkAdapter(),
-        new WebSocketClientAdapter("wss://5bcaaf94-60ef-4757-b55c-5f2e443c480c.ka.bw-cloud-instance.org/")
+        new WebSocketClientAdapter("wss://5bcaaf94-60ef-4757-b55c-5f2e443c480c.ka.bw-cloud-instance.org/"),
+        new PeerjsNetworkAdapter(connector)
     ];
 
     const [networkAdapters, setNetworkAdapters] = useState<NetworkAdapterInterface[] | undefined>(synchronization ? initialNetworkAdapters : undefined);
