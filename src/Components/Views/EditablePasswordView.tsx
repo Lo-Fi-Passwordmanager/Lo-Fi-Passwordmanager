@@ -49,10 +49,9 @@ const EditablePasswordView: React.FC<{
                             }}>
                         💾
                     </button>
-                    <div className={"entryViewAttribute"}>
-                        <input className={"attribute-value"} type={"text"} value={viewmodel.title}
-                               onChange={(e) => viewmodel.setTitle(e.target.value)}/>
-                    </div>
+                    <input className={"title-value"} type={"text"} value={viewmodel.title}
+                           onChange={(e) => viewmodel.setTitle(e.target.value)}/>
+
                     <div className={"entryViewListing"}>
                         <div className={"entryViewAttribute"}>
                             <span>Benutzername:</span>
