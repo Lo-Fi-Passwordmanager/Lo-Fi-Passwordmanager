@@ -119,7 +119,7 @@ button, select {
 
     /* Modern Interaction Style */
     box-shadow: var(--shadow);
-    transition: transform 0.1s active, filter 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.1s, active, filter 0.2s ease, box-shadow 0.2s ease;
 }
 
 select {
