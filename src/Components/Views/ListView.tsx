@@ -1,7 +1,8 @@
 import {type Item} from "../../Model/Item.ts";
 import {useListViewModel} from "../ViewModels/ListViewModel.ts";
 import {Entry} from "../../Model/Entry.ts";
-
+import React from "react";
+import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
 
 /**
  * The View that represents the whole database, which is represented by {@link Entry}/{@link Folder} Class Instances
@@ -11,12 +12,27 @@ import {Entry} from "../../Model/Entry.ts";
 const ListView: React.FC<{
     item: Item,
     setCurItem: (entry: Entry) => void,
+    getCurItem: () => Item,
     setItemCreationDialog: () => void,
-    setCurrentParent?: (item: Item) => void
+    setCurrentParent?: (item: Item) => void,
     deleteItem: (item: Item) => void,
+    sortCriterion: SortCriteria,
+    isAscending: boolean,
     dirtyItemId: string | null,
-}> = ({item, setCurItem, setItemCreationDialog, setCurrentParent, deleteItem, dirtyItemId}) => {
-    const listViewModel = useListViewModel(item, dirtyItemId, setCurItem);
+    openedDbName: string,
+}> = ({
+          item,
+          setCurItem,
+          getCurItem,
+          setItemCreationDialog,
+          setCurrentParent,
+          deleteItem,
+          sortCriterion,
+          isAscending,
+          dirtyItemId,
+          openedDbName
+      }) => {
+    const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem);
 
     function addButtonPressed() {
         setItemCreationDialog();
@@ -30,8 +46,10 @@ const ListView: React.FC<{
         const entry = listViewModel.getItem() as Entry;
         return (
             <div className="listViewEntry" onClick={() => setCurItem(entry)}>
-                <span>Titel:</span> <span>{entry.title}</span>
-                <button onClick={() => deleteItem(item)}>🗑️</button>
+                <span style={{marginRight: "1ch"}}></span> <span>{entry.title}</span>
+                <div className="btnWrapper">
+                    <button onClick={() => deleteItem(item)}>🗑️</button>
+                </div>
             </div>
         );
         /**
@@ -43,29 +61,39 @@ const ListView: React.FC<{
             <>
                 {/* Name and Buttons */}
                 <div className="listViewTitleHeader">
-                    <span>{listViewModel.getItem().title}:</span>
-                    <button
-                        onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? ">" : "v"}</button>
-                    <button onClick={() => addButtonPressed()}>+</button>
-                    {/* Delete button should not be rendered for the root */}
-                    {(item.id != "") && <button onClick={() => deleteItem(item)}>🗑️</button>}
-                    {/* FIXME: Löschbestätigung einbauen */}
+                    {(item.id != "") &&
+                    <button style={{marginRight: "15px"}}
+                            onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? ">" : "v"}</button>}
+
+                    <span style={{marginLeft: ((item.id != "")?"":"10px" )}}>{ (item.id != "") ? listViewModel.getItem().title : openedDbName}</span>
+
+                    <div className="btnWrapper">
+                        <button onClick={() => {
+                            addButtonPressed();
+                            listViewModel.setExtended(true);
+                        }}>+
+                        </button>
+                        {(item.id != "") && <button onClick={() => deleteItem(item)}>🗑️</button>}
+                        {/* FIXME: Löschbestätigung einbauen */}</div>
                 </div>
 
                 {/* Recursive call of children with indent to visualizes depth in the tree */}
-                <div className="listViewEntryWrapper"
-                     style={{display: (listViewModel.getExtended() ? "block" : "none")}}>
-                    {listViewModel.getChildren() &&
-                        listViewModel.getChildren()!.map((item: Item, index: number) => {
-                            return <ListView key={index} item={item}
-                                             setCurItem={setCurItem}
-                                             setItemCreationDialog={setItemCreationDialog}
-                                             setCurrentParent={setCurrentParent}
-                                             deleteItem={deleteItem}
-                                             dirtyItemId={dirtyItemId}
-                            />;
-                        })}
-                </div>
+                <div className="listViewEntryWrapper" style={{display: (listViewModel.getExtended()?"block":"none")}}>
+                        {listViewModel.getChildren() &&
+                            listViewModel.getChildren()!.map((item: Item, index: number) => {
+                                return <ListView
+                                    key={index}
+                                    item={item}
+                                    setCurItem={setCurItem}
+                                    getCurItem={getCurItem}
+                                    setItemCreationDialog={setItemCreationDialog}
+                                    setCurrentParent={setCurrentParent}
+                                    deleteItem={deleteItem}
+                                    sortCriterion={sortCriterion}
+                                    isAscending={isAscending}
+                                    dirtyItemId={dirtyItemId} openedDbName={""}                                />;
+                            })}
+                    </div>
             </>
         );
     }

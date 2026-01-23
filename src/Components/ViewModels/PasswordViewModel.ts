@@ -2,6 +2,19 @@ import {useRef, useState} from "react";
 import {type Attribute, AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {useAutomergeFacade} from "../../Utility/useAutomergeFacade.ts";
 import type {Item} from "../../Model/Item.ts";
+import {
+    loadCurrentSortCriterion,
+    loadIsAscending,
+    saveCurrentSortCriterion,
+    saveIsAscending
+} from "../../Utility/Storage.ts";
+
+export const SortCriteria = {
+    Name: "NAME",
+    CreatedAt: "CREATED",
+    EditedAt: "EDITED",
+} as const;
+export type SortCriteria = typeof SortCriteria[keyof typeof SortCriteria];
 
 /**
  * The viewmodel for the PasswordView, which stores the currently displayed entry
@@ -20,10 +33,76 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     const clipboardTimerRef = useRef<number | null>(null);
     const [inEditable, setInEditable] = useState(false);
     const [dirtyItemId, setDirtyItemId] = useState<string | null>(null);
+    const [hidePassword, setHidePassword] = useState(true);
 
     function setCurItem(item: Item) {
         _setCurItem(item);
         setDirtyItemId(null);
+    }
+
+    const [curSortCrit, setCurSortCrit] = useState<SortCriteria>(initSortCriterion);
+    const [isAscending, setIsAscending] = useState<boolean>(initIsAscending);
+
+    const [searchValue, setSearchValue] = useState<string>("");
+
+    /**
+     * initializes the sort criterion from the local storage, or uses the default value
+     */
+    function initSortCriterion() {
+        const savedCriterion = loadCurrentSortCriterion();
+        if (isCriterion(savedCriterion)) {
+            return savedCriterion;
+        } else {
+            return SortCriteria.Name;
+        }
+    }
+
+    /**
+     * Toggles the password from ****** to the string and back
+     */
+    function toggleHidePassword() {
+        setHidePassword(!hidePassword);
+    }
+
+    /**
+     * type guard to check if a string is a valid SortCriterion
+     */
+    function isCriterion(value: string | null): value is SortCriteria {
+        return Object.values(SortCriteria).includes(value as SortCriteria);
+    }
+
+    /**
+     * initializes the isAscending boolean from the local storage, or uses the default value
+     */
+    function initIsAscending() {
+        const savedBoolean = loadIsAscending();
+        if (isBoolean(savedBoolean)) {
+            return savedBoolean;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * type guard to check if a value is a boolean
+     */
+    function isBoolean(value: boolean | null): value is boolean {
+        return typeof value === 'boolean';
+    }
+
+    /**
+     * sets and stores the current sort criterion
+     */
+    function setAndStoreSortCriterion(criterion: SortCriteria) {
+        setCurSortCrit(criterion);
+        saveCurrentSortCriterion(criterion)
+    }
+
+    /**
+     * returns the current sort criterion
+     */
+    function getCurSortCriterion() {
+        return curSortCrit;
     }
 
     /**
@@ -66,6 +145,9 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     }
 
     function deleteItem(item: Item) {
+        if (item.id === "") {
+            return;
+        }
         reactiveFacade.deleteItem(item.id);
         item.deleted = true;
         setCurItem(getRootFolder());
@@ -104,8 +186,21 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         }, timeout);
     }
 
+    function toggleOrder() {
+        setIsAscending(!isAscending);
+        saveIsAscending(!isAscending);
+    }
+
     return {
         dirtyItemId,
+        isAscending,
+        searchValue,
+        toastMessage,
+        toastVisible,
+        inEditable,
+        hidePassword,
+        toggleHidePassword,
+        setSearchValue,
         copyToClipboardAndClear,
         setCurItem,
         getCurEntry,
@@ -113,10 +208,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         addItem,
         setToastMessage,
         setToastVisible,
-        toastVisible,
-        inEditable,
         setInEditable,
-        toastMessage,
         updateItemAttribute,
         toggleEditablePasswordView,
         getInEditablePasswordView,
@@ -124,6 +216,9 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setInItemCreation,
         setCurParent,
         getCurParent,
-        deleteItem
+        deleteItem,
+        setAndStoreSortCriterion,
+        toggleOrder,
+        getCurSortCriterion,
     };
 };

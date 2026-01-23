@@ -21,32 +21,16 @@ const DatabaseListing: React.FC<DatabaseListingProps> = ({databases, openDatabas
     };
 
     return (
-        <div className="listing">
+        <div className="DatabaseListing">
             {Array.from(databases).map(([db, url]) => (
-                <div
-                    key={db}
-                    style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        width: "100%",
-                        alignItems: "stretch"
-                    }}
-                >
-                    <button
-                        style={{ width: "100%", padding: "0.6rem", margin: "1%" }}
-                        onClick={() => openDatabase(db)}
-                    >
+                <div className={"DatabaseAndOptions"} key={db}>
+                    <button onClick={() => openDatabase(db)}>
                         {db}
                     </button>
-                    <button
-                        style={{padding: "0.6rem", margin: "1%" }}
-                        onClick={() => copyToClipboard(url)}
-                        title="Copy URL"
-                    >
+                    <button onClick={() => copyToClipboard(url)} title="Copy URL">
                         🔗
                     </button>
-                    <button style={{padding: "0.6rem", margin: "1%" }}
-                    onClick={() => removeDatabase(db)}>
+                    <button onClick={() => removeDatabase(db)}>
                         🗑️
                     </button>
                 </div>
