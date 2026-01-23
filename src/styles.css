@@ -121,6 +121,7 @@ button, select {
     box-shadow: var(--shadow);
     transition: transform 0.1s active, filter 0.2s ease, box-shadow 0.2s ease;
 }
+
 select {
     border-right: 10px solid transparent
 }
@@ -223,6 +224,34 @@ button:focus-visible {
     white-space: nowrap;
 }
 
+.numberInput {
+    display: grid;
+    grid-template-columns: 8fr 1fr 1fr;
+    align-items: center;
+    gap: 8px;
+    width: 300px;
+}
+
+.number-control {
+    width: 50px;
+    max-height: 100%;
+    min-height: 100%;
+    font-size: 1.5em;
+    padding: 0;
+    padding-bottom: 3px;
+    box-shadow: none;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.timeout-setting {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
 .flexContainer {
     display: flex;
     flex-direction: column;
@@ -294,6 +323,7 @@ button:focus-visible {
     padding: 4px 8px;
     border-radius: 8px;
 }
+
 .listViewEntry span {
     text-align: start;
     white-space: nowrap;

@@ -1,5 +1,4 @@
 import {useSettingsViewModel} from "../ViewModels/SettingsViewModel.ts";
-import React from "react";
 
 
 /**
@@ -64,17 +63,20 @@ const SettingsView: React.FC = () => {
                             </label>
                         </div>
 
-                        {viewmodel.timeOutActive && <div>
+                        {viewmodel.timeOutActive && <div className={"timeout-setting"}>
                             <label>Minuten bis Abmeldung: </label>
-                            <input
-                                className="inputField"
-                                type="number"
-                                value={viewmodel.timeoutLength}
-                                onChange={(e) => viewmodel.setTimeOutLengthVM(e.target.value)}
-                                min="1"
-                                max="120"
-                                step="1"
-                            />
+                            <div className={"numberInput"}>
+                                <input
+                                    type="number"
+                                    value={viewmodel.timeoutLength}
+                                    onChange={(e) => viewmodel.setTimeOutLengthVM(e.target.value)}
+                                    min="1"
+                                    max="120"
+                                    step="1"
+                                />
+                                <button className={"number-control"} onClick={viewmodel.decrease}>–</button>
+                                <button className={"number-control"} onClick={viewmodel.increase}>+</button>
+                            </div>
                         </div>}
                     </div>
                     <button onClick={() => viewmodel.setSettingsOpen(false)} style={{marginTop: "1em"}}>Einstellungen

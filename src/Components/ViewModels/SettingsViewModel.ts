@@ -57,6 +57,16 @@ export const useSettingsViewModel = () => {
         }
     }
 
+    function increase() {
+        setTimeOutLengthVM((timeoutLength + 1).toString());
+    }
+
+    function decrease() {
+        if(timeoutLength > 1) {
+            setTimeOutLengthVM((timeoutLength - 1).toString());
+        }
+    }
+
 
     return {
         darkMode,
@@ -72,5 +82,7 @@ export const useSettingsViewModel = () => {
         toggleTimeOutActive,
         setSettingsOpen,
         setTimeOutLengthVM,
+        increase,
+        decrease,
     };
 };
