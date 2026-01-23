@@ -14,10 +14,11 @@ import Peer from "peerjs";
 import {PeerjsNetworkAdapter} from "automerge-repo-network-peerjs";
 
 export const usePasswordManagerViewModel = () => {
-    const [peer, setPeer] = useState(new Peer("GubiFortnite"));
-    const [connector] = useState(peer.connect("Fortnite"))
+    const [peer, setPeer] = useState(new Peer());
+    window.peer = peer;
 
     const settings = useSettings();
+    const [connector] = useState(settings.getConnector());
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
     const [automergeFacade, setAutomergeFacade] = useState<AutomergeFacade | null>(null);
     const [securityProvider] = useState(() => new SecurityProvider());
@@ -27,7 +28,12 @@ export const usePasswordManagerViewModel = () => {
     const [synchronization] = useState<boolean>(settings.getSynchronization());
     const [openedDatabaseName, setOpenedDatabaseName] = useState<string>("");
 
+    connector.on("open", () => {
+        conn.send("hi!");
+    });
+
     peer.on("connection", (conn) => {
+        console.log("connection", conn);
         conn.on("data", (data) => {
             // Will print 'hi!'
             console.log("data:" + data);
@@ -37,22 +43,27 @@ export const usePasswordManagerViewModel = () => {
         });
     });
 
+    const [peerJsAdapter, setPeerJsAdapter] = useState<PeerjsNetworkAdapter>(new PeerjsNetworkAdapter(connector));
+
     const initialNetworkAdapters = [
         new BroadcastChannelNetworkAdapter(),
         new WebSocketClientAdapter("wss://5bcaaf94-60ef-4757-b55c-5f2e443c480c.ka.bw-cloud-instance.org/"),
-        new PeerjsNetworkAdapter(connector)
+        peerJsAdapter,
     ];
 
     const [networkAdapters, setNetworkAdapters] = useState<NetworkAdapterInterface[] | undefined>(synchronization ? initialNetworkAdapters : undefined);
 
     useEffect(() => {
+        setPeerJsAdapter(new PeerjsNetworkAdapter(settings.getConnector()));
         if (settings.getSynchronization()) {
             // Does not cause cascading renders (apparently) => ignore error
             setNetworkAdapters(initialNetworkAdapters);
+
         } else {
             setNetworkAdapters(undefined);
         }
     }, [settings]);
+
 
     const repo = new Repo({
         network: networkAdapters,

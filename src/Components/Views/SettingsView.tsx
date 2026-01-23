@@ -79,6 +79,16 @@ const SettingsView: React.FC = () => {
                             </div>
                         </div>}
                     </div>
+                    <div>
+                        <label>{"Deine Peer Id: \n"}</label>
+                    </div>
+                    <div>
+                        <label>{viewmodel.getPeerId()}</label>
+                    </div>
+
+                    <label>Other Peer Id</label>
+                    <input type="text" onChange={(e) => viewmodel.setConnection(e.target.value)} />
+
                     <button onClick={() => viewmodel.setSettingsOpen(false)} style={{marginTop: "1em"}}>Einstellungen
                         Schließen
                     </button>

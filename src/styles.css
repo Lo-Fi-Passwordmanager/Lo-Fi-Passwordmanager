@@ -161,6 +161,8 @@ button:focus-visible {
 }
 
 .dialog {
+    width: fit-content;
+    overflow: auto;
     background: var(--dialog-bg);
     color: var(--text);
     padding: 20px;
@@ -203,7 +205,8 @@ button:focus-visible {
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    width: 50vmin;
+    min-width: 10vmin;
+    width: fit-content;
     gap: 24px;
 }
 

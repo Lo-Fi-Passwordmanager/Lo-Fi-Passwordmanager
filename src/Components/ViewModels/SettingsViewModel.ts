@@ -61,6 +61,14 @@ export const useSettingsViewModel = () => {
         setTimeOutLengthVM((timeoutLength + 1).toString());
     }
 
+    function getPeerId() {
+        return settings.getPeer().id;
+    }
+
+    function setConnection(id: string) {
+        settings.setConnector(id);
+    }
+
     function decrease() {
         if(timeoutLength > 1) {
             setTimeOutLengthVM((timeoutLength - 1).toString());
@@ -76,6 +84,7 @@ export const useSettingsViewModel = () => {
         settingsOpen,
         timeoutLength,
 
+        setConnection,
         toggleDarkMode,
         toggleSynchronisation,
         toggleAutoConflictRes,
@@ -84,5 +93,6 @@ export const useSettingsViewModel = () => {
         setTimeOutLengthVM,
         increase,
         decrease,
+        getPeerId,
     };
 };

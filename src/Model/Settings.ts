@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import Peer, {type DataConnection} from "peerjs";
 
 const SYNCHRONISATION = "synchronisation";
 const AUTO_CONFLICT_RESOLUTION = "auto_conflict_resolution";
@@ -36,6 +37,8 @@ export class Settings {
     private _darkMode: boolean;
     private _timeoutActive: boolean;
     private _timeoutLength: number;
+    private peer: Peer;
+    private connector: DataConnection;
 
     private listeners: SettingsListener[] = [];
 
@@ -46,7 +49,10 @@ export class Settings {
         const darkMode = localStorage.getItem(DARK_MODE)
         const timeoutActive = localStorage.getItem(TIMEOUT_ACTIVE)
         const timeoutLength = localStorage.getItem(TIMEOUT_LENGTH);
+        this.peer = new Peer();
+        window.peer = this.peer;
 
+        this.connector = this.peer.connect("");
         if (synchronisation) {
             this._synchronization = JSON.parse(synchronisation);
         } else {
@@ -142,6 +148,23 @@ export class Settings {
         return () => {
             this.listeners = this.listeners.filter(l => l !== listener);
         };
+    }
+
+    public getPeer() {
+        return this.peer;
+    }
+
+    /**
+     * Connects your own peer to a given id
+     * @param id the id to connect to
+     */
+    public setConnector(id: string) {
+        this.connector = this.peer.connect(id);
+        this.notify();
+    }
+
+    public getConnector() {
+        return this.connector;
     }
 
     private notify() {

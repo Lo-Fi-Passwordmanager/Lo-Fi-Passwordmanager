@@ -5,6 +5,7 @@ import PasswordManagerView from "./Components/Views/PasswodManagerView.tsx";
 import "./styles.css";
 import {LoadingScreenProvider} from "./Components/Views/LoadingScreenProvider.tsx";
 import {Repo} from "@automerge/react";
+import type Peer from "peerjs";
 
 
 // Fügt das Repo als zu global hinzu, sodass man im Browser einfach auf das Repo zugreifen kann, zum debuggen.
@@ -12,6 +13,7 @@ import {Repo} from "@automerge/react";
 declare global {
     interface Window {
         repo: Repo;
+        peer: Peer;
     }
 }
 
