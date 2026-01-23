@@ -145,6 +145,9 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     }
 
     function deleteItem(item: Item) {
+        if (item.id === "") {
+            return;
+        }
         reactiveFacade.deleteItem(item.id);
         item.deleted = true;
         setCurItem(getRootFolder());
