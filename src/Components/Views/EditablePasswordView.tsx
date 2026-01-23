@@ -51,26 +51,32 @@ const EditablePasswordView: React.FC<{
                             }}>
                         💾
                     </button>
-                    <span>Titel:</span> <input type={"text"} value={viewmodel.title}
-                                                  onChange={(e) => viewmodel.setTitle(e.target.value)}></input>
-                    <button onClick={() => copyAndClearClipboard(viewmodel.title)}>🔗</button>
-
-                    <span>Benutzername:</span> <input type={"text"} value={viewmodel.username}
-                                                      onChange={(e) => viewmodel.setUsername(e.target.value)}></input>
-                    <button onClick={() => copyAndClearClipboard(viewmodel.username)}>🔗</button>
-
-                    <span>Passwort:</span> <input type={"text"} value={viewmodel.password}
-                                                  onChange={(e) => viewmodel.setPassword(e.target.value)}></input>
-                    <button onClick={() => copyAndClearClipboard(viewmodel.password)}>🔗</button>
-
-                    {/* adds https://www. to the start of the link*/}
-                    <span>URL:</span> <input type={"text"} value={viewmodel.url}
-                                             onChange={(e) => viewmodel.setUrl(e.target.value)}></input>
-                    <button onClick={() => copyAndClearClipboard(viewmodel.url)}>🔗</button>
-
-                    <span>Notiz:</span> <input type={"text"} value={viewmodel.note}
-                                               onChange={(e) => viewmodel.setNote(e.target.value)}></input>
-                    <button onClick={() => copyAndClearClipboard(viewmodel.note)}>🔗</button>
+                    <div className={"entryViewAttribute"}>
+                        <span>Titel:</span> <input type={"text"} value={viewmodel.title}
+                                                   onChange={(e) => viewmodel.setTitle(e.target.value)}></input>
+                        <button onClick={() => copyAndClearClipboard(viewmodel.title)}>🔗</button>
+                    </div>
+                    <div className={"entryViewAttribute"}>
+                        <span>Benutzername:</span> <input type={"text"} value={viewmodel.username}
+                                                          onChange={(e) => viewmodel.setUsername(e.target.value)}></input>
+                        <button onClick={() => copyAndClearClipboard(viewmodel.username)}>🔗</button>
+                    </div>
+                    <div className={"entryViewAttribute"}>
+                        <span>Passwort:</span> <input type={"text"} value={viewmodel.password}
+                                                      onChange={(e) => viewmodel.setPassword(e.target.value)}></input>
+                        <button onClick={() => copyAndClearClipboard(viewmodel.password)}>🔗</button>
+                    </div>
+                    <div className={"entryViewAttribute"}>
+                        {/* adds https://www. to the start of the link*/}
+                        <span>URL:</span> <input type={"text"} value={viewmodel.url}
+                                                 onChange={(e) => viewmodel.setUrl(e.target.value)}></input>
+                        <button onClick={() => copyAndClearClipboard(viewmodel.url)}>🔗</button>
+                    </div>
+                    <div className={"entryViewAttribute"}>
+                        <span>Notiz:</span> <input type={"text"} value={viewmodel.note}
+                                                   onChange={(e) => viewmodel.setNote(e.target.value)}></input>
+                        <button onClick={() => copyAndClearClipboard(viewmodel.note)}>🔗</button>
+                    </div>
                 </div>
                 <div className="entryDateViewEntry">
                     <span>Erstellt am: {item.createdAt.toLocaleString()}</span>
