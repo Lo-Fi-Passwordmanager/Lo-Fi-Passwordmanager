@@ -8,6 +8,7 @@ import {
     saveCurrentSortCriterion,
     saveIsAscending
 } from "../../Utility/Storage.ts";
+import type {Folder} from "../../Model/Folder.ts";
 
 export const SortCriteria = {
     Name: "NAME",
@@ -34,6 +35,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     const [inEditable, setInEditable] = useState(false);
     const [dirtyItemId, setDirtyItemId] = useState<string | null>(null);
     const [hidePassword, setHidePassword] = useState(true);
+    const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
 
     function setCurItem(item: Item) {
         _setCurItem(item);
@@ -191,6 +193,15 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         saveIsAscending(!isAscending);
     }
 
+    function goToFolder(folder: Folder) {
+        setCurItem(folder);
+        setSearchValue("");
+        setSelectedFolderId(folder.id);
+        setTimeout(() =>
+            document.querySelector("[aria-selected='true']")?.scrollIntoView(), 0)
+
+    }
+
     return {
         dirtyItemId,
         isAscending,
@@ -199,6 +210,8 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         toastVisible,
         inEditable,
         hidePassword,
+        selectedFolderId,
+
         toggleHidePassword,
         setSearchValue,
         copyToClipboardAndClear,
@@ -220,5 +233,6 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setAndStoreSortCriterion,
         toggleOrder,
         getCurSortCriterion,
+        goToFolder,
     };
 };

@@ -20,6 +20,7 @@ const ListView: React.FC<{
     isAscending: boolean,
     dirtyItemId: string | null,
     openedDbName: string,
+    selectedFolderId: string | null;
 }> = ({
           item,
           setCurItem,
@@ -30,7 +31,8 @@ const ListView: React.FC<{
           sortCriterion,
           isAscending,
           dirtyItemId,
-          openedDbName
+          openedDbName,
+          selectedFolderId
       }) => {
     const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem);
 
@@ -60,12 +62,13 @@ const ListView: React.FC<{
         return (
             <>
                 {/* Name and Buttons */}
-                <div className="listViewTitleHeader">
+                <div className="listViewTitleHeader" aria-selected={selectedFolderId === item.id}>
                     {(item.id != "") &&
-                    <button style={{marginRight: "15px"}}
-                            onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? ">" : "v"}</button>}
+                        <button style={{marginRight: "15px"}}
+                                onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? ">" : "v"}</button>}
 
-                    <span style={{marginLeft: ((item.id != "")?"":"10px" )}}>{ (item.id != "") ? listViewModel.getItem().title : openedDbName}</span>
+                    <span
+                        style={{marginLeft: ((item.id != "") ? "" : "10px")}}>{(item.id != "") ? listViewModel.getItem().title : openedDbName}</span>
 
                     <div className="btnWrapper">
                         <button onClick={() => {
@@ -78,22 +81,25 @@ const ListView: React.FC<{
                 </div>
 
                 {/* Recursive call of children with indent to visualizes depth in the tree */}
-                <div className="listViewEntryWrapper" style={{display: (listViewModel.getExtended()?"block":"none")}}>
-                        {listViewModel.getChildren() &&
-                            listViewModel.getChildren()!.map((item: Item, index: number) => {
-                                return <ListView
-                                    key={index}
-                                    item={item}
-                                    setCurItem={setCurItem}
-                                    getCurItem={getCurItem}
-                                    setItemCreationDialog={setItemCreationDialog}
-                                    setCurrentParent={setCurrentParent}
-                                    deleteItem={deleteItem}
-                                    sortCriterion={sortCriterion}
-                                    isAscending={isAscending}
-                                    dirtyItemId={dirtyItemId} openedDbName={""}                                />;
-                            })}
-                    </div>
+                <div className="listViewEntryWrapper"
+                     style={{display: (listViewModel.getExtended() ? "block" : "none")}}>
+                    {listViewModel.getChildren() &&
+                        listViewModel.getChildren()!.map((item: Item, index: number) => {
+                            return <ListView
+                                key={index}
+                                item={item}
+                                setCurItem={setCurItem}
+                                getCurItem={getCurItem}
+                                setItemCreationDialog={setItemCreationDialog}
+                                setCurrentParent={setCurrentParent}
+                                deleteItem={deleteItem}
+                                sortCriterion={sortCriterion}
+                                isAscending={isAscending}
+                                dirtyItemId={dirtyItemId} openedDbName={""}
+                                selectedFolderId={selectedFolderId}
+                            />;
+                        })}
+                </div>
             </>
         );
     }

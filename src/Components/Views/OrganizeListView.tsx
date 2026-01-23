@@ -7,8 +7,9 @@ const OrganizeListView: React.FC<{
     toggleOrder: () => void,
     getOrder: boolean,
     setLiveSearchValue: (value: string) => void,
+    liveSearchValue: string,
     closeDatabase: () => void
-}> = ({getCurSortCriterion, setCurSortCriterion, toggleOrder, getOrder: isAscending, setLiveSearchValue, closeDatabase}) => {
+}> = ({getCurSortCriterion, setCurSortCriterion, toggleOrder, getOrder: isAscending, setLiveSearchValue, liveSearchValue, closeDatabase}) => {
 
     return (
         <div className={"borderBox"} style={{borderLeft: "0", borderTop: "0"}}>
@@ -16,7 +17,7 @@ const OrganizeListView: React.FC<{
 
                 <div style={{display: "flex", justifyContent: "space-between"}}>
                     <button style={{marginRight: "8px", height: "100%"}} onClick={() => closeDatabase()}>⬅</button>
-                    <input className="search-bar" type="text" placeholder="Suchen..."
+                    <input className="search-bar" type="text" placeholder="Suchen..." value={liveSearchValue}
                        onChange={(event => setLiveSearchValue(event.target.value))}/>
                 </div>
                 <select className="sort-menu"
