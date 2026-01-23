@@ -37,7 +37,9 @@ const EditablePasswordView: React.FC<{
             <>
                 <div className="entryViewEntry" style={{position: "relative"}}>
                     <button onClick={() => {
-                        viewmodel.updateItemInAutomerge();
+                        if (viewmodel.hasChanges()) {
+                            viewmodel.updateItemInAutomerge();
+                        }
                         setEditableView();
                     }}
                             style={{
@@ -71,8 +73,8 @@ const EditablePasswordView: React.FC<{
                     <button onClick={() => copyAndClearClipboard(viewmodel.note)}>🔗</button>
                 </div>
                 <div className="entryDateViewEntry">
-                    <span>Erstellt am: {item.createdAt.toDateString()}</span>
-                    <span>Bearbeitet am: {item.editedAt.toDateString()}</span>
+                    <span>Erstellt am: {item.createdAt.toLocaleString()}</span>
+                    <span>Bearbeitet am: {item.editedAt.toLocaleString()}</span>
                 </div>
             </>
         );

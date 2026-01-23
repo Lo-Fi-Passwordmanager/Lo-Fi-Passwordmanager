@@ -51,8 +51,6 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                     {passwordViewModel.searchValue.length > 0 && <FilteredListView
                         root={passwordViewModel.getRootFolder()}
                         setCurItem={passwordViewModel.setCurItem}
-                        setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
-                        setCurrentParent={passwordViewModel.setCurParent}
                         deleteItem={passwordViewModel.deleteItem}
                         sortCriterion={passwordViewModel.getCurSortCriterion()}
                         isAscending={passwordViewModel.isAscending}
