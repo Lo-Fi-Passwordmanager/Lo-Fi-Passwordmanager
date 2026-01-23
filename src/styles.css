@@ -420,7 +420,7 @@ input[type="number"] {
     flex-direction: column;
     gap: 12px;
     width: 90%;
-    justify-content: center;
+    justify-content: start;
     height: 100%;
 }
 
