@@ -9,15 +9,13 @@ import {useEditablePasswordViewModel} from "../ViewModels/EditablePasswordViewMo
  * The View that depicts an Entry with all its attributes at large scale while beeing editable
  * @param item the entry that should be depicted
  * @param updateItemAttribute the function on the active {@link AutomergeFacade} to update a item in the doc
- * @param copyAndClearClipboard the function that copies a string to the clipboard and clears it afterwards
  * @param setEditableView the function to close the editable passwordview
  */
 const EditablePasswordView: React.FC<{
     item: Item,
     updateItemAttribute: (itemId: string, changes: [Attribute, string | Date][]) => void;
-    copyAndClearClipboard: (text: string, timeout?: number) => void;
     setEditableView: () => void;
-}> = ({item, updateItemAttribute, copyAndClearClipboard, setEditableView}) => {
+}> = ({item, updateItemAttribute, setEditableView}) => {
 
     const viewmodel = useEditablePasswordViewModel(item, updateItemAttribute);
 
@@ -52,30 +50,32 @@ const EditablePasswordView: React.FC<{
                         💾
                     </button>
                     <div className={"entryViewAttribute"}>
-                        <span>Titel:</span> <input type={"text"} value={viewmodel.title}
-                                                   onChange={(e) => viewmodel.setTitle(e.target.value)}></input>
-                        <button onClick={() => copyAndClearClipboard(viewmodel.title)}>🔗</button>
+                        <input className={"attribute-value"} type={"text"} value={viewmodel.title}
+                               onChange={(e) => viewmodel.setTitle(e.target.value)}/>
                     </div>
-                    <div className={"entryViewAttribute"}>
-                        <span>Benutzername:</span> <input type={"text"} value={viewmodel.username}
-                                                          onChange={(e) => viewmodel.setUsername(e.target.value)}></input>
-                        <button onClick={() => copyAndClearClipboard(viewmodel.username)}>🔗</button>
-                    </div>
-                    <div className={"entryViewAttribute"}>
-                        <span>Passwort:</span> <input type={"text"} value={viewmodel.password}
-                                                      onChange={(e) => viewmodel.setPassword(e.target.value)}></input>
-                        <button onClick={() => copyAndClearClipboard(viewmodel.password)}>🔗</button>
-                    </div>
-                    <div className={"entryViewAttribute"}>
-                        {/* adds https://www. to the start of the link*/}
-                        <span>URL:</span> <input type={"text"} value={viewmodel.url}
-                                                 onChange={(e) => viewmodel.setUrl(e.target.value)}></input>
-                        <button onClick={() => copyAndClearClipboard(viewmodel.url)}>🔗</button>
-                    </div>
-                    <div className={"entryViewAttribute"}>
-                        <span>Notiz:</span> <input type={"text"} value={viewmodel.note}
-                                                   onChange={(e) => viewmodel.setNote(e.target.value)}></input>
-                        <button onClick={() => copyAndClearClipboard(viewmodel.note)}>🔗</button>
+                    <div className={"entryViewListing"}>
+                        <div className={"entryViewAttribute"}>
+                            <span>Benutzername:</span>
+                            <input className={"attribute-value"}
+                                   type={"text"} value={viewmodel.username}
+                                   onChange={(e) => viewmodel.setUsername(e.target.value)}/>
+                        </div>
+                        <div className={"entryViewAttribute"}>
+                            <span>Passwort:</span>
+                            <input className={"attribute-value"} type={"text"} value={viewmodel.password}
+                                   onChange={(e) => viewmodel.setPassword(e.target.value)}/>
+                        </div>
+                        <div className={"entryViewAttribute"}>
+                            {/* adds https://www. to the start of the link*/}
+                            <span>URL:</span>
+                            <input className={"attribute-value"} type={"text"} value={viewmodel.url}
+                                   onChange={(e) => viewmodel.setUrl(e.target.value)}/>
+                        </div>
+                        <div className={"entryViewAttribute"}>
+                            <span>Notiz:</span>
+                            <input className={"attribute-value"} type={"text"} value={viewmodel.note}
+                                   onChange={(e) => viewmodel.setNote(e.target.value)}/>
+                        </div>
                     </div>
                 </div>
                 <div className="entryDateViewEntry">

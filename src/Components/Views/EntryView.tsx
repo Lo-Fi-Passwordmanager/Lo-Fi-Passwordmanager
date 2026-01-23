@@ -56,18 +56,20 @@ const EntryView: React.FC<{
                         <div className={"entryViewAttribute"}>
                             <span>Passwort:</span>
                             <span className={"attribute-value"}>{(hidePassword ? "********" : entry.password)}</span>
-                            <button className={"copy-button"} onClick={() => toggleHidePassword()}>👁️   </button>
-                            <button className={"copy-button"} onClick={() => copyAndClearClipboard(entry.password)}>🔗</button>
+                            <div className={"password-buttons"}>
+                                <button className={"copy-button"} onClick={() => toggleHidePassword()}>👁️</button>
+                                <button className={"copy-button"} onClick={() => copyAndClearClipboard(entry.password)}>🔗</button>
+                            </div>
                         </div>
 
                         <div className={"entryViewAttribute"}>
                             {/* adds https://www. to the start of the link*/}
                             <span>URL:</span>
                             <a className={"attribute-value"}
-                            href={entry.url.includes("www.") ? (entry.url.startsWith("http") ? entry.url : ("https://" + entry.url)) : ("https://www." + entry.url)}
-                            target="_blank" rel="noopener noreferrer"
-                            style={{textDecoration: "underline", color: "inherit"}}>
-                            {entry.url}
+                               href={entry.url.includes("www.") ? (entry.url.startsWith("http") ? entry.url : ("https://" + entry.url)) : ("https://www." + entry.url)}
+                               target="_blank" rel="noopener noreferrer"
+                               style={{textDecoration: "underline", color: "inherit"}}>
+                                {entry.url}
                             </a>
                             <button className={"copy-button"} onClick={() => copyAndClearClipboard(entry.url)}>🔗</button>
                         </div>
@@ -75,7 +77,8 @@ const EntryView: React.FC<{
                         <div className={"entryViewAttribute"}>
                             <span>Notiz:</span>
                             <span className={"attribute-value"}>{entry.note}</span>
-                            <button className={"copy-button"} onClick={() => copyAndClearClipboard(entry.note)}>🔗</button>
+                            <button className={"copy-button"} onClick={() => copyAndClearClipboard(entry.note)}>🔗
+                            </button>
                         </div>
                     </div>
                 </div>

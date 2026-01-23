@@ -422,7 +422,7 @@ input[type="number"] {
 
 .entryViewAttribute {
     display: grid;
-    grid-template-columns: 90fr auto auto;
+    grid-template-columns: 90fr 50fr 10fr;
     align-items: center;
     gap: 8px;
     padding: 8px;
@@ -441,7 +441,11 @@ input[type="number"] {
     font-size: 18px;
     line-height: 1;
     cursor: pointer;
-    margin-bottom: 0;
+}
+
+.password-buttons {
+    display: flex;
+    gap: 12px;
 }
 
 .attribute-value {
