@@ -2,7 +2,7 @@ import {type DocHandle, getObjectId, isValidAutomergeUrl, Repo} from "@automerge
 import {AutomergeDoc} from "../Model/Automerge/AutomergeDoc.ts";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
 import {SecurityProvider} from "./Security/SecurityProvider.ts";
-import type {Patch} from "@automerge/automerge";
+import type {HistoryItem} from "../Model/Automerge/HistoryItem.ts";
 
 export type Attribute = "name" | "createdAt" | "editedAt" | "parentId" | "username" | "password" | "url" | "note"
 // FIXME Hier waren im entwurf überflüssige funktionen??
@@ -86,39 +86,90 @@ export class AutomergeFacade {
         return this._securityProvider;
     }
 
-    async getHistory(): Promise<Patch[][] | null> {
+    async getHistory(): Promise<Map<string, HistoryItem>[] | null> {
         if (this._automergeURL === null) {
             return null;
         }
 
-        const changes: Patch[][] = [];
         let prev = null;
+        const history: Map<string, HistoryItem>[] = [];
         const handle: DocHandle<AutomergeDoc> = await this._repo.find(this._automergeURL);
-        for (const entry of handle.history()!) {
+
+        for (const historyEntry of handle.history()!) {
+            const changeMap: Map<string, HistoryItem> = new Map();
+
             if (prev === null) {
-                prev = entry;
+                prev = historyEntry;
                 continue;
             }
-            changes.push(handle.diff(prev, entry));
-            prev = entry;
+
+            const changes = handle.diff(prev, historyEntry);
+
+            const prevDoc = handle.view(prev);
+            const currentDoc = handle.view(historyEntry);
+
+            let inserted = false;
+
+            for (const change of changes) {
+                const itemIndex = change.path[1] as number;
+                const action = change.action;
+                const deleted = action === "del";
+
+                if (action === "insert") {
+                    inserted = true;
+                }
+
+                if (inserted) {
+                    // Es wurde im aktuelle change set ein neues Item erstellt
+                    const newItem = currentDoc.doc().items[itemIndex];
+                    const newItemId = getObjectId(newItem)!;
+
+                    if (action === "insert") {
+                        // Das Item wird erstellt
+                        changeMap.set(newItemId, {
+                            itemId: newItemId,
+                            changes: new Map(),
+                            deleted: deleted,
+                            new: true,
+                            item: newItem
+                        });
+                        continue;
+                    }
+
+                    // Für alle nachfoldenden Änderungen können wir immer nur das neue Item updaten, da es kein altes gibt, zu dem man Änderungen zeigen könnte
+                    changeMap.get(newItemId)!.item = newItem;
+                } else {
+                    const prevItem = prevDoc.doc().items[itemIndex];
+                    const prevItemId = getObjectId(prevItem)!;
+
+                    const changedValueKey = change.path[2] as string;
+                    let newValue: string | number | null = null;
+
+                    if (action === "put" || action === "splice") {
+                        newValue = (change.value as string | number);
+                    }
+
+                    const changedItem = changeMap.get(prevItemId);
+                    if (changedItem === undefined) {
+                        changeMap.set(prevItemId, {
+                            itemId: prevItemId,
+                            changes: newValue ? new Map([[changedValueKey, newValue]]) : new Map(),
+                            deleted: deleted,
+                            new: false,
+                            item: prevItem
+                        });
+                    } else {
+                        if (newValue) {
+                            changeMap.get(prevItemId)!.changes.set(changedValueKey, newValue);
+                        }
+                    }
+                }
+            }
+            history.push(changeMap);
+
+            prev = historyEntry;
         }
 
-        const a = [];
-
-        changes.forEach((change) => {
-            const b: (changeEntry | changeFolder)[] = [];
-
-            change.forEach((c) => {
-                const itemIndex = c.path[1] as number;
-                const changedItem = getObjectId(handle.doc().items[itemIndex]);
-            });
-        });
-
-        return changes;
+        return history;
     }
-}
-
-type changeEntry = {
-    idemId: string
-    changes: string[]
 }
