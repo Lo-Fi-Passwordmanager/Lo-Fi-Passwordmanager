@@ -64,7 +64,7 @@ const EntryView: React.FC<{
                             {/* adds https://www. to the start of the link*/}
                             <span>URL:</span>
                             <a className={"attribute-value"}
-                            href={entry.url.includes("www.") ? (entry.url.startsWith("http") ? entry.url : ("https://" + entry.url)) : ("https://www." + entry.url)}
+                            href={(entry.url.startsWith("http") ? entry.url : ("https://" + entry.url))}
                             target="_blank" rel="noopener noreferrer"
                             style={{textDecoration: "underline", color: "inherit"}}>
                             {entry.url}
