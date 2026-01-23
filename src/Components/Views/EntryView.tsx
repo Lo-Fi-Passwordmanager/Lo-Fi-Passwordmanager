@@ -14,7 +14,9 @@ const EntryView: React.FC<{
     item: Item,
     copyAndClearClipboard: (text: string, timeout?: number) => void,
     setEditableView: () => void,
-}> = ({item, copyAndClearClipboard, setEditableView}) => {
+    hidePassword: boolean;
+    toggleHidePassword: () => void;
+}> = ({item, copyAndClearClipboard, setEditableView, hidePassword, toggleHidePassword}) => {
 
     if (item.isFolder() || item.deleted) {
         return (
@@ -53,7 +55,8 @@ const EntryView: React.FC<{
 
                         <div className={"entryViewAttribute"}>
                             <span>Passwort:</span>
-                            <span className={"attribute-value"}>{entry.password}</span>
+                            <span className={"attribute-value"}>{(hidePassword ? "********" : entry.password)}</span>
+                            <button className={"copy-button"} onClick={() => toggleHidePassword()}>👁️   </button>
                             <button className={"copy-button"} onClick={() => copyAndClearClipboard(entry.password)}>🔗</button>
                         </div>
 

@@ -78,7 +78,9 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                     {!passwordViewModel.inEditable &&
                         <EntryView item={passwordViewModel.getCurEntry()}
                                    copyAndClearClipboard={passwordViewModel.copyToClipboardAndClear}
-                                   setEditableView={() => passwordViewModel.setInEditable(true)}/>}
+                                   setEditableView={() => passwordViewModel.setInEditable(true)}
+                        hidePassword={passwordViewModel.hidePassword}
+                        toggleHidePassword={passwordViewModel.toggleHidePassword}/>}
 
                     {passwordViewModel.inEditable &&
                         <EditablePasswordView item={passwordViewModel.getCurEntry()}

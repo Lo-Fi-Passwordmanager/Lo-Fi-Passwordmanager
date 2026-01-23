@@ -422,7 +422,7 @@ input[type="number"] {
 
 .entryViewAttribute {
     display: grid;
-    grid-template-columns: 90fr auto;
+    grid-template-columns: 90fr auto auto;
     align-items: center;
     gap: 8px;
     padding: 8px;
