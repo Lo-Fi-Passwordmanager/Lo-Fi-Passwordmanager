@@ -306,6 +306,7 @@ input[type="number"] {
     white-space: nowrap;
     align-items: center;
     padding-left: 10px;
+    height: 36px;
 }
 
 .listViewTitleHeader:hover {
@@ -333,13 +334,16 @@ input[type="number"] {
     flex-direction: row;
     padding-left: 10px;
     border-radius: 10px;
-    height: 4vh;
+    height: 36px;
     background-color: var(--dialog-bg);
     text-align: left;
     font-weight: 500;
     margin: 5px 10px;
-    border: 1px solid transparent;
+    border: 2px solid transparent;
     transition: border-color 0.2s ease, transform 0.1s ease;
+    box-sizing: border-box;
+
+
 
     /*grid formatting*/
     display: flex;
@@ -352,7 +356,7 @@ input[type="number"] {
 }
 
 .listViewEntry.selected {
-    background-color: var(--panel);
+    border: 2px solid var(--panel);
     box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
     align-items: center;
     white-space: nowrap;
