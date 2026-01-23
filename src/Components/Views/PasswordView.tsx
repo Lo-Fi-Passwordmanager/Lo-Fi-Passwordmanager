@@ -10,6 +10,7 @@ import EditablePasswordView from "./EditablePasswordView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
 import SettingsView from "./SettingsView.tsx";
 import {useRepo} from "@automerge/automerge-repo-react-hooks";
+import {HistoryDialog} from "./Dialogs/HistoryDialog.tsx";
 
 interface PasswordViewProps {
     automergeFacade?: AutomergeFacade | null,
@@ -26,7 +27,11 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
     // Fügt das Repo als zu global hinzu, sodass man im Browser einfach auf das Repo zugreifen kann, zum debuggen.
     // Nur während 'yarn dev' verfügbar, nach dem build nicht mehr
     if (import.meta.env.DEV) {
+        // @ts-expect-error no error
+        // eslint-disable-next-line react-hooks/rules-of-hooks
         window.handle = useRepo().find(automergeFacade!.automergeURL!);
+
+        // @ts-expect-error no error
         window.history2 = automergeFacade!.getHistory();
     }
 
@@ -81,14 +86,15 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
 
 
                 <div className="borderBox" style={{width: "70%", position: "relative"}}>
-                    <SettingsView />
+                    <SettingsView/>
+                    <HistoryDialog/>
                     {/*Depending on the state, either shows the editable or the normal/noneditable passwordView*/}
                     {!passwordViewModel.inEditable &&
                         <EntryView item={passwordViewModel.getCurEntry()}
                                    copyAndClearClipboard={passwordViewModel.copyToClipboardAndClear}
                                    setEditableView={() => passwordViewModel.setInEditable(true)}
-                        hidePassword={passwordViewModel.hidePassword}
-                        toggleHidePassword={passwordViewModel.toggleHidePassword}/>}
+                                   hidePassword={passwordViewModel.hidePassword}
+                                   toggleHidePassword={passwordViewModel.toggleHidePassword}/>}
 
                     {passwordViewModel.inEditable &&
                         <EditablePasswordView item={passwordViewModel.getCurEntry()}

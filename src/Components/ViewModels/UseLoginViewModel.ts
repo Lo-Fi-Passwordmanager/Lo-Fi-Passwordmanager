@@ -221,6 +221,11 @@ export const useLoginViewModel = (
     // Close the dialog to log in to a database
     const closeEnterPasswordDialog = () => setIsEnterPasswordDialogOpen(false);
 
+    if (import.meta.env.DEV) {
+
+        tryOpenDatabase("test_datenbank_automatisch", "test_datenbank_automatisch");
+    }
+
     return {
         databaseNames,
         isAddDialogOpen,
