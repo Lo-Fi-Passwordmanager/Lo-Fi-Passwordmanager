@@ -55,7 +55,7 @@ const EntryView: React.FC<{
 
                         <div className={"entryViewAttribute"}>
                             <span>Passwort:</span>
-                            <span className={"attribute-value"}>{(hidePassword ? "********" : entry.password)}</span>
+                            <span className={"attribute-value"}>{(hidePassword ? "*".repeat(entry.password.length) : entry.password)}</span>
                             <div className={"password-buttons"}>
                                 <button className={"copy-button"} onClick={() => toggleHidePassword()}>👁️</button>
                                 <button className={"copy-button"} onClick={() => copyAndClearClipboard(entry.password)}>🔗</button>
