@@ -3,17 +3,22 @@ import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
 
 const OrganizeListView: React.FC<{
     getCurSortCriterion: () => SortCriteria,
-    setCurSortCriterion: (criterion: SortCriteria) => void
-    toggleOrder: () => void
-    getOrder: boolean
-    setLiveSearchValue: (value: string) => void
-}> = ({getCurSortCriterion, setCurSortCriterion, toggleOrder, getOrder: isAscending, setLiveSearchValue}) => {
+    setCurSortCriterion: (criterion: SortCriteria) => void,
+    toggleOrder: () => void,
+    getOrder: boolean,
+    setLiveSearchValue: (value: string) => void,
+    closeDatabase: () => void
+}> = ({getCurSortCriterion, setCurSortCriterion, toggleOrder, getOrder: isAscending, setLiveSearchValue, closeDatabase}) => {
 
     return (
         <div className={"borderBox"} style={{borderLeft: "0", borderTop: "0"}}>
             <div className={"OrganizedListView"}>
-                <input className="search-bar" type="text" placeholder="Suchen..."
+
+                <div style={{display: "flex", justifyContent: "space-between"}}>
+                    <button style={{marginRight: "8px", height: "100%"}} onClick={() => closeDatabase()}>⬅</button>
+                    <input className="search-bar" type="text" placeholder="Suchen..."
                        onChange={(event => setLiveSearchValue(event.target.value))}/>
+                </div>
                 <select className="sort-menu"
                         value={getCurSortCriterion()}
                         onChange={(e) => setCurSortCriterion(e.target.value as SortCriteria)}>

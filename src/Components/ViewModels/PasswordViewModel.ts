@@ -33,6 +33,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     const clipboardTimerRef = useRef<number | null>(null);
     const [inEditable, setInEditable] = useState(false);
     const [dirtyItemId, setDirtyItemId] = useState<string | null>(null);
+    const [hidePassword, setHidePassword] = useState(true);
 
     function setCurItem(item: Item) {
         _setCurItem(item);
@@ -54,6 +55,13 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         } else {
             return SortCriteria.Name;
         }
+    }
+
+    /**
+     * Toggles the password from ****** to the string and back
+     */
+    function toggleHidePassword() {
+        setHidePassword(!hidePassword);
     }
 
     /**
@@ -190,7 +198,8 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         toastMessage,
         toastVisible,
         inEditable,
-
+        hidePassword,
+        toggleHidePassword,
         setSearchValue,
         copyToClipboardAndClear,
         setCurItem,

@@ -17,6 +17,10 @@ export const useEditablePasswordViewModel = (item: Item, updateItemAttribute: (i
         updateItemAttribute(item.id, [["name", title], ["username", username], ["password", password], ["url", url], ["note", note]]);
     }
 
+    function hasChanges():boolean {
+        return (title != entry.title || username != entry.username || password != entry.password || url != entry.url || note != entry.note);
+    }
+
 
     return {
         title,
@@ -24,6 +28,7 @@ export const useEditablePasswordViewModel = (item: Item, updateItemAttribute: (i
         password,
         url,
         note,
+        hasChanges,
         setTitle,
         setUsername,
         setPassword,

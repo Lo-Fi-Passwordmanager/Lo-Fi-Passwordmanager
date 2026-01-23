@@ -1,16 +1,12 @@
 import {useSettingsViewModel} from "../ViewModels/SettingsViewModel.ts";
-import React from "react";
 
 
 /**
  * The view that links to the {@link Settings} singleton and toggles its values.
  */
-const SettingsView: React.FC<
-    {
-        setSync: (value: boolean) => void
-    }> = ({setSync}) => {
+const SettingsView: React.FC = () => {
 
-    const viewmodel = useSettingsViewModel(setSync);
+    const viewmodel = useSettingsViewModel();
 
     /**
      * Checks if the settingsmenu should be open or not
@@ -63,26 +59,29 @@ const SettingsView: React.FC<
                                     checked={viewmodel.timeOutActive}
                                     onChange={viewmodel.toggleTimeOutActive}
                                 />
-                                Sperren der App bei Inaktivität
+                                Bei Inaktivität abmelden
                             </label>
                         </div>
 
-                        <div>
-                            <label>Min. bis Sperre:  </label>
-                            <input
-                                className="inputField"
-                                type="number"
-                                value={viewmodel.timeoutLength}
-                                onChange={(e) => viewmodel.setTimeOutLengthVM(e.target.value)}
-                                min="1"
-                                max="120"
-                                step="1"
-                                autoFocus
-                            />
+                        {viewmodel.timeOutActive && <div className={"timeout-setting"}>
+                            <label>Minuten bis Abmeldung: </label>
+                            <div className={"numberInput"}>
+                                <input
+                                    type="number"
+                                    value={viewmodel.timeoutLength}
+                                    onChange={(e) => viewmodel.setTimeOutLengthVM(e.target.value)}
+                                    min="1"
+                                    max="120"
+                                    step="1"
+                                />
+                                <button className={"number-control"} onClick={viewmodel.decrease}>–</button>
+                                <button className={"number-control"} onClick={viewmodel.increase}>+</button>
+                            </div>
+                        </div>}
                     </div>
-
-                    </div>
-                    <button onClick={() => viewmodel.setSettingsOpen(false)}>Einstellungen Schließen</button>
+                    <button onClick={() => viewmodel.setSettingsOpen(false)} style={{marginTop: "1em"}}>Einstellungen
+                        Schließen
+                    </button>
                 </div>
             </div>
         );
@@ -94,7 +93,7 @@ const SettingsView: React.FC<
         return (
             <button
                 className="settingsButton"
-                onClick={() => viewmodel.setSettingsOpen(true)}>Einstellungen Öffnen
+                onClick={() => viewmodel.setSettingsOpen(true)}>⚙️
             </button>
         );
     }

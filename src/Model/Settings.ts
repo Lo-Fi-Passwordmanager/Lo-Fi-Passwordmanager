@@ -1,3 +1,5 @@
+import {useEffect, useState} from "react";
+
 const SYNCHRONISATION = "synchronisation";
 const AUTO_CONFLICT_RESOLUTION = "auto_conflict_resolution";
 const DARK_MODE = "dark_mode"
@@ -5,6 +7,27 @@ const TIMEOUT_ACTIVE = "timeout_active"
 const TIMEOUT_LENGTH = "timeout_length"
 
 type SettingsListener = () => void;
+
+export function useSettings() {
+    // Local state to force React to re-render
+    const [settings, setSettings] = useState(Settings.getSettings());
+
+    useEffect(() => {
+        // Subscribe to changes in the Singleton
+        const subscribe = Settings.getSettings().subscribe(() => {
+            // When notify() is called, we update state to trigger a re-render
+            //The code below moves the settings object to a new address in memory, forcing react to rerender it
+            //FIXME somehow this should just be able to rerender by increasing a counter or smth but I couldnt do it ~Jesko
+            setSettings(Object.assign(Object.create(Object.getPrototypeOf(Settings.getSettings())), Settings.getSettings()));
+
+        });
+
+        return () => subscribe(); // Cleanup on unmount
+    }, []);
+
+    return settings;
+}
+
 
 export class Settings {
     private static instance: Settings;
@@ -73,7 +96,8 @@ export class Settings {
 
     public setSynchronization(value: boolean) {
         this._synchronization = value;
-        localStorage.setItem(SYNCHRONISATION, JSON.stringify(value))
+        localStorage.setItem(SYNCHRONISATION, JSON.stringify(value));
+        this.notify();
     }
 
     public getAutoConflictResolution(): boolean {

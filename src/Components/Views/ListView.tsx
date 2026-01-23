@@ -12,13 +12,26 @@ import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
 const ListView: React.FC<{
     item: Item,
     setCurItem: (entry: Entry) => void,
+    getCurItem: () => Item,
     setItemCreationDialog: () => void,
-    setCurrentParent?: (item: Item) => void
+    setCurrentParent?: (item: Item) => void,
     deleteItem: (item: Item) => void,
     sortCriterion: SortCriteria,
     isAscending: boolean,
     dirtyItemId: string | null,
-}> = ({item, setCurItem, setItemCreationDialog, setCurrentParent, deleteItem, sortCriterion, isAscending, dirtyItemId}) => {
+    openedDbName: string,
+}> = ({
+          item,
+          setCurItem,
+          getCurItem,
+          setItemCreationDialog,
+          setCurrentParent,
+          deleteItem,
+          sortCriterion,
+          isAscending,
+          dirtyItemId,
+          openedDbName
+      }) => {
     const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem);
 
     function addButtonPressed() {
@@ -33,8 +46,10 @@ const ListView: React.FC<{
         const entry = listViewModel.getItem() as Entry;
         return (
             <div className="listViewEntry" onClick={() => setCurItem(entry)}>
-                <span>Titel:</span> <span>{entry.title}</span>
-                <button onClick={() => deleteItem(item)}>🗑️</button>
+                <span style={{marginRight: "1ch"}}></span> <span>{entry.title}</span>
+                <div className="btnWrapper">
+                    <button onClick={() => deleteItem(item)}>🗑️</button>
+                </div>
             </div>
         );
         /**
@@ -46,13 +61,20 @@ const ListView: React.FC<{
             <>
                 {/* Name and Buttons */}
                 <div className="listViewTitleHeader">
-                    <span>{listViewModel.getItem().title}:</span>
-                    <button
-                        onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? ">" : "v"}</button>
-                    <button onClick={() => addButtonPressed()}>+</button>
-                    {/* Delete button should not be rendered for the root */}
-                    {(item.id != "") && <button onClick={() => deleteItem(item)}>🗑️</button>}
-                    {/* FIXME: Löschbestätigung einbauen */}
+                    {(item.id != "") &&
+                    <button style={{marginRight: "15px"}}
+                            onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? ">" : "v"}</button>}
+
+                    <span style={{marginLeft: ((item.id != "")?"":"10px" )}}>{ (item.id != "") ? listViewModel.getItem().title : openedDbName}</span>
+
+                    <div className="btnWrapper">
+                        <button onClick={() => {
+                            addButtonPressed();
+                            listViewModel.setExtended(true);
+                        }}>+
+                        </button>
+                        {(item.id != "") && <button onClick={() => deleteItem(item)}>🗑️</button>}
+                        {/* FIXME: Löschbestätigung einbauen */}</div>
                 </div>
 
                 {/* Recursive call of children with indent to visualizes depth in the tree */}
@@ -63,16 +85,15 @@ const ListView: React.FC<{
                                     key={index}
                                     item={item}
                                     setCurItem={setCurItem}
+                                    getCurItem={getCurItem}
                                     setItemCreationDialog={setItemCreationDialog}
                                     setCurrentParent={setCurrentParent}
                                     deleteItem={deleteItem}
                                     sortCriterion={sortCriterion}
                                     isAscending={isAscending}
-                                    dirtyItemId={dirtyItemId}
-                                />;
+                                    dirtyItemId={dirtyItemId} openedDbName={""}                                />;
                             })}
                     </div>
-
             </>
         );
     }

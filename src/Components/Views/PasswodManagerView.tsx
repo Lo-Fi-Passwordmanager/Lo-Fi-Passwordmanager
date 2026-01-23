@@ -20,10 +20,11 @@ const PasswordManagerView: React.FC = () => {
     if (!viewModel.getLoggedIn()) {
         return (
             <RepoContext.Provider value={viewModel.repo}>
-                <SettingsView setSync={viewModel.setSyncSetting}/>
+                <SettingsView/>
                 <LoginView repo={viewModel.repo} setLoggedIn={viewModel.setLoggedIn}
                            setAutomergeFacade={viewModel.setAutomergeFacade}
-                           securityProvider={viewModel.securityProvider}/>
+                           securityProvider={viewModel.securityProvider}
+                setOpenedDbName={viewModel.setOpenedDatabaseName}/>
                 <ToastDialog message={viewModel.toastMessage}
                              isVisible={viewModel.toastVisible}
                              onClose={() => viewModel}>
@@ -35,9 +36,9 @@ const PasswordManagerView: React.FC = () => {
         return (
             <Suspense fallback={<LoadingScreen/>}>
                 <RepoContext.Provider value={viewModel.repo}>
-                    <button className="closeButton" onClick={viewModel.closeLoggedIn}>Datenbank schließen</button>
-                    <SettingsView setSync={viewModel.setSyncSetting}/>
-                    <PasswordView automergeFacade={viewModel.getAutomergeFacade()}/>
+                    <PasswordView automergeFacade={viewModel.getAutomergeFacade()}
+                    closeDatabase={() => viewModel.closeLoggedIn()}
+                    openedDbName={viewModel.openedDatabaseName}/>
                 </RepoContext.Provider>
             </Suspense>
         );

@@ -70,6 +70,7 @@ export const useListViewModel = (topItem: Item, currentSortCrit: SortCriteria, i
         isItemEntry,
         getItem,
         toggleExtended,
-        getExtended
+        getExtended,
+        setExtended
     };
 };
