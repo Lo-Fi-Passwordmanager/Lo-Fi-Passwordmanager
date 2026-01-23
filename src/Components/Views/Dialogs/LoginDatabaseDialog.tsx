@@ -29,6 +29,9 @@ const LoginDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                     onChange={(e) => viewModel.setField1(e.target.value)}
                     placeholder={label1}
                     autoFocus
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {viewModel.handleConfirm();}
+                    }}
                 />
 
                 <div className="confirm-cancel-buttons">
