@@ -14,8 +14,8 @@ import Peer from "peerjs";
 import {PeerjsNetworkAdapter} from "automerge-repo-network-peerjs";
 
 export const usePasswordManagerViewModel = () => {
-    const [peer, setPeer] = useState(new Peer());
-    window.peer = peer;
+    const [peer, setPeer] = useState<Peer>(Settings.getSettings().getPeer());
+
 
     const settings = useSettings();
     const [connector] = useState(settings.getConnector());
@@ -28,8 +28,11 @@ export const usePasswordManagerViewModel = () => {
     const [synchronization] = useState<boolean>(settings.getSynchronization());
     const [openedDatabaseName, setOpenedDatabaseName] = useState<string>("");
 
+    window.connector = connector;
+    window.peer = peer;
+
     connector.on("open", () => {
-        conn.send("hi!");
+        connector.send("hi!");
     });
 
     peer.on("connection", (conn) => {

@@ -1,4 +1,5 @@
 import {useSettingsViewModel} from "../ViewModels/SettingsViewModel.ts";
+import {Settings} from "../../Model/Settings.ts";
 
 
 /**
@@ -87,8 +88,9 @@ const SettingsView: React.FC = () => {
                     </div>
 
                     <label>Other Peer Id</label>
-                    <input type="text" onChange={(e) => viewmodel.setConnection(e.target.value)} />
-
+                    <input type="text"
+                           onChange={(e) => viewmodel.setConnection(e.target.value)}
+                           value={Settings.getSettings().getConnector().peer}/>
                     <button onClick={() => viewmodel.setSettingsOpen(false)} style={{marginTop: "1em"}}>Einstellungen
                         Schließen
                     </button>

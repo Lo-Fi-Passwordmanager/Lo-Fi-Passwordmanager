@@ -14,6 +14,7 @@ declare global {
     interface Window {
         repo: Repo;
         peer: Peer;
+        connector: Connector;
     }
 }
 
