@@ -51,7 +51,7 @@ const EditablePasswordView: React.FC<{
                             }}>
                         💾
                     </button>
-                    <span>Fortnite:</span> <input type={"text"} value={viewmodel.title}
+                    <span>Titel:</span> <input type={"text"} value={viewmodel.title}
                                                   onChange={(e) => viewmodel.setTitle(e.target.value)}></input>
                     <button onClick={() => copyAndClearClipboard(viewmodel.title)}>🔗</button>
 
