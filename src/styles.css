@@ -395,7 +395,6 @@ input[type="number"] {
     height: 90%;
     display: flex;
     flex-direction: column;
-    background-color: var(--bg-color);
     text-align: left;
     gap: 10px 20px;
     box-sizing: border-box;
@@ -416,8 +415,9 @@ input[type="number"] {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    margin: 10%;
     width: 60%;
+    justify-content: center;
+    height: 100%;
 }
 
 .entryViewAttribute {
