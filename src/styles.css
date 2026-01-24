@@ -156,8 +156,12 @@ button:focus-visible {
     inset: 0;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    padding: 20px;
     z-index: 100;
+    overflow: auto;
+    scrollbar-color: var(--panel) var(--bg);
+    scrollbar-width: thin;
 }
 
 .dialog {
@@ -170,7 +174,9 @@ button:focus-visible {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    width: 300px;
+    min-width: 300px;
+    width: fit-content;
+    margin: auto;
 }
 
 .DatabaseListing {
@@ -487,8 +493,6 @@ input[type="number"] {
     overflow: auto;
     scrollbar-color: var(--panel) var(--bg);
     scrollbar-width: thin;
-
-
 }
 
 .closeButton {
