@@ -42,9 +42,10 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                         getCurSortCriterion={passwordViewModel.getCurSortCriterion}
                         setCurSortCriterion={passwordViewModel.setAndStoreSortCriterion}
                         toggleOrder={passwordViewModel.toggleOrder}
-                        getOrder={passwordViewModel.isAscending}
+                        isAscending={passwordViewModel.isAscending}
                         setLiveSearchValue={passwordViewModel.setSearchValue}
                         closeDatabase={closeDatabase}
+                        setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
                     />
 
                     <div className="scrollableContainer">

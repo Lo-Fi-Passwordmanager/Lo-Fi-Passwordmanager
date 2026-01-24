@@ -611,15 +611,10 @@ input[type="number"] {
 
 .OrganizedListView {
     display: grid;
-    grid-template-columns: 9fr 1fr;
-    grid-template-rows: auto;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(2, 1fr);
     gap: 8px;
     padding: 8px;
-}
-
-/* First element fills the entire first row */
-.OrganizedListView > :first-child {
-    grid-column: 1 / -1;
 }
 
 .FilteredListView__header {
