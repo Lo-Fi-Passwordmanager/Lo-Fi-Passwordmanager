@@ -437,6 +437,11 @@ input[type="number"] {
     gap: 8px;
     padding: 8px;
     position: relative;
+    height: 20%;
+}
+
+.entryViewAttribute button {
+    max-height: 70%;
 }
 
 /* First element fills the entire first row */
@@ -461,7 +466,7 @@ input[type="number"] {
     font-size: 1.8em;
     position: absolute;
     right: 14%;
-    top: 50%;
+    align-self: end;
 }
 
 .eye-button:hover {
