@@ -1,13 +1,13 @@
 import React from "react";
 import {useLoginViewModel} from "../ViewModels/UseLoginViewModel.ts";
-import DatabaseListing from "./ListingViews/DatabaseListing.tsx";
-import CreateDatabaseDialog from "./Dialogs/CreateDatabaseDialog.tsx";
-import LoginDatabaseDialog from "./Dialogs/LoginDatabaseDialog.tsx";
+import DatabaseListingView from "./ListingViews/DatabaseListingView.tsx";
+import CreateDatabaseDialog from "./DialogViews/CreateDatabaseDialog.tsx";
+import LoginDatabaseDialog from "./DialogViews/LoginDatabaseDialog.tsx";
 import PWMLogo from "../../assets/logo_gelb.svg?inline";
 import type {Repo} from "@automerge/react";
 import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import  {type SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
-import ToastDialog from "./Dialogs/ToastDialog.tsx";
+import ToastDialog from "./DialogViews/ToastDialog.tsx";
 
 
 const LoginView: React.FC<{
@@ -29,7 +29,7 @@ const LoginView: React.FC<{
 
                 <div className="databaseSelection">
                     {/* Show a list of all available Documents */}
-                    <DatabaseListing
+                    <DatabaseListingView
                         databases={viewModel.databases}
                         openDatabase={viewModel.openEnterPasswordDialog}
                         removeDatabase={viewModel.deleteDatabase}

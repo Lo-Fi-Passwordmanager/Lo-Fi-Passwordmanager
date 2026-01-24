@@ -14,17 +14,20 @@ export interface TwoFieldDialogProps {
     setShowToast: (show: boolean) => void,
 }
 
-export const useCreateDatabaseViewModel = (isOpen:boolean,
+export const useCreateDatabaseViewModel = (isOpen: boolean,
                                            createDatabase: ((field1: string, field2: string) => void),
                                            storeDatabase: (name: string, autoMergeUrl: AutomergeUrl) => void,
                                            setToastMessage: (message: string) => void,
                                            setShowToast: (show: boolean) => void,
-                                           ) => {
+) => {
 
     const [createNewDatabase, setCreateNewDatabase] = useState(true);
     const [field1, setField1] = useState("");
     const [field2, setField2] = useState("");
 
+    /**
+     * Resets the input fields when the dialog is opened
+     */
     useEffect(() => {
         if (isOpen) {
             setField1("");
@@ -32,7 +35,13 @@ export const useCreateDatabaseViewModel = (isOpen:boolean,
         }
     }, [isOpen]);
 
-    function handleConfirm()  {
+    /**
+     * Handles the confirm action based on the current mode (create new or import)
+     *
+     * @param createDatabase Function to create a new database
+     * @param storeDatabase Function to store an existing database from URL
+     */
+    function handleConfirm() {
         if (!field1 || !field2) {
             setToastMessage("Bitte alle Felder ausfüllen.")
             setShowToast(true);
@@ -50,6 +59,7 @@ export const useCreateDatabaseViewModel = (isOpen:boolean,
             return;
         }
     }
+
     return {
         createNewDatabase,
         field1,

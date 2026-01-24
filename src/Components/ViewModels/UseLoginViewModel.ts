@@ -33,13 +33,16 @@ export type LoginViewModelReturn = {
  * @param setAutomergeFacade the function to update the automergeFacade of the used database on correct Login.
  * @param securityProvider the security Provider to encrypt/decrypt with the given master password.
  * @param setOpenedDbName the function that sets the Database name on the PasswordManager.
+ *
  * @returns all data and functions required by the LoginView
  */
 export const useLoginViewModel = (
-    repo: Repo, setLoggedIn: (value: (((prevState: boolean) => boolean) | boolean)) => void,
+    repo: Repo,
+    setLoggedIn: (value: (((prevState: boolean) => boolean) | boolean)) => void,
     setAutomergeFacade: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void,
-    securityProvider: SecurityProvider
-    , setOpenedDbName: ((value: (((prevState: string) => string) | string)) => void)): LoginViewModelReturn => {
+    securityProvider: SecurityProvider,
+    setOpenedDbName: ((value: (((prevState: string) => string) | string)) => void)
+): LoginViewModelReturn => {
     // map of database names to their automerge urls
     const [databases, setDatabases] = useState(() => loadAllDatabases());
     // names of all available databases to show in the listing
@@ -87,7 +90,12 @@ export const useLoginViewModel = (
         }, 0);
     };
 
-    // tries to open a database with the provided master password
+    /**
+     * Tries to open a database with the provided master password
+     *
+     * @param masterPassword the master password to decrypt the database
+     * @param name optional name of the database if an database was just added
+     */
     const tryOpenDatabase = async (masterPassword: string, name?: string) => {
             let dbUrl: AutomergeUrl | undefined;
             if (name) {

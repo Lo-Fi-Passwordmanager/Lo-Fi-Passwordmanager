@@ -4,8 +4,8 @@ import EntryView from "./EntryView.tsx";
 import OrganizeListView from "./OrganizeListView.tsx";
 import {usePasswortViewModel} from "../ViewModels/PasswordViewModel.ts";
 import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
-import ItemCreationDialog from "./Dialogs/ItemCreationDialog.tsx";
-import ToastDialog from "./Dialogs/ToastDialog.tsx";
+import ItemCreationDialog from "./DialogViews/ItemCreationDialog.tsx";
+import ToastDialog from "./DialogViews/ToastDialog.tsx";
 import EditablePasswordView from "./EditablePasswordView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
 import SettingsView from "./SettingsView.tsx";
@@ -33,10 +33,9 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                     setCurItem={passwordViewModel.setCurItem}
                 />}
 
-
             <div className="passwordView">
                 <div className="borderBox scrollableContainer" style={{width: "30%"}}>
-                    {/*Container for every related to the search/Sort features */}
+                    {/*Container for everything related to the search/Sort features */}
                     <OrganizeListView
                         getCurSortCriterion={passwordViewModel.getCurSortCriterion}
                         setCurSortCriterion={passwordViewModel.setAndStoreSortCriterion}
@@ -46,8 +45,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                         closeDatabase={closeDatabase}
                     />
 
-
-                    {/*Shows only the Views, that match the given search input*/}
+                    {/*Shows only the views that match the given search input*/}
                     {passwordViewModel.searchValue.length > 0 && <FilteredListView
                         root={passwordViewModel.getRootFolder()}
                         setCurItem={passwordViewModel.setCurItem}
@@ -56,6 +54,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                         isAscending={passwordViewModel.isAscending}
                         filterText={passwordViewModel.searchValue}
                     />}
+
                     {/*The basic ListView which shows all Items and Folders in their hierarchy*/}
                     {passwordViewModel.searchValue.length === 0 && <ListView
                         item={passwordViewModel.getRootFolder()}
@@ -70,7 +69,6 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                         openedDbName={openedDbName}
                     />}
                 </div>
-
 
                 <div className="borderBox" style={{width: "70%", position: "relative"}}>
                     <SettingsView />
