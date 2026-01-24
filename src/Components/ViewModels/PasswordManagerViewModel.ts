@@ -20,10 +20,6 @@ export const usePasswordManagerViewModel = () => {
         return loggedIn;
     }
 
-    function getAutomergeFacade(): AutomergeFacade | null {
-        return automergeFacade;
-    }
-
     function closeLoggedIn(): void {
         setLoggedIn(false);
         setAutomergeFacade(null);
@@ -33,10 +29,10 @@ export const usePasswordManagerViewModel = () => {
     return {
         repo,
         securityProvider,
+        automergeFacade,
         getLoggedIn,
         setLoggedIn,
         setAutomergeFacade,
-        getAutomergeFacade,
         closeLoggedIn,
     };
 }
