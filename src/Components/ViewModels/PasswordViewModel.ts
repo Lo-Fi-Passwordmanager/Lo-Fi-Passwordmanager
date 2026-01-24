@@ -188,11 +188,17 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         }, timeout);
     }
 
+    /**
+     * Toggles the sorting order between ascending and descending and saves the new value
+     */
     function toggleOrder() {
         setIsAscending(!isAscending);
         saveIsAscending(!isAscending);
     }
 
+    /**
+     * Navigates to the given folder by setting it as the current item and clearing the search value so the view shows the full hierarchy
+     */
     function goToFolder(folder: Folder) {
         setCurItem(folder);
         setSearchValue("");

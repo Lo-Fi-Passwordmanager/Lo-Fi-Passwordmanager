@@ -62,6 +62,7 @@ const ListView: React.FC<{
         return (
             <>
                 {/* Name and Buttons */}
+                {/*                                  vvvvvvvvvvvvv using aria-selected for scrolling to the clicked folder from filtered list view */}
                 <div className="listViewTitleHeader" aria-selected={selectedFolderId === item.id}>
                     {(item.id != "") &&
                         <button style={{marginRight: "15px"}}
