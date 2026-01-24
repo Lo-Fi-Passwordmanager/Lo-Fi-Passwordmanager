@@ -487,6 +487,8 @@ input[type="number"] {
     overflow: auto;
     scrollbar-color: var(--panel) var(--bg);
     scrollbar-width: thin;
+
+
 }
 
 .closeButton {
@@ -612,11 +614,10 @@ input[type="number"] {
 }
 
 .FilteredListView__header {
-    width: 100%;
+    width: calc(100% - 12px);
     display: flex;
     justify-content: space-between;
-    margin: 12px;
-    margin-bottom: 8px;
+    margin: 8px 0px 8px 12px;
     color: var(--outline);
 }
 

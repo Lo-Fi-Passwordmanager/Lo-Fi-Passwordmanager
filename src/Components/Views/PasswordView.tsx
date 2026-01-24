@@ -35,7 +35,8 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
 
 
             <div className="passwordView">
-                <div className="borderBox scrollableContainer" style={{width: "30%"}}>
+
+                <div className={"borderBox"} style={{width: "30%", display: "flex", flexDirection: "column"}}>
                     {/*Container for every related to the search/Sort features */}
                     <OrganizeListView
                         getCurSortCriterion={passwordViewModel.getCurSortCriterion}
@@ -46,41 +47,43 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                         closeDatabase={closeDatabase}
                     />
 
+                    <div className="scrollableContainer">
 
-                    {/*Shows only the Views, that match the given search input*/}
-                    {passwordViewModel.searchValue.length > 0 && <FilteredListView
-                        root={passwordViewModel.getRootFolder()}
-                        setCurItem={passwordViewModel.setCurItem}
-                        deleteItem={passwordViewModel.deleteItem}
-                        sortCriterion={passwordViewModel.getCurSortCriterion()}
-                        isAscending={passwordViewModel.isAscending}
-                        filterText={passwordViewModel.searchValue}
-                    />}
-                    {/*The basic ListView which shows all Items and Folders in their hierarchy*/}
-                    {passwordViewModel.searchValue.length === 0 && <ListView
-                        item={passwordViewModel.getRootFolder()}
-                        setCurItem={passwordViewModel.setCurItem}
-                        setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
-                        setCurrentParent={passwordViewModel.setCurParent}
-                        deleteItem={passwordViewModel.deleteItem}
-                        sortCriterion={passwordViewModel.getCurSortCriterion()}
-                        isAscending={passwordViewModel.isAscending}
-                        dirtyItemId={passwordViewModel.dirtyItemId}
-                        getCurItem={passwordViewModel.getCurEntry}
-                        openedDbName={openedDbName}
-                    />}
+                        {/*Shows only the Views, that match the given search input*/}
+                        {passwordViewModel.searchValue.length > 0 && <FilteredListView
+                            root={passwordViewModel.getRootFolder()}
+                            setCurItem={passwordViewModel.setCurItem}
+                            deleteItem={passwordViewModel.deleteItem}
+                            sortCriterion={passwordViewModel.getCurSortCriterion()}
+                            isAscending={passwordViewModel.isAscending}
+                            filterText={passwordViewModel.searchValue}
+                        />}
+
+                        {/*The basic ListView which shows all Items and Folders in their hierarchy*/}
+                        {passwordViewModel.searchValue.length === 0 && <ListView
+                            item={passwordViewModel.getRootFolder()}
+                            setCurItem={passwordViewModel.setCurItem}
+                            setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
+                            setCurrentParent={passwordViewModel.setCurParent}
+                            deleteItem={passwordViewModel.deleteItem}
+                            sortCriterion={passwordViewModel.getCurSortCriterion()}
+                            isAscending={passwordViewModel.isAscending}
+                            dirtyItemId={passwordViewModel.dirtyItemId}
+                            getCurItem={passwordViewModel.getCurEntry}
+                            openedDbName={openedDbName}
+                        />}
+                    </div>
+
                 </div>
-
-
                 <div className="borderBox" style={{width: "70%", position: "relative"}}>
-                    <SettingsView />
+                    <SettingsView/>
                     {/*Depending on the state, either shows the editable or the normal/noneditable passwordView*/}
                     {!passwordViewModel.inEditable &&
                         <EntryView item={passwordViewModel.getCurEntry()}
                                    copyAndClearClipboard={passwordViewModel.copyToClipboardAndClear}
                                    setEditableView={() => passwordViewModel.setInEditable(true)}
-                        hidePassword={passwordViewModel.hidePassword}
-                        toggleHidePassword={passwordViewModel.toggleHidePassword}/>}
+                                   hidePassword={passwordViewModel.hidePassword}
+                                   toggleHidePassword={passwordViewModel.toggleHidePassword}/>}
 
                     {passwordViewModel.inEditable &&
                         <EditablePasswordView item={passwordViewModel.getCurEntry()}
