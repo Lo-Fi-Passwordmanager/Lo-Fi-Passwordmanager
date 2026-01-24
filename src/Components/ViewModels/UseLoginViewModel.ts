@@ -3,7 +3,7 @@ import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import type {Repo} from "@automerge/react";
 import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
-import {loadAllDatabases, storeDatabase, removeDatabase} from "../../Utility/Storage.ts";
+import {loadAllDatabases, removeDatabase, storeDatabase} from "../../Utility/Storage.ts";
 import {useLoadingScreen} from "./LoadingScreenProviderViewModel.ts";
 
 export type LoginViewModelReturn = {
@@ -89,7 +89,7 @@ export const useLoginViewModel = (
 
     // tries to open a database with the provided master password
     const tryOpenDatabase = async (masterPassword: string, name?: string) => {
-        let dbUrl: AutomergeUrl | undefined;
+            let dbUrl: AutomergeUrl | undefined;
             if (name) {
                 dbUrl = loadAllDatabases().get(name); // react states update asynchronously, so we have to load directly here
             } else if (selectedDatabase) {
@@ -170,10 +170,11 @@ export const useLoginViewModel = (
      */
     function deleteDatabase(name: string) {
         const updatedDatabases = new Map(databases);
+        const id = updatedDatabases.get(name)!;
         updatedDatabases.delete(name);
         setDatabases(updatedDatabases);
         removeDatabase(name);
-        //TODO: AutomergeDoc löschen
+        repo.delete(id);
     }
 
     /**
@@ -238,6 +239,6 @@ export const useLoginViewModel = (
         closeEnterPasswordDialog,
         importDatabaseFromURL,
         setToastMessage,
-        deleteDatabase,
+        deleteDatabase
     };
 };
