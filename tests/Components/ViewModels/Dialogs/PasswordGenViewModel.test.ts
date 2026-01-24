@@ -3,7 +3,11 @@ import {act, renderHook} from "@testing-library/react";
 import {usePasswordGenViewModel} from "../../../../src/Components/ViewModels/Dialog/PasswordGenViewModel";
 
 describe('PasswordGenViewModel' ,()=> {
+    const ALL_SYMBOLS = /^[A-Za-z0-9!@$%^&*()<>,?/[\]{}\-=_+]+$/
+    const LETTERS_ONLY = /^[a-zA-Z]+$/;
+    const NUMBERS_SPECIAL_ONLY = /^[0-9!@$%^&*()<>,?/[\]{}\-=_+]+$/
     let pass: string;
+
     beforeEach(()=> {
 
     })
@@ -25,10 +29,33 @@ describe('PasswordGenViewModel' ,()=> {
         result.current.handleConfirm();
     })
 
-    it('should be able to generate a password from the selected symbols', ()=> {
+    it('should be able to generate a password from the selected symbols(All)', ()=> {
         const {result} = renderHook(() => usePasswordGenViewModel(newPassword));
         result.current.handleConfirm();
         expect(pass.length).toBe(20);
+        expect(pass).toMatch(ALL_SYMBOLS)
+    })
+
+    it('should be able to generate a password from the selected symbols(letters Only)',()=> {
+        const {result} = renderHook(() => usePasswordGenViewModel(newPassword));
+        act(()=> {
+            result.current.toggleNumbers();
+            result.current.toggleSpecial();
+        })
+        result.current.handleConfirm();
+        expect(pass.length).toBe(20);
+        expect(pass).toMatch(LETTERS_ONLY);
+    })
+
+    it('should be able to generate a password from the selected symbols(Special/Numbers Only)', ()=> {
+        const {result} = renderHook(() => usePasswordGenViewModel(newPassword));
+        act(()=> {
+            result.current.toggleUppercase();
+            result.current.toggleLowercase();
+        })
+        result.current.handleConfirm();
+        expect(pass.length).toBe(20);
+        expect(pass).toMatch(NUMBERS_SPECIAL_ONLY);
     })
 
     it('should be able to return and toggle Uppercase correctly',()=> {
