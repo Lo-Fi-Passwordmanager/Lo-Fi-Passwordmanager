@@ -6,38 +6,45 @@ describe('LoginDatabaseViewModel', ()=> {
     const onConfirm = vi.fn();
     const setToastMessage = vi.fn();
     const setShowToast = vi.fn();
-    /*
-    let result: ReturnType<typeof renderHook>;
-    let rerender: ReturnType<typeof renderHook>["rerender"];
 
     beforeEach(() => {
         vi.clearAllMocks();
-
-        result = renderHook(
-            ({ isOpen }) =>
-                useLoginDatabaseViewModel(
-                    isOpen,
-                    onConfirm,
-                    setToastMessage,
-                    setShowToast
-                ),
-            {
-                initialProps: { isOpen: false },
-            }
-        );
-        rerender = result.rerender;
     });
-    */
-    it('should', ()=> {
-        /*
+
+    it('should be able to set Field 1', ()=> {
+        const {result} = renderHook(() => useLoginDatabaseViewModel(true, onConfirm, setToastMessage, setShowToast))
+        expect(result.current.field1).toBe("");
         act(()=> {
             result.current.setField1("1234")
         })
         expect(result.current.field1).toBe("1234");
+    })
+
+    it('should return a toast when no password has been entered',async ()=> {
+        const {result} = renderHook(() => useLoginDatabaseViewModel(true, onConfirm, setToastMessage, setShowToast))
         act(()=> {
-            setIsOpen(true);
+            result.current.handleConfirm();
         })
+        expect(setToastMessage).toHaveBeenCalledTimes(1);
+        expect(setShowToast).toHaveBeenCalledTimes(1);
+        expect(onConfirm).toHaveBeenCalledTimes(0);
+    })
+
+    it('should call onConfirm when a password has been entered',async ()=> {
+        const {result} = renderHook(() => useLoginDatabaseViewModel(true, onConfirm, setToastMessage, setShowToast))
+        act(()=> {
+            result.current.setField1("password");
+        })
+        act(()=> {
+            result.current.handleConfirm();
+        })
+        expect(setToastMessage).toHaveBeenCalledTimes(0);
+        expect(setShowToast).toHaveBeenCalledTimes(0);
+        expect(onConfirm).toHaveBeenCalledTimes(1);
+    })
+
+    it('should have field1 in its correct default state', ()=> {
+        const {result} = renderHook(() => useLoginDatabaseViewModel(false, onConfirm, setToastMessage, setShowToast))
         expect(result.current.field1).toBe("");
-        */
     })
 })

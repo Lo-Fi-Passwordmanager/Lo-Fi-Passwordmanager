@@ -2,7 +2,13 @@ import {expect, it, describe, beforeEach, afterEach} from "vitest";
 
 
 import {AutomergeUrl} from "@automerge/automerge-repo";
-import {loadAllDatabases, saveDatabases, storeDatabase} from "../../src/Utility/Storage";
+import {
+    loadAllDatabases, loadCurrentSortCriterion, loadIsAscending,
+    removeDatabase,
+    saveCurrentSortCriterion,
+    saveDatabases, saveIsAscending,
+    storeDatabase
+} from "../../src/Utility/Storage";
 
 const testMap = new Map<string, AutomergeUrl>();
 
@@ -44,4 +50,28 @@ describe("PasswordManagerViewModel", () => {
         expect(reloadedMap.size).toBe(2);
         expect(reloadedMap.get("TestDB2")).toBe("automerge-id-2");
     })
+
+    it('Should be able to remove a Database correctly', ()=> {
+        storeDatabase("TestDB2", "automerge-id-2" as AutomergeUrl);
+        let reloadedMap = loadAllDatabases();
+        expect(reloadedMap.size).toBe(1);
+        expect(reloadedMap.get("TestDB2")).toBe("automerge-id-2");
+        removeDatabase("TestDB2");
+        reloadedMap = loadAllDatabases();
+        expect(reloadedMap.size).toBe(0);
+    })
+
+    it('should be able to store/and get sorting criteria', ()=> {
+        saveCurrentSortCriterion("date");
+        expect(loadCurrentSortCriterion()).toBe("date");
+    })
+
+    it('should be able to store if the items are sorted ascending', ()=> {
+        expect(loadIsAscending()).toBe(null);
+        saveIsAscending(false)
+        expect(loadIsAscending()).toBe(false);
+        saveIsAscending(true)
+        expect(loadIsAscending()).toBe(true);
+    })
+
 })

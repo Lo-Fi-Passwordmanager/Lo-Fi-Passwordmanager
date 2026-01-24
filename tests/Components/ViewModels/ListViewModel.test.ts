@@ -31,7 +31,8 @@ describe("ListViewModel", () => {
     });
 
     it("should be able to tell when its a folder", () => {
-        const {result} = renderHook(() => useListViewModel(root, sortCriteria, isAscending, null, () => {}));
+        const {result} = renderHook(() =>
+            useListViewModel(root, sortCriteria, isAscending, null, () => {}));
         expect(result.current.isItemFolder()).toBe(true);
         expect(result.current.isItemEntry()).toBe(false);
     });
