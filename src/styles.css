@@ -432,16 +432,10 @@ input[type="number"] {
 
 .entryViewAttribute {
     display: grid;
-    grid-template-columns: 90fr 10fr;
+    grid-template-columns: 9fr 1fr;
     align-items: center;
-    gap: 8px;
-    padding: 8px;
     position: relative;
-    height: 20%;
-}
-
-.entryViewAttribute button {
-    max-height: 70%;
+    gap: 12px;
 }
 
 /* First element fills the entire first row */
@@ -463,9 +457,9 @@ input[type="number"] {
     height: fit-content;
     color: var(--panel);
     background-color: transparent;
-    font-size: 1.8em;
+    font-size: 2em;
     position: absolute;
-    right: 14%;
+    right: 13%;
     align-self: center;
 }
 
@@ -479,19 +473,27 @@ input[type="number"] {
     color: var(--text);
 }
 
-.title-value {
-    font-size: 1.2em;
-    height: 30px;
-    width: fit-content;
-    padding: 1.2%;
-}
-
-.attribute-value {
+.attribute-value, title-value {
+    box-sizing: border-box;
     margin-left: 48px;
     border: 1px solid var(--panel);
     border-radius: 12px;
-    padding: 12px;
+    padding: 0 12px;
+    min-height: 5vh;
+    height: 5vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.title-value {
     box-sizing: border-box;
+    font-size: 1.2em;
+    width: fit-content;
+    padding: 1.2%;
+    min-height: 5vh;
+    height: 5vh;
 }
 
 .scrollableContainer {

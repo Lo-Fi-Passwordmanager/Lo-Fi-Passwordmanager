@@ -81,7 +81,7 @@ const EntryView: React.FC<{
 
                         <div className={"entryViewAttribute"}>
                             <span>Notiz:</span>
-                            <span className={"attribute-value"}>{entry.note}</span>
+                            <span className={"attribute-value"} style={{height:"fit-content", padding:"12px", whiteSpace:"normal"}}>{entry.note}</span>
                         </div>
                     </div>
                 </div>
