@@ -4,8 +4,8 @@ import LoginView from "./LoginView.tsx";
 import SettingsView from "./SettingsView.tsx";
 import PasswordView from "./PasswordView.tsx";
 import {RepoContext} from "@automerge/react";
-import LoadingScreen from "./Dialogs/LoadingScreen.tsx";
-import ToastDialog from "./Dialogs/ToastDialog.tsx";
+import LoadingScreen from "./DialogViews/LoadingScreen.tsx";
+import ToastDialog from "./DialogViews/ToastDialog.tsx";
 
 const PasswordManagerView: React.FC = () => {
 

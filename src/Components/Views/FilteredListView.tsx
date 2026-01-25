@@ -34,7 +34,9 @@ const FilteredListView: React.FC<{
                     </div>
                 })}
             </div>
+
             <div className={"divider"}/>
+
             <div>
                 <div className="FilteredListView__header">
                     Gefundene Ordner
