@@ -10,10 +10,13 @@ describe('UseLoginViewModel', () => {
     const setAutomergeFacade = vi.fn();
     const setOpenedDbName = vi.fn();
     let secProv: SecurityProvider;
+
     beforeEach(() => {
         repo = new Repo();
         secProv = new SecurityProvider();
         secProv.getNewValidation("password", secProv.getNewSalt());
+        localStorage.clear();
+        vi.resetAllMocks();
     })
 
     afterEach(() => {
@@ -132,11 +135,40 @@ describe('UseLoginViewModel', () => {
         });
     });
 
-    it('should be able to import a database from a url', async () => {
+    it('should throw when the database doesnt exist', async () => {
         const {result} = renderHook(() =>
             useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, secProv, setOpenedDbName));
         await expect(result.current.tryOpenDatabase("password", "name")).rejects.toThrow("Database doesn't exist");
     })
+
+    it("should be able to open the selcted database", async () => {
+        const {result} = renderHook(() =>
+            useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, secProv, setOpenedDbName));
+        result.current.createDatabase("name", "password");
+        result.current.closeDatabase();
+        await waitFor(()=> {
+            expect(setLoggedIn()).toHaveBeenCalled;
+        })
+        act(() => {
+            result.current.openEnterPasswordDialog("name");
+        })
+        await waitFor(() => {
+            result.current.tryOpenDatabase("password");
+        })
+    });
+
+    it("should reject a wrong password", async () => {
+        const {result} = renderHook(() =>
+            useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, secProv, setOpenedDbName));
+        result.current.createDatabase("name", "password");
+        result.current.closeDatabase();
+        await waitFor(()=> {
+            expect(setLoggedIn).toHaveBeenCalled();
+        })
+        await waitFor(() => {
+            result.current.tryOpenDatabase("WrongPassword", "name");
+        });
+    });
 
 
 })
