@@ -1,6 +1,7 @@
 import React from "react";
 import {useHistoryViewModel} from "../../ViewModels/Dialog/HistoryViewModel.ts";
 import Dialog from "./Dialog.tsx";
+import {HistoryItem} from "./HistoryItem.tsx";
 
 export const HistoryDialog: React.FC = () => {
 
@@ -18,8 +19,11 @@ export const HistoryDialog: React.FC = () => {
             {
                 viewmodel.historyOpen &&
                 <Dialog title="History" onCloseDialog={() => viewmodel.setHistoryOpen(false)}>
+                    {/*TODO HistoryItem*/}
+
+                    <HistoryItem/>
                 </Dialog>
-            }
+            }()
         </>
     );
 };

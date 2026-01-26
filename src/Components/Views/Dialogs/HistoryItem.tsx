@@ -1,6 +1,5 @@
 import React from "react";
 import {useHistoryViewModel} from "../../ViewModels/Dialog/HistoryViewModel.ts";
-import Dialog from "./Dialog.tsx";
 
 export const HistoryItem: React.FC = () => {
 
@@ -8,20 +7,7 @@ export const HistoryItem: React.FC = () => {
 
     return (
         <>
-            <button
-                className="settingsButton"
-                onClick={() => viewmodel.setHistoryOpen(true)}
-                style={{right: "100px"}}
-            >
-                hist
-            </button>
-            {
-                viewmodel.historyOpen &&
-                <Dialog title="History" onCloseDialog={() => viewmodel.setHistoryOpen(false)}>
-                    {/*TODO HistoryItem*/}
-                    <HistoryItem/>
-                </Dialog>
-            }
+
         </>
     );
 };

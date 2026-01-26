@@ -171,6 +171,15 @@ button:focus-visible {
     flex-direction: column;
     gap: 10px;
     width: 300px;
+    position: relative;
+}
+
+.closeIcon {
+    width: 20px;
+    aspect-ratio: 1;
+    position: absolute;
+    right: 20px;
+    cursor: pointer;
 }
 
 .DatabaseListing {
