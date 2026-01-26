@@ -126,6 +126,13 @@ export const useLoginViewModel = (
                 return;
             }
 
+            if (salt == null || validation == null) {
+                setLoadingScreenActive(false);
+                setShowToast(true);
+                setToastMessage("Automerge konnte die Datenbank nicht laden!");
+                return;
+            }
+
             // Das Timeout an dieser Stelle sorgt dafür, dass der enthaltene Codeblock ans Ende der aktuell auszuführenden Aktionen geschoben wird,
             // wodurch das Rendering des Ladescreens ermöglicht wird, bevor der SecurityProvider den Thread blockiert.
             setTimeout(() => {
