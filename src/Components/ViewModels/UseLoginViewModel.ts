@@ -12,7 +12,7 @@ export type LoginViewModelReturn = {
     isAddDialogOpen: boolean,
     isEnterPasswordDialogOpen: boolean,
     createDatabase: (name: string, masterPassword: string) => void,
-    tryOpenDatabase: (masterPassword: string) => void,
+    tryOpenDatabase: (masterPassword: string, name?: string) => void,
     closeDatabase: () => void,
     openAddDialog: () => void,
     closeAddDialog: () => void,
