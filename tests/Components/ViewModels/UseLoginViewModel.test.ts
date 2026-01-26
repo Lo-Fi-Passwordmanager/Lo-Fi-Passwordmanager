@@ -169,6 +169,4 @@ describe('UseLoginViewModel', () => {
             result.current.tryOpenDatabase("WrongPassword", "name");
         });
     });
-
-
 })
