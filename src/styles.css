@@ -157,6 +157,17 @@ button:focus-visible {
     gap: 12px;
 }
 
+.dbSettingsContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    & > button {
+        margin-block: 5px;
+        margin-inline: unset;
+    }
+}
+
 .checkboxRow {
     display: flex;
     align-items: center;

@@ -1,12 +1,13 @@
-import {useDatabaseSettingsViewModel} from "../../ViewModels/DatabaseSettingsViewModel.ts";
 import type {AutomergeFacade} from "../../../Utility/AutomergeFacade.ts";
+import React from "react";
 
 
 /**
  * The view that links to the {@link Settings} singleton and toggles its values.
  */
 const DatabaseSettingsView: React.FC<{ automergeFacade: AutomergeFacade }> = (automergeFacade) => {
-    const viewmodel = useDatabaseSettingsViewModel();
+    // Auskommentiert, da es gerade nicht verwendet wird
+    // const viewmodel = useDatabaseSettingsViewModel();
 
     return (
         <>
@@ -14,16 +15,18 @@ const DatabaseSettingsView: React.FC<{ automergeFacade: AutomergeFacade }> = (au
             <h1 style={{fontSize: "2em", marginBottom: "20px"}}>Datenbankeinstellungen</h1>
 
             {/* Following are the checkboxes and their description */}
-            <div className="settingsContainer">
+            <div className="dbSettingsContainer">
                 <button
-                    onClick={() => navigator.clipboard.writeText(
-                        (automergeFacade.automergeFacade.automergeURL as string).replace("automerge:", "")
-                    )}>
+                    onClick={
+                        () => navigator.clipboard.writeText(
+                            (automergeFacade.automergeFacade.automergeURL as string).replace("automerge:", "")
+                        )
+                    }>
                     URL kopieren
                 </button>
                 <button>Datenbank lokal löschen</button>
-                <button>Exportieren</button>
-                <button>Exportieren</button>
+                <button>Unverschlüsselt Exportieren</button>
+                <button>Verschlüsselt Exportieren</button>
             </div>
         </>
     );
