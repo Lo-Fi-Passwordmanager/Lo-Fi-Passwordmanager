@@ -674,3 +674,38 @@ input[type="number"] {
     width: 150px;
     text-align: center;
 }
+
+.settings-layout {
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    min-height: 35%;
+}
+
+.settings-sidebar {
+    background: var(--dialog-bg);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--panel);
+}
+
+.settings-sidebar button {
+    text-align: left;
+    padding: 10px;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+
+.settings-content {
+    background: var(--dialog-bg);
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.settings-close-btn {
+    margin-top: auto;
+    background: gray;
+}

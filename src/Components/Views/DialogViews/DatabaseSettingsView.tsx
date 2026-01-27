@@ -11,9 +11,7 @@ const DatabaseSettingsView: React.FC<{ automergeFacade: AutomergeFacade }> = ({a
 
     return (
         <>
-            <div className="divider"/>
             <div className="dbSettingsContainer">
-                <h1 style={{fontSize: "2em", marginBottom: "20px", marginTop: 0}}>Datenbankeinstellungen</h1>
                 {/* TODO Toast */}
                 <button
                     onClick={

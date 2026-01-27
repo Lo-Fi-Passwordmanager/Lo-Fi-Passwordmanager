@@ -3,7 +3,7 @@ import {useState} from "react";
 export const useRenameDatabaseViewModel = (oldName: string, renameDatabase: (oldName: string, newName: string) => void) => {
 
     const [renameDatabaseOpen, setRenameDatabaseOpen] = useState(false);
-    const [newName, setNewName] = useState("");
+    const [newName, setNewName] = useState(oldName);
 
     function handleConfirm() {
         renameDatabase(oldName, newName);
