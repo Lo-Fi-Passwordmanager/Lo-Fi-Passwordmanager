@@ -307,7 +307,7 @@ input[type="number"] {
 }
 
 .over {
-    border: 2px dashed var(--outline-droppable);
+    border: 2px dashed var(--outline-droppable) !important;
     background-color: var(--bg) !important;
 }
 
@@ -324,6 +324,7 @@ input[type="number"] {
     align-items: center;
     padding-left: 10px;
     height: 36px;
+    border: 2px solid transparent;
     box-sizing: border-box;
 }
 
