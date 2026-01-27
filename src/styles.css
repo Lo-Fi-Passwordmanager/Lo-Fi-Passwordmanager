@@ -424,7 +424,6 @@ input[type="number"] {
 .entryViewListing {
     display: flex;
     flex-direction: column;
-    gap: 12px;
     width: 90%;
     justify-content: start;
     height: 100%;
@@ -435,7 +434,6 @@ input[type="number"] {
     grid-template-columns: 9fr 1fr;
     align-items: center;
     position: relative;
-    gap: 12px;
     height: 20%;
 }
 
@@ -451,7 +449,7 @@ input[type="number"] {
     box-shadow: none;
     font-size: 18px;
     line-height: 1;
-    justify-self: end;
+    justify-self: center;
 }
 
 .eye-button {
@@ -460,7 +458,7 @@ input[type="number"] {
     background-color: transparent;
     font-size: 2em;
     position: absolute;
-    right: 13%;
+    right: 12%;
     align-self: center;
 }
 
