@@ -45,7 +45,7 @@ const ListView: React.FC<{
     if (listViewModel.isItemEntry()) {
         const entry = listViewModel.getItem() as Entry;
         return (
-            <div className="listViewEntry" onClick={() => setCurItem(entry)}>
+            <div className={`listViewEntry ${getCurItem().id === entry.id? "selected" : ""}`} onClick={() => setCurItem(entry)}>
                 <span style={{marginRight: "1ch"}}></span> <span>{entry.title}</span>
                 <div className="btnWrapper">
                     <button onClick={() => deleteItem(item)}>🗑️</button>
@@ -62,8 +62,8 @@ const ListView: React.FC<{
                 {/* Name and Buttons */}
                 <div className="listViewTitleHeader">
                     {(item.id != "") &&
-                    <button style={{marginRight: "15px"}}
-                            onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? ">" : "v"}</button>}
+                    <button style={{marginRight: "15px", boxShadow:"none"}}
+                            onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? "▼" : "▷"}</button>}
 
                     <span style={{marginLeft: ((item.id != "")?"":"10px" )}}>{ (item.id != "") ? listViewModel.getItem().title : openedDbName}</span>
 
