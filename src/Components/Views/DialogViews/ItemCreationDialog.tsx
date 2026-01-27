@@ -55,12 +55,7 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({
                                     placeholder={"Passwort"}
                                 />
                             </div>
-                            <button
-                                className="passwordGenButton"
-                                onClick={() => viewmodel.setInPasswordGen(true)}
-                            >
-                                +
-                            </button>
+                            <PasswordGenDialog newPassword={(password: string) => viewmodel.setPassword(password)}></PasswordGenDialog>
                         </div>
                         <label>URL</label>
                         <input
@@ -82,14 +77,6 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({
                         </div>
                     </div>
                 </div>
-                {viewmodel.inPasswordGen &&
-                    <PasswordGenDialog
-                        newPassword={(password) => {
-                            viewmodel.setPassword(password);
-                            viewmodel.setInPasswordGen(false);
-                        }}
-                        cancelPasswordGen={() => viewmodel.setInPasswordGen(false)}
-                    />}
             </>
         );
     } else {
