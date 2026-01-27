@@ -1,7 +1,20 @@
-import {useState} from "react";
-import {AutomergeFacade, useAutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import {useRef, useState} from "react";
+import {type Attribute, AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import {useAutomergeFacade} from "../../Utility/useAutomergeFacade.ts";
 import type {Item} from "../../Model/Item.ts";
+import {
+    loadCurrentSortCriterion,
+    loadIsAscending,
+    saveCurrentSortCriterion,
+    saveIsAscending
+} from "../../Utility/Storage.ts";
 
+export const SortCriteria = {
+    Name: "NAME",
+    CreatedAt: "CREATED",
+    EditedAt: "EDITED",
+} as const;
+export type SortCriteria = typeof SortCriteria[keyof typeof SortCriteria];
 
 /**
  * The viewmodel for the PasswordView, which stores the currently displayed entry
@@ -13,8 +26,84 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     const [inEditablePasswordView, setInEditablePasswordView] = useState(false);
     const [inItemCreation, setInItemCreation] = useState(false);
     const reactiveFacade = useAutomergeFacade(automergeFacade);
-    const [curItem, setCurItem] = useState<Item>(reactiveFacade.tree.rootFolder);
+    const [curItem, _setCurItem] = useState<Item>(reactiveFacade.tree.rootFolder);
     const [curParent, setCurParent] = useState<Item>(reactiveFacade.tree.rootFolder);
+    const [toastMessage, setToastMessage] = useState("");
+    const [toastVisible, setToastVisible] = useState(false);
+    const clipboardTimerRef = useRef<number | null>(null);
+    const [inEditable, setInEditable] = useState(false);
+    const [dirtyItemId, setDirtyItemId] = useState<string | null>(null);
+    const [hidePassword, setHidePassword] = useState(true);
+
+    function setCurItem(item: Item) {
+        _setCurItem(item);
+        setDirtyItemId(null);
+    }
+
+    const [curSortCrit, setCurSortCrit] = useState<SortCriteria>(initSortCriterion);
+    const [isAscending, setIsAscending] = useState<boolean>(initIsAscending);
+
+    const [searchValue, setSearchValue] = useState<string>("");
+
+    /**
+     * initializes the sort criterion from the local storage, or uses the default value
+     */
+    function initSortCriterion() {
+        const savedCriterion = loadCurrentSortCriterion();
+        if (isCriterion(savedCriterion)) {
+            return savedCriterion;
+        } else {
+            return SortCriteria.Name;
+        }
+    }
+
+    /**
+     * Toggles the password from ****** to the string and back
+     */
+    function toggleHidePassword() {
+        setHidePassword(!hidePassword);
+    }
+
+    /**
+     * type guard to check if a string is a valid SortCriterion
+     */
+    function isCriterion(value: string | null): value is SortCriteria {
+        return Object.values(SortCriteria).includes(value as SortCriteria);
+    }
+
+    /**
+     * initializes the isAscending boolean from the local storage, or uses the default value
+     */
+    function initIsAscending() {
+        const savedBoolean = loadIsAscending();
+        if (isBoolean(savedBoolean)) {
+            return savedBoolean;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * type guard to check if a value is a boolean
+     */
+    function isBoolean(value: boolean | null): value is boolean {
+        return typeof value === 'boolean';
+    }
+
+    /**
+     * sets and stores the current sort criterion
+     */
+    function setAndStoreSortCriterion(criterion: SortCriteria) {
+        setCurSortCrit(criterion);
+        saveCurrentSortCriterion(criterion)
+    }
+
+    /**
+     * returns the current sort criterion
+     */
+    function getCurSortCriterion() {
+        return curSortCrit;
+    }
 
     /**
      * returns the current entry that should be shown
@@ -31,9 +120,9 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         return reactiveFacade.tree.rootFolder;
     }
 
-    function addItem(item: Item, id: string) {
-        reactiveFacade.insertItem(item, id);
+    function addItem(item: Item, parentId: string): string {
         toggleEditablePasswordView();
+        return reactiveFacade.insertItem(item, parentId);
     }
 
     function toggleEditablePasswordView() {
@@ -48,15 +137,83 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         return curParent;
     }
 
+    function updateItemAttribute(itemId: string, changes: [Attribute, string | Date][]) {
+        reactiveFacade.updateItem(itemId, changes);
+        const id = curItem.id;
+        setCurItem(getRootFolder());
+        setDirtyItemId(id);
+    }
+
     function deleteItem(item: Item) {
+        if (item.id === "") {
+            return;
+        }
         reactiveFacade.deleteItem(item.id);
+        item.deleted = true;
+        setCurItem(getRootFolder());
+        setCurParent(getRootFolder());
+    }
+
+    function copyToClipboardAndClear(text: string, timeout: number = 10000) {
+        //If a timer is already running, cancel it. This is important for copying twice so that the first copy doesnt delete the second one
+        if (clipboardTimerRef.current) {
+            window.clearTimeout(clipboardTimerRef.current);
+        }
+
+        setToastMessage("In die Zwischenablage kopiert");
+        setToastVisible(true);
+        navigator.clipboard.writeText(text);
+
+
+        //after the timeout check for focus and clear the clipboard when focused
+        clipboardTimerRef.current = window.setTimeout(() => {
+            if (document.hasFocus()) {
+                navigator.clipboard.writeText("");
+                setToastMessage("Zwischenablage gelöscht");
+                setToastVisible(true);
+                clipboardTimerRef.current = null;
+            } else {
+                // If user is away, wait until they come back
+                setToastMessage("Löschen ausstehend (bitte Tab fokussieren)");
+                window.addEventListener("focus",
+                    () => {
+                        navigator.clipboard.writeText("");
+                        setToastMessage("Zwischenablage gelöscht");
+                        setToastVisible(true);
+                    },
+                    {once: true});
+                clipboardTimerRef.current = null;
+            }
+        }, timeout);
+    }
+
+    /**
+     * Toggles the order of the sorting between ascending and descending
+     */
+    function toggleOrder() {
+        setIsAscending(!isAscending);
+        saveIsAscending(!isAscending);
     }
 
     return {
+        dirtyItemId,
+        isAscending,
+        searchValue,
+        toastMessage,
+        toastVisible,
+        inEditable,
+        hidePassword,
+        toggleHidePassword,
+        setSearchValue,
+        copyToClipboardAndClear,
         setCurItem,
         getCurEntry,
         getRootFolder,
         addItem,
+        setToastMessage,
+        setToastVisible,
+        setInEditable,
+        updateItemAttribute,
         toggleEditablePasswordView,
         getInEditablePasswordView,
         getInItemCreation,
@@ -64,5 +221,8 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setCurParent,
         getCurParent,
         deleteItem,
+        setAndStoreSortCriterion,
+        toggleOrder,
+        getCurSortCriterion,
     };
 };

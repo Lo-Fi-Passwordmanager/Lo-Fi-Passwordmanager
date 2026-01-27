@@ -10,7 +10,6 @@ import DatabaseSettingsView from "./Dialogs/DatabaseSettingsView.tsx";
 const SettingsView: React.FC<{ automergeFacade?: AutomergeFacade | null }> = ({automergeFacade}) => {
     const viewmodel = useSettingsViewModel();
 
-
     /**
      * Checks if the settingsmenu should be open or not
      */
@@ -53,29 +52,46 @@ const SettingsView: React.FC<{ automergeFacade?: AutomergeFacade | null }> = ({a
                                 <label className="checkboxRow">
                                     <input
                                         type="checkbox"
-                                        checked={viewmodel.autoConclictRes}
-                                        onChange={viewmodel.toggleAutoConclictRes}
+                                        checked={viewmodel.autoConflictRes}
+                                        onChange={viewmodel.toggleAutoConflictRes}
                                     />
                                     Konfliktauflösung
                                 </label>
                             </div>
 
-                            <div>
-                                <label className="checkboxRow">
-                                    <input
-                                        type="checkbox"
-                                        checked={viewmodel.timeOutActive}
-                                        onChange={viewmodel.toggleTimeOutActive}
-                                    />
-                                    Sperren der App bei Inaktivität
-                                </label>
-                            </div>
+                        <div>
+                            <label className="checkboxRow">
+                                <input
+                                    type="checkbox"
+                                    checked={viewmodel.timeOutActive}
+                                    onChange={viewmodel.toggleTimeOutActive}
+                                />
+                                Bei Inaktivität abmelden
+                            </label>
                         </div>
 
-                        {automergeFacade && <DatabaseSettingsView automergeFacade={automergeFacade}/>}
+                        {viewmodel.timeOutActive && <div className={"timeout-setting"}>
+                            <label>Minuten bis Abmeldung: </label>
+                            <div className={"numberInput"}>
+                                <input
+                                    type="number"
+                                    value={viewmodel.timeoutLength}
+                                    onChange={(e) => viewmodel.setTimeOutLengthVM(e.target.value)}
+                                    min="1"
+                                    max="120"
+                                    step="1"
+                                />
+                                <button className={"number-control"} onClick={viewmodel.decrease}>–</button>
+                                <button className={"number-control"} onClick={viewmodel.increase}>+</button>
+                            </div>
+                        </div>}
+                            {automergeFacade && <DatabaseSettingsView automergeFacade={automergeFacade}/>}
                     </div>
+                    <button onClick={() => viewmodel.setSettingsOpen(false)} style={{marginTop: "1em"}}>Einstellungen
+                        Schließen
+                    </button>
                 </div>
-            </>
+            </div>
         );
 
         /**
@@ -85,7 +101,7 @@ const SettingsView: React.FC<{ automergeFacade?: AutomergeFacade | null }> = ({a
         return (
             <button
                 className="settingsButton"
-                onClick={() => viewmodel.setSettingsOpen(true)}>Einstellungen Öffnen
+                onClick={() => viewmodel.setSettingsOpen(true)}>⚙️
             </button>
         );
     }

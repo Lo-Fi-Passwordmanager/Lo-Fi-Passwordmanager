@@ -1,6 +1,6 @@
 import {Settings} from "../../Model/Settings";
 
-import { useState, useEffect } from 'react';
+import {useEffect, useState} from "react";
 
 /**
  * The ViewModel that is used for interfacing the {@link Settings} singleton.
@@ -13,20 +13,23 @@ export const useSettingsViewModel = () => {
     // Reactive state to store values during runtime
     const [darkMode, setDarkMode] = useState(settings.getDarkMode());
     const [synchronisation, setSynchronisation] = useState(settings.getSynchronization());
-    const [autoConclictRes, setAutoConflictRes] = useState(settings.getAutoConflictResolution());
+    const [autoConflictRes, setAutoConflictRes] = useState(settings.getAutoConflictResolution());
     const [timeOutActive, setTimeOutActive] = useState(settings.getTimeoutActive());
     const [settingsOpen, setSettingsOpen] = useState(false);
+    const [timeoutLength, setTimeoutLength] = useState(settings.getTimeoutLength());
+
 
     document.getElementsByTagName("html")[0]?.setAttribute("data-theme", darkMode ? "dark" : "light");
 
 
     // When darkMode is updated, update settings
     useEffect(() => {
-        settings.setDarkMode(darkMode)
+        settings.setDarkMode(darkMode);
         settings.setSynchronization(synchronisation);
-        settings.setAutoConflictResolution(autoConclictRes);
+        settings.setAutoConflictResolution(autoConflictRes);
         settings.setTimeoutActive(timeOutActive);
-    }, [darkMode, synchronisation, autoConclictRes, timeOutActive, settings]);
+        settings.setTimeoutLength(timeoutLength);
+    }, [darkMode, synchronisation, autoConflictRes, timeOutActive, settings, timeoutLength]);
 
 
     // Update darkMode
@@ -34,28 +37,52 @@ export const useSettingsViewModel = () => {
         setDarkMode(!darkMode);
         document.getElementsByTagName("html")[0]?.setAttribute("data-theme", darkMode ? "dark" : "light");
     }
+
     function toggleSynchronisation() {
         setSynchronisation(!synchronisation);
     }
-    function toggleAutoConclictRes() {
-        setAutoConflictRes(!autoConclictRes);
+
+    function toggleAutoConflictRes() {
+        setAutoConflictRes(!autoConflictRes);
     }
+
     function toggleTimeOutActive() {
         setTimeOutActive(!timeOutActive);
+    }
+    //Checks that timeout cant be 0 or less since that causes the whole app to be unusable
+    function setTimeOutLengthVM(newLength: string) {
+        const length:number = Number(newLength);
+        if(length >= 1) {
+            setTimeoutLength(length);
+        }
+    }
+
+    function increase() {
+        setTimeOutLengthVM((timeoutLength + 1).toString());
+    }
+
+    function decrease() {
+        if(timeoutLength > 1) {
+            setTimeOutLengthVM((timeoutLength - 1).toString());
+        }
     }
 
 
     return {
         darkMode,
         synchronisation,
-        autoConclictRes,
+        autoConflictRes,
         timeOutActive,
         settingsOpen,
+        timeoutLength,
 
         toggleDarkMode,
         toggleSynchronisation,
-        toggleAutoConclictRes,
+        toggleAutoConflictRes,
         toggleTimeOutActive,
         setSettingsOpen,
+        setTimeOutLengthVM,
+        increase,
+        decrease,
     };
 };

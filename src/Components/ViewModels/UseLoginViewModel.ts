@@ -1,9 +1,10 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useState} from "react";
 import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import type {Repo} from "@automerge/react";
-import {AutomergeFacade, useAutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
-import {loadAllDatabases, storeDatabase} from "../../Utility/Storage.ts";
+import {loadAllDatabases, removeDatabase, storeDatabase} from "../../Utility/Storage.ts";
+import {useLoadingScreen} from "./LoadingScreenProviderViewModel.ts";
 
 export type LoginViewModelReturn = {
     databaseNames: string[],
@@ -11,31 +12,36 @@ export type LoginViewModelReturn = {
     isAddDialogOpen: boolean,
     isEnterPasswordDialogOpen: boolean,
     createDatabase: (name: string, masterPassword: string) => void,
-    tryOpenDatabase: (masterPassword: string) => void,
+    tryOpenDatabase: (masterPassword: string, name?: string) => void,
     closeDatabase: () => void,
     openAddDialog: () => void,
     closeAddDialog: () => void,
     openEnterPasswordDialog: (db: string) => void,
     closeEnterPasswordDialog: () => void
-    importDatabaseFromURL: (databaseName:string, automergeurl: AutomergeUrl) => void,
+    importDatabaseFromURL: (databaseName: string, url: AutomergeUrl) => void,
     showToast: boolean,
     setShowToast: (showToast: boolean) => void,
     toastMessage: string,
+    setToastMessage: (message: string) => void,
+    deleteDatabase: (name: string) => void,
 }
 
 /**
  * ViewModel for the LoginView
  * @param repo the automerge repo
- * @param setLoggedIn the function to update the View to switch from loginView to PasswordView
- * @param setAutomergeFacade the function to update the automergeFacade of the used database on correct Login
- * @param passwordViewSecurityProvider
+ * @param setLoggedIn the function to update the View to switch from loginView to PasswordView.
+ * @param setAutomergeFacade the function to update the automergeFacade of the used database on correct Login.
+ * @param securityProvider the security Provider to encrypt/decrypt with the given master password.
+ * @param setOpenedDbName the function that sets the Database name on the PasswordManager.
+ *
  * @returns all data and functions required by the LoginView
- * @author uwing
  */
 export const useLoginViewModel = (
-    repo: Repo, setLoggedIn: (value: (((prevState: boolean) => boolean) | boolean)) => void,
+    repo: Repo,
+    setLoggedIn: (value: (((prevState: boolean) => boolean) | boolean)) => void,
     setAutomergeFacade: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void,
     securityProvider: SecurityProvider,
+    setOpenedDbName: ((value: (((prevState: string) => string) | string)) => void)
 ): LoginViewModelReturn => {
     // map of database names to their automerge urls
     const [databases, setDatabases] = useState(() => loadAllDatabases());
@@ -51,6 +57,8 @@ export const useLoginViewModel = (
     const [showToast, setShowToast] = useState<boolean>(false);
     const [toastMessage, setToastMessage] = useState<string>("");
 
+    const setLoadingScreenActive = useLoadingScreen();
+
     // update the list of database names when the databases change
     useEffect(() => {
         setDatabaseNames(Array.from(databases.keys()));
@@ -62,77 +70,137 @@ export const useLoginViewModel = (
      * @param masterPassword the masterpassword that gets used for encryption
      */
     const createDatabase = (name: string, masterPassword: string) => {
-
+        setLoadingScreenActive(true);
         if (!isNameAvailable(name)) {
+            setLoadingScreenActive(false);
             return;
         }
 
-        const salt = securityProvider.getNewSalt();
-        const validation = securityProvider.getNewValidation(masterPassword, salt);
+        // Das Timeout an dieser Stelle sorgt dafür, dass der enthaltene Codeblock ans Ende der aktuell auszuführenden Aktionen geschoben wird,
+        // wodurch das Rendering des Ladescreens ermöglicht wird, bevor der SecurityProvider den Thread blockiert.
+        setTimeout(() => {
+            const salt = securityProvider.getNewSalt();
+            const validation = securityProvider.getNewValidation(masterPassword, salt);
 
-        const automergeFacade = new AutomergeFacade(repo);
-        automergeFacade.createDatabase(salt, validation)
+            const automergeFacade = new AutomergeFacade(repo);
+            automergeFacade.createDatabase(salt, validation);
 
-        const url = automergeFacade.automergeURL!;
+            const url = automergeFacade.automergeURL!;
+            addDatabase(name, url, masterPassword);
+        }, 0);
+    };
 
-        addDatabase(name, url);
-    }
-
-    // tries to open a database with the provided master password
-    const tryOpenDatabase = async (masterPassword: string) => {
-        if (!selectedDatabase) {
-            throw new Error("No database selected");
-        }
-        const dbUrl = databases.get(selectedDatabase);
-        if (!dbUrl) {
-            throw new Error("Database doesn't exist");
-        }
-
-        const facade = new AutomergeFacade(repo, dbUrl, securityProvider)
-        try {
-            if (securityProvider.verifyMasterPassword(masterPassword, (await facade.getSalt())!, (await facade.getValidation())!)) {
-                setLoggedIn!(true);
-                setAutomergeFacade!(facade);
-                setIsEnterPasswordDialogOpen(false);
-                setSelectedDatabase(null);
+    /**
+     * Tries to open a database with the provided master password
+     *
+     * @param masterPassword the master password to decrypt the database
+     * @param name optional name of the database if an database was just added
+     */
+    const tryOpenDatabase = async (masterPassword: string, name?: string) => {
+            let dbUrl: AutomergeUrl | undefined;
+            if (name) {
+                dbUrl = loadAllDatabases().get(name); // react states update asynchronously, so we have to load directly here
+            } else if (selectedDatabase) {
+                dbUrl = databases.get(selectedDatabase);
             } else {
-                setShowToast(true);
-                setToastMessage("Falsches Masterpasswort!")
+                throw new Error("No database selected");
             }
-        }
-        catch (error) {
-            console.error(error);
-            setShowToast(true);
-            setToastMessage("Die Datenbank konnte nicht geladen werden")
-        }
+            if (!dbUrl) {
+                throw new Error("Database doesn't exist");
+            }
 
-    }
+            setLoadingScreenActive(true);
+            setOpenedDbName(selectedDatabase!);
+            const facade = new AutomergeFacade(repo, dbUrl, securityProvider);
+            let salt: string | null;
+            let validation: string | null;
+            try {
+                salt = (await facade.getSalt());
+                validation = (await facade.getValidation());
+
+            } catch (error) {
+                console.error(error);
+                setLoadingScreenActive(false);
+                setShowToast(true);
+                setToastMessage("Automerge konnte die Datenbank nicht laden!");
+                return;
+            }
+
+            if (salt == null || validation == null) {
+                setLoadingScreenActive(false);
+                setShowToast(true);
+                setToastMessage("Automerge konnte die Datenbank nicht laden!");
+                return;
+            }
+
+            // Das Timeout an dieser Stelle sorgt dafür, dass der enthaltene Codeblock ans Ende der aktuell auszuführenden Aktionen geschoben wird,
+            // wodurch das Rendering des Ladescreens ermöglicht wird, bevor der SecurityProvider den Thread blockiert.
+            setTimeout(() => {
+                try {
+                    if (securityProvider.verifyMasterPassword(masterPassword, salt, validation)) {
+                        setLoggedIn!(true);
+                        setAutomergeFacade!(facade);
+                        setLoadingScreenActive(false);
+                        setSelectedDatabase(null);
+                    } else {
+                        setLoadingScreenActive(false);
+                        setShowToast(true);
+                        setToastMessage("Falsches Masterpasswort!");
+                    }
+                } catch (error) {
+                    console.error(error);
+                    setLoadingScreenActive(false);
+                    setShowToast(true);
+                    setToastMessage("Die Datenbank konnte nicht geladen werden");
+                }
+            }, 0);
+        }
+    ;
 
     /**
      * Imports a database from an automerge url and stores it in localStorage
      * @param name the name of the database
-     * @param automergeurl the automerge url of the database
+     * @param url the automerge url of the database
      */
-    function importDatabaseFromURL(name:string, automergeurl: AutomergeUrl) {
-        if (!isNameAvailable(name) || !isAutomergeUrlAvailable(automergeurl)) {
+    function importDatabaseFromURL(name: string, url: AutomergeUrl) {
+        if (!isNameAvailable(name) || !isAutomergeUrlAvailable(url)) {
+            setLoadingScreenActive(false);
             return;
         }
-        addDatabase(name, automergeurl);
+        addDatabase(name, url);
     }
 
     /**
      * Adds a new database to the list of available databases and opens the enter password dialog
      * @param name the name of the new database
      * @param url the automerge url of the new database
+     * @param masterPassword
      */
-    function addDatabase(name: string, url: AutomergeUrl) {
-        storeDatabase(name, url);
-        setDatabases(loadAllDatabases);
-
+    function addDatabase(name: string, url: AutomergeUrl, masterPassword?: string) {
         closeAddDialog();
 
+        storeDatabase(name, url);
+        setDatabases(loadAllDatabases);
         setSelectedDatabase(name);
-        setIsEnterPasswordDialogOpen(true);
+
+        if (masterPassword) {
+            tryOpenDatabase(masterPassword, name);
+        }
+    }
+
+
+    /**
+     * Removes a database from the list of available databases
+     *
+     * @param name the name of the database to remove
+     */
+    function deleteDatabase(name: string) {
+        const updatedDatabases = new Map(databases);
+        const id = updatedDatabases.get(name)!;
+        updatedDatabases.delete(name);
+        setDatabases(updatedDatabases);
+        removeDatabase(name);
+        repo.delete(id);
     }
 
     /**
@@ -171,12 +239,12 @@ export const useLoginViewModel = (
     // Close the dialog to create a new database
     const closeAddDialog = () => setIsAddDialogOpen(false);
 
-    // Open the dialog to login to a database
+    // Open the dialog to log in to a database
     const openEnterPasswordDialog = (db: string) => {
         setSelectedDatabase(db);
         setIsEnterPasswordDialogOpen(true);
-    }
-    // Close the dialog to login to a database
+    };
+    // Close the dialog to log in to a database
     const closeEnterPasswordDialog = () => setIsEnterPasswordDialogOpen(false);
 
     return {
@@ -196,5 +264,7 @@ export const useLoginViewModel = (
         openEnterPasswordDialog,
         closeEnterPasswordDialog,
         importDatabaseFromURL,
+        setToastMessage,
+        deleteDatabase
     };
-}
+};
