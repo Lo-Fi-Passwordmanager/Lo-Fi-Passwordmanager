@@ -8,7 +8,7 @@ import {
     saveCurrentSortCriterion,
     saveIsAscending
 } from "../../Utility/Storage.ts";
-import {PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
+import {type DragEndEvent, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
 
 export const SortCriteria = {
     Name: "NAME",
@@ -199,10 +199,13 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     /**
      * Handles the drag end event from dnd kit and updates the parentId of the dragged item
      */
-    const handleDragEnd = (event) => {
+    const handleDragEnd = (event: DragEndEvent) => {
         const {active, over} = event;
+        if (!over) {
+            return;
+        }
         if (active.id !== over.id) {
-            reactiveFacade.updateItem(active.id, [["parentId", over.id]]);
+            reactiveFacade.updateItem(active.id as string, [["parentId", over.id as string]]);
         }
     };
 

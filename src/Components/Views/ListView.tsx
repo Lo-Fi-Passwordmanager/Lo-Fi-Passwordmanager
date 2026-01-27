@@ -4,7 +4,6 @@ import {Entry} from "../../Model/Entry.ts";
 import React from "react";
 import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
 import {CSS} from "@dnd-kit/utilities";
-import {useDraggable, useDroppable} from "@dnd-kit/core";
 
 /**
  * The View that represents the whole database, which is represented by {@link Entry}/{@link Folder} Class Instances
@@ -41,39 +40,9 @@ const ListView: React.FC<{
         setCurrentParent!(item);
     }
 
-    // DnD Kit Draggable and Droppable setup
-    const {
-        attributes,
-        listeners,
-        setNodeRef: setDraggableRef,
-        transform,
-        isDragging
-    } = useDraggable({
-        id: item.id,
-        data: {type: listViewModel.isItemFolder() ? 'folder' : 'entry',
-        descendantIds: listViewModel.descendantIds}
-    });
-
-    const {
-        setNodeRef: setDroppableRef,
-        isOver
-    } = useDroppable({
-        id: item.id,
-        disabled: !listViewModel.isItemFolder() || listViewModel.isInvalidDropTarget
-    });
-
-    const setFolderRef = (node) => {
-        setDraggableRef(node);
-        setDroppableRef(node);
-    };
-
-    //FIXME: put these in CSS class?
+    // makes the dragged item follow the cursor
     const dragStyle = {
-        transform: CSS.Translate.toString(transform),
-        opacity: isDragging ? 0.5 : 1,
-        backgroundColor: (isOver && !isDragging) ? 'rgba(0, 100, 255, 0.1)' : undefined,
-        border: (isOver && !isDragging) ? '2px dashed #007bff' : '1px solid transparent',
-        cursor: isDragging ? 'grabbing' : 'pointer'
+        transform: CSS.Translate.toString(listViewModel.transform),
     };
 
     /**
@@ -82,12 +51,12 @@ const ListView: React.FC<{
     if (listViewModel.isItemEntry()) {
         const entry = listViewModel.getItem() as Entry;
         return (
-            <div className="listViewEntry"
+            <div className={!listViewModel.isDragging ? "listViewEntry" : "listViewEntry dragged"}
                  onClick={() => setCurItem(entry)}
                  style={dragStyle}
-                 ref={setDraggableRef}
-                 {...attributes}
-                 {...listeners}
+                 ref={listViewModel.setDraggableRef}
+                 {...listViewModel.attributes}
+                 {...listViewModel.listeners}
             >
                 <span style={{marginRight: "1ch"}}></span> <span>{entry.title}</span>
                 <div className="btnWrapper">
@@ -103,11 +72,11 @@ const ListView: React.FC<{
         return (
             <>
                 {/* Name and Buttons */}
-                <div className="listViewTitleHeader"
-                     ref={setFolderRef}
+                    <div className={`listViewTitleHeader ${listViewModel.isDragging ? "dragged" : ""} ${listViewModel.isOver && !listViewModel.isDragging ? "over" : ""}`}
+                     ref={listViewModel.setFolderRef}
                      style={dragStyle}
-                     {...attributes}
-                     {...listeners}
+                     {...listViewModel.attributes}
+                     {...listViewModel.listeners}
                 >
                     {(item.id != "") &&
                         <button style={{marginRight: "15px"}}

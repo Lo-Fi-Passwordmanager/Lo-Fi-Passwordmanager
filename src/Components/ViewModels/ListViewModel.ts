@@ -3,7 +3,7 @@ import {Folder} from "../../Model/Folder.ts";
 import type {Entry} from "../../Model/Entry.ts";
 import {useMemo, useState} from "react";
 import {SortCriteria} from "./PasswordViewModel.ts";
-import {useDndContext} from "@dnd-kit/core";
+import {useDndContext, useDraggable, useDroppable} from "@dnd-kit/core";
 
 /**
  * The viewmodel used by the ListView. It has the utility needed for correctly deciding and differentiating {@link Entry} and {@link Folder}
@@ -94,6 +94,34 @@ export const useListViewModel = (topItem: Item, currentSortCrit: SortCriteria, i
         return activeDescendants.includes(item.id);
     }, [active, item.id]);
 
+
+    // DnD Kit Draggable and Droppable setup
+    const {
+        attributes,
+        listeners,
+        setNodeRef: setDraggableRef,
+        transform,
+        isDragging
+    } = useDraggable({
+        id: item.id,
+        data: {type: isItemFolder() ? 'folder' : 'entry',
+            descendantIds: descendantIds}
+    });
+
+    const {
+        setNodeRef: setDroppableRef,
+        isOver
+    } = useDroppable({
+        id: item.id,
+        disabled: !isItemFolder() || isInvalidDropTarget
+    });
+
+    const setFolderRef = (node: HTMLDivElement | null) => {
+        if (!node) return;
+        setDraggableRef(node);
+        setDroppableRef(node);
+    };
+
     return {
         getChildren,
         isItemFolder,
@@ -104,5 +132,12 @@ export const useListViewModel = (topItem: Item, currentSortCrit: SortCriteria, i
         setExtended,
         descendantIds,
         isInvalidDropTarget,
+        setFolderRef,
+        setDraggableRef,
+        attributes,
+        listeners,
+        isDragging,
+        transform,
+        isOver
     };
 };
