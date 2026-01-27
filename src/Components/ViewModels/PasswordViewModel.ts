@@ -8,6 +8,7 @@ import {
     saveCurrentSortCriterion,
     saveIsAscending
 } from "../../Utility/Storage.ts";
+import {PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
 
 export const SortCriteria = {
     Name: "NAME",
@@ -196,11 +197,26 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     }
 
     /**
-     * Moves an item to a new parent folder
+     * Handles the drag end event from dnd kit and updates the parentId of the dragged item
      */
-    function moveItem(itemId: string, newParentId: string) {
-        reactiveFacade.updateItem(itemId, [["parentId", newParentId]]);
-    }
+    const handleDragEnd = (event) => {
+        const {active, over} = event;
+        if (active.id !== over.id) {
+            reactiveFacade.updateItem(active.id, [["parentId", over.id]]);
+        }
+    };
+
+    /**
+     * Sensor for dnd kit to start dragging after moving 5 pixels
+     * Otherwise it interferes with clicking to select items
+     */
+    const sensors = useSensors(
+        useSensor(PointerSensor, {
+            activationConstraint: {
+                distance: 5,
+            },
+        })
+    );
 
     return {
         dirtyItemId,
@@ -210,6 +226,8 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         toastVisible,
         inEditable,
         hidePassword,
+        sensors,
+
         toggleHidePassword,
         setSearchValue,
         copyToClipboardAndClear,
@@ -231,6 +249,6 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setAndStoreSortCriterion,
         toggleOrder,
         getCurSortCriterion,
-        moveItem,
+        handleDragEnd,
     };
 };

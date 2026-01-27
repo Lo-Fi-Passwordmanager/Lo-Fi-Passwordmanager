@@ -9,7 +9,7 @@ import ToastDialog from "./DialogViews/ToastDialog.tsx";
 import EditablePasswordView from "./EditablePasswordView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
 import SettingsView from "./SettingsView.tsx";
-import {closestCenter, DndContext, pointerWithin} from "@dnd-kit/core";
+import {DndContext, pointerWithin} from "@dnd-kit/core";
 
 interface PasswordViewProps {
     automergeFacade?: AutomergeFacade | null,
@@ -23,12 +23,6 @@ interface PasswordViewProps {
 const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbName, closeDatabase}) => {
     const passwordViewModel = usePasswortViewModel(automergeFacade as AutomergeFacade);
 
-    const handleDragEnd = (event) => {
-        const {active, over} = event;
-        if (active.id !== over.id) {
-            passwordViewModel.moveItem(active.id, over.id);
-        }
-    };
 
     return (
         <div style={{margin: "10px", height: "95vh"}}>
@@ -62,7 +56,8 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                         isAscending={passwordViewModel.isAscending}
                         filterText={passwordViewModel.searchValue}
                     />}
-                    <DndContext collisionDetection={pointerWithin} onDragEnd={handleDragEnd}>
+                    <DndContext collisionDetection={pointerWithin} onDragEnd={passwordViewModel.handleDragEnd}
+                                sensors={passwordViewModel.sensors}>
 
                         {/*The basic ListView which shows all Items and Folders in their hierarchy*/}
                         {passwordViewModel.searchValue.length === 0 && <ListView

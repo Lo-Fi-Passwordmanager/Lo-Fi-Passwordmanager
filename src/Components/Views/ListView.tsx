@@ -1,11 +1,10 @@
 import {type Item} from "../../Model/Item.ts";
 import {useListViewModel} from "../ViewModels/ListViewModel.ts";
 import {Entry} from "../../Model/Entry.ts";
-import React, {useMemo} from "react";
+import React from "react";
 import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
 import {CSS} from "@dnd-kit/utilities";
-import {useDndContext, useDraggable, useDroppable} from "@dnd-kit/core";
-import type {Folder} from "../../Model/Folder.ts";
+import {useDraggable, useDroppable} from "@dnd-kit/core";
 
 /**
  * The View that represents the whole database, which is represented by {@link Entry}/{@link Folder} Class Instances
@@ -42,31 +41,7 @@ const ListView: React.FC<{
         setCurrentParent!(item);
     }
 
-    const {active} = useDndContext();
-
-
-    const getAllDescendantIds = (item: Item): string[] => {
-        if (item.isEntry()) {
-            return [];
-        } else if (!(item as Folder).entries) {
-            return [];
-        }
-        return (item as Folder).entries.flatMap((child) => [child.id, ...getAllDescendantIds(child)]);
-    }
-
-    const descendantIds = useMemo(() => {
-        return listViewModel.isItemFolder() ? getAllDescendantIds(item) : [];
-    }, [item]);
-
-
-    const isInvalidDropTarget = useMemo(() => {
-        if (!active) return false;
-        if (active.id === item.id) return true; // Cannot drop onto itself
-
-        const activeDescendants = active.data.current?.descendantIds as string[];
-        return activeDescendants.includes(item.id);
-    }, [active, item.id]);
-
+    // DnD Kit Draggable and Droppable setup
     const {
         attributes,
         listeners,
@@ -76,7 +51,7 @@ const ListView: React.FC<{
     } = useDraggable({
         id: item.id,
         data: {type: listViewModel.isItemFolder() ? 'folder' : 'entry',
-        descendantIds: descendantIds}
+        descendantIds: listViewModel.descendantIds}
     });
 
     const {
@@ -84,21 +59,21 @@ const ListView: React.FC<{
         isOver
     } = useDroppable({
         id: item.id,
-        disabled: !listViewModel.isItemFolder() || isInvalidDropTarget
+        disabled: !listViewModel.isItemFolder() || listViewModel.isInvalidDropTarget
     });
 
-    // Style für das gezogene Element (folgt der Maus)
+    const setFolderRef = (node) => {
+        setDraggableRef(node);
+        setDroppableRef(node);
+    };
+
+    //FIXME: put these in CSS class?
     const dragStyle = {
         transform: CSS.Translate.toString(transform),
         opacity: isDragging ? 0.5 : 1,
         backgroundColor: (isOver && !isDragging) ? 'rgba(0, 100, 255, 0.1)' : undefined,
         border: (isOver && !isDragging) ? '2px dashed #007bff' : '1px solid transparent',
-        cursor: isDragging ? 'grabbing' : (isInvalidDropTarget && isOver ? 'not-allowed' : 'pointer')
-    };
-
-    const setFolderRef = (node) => {
-        setDraggableRef(node);
-        setDroppableRef(node);
+        cursor: isDragging ? 'grabbing' : 'pointer'
     };
 
     /**

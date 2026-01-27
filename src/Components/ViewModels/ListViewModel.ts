@@ -1,8 +1,10 @@
 import {Item} from "../../Model/Item.ts";
 import {Folder} from "../../Model/Folder.ts";
 import type {Entry} from "../../Model/Entry.ts";
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import {SortCriteria} from "./PasswordViewModel.ts";
+import {useDndContext} from "@dnd-kit/core";
+
 /**
  * The viewmodel used by the ListView. It has the utility needed for correctly deciding and differentiating {@link Entry} and {@link Folder}
  * @param topItem the item that is on top of the list to be shown. Shows this item and all below
@@ -13,6 +15,7 @@ export const useListViewModel = (topItem: Item, currentSortCrit: SortCriteria, i
 
     const item: Item = topItem;
     const [extended, setExtended] = useState(true);
+    const {active} = useDndContext();
 
     if (dirtyItemId && item.id === dirtyItemId) {
         setCurrItem(item as Entry);
@@ -66,6 +69,31 @@ export const useListViewModel = (topItem: Item, currentSortCrit: SortCriteria, i
     }
 
 
+    const getDescendantIds = (item: Item): string[] => {
+        if (item.isEntry()) {
+            return [];
+        } else if (!(item as Folder).entries) {
+            return [];
+        }
+        return (item as Folder).entries.flatMap((child) => [child.id, ...getDescendantIds(child)]);
+    }
+
+    /**
+     * Gets all descendant IDs of the current item if it is a folder
+     */
+    const descendantIds = useMemo(() => {
+        return isItemFolder() ? getDescendantIds(item) : [];
+    }, [item]);
+
+    /**
+     * Determines if the current item is an invalid drop target for the active draggable item
+     */
+    const isInvalidDropTarget = useMemo(() => {
+        if (!active) return false;
+        const activeDescendants = active.data.current?.descendantIds as string[];
+        return activeDescendants.includes(item.id);
+    }, [active, item.id]);
+
     return {
         getChildren,
         isItemFolder,
@@ -74,5 +102,7 @@ export const useListViewModel = (topItem: Item, currentSortCrit: SortCriteria, i
         toggleExtended,
         getExtended,
         setExtended,
+        descendantIds,
+        isInvalidDropTarget,
     };
 };
