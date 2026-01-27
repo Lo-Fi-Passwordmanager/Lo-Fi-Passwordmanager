@@ -9,6 +9,7 @@ describe('CreateDatabaseViewModel', ()=> {
     const setToastMessage = vi.fn();
     const storeDatabase = vi.fn();
     const setShowToast = vi.fn();
+    const importDatabase = vi.fn();
 
 
     vi.mock("@automerge/react", async () => {
