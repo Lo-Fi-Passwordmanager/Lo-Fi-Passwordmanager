@@ -51,7 +51,7 @@ describe('CreateDatabaseViewModel', ()=> {
         act(()=> {
             result.current.setField1("name");
             result.current.setField2("url");
-            result.current.setCreateNewDatabase(true);
+            result.current.setSelectedImportType("new");
         })
         act(()=> {
             result.current.handleConfirm();
@@ -66,7 +66,7 @@ describe('CreateDatabaseViewModel', ()=> {
         act(()=> {
             result.current.setField1("name");
             result.current.setField2("url");
-            result.current.setCreateNewDatabase(false);
+            result.current.setSelectedImportType("url");
         })
         act(()=> {
             result.current.handleConfirm();
@@ -81,7 +81,7 @@ describe('CreateDatabaseViewModel', ()=> {
         act(()=> {
             result.current.setField1("name");
             result.current.setField2("url");
-            result.current.setCreateNewDatabase(false);
+            result.current.setSelectedImportType("url");
         })
         act(()=> {
             result.current.handleConfirm();
