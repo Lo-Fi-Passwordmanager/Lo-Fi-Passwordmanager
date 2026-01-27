@@ -1,6 +1,6 @@
 import type {AutomergeFacade} from "../../../Utility/AutomergeFacade.ts";
 import React from "react";
-import {saveFile, uInt8ArrayFromFile} from "../../../Utility/InputOutputUtil.ts";
+import {saveFile} from "../../../Utility/InputOutputUtil.ts";
 
 /**
  * The view that links to the {@link Settings} singleton and toggles its values.
@@ -30,11 +30,6 @@ const DatabaseSettingsView: React.FC<{ automergeFacade: AutomergeFacade }> = ({a
                 {/* TODO Hier export (Datei) */}
                 <button>Unverschlüsselt Exportieren</button>
                 <button onClick={() => saveFile(automergeFacade.exportAutomergeToBinary())}>Verschlüsselt Exportieren</button>
-                <input
-                    type="file"
-                    accept="*/*"
-                    onChange={(event)=> automergeFacade.importBinary(uInt8ArrayFromFile(event.target.files)) }
-                />
             </div>
         </>
     );

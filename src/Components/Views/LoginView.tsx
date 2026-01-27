@@ -63,6 +63,7 @@ const LoginView: React.FC<{
                     storeDatabase={viewModel.importDatabaseFromURL}
                     setToastMessage={viewModel.setToastMessage}
                     setShowToast={viewModel.setShowToast}
+                    importDatabase={viewModel.importDatabaseFromFile}
                 />
             </main>
             <ToastDialog message={viewModel.toastMessage}

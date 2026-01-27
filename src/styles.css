@@ -294,6 +294,9 @@ input[type="number"] {
     gap: 2em;
     margin-top: 1em;
 }
+.confirm-cancel-buttons button:nth-child(2) {
+    background: gray;
+}
 
 .logo {
     margin-top: 5em;
@@ -365,7 +368,6 @@ input[type="number"] {
     border: 3px solid transparent;
     transition: border-color 0.2s ease, transform 0.1s ease;
     box-sizing: border-box;
-
 
 
     /*grid formatting*/
@@ -659,4 +661,16 @@ input[type="number"] {
     align-items: center;
     justify-items: center;
     border-radius: 0 0 0 20px;
+}
+
+.dialogButtonContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.dialogButtonContainer button {
+    margin: 10px;
+    white-space: normal;
+    width: 150px;
+    text-align: center;
 }

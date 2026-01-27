@@ -5,26 +5,7 @@ import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
 import {loadAllDatabases, removeDatabase, storeDatabase} from "../../Utility/Storage.ts";
 import {useLoadingScreen} from "./LoadingScreenProviderViewModel.ts";
-
-export type LoginViewModelReturn = {
-    databaseNames: string[],
-    databases: Map<string, AutomergeUrl>,
-    isAddDialogOpen: boolean,
-    isEnterPasswordDialogOpen: boolean,
-    createDatabase: (name: string, masterPassword: string) => void,
-    tryOpenDatabase: (masterPassword: string, name?: string) => void,
-    closeDatabase: () => void,
-    openAddDialog: () => void,
-    closeAddDialog: () => void,
-    openEnterPasswordDialog: (db: string) => void,
-    closeEnterPasswordDialog: () => void
-    importDatabaseFromURL: (databaseName: string, url: AutomergeUrl) => void,
-    showToast: boolean,
-    setShowToast: (showToast: boolean) => void,
-    toastMessage: string,
-    setToastMessage: (message: string) => void,
-    deleteDatabase: (name: string) => void,
-}
+import {uInt8ArrayFromFile} from "../../Utility/InputOutputUtil.ts";
 
 /**
  * ViewModel for the LoginView
@@ -42,7 +23,7 @@ export const useLoginViewModel = (
     setAutomergeFacade: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void,
     securityProvider: SecurityProvider,
     setOpenedDbName: ((value: (((prevState: string) => string) | string)) => void)
-): LoginViewModelReturn => {
+) => {
     // map of database names to their automerge urls
     const [databases, setDatabases] = useState(() => loadAllDatabases());
     // names of all available databases to show in the listing
@@ -247,6 +228,36 @@ export const useLoginViewModel = (
     // Close the dialog to log in to a database
     const closeEnterPasswordDialog = () => setIsEnterPasswordDialogOpen(false);
 
+    async function importDatabaseFromFile(targetFiles: FileList | null, name: string) {
+        if (!isNameAvailable(name)) {
+            return;
+        }
+
+        if (name === "") {
+            setToastMessage("Bitte wähle einen Namen")
+            setShowToast(true);
+            return;
+        }
+
+        if (!FileList) {
+            setToastMessage("Bitte wähle eine Datei")
+            setShowToast(true);
+            return;
+        }
+
+        const binary = await uInt8ArrayFromFile(targetFiles);
+        if (!binary) {
+            return;
+        }
+
+        const handle = repo.import(binary);
+        storeDatabase((!name)?"Neue Datenbank": name, handle.url);
+
+
+        setSelectedDatabase((!name)?"Neue Datenbank": name);
+        setIsAddDialogOpen(false);
+    }
+
     return {
         databaseNames,
         isAddDialogOpen,
@@ -255,6 +266,7 @@ export const useLoginViewModel = (
         showToast,
         toastMessage,
 
+        importDatabaseFromFile,
         setShowToast,
         createDatabase,
         tryOpenDatabase,

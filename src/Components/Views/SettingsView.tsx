@@ -85,7 +85,11 @@ const SettingsView: React.FC<{ automergeFacade?: AutomergeFacade | null }> = ({a
                                     <button className={"number-control"} onClick={viewmodel.increase}>+</button>
                                 </div>
                             </div>}
+
+
                             {automergeFacade && <DatabaseSettingsView automergeFacade={automergeFacade}/>}
+
+
                         </div>
                         <button onClick={() => viewmodel.setSettingsOpen(false)}
                                 style={{marginTop: "1em"}}>Einstellungen
