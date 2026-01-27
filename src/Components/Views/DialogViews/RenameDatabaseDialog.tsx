@@ -3,11 +3,11 @@ import {useRenameDatabaseViewModel} from "../../ViewModels/Dialog/RenameDatabase
 
 
 interface RenameDatabaseDialogProps {
-    oldName?: string;
+    oldName: string;
 }
 
-const RenameDatabaseDialog: React.FC = ({oldName}: RenameDatabaseDialogProps) => {
-    const viewModel = useRenameDatabaseViewModel(oldName!);
+const RenameDatabaseDialog: React.FC<RenameDatabaseDialogProps> = ({oldName}: RenameDatabaseDialogProps) => {
+    const viewModel = useRenameDatabaseViewModel(oldName);
 
     if (viewModel.renameDatabaseOpen) {
         return (
@@ -30,7 +30,7 @@ const RenameDatabaseDialog: React.FC = ({oldName}: RenameDatabaseDialogProps) =>
         return (
             <button
                 className="renameDatabaseButton"
-                onClick={() => viewModel.setRenameDatabaseOpen(true)}>#
+                onClick={() => viewModel.setRenameDatabaseOpen(true)}>✏️
             </button>
         );
     }

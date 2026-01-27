@@ -28,7 +28,7 @@ const DatabaseListingView: React.FC<DatabaseListingProps> = ({databases, openDat
                         <button onClick={() => viewModel.copyToClipboard(url)} title="Copy URL">
                             🔗
                         </button>
-                        <RenameDatabaseDialog oldName={dbName as string}/>
+                        <RenameDatabaseDialog oldName={dbName}/>
                         <button onClick={() => removeDatabase(dbName)}>
                             🗑️
                         </button>
