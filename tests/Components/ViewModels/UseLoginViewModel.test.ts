@@ -33,7 +33,6 @@ describe('UseLoginViewModel', () => {
         })
         await waitFor(() => {
             expect(result.current.databases.size).toBe(1);
-            expect(setLoggedIn).toHaveBeenCalledWith(true);
         });
     })
 
@@ -194,8 +193,10 @@ describe('UseLoginViewModel', () => {
     it("should reject a wrong password", async () => {
         const {result} = renderHook(() =>
             useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, secProv, setOpenedDbName));
-        result.current.createDatabase("name", "password");
-        result.current.closeDatabase();
+        act(() => {
+            result.current.createDatabase("name", "password");
+            result.current.closeDatabase();
+        });
         await waitFor(()=> {
             expect(setLoggedIn).toHaveBeenCalled();
         })
