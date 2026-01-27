@@ -3,7 +3,7 @@ import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import type {Repo} from "@automerge/react";
 import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
-import {loadAllDatabases, removeDatabase, storeDatabase} from "../../Utility/Storage.ts";
+import {loadAllDatabases, removeDatabase, renameDatabase, storeDatabase} from "../../Utility/Storage.ts";
 import {useLoadingScreen} from "./LoadingScreenProviderViewModel.ts";
 import {uInt8ArrayFromFile} from "../../Utility/InputOutputUtil.ts";
 
@@ -70,6 +70,19 @@ export const useLoginViewModel = (
             addDatabase(name, url, masterPassword);
         }, 0);
     };
+
+    /**
+     * Renames a database from oldName to newName
+     *
+     * @param oldName the current name of the database
+     * @param newName the new name of the database
+     */
+    function changeDatabaseName(oldName: string, newName: string) {
+        if (!isNameAvailable(newName)) {
+            return;
+        }
+        setDatabases(() => renameDatabase(oldName, newName));
+    }
 
     /**
      * Tries to open a database with the provided master password
@@ -155,7 +168,7 @@ export const useLoginViewModel = (
      * Adds a new database to the list of available databases and opens the enter password dialog
      * @param name the name of the new database
      * @param url the automerge url of the new database
-     * @param masterPassword
+     * @param masterPassword optional master password to directly open the database after creation
      */
     function addDatabase(name: string, url: AutomergeUrl, masterPassword?: string) {
         closeAddDialog();
@@ -277,6 +290,7 @@ export const useLoginViewModel = (
         closeEnterPasswordDialog,
         importDatabaseFromURL,
         setToastMessage,
-        deleteDatabase
+        deleteDatabase,
+        changeDatabaseName,
     };
 };

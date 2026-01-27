@@ -1,7 +1,6 @@
 import {useState} from "react";
-import {renameDatabase} from "../../../Utility/Storage.ts";
 
-export const useRenameDatabaseViewModel = (oldName: string) => {
+export const useRenameDatabaseViewModel = (oldName: string, renameDatabase: (oldName: string, newName: string) => void) => {
 
     const [renameDatabaseOpen, setRenameDatabaseOpen] = useState(false);
     const [newName, setNewName] = useState("");

@@ -4,10 +4,11 @@ import {useRenameDatabaseViewModel} from "../../ViewModels/Dialog/RenameDatabase
 
 interface RenameDatabaseDialogProps {
     oldName: string;
+    renameDatabase: (oldName: string, newName: string) => void;
 }
 
-const RenameDatabaseDialog: React.FC<RenameDatabaseDialogProps> = ({oldName}: RenameDatabaseDialogProps) => {
-    const viewModel = useRenameDatabaseViewModel(oldName);
+const RenameDatabaseDialog: React.FC<RenameDatabaseDialogProps> = ({oldName, renameDatabase}: RenameDatabaseDialogProps) => {
+    const viewModel = useRenameDatabaseViewModel(oldName, renameDatabase);
 
     if (viewModel.renameDatabaseOpen) {
         return (
@@ -18,6 +19,7 @@ const RenameDatabaseDialog: React.FC<RenameDatabaseDialogProps> = ({oldName}: Re
                         type={"text"}
                         value={viewModel.newName}
                         onChange={(e) => viewModel.setNewName(e.target.value)}
+                        autoFocus
                     />
                     <div className={"confirm-cancel-buttons"}>
                         <button onClick={() => viewModel.handleConfirm()}>Bestätigen</button>

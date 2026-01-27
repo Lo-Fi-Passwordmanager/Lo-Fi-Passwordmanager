@@ -8,9 +8,10 @@ type DatabaseListingProps = {
     databases: Map<string, AutomergeUrl>,
     openDatabase: (db: string) => void;
     removeDatabase: (db: string) => void;
+    renameDatabase: (oldName: string, newName: string) => void;
 }
 
-const DatabaseListingView: React.FC<DatabaseListingProps> = ({databases, openDatabase, removeDatabase}) => {
+const DatabaseListingView: React.FC<DatabaseListingProps> = ({databases, openDatabase, removeDatabase, renameDatabase}) => {
 
     const viewModel = DatabaseListingViewModel();
 
@@ -28,7 +29,7 @@ const DatabaseListingView: React.FC<DatabaseListingProps> = ({databases, openDat
                         <button onClick={() => viewModel.copyToClipboard(url)} title="Copy URL">
                             🔗
                         </button>
-                        <RenameDatabaseDialog oldName={dbName}/>
+                        <RenameDatabaseDialog oldName={dbName} renameDatabase={renameDatabase} />
                         <button onClick={() => removeDatabase(dbName)}>
                             🗑️
                         </button>
