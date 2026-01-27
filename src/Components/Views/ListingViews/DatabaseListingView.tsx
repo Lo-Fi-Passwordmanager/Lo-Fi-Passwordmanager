@@ -2,6 +2,7 @@ import type {AutomergeUrl} from "@automerge/automerge-repo";
 import React from "react";
 import ToastDialog from "../DialogViews/ToastDialog.tsx";
 import DatabaseListingViewModel from "../../ViewModels/Listing/DatabaseListingViewModel.ts";
+import RenameDatabaseDialog from "../DialogViews/RenameDatabaseDialog.tsx";
 
 type DatabaseListingProps = {
     databases: Map<string, AutomergeUrl>,
@@ -19,15 +20,16 @@ const DatabaseListingView: React.FC<DatabaseListingProps> = ({databases, openDat
         return (
             <div className="DatabaseListing">
                 {/* List all available Databases which can be opened, shared or deleted */}
-                {Array.from(databases).map(([db, url]) => (
-                    <div className={"DatabaseAndOptions"} key={db}>
-                        <button onClick={() => openDatabase(db)}>
-                            {db}
+                {Array.from(databases).map(([dbName, url]) => (
+                    <div className={"DatabaseAndOptions"} key={dbName}>
+                        <button onClick={() => openDatabase(dbName)}>
+                            {dbName}
                         </button>
                         <button onClick={() => viewModel.copyToClipboard(url)} title="Copy URL">
                             🔗
                         </button>
-                        <button onClick={() => removeDatabase(db)}>
+                        <RenameDatabaseDialog oldName={dbName as string}/>
+                        <button onClick={() => removeDatabase(dbName)}>
                             🗑️
                         </button>
                     </div>
