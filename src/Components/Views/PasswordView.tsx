@@ -9,6 +9,7 @@ import ToastDialog from "./DialogViews/ToastDialog.tsx";
 import EditablePasswordView from "./EditablePasswordView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
 import SettingsView from "./SettingsView.tsx";
+import {closestCenter, DndContext, pointerWithin} from "@dnd-kit/core";
 
 interface PasswordViewProps {
     automergeFacade?: AutomergeFacade | null,
@@ -21,6 +22,13 @@ interface PasswordViewProps {
  */
 const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbName, closeDatabase}) => {
     const passwordViewModel = usePasswortViewModel(automergeFacade as AutomergeFacade);
+
+    const handleDragEnd = (event) => {
+        const {active, over} = event;
+        if (active.id !== over.id) {
+            passwordViewModel.moveItem(active.id, over.id);
+        }
+    };
 
     return (
         <div style={{margin: "10px", height: "95vh"}}>
@@ -54,31 +62,34 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                         isAscending={passwordViewModel.isAscending}
                         filterText={passwordViewModel.searchValue}
                     />}
+                    <DndContext collisionDetection={pointerWithin} onDragEnd={handleDragEnd}>
 
-                    {/*The basic ListView which shows all Items and Folders in their hierarchy*/}
-                    {passwordViewModel.searchValue.length === 0 && <ListView
-                        item={passwordViewModel.getRootFolder()}
-                        setCurItem={passwordViewModel.setCurItem}
-                        setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
-                        setCurrentParent={passwordViewModel.setCurParent}
-                        deleteItem={passwordViewModel.deleteItem}
-                        sortCriterion={passwordViewModel.getCurSortCriterion()}
-                        isAscending={passwordViewModel.isAscending}
-                        dirtyItemId={passwordViewModel.dirtyItemId}
-                        getCurItem={passwordViewModel.getCurEntry}
-                        openedDbName={openedDbName}
-                    />}
+                        {/*The basic ListView which shows all Items and Folders in their hierarchy*/}
+                        {passwordViewModel.searchValue.length === 0 && <ListView
+                            item={passwordViewModel.getRootFolder()}
+                            setCurItem={passwordViewModel.setCurItem}
+                            setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
+                            setCurrentParent={passwordViewModel.setCurParent}
+                            deleteItem={passwordViewModel.deleteItem}
+                            sortCriterion={passwordViewModel.getCurSortCriterion()}
+                            isAscending={passwordViewModel.isAscending}
+                            dirtyItemId={passwordViewModel.dirtyItemId}
+                            getCurItem={passwordViewModel.getCurEntry}
+                            openedDbName={openedDbName}
+                        />}
+                    </DndContext>
+
                 </div>
 
                 <div className="borderBox" style={{width: "70%", position: "relative"}}>
-                    <SettingsView />
+                    <SettingsView/>
                     {/*Depending on the state, either shows the editable or the normal/noneditable passwordView*/}
                     {!passwordViewModel.inEditable &&
                         <EntryView item={passwordViewModel.getCurEntry()}
                                    copyAndClearClipboard={passwordViewModel.copyToClipboardAndClear}
                                    setEditableView={() => passwordViewModel.setInEditable(true)}
-                        hidePassword={passwordViewModel.hidePassword}
-                        toggleHidePassword={passwordViewModel.toggleHidePassword}/>}
+                                   hidePassword={passwordViewModel.hidePassword}
+                                   toggleHidePassword={passwordViewModel.toggleHidePassword}/>}
 
                     {passwordViewModel.inEditable &&
                         <EditablePasswordView item={passwordViewModel.getCurEntry()}

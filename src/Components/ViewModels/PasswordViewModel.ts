@@ -195,6 +195,13 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         saveIsAscending(!isAscending);
     }
 
+    /**
+     * Moves an item to a new parent folder
+     */
+    function moveItem(itemId: string, newParentId: string) {
+        reactiveFacade.updateItem(itemId, [["parentId", newParentId]]);
+    }
+
     return {
         dirtyItemId,
         isAscending,
@@ -224,5 +231,6 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setAndStoreSortCriterion,
         toggleOrder,
         getCurSortCriterion,
+        moveItem,
     };
 };

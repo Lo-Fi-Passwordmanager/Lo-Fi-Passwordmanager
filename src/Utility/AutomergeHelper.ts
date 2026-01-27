@@ -243,6 +243,7 @@ export function updateValue(d: AutomergeDoc, itemId: string, itemsById: Map<stri
         } else if (isFolder(docItem)) {
             if (attribute === "name" || attribute === "parentId") {
                 docItem[attribute] = newValue;
+                return; // otherwise always error thrown?
             }
 
             throw new Error(`This attribute does not exist on folders.`);

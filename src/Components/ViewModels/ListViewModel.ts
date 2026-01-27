@@ -3,7 +3,6 @@ import {Folder} from "../../Model/Folder.ts";
 import type {Entry} from "../../Model/Entry.ts";
 import {useState} from "react";
 import {SortCriteria} from "./PasswordViewModel.ts";
-
 /**
  * The viewmodel used by the ListView. It has the utility needed for correctly deciding and differentiating {@link Entry} and {@link Folder}
  * @param topItem the item that is on top of the list to be shown. Shows this item and all below
@@ -66,6 +65,7 @@ export const useListViewModel = (topItem: Item, currentSortCrit: SortCriteria, i
         return item.isEntry();
     }
 
+
     return {
         getChildren,
         isItemFolder,
@@ -73,6 +73,6 @@ export const useListViewModel = (topItem: Item, currentSortCrit: SortCriteria, i
         getItem,
         toggleExtended,
         getExtended,
-        setExtended
+        setExtended,
     };
 };
