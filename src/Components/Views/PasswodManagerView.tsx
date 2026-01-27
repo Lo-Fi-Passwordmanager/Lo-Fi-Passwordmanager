@@ -1,7 +1,7 @@
 import React, {Suspense} from "react";
 import {usePasswordManagerViewModel} from "../ViewModels/PasswordManagerViewModel.ts";
 import LoginView from "./LoginView.tsx";
-import SettingsView from "./Dialogs/SettingsView.tsx";
+import SettingsView from "./SettingsView.tsx";
 import PasswordView from "./PasswordView.tsx";
 import {RepoContext} from "@automerge/react";
 

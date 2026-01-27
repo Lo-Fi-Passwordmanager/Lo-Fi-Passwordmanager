@@ -1,7 +1,7 @@
-import {useSettingsViewModel} from "../../ViewModels/SettingsViewModel.ts";
+import {useSettingsViewModel} from "../ViewModels/SettingsViewModel.ts";
 import React from "react";
-import type {AutomergeFacade} from "../../../Utility/AutomergeFacade.ts";
-import DatabaseSettingsView from "./DatabaseSettingsView.tsx";
+import type {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import DatabaseSettingsView from "./Dialogs/DatabaseSettingsView.tsx";
 
 
 /**
