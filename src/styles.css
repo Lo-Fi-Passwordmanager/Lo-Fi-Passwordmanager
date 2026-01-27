@@ -361,7 +361,6 @@ input[type="number"] {
     box-sizing: border-box;
 
 
-
     /*grid formatting*/
     display: flex;
     align-items: center;
@@ -407,6 +406,8 @@ input[type="number"] {
     border: 2px solid var(--panel);
     border-right: 0;
     border-radius: 20px 0 0 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .entryViewEntry {
@@ -509,9 +510,12 @@ input[type="number"] {
 }
 
 .scrollableContainer {
-    overflow: auto;
     scrollbar-color: var(--panel) var(--bg);
     scrollbar-width: thin;
+    flex: 1;
+    overflow-y: scroll;
+    overflow-x: hidden !important;
+    max-width: 100%;
 }
 
 .closeButton {

@@ -36,7 +36,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                 />}
 
             <div className="passwordView">
-                <div className="borderBox scrollableContainer" style={{width: "30%"}}>
+                <div className="borderBox" style={{width: "30%"}}>
                     {/*Container for everything related to the search/Sort features */}
                     <OrganizeListView
                         getCurSortCriterion={passwordViewModel.getCurSortCriterion}
@@ -59,24 +59,26 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                             isAscending={passwordViewModel.isAscending}
                             filterText={passwordViewModel.searchValue}
                         />}
-                    <DndContext collisionDetection={pointerWithin} onDragEnd={passwordViewModel.handleDragEnd}
-                                sensors={passwordViewModel.sensors}>
+                        <DndContext collisionDetection={pointerWithin}
+                                    onDragEnd={passwordViewModel.handleDragEnd}
+                                    sensors={passwordViewModel.sensors}
+                                    autoScroll={false}>
 
-                        {/*The basic ListView which shows all Items and Folders in their hierarchy*/}
-                        {passwordViewModel.searchValue.length === 0 && <ListView
-                            item={passwordViewModel.getRootFolder()}
-                            setCurItem={passwordViewModel.setCurItem}
-                            setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
-                            setCurrentParent={passwordViewModel.setCurParent}
-                            deleteItem={passwordViewModel.deleteItem}
-                            sortCriterion={passwordViewModel.getCurSortCriterion()}
-                            isAscending={passwordViewModel.isAscending}
-                            dirtyItemId={passwordViewModel.dirtyItemId}
-                            getCurItem={passwordViewModel.getCurEntry}
-                            openedDbName={openedDbName}
-                        />}
-                    </DndContext>
-
+                            {/*The basic ListView which shows all Items and Folders in their hierarchy*/}
+                            {passwordViewModel.searchValue.length === 0 && <ListView
+                                item={passwordViewModel.getRootFolder()}
+                                setCurItem={passwordViewModel.setCurItem}
+                                setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
+                                setCurrentParent={passwordViewModel.setCurParent}
+                                deleteItem={passwordViewModel.deleteItem}
+                                sortCriterion={passwordViewModel.getCurSortCriterion()}
+                                isAscending={passwordViewModel.isAscending}
+                                dirtyItemId={passwordViewModel.dirtyItemId}
+                                getCurItem={passwordViewModel.getCurEntry}
+                                openedDbName={openedDbName}
+                            />}
+                        </DndContext>
+                    </div>
                 </div>
 
                 <div className="borderBox" style={{width: "70%", position: "relative"}}>
