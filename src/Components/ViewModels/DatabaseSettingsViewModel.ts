@@ -1,7 +1,4 @@
-import {Settings} from "../../Model/Settings";
-
-import { useState, useEffect } from 'react';
-import type Database from "../../Model/Database.ts";
+import {useState} from "react";
 
 /**
  * The ViewModel that is used for interfacing the {@link Settings} singleton.
@@ -16,6 +13,6 @@ export const useDatabaseSettingsViewModel = () => {
 
     return {
         settingsOpen,
-        setSettingsOpen,
+        setSettingsOpen
     };
 };
