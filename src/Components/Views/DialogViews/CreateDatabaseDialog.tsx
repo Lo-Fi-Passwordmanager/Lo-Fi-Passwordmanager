@@ -34,6 +34,10 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                         onChange={(e) => viewModel.setField1(e.target.value)}
                         placeholder={label1}
                         autoFocus
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {viewModel.handleConfirm();}
+                            if (e.key === 'Escape') {onCancel();}
+                        }}
                     />
 
                     <label>{label2}</label>
@@ -44,6 +48,7 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                         placeholder={label2}
                         onKeyDown={(e) => {
                             if (e.key === 'Enter') {viewModel.handleConfirm();}
+                            if (e.key === 'Escape') {onCancel();}
                         }}
                     />
                     <div className="confirm-cancel-buttons">
@@ -76,6 +81,7 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                         autoFocus
                         onKeyDown={(e) => {
                             if (e.key === 'Enter') {viewModel.handleConfirm();}
+                            if (e.key === 'Escape') {onCancel();}
                         }}
                     />
                     <div className="confirm-cancel-buttons">
