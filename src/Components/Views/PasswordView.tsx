@@ -4,8 +4,8 @@ import EntryView from "./EntryView.tsx";
 import OrganizeListView from "./OrganizeListView.tsx";
 import {usePasswortViewModel} from "../ViewModels/PasswordViewModel.ts";
 import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
-import ItemCreationDialog from "./Dialogs/ItemCreationDialog.tsx";
-import ToastDialog from "./Dialogs/ToastDialog.tsx";
+import ItemCreationDialog from "./DialogViews/ItemCreationDialog.tsx";
+import ToastDialog from "./DialogViews/ToastDialog.tsx";
 import EditablePasswordView from "./EditablePasswordView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
 import SettingsView from "./SettingsView.tsx";
@@ -33,11 +33,9 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                     setCurItem={passwordViewModel.setCurItem}
                 />}
 
-
             <div className="passwordView">
-
-                <div className={"borderBox"} style={{width: "30%", display: "flex", flexDirection: "column"}}>
-                    {/*Container for every related to the search/Sort features */}
+                <div className="borderBox scrollableContainer" style={{width: "30%"}}>
+                    {/*Container for everything related to the search/Sort features */}
                     <OrganizeListView
                         getCurSortCriterion={passwordViewModel.getCurSortCriterion}
                         setCurSortCriterion={passwordViewModel.setAndStoreSortCriterion}
@@ -76,6 +74,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                     </div>
 
                 </div>
+
                 <div className="borderBox" style={{width: "70%", position: "relative"}}>
                     <SettingsView/>
                     {/*Depending on the state, either shows the editable or the normal/noneditable passwordView*/}

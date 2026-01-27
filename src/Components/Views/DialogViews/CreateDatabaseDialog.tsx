@@ -53,8 +53,6 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                 </div>
             </div>
         );
-
-
     } else {
         return (
             <div className="dialogOverlay">

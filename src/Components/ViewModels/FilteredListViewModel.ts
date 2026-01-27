@@ -45,6 +45,9 @@ export const useFilteredListViewModel = (root: Folder, filterText: string, curre
         return filtered;
     }
 
+    /**
+     * Gets the children of the given folder, sorted by the current sort criterion and order
+     */
     function getSortedChildren(folder: Folder): Item[] {
         switch (`${currentSortCrit}-${isAscending}`) {
             case `${SortCriteria.Name}-true`:

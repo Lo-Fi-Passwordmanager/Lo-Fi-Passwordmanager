@@ -24,11 +24,13 @@ const OrganizeListView: React.FC<{
             {/*Container for every related to the search/Sort features plus log out button*/}
             <div className={"OrganizedListView"}>
                 {/*Giving each element a specific grid column to align them properly*/}
+
+                {/* Button to close the database and go back to the database selection */}
                 <button style={{gridColumn: "span 1"}} onClick={() => closeDatabase()}>⬅</button>
 
                 <input style={{gridColumn: "span 8"}} type="text" placeholder="Suchen..."
                        onChange={(event => setLiveSearchValue(event.target.value))}/>
-
+                {/* Search bar to filter the list of entries and folders */}
                 <button style={{gridColumn: "span 1", fontSize: "1.2em"}} onClick={() => {
                     setItemCreationDialog();
                 }}>+

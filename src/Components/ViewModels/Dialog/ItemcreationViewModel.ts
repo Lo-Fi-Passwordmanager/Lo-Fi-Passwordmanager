@@ -14,7 +14,6 @@ export const useItemcreationViewModel = (
     const [note, setNote] = useState("");
     const [inPasswordGen, setInPasswordGen] = useState(false);
 
-
     function handleConfirm() {
         // Temp var must be created, because the react hook is updated only after the functino is fully executed
         let newTitle = title.trim();
