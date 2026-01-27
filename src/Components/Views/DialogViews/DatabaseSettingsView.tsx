@@ -1,11 +1,11 @@
 import type {AutomergeFacade} from "../../../Utility/AutomergeFacade.ts";
 import React from "react";
-
+import {saveFile, uInt8ArrayFromFile} from "../../../Utility/InputOutputUtil.ts";
 
 /**
  * The view that links to the {@link Settings} singleton and toggles its values.
  */
-const DatabaseSettingsView: React.FC<{ automergeFacade: AutomergeFacade }> = (automergeFacade) => {
+const DatabaseSettingsView: React.FC<{ automergeFacade: AutomergeFacade }> = ({automergeFacade}) => {
     // Auskommentiert, da es gerade nicht verwendet wird
     // const viewmodel = useDatabaseSettingsViewModel();
 
@@ -18,7 +18,7 @@ const DatabaseSettingsView: React.FC<{ automergeFacade: AutomergeFacade }> = (au
                 <button
                     onClick={
                         () => navigator.clipboard.writeText(
-                            (automergeFacade.automergeFacade.automergeURL as string).replace("automerge:", "")
+                            (automergeFacade.automergeURL as string).replace("automerge:", "")
                         )
                     }>
                     URL kopieren
@@ -29,7 +29,12 @@ const DatabaseSettingsView: React.FC<{ automergeFacade: AutomergeFacade }> = (au
 
                 {/* TODO Hier export (Datei) */}
                 <button>Unverschlüsselt Exportieren</button>
-                <button>Verschlüsselt Exportieren</button>
+                <button onClick={() => saveFile(automergeFacade.exportAutomergeToBinary())}>Verschlüsselt Exportieren</button>
+                <input
+                    type="file"
+                    accept="*/*"
+                    onChange={(event)=> automergeFacade.importBinary(uInt8ArrayFromFile(event.target.files)) }
+                />
             </div>
         </>
     );

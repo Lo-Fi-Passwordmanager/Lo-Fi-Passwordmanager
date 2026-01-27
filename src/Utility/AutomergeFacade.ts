@@ -2,6 +2,7 @@ import {isValidAutomergeUrl, Repo} from "@automerge/react";
 import {AutomergeDoc} from "../Model/Automerge/AutomergeDoc.ts";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
 import {SecurityProvider} from "./Security/SecurityProvider.ts";
+import {storeDatabase} from "./Storage.ts";
 
 export type Attribute = 'name' | 'createdAt' | 'editedAt' | 'parentId' | 'username' | 'password' | 'url' | 'note'
 // FIXME Hier waren im entwurf überflüssige funktionen??
@@ -83,5 +84,22 @@ export class AutomergeFacade {
 
     getSecurityProvider(): SecurityProvider | null {
         return this._securityProvider
+    }
+
+    /**
+     * Exports the current Databse to binary
+     * If the automergeUrl is not set, this functino does not work and returns undefinded
+     */
+    public exportAutomergeToBinary(): Promise<Uint8Array | undefined> {
+        return this._repo.export(this._automergeURL!);
+    }
+
+    public async importBinary(promiseBinary: Promise<Uint8Array<ArrayBuffer> | undefined>) {
+        const binary = await promiseBinary;
+        if (!binary) {
+            return;
+        }
+        const handle = this._repo.import(binary);
+        storeDatabase("Gubi Fortnite?" , handle.url);
     }
 }
