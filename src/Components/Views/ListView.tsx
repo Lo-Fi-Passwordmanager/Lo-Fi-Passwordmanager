@@ -51,7 +51,7 @@ const ListView: React.FC<{
     if (listViewModel.isItemEntry()) {
         const entry = listViewModel.getItem() as Entry;
         return (
-            <div className={!listViewModel.isDragging ? "listViewEntry" : "listViewEntry dragged"}
+            <div className={`listViewEntry ${getCurItem().id !== entry.id ? "" : "selected"} ${listViewModel.isDragging ? "dragged" : ""}`}
                  onClick={() => setCurItem(entry)}
                  style={dragStyle}
                  ref={listViewModel.setDraggableRef}
@@ -79,11 +79,11 @@ const ListView: React.FC<{
                      {...listViewModel.listeners}
                 >
                     {(item.id != "") &&
-                        <button style={{marginRight: "15px"}}
+                        <button style={{marginRight: "15px", boxShadow:"none"}}
                                 onClick={() => listViewModel.toggleExtended()}
                                 onPointerDown={(e) => e.stopPropagation()}
                         >
-                            {listViewModel.getExtended() ? ">" : "v"}</button>}
+                            {listViewModel.getExtended() ? "▼" : "▷"}</button>}
 
                     <span
                         style={{marginLeft: ((item.id != "") ? "" : "10px")}}>{(item.id != "") ? listViewModel.getItem().title : openedDbName}</span>

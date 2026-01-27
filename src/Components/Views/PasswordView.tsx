@@ -42,20 +42,23 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                         getCurSortCriterion={passwordViewModel.getCurSortCriterion}
                         setCurSortCriterion={passwordViewModel.setAndStoreSortCriterion}
                         toggleOrder={passwordViewModel.toggleOrder}
-                        getOrder={passwordViewModel.isAscending}
+                        isAscending={passwordViewModel.isAscending}
                         setLiveSearchValue={passwordViewModel.setSearchValue}
                         closeDatabase={closeDatabase}
+                        setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
                     />
 
-                    {/*Shows only the views that match the given search input*/}
-                    {passwordViewModel.searchValue.length > 0 && <FilteredListView
-                        root={passwordViewModel.getRootFolder()}
-                        setCurItem={passwordViewModel.setCurItem}
-                        deleteItem={passwordViewModel.deleteItem}
-                        sortCriterion={passwordViewModel.getCurSortCriterion()}
-                        isAscending={passwordViewModel.isAscending}
-                        filterText={passwordViewModel.searchValue}
-                    />}
+                    <div className="scrollableContainer">
+
+                        {/*Shows only the Views, that match the given search input*/}
+                        {passwordViewModel.searchValue.length > 0 && <FilteredListView
+                            root={passwordViewModel.getRootFolder()}
+                            setCurItem={passwordViewModel.setCurItem}
+                            deleteItem={passwordViewModel.deleteItem}
+                            sortCriterion={passwordViewModel.getCurSortCriterion()}
+                            isAscending={passwordViewModel.isAscending}
+                            filterText={passwordViewModel.searchValue}
+                        />}
                     <DndContext collisionDetection={pointerWithin} onDragEnd={passwordViewModel.handleDragEnd}
                                 sensors={passwordViewModel.sensors}>
 
@@ -89,7 +92,6 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                     {passwordViewModel.inEditable &&
                         <EditablePasswordView item={passwordViewModel.getCurEntry()}
                                               updateItemAttribute={passwordViewModel.updateItemAttribute}
-                                              copyAndClearClipboard={passwordViewModel.copyToClipboardAndClear}
                                               setEditableView={() => passwordViewModel.setInEditable(false)}/>}
                 </div>
 

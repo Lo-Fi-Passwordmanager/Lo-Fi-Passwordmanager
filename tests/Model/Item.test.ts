@@ -81,4 +81,16 @@ describe('Item', () => {
         testEntry.password = "test";
         assert.notEqual(testEntry.createdAt, testEntry.editedAt);
     })
+
+    it('should be able to get/set the items id', ()=> {
+        expect(item1.id).toBe("id1");
+        item1.id = "newId";
+        expect(item1.id).toBe("newId");
+    })
+
+    it('should be able to get/set deleted correctly', ()=> {
+        expect(item1.deleted).toBe(false);
+        item1.deleted = true;
+        expect(item1.deleted).toBe(true);
+    })
 })

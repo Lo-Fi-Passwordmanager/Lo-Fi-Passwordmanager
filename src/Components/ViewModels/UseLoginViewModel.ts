@@ -12,7 +12,7 @@ export type LoginViewModelReturn = {
     isAddDialogOpen: boolean,
     isEnterPasswordDialogOpen: boolean,
     createDatabase: (name: string, masterPassword: string) => void,
-    tryOpenDatabase: (masterPassword: string) => void,
+    tryOpenDatabase: (masterPassword: string, name?: string) => void,
     closeDatabase: () => void,
     openAddDialog: () => void,
     closeAddDialog: () => void,
@@ -112,8 +112,26 @@ export const useLoginViewModel = (
             setLoadingScreenActive(true);
             setOpenedDbName(selectedDatabase!);
             const facade = new AutomergeFacade(repo, dbUrl, securityProvider);
-            const salt = (await facade.getSalt())!;
-            const validation = (await facade.getValidation())!;
+            let salt: string | null;
+            let validation: string | null;
+            try {
+                salt = (await facade.getSalt());
+                validation = (await facade.getValidation());
+
+            } catch (error) {
+                console.error(error);
+                setLoadingScreenActive(false);
+                setShowToast(true);
+                setToastMessage("Automerge konnte die Datenbank nicht laden!");
+                return;
+            }
+
+            if (salt == null || validation == null) {
+                setLoadingScreenActive(false);
+                setShowToast(true);
+                setToastMessage("Automerge konnte die Datenbank nicht laden!");
+                return;
+            }
 
             // Das Timeout an dieser Stelle sorgt dafür, dass der enthaltene Codeblock ans Ende der aktuell auszuführenden Aktionen geschoben wird,
             // wodurch das Rendering des Ladescreens ermöglicht wird, bevor der SecurityProvider den Thread blockiert.

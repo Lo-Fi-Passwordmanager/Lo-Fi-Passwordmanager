@@ -5,10 +5,12 @@ import {DatabaseRoot} from "../../src/Model/DatabaseRoot";
 describe('DatabaseRoot', ()=> {
     let root;
     let folder;
+    let rootCompareFolder
 
     beforeEach(()=> {
         root = new DatabaseRoot("salt");
-        folder = new Folder("name", "id")
+        rootCompareFolder = new Folder("root", "")
+        folder = new Folder("name", "id");
     })
 
     it('should be able to add an item and find it via id', ()=> {
@@ -21,8 +23,7 @@ describe('DatabaseRoot', ()=> {
     })
     //TODO might fail because createdAt/editedAdd are not the same some times
     it("should be able to return the root folder", ()=> {
-        const folder = new Folder("root", "")
-        expect(root.rootFolder).toStrictEqual(folder);
+        expect(root.rootFolder).toStrictEqual(rootCompareFolder);
     })
 
 })
