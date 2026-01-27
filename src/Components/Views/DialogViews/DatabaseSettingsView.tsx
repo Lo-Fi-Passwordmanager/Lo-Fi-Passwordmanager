@@ -12,10 +12,8 @@ const DatabaseSettingsView: React.FC<{ automergeFacade: AutomergeFacade }> = (au
     return (
         <>
             <div className="divider"/>
-            <h1 style={{fontSize: "2em", marginBottom: "20px"}}>Datenbankeinstellungen</h1>
-
-            {/* Following are the checkboxes and their description */}
             <div className="dbSettingsContainer">
+                <h1 style={{fontSize: "2em", marginBottom: "20px", marginTop: 0}}>Datenbankeinstellungen</h1>
                 <button
                     onClick={
                         () => navigator.clipboard.writeText(

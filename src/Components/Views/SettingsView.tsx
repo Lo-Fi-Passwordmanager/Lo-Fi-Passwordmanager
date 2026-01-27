@@ -1,7 +1,7 @@
 import {useSettingsViewModel} from "../ViewModels/SettingsViewModel.ts";
 import React from "react";
 import type {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
-import DatabaseSettingsView from "./Dialogs/DatabaseSettingsView.tsx";
+import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
 
 
 /**
@@ -18,9 +18,9 @@ const SettingsView: React.FC<{ automergeFacade?: AutomergeFacade | null }> = ({a
             <>
                 <button
                     className="settingsButton"
-                    onClick={() => viewmodel.setSettingsOpen(true)}>Einstellungen Öffnen
+                    onClick={() => viewmodel.setSettingsOpen(true)}>⚙️
                 </button>
-                <div className="settingsBackground dialogOverlay" onClick={() => viewmodel.setSettingsOpen(false)}>
+                <div className="settingsBackground dialogOverlay">
                     <div className="dialog">
                         <h1 style={{fontSize: "2em", marginBottom: "20px"}}>Einstellungen</h1>
 
@@ -59,39 +59,41 @@ const SettingsView: React.FC<{ automergeFacade?: AutomergeFacade | null }> = ({a
                                 </label>
                             </div>
 
-                        <div>
-                            <label className="checkboxRow">
-                                <input
-                                    type="checkbox"
-                                    checked={viewmodel.timeOutActive}
-                                    onChange={viewmodel.toggleTimeOutActive}
-                                />
-                                Bei Inaktivität abmelden
-                            </label>
-                        </div>
-
-                        {viewmodel.timeOutActive && <div className={"timeout-setting"}>
-                            <label>Minuten bis Abmeldung: </label>
-                            <div className={"numberInput"}>
-                                <input
-                                    type="number"
-                                    value={viewmodel.timeoutLength}
-                                    onChange={(e) => viewmodel.setTimeOutLengthVM(e.target.value)}
-                                    min="1"
-                                    max="120"
-                                    step="1"
-                                />
-                                <button className={"number-control"} onClick={viewmodel.decrease}>–</button>
-                                <button className={"number-control"} onClick={viewmodel.increase}>+</button>
+                            <div>
+                                <label className="checkboxRow">
+                                    <input
+                                        type="checkbox"
+                                        checked={viewmodel.timeOutActive}
+                                        onChange={viewmodel.toggleTimeOutActive}
+                                    />
+                                    Bei Inaktivität abmelden
+                                </label>
                             </div>
-                        </div>}
+
+                            {viewmodel.timeOutActive && <div className={"timeout-setting"}>
+                                <label>Minuten bis Abmeldung: </label>
+                                <div className={"numberInput"}>
+                                    <input
+                                        type="number"
+                                        value={viewmodel.timeoutLength}
+                                        onChange={(e) => viewmodel.setTimeOutLengthVM(e.target.value)}
+                                        min="1"
+                                        max="120"
+                                        step="1"
+                                    />
+                                    <button className={"number-control"} onClick={viewmodel.decrease}>–</button>
+                                    <button className={"number-control"} onClick={viewmodel.increase}>+</button>
+                                </div>
+                            </div>}
                             {automergeFacade && <DatabaseSettingsView automergeFacade={automergeFacade}/>}
+                        </div>
+                        <button onClick={() => viewmodel.setSettingsOpen(false)}
+                                style={{marginTop: "1em"}}>Einstellungen
+                                                           Schließen
+                        </button>
                     </div>
-                    <button onClick={() => viewmodel.setSettingsOpen(false)} style={{marginTop: "1em"}}>Einstellungen
-                        Schließen
-                    </button>
                 </div>
-            </div>
+            </>
         );
 
         /**
