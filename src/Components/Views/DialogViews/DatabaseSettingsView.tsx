@@ -14,6 +14,7 @@ const DatabaseSettingsView: React.FC<{ automergeFacade: AutomergeFacade }> = (au
             <div className="divider"/>
             <div className="dbSettingsContainer">
                 <h1 style={{fontSize: "2em", marginBottom: "20px", marginTop: 0}}>Datenbankeinstellungen</h1>
+                {/* TODO Toast */}
                 <button
                     onClick={
                         () => navigator.clipboard.writeText(
@@ -22,7 +23,11 @@ const DatabaseSettingsView: React.FC<{ automergeFacade: AutomergeFacade }> = (au
                     }>
                     URL kopieren
                 </button>
+
+                {/* TODO Datenbank löschen und abmelden*/}
                 <button>Datenbank lokal löschen</button>
+
+                {/* TODO Hier export (Datei) */}
                 <button>Unverschlüsselt Exportieren</button>
                 <button>Verschlüsselt Exportieren</button>
             </div>
