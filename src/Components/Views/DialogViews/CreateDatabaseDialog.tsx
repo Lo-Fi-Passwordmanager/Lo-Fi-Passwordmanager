@@ -83,7 +83,6 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                         value={viewModel.field2}
                         onChange={(e) => viewModel.setField2(e.target.value)}
                         placeholder={"Automerge Url"}
-                        autoFocus
                         onKeyDown={(e) => {
                             if (e.key === 'Enter') {viewModel.handleConfirm();}
                         }}

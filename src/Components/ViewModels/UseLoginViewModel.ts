@@ -264,11 +264,11 @@ export const useLoginViewModel = (
         }
 
         const handle = repo.import(binary);
-        storeDatabase((!name)?"Neue Datenbank": name, handle.url);
-
-
-        setSelectedDatabase((!name)?"Neue Datenbank": name);
+        const dbName = name || "Neue Datenbank";
+        storeDatabase(dbName, handle.url);
+        setSelectedDatabase(dbName);
         setIsAddDialogOpen(false);
+        addDatabase(dbName, handle.url);
     }
 
     return {
