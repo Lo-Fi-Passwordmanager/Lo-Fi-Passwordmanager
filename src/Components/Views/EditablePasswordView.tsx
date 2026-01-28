@@ -10,6 +10,9 @@ import {useEditablePasswordViewModel} from "../ViewModels/EditablePasswordViewMo
  * @param item the entry that should be depicted
  * @param updateItemAttribute the function on the active {@link AutomergeFacade} to update a item in the doc
  * @param setEditableView the function to close the editable passwordview
+ * @param createItem the function to create the item in the database
+ * @param inCreation whether the item is currently created
+ * @param setInCreation the function to set the inCreation state
  */
 const EditablePasswordView: React.FC<{
     item: Item,
@@ -20,7 +23,7 @@ const EditablePasswordView: React.FC<{
     createItem: (item: Item) => void;
 }> = ({item, updateItemAttribute, setEditableView, createItem, inCreation, setInCreation}) => {
 
-    const viewmodel = useEditablePasswordViewModel(item, updateItemAttribute);
+    const viewmodel = useEditablePasswordViewModel(item, updateItemAttribute, createItem);
 
     if (item.isFolder() || item.deleted) {
         return (
@@ -92,7 +95,7 @@ const EditablePasswordView: React.FC<{
                     <button onClick={() => {
                         if (inCreation) {
                             setInCreation(false);
-                            createItem(item);
+                            viewmodel.createItemInAutomerge();
                         } else if (viewmodel.hasChanges()) {
                             viewmodel.updateItemInAutomerge();
                         }
