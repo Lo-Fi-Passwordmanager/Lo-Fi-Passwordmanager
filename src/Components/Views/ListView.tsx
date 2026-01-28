@@ -72,7 +72,7 @@ const ListView: React.FC<{
                         <button style={{marginRight: "15px", boxShadow: "none"}}
                                 onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? "▼" : "▷"}</button>}
 
-                    {/* If an Folder is being renamed (or jsut created), an input field is shown instead of the title */}
+                    {/* If a folder is being renamed (or just created), an input field is shown instead of the title */}
                     {item.id === folderToRename ?
                         <input
                             type="text"
@@ -90,9 +90,9 @@ const ListView: React.FC<{
                                     setFolderToRename(null);
                                 }
                             }}
-                            style={{marginLeft: ((item.id != "") ? "" : "10px")}}
-                        >
-                        </input> :
+                            style={{marginLeft: ((item.id != "") ? "" : "10px"), height:"100%", outline:"none", border:"none", margin:"2px"}}
+                        />
+                            :
                         <span
                             style={{marginLeft: ((item.id != "") ? "" : "10px")}}
                             onDoubleClick={() => setFolderToRename(item.id)}
