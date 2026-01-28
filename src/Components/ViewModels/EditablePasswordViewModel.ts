@@ -3,7 +3,10 @@ import {type Attribute} from "../../Utility/AutomergeFacade.ts";
 import {useState} from "react";
 import type {Entry} from "../../Model/Entry.ts";
 
-export const useEditablePasswordViewModel = (item: Item, updateItemAttribute: (itemId: string, changes: [Attribute, string | Date][]) => void) => {
+export const useEditablePasswordViewModel = (
+    item: Item,
+    updateItemAttribute: (itemId: string, changes: [Attribute, string | Date][]) => void
+) => {
 //     'name' | 'createdAt' | 'editedAt' | 'parentId' | 'username' | 'password' | 'url' | 'note'
 
     const entry = item as Entry;
@@ -17,10 +20,9 @@ export const useEditablePasswordViewModel = (item: Item, updateItemAttribute: (i
         updateItemAttribute(item.id, [["name", title], ["username", username], ["password", password], ["url", url], ["note", note]]);
     }
 
-    function hasChanges():boolean {
+    function hasChanges(): boolean {
         return (title != entry.title || username != entry.username || password != entry.password || url != entry.url || note != entry.note);
     }
-
 
     return {
         title,

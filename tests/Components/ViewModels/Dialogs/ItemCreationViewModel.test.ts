@@ -1,6 +1,6 @@
 import {beforeEach, describe, expect, it, vi} from "vitest";
 import {act, renderHook, waitFor} from "@testing-library/react";
-import {useItemcreationViewModel} from "../../../../src/Components/ViewModels/Dialog/ItemcreationViewModel";
+import {useItemCreationViewModel} from "../../../../src/Components/ViewModels/Dialog/ItemcreationViewModel";
 import {Item} from "../../../../src/Model/Item";
 import {Folder} from "../../../../src/Model/Folder";
 
@@ -15,7 +15,7 @@ describe('ItemCreationViewModel' , () => {
 
     it('should be able to create an empty entry',async ()=> {
         const {result} = renderHook(() =>
-            useItemcreationViewModel(addItem, setCurItem, curParent, cancelItemCreation));
+            useItemCreationViewModel(addItem, setCurItem, curParent, cancelItemCreation));
         result.current.handleConfirm();
         await waitFor(() => {
             expect(addItem).toHaveBeenCalledTimes(1);
@@ -25,7 +25,7 @@ describe('ItemCreationViewModel' , () => {
 
     it('should be able to create a new Folder',async ()=> {
         const {result} = renderHook(() =>
-            useItemcreationViewModel(addItem, setCurItem, curParent, cancelItemCreation));
+            useItemCreationViewModel(addItem, setCurItem, curParent, cancelItemCreation));
         act(() => {
             result.current.setTitle("Uni")
             result.current.setTypeOfItem("folder");
@@ -39,7 +39,7 @@ describe('ItemCreationViewModel' , () => {
 
     it('should not create a new Item when the item Type is wrong',async ()=> {
         const {result} = renderHook(() =>
-            useItemcreationViewModel(addItem, setCurItem, curParent, cancelItemCreation));
+            useItemCreationViewModel(addItem, setCurItem, curParent, cancelItemCreation));
         act(() => {
             result.current.setTypeOfItem("wederNoch");
         })

@@ -28,9 +28,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
             {passwordViewModel.getInItemCreation() &&
                 <ItemCreationDialog
                     addItem={passwordViewModel.addItem}
-                    curParent={passwordViewModel.getCurParent()}
                     cancelItemCreation={() => passwordViewModel.setInItemCreation(false)}
-                    setCurItem={passwordViewModel.setCurItem}
                 />}
 
             <div className="passwordView">
@@ -92,7 +90,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                         <EditablePasswordView item={passwordViewModel.getCurEntry()}
                                               updateItemAttribute={passwordViewModel.updateItemAttribute}
                                               setEditableView={() => passwordViewModel.setInEditable(false)}
-                                              deleteItem={passwordViewModel.deleteItem}
+                                              createItem={passwordViewModel.createEntry}
                                               inCreation={passwordViewModel.inEntryCreation}
                                               setInCreation={passwordViewModel.setInEntryCreation}
 

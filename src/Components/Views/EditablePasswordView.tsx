@@ -17,8 +17,8 @@ const EditablePasswordView: React.FC<{
     setEditableView: () => void;
     inCreation: boolean;
     setInCreation: (inCreation: boolean) => void;
-    deleteItem: (item: Item) => void;
-}> = ({item, updateItemAttribute, setEditableView, deleteItem, inCreation, setInCreation}) => {
+    createItem: (item: Item) => void;
+}> = ({item, updateItemAttribute, setEditableView, createItem, inCreation, setInCreation}) => {
 
     const viewmodel = useEditablePasswordViewModel(item, updateItemAttribute);
 
@@ -90,18 +90,17 @@ const EditablePasswordView: React.FC<{
                 </div>
                 <div className={"confirm-cancel-buttons"}>
                     <button onClick={() => {
-                        if (viewmodel.hasChanges()) {
+                        if (inCreation) {
+                            setInCreation(false);
+                            createItem(item);
+                        } else if (viewmodel.hasChanges()) {
                             viewmodel.updateItemInAutomerge();
                         }
-                        setInCreation(false);
                         setEditableView();
                     }}>Speichern
                     </button>
                     <button onClick={() => {
-                        if (inCreation) {
-                            deleteItem(item);
-                            setInCreation(false);
-                        }
+                        setInCreation(false);
                         setEditableView();
                     }}>Abbrechen
                     </button>

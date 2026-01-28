@@ -3,8 +3,8 @@ import {Entry} from "../../../Model/Entry.ts";
 import {Folder} from "../../../Model/Folder.ts";
 import type {Item} from "../../../Model/Item.ts";
 
-export const useItemcreationViewModel = (
-    addItem: ((item: Item, id: string) => string), setCurItem: (newItem: Item) => void, curParent: Item, cancelItemCreation: () => void) => {
+export const useItemCreationViewModel = (
+    addItem: ((item: Item) => void), cancelItemCreation: () => void) => {
 
     const [title, setTitle] = useState("");
     const [username, setUsername] = useState("");
@@ -15,15 +15,13 @@ export const useItemcreationViewModel = (
 
     function createEntry() {
         const entry = new Entry("Neuer Eintrag", "willBeAutomaticallySet", new Date(), new Date(), "", "", "", "");
-        const newId = addItem(entry, curParent.id);
-        entry.id = newId;
-        setCurItem(entry);
+        addItem(entry);
         cancelItemCreation();
     }
 
     function createFolder() {
         const folder = new Folder("Neuer Ordner", "willBeAutomaticallySet", new Date(), new Date());
-        addItem(folder, curParent.id);
+        addItem(folder);
         cancelItemCreation();
     }
 

@@ -123,16 +123,20 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         return reactiveFacade.tree.rootFolder;
     }
 
-    function addItem(item: Item, parentId: string): string {
+    function addItem(item: Item) {
         if (item.isEntry()) {
+            setCurItem(item);
             setInEntryCreation(true);
             setInEditable(true);
-            return reactiveFacade.insertItem(item, parentId);
         } else {
-            const id = reactiveFacade.insertItem(item, parentId);
+            const id = reactiveFacade.insertItem(item, curParent.id);
             setFolderToRename(id);
-            return id;
         }
+    }
+
+    function createEntry(item: Item) {
+        item.id = reactiveFacade.insertItem(item, curParent.id);
+        setCurItem(item);
     }
 
     function toggleEditablePasswordView() {
@@ -141,10 +145,6 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
 
     function getInEditablePasswordView() {
         return inEditablePasswordView;
-    }
-
-    function getCurParent() {
-        return curParent;
     }
 
     function updateItemAttribute(itemId: string, changes: [Attribute, string | Date][]) {
@@ -242,7 +242,6 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         getInItemCreation,
         setInItemCreation,
         setCurParent,
-        getCurParent,
         deleteItem,
         setAndStoreSortCriterion,
         toggleOrder,
@@ -250,5 +249,6 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setInEntryCreation,
         renameFolder,
         setFolderToRename,
+        createEntry
     };
 };

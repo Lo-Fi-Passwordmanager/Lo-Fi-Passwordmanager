@@ -1,21 +1,17 @@
 import React from "react";
 import {type Item} from "../../../Model/Item.ts";
-import {useItemcreationViewModel} from "../../ViewModels/Dialog/ItemcreationViewModel.ts";
+import {useItemCreationViewModel} from "../../ViewModels/Dialog/ItemcreationViewModel.ts";
 
 interface ItemCreationDialogProps {
-    addItem: (item: Item, id: string) => string;
-    curParent: Item;
+    addItem: (item: Item) => void;
     cancelItemCreation: () => void;
-    setCurItem: (newItem: Item) => void;
 }
 
 const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({
                                                                    addItem,
-                                                                   curParent,
                                                                    cancelItemCreation,
-                                                                   setCurItem
                                                                }: ItemCreationDialogProps) => {
-    const viewmodel = useItemcreationViewModel(addItem, setCurItem, curParent, cancelItemCreation);
+    const viewmodel = useItemCreationViewModel(addItem, cancelItemCreation);
 
 
     return (<>
