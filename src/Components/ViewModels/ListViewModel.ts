@@ -66,6 +66,10 @@ export const useListViewModel = (topItem: Item, currentSortCrit: SortCriteria, i
         return item.isEntry();
     }
 
+    function setTitle(newTitle: string) {
+        item.title = newTitle;
+    }
+
     return {
         getChildren,
         isItemFolder,
@@ -73,6 +77,7 @@ export const useListViewModel = (topItem: Item, currentSortCrit: SortCriteria, i
         getItem,
         toggleExtended,
         getExtended,
-        setExtended
+        setExtended,
+        setTitle,
     };
 };

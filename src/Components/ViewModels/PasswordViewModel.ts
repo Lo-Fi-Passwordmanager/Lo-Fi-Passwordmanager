@@ -35,7 +35,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     const [dirtyItemId, setDirtyItemId] = useState<string | null>(null);
     const [hidePassword, setHidePassword] = useState(true);
     const [inEntryCreation, setInEntryCreation] = useState(false);
-    const [newFolder, setNewFolder] = useState<string | null>(null);
+    const [folderToRename, setFolderToRename] = useState<string | null>(null);
 
     function setCurItem(item: Item) {
         _setCurItem(item);
@@ -129,7 +129,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
             return reactiveFacade.insertItem(item, parentId);
         } else {
             const id = reactiveFacade.insertItem(item, parentId);
-            setNewFolder(id);
+            setFolderToRename(id);
             return id;
         }
     }
@@ -161,6 +161,13 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         item.deleted = true;
         setCurItem(getRootFolder());
         setCurParent(getRootFolder());
+    }
+
+    function renameFolder(item: Item, newName: string) {
+        if (item.id === "") {
+            return;
+        }
+        updateItemAttribute(item.id, [["name", newName]]);
     }
 
     function copyToClipboardAndClear(text: string, timeout: number = 10000) {
@@ -204,10 +211,6 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         saveIsAscending(!isAscending);
     }
 
-    function resetNewFolder() {
-        setNewFolder(null);
-    }
-
     return {
         dirtyItemId,
         isAscending,
@@ -217,7 +220,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         inEditable,
         hidePassword,
         inEntryCreation,
-        newFolder,
+        folderToRename,
 
         toggleHidePassword,
         setSearchValue,
@@ -241,6 +244,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         toggleOrder,
         getCurSortCriterion,
         setInEntryCreation,
-        resetNewFolder,
+        renameFolder,
+        setFolderToRename,
     };
 };

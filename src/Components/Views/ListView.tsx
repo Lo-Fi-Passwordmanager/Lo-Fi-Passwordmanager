@@ -20,8 +20,9 @@ const ListView: React.FC<{
     isAscending: boolean,
     dirtyItemId: string | null,
     openedDbName: string,
-    newFolder: string | null,
-    resetNewFolder: () => void
+    folderToRename: string | null,
+    setFolderToRename: (id: string | null) => void,
+    changeFolderName: (item: Item, newName: string) => void
 }> = ({
           item,
           setCurItem,
@@ -33,8 +34,9 @@ const ListView: React.FC<{
           isAscending,
           dirtyItemId,
           openedDbName,
-          newFolder,
-          resetNewFolder
+          folderToRename,
+          setFolderToRename,
+          changeFolderName,
       }) => {
     const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem);
 
@@ -70,18 +72,30 @@ const ListView: React.FC<{
                         <button style={{marginRight: "15px", boxShadow: "none"}}
                                 onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? "▼" : "▷"}</button>}
 
-                    {item.id === newFolder ?
+                    {item.id === folderToRename ?
                         <input
                             type="text"
                             autoFocus
                             onFocus={(e) => e.target.select()}
-                            value={listViewModel.getItem().title}
-
-                            style={{marginLeft: ((item.id != "") ? "" : "10px")}}>
-                            {(item.id != "") ? listViewModel.getItem().title : openedDbName}
+                            defaultValue={listViewModel.getItem().title}
+                            onChange={(e) => listViewModel.setTitle(e.target.value)}
+                            onBlur={() => {
+                                changeFolderName(item, listViewModel.getItem().title);
+                                setFolderToRename(null);
+                            }}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    changeFolderName(item, listViewModel.getItem().title);
+                                    setFolderToRename(null);
+                                }
+                            }}
+                            style={{marginLeft: ((item.id != "") ? "" : "10px")}}
+                        >
                         </input> :
                         <span
-                            style={{marginLeft: ((item.id != "") ? "" : "10px")}}>{(item.id != "") ? listViewModel.getItem().title : openedDbName}
+                            style={{marginLeft: ((item.id != "") ? "" : "10px")}}
+                            onDoubleClick={() => setFolderToRename(item.id)}
+                        >{(item.id != "") ? listViewModel.getItem().title : openedDbName}
                         </span>
                     }
 
@@ -98,7 +112,7 @@ const ListView: React.FC<{
                 {/* Recursive call of children with indent to visualizes depth in the tree */}
                 <div className="listViewEntryWrapper"
                      style={{display: (listViewModel.getExtended() ? "block" : "none")}}>
-                    {item.id !== newFolder && listViewModel.getChildren() &&
+                    {listViewModel.getChildren() &&
                         listViewModel.getChildren()!.map((item: Item, index: number) => {
                             return <ListView
                                 key={index}
@@ -112,8 +126,9 @@ const ListView: React.FC<{
                                 isAscending={isAscending}
                                 dirtyItemId={dirtyItemId}
                                 openedDbName={""}
-                                newFolder={newFolder}
-                                resetNewFolder={resetNewFolder}
+                                folderToRename={folderToRename}
+                                setFolderToRename={setFolderToRename}
+                                changeFolderName={changeFolderName}
                             />;
                         })}
                 </div>
