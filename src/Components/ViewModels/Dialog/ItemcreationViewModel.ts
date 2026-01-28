@@ -12,7 +12,6 @@ export const useItemcreationViewModel = (
     const [password, setPassword] = useState("");
     const [url, setUrl] = useState("");
     const [note, setNote] = useState("");
-    const [inPasswordGen, setInPasswordGen] = useState(false);
 
     function handleConfirm() {
         // Temp var must be created, because the react hook is updated only after the functino is fully executed
@@ -37,9 +36,7 @@ export const useItemcreationViewModel = (
         password,
         url,
         note,
-        inPasswordGen,
         typeOfItem,
-        setInPasswordGen,
         setNote,
         setUrl,
         setPassword,
