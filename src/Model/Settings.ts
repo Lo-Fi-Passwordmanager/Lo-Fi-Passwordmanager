@@ -50,7 +50,6 @@ export class Settings {
         const timeoutActive = localStorage.getItem(TIMEOUT_ACTIVE)
         const timeoutLength = localStorage.getItem(TIMEOUT_LENGTH);
         this.peer = new Peer();
-        window.peer = this.peer;
 
         this.connector = this.peer.connect("");
         if (synchronisation) {

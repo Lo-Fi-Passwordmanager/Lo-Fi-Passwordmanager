@@ -28,21 +28,6 @@ export const usePasswordManagerViewModel = () => {
     const [synchronization] = useState<boolean>(settings.getSynchronization());
     const [openedDatabaseName, setOpenedDatabaseName] = useState<string>("");
 
-    connector.on("open", () => {
-        connector.send("hi!");
-    });
-
-    peer.on("connection", (conn) => {
-        console.log("connection", conn);
-        conn.on("data", (data) => {
-            // Will print 'hi!'
-            console.log("data:" + data);
-        });
-        conn.on("open", () => {
-            conn.send("open");
-        });
-    });
-
     const [peerJsAdapter, setPeerJsAdapter] = useState<PeerjsNetworkAdapter>(new PeerjsNetworkAdapter(connector));
 
     const initialNetworkAdapters = [
