@@ -20,6 +20,7 @@ const ListView: React.FC<{
     isAscending: boolean,
     dirtyItemId: string | null,
     openedDbName: string,
+    updateItemTitle: (itemId: string, newTitle: string) => void;
 }> = ({
           item,
           setCurItem,
@@ -30,70 +31,94 @@ const ListView: React.FC<{
           sortCriterion,
           isAscending,
           dirtyItemId,
-          openedDbName
+          openedDbName,
+          updateItemTitle
       }) => {
-    const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem);
+    const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem, updateItemTitle);
 
     function addButtonPressed() {
         setItemCreationDialog();
         setCurrentParent!(item);
     }
 
-    /**
-     * If the item to be shown is of type entry, than only its name will be shown
-     */
+    //If the item to be shown is of type entry, than only its name will be shown
     if (listViewModel.isItemEntry()) {
         const entry = listViewModel.getItem() as Entry;
         return (
-            <div className={`listViewEntry ${getCurItem().id === entry.id? "selected" : ""}`} onClick={() => setCurItem(entry)}>
+            <div className={`listViewEntry ${getCurItem().id === entry.id ? "selected" : ""}`}
+                 onClick={() => setCurItem(entry)}>
                 <span style={{marginRight: "1ch"}}></span> <span>{entry.title}</span>
                 <div className="btnWrapper">
                     <button onClick={() => deleteItem(item)}>🗑️</button>
                 </div>
             </div>
         );
-        /**
-         * If the item is a folder, than all of its children get shown recursivley by creating a {@link ListView} of all of its children.
-         * Furthermore a button that extends/collapses the folder and a Button to add a new Element are shown next to the title
-         */
+
+        //If the item is a folder, than all of its children get shown recursivley by creating a {@link ListView} of all of its children.
+        //Furthermore a button that extends/collapses the folder and a Button to add a new Element are shown next to the title
     } else if (listViewModel.isItemFolder()) {
         return (
             <>
                 {/* Name and Buttons */}
                 <div className="listViewTitleHeader">
                     {(item.id != "") &&
-                    <button style={{marginRight: "15px", boxShadow:"none"}}
-                            onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? "▼" : "▷"}</button>}
+                        <button style={{marginRight: "15px", boxShadow: "none"}}
+                                onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? "▼" : "▷"}</button>}
 
-                    <span style={{marginLeft: ((item.id != "")?"":"10px" )}}>{ (item.id != "") ? listViewModel.getItem().title : openedDbName}</span>
-
+                    {!listViewModel.inEditName &&
+                        <span
+                            style={{marginLeft: ((item.id != "") ? "" : "10px")}}>{(item.id != "") ? listViewModel.newTitle : openedDbName}</span>
+                    }
+                    {listViewModel.inEditName &&
+                        <input type="text"
+                               autoFocus
+                               style={{marginLeft: ((item.id != "") ? "" : "10px")}}
+                               value={listViewModel.newTitle}
+                               onChange={(e) => listViewModel.setItemTitle(e.target.value)}
+                               onBlur={() => {
+                                   listViewModel.toggleInEditName();
+                                   listViewModel.updateTitleInAutomerge()
+                               }}
+                               onKeyDown={(e) => {
+                                   if (e.key === 'Enter') {
+                                       (e.target as HTMLInputElement).blur();
+                                   }
+                               }}
+                        />
+                    }
                     <div className="btnWrapper">
                         <button onClick={() => {
                             addButtonPressed();
                             listViewModel.setExtended(true);
                         }}>+
                         </button>
+                        {(item.id != "") &&
+                        <button onClick={() => listViewModel.toggleInEditName()}>
+                            ✏️
+                        </button>}
                         {(item.id != "") && <button onClick={() => deleteItem(item)}>🗑️</button>}
                         {/* FIXME: Löschbestätigung einbauen */}</div>
                 </div>
 
                 {/* Recursive call of children with indent to visualizes depth in the tree */}
-                <div className="listViewEntryWrapper" style={{display: (listViewModel.getExtended()?"block":"none")}}>
-                        {listViewModel.getChildren() &&
-                            listViewModel.getChildren()!.map((item: Item, index: number) => {
-                                return <ListView
-                                    key={index}
-                                    item={item}
-                                    setCurItem={setCurItem}
-                                    getCurItem={getCurItem}
-                                    setItemCreationDialog={setItemCreationDialog}
-                                    setCurrentParent={setCurrentParent}
-                                    deleteItem={deleteItem}
-                                    sortCriterion={sortCriterion}
-                                    isAscending={isAscending}
-                                    dirtyItemId={dirtyItemId} openedDbName={""}                                />;
-                            })}
-                    </div>
+                <div className="listViewEntryWrapper"
+                     style={{display: (listViewModel.getExtended() ? "block" : "none")}}>
+                    {listViewModel.getChildren() &&
+                        listViewModel.getChildren()!.map((item: Item, index: number) => {
+                            return <ListView
+                                key={index}
+                                item={item}
+                                setCurItem={setCurItem}
+                                getCurItem={getCurItem}
+                                setItemCreationDialog={setItemCreationDialog}
+                                setCurrentParent={setCurrentParent}
+                                deleteItem={deleteItem}
+                                sortCriterion={sortCriterion}
+                                isAscending={isAscending}
+                                dirtyItemId={dirtyItemId} openedDbName={""}
+                                updateItemTitle={updateItemTitle}/>;
+                        })}
+                </div>
             </>
         );
     }

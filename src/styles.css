@@ -681,7 +681,7 @@ input[type="number"] {
     display: flex;
     flex-direction: row;
     overflow: hidden;
-    min-height: 35%;
+    min-height: 75%;
 }
 
 .settings-sidebar {
