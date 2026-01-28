@@ -190,11 +190,12 @@ button:focus-visible {
     align-items: center;
     justify-content: center;
     gap: 12px;
+    width: 100%;
 }
 
 .DatabaseAndOptions {
     justify-content: center;
-    width: 60vmin;
+    width: 100%;
 
     display: grid;
     grid-template-columns: 8fr 1fr 1fr 1fr;
@@ -207,6 +208,7 @@ button:focus-visible {
     align-items: center;
     justify-content: center;
     gap: 24px;
+    width: 100%;
 }
 
 .settingsContainer {
