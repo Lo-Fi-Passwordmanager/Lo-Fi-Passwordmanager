@@ -79,7 +79,7 @@ const ListView: React.FC<{
                                 textOverflow: "ellipsis", // Adds the "..."
                                 verticalAlign: "middle"  // Keeps it aligned with buttons
                             }}
-                        >{(item.id != "") ? listViewModel.newTitle : openedDbName}</span>
+                        >{(item.id != "") ? item.title : openedDbName}</span>
                     }
                     {listViewModel.inEditName &&
                         <input type="text"
