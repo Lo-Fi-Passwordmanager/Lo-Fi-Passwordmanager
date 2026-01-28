@@ -10,13 +10,9 @@ import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import {useIdleTimer} from "react-idle-timer";
 import {Settings, useSettings} from "../../Model/Settings.ts";
-import Peer from "peerjs";
 import {PeerjsNetworkAdapter} from "automerge-repo-network-peerjs";
 
 export const usePasswordManagerViewModel = () => {
-    const [peer] = useState<Peer>(Settings.getSettings().getPeer());
-
-
     const settings = useSettings();
     const [connector] = useState(settings.getConnector());
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
