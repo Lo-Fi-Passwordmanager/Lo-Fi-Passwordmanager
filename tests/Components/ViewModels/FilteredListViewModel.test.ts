@@ -1,5 +1,5 @@
 import {beforeEach, describe, expect, it} from "vitest";
-import {act, renderHook} from "@testing-library/react";
+import {act, renderHook, waitFor} from "@testing-library/react";
 import {useFilteredListViewModel} from "../../../src/Components/ViewModels/FilteredListViewModel";
 import {Folder} from "../../../src/Model/Folder";
 import {SortCriteria} from "../../../src/Components/ViewModels/PasswordViewModel";
@@ -31,23 +31,28 @@ describe('FilteredListViewModel', () => {
         alvl1Folder1.addItem(clvl2Entry1);
     })
 
-    it('should return all entries when no search filters is applied', ()=> {
+    it('should return all entries when no search filter is applied', async ()=> {
         const {result} = renderHook(() =>
             useFilteredListViewModel(root, filterText, currentSortCrit, isAscending));
         let filteredFolders: Folder;
         act(() => {
             filteredFolders = result.current.getFilteredFolders();
         });
-        expect(filteredFolders.entries.length).toBe(3);
+        await waitFor(() => {
+            expect(filteredFolders.entries.length).toBe(2);
+        })
     })
 
-    it('should be awesome', ()=> {
+    it('should return all Folders when no search filter is applied', async ()=> {
         const {result} = renderHook(() =>
             useFilteredListViewModel(root, filterText, currentSortCrit, isAscending));
         let filteredEntries: Folder;
         act(() => {
             filteredEntries = result.current.getFilteredEntries();
         });
-        console.log(filteredEntries)
+        await waitFor(() => {
+            expect(filteredEntries.entries.length).toBe(3);
+            expect(filteredEntries.entries).toStrictEqual([alvl1Entry1, blvl1Entry2, clvl2Entry1]);
+        });
     })
 })
