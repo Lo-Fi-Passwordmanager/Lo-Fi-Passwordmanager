@@ -87,7 +87,7 @@ const ListView: React.FC<{
                         >
                             {listViewModel.getExtended() ? "▼" : "▷"}</button>}
 
-                    {!listViewModel.inEditName &&<span
+                    {!listViewModel.inEditName && <span
                         style={{marginLeft: item.id !== ""  ? "" : "10px",
                                 display: "inline-block", // Required for overflow to work
                                 maxWidth: "100%",        // Limits it to the parent's width
@@ -95,7 +95,7 @@ const ListView: React.FC<{
                                 overflow: "hidden",      // Hides the text that goes outside the bounds
                                 textOverflow: "ellipsis", // Adds the "..."
                                 verticalAlign: "middle"  // Keeps it aligned with buttons
-                            }}>{(item.id != "") ? listViewModel.newTitle : openedDbName}</span>
+                            }}>{(item.id != "") ? item.title : openedDbName}</span>
                     }
                     {listViewModel.inEditName &&
                         <input type="text"
