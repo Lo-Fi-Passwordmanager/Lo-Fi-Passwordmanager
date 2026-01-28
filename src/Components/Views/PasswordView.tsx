@@ -10,7 +10,8 @@ import EditablePasswordView from "./EditablePasswordView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
 import SettingsView from "./SettingsView.tsx";
 import {useRepo} from "@automerge/automerge-repo-react-hooks";
-import {HistoryDialog} from "./Dialogs/HistoryDialog.tsx";
+import {HistoryDialog} from "./DialogViews/HistoryDialog.tsx";
+
 
 interface PasswordViewProps {
     automergeFacade?: AutomergeFacade | null,
@@ -71,24 +72,24 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                         {/*The basic ListView which shows all Items and Folders in their hierarchy*/}
                         {passwordViewModel.searchValue.length === 0 &&
                             <ListView
-                            item={passwordViewModel.getRootFolder()}
-                            setCurItem={passwordViewModel.setCurItem}
-                            setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
-                            setCurrentParent={passwordViewModel.setCurParent}
-                            deleteItem={passwordViewModel.deleteItem}
-                            sortCriterion={passwordViewModel.getCurSortCriterion()}
-                            isAscending={passwordViewModel.isAscending}
-                            dirtyItemId={passwordViewModel.dirtyItemId}
-                            getCurItem={passwordViewModel.getCurEntry}
-                            openedDbName={openedDbName}
-                            updateItemTitle={passwordViewModel.updateItemTitle}
-                        />}
+                                item={passwordViewModel.getRootFolder()}
+                                setCurItem={passwordViewModel.setCurItem}
+                                setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
+                                setCurrentParent={passwordViewModel.setCurParent}
+                                deleteItem={passwordViewModel.deleteItem}
+                                sortCriterion={passwordViewModel.getCurSortCriterion()}
+                                isAscending={passwordViewModel.isAscending}
+                                dirtyItemId={passwordViewModel.dirtyItemId}
+                                getCurItem={passwordViewModel.getCurEntry}
+                                openedDbName={openedDbName}
+                                updateItemTitle={passwordViewModel.updateItemTitle}
+                            />}
                     </div>
 
                 </div>
 
                 <div className="borderBox" style={{width: "70%", position: "relative"}}>
-                    <SettingsViewautomergeFacade={automergeFacade}/>
+                    <SettingsView automergeFacade={automergeFacade}/>
                     <HistoryDialog automergeFacade={automergeFacade!}/>
                     {/*Depending on the state, either shows the editable or the normal/noneditable passwordView*/}
                     {!passwordViewModel.inEditable &&
