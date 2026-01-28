@@ -70,6 +70,8 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                             dirtyItemId={passwordViewModel.dirtyItemId}
                             getCurItem={passwordViewModel.getCurEntry}
                             openedDbName={openedDbName}
+                            newFolder={passwordViewModel.newFolder}
+                            resetNewFolder={passwordViewModel.resetNewFolder}
                         />}
                     </div>
 
@@ -88,7 +90,12 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                     {passwordViewModel.inEditable &&
                         <EditablePasswordView item={passwordViewModel.getCurEntry()}
                                               updateItemAttribute={passwordViewModel.updateItemAttribute}
-                                              setEditableView={() => passwordViewModel.setInEditable(false)}/>}
+                                              setEditableView={() => passwordViewModel.setInEditable(false)}
+                                              deleteItem={passwordViewModel.deleteItem}
+                                              inCreation={passwordViewModel.inEntryCreation}
+                                              setInCreation={passwordViewModel.setInEntryCreation}
+
+                        />}
                 </div>
 
                 {/*A Toast that may be called at any time with a given message*/}

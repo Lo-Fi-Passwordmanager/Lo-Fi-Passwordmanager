@@ -20,6 +20,8 @@ const ListView: React.FC<{
     isAscending: boolean,
     dirtyItemId: string | null,
     openedDbName: string,
+    newFolder: string | null,
+    resetNewFolder: () => void
 }> = ({
           item,
           setCurItem,
@@ -30,7 +32,9 @@ const ListView: React.FC<{
           sortCriterion,
           isAscending,
           dirtyItemId,
-          openedDbName
+          openedDbName,
+          newFolder,
+          resetNewFolder
       }) => {
     const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem);
 
@@ -45,7 +49,8 @@ const ListView: React.FC<{
     if (listViewModel.isItemEntry()) {
         const entry = listViewModel.getItem() as Entry;
         return (
-            <div className={`listViewEntry ${getCurItem().id === entry.id? "selected" : ""}`} onClick={() => setCurItem(entry)}>
+            <div className={`listViewEntry ${getCurItem().id === entry.id ? "selected" : ""}`}
+                 onClick={() => setCurItem(entry)}>
                 <span style={{marginRight: "1ch"}}></span> <span>{entry.title}</span>
                 <div className="btnWrapper">
                     <button onClick={() => deleteItem(item)}>🗑️</button>
@@ -62,10 +67,23 @@ const ListView: React.FC<{
                 {/* Name and Buttons */}
                 <div className="listViewTitleHeader">
                     {(item.id != "") &&
-                    <button style={{marginRight: "15px", boxShadow:"none"}}
-                            onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? "▼" : "▷"}</button>}
+                        <button style={{marginRight: "15px", boxShadow: "none"}}
+                                onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? "▼" : "▷"}</button>}
 
-                    <span style={{marginLeft: ((item.id != "")?"":"10px" )}}>{ (item.id != "") ? listViewModel.getItem().title : openedDbName}</span>
+                    {item.id === newFolder ?
+                        <input
+                            type="text"
+                            autoFocus
+                            onFocus={(e) => e.target.select()}
+                            value={listViewModel.getItem().title}
+
+                            style={{marginLeft: ((item.id != "") ? "" : "10px")}}>
+                            {(item.id != "") ? listViewModel.getItem().title : openedDbName}
+                        </input> :
+                        <span
+                            style={{marginLeft: ((item.id != "") ? "" : "10px")}}>{(item.id != "") ? listViewModel.getItem().title : openedDbName}
+                        </span>
+                    }
 
                     <div className="btnWrapper">
                         <button onClick={() => {
@@ -78,22 +96,27 @@ const ListView: React.FC<{
                 </div>
 
                 {/* Recursive call of children with indent to visualizes depth in the tree */}
-                <div className="listViewEntryWrapper" style={{display: (listViewModel.getExtended()?"block":"none")}}>
-                        {listViewModel.getChildren() &&
-                            listViewModel.getChildren()!.map((item: Item, index: number) => {
-                                return <ListView
-                                    key={index}
-                                    item={item}
-                                    setCurItem={setCurItem}
-                                    getCurItem={getCurItem}
-                                    setItemCreationDialog={setItemCreationDialog}
-                                    setCurrentParent={setCurrentParent}
-                                    deleteItem={deleteItem}
-                                    sortCriterion={sortCriterion}
-                                    isAscending={isAscending}
-                                    dirtyItemId={dirtyItemId} openedDbName={""}                                />;
-                            })}
-                    </div>
+                <div className="listViewEntryWrapper"
+                     style={{display: (listViewModel.getExtended() ? "block" : "none")}}>
+                    {item.id !== newFolder && listViewModel.getChildren() &&
+                        listViewModel.getChildren()!.map((item: Item, index: number) => {
+                            return <ListView
+                                key={index}
+                                item={item}
+                                setCurItem={setCurItem}
+                                getCurItem={getCurItem}
+                                setItemCreationDialog={setItemCreationDialog}
+                                setCurrentParent={setCurrentParent}
+                                deleteItem={deleteItem}
+                                sortCriterion={sortCriterion}
+                                isAscending={isAscending}
+                                dirtyItemId={dirtyItemId}
+                                openedDbName={""}
+                                newFolder={newFolder}
+                                resetNewFolder={resetNewFolder}
+                            />;
+                        })}
+                </div>
             </>
         );
     }

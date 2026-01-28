@@ -15,7 +15,10 @@ const EditablePasswordView: React.FC<{
     item: Item,
     updateItemAttribute: (itemId: string, changes: [Attribute, string | Date][]) => void;
     setEditableView: () => void;
-}> = ({item, updateItemAttribute, setEditableView}) => {
+    inCreation: boolean;
+    setInCreation: (inCreation: boolean) => void;
+    deleteItem: (item: Item) => void;
+}> = ({item, updateItemAttribute, setEditableView, deleteItem, inCreation, setInCreation}) => {
 
     const viewmodel = useEditablePasswordViewModel(item, updateItemAttribute);
 
@@ -31,6 +34,7 @@ const EditablePasswordView: React.FC<{
             </div>
         );
     } else if (item.isEntry()) {
+
         return (
             <>
                 <div className="entryViewEntry" style={{position: "relative"}}>
@@ -50,7 +54,14 @@ const EditablePasswordView: React.FC<{
                         💾
                     </button>
                     <input className={"title-value"} type={"text"} value={viewmodel.title}
-                           onChange={(e) => viewmodel.setTitle(e.target.value)}/>
+                           onChange={(e) => viewmodel.setTitle(e.target.value)}
+                           autoFocus={inCreation}
+                           onFocus={(e) => {
+                               if (inCreation) {
+                                   e.target.select();
+                               }
+                           }}
+                    />
 
                     <div className={"entryViewListing"}>
                         <div className={"entryViewAttribute"}>
@@ -76,6 +87,24 @@ const EditablePasswordView: React.FC<{
                                    onChange={(e) => viewmodel.setNote(e.target.value)}/>
                         </div>
                     </div>
+                </div>
+                <div className={"confirm-cancel-buttons"}>
+                    <button onClick={() => {
+                        if (viewmodel.hasChanges()) {
+                            viewmodel.updateItemInAutomerge();
+                        }
+                        setInCreation(false);
+                        setEditableView();
+                    }}>Speichern
+                    </button>
+                    <button onClick={() => {
+                        if (inCreation) {
+                            deleteItem(item);
+                            setInCreation(false);
+                        }
+                        setEditableView();
+                    }}>Abbrechen
+                    </button>
                 </div>
                 <div className="entryDateViewEntry">
                     <span>Erstellt am: {item.createdAt.toLocaleString()}</span>

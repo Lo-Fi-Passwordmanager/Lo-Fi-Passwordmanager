@@ -34,6 +34,8 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     const [inEditable, setInEditable] = useState(false);
     const [dirtyItemId, setDirtyItemId] = useState<string | null>(null);
     const [hidePassword, setHidePassword] = useState(true);
+    const [inEntryCreation, setInEntryCreation] = useState(false);
+    const [newFolder, setNewFolder] = useState<string | null>(null);
 
     function setCurItem(item: Item) {
         _setCurItem(item);
@@ -121,8 +123,15 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     }
 
     function addItem(item: Item, parentId: string): string {
-        toggleEditablePasswordView();
-        return reactiveFacade.insertItem(item, parentId);
+        if (item.isEntry()) {
+            setInEntryCreation(true);
+            setInEditable(true);
+            return reactiveFacade.insertItem(item, parentId);
+        } else {
+            const id = reactiveFacade.insertItem(item, parentId);
+            setNewFolder(id);
+            return id;
+        }
     }
 
     function toggleEditablePasswordView() {
@@ -195,6 +204,10 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         saveIsAscending(!isAscending);
     }
 
+    function resetNewFolder() {
+        setNewFolder(null);
+    }
+
     return {
         dirtyItemId,
         isAscending,
@@ -203,6 +216,9 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         toastVisible,
         inEditable,
         hidePassword,
+        inEntryCreation,
+        newFolder,
+
         toggleHidePassword,
         setSearchValue,
         copyToClipboardAndClear,
@@ -224,5 +240,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setAndStoreSortCriterion,
         toggleOrder,
         getCurSortCriterion,
+        setInEntryCreation,
+        resetNewFolder,
     };
 };
