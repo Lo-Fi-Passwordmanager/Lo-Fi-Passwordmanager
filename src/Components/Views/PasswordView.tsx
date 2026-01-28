@@ -42,6 +42,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                         toggleOrder={passwordViewModel.toggleOrder}
                         isAscending={passwordViewModel.isAscending}
                         setLiveSearchValue={passwordViewModel.setSearchValue}
+                        liveSearchValue={passwordViewModel.searchValue}
                         closeDatabase={closeDatabase}
                         setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
                     />
@@ -56,6 +57,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                             sortCriterion={passwordViewModel.getCurSortCriterion()}
                             isAscending={passwordViewModel.isAscending}
                             filterText={passwordViewModel.searchValue}
+                            goToFolder={passwordViewModel.goToFolder}
                         />}
 
                         {/*The basic ListView which shows all Items and Folders in their hierarchy*/}
@@ -71,6 +73,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                             dirtyItemId={passwordViewModel.dirtyItemId}
                             getCurItem={passwordViewModel.getCurEntry}
                             openedDbName={openedDbName}
+                            selectedFolderId={passwordViewModel.selectedFolderId}
                             updateItemTitle={passwordViewModel.updateItemTitle}
                         />}
                     </div>

@@ -7,15 +7,14 @@ const OrganizeListView: React.FC<{
     toggleOrder: () => void,
     isAscending: boolean,
     setLiveSearchValue: (value: string) => void,
+    liveSearchValue: string,
     closeDatabase: () => void,
     setItemCreationDialog: () => void,
 }> = ({
           getCurSortCriterion,
           setCurSortCriterion,
           toggleOrder,
-          isAscending,
-          setLiveSearchValue,
-          closeDatabase,
+          isAscending, setLiveSearchValue, liveSearchValue, closeDatabase,
           setItemCreationDialog
       }) => {
 
@@ -28,7 +27,7 @@ const OrganizeListView: React.FC<{
                 {/* Button to close the database and go back to the database selection */}
                 <button style={{gridColumn: "span 1"}} onClick={() => closeDatabase()}>⬅</button>
 
-                <input style={{gridColumn: "span 8"}} type="text" placeholder="Suchen..."
+                <input style={{gridColumn: "span 8"}} type="text" placeholder="Suchen..." value={liveSearchValue}
                        onChange={(event => setLiveSearchValue(event.target.value))}/>
                 {/* Search bar to filter the list of entries and folders */}
                 <button style={{gridColumn: "span 1", fontSize: "1.2em"}} onClick={() => {
