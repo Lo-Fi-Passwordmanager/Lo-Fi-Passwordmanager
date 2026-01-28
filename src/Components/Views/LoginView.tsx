@@ -33,6 +33,7 @@ const LoginView: React.FC<{
                         databases={viewModel.databases}
                         openDatabase={viewModel.openEnterPasswordDialog}
                         removeDatabase={viewModel.deleteDatabase}
+                        renameDatabase={viewModel.changeDatabaseName}
                     />
 
 
@@ -63,6 +64,7 @@ const LoginView: React.FC<{
                     storeDatabase={viewModel.importDatabaseFromURL}
                     setToastMessage={viewModel.setToastMessage}
                     setShowToast={viewModel.setShowToast}
+                    importDatabase={viewModel.importDatabaseFromFile}
                 />
             </main>
             <ToastDialog message={viewModel.toastMessage}
