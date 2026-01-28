@@ -15,8 +15,8 @@ describe('LoadingScreenProviderViewModel', ()=> {
 
     });
 
-    it('should ', () => {
+    it('should be able to correctly render the hook of the provider', () => {
         const {result} = renderHook(() => useLoadingScreenProviderViewModel());
-
+        expect(result === null).toBe(false);
     })
 })
