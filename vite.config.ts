@@ -24,7 +24,9 @@ export default defineConfig({
       coverage: {
         provider: 'v8',
         include: ['src/**/*.{ts,tsx}'],
-        exclude: ['scryptConfig.ts' // excluding since the config is used to reduce scrypt-time during tests only and therefore can't be covered
+        exclude: ['scryptConfig.ts', // excluding since the config is used to reduce scrypt-time during tests only and therefore can't be covered
+                  'src/Components/Views',
+                  'main.tsx'
         ],
         reporter: ['text', 'html', 'lcov'],
         reportsDirectory: './coverage',

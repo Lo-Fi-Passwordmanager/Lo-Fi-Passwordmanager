@@ -17,6 +17,7 @@ export const useSettingsViewModel = () => {
     const [timeOutActive, setTimeOutActive] = useState(settings.getTimeoutActive());
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [timeoutLength, setTimeoutLength] = useState(settings.getTimeoutLength());
+    const [activeTab, setActiveTab] = useState<"general" | "database" | "about">("general");
 
 
     document.getElementsByTagName("html")[0]?.setAttribute("data-theme", darkMode ? "dark" : "light");
@@ -83,6 +84,8 @@ export const useSettingsViewModel = () => {
         timeOutActive,
         settingsOpen,
         timeoutLength,
+        activeTab,
+        setActiveTab,
 
         setConnection,
         toggleDarkMode,

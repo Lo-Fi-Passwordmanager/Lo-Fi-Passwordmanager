@@ -1,115 +1,178 @@
 import {useSettingsViewModel} from "../ViewModels/SettingsViewModel.ts";
 import {Settings} from "../../Model/Settings.ts";
 
+import React from "react";
+import type {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
 
-/**
- * The view that links to the {@link Settings} singleton and toggles its values.
- */
-const SettingsView: React.FC = () => {
-
+const SettingsView: React.FC<{ automergeFacade?: AutomergeFacade | null }> = ({automergeFacade}) => {
     const viewmodel = useSettingsViewModel();
 
-    /**
-     * Checks if the settingsmenu should be open or not
-     */
-    if (viewmodel.settingsOpen) {
+    if (!viewmodel.settingsOpen) {
         return (
-            <div className="settingsBackground dialogOverlay">
-                <div className="dialog">
-                    <h1 style={{fontSize: "2em", marginBottom: "20px"}}>Einstellungen</h1>
-
-                    {/* Following are the checkboxes and their description */}
-                    <div className="settingsContainer">
-                        <div>
-                            <label className="checkboxRow">
-                                <input
-                                    type="checkbox"
-                                    checked={viewmodel.darkMode}
-                                    onChange={viewmodel.toggleDarkMode}
-                                />
-                                Darkmode
-                            </label>
-                        </div>
-
-                        <div>
-                            <label className="checkboxRow">
-                                <input
-                                    type="checkbox"
-                                    checked={viewmodel.synchronisation}
-                                    onChange={viewmodel.toggleSynchronisation}
-                                />
-                                Synchronisation
-                            </label>
-                        </div>
-
-                        <div>
-                            <label className="checkboxRow">
-                                <input
-                                    type="checkbox"
-                                    checked={viewmodel.autoConflictRes}
-                                    onChange={viewmodel.toggleAutoConflictRes}
-                                />
-                                Konfliktauflösung
-                            </label>
-                        </div>
-
-                        <div>
-                            <label className="checkboxRow">
-                                <input
-                                    type="checkbox"
-                                    checked={viewmodel.timeOutActive}
-                                    onChange={viewmodel.toggleTimeOutActive}
-                                />
-                                Bei Inaktivität abmelden
-                            </label>
-                        </div>
-
-                        {viewmodel.timeOutActive && <div className={"timeout-setting"}>
-                            <label>Minuten bis Abmeldung: </label>
-                            <div className={"numberInput"}>
-                                <input
-                                    type="number"
-                                    value={viewmodel.timeoutLength}
-                                    onChange={(e) => viewmodel.setTimeOutLengthVM(e.target.value)}
-                                    min="1"
-                                    max="120"
-                                    step="1"
-                                />
-                                <button className={"number-control"} onClick={viewmodel.decrease}>–</button>
-                                <button className={"number-control"} onClick={viewmodel.increase}>+</button>
-                            </div>
-                        </div>}
-                    </div>
-                    <div>
-                        <label>{"Deine Peer Id: \n"}</label>
-                    </div>
-                    <div>
-                        <label>{viewmodel.getPeerId()}</label>
-                    </div>
-
-                    <label>Other Peer Id</label>
-                    <input type="text"
-                           onChange={(e) => viewmodel.setConnection(e.target.value)}
-                           value={Settings.getSettings().getConnector().peer}/>
-                    <button onClick={() => viewmodel.setSettingsOpen(false)} style={{marginTop: "1em"}}>Einstellungen
-                        Schließen
-                    </button>
-                </div>
-            </div>
-        );
-
-        /**
-         * If settingsmenu should not be open, only the button to open it, is seen in the top right corner
-         */
-    } else {
-        return (
-            <button
-                className="settingsButton"
-                onClick={() => viewmodel.setSettingsOpen(true)}>⚙️
-            </button>
+            <button className="settingsButton" onClick={() => viewmodel.setSettingsOpen(true)}>⚙️</button>
         );
     }
 
+    return (
+        <div className="settingsBackground dialogOverlay">
+            <div className="dialog settings-layout">
+                {/* Sidebar Navigation */}
+                <aside className="settings-sidebar">
+                    <h2>Einstellungen</h2>
+                    <button onClick={() => viewmodel.setActiveTab("general")}>
+                        Allgemeine Einstellungen
+                    </button>
+                    <button onClick={() => viewmodel.setActiveTab("database")}>
+                        Datenbankeinstellungen
+                    </button>
+                    <button onClick={() => viewmodel.setActiveTab("about")}>
+                        Über die App
+                    </button>
+
+                    <button className="settings-close-btn" onClick={() => viewmodel.setSettingsOpen(false)}>
+                        Schließen
+                    </button>
+                </aside>
+
+
+                {/* Main Content Area */}
+                <main className="settings-content">
+                    {viewmodel.activeTab === "general" && (
+                        <div className="settingsContainer">
+                            <h3>Allgemeine Einstellungen</h3>
+                            <label className="checkboxRow">
+                                <input type="checkbox" checked={viewmodel.darkMode}
+                                       onChange={viewmodel.toggleDarkMode}/>
+                                Darkmode
+                            </label>
+
+                            <label className="checkboxRow">
+                                <input type="checkbox" checked={viewmodel.synchronisation}
+                                       onChange={viewmodel.toggleSynchronisation}/>
+                                Synchronisation
+                            </label>
+
+                            <label className="checkboxRow">
+                                <input type="checkbox" checked={viewmodel.autoConflictRes}
+                                       onChange={viewmodel.toggleAutoConflictRes}/>
+                                Konfliktauflösung
+                            </label>
+
+                            <label className="checkboxRow">
+                                <input type="checkbox" checked={viewmodel.timeOutActive}
+                                       onChange={viewmodel.toggleTimeOutActive}/>
+                                Bei Inaktivität abmelden
+                            </label>
+
+                            {viewmodel.timeOutActive && (
+                                <div className={"timeout-setting"}>
+                                    <label>Minuten bis Abmeldung: </label>
+                                    <div className={"numberInput"}>
+                                        <input type="number" value={viewmodel.timeoutLength}
+                                               onChange={(e) => viewmodel.setTimeOutLengthVM(e.target.value)} min="1"/>
+                                        <button onClick={viewmodel.decrease}>–</button>
+                                        <button onClick={viewmodel.increase}>+</button>
+                                    </div>
+                                </div>
+                            )}
+
+                            <div>
+                                <label>{"Deine Peer Id: \n"}</label>
+                            </div>
+                            <div>
+                                <label>{viewmodel.getPeerId()}</label>
+                            </div>
+
+                            <label>Other Peer Id</label>
+                            <input type="text"
+                                   onChange={(e) => viewmodel.setConnection(e.target.value)}
+                                   value={Settings.getSettings().getConnector().peer}/>
+                            <button onClick={() => viewmodel.setSettingsOpen(false)} style={{marginTop: "1em"}}>Einstellungen
+                                Schließen
+                            </button>
+                        </div>
+                    )}
+
+                    {viewmodel.activeTab === "database" && (
+                        <div className="settingsContainer">
+                            <h3>Datenbankeinstellungen</h3>
+                            {automergeFacade ? (
+                                <DatabaseSettingsView automergeFacade={automergeFacade}/>
+                            ) : (
+                                <p>Bitte Datenbank auswählen.</p>
+                            )}
+                        </div>
+                    )}
+
+                    {viewmodel.activeTab === "about" && (
+                        <div className="settingsContainer about-view" style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            textAlign: "center",
+                            gap: "20px"
+                        }}>
+                            <div>
+                                <h2 style={{marginBottom: "5px"}}>Über diese Anwendung</h2>
+                            </div>
+
+                            <section className="about-section">
+                                <p><strong>Version:</strong> 0.1.0-beta</p>
+                                <p><strong>Lizenz:</strong> MIT License</p>
+                            </section>
+
+                            <section className="about-section">
+                                <p>
+                                    Dies ist eine kollaborative Anwendung zur Datenverwaltung.
+                                    Dabei wird die Datenspeicherung und Übertragung mithilfe der Automerge Bibliothek
+                                    implementiert.
+
+                                    Zusätzlich benutzt werden die Bibliotheken Idle Timer und React DnD Kit.
+                                </p>
+                            </section>
+
+                            {/* Buttons für React und Automerge */}
+                            <div style={{display: "flex", gap: "10px", justifyContent: "center"}}>
+                                <button
+                                    onClick={() => window.open("https://react.dev", "_blank")}
+                                    style={{padding: "8px 15px", cursor: "pointer"}}>
+                                    React Homepage
+                                </button>
+
+                                <button
+                                    onClick={() => window.open("https://automerge.org", "_blank")}
+                                    style={{padding: "8px 15px", cursor: "pointer"}}>
+                                    Automerge Docs
+                                </button>
+
+                                <button
+                                    onClick={() => window.open("https://github.com/SupremeTechnopriest/react-idle-timer", "_blank")}
+                                    style={{padding: "8px 15px", cursor: "pointer"}}>
+                                    Idle Timer
+                                </button>
+
+                                <button
+                                    onClick={() => window.open("https://dndkit.com/", "_blank")}
+                                    style={{padding: "8px 15px", cursor: "pointer"}}>
+                                    DnD Kit
+                                </button>
+                            </div>
+
+                            <section className="license-notice"
+                                     style={{fontSize: "0.8em", opacity: 0.7, marginTop: "20px"}}>
+                                <p>Copyright © {new Date().getFullYear()}</p>
+                                <p style={{maxWidth: "500px"}}>
+                                    Die Software wird "wie besehen" bereitgestellt, ohne jegliche ausdrückliche oder
+                                    implizierte Gewährleistung.
+                                </p>
+                            </section>
+                        </div>
+                    )}
+                </main>
+            </div>
+        </div>
+    );
 };
 
 export default SettingsView;

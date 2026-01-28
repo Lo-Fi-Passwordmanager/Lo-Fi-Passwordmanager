@@ -144,6 +144,10 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setDirtyItemId(id);
     }
 
+    function updateItemTitle(itemId: string, newTitle: string) {
+        reactiveFacade.updateItem(itemId, [["name", newTitle]]);
+    }
+
     function deleteItem(item: Item) {
         if (item.id === "") {
             return;
@@ -151,6 +155,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         reactiveFacade.deleteItem(item.id);
         item.deleted = true;
         setCurItem(getRootFolder());
+        setCurParent(getRootFolder());
     }
 
     function copyToClipboardAndClear(text: string, timeout: number = 10000) {
@@ -186,6 +191,9 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         }, timeout);
     }
 
+    /**
+     * Toggles the order of the sorting between ascending and descending
+     */
     function toggleOrder() {
         setIsAscending(!isAscending);
         saveIsAscending(!isAscending);
@@ -220,5 +228,6 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setAndStoreSortCriterion,
         toggleOrder,
         getCurSortCriterion,
+        updateItemTitle,
     };
 };

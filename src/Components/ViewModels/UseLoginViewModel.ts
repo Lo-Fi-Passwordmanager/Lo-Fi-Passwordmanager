@@ -3,28 +3,9 @@ import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import type {Repo} from "@automerge/react";
 import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
-import {loadAllDatabases, removeDatabase, storeDatabase} from "../../Utility/Storage.ts";
+import {loadAllDatabases, removeDatabase, renameDatabase, storeDatabase} from "../../Utility/Storage.ts";
 import {useLoadingScreen} from "./LoadingScreenProviderViewModel.ts";
-
-export type LoginViewModelReturn = {
-    databaseNames: string[],
-    databases: Map<string, AutomergeUrl>,
-    isAddDialogOpen: boolean,
-    isEnterPasswordDialogOpen: boolean,
-    createDatabase: (name: string, masterPassword: string) => void,
-    tryOpenDatabase: (masterPassword: string) => void,
-    closeDatabase: () => void,
-    openAddDialog: () => void,
-    closeAddDialog: () => void,
-    openEnterPasswordDialog: (db: string) => void,
-    closeEnterPasswordDialog: () => void
-    importDatabaseFromURL: (databaseName: string, url: AutomergeUrl) => void,
-    showToast: boolean,
-    setShowToast: (showToast: boolean) => void,
-    toastMessage: string,
-    setToastMessage: (message: string) => void,
-    deleteDatabase: (name: string) => void,
-}
+import {uInt8ArrayFromFile} from "../../Utility/InputOutputUtil.ts";
 
 /**
  * ViewModel for the LoginView
@@ -33,13 +14,16 @@ export type LoginViewModelReturn = {
  * @param setAutomergeFacade the function to update the automergeFacade of the used database on correct Login.
  * @param securityProvider the security Provider to encrypt/decrypt with the given master password.
  * @param setOpenedDbName the function that sets the Database name on the PasswordManager.
+ *
  * @returns all data and functions required by the LoginView
  */
 export const useLoginViewModel = (
-    repo: Repo, setLoggedIn: (value: (((prevState: boolean) => boolean) | boolean)) => void,
+    repo: Repo,
+    setLoggedIn: (value: (((prevState: boolean) => boolean) | boolean)) => void,
     setAutomergeFacade: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void,
-    securityProvider: SecurityProvider
-    , setOpenedDbName: ((value: (((prevState: string) => string) | string)) => void)): LoginViewModelReturn => {
+    securityProvider: SecurityProvider,
+    setOpenedDbName: ((value: (((prevState: string) => string) | string)) => void)
+) => {
     // map of database names to their automerge urls
     const [databases, setDatabases] = useState(() => loadAllDatabases());
     // names of all available databases to show in the listing
@@ -87,7 +71,25 @@ export const useLoginViewModel = (
         }, 0);
     };
 
-    // tries to open a database with the provided master password
+    /**
+     * Renames a database from oldName to newName
+     *
+     * @param oldName the current name of the database
+     * @param newName the new name of the database
+     */
+    function changeDatabaseName(oldName: string, newName: string) {
+        if (!isNameAvailable(newName)) {
+            return;
+        }
+        setDatabases(() => renameDatabase(oldName, newName));
+    }
+
+    /**
+     * Tries to open a database with the provided master password
+     *
+     * @param masterPassword the master password to decrypt the database
+     * @param name optional name of the database if an database was just added
+     */
     const tryOpenDatabase = async (masterPassword: string, name?: string) => {
             let dbUrl: AutomergeUrl | undefined;
             if (name) {
@@ -104,8 +106,26 @@ export const useLoginViewModel = (
             setLoadingScreenActive(true);
             setOpenedDbName(selectedDatabase!);
             const facade = new AutomergeFacade(repo, dbUrl, securityProvider);
-            const salt = (await facade.getSalt())!;
-            const validation = (await facade.getValidation())!;
+            let salt: string | null;
+            let validation: string | null;
+            try {
+                salt = (await facade.getSalt());
+                validation = (await facade.getValidation());
+
+            } catch (error) {
+                console.error(error);
+                setLoadingScreenActive(false);
+                setShowToast(true);
+                setToastMessage("Automerge konnte die Datenbank nicht laden!");
+                return;
+            }
+
+            if (salt == null || validation == null) {
+                setLoadingScreenActive(false);
+                setShowToast(true);
+                setToastMessage("Automerge konnte die Datenbank nicht laden!");
+                return;
+            }
 
             // Das Timeout an dieser Stelle sorgt dafür, dass der enthaltene Codeblock ans Ende der aktuell auszuführenden Aktionen geschoben wird,
             // wodurch das Rendering des Ladescreens ermöglicht wird, bevor der SecurityProvider den Thread blockiert.
@@ -148,7 +168,7 @@ export const useLoginViewModel = (
      * Adds a new database to the list of available databases and opens the enter password dialog
      * @param name the name of the new database
      * @param url the automerge url of the new database
-     * @param masterPassword
+     * @param masterPassword optional master password to directly open the database after creation
      */
     function addDatabase(name: string, url: AutomergeUrl, masterPassword?: string) {
         closeAddDialog();
@@ -221,6 +241,36 @@ export const useLoginViewModel = (
     // Close the dialog to log in to a database
     const closeEnterPasswordDialog = () => setIsEnterPasswordDialogOpen(false);
 
+    async function importDatabaseFromFile(targetFiles: FileList | null, name: string) {
+        if (!isNameAvailable(name)) {
+            return;
+        }
+
+        if (name === "") {
+            setToastMessage("Bitte wähle einen Namen")
+            setShowToast(true);
+            return;
+        }
+
+        if (!FileList) {
+            setToastMessage("Bitte wähle eine Datei")
+            setShowToast(true);
+            return;
+        }
+
+        const binary = await uInt8ArrayFromFile(targetFiles);
+        if (!binary) {
+            return;
+        }
+
+        const handle = repo.import(binary);
+        const dbName = name || "Neue Datenbank";
+        storeDatabase(dbName, handle.url);
+        setSelectedDatabase(dbName);
+        setIsAddDialogOpen(false);
+        addDatabase(dbName, handle.url);
+    }
+
     return {
         databaseNames,
         isAddDialogOpen,
@@ -229,6 +279,7 @@ export const useLoginViewModel = (
         showToast,
         toastMessage,
 
+        importDatabaseFromFile,
         setShowToast,
         createDatabase,
         tryOpenDatabase,
@@ -239,6 +290,7 @@ export const useLoginViewModel = (
         closeEnterPasswordDialog,
         importDatabaseFromURL,
         setToastMessage,
-        deleteDatabase
+        deleteDatabase,
+        changeDatabaseName,
     };
 };

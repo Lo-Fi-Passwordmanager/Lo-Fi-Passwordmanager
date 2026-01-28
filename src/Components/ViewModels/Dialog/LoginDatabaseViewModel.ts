@@ -18,13 +18,18 @@ export const useLoginDatabaseViewModel = (isOpen: boolean,
 
     const [field1, setField1] = useState("");
 
+    /**
+     * Resets the input fields when the dialog is opened
+     */
     useEffect(() => {
         if (isOpen) {
             setField1("");
         }
     }, [isOpen]);
 
-
+    /**
+     * Handles the confirm action
+     */
     const handleConfirm = () => {
         if (!field1) {
             setToastMessage("Bitte ein Password eingeben.");

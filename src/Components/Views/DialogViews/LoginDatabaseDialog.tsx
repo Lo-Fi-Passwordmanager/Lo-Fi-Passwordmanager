@@ -29,11 +29,14 @@ const LoginDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                     onChange={(e) => viewModel.setField1(e.target.value)}
                     placeholder={label1}
                     autoFocus
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {viewModel.handleConfirm();}
+                    }}
                 />
 
                 <div className="confirm-cancel-buttons">
                     <button onClick={viewModel.handleConfirm}>Bestätigen</button>
-                    <button onClick={onCancel} style={{background:"gray"}}>Abbrechen</button>
+                    <button onClick={onCancel}>Abbrechen</button>
                 </div>
 
             </div>
