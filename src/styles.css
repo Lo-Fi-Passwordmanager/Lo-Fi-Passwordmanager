@@ -609,3 +609,51 @@ input[type="number"] {
     justify-items: center;
     border-radius: 0 0 0 20px;
 }
+
+.historyEntry {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+    border-bottom: 1px solid var(--panel);
+
+    & p {
+        margin: 8px 0 0;
+
+        &:last-child {
+            margin-bottom: 8px;
+        }
+
+        &:nth-last-child(2) {
+            margin-bottom: 8px;
+        }
+    }
+
+    & .title {
+        font-weight: bold;
+    }
+
+    & .createdDate {
+        position: absolute;
+        font-size: .8rem;
+        right: 6px;
+        color: color-mix(in srgb, var(--text), transparent 30%);
+    }
+
+    & .content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        width: 100%;
+
+        text-align: left;
+    }
+
+    &.deleted p {
+        font-style: italic;
+    }
+}
+
+.historyDialog {
+    max-height: 80%;
+    width: 40%;
+}

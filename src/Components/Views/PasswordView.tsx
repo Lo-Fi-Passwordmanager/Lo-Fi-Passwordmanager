@@ -30,9 +30,6 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
         // @ts-expect-error no error
         // eslint-disable-next-line react-hooks/rules-of-hooks
         window.handle = useRepo().find(automergeFacade!.automergeURL!);
-
-        // @ts-expect-error no error
-        window.history2 = automergeFacade!.getHistory();
     }
 
     return (
@@ -87,7 +84,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
 
                 <div className="borderBox" style={{width: "70%", position: "relative"}}>
                     <SettingsView/>
-                    <HistoryDialog/>
+                    <HistoryDialog automergeFacade={automergeFacade!}/>
                     {/*Depending on the state, either shows the editable or the normal/noneditable passwordView*/}
                     {!passwordViewModel.inEditable &&
                         <EntryView item={passwordViewModel.getCurEntry()}

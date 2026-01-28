@@ -223,7 +223,7 @@ export const useLoginViewModel = (
 
     if (import.meta.env.DEV) {
 
-        tryOpenDatabase("test_datenbank_automatisch", "test_datenbank_automatisch");
+        // tryOpenDatabase("test_datenbank_automatisch", "test_datenbank_automatisch");
     }
 
     return {

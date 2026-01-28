@@ -2,10 +2,12 @@ import React from "react";
 import {useHistoryViewModel} from "../../ViewModels/Dialog/HistoryViewModel.ts";
 import Dialog from "./Dialog.tsx";
 import {HistoryItem} from "./HistoryItem.tsx";
+import type {AutomergeFacade} from "../../../Utility/AutomergeFacade.ts";
+import type {HistoryEntry} from "../../../Model/Automerge/HistoryEntry.ts";
 
-export const HistoryDialog: React.FC = () => {
+export const HistoryDialog: React.FC<{ automergeFacade: AutomergeFacade }> = ({automergeFacade}) => {
 
-    const viewmodel = useHistoryViewModel();
+    const viewmodel = useHistoryViewModel(automergeFacade);
 
     return (
         <>
@@ -18,12 +20,20 @@ export const HistoryDialog: React.FC = () => {
             </button>
             {
                 viewmodel.historyOpen &&
-                <Dialog title="History" onCloseDialog={() => viewmodel.setHistoryOpen(false)}>
-                    {/*TODO HistoryItem*/}
+                <Dialog title="History" onCloseDialog={() => viewmodel.setHistoryOpen(false)} className="historyDialog">
+                    <div className="divider"/>
 
-                    <HistoryItem/>
+                    <div className="scrollableContainer">
+                        {viewmodel.automergeHistory &&
+                            viewmodel.automergeHistory.map((historyEntry: HistoryEntry, index: number) => {
+                                return <HistoryItem key={index} historyEntry={historyEntry}
+                                                    securityProvider={automergeFacade.getSecurityProvider()!}/>;
+                            })}
+                    </div>
+
+
                 </Dialog>
-            }()
+            }
         </>
     );
 };

@@ -2,7 +2,7 @@ import {type DocHandle, getObjectId, isValidAutomergeUrl, Repo} from "@automerge
 import {AutomergeDoc} from "../Model/Automerge/AutomergeDoc.ts";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
 import {SecurityProvider} from "./Security/SecurityProvider.ts";
-import type {HistoryItem} from "../Model/Automerge/HistoryItem.ts";
+import type {HistoryEntry} from "../Model/Automerge/HistoryEntry.ts";
 
 export type Attribute = "name" | "createdAt" | "editedAt" | "parentId" | "username" | "password" | "url" | "note"
 // FIXME Hier waren im entwurf überflüssige funktionen??
@@ -86,17 +86,17 @@ export class AutomergeFacade {
         return this._securityProvider;
     }
 
-    async getHistory(): Promise<Map<string, HistoryItem>[] | null> {
+    async getHistory(): Promise<HistoryEntry[] | null> {
         if (this._automergeURL === null) {
             return null;
         }
 
         let prev = null;
-        const history: Map<string, HistoryItem>[] = [];
+        const history: HistoryEntry[] = [];
         const handle: DocHandle<AutomergeDoc> = await this._repo.find(this._automergeURL);
 
         for (const historyEntry of handle.history()!) {
-            const changeMap: Map<string, HistoryItem> = new Map();
+            let historyItem: HistoryEntry | undefined = undefined;
 
             if (prev === null) {
                 prev = historyEntry;
@@ -113,7 +113,6 @@ export class AutomergeFacade {
             for (const change of changes) {
                 const itemIndex = change.path[1] as number;
                 const action = change.action;
-                const deleted = action === "del";
 
                 if (action === "insert") {
                     inserted = true;
@@ -126,18 +125,18 @@ export class AutomergeFacade {
 
                     if (action === "insert") {
                         // Das Item wird erstellt
-                        changeMap.set(newItemId, {
+                        historyItem = {
                             itemId: newItemId,
                             changes: new Map(),
-                            deleted: deleted,
-                            new: true,
+                            type: "new",
                             item: newItem
-                        });
+                        };
                         continue;
                     }
 
                     // Für alle nachfoldenden Änderungen können wir immer nur das neue Item updaten, da es kein altes gibt, zu dem man Änderungen zeigen könnte
-                    changeMap.get(newItemId)!.item = newItem;
+                    // @ts-expect-error wird vorher immer assigned, hier entsteht kein Fehler
+                    historyItem.item = newItem;
                 } else {
                     const prevItem = prevDoc.doc().items[itemIndex];
                     const prevItemId = getObjectId(prevItem)!;
@@ -149,23 +148,23 @@ export class AutomergeFacade {
                         newValue = (change.value as string | number);
                     }
 
-                    const changedItem = changeMap.get(prevItemId);
-                    if (changedItem === undefined) {
-                        changeMap.set(prevItemId, {
+                    if (historyItem === undefined) {
+                        historyItem = {
                             itemId: prevItemId,
                             changes: newValue ? new Map([[changedValueKey, newValue]]) : new Map(),
-                            deleted: deleted,
-                            new: false,
+                            type: (action === "del") ? "deleted" : "update",
                             item: prevItem
-                        });
+                        };
                     } else {
                         if (newValue) {
-                            changeMap.get(prevItemId)!.changes.set(changedValueKey, newValue);
+                            historyItem.changes.set(changedValueKey, newValue);
                         }
                     }
                 }
             }
-            history.push(changeMap);
+            if (historyItem) {
+                history.push(historyItem);
+            }
 
             prev = historyEntry;
         }

@@ -1,6 +1,6 @@
 import type {AutomergeItem} from "./AutomergeItem.ts";
 
-export type HistoryItem = {
+export type HistoryEntry = {
     /**
      * Die ID des geänderten Items
      */
@@ -10,13 +10,9 @@ export type HistoryItem = {
      */
     changes: Map<string, string | number>
     /**
-     * Ob das Item gelöscht wurde
+     * Was für eine Art der Modifikation war die Änderung
      */
-    deleted: boolean
-    /**
-     * Ob das Item neu angelegt wurde
-     */
-    new: boolean
+    type: "new" | "deleted" | "update"
     /**
      * Das alte Item (vor der Änderungen), bzw das neue Item, wenn es neu erstellt wurde.
      */
