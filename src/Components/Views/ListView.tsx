@@ -67,16 +67,25 @@ const ListView: React.FC<{
 
                     {!listViewModel.inEditName &&
                         <span
-                            style={{marginLeft: ((item.id != "") ? "" : "10px")}}>{(item.id != "") ? listViewModel.newTitle : openedDbName}</span>
+                            style={{
+                                marginLeft: item.id !== "" ? "" : "10px",
+                                display: "inline-block", // Required for overflow to work
+                                maxWidth: "100%",        // Limits it to the parent's width
+                                whiteSpace: "nowrap",    // Prevents text from wrapping to a second line
+                                overflow: "hidden",      // Hides the text that goes outside the bounds
+                                textOverflow: "ellipsis", // Adds the "..."
+                                verticalAlign: "middle"  // Keeps it aligned with buttons
+                            }}
+                        >{(item.id != "") ? listViewModel.newTitle : openedDbName}</span>
                     }
                     {listViewModel.inEditName &&
                         <input type="text"
                                autoFocus
-                               style={{marginLeft: ((item.id != "") ? "" : "10px")}}
+                               style={{marginLeft: ((item.id != "") ? "" : "10px"), border: "none"}}
                                value={listViewModel.newTitle}
                                onChange={(e) => listViewModel.setItemTitle(e.target.value)}
                                onBlur={() => {
-                                   listViewModel.toggleInEditName();
+                                   listViewModel.setAndStoreEditName(false);
                                    listViewModel.updateTitleInAutomerge()
                                }}
                                onKeyDown={(e) => {
@@ -92,8 +101,12 @@ const ListView: React.FC<{
                             listViewModel.setExtended(true);
                         }}>+
                         </button>
-                        {(item.id != "") &&
-                        <button onClick={() => listViewModel.toggleInEditName()}>
+                        {(item.id != "") && (listViewModel.inEditName) &&
+                        <button onClick={() => listViewModel.setAndStoreEditName(false)}>
+                            ✏️
+                        </button>}
+                        {(item.id != "") && (!listViewModel.inEditName) &&
+                        <button onClick={() => listViewModel.setAndStoreEditName(true)}>
                             ✏️
                         </button>}
                         {(item.id != "") && <button onClick={() => deleteItem(item)}>🗑️</button>}

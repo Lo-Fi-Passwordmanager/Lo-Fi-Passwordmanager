@@ -84,9 +84,9 @@ export const useListViewModel = (topItem: Item,
         updateItemTitle(item.id, newTitle);
     }
 
-    function toggleInEditName(): void {
+    function setAndStoreEditName(newValue: boolean): void {
         //set the boolean first so the (slow) automerge Updates happens when the UI is already updated
-        setInEditName(!inEditName);
+        setInEditName(newValue);
         //due to the code executing first, the state update actually triggers after this function so we need to check for the value before
         if (inEditName) {
             updateTitleInAutomerge();
@@ -98,7 +98,7 @@ export const useListViewModel = (topItem: Item,
         inEditName,
         setItemTitle,
         updateTitleInAutomerge,
-        toggleInEditName,
+        setAndStoreEditName,
         getChildren,
         isItemFolder,
         isItemEntry,
