@@ -21,13 +21,15 @@ const DatabaseSettingsView: React.FC<{ automergeFacade: AutomergeFacade }> = ({a
                     }>
                     URL kopieren
                 </button>
-
-                {/* TODO Datenbank löschen und abmelden*/}
+                <button onClick={() => saveFile(automergeFacade.exportAutomergeToBinary())}>Verschlüsselt Exportieren</button>
+                {/*
+                /* TODO Datenbank löschen und abmelden
                 <button>Datenbank lokal löschen</button>
 
-                {/* TODO Hier export (Datei) */}
+                /* TODO Hier export (Datei)
                 <button>Unverschlüsselt Exportieren</button>
-                <button onClick={() => saveFile(automergeFacade.exportAutomergeToBinary())}>Verschlüsselt Exportieren</button>
+
+                */}
             </div>
         </>
     );
