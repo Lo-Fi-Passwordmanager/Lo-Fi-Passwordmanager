@@ -25,7 +25,7 @@ const FilteredListView: React.FC<{
                 <div className="FilteredListView__header">
                     Gefundene Einträge
                 </div>
-                {filteredEntries.entries.map((item: Item, index: number) => {
+                {filteredEntries.map((item: Item, index: number) => {
                     return <div className="listViewEntry" key={index} onClick={() => setCurItem(item as Entry)}>
                         <span style={{marginLeft: "5px"}}></span> <span>{item.title}</span>
                         <div className={"btnWrapper"}>
@@ -41,7 +41,7 @@ const FilteredListView: React.FC<{
                 <div className="FilteredListView__header">
                     Gefundene Ordner
                 </div>
-                {filteredFolders.entries.map((item: Item, index: number) => {
+                {filteredFolders.map((item: Item, index: number) => {
                     return <div className="listViewTitleHeader" key={index}>
                         <span style={{marginLeft: "5px"}}></span> <span>{item.title}</span>
                         <div className={"btnWrapper"}>
