@@ -3,9 +3,6 @@ import {act, renderHook} from "@testing-library/react";
 import {useSettingsViewModel} from "../../../src/Components/ViewModels/SettingsViewModel";
 
 describe("SettingsViewModel", () => {
-
-    function setSync(value: boolean) {}
-
     beforeEach(() => {
 
     });
@@ -15,7 +12,7 @@ describe("SettingsViewModel", () => {
     });
 
     it("should be able to toggle Dark Mode", () => {
-        const {result} = renderHook(() => useSettingsViewModel(setSync));
+        const {result} = renderHook(() => useSettingsViewModel());
         expect(result.current.darkMode).toBe(true);
         act(() => {
             result.current.toggleDarkMode();
@@ -28,7 +25,7 @@ describe("SettingsViewModel", () => {
     });
 
     it("should be able to toggle Synchronisation", () => {
-        const {result} = renderHook(() => useSettingsViewModel(setSync));
+        const {result} = renderHook(() => useSettingsViewModel());
         expect(result.current.synchronisation).toBe(true);
         act(() => {
             result.current.toggleSynchronisation();
@@ -41,7 +38,7 @@ describe("SettingsViewModel", () => {
     });
 
     it("should be able to toggle AutoConflictResolution", () => {
-        const {result} = renderHook(() => useSettingsViewModel(setSync));
+        const {result} = renderHook(() => useSettingsViewModel());
         expect(result.current.autoConflictRes).toBe(true);
         act(() => {
             result.current.toggleAutoConflictRes();
@@ -54,7 +51,7 @@ describe("SettingsViewModel", () => {
     });
 
     it("should be able to toggle Auto Logout", () => {
-        const {result} = renderHook(() => useSettingsViewModel(setSync));
+        const {result} = renderHook(() => useSettingsViewModel());
         expect(result.current.timeOutActive).toBe(true);
         act(() => {
             result.current.toggleTimeOutActive();
@@ -65,4 +62,36 @@ describe("SettingsViewModel", () => {
         });
         expect(result.current.timeOutActive).toBe(true);
     });
+
+    it('should be able to change auto logout Length correctly', ()=> {
+        const {result} = renderHook(() => useSettingsViewModel());
+        act(() => {
+            result.current.setTimeOutLengthVM("1");
+        });
+        expect(result.current.timeoutLength).toBe(1);
+        act(() => {
+            result.current.increase();
+        });
+        expect(result.current.timeoutLength).toBe(2);
+        act(() => {
+            result.current.decrease();
+        });
+        expect(result.current.timeoutLength).toBe(1);
+    })
+
+    it('should never let timeoutLength be below 1', ()=> {
+        const {result} = renderHook(() => useSettingsViewModel());
+        act(() => {
+            result.current.setTimeOutLengthVM("1");
+        });
+        expect(result.current.timeoutLength).toBe(1);
+        act(() => {
+            result.current.setTimeOutLengthVM("0");
+        });
+        expect(result.current.timeoutLength).toBe(1);
+        act(() => {
+            result.current.decrease();
+        });
+        expect(result.current.timeoutLength).toBe(1);
+    })
 });

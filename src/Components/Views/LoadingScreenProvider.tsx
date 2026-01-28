@@ -1,4 +1,4 @@
-import LoadingScreen from "./Dialogs/LoadingScreen.tsx";
+import LoadingScreen from "./DialogViews/LoadingScreen.tsx";
 import {LoadingContext, useLoadingScreenProviderViewModel} from "../ViewModels/LoadingScreenProviderViewModel.ts";
 import React from "react";
 

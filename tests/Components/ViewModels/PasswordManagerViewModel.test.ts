@@ -57,7 +57,6 @@ describe("PasswordManagerViewModel", () => {
             foo = null;
         }
         expect(foo).toBe(null);
-
         expect(result.current.getAutomergeFacade()).toBe(null);
     })
 })
