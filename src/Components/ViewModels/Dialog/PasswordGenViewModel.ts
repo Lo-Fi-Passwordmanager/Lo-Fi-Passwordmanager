@@ -9,7 +9,6 @@ import {
 
 export interface PasswordGenDialogProps {
     newPassword: (password: string) => void;
-    cancelPasswordGen: () => void;
 }
 
 export const usePasswordGenViewModel = (newPassword: (password: string) => void) => {
@@ -21,6 +20,7 @@ export const usePasswordGenViewModel = (newPassword: (password: string) => void)
     const [special, setSpecial] = useState(true);
     const [toastMessage, setToastMessage] = useState("");
     const [toastVisible, setToastVisible] = useState(false);
+    const [passwordGenOpen, setPasswordGenOpen] = useState(false);
 
     function handleConfirm() {
         if(!uppercase && !lowercase && !numbers && !special) {
@@ -30,6 +30,7 @@ export const usePasswordGenViewModel = (newPassword: (password: string) => void)
         }
         const characters: string[] = getCharacters(uppercase, lowercase, numbers, special);
         newPassword(generatePassword(Number(length), characters));
+        setPasswordGenOpen(false);
     }
 
     function getCharacters(uppercase: boolean, lowercase: boolean, numbers: boolean, special: boolean): string[] {
@@ -73,6 +74,7 @@ export const usePasswordGenViewModel = (newPassword: (password: string) => void)
         special,
         toastMessage,
         toastVisible,
+        passwordGenOpen,
 
         setToastVisible,
         setToastMessage,
@@ -82,5 +84,6 @@ export const usePasswordGenViewModel = (newPassword: (password: string) => void)
         toggleNumbers,
         toggleSpecial,
         handleConfirm,
+        setPasswordGenOpen,
     }
 }

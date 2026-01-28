@@ -19,7 +19,9 @@ export const useListViewModel = (topItem: Item, currentSortCrit: SortCriteria, i
         setCurrItem(item as Entry);
     }
 
-    // Reactive state to store values during runtime
+    /**
+     * Gets the children of the current item, sorted by the current sort criterion and order
+     */
     function getChildren() {
         if (item.isFolder()) {
             switch (`${currentSortCrit}-${isAscending}`) {

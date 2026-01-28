@@ -42,6 +42,9 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                         value={viewModel.field2}
                         onChange={(e) => viewModel.setField2(e.target.value)}
                         placeholder={label2}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {viewModel.handleConfirm();}
+                        }}
                     />
                     <div className="confirm-cancel-buttons">
                         <button onClick={viewModel.handleConfirm}>Bestätigen</button>
@@ -50,8 +53,6 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                 </div>
             </div>
         );
-
-
     } else {
         return (
             <div className="dialogOverlay">
@@ -73,6 +74,9 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                         onChange={(e) => viewModel.setField2(e.target.value)}
                         placeholder={"Automerge Url"}
                         autoFocus
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {viewModel.handleConfirm();}
+                        }}
                     />
                     <div className="confirm-cancel-buttons">
                         <button onClick={viewModel.handleConfirm}>Bestätigen</button>

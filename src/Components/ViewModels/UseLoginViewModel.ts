@@ -12,7 +12,7 @@ export type LoginViewModelReturn = {
     isAddDialogOpen: boolean,
     isEnterPasswordDialogOpen: boolean,
     createDatabase: (name: string, masterPassword: string) => void,
-    tryOpenDatabase: (masterPassword: string) => void,
+    tryOpenDatabase: (masterPassword: string, name?: string) => void,
     closeDatabase: () => void,
     openAddDialog: () => void,
     closeAddDialog: () => void,
@@ -33,13 +33,16 @@ export type LoginViewModelReturn = {
  * @param setAutomergeFacade the function to update the automergeFacade of the used database on correct Login.
  * @param securityProvider the security Provider to encrypt/decrypt with the given master password.
  * @param setOpenedDbName the function that sets the Database name on the PasswordManager.
+ *
  * @returns all data and functions required by the LoginView
  */
 export const useLoginViewModel = (
-    repo: Repo, setLoggedIn: (value: (((prevState: boolean) => boolean) | boolean)) => void,
+    repo: Repo,
+    setLoggedIn: (value: (((prevState: boolean) => boolean) | boolean)) => void,
     setAutomergeFacade: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void,
-    securityProvider: SecurityProvider
-    , setOpenedDbName: ((value: (((prevState: string) => string) | string)) => void)): LoginViewModelReturn => {
+    securityProvider: SecurityProvider,
+    setOpenedDbName: ((value: (((prevState: string) => string) | string)) => void)
+): LoginViewModelReturn => {
     // map of database names to their automerge urls
     const [databases, setDatabases] = useState(() => loadAllDatabases());
     // names of all available databases to show in the listing
@@ -87,7 +90,12 @@ export const useLoginViewModel = (
         }, 0);
     };
 
-    // tries to open a database with the provided master password
+    /**
+     * Tries to open a database with the provided master password
+     *
+     * @param masterPassword the master password to decrypt the database
+     * @param name optional name of the database if an database was just added
+     */
     const tryOpenDatabase = async (masterPassword: string, name?: string) => {
             let dbUrl: AutomergeUrl | undefined;
             if (name) {
@@ -104,8 +112,26 @@ export const useLoginViewModel = (
             setLoadingScreenActive(true);
             setOpenedDbName(selectedDatabase!);
             const facade = new AutomergeFacade(repo, dbUrl, securityProvider);
-            const salt = (await facade.getSalt())!;
-            const validation = (await facade.getValidation())!;
+            let salt: string | null;
+            let validation: string | null;
+            try {
+                salt = (await facade.getSalt());
+                validation = (await facade.getValidation());
+
+            } catch (error) {
+                console.error(error);
+                setLoadingScreenActive(false);
+                setShowToast(true);
+                setToastMessage("Automerge konnte die Datenbank nicht laden!");
+                return;
+            }
+
+            if (salt == null || validation == null) {
+                setLoadingScreenActive(false);
+                setShowToast(true);
+                setToastMessage("Automerge konnte die Datenbank nicht laden!");
+                return;
+            }
 
             // Das Timeout an dieser Stelle sorgt dafür, dass der enthaltene Codeblock ans Ende der aktuell auszuführenden Aktionen geschoben wird,
             // wodurch das Rendering des Ladescreens ermöglicht wird, bevor der SecurityProvider den Thread blockiert.

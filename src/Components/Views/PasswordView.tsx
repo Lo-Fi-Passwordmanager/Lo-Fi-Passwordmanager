@@ -4,8 +4,8 @@ import EntryView from "./EntryView.tsx";
 import OrganizeListView from "./OrganizeListView.tsx";
 import {usePasswortViewModel} from "../ViewModels/PasswordViewModel.ts";
 import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
-import ItemCreationDialog from "./Dialogs/ItemCreationDialog.tsx";
-import ToastDialog from "./Dialogs/ToastDialog.tsx";
+import ItemCreationDialog from "./DialogViews/ItemCreationDialog.tsx";
+import ToastDialog from "./DialogViews/ToastDialog.tsx";
 import EditablePasswordView from "./EditablePasswordView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
 import SettingsView from "./SettingsView.tsx";
@@ -33,20 +33,21 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                     setCurItem={passwordViewModel.setCurItem}
                 />}
 
-
             <div className="passwordView">
                 <div className="borderBox scrollableContainer" style={{width: "30%"}}>
-                    {/*Container for every related to the search/Sort features */}
+                    {/*Container for everything related to the search/Sort features */}
                     <OrganizeListView
                         getCurSortCriterion={passwordViewModel.getCurSortCriterion}
                         setCurSortCriterion={passwordViewModel.setAndStoreSortCriterion}
                         toggleOrder={passwordViewModel.toggleOrder}
-                        getOrder={passwordViewModel.isAscending}
+                        isAscending={passwordViewModel.isAscending}
                         setLiveSearchValue={passwordViewModel.setSearchValue}
                         liveSearchValue={passwordViewModel.searchValue}
                         closeDatabase={closeDatabase}
+                        setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
                     />
 
+                    <div className="scrollableContainer">
 
                     {/*Shows only the Views, that match the given search input*/}
                     {passwordViewModel.searchValue.length > 0 && <FilteredListView
@@ -71,24 +72,22 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                         getCurItem={passwordViewModel.getCurEntry}
                         openedDbName={openedDbName}
                         selectedFolderId={passwordViewModel.selectedFolderId}
-                    />}
+                    />}</div>
                 </div>
 
-
                 <div className="borderBox" style={{width: "70%", position: "relative"}}>
-                    <SettingsView />
+                    <SettingsView/>
                     {/*Depending on the state, either shows the editable or the normal/noneditable passwordView*/}
                     {!passwordViewModel.inEditable &&
                         <EntryView item={passwordViewModel.getCurEntry()}
                                    copyAndClearClipboard={passwordViewModel.copyToClipboardAndClear}
                                    setEditableView={() => passwordViewModel.setInEditable(true)}
-                        hidePassword={passwordViewModel.hidePassword}
-                        toggleHidePassword={passwordViewModel.toggleHidePassword}/>}
+                                   hidePassword={passwordViewModel.hidePassword}
+                                   toggleHidePassword={passwordViewModel.toggleHidePassword}/>}
 
                     {passwordViewModel.inEditable &&
                         <EditablePasswordView item={passwordViewModel.getCurEntry()}
                                               updateItemAttribute={passwordViewModel.updateItemAttribute}
-                                              copyAndClearClipboard={passwordViewModel.copyToClipboardAndClear}
                                               setEditableView={() => passwordViewModel.setInEditable(false)}/>}
                 </div>
 

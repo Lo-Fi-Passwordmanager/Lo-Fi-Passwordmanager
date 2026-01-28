@@ -45,37 +45,43 @@ const EntryView: React.FC<{
                             }}>
                         ✏️
                     </button>
-                    <span>{entry.title}</span>
+                    <span className={"title-value"}>{entry.title}</span>
                     <div className={"entryViewListing"}>
                         <div className={"entryViewAttribute"}>
                             <span>Benutzername:</span>
                             <span className={"attribute-value"}>{entry.username}</span>
-                            <button className={"copy-button"} onClick={() => copyAndClearClipboard(entry.username)}>🔗</button>
+                            <button className={"copy-button"} onClick={() => copyAndClearClipboard(entry.username)}>🔗
+                            </button>
                         </div>
 
                         <div className={"entryViewAttribute"}>
                             <span>Passwort:</span>
-                            <span className={"attribute-value"}>{(hidePassword ? "********" : entry.password)}</span>
-                            <button className={"copy-button"} onClick={() => toggleHidePassword()}>👁️   </button>
-                            <button className={"copy-button"} onClick={() => copyAndClearClipboard(entry.password)}>🔗</button>
+                            <div className={"attribute-value"}>
+                                <span>{(hidePassword ? "*".repeat(entry.password.length) : entry.password)}</span>
+                                <button className={`eye-button ${hidePassword ? "" : "selected"}`}
+                                        onClick={() => toggleHidePassword()}
+                                >👁</button>
+                            </div>
+                            <button className={"copy-button"} onClick={() => copyAndClearClipboard(entry.password)}>🔗
+                            </button>
                         </div>
 
                         <div className={"entryViewAttribute"}>
                             {/* adds https://www. to the start of the link*/}
                             <span>URL:</span>
                             <a className={"attribute-value"}
-                            href={(entry.url.startsWith("http") ? entry.url : ("https://" + entry.url))}
-                            target="_blank" rel="noopener noreferrer"
-                            style={{textDecoration: "underline", color: "inherit"}}>
-                            {entry.url}
+                               href={(entry.url.startsWith("http") ? entry.url : ("https://" + entry.url))}
+                               target="_blank" rel="noopener noreferrer"
+                               style={{textDecoration: "underline", color: "inherit"}}>
+                                {entry.url}
                             </a>
-                            <button className={"copy-button"} onClick={() => copyAndClearClipboard(entry.url)}>🔗</button>
+                            <button className={"copy-button"} onClick={() => copyAndClearClipboard(entry.url)}>🔗
+                            </button>
                         </div>
 
                         <div className={"entryViewAttribute"}>
                             <span>Notiz:</span>
-                            <span className={"attribute-value"}>{entry.note}</span>
-                            <button className={"copy-button"} onClick={() => copyAndClearClipboard(entry.note)}>🔗</button>
+                            <span className={"attribute-value"} style={{height:"fit-content", padding:"12px", whiteSpace:"normal"}}>{entry.note}</span>
                         </div>
                     </div>
                 </div>

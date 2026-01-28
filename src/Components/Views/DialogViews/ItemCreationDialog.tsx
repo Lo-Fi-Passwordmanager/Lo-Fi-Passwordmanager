@@ -42,7 +42,6 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({
                             value={viewmodel.username}
                             onChange={(e) => viewmodel.setUsername(e.target.value)}
                             placeholder={"Benutzername"}
-                            autoFocus
                         />
                         <div
                             style={{display: "flex", alignItems: "flex-end"}}>
@@ -54,15 +53,9 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({
                                     value={viewmodel.password}
                                     onChange={(e) => viewmodel.setPassword(e.target.value)}
                                     placeholder={"Passwort"}
-                                    autoFocus
                                 />
                             </div>
-                            <button
-                                className="passwordGenButton"
-                                onClick={() => viewmodel.setInPasswordGen(true)}
-                            >
-                                +
-                            </button>
+                            <PasswordGenDialog newPassword={(password: string) => viewmodel.setPassword(password)}></PasswordGenDialog>
                         </div>
                         <label>URL</label>
                         <input
@@ -70,7 +63,6 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({
                             value={viewmodel.url}
                             onChange={(e) => viewmodel.setUrl(e.target.value)}
                             placeholder={"URL"}
-                            autoFocus
                         />
                         <label>Notiz</label>
                         <input
@@ -78,7 +70,6 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({
                             value={viewmodel.note}
                             onChange={(e) => viewmodel.setNote(e.target.value)}
                             placeholder={"Notiz"}
-                            autoFocus
                         />
                         <div className="confirm-cancel-buttons">
                             <button onClick={viewmodel.handleConfirm}>Bestätigen</button>
@@ -86,14 +77,6 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({
                         </div>
                     </div>
                 </div>
-                {viewmodel.inPasswordGen &&
-                    <PasswordGenDialog
-                        newPassword={(password) => {
-                            viewmodel.setPassword(password);
-                            viewmodel.setInPasswordGen(false);
-                        }}
-                        cancelPasswordGen={() => viewmodel.setInPasswordGen(false)}
-                    />}
             </>
         );
     } else {

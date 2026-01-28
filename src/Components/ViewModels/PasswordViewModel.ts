@@ -153,6 +153,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         reactiveFacade.deleteItem(item.id);
         item.deleted = true;
         setCurItem(getRootFolder());
+        setCurParent(getRootFolder());
     }
 
     function copyToClipboardAndClear(text: string, timeout: number = 10000) {
@@ -189,7 +190,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     }
 
     /**
-     * Toggles the sorting order between ascending and descending and saves the new value
+     * Toggles the order of the sorting between ascending and descending
      */
     function toggleOrder() {
         setIsAscending(!isAscending);
