@@ -23,9 +23,9 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({
         return (<>
                 <div className="dialogOverlay">
                     <div className="dialog">
-                        <div className="confirm-cancel-buttons">
+                        <div className="dialogButtonContainer">
                             <button onClick={() => viewmodel.setTypeOfItem("entry")}>Eintrag</button>
-                            <button onClick={() => viewmodel.setTypeOfItem("folder")}>Ordner</button>
+                            <button style={{color: "gray"}} onClick={() => viewmodel.setTypeOfItem("folder")}>Ordner</button>
                         </div>
                         <h3>Neuer Eintrag</h3>
                         <label>Titel</label>
@@ -83,8 +83,8 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({
         return (
             <div className="dialogOverlay">
                 <div className="dialog">
-                    <div className="confirm-cancel-buttons">
-                        <button onClick={() => viewmodel.setTypeOfItem("entry")}>Eintrag</button>
+                    <div className="dialogButtonContainer">
+                        <button style={{color: "gray"}} onClick={() => viewmodel.setTypeOfItem("entry")}>Eintrag</button>
                         <button onClick={() => viewmodel.setTypeOfItem("folder")}>Ordner</button>
                     </div>
                     <h3>Neuer Ordner</h3>
