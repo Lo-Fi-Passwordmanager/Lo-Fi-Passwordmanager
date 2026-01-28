@@ -9,21 +9,24 @@ export interface TwoFieldDialogProps {
     label2: string,
     createDatabase: (field1: string, field2: string) => void,
     onCancel: () => void,
-    storeDatabase: (name: string, autoMergeUrl: AutomergeUrl) => void
+    storeDatabase: (name: string, autoMergeUrl: AutomergeUrl) => void,
     setToastMessage: (message: string) => void,
     setShowToast: (show: boolean) => void,
+    importDatabase: (targetFiles: (FileList | null), name: string) => void
 }
 
 export const useCreateDatabaseViewModel = (isOpen: boolean,
-                                           createDatabase: ((field1: string, field2: string) => void),
+                                           createDatabase: (field1: string, field2: string) => void,
                                            storeDatabase: (name: string, autoMergeUrl: AutomergeUrl) => void,
                                            setToastMessage: (message: string) => void,
                                            setShowToast: (show: boolean) => void,
-) => {
+                                           importDatabase: (targetFiles: (FileList | null), name: string) => void) => {
 
-    const [createNewDatabase, setCreateNewDatabase] = useState(true);
+    //Valid states beeing, "new", "file" and "url"
+    const [selectedImportType, setSelectedImportType] = useState("new");
     const [field1, setField1] = useState("");
     const [field2, setField2] = useState("");
+    const [targetFiles, setTargetFiles] = useState<FileList | null>(null);
 
     /**
      * Resets the input fields when the dialog is opened
@@ -42,33 +45,39 @@ export const useCreateDatabaseViewModel = (isOpen: boolean,
      * @param storeDatabase Function to store an existing database from URL
      */
     function handleConfirm() {
-        if (!field1 || !field2) {
-            setToastMessage("Bitte alle Felder ausfüllen.")
-            setShowToast(true);
-            return;
-        }
-        if (createNewDatabase) {
-            createDatabase(field1, field2);
+        if (selectedImportType === "file") {
+            importDatabase(targetFiles, field1);
         } else {
-            if (!isValidAutomergeUrl(("automerge:" + field2) as AutomergeUrl)) {
-                setToastMessage("Keine valide AutomergeUrl.")
+            if (!field1 || !field2) {
+                setToastMessage("Bitte alle Felder ausfüllen.")
                 setShowToast(true);
                 return;
             }
-            storeDatabase(field1, ("automerge:" + field2) as AutomergeUrl);
-            return;
+            if (selectedImportType === "new") {
+                createDatabase(field1, field2);
+            } else if (selectedImportType === "url") {
+                if (!isValidAutomergeUrl(("automerge:" + field2) as AutomergeUrl)) {
+                    setToastMessage("Keine valide AutomergeUrl.")
+                    setShowToast(true);
+                    return;
+                }
+                storeDatabase(field1, ("automerge:" + field2) as AutomergeUrl);
+                return;
+            }
         }
     }
 
     return {
-        createNewDatabase,
+        selectedImportType,
         field1,
         field2,
+        targetFiles,
 
+        setTargetFiles,
         handleConfirm,
         setField1,
         setField2,
-        setCreateNewDatabase,
+        setSelectedImportType,
         useEffect,
     }
 }
