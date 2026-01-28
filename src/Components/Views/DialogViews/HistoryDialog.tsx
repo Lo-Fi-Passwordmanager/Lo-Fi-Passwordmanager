@@ -25,7 +25,7 @@ export const HistoryDialog: React.FC<{ automergeFacade: AutomergeFacade }> = ({a
 
                     <div className="scrollableContainer">
                         {viewmodel.automergeHistory &&
-                            viewmodel.automergeHistory.map((historyEntry: HistoryEntry, index: number) => {
+                            [...viewmodel.automergeHistory].reverse().map((historyEntry: HistoryEntry, index: number) => {
                                 return <HistoryItem key={index} historyEntry={historyEntry}
                                                     securityProvider={automergeFacade.getSecurityProvider()!}/>;
                             })}
