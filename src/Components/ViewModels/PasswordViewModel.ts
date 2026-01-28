@@ -34,6 +34,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     const [inEditable, setInEditable] = useState(false);
     const [dirtyItemId, setDirtyItemId] = useState<string | null>(null);
     const [hidePassword, setHidePassword] = useState(true);
+    // State to track if we are in the process of creating a new entry
     const [inEntryCreation, setInEntryCreation] = useState(false);
     const [folderToRename, setFolderToRename] = useState<string | null>(null);
 
@@ -163,6 +164,9 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setCurParent(getRootFolder());
     }
 
+    /**
+     * Renames a folder
+     */
     function renameFolder(item: Item, newName: string) {
         if (item.id === "") {
             return;

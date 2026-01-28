@@ -72,6 +72,7 @@ const ListView: React.FC<{
                         <button style={{marginRight: "15px", boxShadow: "none"}}
                                 onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? "▼" : "▷"}</button>}
 
+                    {/* If an Folder is being renamed (or jsut created), an input field is shown instead of the title */}
                     {item.id === folderToRename ?
                         <input
                             type="text"

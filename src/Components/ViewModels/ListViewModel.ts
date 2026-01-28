@@ -66,6 +66,10 @@ export const useListViewModel = (topItem: Item, currentSortCrit: SortCriteria, i
         return item.isEntry();
     }
 
+    /**
+     * Updates the title of the item
+     * @param newTitle
+     */
     function setTitle(newTitle: string) {
         item.title = newTitle;
     }
