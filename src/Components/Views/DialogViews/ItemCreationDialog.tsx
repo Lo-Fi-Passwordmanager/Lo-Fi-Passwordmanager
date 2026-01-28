@@ -23,9 +23,9 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({
         return (<>
                 <div className="dialogOverlay">
                     <div className="dialog">
-                        <div className="confirm-cancel-buttons">
+                        <div className="dialogButtonContainer">
                             <button onClick={() => viewmodel.setTypeOfItem("entry")}>Eintrag</button>
-                            <button onClick={() => viewmodel.setTypeOfItem("folder")}>Ordner</button>
+                            <button style={{color: "gray"}} onClick={() => viewmodel.setTypeOfItem("folder")}>Ordner</button>
                         </div>
                         <h3>Neuer Eintrag</h3>
                         <label>Titel</label>
@@ -55,12 +55,7 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({
                                     placeholder={"Passwort"}
                                 />
                             </div>
-                            <button
-                                className="passwordGenButton"
-                                onClick={() => viewmodel.setInPasswordGen(true)}
-                            >
-                                +
-                            </button>
+                            <PasswordGenDialog newPassword={(password: string) => viewmodel.setPassword(password)}></PasswordGenDialog>
                         </div>
                         <label>URL</label>
                         <input
@@ -82,22 +77,14 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({
                         </div>
                     </div>
                 </div>
-                {viewmodel.inPasswordGen &&
-                    <PasswordGenDialog
-                        newPassword={(password) => {
-                            viewmodel.setPassword(password);
-                            viewmodel.setInPasswordGen(false);
-                        }}
-                        cancelPasswordGen={() => viewmodel.setInPasswordGen(false)}
-                    />}
             </>
         );
     } else {
         return (
             <div className="dialogOverlay">
                 <div className="dialog">
-                    <div className="confirm-cancel-buttons">
-                        <button onClick={() => viewmodel.setTypeOfItem("entry")}>Eintrag</button>
+                    <div className="dialogButtonContainer">
+                        <button style={{color: "gray"}} onClick={() => viewmodel.setTypeOfItem("entry")}>Eintrag</button>
                         <button onClick={() => viewmodel.setTypeOfItem("folder")}>Ordner</button>
                     </div>
                     <h3>Neuer Ordner</h3>

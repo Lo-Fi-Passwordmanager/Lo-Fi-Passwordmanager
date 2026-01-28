@@ -42,6 +42,25 @@ export function storeDatabase(name: string, autoMergeUrl: AutomergeUrl): void {
 }
 
 /**
+ * Renames a database in localStorage
+ *
+ * @param oldName the current name of the database
+ * @param newName the new name of the database
+ */
+export function renameDatabase(oldName: string, newName: string): Map<string, AutomergeUrl> {
+    const databases = loadAllDatabases();
+    const autoMergeUrl = databases.get(oldName);
+    if (autoMergeUrl) {
+        databases.delete(oldName);
+        databases.set(newName, autoMergeUrl);
+        saveDatabases(databases);
+        return databases;
+    } else {
+        throw new Error(`Database with name ${oldName} does not exist.`);
+    }
+}
+
+/**
  * Removes a database name and its automerge url from localStorage
  *
  * @param name the name of the database to remove

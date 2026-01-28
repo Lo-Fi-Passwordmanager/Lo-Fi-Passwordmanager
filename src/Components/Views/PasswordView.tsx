@@ -76,13 +76,13 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                                 dirtyItemId={passwordViewModel.dirtyItemId}
                                 getCurItem={passwordViewModel.getCurEntry}
                                 openedDbName={openedDbName}
-                            />}
+                            updateItemTitle={passwordViewModel.updateItemTitle}/>}
                         </DndContext>
                     </div>
                 </div>
 
                 <div className="borderBox" style={{width: "70%", position: "relative"}}>
-                    <SettingsView/>
+                    <SettingsView automergeFacade={automergeFacade}/>
                     {/*Depending on the state, either shows the editable or the normal/noneditable passwordView*/}
                     {!passwordViewModel.inEditable &&
                         <EntryView item={passwordViewModel.getCurEntry()}

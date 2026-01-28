@@ -11,10 +11,17 @@ import {useDndContext, useDraggable, useDroppable} from "@dnd-kit/core";
  * @param currentSortCrit the current sort criterion to be used
  * @param isAscending whether the sorting should be ascending or descending
  */
-export const useListViewModel = (topItem: Item, currentSortCrit: SortCriteria, isAscending: boolean, dirtyItemId: string | null, setCurrItem: (entry: Entry) => void) => {
+export const useListViewModel = (topItem: Item,
+                                 currentSortCrit: SortCriteria,
+                                 isAscending: boolean,
+                                 dirtyItemId: string | null,
+                                 setCurrItem: (entry: Entry) => void,
+                                 updateItemTitle: (itemId: string, newTitle: string) => void) => {
 
     const item: Item = topItem;
     const [extended, setExtended] = useState(true);
+    const [inEditName, setInEditName] = useState(false);
+    const [newTitle, setNewTitle] = useState(item.title);
     const {active} = useDndContext();
 
     if (dirtyItemId && item.id === dirtyItemId) {
@@ -66,6 +73,26 @@ export const useListViewModel = (topItem: Item, currentSortCrit: SortCriteria, i
 
     function isItemEntry(): this is Entry {
         return item.isEntry();
+    }
+
+    function setItemTitle(newTitle: string): void {
+        setNewTitle(newTitle);
+    }
+
+    /**
+     * Updates the title of the item in the automerge doc, should only be called, if a updateItemTitle functino is given into the viewmodel
+     */
+    function updateTitleInAutomerge() {
+        updateItemTitle(item.id, newTitle);
+    }
+
+    function setAndStoreEditName(newValue: boolean): void {
+        //set the boolean first so the (slow) automerge Updates happens when the UI is already updated
+        setInEditName(newValue);
+        //due to the code executing first, the state update actually triggers after this function so we need to check for the value before
+        if (inEditName) {
+            updateTitleInAutomerge();
+        }
     }
 
 
@@ -123,6 +150,11 @@ export const useListViewModel = (topItem: Item, currentSortCrit: SortCriteria, i
     };
 
     return {
+        newTitle,
+        inEditName,
+        setItemTitle,
+        updateTitleInAutomerge,
+        setAndStoreEditName,
         getChildren,
         isItemFolder,
         isItemEntry,

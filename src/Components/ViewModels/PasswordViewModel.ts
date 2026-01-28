@@ -145,6 +145,10 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setDirtyItemId(id);
     }
 
+    function updateItemTitle(itemId: string, newTitle: string) {
+        reactiveFacade.updateItem(itemId, [["name", newTitle]]);
+    }
+
     function deleteItem(item: Item) {
         if (item.id === "") {
             return;
@@ -253,5 +257,6 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         toggleOrder,
         getCurSortCriterion,
         handleDragEnd,
+        updateItemTitle,
     };
 };
