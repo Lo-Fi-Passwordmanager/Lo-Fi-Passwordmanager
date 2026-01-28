@@ -636,7 +636,8 @@ input[type="number"] {
     height: 36px;
     padding: 0;
     /* Circle shape */
-    border-radius: 50%;
+    border-radius: 80%;
+    border: 1px solid var(--bg);
 
     display: flex;
     align-items: center;
