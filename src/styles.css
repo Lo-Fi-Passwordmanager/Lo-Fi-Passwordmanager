@@ -490,15 +490,21 @@ input[type="number"] {
 }
 
 .eye-button {
-    background-color: var(--dialog-bg);
+    background-color: transparent;
     color: var(--panel);
+    border: 1px solid var(--panel);
     font-size: 1.5em;
     grid-column-start: 19 !important;
+    padding: 1vh;
 }
 
 .eye-button.selected {
     color: var(--text);
     background-color: var(--panel);
+}
+
+.eyeIcon {
+    stroke-color: var(--panel);
 }
 
 .attribute-value, .title-value {

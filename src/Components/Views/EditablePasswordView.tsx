@@ -4,6 +4,7 @@ import Logo from "../../assets/logo_gelb.svg?inline";
 import type {Attribute} from "../../Utility/AutomergeFacade.ts";
 import {useEditablePasswordViewModel} from "../ViewModels/EditablePasswordViewModel.ts";
 import PasswordGenDialog from "./DialogViews/PasswordGenDialog.tsx";
+import EyeButton from "./ButtonViews/EyeButton.tsx";
 
 
 /**
@@ -55,8 +56,8 @@ const EditablePasswordView: React.FC<{
                     <input className={"title-value"} type={"text"} value={viewmodel.title}
                            onChange={(e) => viewmodel.setTitle(e.target.value)}/>
 
-                    <div style={{height: '100%', width: '100%'}}>
-                        <div className={"entryViewListing"} style={{width: "90%"}}>
+                    <div style={{height: '100%', width: '90%'}}>
+                        <div className={"entryViewListing"}>
                             <div className={"entryViewAttribute"}>
                                 <span style={{gridColumn: "span 20"}}>Benutzername:</span>
                                 <input className={"attribute-value editing"}
@@ -69,9 +70,7 @@ const EditablePasswordView: React.FC<{
                                        type={hidePassword ? "password" : "text"}
                                        value={viewmodel.password}
                                        onChange={(e) => viewmodel.setPassword(e.target.value)}/>
-                                <button className={`eye-button ${hidePassword ? "" : "selected"}`}
-                                        onClick={() => toggleHidePassword()}>👁
-                                </button>
+                                <EyeButton hidePassword={hidePassword} toggleHidePassword={toggleHidePassword}/>
                                 <PasswordGenDialog
                                     newPassword={(password: string) => viewmodel.setPassword(password)}/>
                             </div>

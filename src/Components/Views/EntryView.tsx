@@ -2,6 +2,7 @@ import React from "react";
 import {type Entry} from "../../Model/Entry.ts";
 import {type Item} from "../../Model/Item.ts";
 import Logo from "../../assets/logo_gelb.svg?inline";
+import EyeButton from "./ButtonViews/EyeButton.tsx";
 
 
 /**
@@ -64,9 +65,7 @@ const EntryView: React.FC<{
                                 <div className={"attribute-value"} style={{gridColumnEnd:"19"}}>
                                     <span>{(hidePassword ? "*".repeat(entry.password.length) : entry.password)}</span>
                                 </div>
-                                <button className={`eye-button ${hidePassword ? "" : "selected"}`}
-                                        onClick={() => toggleHidePassword()}>👁
-                                </button>
+                                <EyeButton hidePassword={hidePassword} toggleHidePassword={toggleHidePassword}/>
                                 <button className={"copy-button"}
                                         onClick={() => copyAndClearClipboard(entry.password)}>🔗
                                 </button>
