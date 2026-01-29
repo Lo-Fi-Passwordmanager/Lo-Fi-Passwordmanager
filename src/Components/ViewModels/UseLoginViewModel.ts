@@ -179,6 +179,8 @@ export const useLoginViewModel = (
 
         if (masterPassword) {
             tryOpenDatabase(masterPassword, name);
+        } else {
+            repo.find(url);
         }
     }
 
@@ -247,13 +249,13 @@ export const useLoginViewModel = (
         }
 
         if (name === "") {
-            setToastMessage("Bitte wähle einen Namen")
+            setToastMessage("Bitte wähle einen Namen");
             setShowToast(true);
             return;
         }
 
         if (!FileList) {
-            setToastMessage("Bitte wähle eine Datei")
+            setToastMessage("Bitte wähle eine Datei");
             setShowToast(true);
             return;
         }
@@ -291,6 +293,6 @@ export const useLoginViewModel = (
         importDatabaseFromURL,
         setToastMessage,
         deleteDatabase,
-        changeDatabaseName,
+        changeDatabaseName
     };
 };

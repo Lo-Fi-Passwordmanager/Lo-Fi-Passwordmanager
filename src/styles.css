@@ -182,6 +182,15 @@ button:focus-visible {
     min-width: 300px;
     width: fit-content;
     margin: auto;
+    position: relative;
+}
+
+.closeIcon {
+    width: 20px;
+    aspect-ratio: 1;
+    position: absolute;
+    right: 20px;
+    cursor: pointer;
 }
 
 .DatabaseListing {
@@ -216,7 +225,7 @@ button:focus-visible {
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    width: 50vmin;
+    width: 100%;
     gap: 24px;
 }
 
@@ -296,6 +305,7 @@ input[type="number"] {
     gap: 2em;
     margin-top: 1em;
 }
+
 .confirm-cancel-buttons button:nth-child(2) {
     background: gray;
 }
@@ -354,6 +364,7 @@ input[type="number"] {
     padding: 4px 8px;
     border-radius: 8px;
 }
+
 .listViewTitleHeader input {
     height: 100%;
     width: auto;
@@ -363,6 +374,7 @@ input[type="number"] {
     font-size: inherit;
     text-transform: inherit;
 }
+
 .listViewTitleHeader input:focus {
     /* Removes outline */
     box-shadow: inset 0 0 0 2px var(--panel);
@@ -698,6 +710,13 @@ input[type="number"] {
     flex-direction: row;
     overflow: hidden;
     min-height: 75%;
+    width: 45%;
+}
+
+@media (min-width: 950px) {
+    .settings-layout {
+        width: 780px;
+    }
 }
 
 .settings-sidebar {
@@ -721,9 +740,182 @@ input[type="number"] {
     flex: 1;
     padding: 20px;
     overflow-y: auto;
+    justify-items: center;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
 }
 
 .settings-close-btn {
     margin-top: auto;
     background: gray;
+}
+
+/* History Dialog Specifics */
+.historyDialog {
+    max-height: 85vh;
+    width: 500px;
+    max-width: 95vw;
+}
+
+.scrollableContainer {
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Timeline Structure */
+.timeline-item {
+    display: flex;
+    gap: 16px;
+    padding-bottom: 24px;
+}
+
+.timeline-marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.marker-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    background: var(--input-field);
+    border: 2px solid var(--panel);
+    z-index: 2;
+}
+
+.marker-line {
+    width: 2px;
+    flex-grow: 1;
+    background: var(--panel);
+    opacity: 0.3;
+    margin-top: 4px;
+}
+
+.timeline-item:last-child .marker-line {
+    display: none;
+}
+
+/* Content Card */
+.timeline-content {
+    flex-grow: 1;
+    background: var(--bg);
+    border-radius: 12px;
+    padding: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    text-align: left;
+}
+
+.timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.timeline-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.timeline-date {
+    font-size: 0.75rem;
+    opacity: 0.6;
+}
+
+/* State Colors */
+.status-new .timeline-label {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-update .timeline-label {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.status-deleted .timeline-content {
+    opacity: 0.7;
+    filter: grayscale(0.5);
+}
+
+.status-deleted .timeline-label {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.item-name {
+    margin: 0 0 8px 0;
+    font-size: 1.1rem;
+    color: var(--text);
+}
+
+/* Change Comparison Visuals */
+.change-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.03);
+    padding: 8px;
+    border-radius: 8px;
+}
+
+.change-row {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.85rem;
+}
+
+.attr-name {
+    font-weight: 600;
+    opacity: 0.7;
+    font-size: 0.75rem;
+}
+
+.change-path {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.old-val {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+
+.arrow {
+    color: var(--panel);
+    font-weight: bold;
+}
+
+.new-val {
+    color: var(--text);
+    font-weight: 500;
+}
+
+.metadata-grid {
+    display: flex;
+    gap: 12px;
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+.url-text {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }

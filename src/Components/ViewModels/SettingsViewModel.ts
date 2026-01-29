@@ -13,7 +13,8 @@ export const useSettingsViewModel = () => {
     // Reactive state to store values during runtime
     const [darkMode, setDarkMode] = useState(settings.getDarkMode());
     const [synchronisation, setSynchronisation] = useState(settings.getSynchronization());
-    const [autoConflictRes, setAutoConflictRes] = useState(settings.getAutoConflictResolution());
+    // not working right now
+    //const [autoConflictRes, setAutoConflictRes] = useState(settings.getAutoConflictResolution());
     const [timeOutActive, setTimeOutActive] = useState(settings.getTimeoutActive());
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [timeoutLength, setTimeoutLength] = useState(settings.getTimeoutLength());
@@ -27,10 +28,12 @@ export const useSettingsViewModel = () => {
     useEffect(() => {
         settings.setDarkMode(darkMode);
         settings.setSynchronization(synchronisation);
-        settings.setAutoConflictResolution(autoConflictRes);
+        //settings.setAutoConflictResolution(autoConflictRes);
         settings.setTimeoutActive(timeOutActive);
         settings.setTimeoutLength(timeoutLength);
-    }, [darkMode, synchronisation, autoConflictRes, timeOutActive, settings, timeoutLength]);
+    }, [darkMode, synchronisation,
+        //autoConflictRes,
+        timeOutActive, settings, timeoutLength]);
 
 
     // Update darkMode
@@ -43,9 +46,10 @@ export const useSettingsViewModel = () => {
         setSynchronisation(!synchronisation);
     }
 
+    /*
     function toggleAutoConflictRes() {
         setAutoConflictRes(!autoConflictRes);
-    }
+    }*/
 
     function toggleTimeOutActive() {
         setTimeOutActive(!timeOutActive);
@@ -72,7 +76,7 @@ export const useSettingsViewModel = () => {
     return {
         darkMode,
         synchronisation,
-        autoConflictRes,
+        //autoConflictRes,
         timeOutActive,
         settingsOpen,
         timeoutLength,
@@ -81,7 +85,7 @@ export const useSettingsViewModel = () => {
 
         toggleDarkMode,
         toggleSynchronisation,
-        toggleAutoConflictRes,
+        //toggleAutoConflictRes,
         toggleTimeOutActive,
         setSettingsOpen,
         setTimeOutLengthVM,
