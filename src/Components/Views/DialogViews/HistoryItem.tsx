@@ -1,21 +1,29 @@
 import React from "react";
-import type { HistoryEntry } from "../../../Model/Automerge/HistoryEntry.ts";
-import { useHistoryItemViewModel } from "../../ViewModels/Dialog/HistoryItemViewModel.ts";
-import type { SecurityProvider } from "../../../Utility/Security/SecurityProvider.ts";
+import type {HistoryEntry} from "../../../Model/Automerge/HistoryEntry.ts";
+import {useHistoryItemViewModel} from "../../ViewModels/Dialog/HistoryItemViewModel.ts";
+import type {SecurityProvider} from "../../../Utility/Security/SecurityProvider.ts";
 
 export const HistoryItem: React.FC<{
     historyEntry: HistoryEntry,
     securityProvider: SecurityProvider
-}> = ({ historyEntry, securityProvider }) => {
+}> = ({historyEntry, securityProvider}) => {
 
     const viewmodel = useHistoryItemViewModel(historyEntry, securityProvider);
 
     if (!historyEntry) return null;
     // Map types to visual config
     const config = {
-        new: { icon: "✦", class: "status-new", label: viewmodel.itemIsFolder ? "Ordner erstellt" : "Eintrag erstellt" },
-        deleted: { icon: "✕", class: "status-deleted", label: viewmodel.itemIsFolder ? "Ordner gelöscht" : "Eintrag gelöscht" },
-        update: { icon: "✎", class: "status-update", label: viewmodel.itemIsFolder ? "Ordner bearbeitet" : "Eintrag bearbeitet" }
+        new: {icon: "✦", class: "status-new", label: viewmodel.itemIsFolder ? "Ordner erstellt" : "Eintrag erstellt"},
+        deleted: {
+            icon: "✕",
+            class: "status-deleted",
+            label: viewmodel.itemIsFolder ? "Ordner gelöscht" : "Eintrag gelöscht"
+        },
+        update: {
+            icon: "✎",
+            class: "status-update",
+            label: viewmodel.itemIsFolder ? "Ordner bearbeitet" : "Eintrag bearbeitet"
+        }
     };
 
     const current = config[viewmodel.itemType as keyof typeof config];
@@ -33,7 +41,7 @@ export const HistoryItem: React.FC<{
                     <span className="timeline-date">
                         {viewmodel.itemType === "update"
                             ? viewmodel.editedAt.toLocaleDateString()
-                            : viewmodel.createdAt.toLocaleDateString()}
+                            : (viewmodel.itemType === "deleted") ? `Letzte Änderung: ${viewmodel.editedAt.toLocaleDateString()}` : viewmodel.createdAt.toLocaleDateString()}
                     </span>
                 </div>
 
@@ -59,9 +67,39 @@ export const HistoryItem: React.FC<{
                             })}
                         </div>
                     ) : (
-                        <div className="metadata-grid">
-                            {viewmodel.username && <span>👤 {viewmodel.username}</span>}
-                            {viewmodel.url && <span className="url-text">🔗 {viewmodel.url}</span>}
+                        <div className="change-list">
+                            {viewmodel.username && <div className="change-row">
+                                <span className="attr-name">Benutzername</span>
+                                <span className="change-path">
+                                    <span className="new-val">
+                                        {viewmodel.username}
+                                    </span>
+                                </span>
+                            </div>}
+                            {viewmodel.password && <div className="change-row">
+                                <span className="attr-name">Passwort</span>
+                                <span className="change-path">
+                                    <span className="new-val">
+                                        {viewmodel.password}
+                                    </span>
+                                </span>
+                            </div>}
+                            {viewmodel.url && <div className="change-row">
+                                <span className="attr-name">URL</span>
+                                <span className="change-path">
+                                    <span className="new-val">
+                                        {viewmodel.url}
+                                    </span>
+                                </span>
+                            </div>}
+                            {viewmodel.note && <div className="change-row">
+                                <span className="attr-name">Notiz</span>
+                                <span className="change-path">
+                                    <span className="new-val">
+                                        {viewmodel.note}
+                                    </span>
+                                </span>
+                            </div>}
                         </div>
                     )}
                 </div>
