@@ -49,11 +49,13 @@ const SettingsView: React.FC<{ automergeFacade?: AutomergeFacade | null }> = ({a
                                 Synchronisation
                             </label>
 
+                            {/* not working right now
                             <label className="checkboxRow">
                                 <input type="checkbox" checked={viewmodel.autoConflictRes}
                                        onChange={viewmodel.toggleAutoConflictRes}/>
                                 Konfliktauflösung
                             </label>
+                            */}
 
                             <label className="checkboxRow">
                                 <input type="checkbox" checked={viewmodel.timeOutActive}
