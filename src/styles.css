@@ -337,7 +337,7 @@ input[type="number"] {
 .settingsButton {
     height: 5vh;
     aspect-ratio: 1;
-    padding: 1vh;
+    padding: 1.2vh;
 
     float: right;
     position: absolute;
@@ -349,7 +349,7 @@ input[type="number"] {
 .DBListingButton {
     height: 5vh;
     aspect-ratio: 1;
-    padding: 1vh;
+    padding: 1.3vh;
 }
 
 .listViewTitleHeader {
@@ -387,7 +387,7 @@ input[type="number"] {
     height: 4vh;
     aspect-ratio: 1;
     margin: 5px;
-    padding: 0.5vh;
+    padding: 0.7vh;
     border-radius: 8px;
     justify-content: center;
 }

@@ -31,7 +31,7 @@ const DatabaseListingView: React.FC<DatabaseListingProps> = ({databases, openDat
                         </button>
                         <button
                             className={"DBListingButton"}
-                            style={{padding:"1.1vh"}}
+                            style={{padding:"1.3vh"}}
                             onClick={() => viewModel.copyToClipboard(url)} title="Copy URL">
                             <ShareIcon/>
                         </button>
