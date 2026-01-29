@@ -9,6 +9,7 @@ describe('CreateDatabaseViewModel', ()=> {
     const setToastMessage = vi.fn();
     const storeDatabase = vi.fn();
     const setShowToast = vi.fn();
+    const importDatabase = vi.fn();
 
 
     vi.mock("@automerge/react", async () => {
@@ -24,23 +25,20 @@ describe('CreateDatabaseViewModel', ()=> {
     })
     //TODO bisschen dummer test
     it('should correctly assign fields when isOpen is true', () => {
-        const {result} = renderHook(() => useCreateDatabaseViewModel(true,
-            createDatabase, storeDatabase, setToastMessage, setShowToast));
+        const {result} = renderHook(() => useCreateDatabaseViewModel(true, createDatabase, storeDatabase, setToastMessage, setShowToast, importDatabase));
         expect(result.current.field1).toBe("");
         expect(result.current.field2).toBe("");
 
     })
 
     it('should correctly assign fields when is Open is false', () => {
-        const {result} = renderHook(() => useCreateDatabaseViewModel(false,
-            createDatabase, storeDatabase, setToastMessage, setShowToast));
+        const {result} = renderHook(() => useCreateDatabaseViewModel(false, createDatabase, storeDatabase, setToastMessage, setShowToast, importDatabase));
         expect(result.current.field1).toBe("");
         expect(result.current.field2).toBe("");
     })
 
     it('should create a toast when no input is given', ()=> {
-        const {result} = renderHook(() => useCreateDatabaseViewModel(true,
-            createDatabase, storeDatabase, setToastMessage, setShowToast));
+        const {result} = renderHook(() => useCreateDatabaseViewModel(true, createDatabase, storeDatabase, setToastMessage, setShowToast, importDatabase));
         act(()=> {
             result.current.handleConfirm();
         })
@@ -49,12 +47,11 @@ describe('CreateDatabaseViewModel', ()=> {
     })
 
     it('should call to create new Database correctly',async ()=> {
-        const {result} = renderHook(() => useCreateDatabaseViewModel(true,
-            createDatabase, storeDatabase, setToastMessage, setShowToast));
+        const {result} = renderHook(() => useCreateDatabaseViewModel(true, createDatabase, storeDatabase, setToastMessage, setShowToast, importDatabase));
         act(()=> {
             result.current.setField1("name");
             result.current.setField2("url");
-            result.current.setCreateNewDatabase(true);
+            result.current.setSelectedImportType("new");
         })
         act(()=> {
             result.current.handleConfirm();
@@ -64,13 +61,12 @@ describe('CreateDatabaseViewModel', ()=> {
     })
 
     it('should create a toast when the url is wrong',async ()=> {
-        const {result} = renderHook(() => useCreateDatabaseViewModel(true,
-            createDatabase, storeDatabase, setToastMessage, setShowToast));
+        const {result} = renderHook(() => useCreateDatabaseViewModel(true, createDatabase, storeDatabase, setToastMessage, setShowToast, importDatabase));
         vi.mocked(isValidAutomergeUrl).mockReturnValue(false);
         act(()=> {
             result.current.setField1("name");
             result.current.setField2("url");
-            result.current.setCreateNewDatabase(false);
+            result.current.setSelectedImportType("url");
         })
         act(()=> {
             result.current.handleConfirm();
@@ -80,13 +76,12 @@ describe('CreateDatabaseViewModel', ()=> {
     })
 
     it('should be able call to store a database from a url', ()=> {
-        const {result} = renderHook(() => useCreateDatabaseViewModel(true,
-            createDatabase, storeDatabase, setToastMessage, setShowToast));
+        const {result} = renderHook(() => useCreateDatabaseViewModel(true, createDatabase, storeDatabase, setToastMessage, setShowToast, importDatabase));
         vi.mocked(isValidAutomergeUrl).mockReturnValue(true);
         act(()=> {
             result.current.setField1("name");
             result.current.setField2("url");
-            result.current.setCreateNewDatabase(false);
+            result.current.setSelectedImportType("url");
         })
         act(()=> {
             result.current.handleConfirm();

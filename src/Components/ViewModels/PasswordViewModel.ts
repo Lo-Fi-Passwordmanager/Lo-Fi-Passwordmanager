@@ -8,6 +8,7 @@ import {
     saveCurrentSortCriterion,
     saveIsAscending
 } from "../../Utility/Storage.ts";
+import type {Folder} from "../../Model/Folder.ts";
 
 export const SortCriteria = {
     Name: "NAME",
@@ -34,9 +35,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     const [inEditable, setInEditable] = useState(false);
     const [dirtyItemId, setDirtyItemId] = useState<string | null>(null);
     const [hidePassword, setHidePassword] = useState(true);
-    // State to track if we are in the process of creating a new entry
-    const [inEntryCreation, setInEntryCreation] = useState(false);
-    const [folderToRename, setFolderToRename] = useState<string | null>(null);
+    const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
 
     function setCurItem(item: Item) {
         _setCurItem(item);
@@ -123,20 +122,9 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         return reactiveFacade.tree.rootFolder;
     }
 
-    function addItem(item: Item) {
-        if (item.isEntry()) {
-            setCurItem(item);
-            setInEntryCreation(true);
-            setInEditable(true);
-        } else {
-            const id = reactiveFacade.insertItem(item, curParent.id);
-            setFolderToRename(id);
-        }
-    }
-
-    function createEntry(item: Item) {
-        item.id = reactiveFacade.insertItem(item, curParent.id);
-        setCurItem(item);
+    function addItem(item: Item, parentId: string): string {
+        toggleEditablePasswordView();
+        return reactiveFacade.insertItem(item, parentId);
     }
 
     function toggleEditablePasswordView() {
@@ -147,11 +135,19 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         return inEditablePasswordView;
     }
 
+    function getCurParent() {
+        return curParent;
+    }
+
     function updateItemAttribute(itemId: string, changes: [Attribute, string | Date][]) {
         reactiveFacade.updateItem(itemId, changes);
         const id = curItem.id;
         setCurItem(getRootFolder());
         setDirtyItemId(id);
+    }
+
+    function updateItemTitle(itemId: string, newTitle: string) {
+        reactiveFacade.updateItem(itemId, [["name", newTitle]]);
     }
 
     function deleteItem(item: Item) {
@@ -162,16 +158,6 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         item.deleted = true;
         setCurItem(getRootFolder());
         setCurParent(getRootFolder());
-    }
-
-    /**
-     * Renames a folder
-     */
-    function renameFolder(item: Item, newName: string) {
-        if (item.id === "") {
-            return;
-        }
-        updateItemAttribute(item.id, [["name", newName]]);
     }
 
     function copyToClipboardAndClear(text: string, timeout: number = 10000) {
@@ -215,6 +201,18 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         saveIsAscending(!isAscending);
     }
 
+    /**
+     * Navigates to the given folder by setting it as the current item and clearing the search value so the view shows the full hierarchy
+     */
+    function goToFolder(folder: Folder) {
+        setCurItem(folder);
+        setSearchValue("");
+        setSelectedFolderId(folder.id);
+        setTimeout(() =>
+            document.querySelector("[aria-selected='true']")?.scrollIntoView(), 0)
+
+    }
+
     return {
         dirtyItemId,
         isAscending,
@@ -223,8 +221,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         toastVisible,
         inEditable,
         hidePassword,
-        inEntryCreation,
-        folderToRename,
+        selectedFolderId,
 
         toggleHidePassword,
         setSearchValue,
@@ -242,13 +239,12 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         getInItemCreation,
         setInItemCreation,
         setCurParent,
+        getCurParent,
         deleteItem,
         setAndStoreSortCriterion,
         toggleOrder,
         getCurSortCriterion,
-        setInEntryCreation,
-        renameFolder,
-        setFolderToRename,
-        createEntry
+        goToFolder,
+        updateItemTitle,
     };
 };

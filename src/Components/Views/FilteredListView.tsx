@@ -8,11 +8,12 @@ import {Folder} from "../../Model/Folder.ts";
 const FilteredListView: React.FC<{
     root: Item,
     setCurItem: (entry: Entry) => void,
+    goToFolder: (folder: Folder) => void,
     deleteItem: (item: Item) => void,
     sortCriterion: SortCriteria,
     isAscending: boolean,
     filterText: string
-}> = ({root, setCurItem, deleteItem, isAscending, sortCriterion, filterText}) => {
+}> = ({root, setCurItem, goToFolder,deleteItem, isAscending, sortCriterion, filterText}) => {
 
     const viewModel = useFilteredListViewModel(root as Folder, filterText, sortCriterion, isAscending);
 
@@ -25,7 +26,7 @@ const FilteredListView: React.FC<{
                 <div className="FilteredListView__header">
                     Gefundene Einträge
                 </div>
-                {filteredEntries.entries.map((item: Item, index: number) => {
+                {filteredEntries.map((item: Item, index: number) => {
                     return <div className="listViewEntry" key={index} onClick={() => setCurItem(item as Entry)}>
                         <span style={{marginLeft: "5px"}}></span> <span>{item.title}</span>
                         <div className={"btnWrapper"}>
@@ -34,15 +35,17 @@ const FilteredListView: React.FC<{
                     </div>
                 })}
             </div>
-
             <div className={"divider"}/>
 
             <div>
                 <div className="FilteredListView__header">
                     Gefundene Ordner
                 </div>
-                {filteredFolders.entries.map((item: Item, index: number) => {
-                    return <div className="listViewTitleHeader" key={index}>
+                {filteredFolders.map((item: Item, index: number) => {
+                    return <div className="listViewTitleHeader"
+                                key={index}
+                                onClick={() => goToFolder(item as Folder)}
+                    >
                         <span style={{marginLeft: "5px"}}></span> <span>{item.title}</span>
                         <div className={"btnWrapper"}>
                             <button onClick={() => deleteItem(item)}>🗑️</button>

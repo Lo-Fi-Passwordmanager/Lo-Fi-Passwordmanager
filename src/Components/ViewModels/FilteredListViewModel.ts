@@ -5,7 +5,10 @@ import type {Item} from "../../Model/Item.ts";
 
 export const useFilteredListViewModel = (root: Folder, filterText: string, currentSortCrit: SortCriteria, isAscending: boolean) => {
 
-    function getFilteredEntries(startFolder: Folder = root): Folder {
+    /**
+     * Gets the entries that match the filter text from the given start folder recursively
+     */
+    function getFilteredEntries(startFolder: Folder = root): Item[] {
         const filtered: Folder = new Folder("filteredEntries", "filteredEntriesId");
         for (const item of getSortedChildren(startFolder)) {
             if (item.isEntry()) {
@@ -20,29 +23,32 @@ export const useFilteredListViewModel = (root: Folder, filterText: string, curre
                 }
             } else if (item.isFolder()) {
                 const subEntries = getFilteredEntries(item as Folder);
-                for (const subItem of subEntries.entries) {
+                for (const subItem of subEntries) {
                     filtered.addItem(subItem);
                 }
             }
         }
-        return filtered;
+        return getSortedChildren(filtered);
     }
 
-    function getFilteredFolders(startFolder: Folder = root): Folder {
-        const filtered: Folder = new Folder("filteredFolders", "filteredFoldersId");
-        for (const item of getSortedChildren(startFolder)) {
+    /**
+     * Gets the folders that match the filter text from the given start folder recursively
+     */
+    function getFilteredFolders(startFolder: Folder = root): Item[] {
+        const filtered = new Folder("filteredFolders", "filteredFoldersId");
+        for (const item of startFolder.entries) {
             if (item.isFolder()) {
                 const folder = item as Folder;
                 if (folder.title.toLowerCase().includes(filterText.toLowerCase())) {
                     filtered.addItem(folder);
                 }
                 const subFolders = getFilteredFolders(folder);
-                for (const subItem of subFolders.entries) {
+                for (const subItem of subFolders) {
                     filtered.addItem(subItem);
                 }
             }
         }
-        return filtered;
+        return getSortedChildren(filtered);
     }
 
     /**

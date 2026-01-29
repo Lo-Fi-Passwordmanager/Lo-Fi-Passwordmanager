@@ -2,6 +2,7 @@ import React from "react";
 import {type Entry} from "../../Model/Entry.ts";
 import {type Item} from "../../Model/Item.ts";
 import Logo from "../../assets/logo_gelb.svg?inline";
+import EyeButton from "./ButtonViews/EyeButton.tsx";
 
 
 /**
@@ -9,6 +10,8 @@ import Logo from "../../assets/logo_gelb.svg?inline";
  * @param item the entry that should be depicted
  * @param copyAndClearClipboard the function that copies a string to the clipboard and clears it afterwards
  * @param setEditableView a command to toggle the editable view to on
+ * @param hidePassword
+ * @param toggleHidePassword
  */
 const EntryView: React.FC<{
     item: Item,
@@ -34,7 +37,7 @@ const EntryView: React.FC<{
     } else if (item.isEntry()) {
         const entry = item as Entry;
         return (<>
-                <div className="entryViewEntry" style={{position: 'relative'}}>
+                <div className="entryViewEntry">
                     <button onClick={setEditableView}
                             style={{
                                 position: "absolute",
@@ -46,42 +49,50 @@ const EntryView: React.FC<{
                         ✏️
                     </button>
                     <span className={"title-value"}>{entry.title}</span>
-                    <div className={"entryViewListing"}>
-                        <div className={"entryViewAttribute"}>
-                            <span>Benutzername:</span>
-                            <span className={"attribute-value"}>{entry.username}</span>
-                            <button className={"copy-button"} onClick={() => copyAndClearClipboard(entry.username)}>🔗
-                            </button>
-                        </div>
 
-                        <div className={"entryViewAttribute"}>
-                            <span>Passwort:</span>
-                            <div className={"attribute-value"}>
-                                <span>{(hidePassword ? "*".repeat(entry.password.length) : entry.password)}</span>
-                                <button className={`eye-button ${hidePassword ? "" : "selected"}`}
-                                        onClick={() => toggleHidePassword()}
-                                >👁</button>
+                    <div className={"scrollableContainer"} style={{height: '100%', width: '90%'}}>
+                        <div className={"entryViewListing"}>
+                            <div className={"entryViewAttribute"}>
+                                <span style={{gridColumn: "span 20"}}>Benutzername:</span>
+                                <span className={"attribute-value"}>{entry.username}</span>
+                                <button className={"copy-button"}
+                                        onClick={() => copyAndClearClipboard(entry.username)}>🔗
+                                </button>
                             </div>
-                            <button className={"copy-button"} onClick={() => copyAndClearClipboard(entry.password)}>🔗
-                            </button>
-                        </div>
 
-                        <div className={"entryViewAttribute"}>
-                            {/* adds https://www. to the start of the link*/}
-                            <span>URL:</span>
-                            <a className={"attribute-value"}
-                               href={(entry.url.startsWith("http") ? entry.url : ("https://" + entry.url))}
-                               target="_blank" rel="noopener noreferrer"
-                               style={{textDecoration: "underline", color: "inherit"}}>
-                                {entry.url}
-                            </a>
-                            <button className={"copy-button"} onClick={() => copyAndClearClipboard(entry.url)}>🔗
-                            </button>
-                        </div>
+                            <div className={"entryViewAttribute"}>
+                                <span style={{gridColumn: "span 20"}}>Passwort:</span>
+                                <div className={"attribute-value"} style={{gridColumnEnd:"19"}}>
+                                    <span>{(hidePassword ? "*".repeat(entry.password.length) : entry.password)}</span>
+                                </div>
+                                <EyeButton hidePassword={hidePassword} toggleHidePassword={toggleHidePassword}/>
+                                <button className={"copy-button"}
+                                        onClick={() => copyAndClearClipboard(entry.password)}>🔗
+                                </button>
+                            </div>
 
-                        <div className={"entryViewAttribute"}>
-                            <span>Notiz:</span>
-                            <span className={"attribute-value"} style={{height:"fit-content", padding:"12px", whiteSpace:"normal"}}>{entry.note}</span>
+                            <div className={"entryViewAttribute"}>
+                                {/* adds https://www. to the start of the link*/}
+                                <span style={{gridColumn: "span 20"}}>URL:</span>
+                                <a className={"attribute-value"}
+                                   href={(entry.url.startsWith("http") ? entry.url : ("https://" + entry.url))}
+                                   target="_blank" rel="noopener noreferrer"
+                                   style={{textDecoration: "underline", color: "inherit"}}>
+                                    {entry.url}
+                                </a>
+                                <button className={"copy-button"} onClick={() => copyAndClearClipboard(entry.url)}>🔗
+                                </button>
+                            </div>
+
+                            <div className={"entryViewAttribute"}>
+                                <span style={{gridColumn: "span 20"}}>Notiz:</span>
+                                <span className={"attribute-value"} style={{
+                                    height: "fit-content",
+                                    padding: "10px",
+                                    whiteSpace: "normal",
+                                    gridColumnEnd:"21"
+                                }}>{entry.note}</span>
+                            </div>
                         </div>
                     </div>
                 </div>

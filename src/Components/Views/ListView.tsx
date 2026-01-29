@@ -20,9 +20,8 @@ const ListView: React.FC<{
     isAscending: boolean,
     dirtyItemId: string | null,
     openedDbName: string,
-    folderToRename: string | null,
-    setFolderToRename: (id: string | null) => void,
-    changeFolderName: (item: Item, newName: string) => void
+    selectedFolderId: string | null;
+    updateItemTitle: (itemId: string, newTitle: string) => void;
 }> = ({
           item,
           setCurItem,
@@ -34,20 +33,17 @@ const ListView: React.FC<{
           isAscending,
           dirtyItemId,
           openedDbName,
-          folderToRename,
-          setFolderToRename,
-          changeFolderName,
+          selectedFolderId,
+          updateItemTitle
       }) => {
-    const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem);
+    const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem, updateItemTitle);
 
     function addButtonPressed() {
         setItemCreationDialog();
         setCurrentParent!(item);
     }
 
-    /**
-     * If the item to be shown is of type entry, than only its name will be shown
-     */
+    //If the item to be shown is of type entry, than only its name will be shown
     if (listViewModel.isItemEntry()) {
         const entry = listViewModel.getItem() as Entry;
         return (
@@ -59,53 +55,63 @@ const ListView: React.FC<{
                 </div>
             </div>
         );
-        /**
-         * If the item is a folder, than all of its children get shown recursivley by creating a {@link ListView} of all of its children.
-         * Furthermore a button that extends/collapses the folder and a Button to add a new Element are shown next to the title
-         */
+
+        //If the item is a folder, than all of its children get shown recursivley by creating a {@link ListView} of all of its children.
+        //Furthermore a button that extends/collapses the folder and a Button to add a new Element are shown next to the title
     } else if (listViewModel.isItemFolder()) {
         return (
             <>
                 {/* Name and Buttons */}
-                <div className="listViewTitleHeader">
+                {/*                                  vvvvvvvvvvvvv using aria-selected for scrolling to the clicked folder from filtered list view */}
+                <div className="listViewTitleHeader" aria-selected={selectedFolderId === item.id}>
                     {(item.id != "") &&
                         <button style={{marginRight: "15px", boxShadow: "none"}}
                                 onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? "▼" : "▷"}</button>}
 
-                    {/* If a folder is being renamed (or just created), an input field is shown instead of the title */}
-                    {item.id === folderToRename ?
-                        <input
-                            type="text"
-                            autoFocus
-                            onFocus={(e) => e.target.select()}
-                            defaultValue={listViewModel.getItem().title}
-                            onChange={(e) => listViewModel.setTitle(e.target.value)}
-                            onBlur={() => {
-                                changeFolderName(item, listViewModel.getItem().title);
-                                setFolderToRename(null);
-                            }}
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter") {
-                                    changeFolderName(item, listViewModel.getItem().title);
-                                    setFolderToRename(null);
-                                }
-                            }}
-                            style={{marginLeft: ((item.id != "") ? "" : "10px"), height:"100%", outline:"none", border:"none", margin:"2px"}}
-                        />
-                            :
+                    {!listViewModel.inEditName &&
                         <span
-                            style={{marginLeft: ((item.id != "") ? "" : "10px")}}
-                            onDoubleClick={() => setFolderToRename(item.id)}
-                        >{(item.id != "") ? listViewModel.getItem().title : openedDbName}
-                        </span>
+                            style={{
+                                marginLeft: item.id !== "" ? "" : "10px",
+                                display: "inline-block", // Required for overflow to work
+                                maxWidth: "100%",        // Limits it to the parent's width
+                                whiteSpace: "nowrap",    // Prevents text from wrapping to a second line
+                                overflow: "hidden",      // Hides the text that goes outside the bounds
+                                textOverflow: "ellipsis", // Adds the "..."
+                                verticalAlign: "middle"  // Keeps it aligned with buttons
+                            }}
+                        >{(item.id != "") ? item.title : openedDbName}</span>
                     }
-
+                    {listViewModel.inEditName &&
+                        <input type="text"
+                               autoFocus
+                               style={{marginLeft: ((item.id != "") ? "" : "10px"), border: "none"}}
+                               value={listViewModel.newTitle}
+                               onChange={(e) => listViewModel.setItemTitle(e.target.value)}
+                               onBlur={() => {
+                                   listViewModel.setAndStoreEditName(false);
+                                   listViewModel.updateTitleInAutomerge()
+                               }}
+                               onKeyDown={(e) => {
+                                   if (e.key === 'Enter') {
+                                       (e.target as HTMLInputElement).blur();
+                                   }
+                               }}
+                        />
+                    }
                     <div className="btnWrapper">
                         <button onClick={() => {
                             addButtonPressed();
                             listViewModel.setExtended(true);
                         }}>+
                         </button>
+                        {(item.id != "") && (listViewModel.inEditName) &&
+                        <button onClick={() => listViewModel.setAndStoreEditName(false)}>
+                            ✏️
+                        </button>}
+                        {(item.id != "") && (!listViewModel.inEditName) &&
+                        <button onClick={() => listViewModel.setAndStoreEditName(true)}>
+                            ✏️
+                        </button>}
                         {(item.id != "") && <button onClick={() => deleteItem(item)}>🗑️</button>}
                         {/* FIXME: Löschbestätigung einbauen */}</div>
                 </div>
@@ -125,12 +131,9 @@ const ListView: React.FC<{
                                 deleteItem={deleteItem}
                                 sortCriterion={sortCriterion}
                                 isAscending={isAscending}
-                                dirtyItemId={dirtyItemId}
-                                openedDbName={""}
-                                folderToRename={folderToRename}
-                                setFolderToRename={setFolderToRename}
-                                changeFolderName={changeFolderName}
-                            />;
+                                dirtyItemId={dirtyItemId} openedDbName={""}
+                                updateItemTitle={updateItemTitle}
+                                selectedFolderId={selectedFolderId}/>;
                         })}
                 </div>
             </>
