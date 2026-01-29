@@ -296,6 +296,7 @@ input[type="number"] {
     gap: 2em;
     margin-top: 1em;
 }
+
 .confirm-cancel-buttons button:nth-child(2) {
     background: gray;
 }
@@ -354,6 +355,7 @@ input[type="number"] {
     padding: 4px 8px;
     border-radius: 8px;
 }
+
 .listViewTitleHeader input {
     height: 100%;
     width: auto;
@@ -363,6 +365,7 @@ input[type="number"] {
     font-size: inherit;
     text-transform: inherit;
 }
+
 .listViewTitleHeader input:focus {
     /* Removes outline */
     box-shadow: inset 0 0 0 2px var(--panel);
@@ -460,52 +463,29 @@ input[type="number"] {
 .entryViewListing {
     display: flex;
     flex-direction: column;
-    width: 90%;
     justify-content: start;
     height: 100%;
+    margin-top: 5vh;
 }
 
 .entryViewAttribute {
     display: grid;
-    grid-template-columns: 9fr 1fr;
-    align-items: center;
-    position: relative;
+    grid-template-columns: repeat(20, 1fr);
+    grid-template-rows: repeat(2, 5vh);
+    align-items: start;
     height: 20%;
-}
-
-/* First element fills the entire first row */
-.entryViewAttribute > :first-child {
-    grid-column: 1 / -1;
 }
 
 .copy-button, .eye-button {
     height: 5vh;
     aspect-ratio: 1;
     padding: 0;
+    margin: 0 0 0 2vh ;
     box-shadow: none;
     font-size: 18px;
     line-height: 1;
-    justify-self: center;
-}
-
-.eye-button {
-    height: fit-content;
-    color: var(--panel);
-    background-color: transparent;
-    font-size: 2em;
-    position: absolute;
-    right: 12%;
-    align-self: center;
-}
-
-.eye-button:hover {
-    filter: brightness(1.2);
-    box-shadow: none;
-    transform: none;
-}
-
-.eye-button.selected {
-    color: var(--text);
+    justify-self: right;
+    grid-column: span 1;
 }
 
 .attribute-value, title-value {
@@ -520,6 +500,11 @@ input[type="number"] {
     display: flex;
     align-items: center;
     white-space: nowrap;
+    grid-column: span 19;
+}
+
+.editing {
+    grid-column: span 20;
 }
 
 .title-value {
@@ -534,7 +519,7 @@ input[type="number"] {
 .scrollableContainer {
     overflow: auto;
     scrollbar-color: var(--panel) var(--bg);
-    scrollbar-width: thin;
+    scrollbar-width: none;
 }
 
 .closeButton {
@@ -630,12 +615,10 @@ input[type="number"] {
 }
 
 .passwordGenButton {
-    width: 36px;
-    height: 36px;
+    width: 5vh;
+    aspect-ratio: 1;
     padding: 0;
-    /* Circle shape */
-    border-radius: 80%;
-    border: 1px solid var(--bg);
+    box-shadow: none;
 
     display: flex;
     align-items: center;
@@ -644,7 +627,7 @@ input[type="number"] {
     font-size: 18px;
     line-height: 1;
     cursor: pointer;
-    margin-bottom: 0;
+    grid-column: span 1;
 }
 
 .OrganizedListView {

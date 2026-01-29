@@ -53,30 +53,32 @@ const EditablePasswordView: React.FC<{
                     <input className={"title-value"} type={"text"} value={viewmodel.title}
                            onChange={(e) => viewmodel.setTitle(e.target.value)}/>
 
-                    <div className={"entryViewListing"}>
+                    <div className={"entryViewListing"} style={{width:"90%"}}>
                         <div className={"entryViewAttribute"}>
-                            <span>Benutzername:</span>
-                            <input className={"attribute-value"}
+                            <span style={{gridColumn: "span 20"}}>Benutzername:</span>
+                            <input className={"attribute-value editing"}
                                    type={"text"} value={viewmodel.username}
                                    onChange={(e) => viewmodel.setUsername(e.target.value)}/>
                         </div>
                         <div className={"entryViewAttribute"}>
-                            <span>Passwort:</span>
-                            <input className={"attribute-value"} type={"text"} value={viewmodel.password}
+                            <span style={{gridColumn: "span 20"}}>Passwort:</span>
+                            <input className={"attribute-value editing"} style={{gridColumn: "span 19"}} type={"text"}
+                                   value={viewmodel.password}
                                    onChange={(e) => viewmodel.setPassword(e.target.value)}/>
-                            <PasswordGenDialog newPassword={(password: string) => viewmodel.setPassword(password)}></PasswordGenDialog>
+                            <PasswordGenDialog newPassword={(password: string) => viewmodel.setPassword(password)}/>
 
                         </div>
                         <div className={"entryViewAttribute"}>
                             {/* adds https://www. to the start of the link*/}
-                            <span>URL:</span>
-                            <input className={"attribute-value"} type={"text"} value={viewmodel.url}
+                            <span style={{gridColumn: "span 20"}}>URL:</span>
+                            <input className={"attribute-value editing"} type={"text"} value={viewmodel.url}
                                    onChange={(e) => viewmodel.setUrl(e.target.value)}/>
                         </div>
                         <div className={"entryViewAttribute"}>
-                            <span>Notiz:</span>
-                            <input className={"attribute-value"} type={"text"} value={viewmodel.note}
-                                   onChange={(e) => viewmodel.setNote(e.target.value)}/>
+                            <span style={{gridColumn: "span 20"}}>Notiz:</span>
+                            <input className={"attribute-value editing"} type={"text"} value={viewmodel.note}
+                                   onChange={(e) => viewmodel.setNote(e.target.value)}
+                                   style={{height: "fit-content", padding: "10px", whiteSpace: "normal"}}/>
                         </div>
                     </div>
                 </div>
