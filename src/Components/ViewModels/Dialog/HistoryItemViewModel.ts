@@ -2,6 +2,7 @@ import type {HistoryEntry} from "../../../Model/Automerge/HistoryEntry.ts";
 import type {AutomergeEntry} from "../../../Model/Automerge/AutomergeEntry.ts";
 import {isFolder} from "../../../Utility/AutomergeHelper.ts";
 import type {SecurityProvider} from "../../../Utility/Security/SecurityProvider.ts";
+import {useState} from "react";
 
 /**
  * The ViewModel that is used for interfacing the {@link Settings} singleton.
@@ -14,6 +15,12 @@ export const useHistoryItemViewModel = (historyEntry: HistoryEntry, securityProv
     const name = securityProvider.decryptValue(historyEntry.item.name);
     const editedAt = new Date(historyEntry.item.editedAt * 1000);
     const createdAt = new Date(historyEntry.item.createdAt * 1000);
+
+    const [passwordVisible, setPasswordVisible] = useState(false);
+
+    function togglePasswordVisible() {
+        setPasswordVisible(!passwordVisible);
+    }
 
     let username: string | null = null;
     let password: string | null = null;
@@ -113,6 +120,8 @@ export const useHistoryItemViewModel = (historyEntry: HistoryEntry, securityProv
         decrypt,
         convertDate,
         getAttributeName,
-        currentConfig
+        currentConfig,
+        passwordVisible,
+        togglePasswordVisible
     };
 };

@@ -39,10 +39,26 @@ export const HistoryItem: React.FC<{
                                 if (attribute === "editedAt" || attribute === "createdAt") return null;
                                 return (
                                     <div key={index} className="change-row">
-                                        <span className="attr-name">{viewmodel.getAttributeName(attribute)}</span>
+                                        <span
+                                            className="attr-name">{viewmodel.getAttributeName(attribute)}{attribute === "password" ?
+                                            <span style={{marginLeft: "1ch", cursor: "pointer"}}
+                                                  onClick={viewmodel.togglePasswordVisible}>👁</span> : ""}</span>
                                         <span className="change-path">
-                                            <span className="old-val">{viewmodel.get(attribute)}</span>
+                                            {attribute === "password" ?
+                                                <span className="old-val">
+                                                    {viewmodel.passwordVisible ? viewmodel.get(attribute) : "*".repeat(viewmodel.get(attribute)!.length)}
+                                                </span> :
+                                                <span className="old-val">{viewmodel.get(attribute)}</span>
+                                            }
                                             <span className="arrow">→</span>
+                                            {attribute === "password" ?
+                                                <span className="new-val">
+                                                    {viewmodel.passwordVisible ? viewmodel.decrypt(newValue as string) : "*".repeat(viewmodel.decrypt(newValue as string)!.length)}
+                                                </span> :
+                                                <span className="new-val">
+                                                    {(typeof newValue === "string") ? viewmodel.decrypt(newValue) : viewmodel.convertDate(newValue)}
+                                                </span>
+                                            }
                                             <span className="new-val">
                                                 {(typeof newValue === "string") ? viewmodel.decrypt(newValue) : viewmodel.convertDate(newValue)}
                                             </span>
@@ -62,10 +78,11 @@ export const HistoryItem: React.FC<{
                                 </span>
                             </div>}
                             {viewmodel.password && <div className="change-row">
-                                <span className="attr-name">Passwort</span>
+                                <span className="attr-name">Passwort<span style={{marginLeft: "1ch", cursor: "pointer"}}
+                                                                          onClick={viewmodel.togglePasswordVisible}>👁</span></span>
                                 <span className="change-path">
                                     <span className="new-val">
-                                        {viewmodel.password}
+                                        {viewmodel.passwordVisible ? viewmodel.password : "*".repeat(viewmodel.password.length)}
                                     </span>
                                 </span>
                             </div>}
