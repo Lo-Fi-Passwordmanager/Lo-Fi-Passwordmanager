@@ -12,15 +12,14 @@ export const HistoryDialog: React.FC<{ automergeFacade: AutomergeFacade }> = ({a
     return (
         <>
             <button
-                className="settingsButton"
                 onClick={() => viewmodel.setHistoryOpen(true)}
-                style={{right: "100px"}}
             >
-                hist
+                Änderungsverlauf
             </button>
             {
                 viewmodel.historyOpen &&
-                <Dialog title="History" onCloseDialog={() => viewmodel.setHistoryOpen(false)} className="historyDialog">
+                <Dialog title="Änderungsverlauf" onCloseDialog={() => viewmodel.setHistoryOpen(false)}
+                        className="historyDialog">
                     <div className="divider"/>
 
                     <div className="scrollableContainer">

@@ -2,6 +2,7 @@ import {useSettingsViewModel} from "../ViewModels/SettingsViewModel.ts";
 import React from "react";
 import type {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
+import Close from "./Icons/Close.tsx";
 
 const SettingsView: React.FC<{ automergeFacade?: AutomergeFacade | null }> = ({automergeFacade}) => {
     const viewmodel = useSettingsViewModel();
@@ -15,6 +16,7 @@ const SettingsView: React.FC<{ automergeFacade?: AutomergeFacade | null }> = ({a
     return (
         <div className="settingsBackground dialogOverlay">
             <div className="dialog settings-layout">
+                <Close className="closeIcon" color={"var(--text)"} onClick={() => viewmodel.setSettingsOpen(false)}/>
                 {/* Sidebar Navigation */}
                 <aside className="settings-sidebar">
                     <h2>Einstellungen</h2>
@@ -26,10 +28,6 @@ const SettingsView: React.FC<{ automergeFacade?: AutomergeFacade | null }> = ({a
                     </button>
                     <button onClick={() => viewmodel.setActiveTab("about")}>
                         Über die App
-                    </button>
-
-                    <button className="settings-close-btn" onClick={() => viewmodel.setSettingsOpen(false)}>
-                        Schließen
                     </button>
                 </aside>
 

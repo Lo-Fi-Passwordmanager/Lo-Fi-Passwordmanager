@@ -10,7 +10,6 @@ import EditablePasswordView from "./EditablePasswordView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
 import SettingsView from "./SettingsView.tsx";
 import {useRepo} from "@automerge/automerge-repo-react-hooks";
-import {HistoryDialog} from "./DialogViews/HistoryDialog.tsx";
 
 
 interface PasswordViewProps {
@@ -84,6 +83,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                                 dirtyItemId={passwordViewModel.dirtyItemId}
                                 getCurItem={passwordViewModel.getCurEntry}
                                 openedDbName={openedDbName}
+                                updateItemTitle={passwordViewModel.updateItemTitle}
                                 selectedFolderId={passwordViewModel.selectedFolderId}
                             />}
                     </div>
@@ -92,7 +92,6 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
 
                 <div className="borderBox" style={{width: "70%", position: "relative"}}>
                     <SettingsView automergeFacade={automergeFacade}/>
-                    <HistoryDialog automergeFacade={automergeFacade!}/>
                     {/*Depending on the state, either shows the editable or the normal/noneditable passwordView*/}
                     {!passwordViewModel.inEditable &&
                         <EntryView item={passwordViewModel.getCurEntry()}
