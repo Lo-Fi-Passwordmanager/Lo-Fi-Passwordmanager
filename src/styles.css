@@ -707,6 +707,7 @@ input[type="number"] {
     flex-direction: row;
     overflow: hidden;
     min-height: 75%;
+    width: 45%;
 }
 
 .settings-sidebar {
@@ -730,6 +731,10 @@ input[type="number"] {
     flex: 1;
     padding: 20px;
     overflow-y: auto;
+    justify-items: center;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
 }
 
 .settings-close-btn {
