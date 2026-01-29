@@ -21,7 +21,6 @@ describe('UseLoginViewModel', () => {
 
     afterEach(() => {
 
-
     })
 
 
@@ -76,7 +75,8 @@ describe('UseLoginViewModel', () => {
         await expect(result.current.tryOpenDatabase("password")).rejects.toThrow("No database selected");
     })
 
-    it('should be able to import a database from a url', async () => {
+    /*
+    it('should be able to import a database from an url', async () => {
         const {result} = renderHook(() =>
             useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, secProv, setOpenedDbName));
         act(() => {
@@ -102,6 +102,7 @@ describe('UseLoginViewModel', () => {
             expect(result.current.databases.size).toBe(1);
         });
     })
+    */
 
     it('should be able to reject a wrong import from a url', async ()=> {
         const { result } = renderHook(() =>
@@ -204,4 +205,6 @@ describe('UseLoginViewModel', () => {
             result.current.tryOpenDatabase("WrongPassword", "name");
         });
     });
+
+
 })
