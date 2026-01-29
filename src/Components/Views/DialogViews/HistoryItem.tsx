@@ -59,9 +59,6 @@ export const HistoryItem: React.FC<{
                                                     {(typeof newValue === "string") ? viewmodel.decrypt(newValue) : viewmodel.convertDate(newValue)}
                                                 </span>
                                             }
-                                            <span className="new-val">
-                                                {(typeof newValue === "string") ? viewmodel.decrypt(newValue) : viewmodel.convertDate(newValue)}
-                                            </span>
                                         </span>
                                     </div>
                                 );
