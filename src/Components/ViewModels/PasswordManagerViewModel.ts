@@ -16,7 +16,7 @@ export const usePasswordManagerViewModel = () => {
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
     const [automergeFacade, setAutomergeFacade] = useState<AutomergeFacade | null>(null);
     const [securityProvider] = useState(() => new SecurityProvider());
-    const timeout = Settings.getSettings().getTimeoutLength() * 1000;
+    const timeout = Settings.getSettings().getTimeoutLength() * 60000;
     const [toastMessage, setToastMessage] = useState("");
     const [toastVisible, setToastVisible] = useState(false);
     const [synchronization] = useState<boolean>(settings.getSynchronization());
