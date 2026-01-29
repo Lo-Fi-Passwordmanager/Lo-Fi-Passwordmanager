@@ -84,4 +84,12 @@ export class AutomergeFacade {
     getSecurityProvider(): SecurityProvider | null {
         return this._securityProvider
     }
+
+    /**
+     * Exports the current Databse to binary
+     * If the automergeUrl is not set, this functino does not work and returns undefinded
+     */
+    public exportAutomergeToBinary(): Promise<Uint8Array | undefined> {
+        return this._repo.export(this._automergeURL!);
+    }
 }

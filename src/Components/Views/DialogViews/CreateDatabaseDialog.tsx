@@ -15,17 +15,23 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                                                                  storeDatabase,
                                                                  setToastMessage,
                                                                  setShowToast,
+                                                                 importDatabase,
                                                              }: TwoFieldDialogProps) => {
 
-    const viewModel = useCreateDatabaseViewModel(isOpen, createDatabase, storeDatabase, setToastMessage, setShowToast);
+    const viewModel = useCreateDatabaseViewModel(isOpen, createDatabase, storeDatabase, setToastMessage, setShowToast, importDatabase);
 
     if (!isOpen) return null;
 
-    if (viewModel.createNewDatabase) {
+    if (viewModel.selectedImportType === "new") {
         return (
             <div className="dialogOverlay">
                 <div className="dialog">
-                    <button onClick={() => viewModel.setCreateNewDatabase(false)}>Existierende Datenbank laden</button>
+                    <div className="dialogButtonContainer">
+                        <button onClick={() => viewModel.setSelectedImportType("new")}>Neue Datenbank erstellen</button>
+                        <button style={{color: "gray"}} onClick={() => viewModel.setSelectedImportType("url")}>Existierende Datenbank laden</button>
+                        <button style={{color: "gray"}} onClick={() => viewModel.setSelectedImportType("file")}>Datenbank importieren</button>
+                    </div>
+
                     <h3>{title}</h3>
                     <label>{label1}</label>
                     <input
@@ -53,16 +59,20 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                     />
                     <div className="confirm-cancel-buttons">
                         <button onClick={viewModel.handleConfirm}>Bestätigen</button>
-                        <button onClick={onCancel} style={{background:"gray"}}>Abbrechen</button>
+                        <button onClick={onCancel}>Abbrechen</button>
                     </div>
                 </div>
             </div>
         );
-    } else {
+    } else if (viewModel.selectedImportType === "url") {
         return (
             <div className="dialogOverlay">
                 <div className="dialog">
-                    <button onClick={() => viewModel.setCreateNewDatabase(true)}>Neue Datenbank erstellen</button>
+                    <div className="dialogButtonContainer">
+                        <button style={{color: "gray"}} onClick={() => viewModel.setSelectedImportType("new")}>Neue Datenbank erstellen</button>
+                        <button onClick={() => viewModel.setSelectedImportType("url")}>Existierende Datenbank laden</button>
+                        <button style={{color: "gray"}} onClick={() => viewModel.setSelectedImportType("file")}>Datenbank importieren</button>
+                    </div>
                     <h3>Existierende Datenbank laden</h3>
                     <label>Name</label>
                     <input
@@ -78,11 +88,41 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                         value={viewModel.field2}
                         onChange={(e) => viewModel.setField2(e.target.value)}
                         placeholder={"Automerge Url"}
-                        autoFocus
                         onKeyDown={(e) => {
                             if (e.key === 'Enter') {viewModel.handleConfirm();}
                             if (e.key === 'Escape') {onCancel();}
                         }}
+                    />
+                    <div className="confirm-cancel-buttons">
+                        <button onClick={viewModel.handleConfirm}>Bestätigen</button>
+                        <button onClick={onCancel}>Abbrechen</button>
+                    </div>
+                </div>
+            </div>
+        );
+    } else {
+        return (
+            <div className="dialogOverlay">
+                <div className="dialog">
+                    <div className="dialogButtonContainer">
+                        <button style={{color: "gray"}} onClick={() => viewModel.setSelectedImportType("new")}>Neue Datenbank erstellen</button>
+                        <button style={{color: "gray"}} onClick={() => viewModel.setSelectedImportType("url")}>Existierende Datenbank laden</button>
+                        <button onClick={() => viewModel.setSelectedImportType("file")}>Datenbank importieren</button>
+                    </div>
+                    <h3>Datenbank aus Datei importieren</h3>
+                    <label>Name</label>
+                    <input
+                        type="text"
+                        value={viewModel.field1}
+                        onChange={(e) => viewModel.setField1(e.target.value)}
+                        placeholder={label1}
+                        autoFocus
+                    />
+                    <label>Datei auswählen</label>
+                    <input
+                        type="file"
+                        accept="*/*"
+                        onChange={(event)=> viewModel.setTargetFiles(event.target.files)}
                     />
                     <div className="confirm-cancel-buttons">
                         <button onClick={viewModel.handleConfirm}>Bestätigen</button>

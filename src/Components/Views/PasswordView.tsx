@@ -42,6 +42,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                         toggleOrder={passwordViewModel.toggleOrder}
                         isAscending={passwordViewModel.isAscending}
                         setLiveSearchValue={passwordViewModel.setSearchValue}
+                        liveSearchValue={passwordViewModel.searchValue}
                         closeDatabase={closeDatabase}
                         setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
                     />
@@ -56,10 +57,12 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                             sortCriterion={passwordViewModel.getCurSortCriterion()}
                             isAscending={passwordViewModel.isAscending}
                             filterText={passwordViewModel.searchValue}
+                            goToFolder={passwordViewModel.goToFolder}
                         />}
 
                         {/*The basic ListView which shows all Items and Folders in their hierarchy*/}
-                        {passwordViewModel.searchValue.length === 0 && <ListView
+                        {passwordViewModel.searchValue.length === 0 &&
+                            <ListView
                             item={passwordViewModel.getRootFolder()}
                             setCurItem={passwordViewModel.setCurItem}
                             setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
@@ -70,13 +73,15 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                             dirtyItemId={passwordViewModel.dirtyItemId}
                             getCurItem={passwordViewModel.getCurEntry}
                             openedDbName={openedDbName}
+                            selectedFolderId={passwordViewModel.selectedFolderId}
+                            updateItemTitle={passwordViewModel.updateItemTitle}
                         />}
                     </div>
 
                 </div>
 
                 <div className="borderBox" style={{width: "70%", position: "relative"}}>
-                    <SettingsView/>
+                    <SettingsView automergeFacade={automergeFacade}/>
                     {/*Depending on the state, either shows the editable or the normal/noneditable passwordView*/}
                     {!passwordViewModel.inEditable &&
                         <EntryView item={passwordViewModel.getCurEntry()}

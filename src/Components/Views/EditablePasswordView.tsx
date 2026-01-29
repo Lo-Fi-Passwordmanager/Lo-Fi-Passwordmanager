@@ -3,6 +3,7 @@ import {type Item} from "../../Model/Item.ts";
 import Logo from "../../assets/logo_gelb.svg?inline";
 import type {Attribute} from "../../Utility/AutomergeFacade.ts";
 import {useEditablePasswordViewModel} from "../ViewModels/EditablePasswordViewModel.ts";
+import PasswordGenDialog from "./DialogViews/PasswordGenDialog.tsx";
 
 
 /**
@@ -63,6 +64,8 @@ const EditablePasswordView: React.FC<{
                             <span>Passwort:</span>
                             <input className={"attribute-value"} type={"text"} value={viewmodel.password}
                                    onChange={(e) => viewmodel.setPassword(e.target.value)}/>
+                            <PasswordGenDialog newPassword={(password: string) => viewmodel.setPassword(password)}></PasswordGenDialog>
+
                         </div>
                         <div className={"entryViewAttribute"}>
                             {/* adds https://www. to the start of the link*/}

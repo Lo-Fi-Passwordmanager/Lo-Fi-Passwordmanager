@@ -61,6 +61,11 @@ html, body {
     min-height: 100vh;
 }
 
+.divider {
+    height: 1px;
+    background-color: color-mix(in srgb, transparent, var(--text) 30%);
+}
+
 input {
     background-color: var(--input-field);
     color: var(--text);
@@ -185,14 +190,15 @@ button:focus-visible {
     align-items: center;
     justify-content: center;
     gap: 12px;
+    width: 100%;
 }
 
 .DatabaseAndOptions {
     justify-content: center;
-    width: 60vmin;
+    width: 100%;
 
     display: grid;
-    grid-template-columns: 8fr 1fr 1fr;
+    grid-template-columns: 8fr 1fr 1fr 1fr;
     gap: 8px;
 }
 
@@ -202,6 +208,7 @@ button:focus-visible {
     align-items: center;
     justify-content: center;
     gap: 24px;
+    width: 100%;
 }
 
 .settingsContainer {
@@ -219,6 +226,18 @@ button:focus-visible {
     padding-left: 20px;
     padding-right: 20px;
     box-shadow: var(--shadow);
+}
+
+.dbSettingsContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+
+    & > button {
+        margin-block: 5px;
+        margin-inline: unset;
+    }
 }
 
 .checkboxRow {
@@ -277,6 +296,9 @@ input[type="number"] {
     gap: 2em;
     margin-top: 1em;
 }
+.confirm-cancel-buttons button:nth-child(2) {
+    background: gray;
+}
 
 .logo {
     margin-top: 5em;
@@ -320,15 +342,30 @@ input[type="number"] {
 }
 
 .btnWrapper {
-    width: 100%;
+    width: fit-content;
     display: flex;
     justify-content: end;
+    justify-self: end;
+    margin-left: auto;
 }
 
 .listViewTitleHeader button, .listViewEntry button {
     margin: 5px;
     padding: 4px 8px;
     border-radius: 8px;
+}
+.listViewTitleHeader input {
+    height: 100%;
+    width: auto;
+    flex-grow: 1;
+    padding: 0 8px;
+    margin: 0;
+    font-size: inherit;
+    text-transform: inherit;
+}
+.listViewTitleHeader input:focus {
+    /* Removes outline */
+    box-shadow: inset 0 0 0 2px var(--panel);
 }
 
 .listViewEntry span {
@@ -348,7 +385,6 @@ input[type="number"] {
     border: 3px solid transparent;
     transition: border-color 0.2s ease, transform 0.1s ease;
     box-sizing: border-box;
-
 
 
     /*grid formatting*/
@@ -598,7 +634,8 @@ input[type="number"] {
     height: 36px;
     padding: 0;
     /* Circle shape */
-    border-radius: 50%;
+    border-radius: 80%;
+    border: 1px solid var(--bg);
 
     display: flex;
     align-items: center;
@@ -640,4 +677,56 @@ input[type="number"] {
     align-items: center;
     justify-items: center;
     border-radius: 0 0 0 20px;
+}
+
+.dialogButtonContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.dialogButtonContainer button {
+    margin: 10px;
+    white-space: normal;
+    width: 150px;
+    text-align: center;
+}
+
+.settings-layout {
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    min-height: 75%;
+    width: 45%;
+}
+
+.settings-sidebar {
+    background: var(--dialog-bg);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--panel);
+}
+
+.settings-sidebar button {
+    text-align: left;
+    padding: 10px;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+
+.settings-content {
+    background: var(--dialog-bg);
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    justify-items: center;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.settings-close-btn {
+    margin-top: auto;
+    background: gray;
 }
