@@ -26,6 +26,7 @@
     --outline: #818181;
     --input-field: rgb(253, 220, 220);
     --dialog-bg: rgba(255, 200, 200);
+    --cancel-button: #3c3c3c;
 
     /* Subtle shadows for depth */
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -121,6 +122,10 @@ button, select {
     cursor: pointer;
     background: var(--panel);
     color: var(--text);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     /* Modern Interaction Style */
     box-shadow: var(--shadow);
@@ -298,7 +303,7 @@ input[type="number"] {
 }
 
 .confirm-cancel-buttons button:nth-child(2) {
-    background: gray;
+    background-color: var(--cancel-button);
 }
 
 .logo {
@@ -335,7 +340,11 @@ input[type="number"] {
     white-space: nowrap;
     align-items: center;
     padding-left: 10px;
-    height: 36px;
+    height: 5vh;
+
+    border: 3px solid transparent;
+    transition: border-color 0.2s ease, transform 0.1s ease;
+    box-sizing: border-box;
 }
 
 .listViewTitleHeader:hover {
@@ -351,9 +360,16 @@ input[type="number"] {
 }
 
 .listViewTitleHeader button, .listViewEntry button {
+    height: 4vh;
+    aspect-ratio: 1;
     margin: 5px;
     padding: 4px 8px;
     border-radius: 8px;
+    justify-content: center;
+}
+
+.listViewTitleHeader.button.active {
+    filter: brightness(1.2);
 }
 
 .listViewTitleHeader input {
@@ -380,7 +396,7 @@ input[type="number"] {
     flex-direction: row;
     padding-left: 10px;
     border-radius: 10px;
-    height: 36px;
+    height: 5vh;
     background-color: var(--dialog-bg);
     text-align: left;
     font-weight: 500;
@@ -480,11 +496,9 @@ input[type="number"] {
     height: 5vh;
     aspect-ratio: 1;
     padding: 0;
-    margin-left: 1vh;
+    margin-left: 2vh;
     box-shadow: none;
     font-size: 18px;
-    line-height: 1;
-    justify-self: right;
     grid-column-start: 20 !important;
     grid-column: span 1;
 }
@@ -731,5 +745,34 @@ input[type="number"] {
 
 .settings-close-btn {
     margin-top: auto;
-    background: gray;
+    background: var(--cancel-button);
+}
+
+.action-menu-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    position: relative;
+    height: 100%;
+}
+
+.action-items {
+    display: flex;
+    align-items: center;
+    gap: 1vh;
+    overflow: hidden;
+
+    max-width: 0;
+    opacity: 0;
+    transform: translateX(20px);
+    padding: 1vh;
+    padding-left: 3vh;
+
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.action-items.open {
+    max-width: 100%;
+    opacity: 1;
+    transform: translateX(0);
 }

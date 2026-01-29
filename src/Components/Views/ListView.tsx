@@ -3,6 +3,7 @@ import {useListViewModel} from "../ViewModels/ListViewModel.ts";
 import {Entry} from "../../Model/Entry.ts";
 import React from "react";
 import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
+import FolderMenu from "./ButtonViews/FolderMenu.tsx";
 
 /**
  * The View that represents the whole database, which is represented by {@link Entry}/{@link Folder} Class Instances
@@ -50,11 +51,12 @@ const ListView: React.FC<{
             <div className={`listViewEntry ${getCurItem().id === entry.id ? "selected" : ""}`}
                  onClick={() => setCurItem(entry)}>
                 <span style={{marginRight: "1ch"}}></span> <span>{entry.title}</span>
-                <div className="btnWrapper">
-                    <button onClick={() => deleteItem(item)}>🗑️</button>
+                <div className={"btnWrapper"}>
+                    <button className="listViewEntry button" onClick={() => deleteItem(item)}>🗑️</button>
                 </div>
             </div>
-        );
+        )
+            ;
 
         //If the item is a folder, than all of its children get shown recursivley by creating a {@link ListView} of all of its children.
         //Furthermore a button that extends/collapses the folder and a Button to add a new Element are shown next to the title
@@ -99,21 +101,14 @@ const ListView: React.FC<{
                         />
                     }
                     <div className="btnWrapper">
-                        <button onClick={() => {
-                            addButtonPressed();
-                            listViewModel.setExtended(true);
-                        }}>+
-                        </button>
-                        {(item.id != "") && (listViewModel.inEditName) &&
-                        <button onClick={() => listViewModel.setAndStoreEditName(false)}>
-                            ✏️
-                        </button>}
-                        {(item.id != "") && (!listViewModel.inEditName) &&
-                        <button onClick={() => listViewModel.setAndStoreEditName(true)}>
-                            ✏️
-                        </button>}
-                        {(item.id != "") && <button onClick={() => deleteItem(item)}>🗑️</button>}
-                        {/* FIXME: Löschbestätigung einbauen */}</div>
+                        <FolderMenu
+                            onAdd={() => addButtonPressed()}
+                            onDelete={() => deleteItem(item)}
+                            onRename={() => {
+                                listViewModel.setAndStoreEditName(true);
+                            }}
+                        />
+                    </div>
                 </div>
 
                 {/* Recursive call of children with indent to visualizes depth in the tree */}
