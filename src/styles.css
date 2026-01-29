@@ -799,3 +799,18 @@ input[type="number"] {
     opacity: 1;
     transform: translateX(0);
 }
+
+@keyframes flashAnimation {
+    0% {
+        background-color: rgba(0, 149, 255, 0.4); /* FIXME: Farben */
+        box-shadow: 0 0 10px rgba(0, 149, 255, 0.4);
+    }
+    100% {
+        background-color: var(--panel);
+        box-shadow: none;
+    }
+}
+
+.flash-highlight {
+    animation: flashAnimation 1s ease-out forwards;
+}

@@ -208,9 +208,8 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setCurItem(folder);
         setSearchValue("");
         setSelectedFolderId(folder.id);
-        setTimeout(() =>
-            document.querySelector("[aria-selected='true']")?.scrollIntoView(), 0)
-
+        setTimeout(() => document.querySelector("[aria-selected='true']")?.scrollIntoView(), 0);
+        setTimeout(() => setSelectedFolderId(null), 1000);
     }
 
     return {

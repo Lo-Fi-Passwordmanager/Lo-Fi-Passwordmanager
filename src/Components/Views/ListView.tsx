@@ -67,8 +67,9 @@ const ListView: React.FC<{
         return (
             <>
                 {/* Name and Buttons */}
-                {/*                                  vvvvvvvvvvvvv using aria-selected for scrolling to the clicked folder from filtered list view */}
-                <div className="listViewTitleHeader" aria-selected={selectedFolderId === item.id}>
+                <div className={`listViewTitleHeader ${selectedFolderId === item.id ? "flash-highlight" : ""}`}
+                     aria-selected={selectedFolderId === item.id}>
+                    {/*^^^^^^^^^^ using aria-selected for scrolling to the clicked folder from filtered list view */}
                     {(item.id != "") &&
                         <button style={{marginRight: "15px", boxShadow: "none"}}
                                 onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? "▼" : "▷"}</button>}
