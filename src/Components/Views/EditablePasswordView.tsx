@@ -15,10 +15,12 @@ import PasswordGenDialog from "./DialogViews/PasswordGenDialog.tsx";
 const EditablePasswordView: React.FC<{
     item: Item,
     updateItemAttribute: (itemId: string, changes: [Attribute, string | Date][]) => void;
-    setEditableView: () => void;
-}> = ({item, updateItemAttribute, setEditableView}) => {
+    setEditableView: () => void; inCreation: boolean;
+    setInCreation: (inCreation: boolean) => void;
+    createItem: (item: Item) => void;
+}> = ({item, updateItemAttribute, setEditableView, setInCreation, inCreation, createItem}) => {
 
-    const viewmodel = useEditablePasswordViewModel(item, updateItemAttribute);
+    const viewmodel = useEditablePasswordViewModel(item, updateItemAttribute, createItem);
 
     if (item.isFolder() || item.deleted) {
         return (
@@ -64,7 +66,8 @@ const EditablePasswordView: React.FC<{
                             <span>Passwort:</span>
                             <input className={"attribute-value"} type={"text"} value={viewmodel.password}
                                    onChange={(e) => viewmodel.setPassword(e.target.value)}/>
-                            <PasswordGenDialog newPassword={(password: string) => viewmodel.setPassword(password)}></PasswordGenDialog>
+                            <PasswordGenDialog
+                                newPassword={(password: string) => viewmodel.setPassword(password)}></PasswordGenDialog>
 
                         </div>
                         <div className={"entryViewAttribute"}>
@@ -80,6 +83,26 @@ const EditablePasswordView: React.FC<{
                         </div>
                     </div>
                 </div>
+                <div className={"entryViewFooterButtons"}>
+                    <button className={"evenButton"}
+                            onClick={() => {
+                                if (inCreation) {
+                                    setInCreation(false);
+                                    viewmodel.createItemInAutomerge();
+                                } else if (viewmodel.hasChanges()) {
+                                    viewmodel.updateItemInAutomerge();
+                                }
+                                setEditableView();
+                            }}>Speichern
+                    </button>
+                    <button className={"evenButton"}
+                            onClick={() => {
+                                setInCreation(false);
+                                setEditableView();
+                            }}>Abbrechen
+                    </button>
+                </div>
+
                 <div className="entryDateViewEntry">
                     <span>Erstellt am: {item.createdAt.toLocaleString()}</span>
                     <span>Bearbeitet am: {item.editedAt.toLocaleString()}</span>

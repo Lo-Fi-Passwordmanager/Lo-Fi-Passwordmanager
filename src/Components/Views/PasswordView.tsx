@@ -38,9 +38,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
             {passwordViewModel.getInItemCreation() &&
                 <ItemCreationDialog
                     addItem={passwordViewModel.addItem}
-                    curParent={passwordViewModel.getCurParent()}
                     cancelItemCreation={() => passwordViewModel.setInItemCreation(false)}
-                    setCurItem={passwordViewModel.setCurItem}
                 />}
 
             <div className="passwordView">
@@ -95,6 +93,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                     {/*Depending on the state, either shows the editable or the normal/noneditable passwordView*/}
                     {!passwordViewModel.inEditable &&
                         <EntryView item={passwordViewModel.getCurEntry()}
+                                   deleteItem={passwordViewModel.deleteItem}
                                    copyAndClearClipboard={passwordViewModel.copyToClipboardAndClear}
                                    setEditableView={() => passwordViewModel.setInEditable(true)}
                                    hidePassword={passwordViewModel.hidePassword}
@@ -103,7 +102,13 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                     {passwordViewModel.inEditable &&
                         <EditablePasswordView item={passwordViewModel.getCurEntry()}
                                               updateItemAttribute={passwordViewModel.updateItemAttribute}
-                                              setEditableView={() => passwordViewModel.setInEditable(false)}/>}
+                                              setEditableView={() => passwordViewModel.setInEditable(false)}
+                                              createItem={passwordViewModel.createEntry}
+                                              inCreation={passwordViewModel.inEntryCreation}
+                                              setInCreation={passwordViewModel.setInEntryCreation}
+
+                        />
+                    }
                 </div>
 
                 {/*A Toast that may be called at any time with a given message*/}

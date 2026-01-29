@@ -50,9 +50,6 @@ const ListView: React.FC<{
             <div className={`listViewEntry ${getCurItem().id === entry.id ? "selected" : ""}`}
                  onClick={() => setCurItem(entry)}>
                 <span style={{marginRight: "1ch"}}></span> <span>{entry.title}</span>
-                <div className="btnWrapper">
-                    <button onClick={() => deleteItem(item)}>🗑️</button>
-                </div>
             </div>
         );
 

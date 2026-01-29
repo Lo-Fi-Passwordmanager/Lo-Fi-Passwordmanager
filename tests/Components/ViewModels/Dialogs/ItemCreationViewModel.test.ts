@@ -1,6 +1,6 @@
 import {beforeEach, describe, expect, it, vi} from "vitest";
 import {act, renderHook, waitFor} from "@testing-library/react";
-import {useItemcreationViewModel} from "../../../../src/Components/ViewModels/Dialog/ItemcreationViewModel";
+import {useItemcreationViewModel} from "../../../../src/Components/ViewModels/Dialog/ItemCreationViewModel";
 import {Item} from "../../../../src/Model/Item";
 import {Folder} from "../../../../src/Model/Folder";
 

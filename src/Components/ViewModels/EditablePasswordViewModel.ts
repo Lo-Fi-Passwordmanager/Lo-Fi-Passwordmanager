@@ -1,9 +1,13 @@
 import type {Item} from "../../Model/Item.ts";
 import {type Attribute} from "../../Utility/AutomergeFacade.ts";
 import {useState} from "react";
-import type {Entry} from "../../Model/Entry.ts";
+import {Entry} from "../../Model/Entry.ts";
 
-export const useEditablePasswordViewModel = (item: Item, updateItemAttribute: (itemId: string, changes: [Attribute, string | Date][]) => void) => {
+export const useEditablePasswordViewModel = (
+    item: Item,
+    updateItemAttribute: (itemId: string, changes: [Attribute, string | Date][]) => void,
+    createItem: (item: Item) => void
+) => {
 //     'name' | 'createdAt' | 'editedAt' | 'parentId' | 'username' | 'password' | 'url' | 'note'
 
     const entry = item as Entry;
@@ -28,10 +32,25 @@ export const useEditablePasswordViewModel = (item: Item, updateItemAttribute: (i
         updateItemAttribute(item.id, changedValues);
     };
 
-    function hasChanges():boolean {
+    function hasChanges(): boolean {
         return (title != entry.title || username != entry.username || password != entry.password || url != entry.url || note != entry.note);
     }
 
+    /**
+     * Create the actual entry in Automerge after saving the temporary
+     */
+    function createItemInAutomerge() {
+        createItem(new Entry(
+            title,
+            "willBeAutomaticallySet",
+            new Date(),
+            new Date(),
+            username,
+            password,
+            url,
+            note
+        ));
+    }
 
     return {
         title,
@@ -45,6 +64,7 @@ export const useEditablePasswordViewModel = (item: Item, updateItemAttribute: (i
         setPassword,
         setUrl,
         setNote,
-        updateItemInAutomerge
+        updateItemInAutomerge,
+        createItemInAutomerge
     };
 };

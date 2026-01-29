@@ -12,11 +12,12 @@ import Logo from "../../assets/logo_gelb.svg?inline";
  */
 const EntryView: React.FC<{
     item: Item,
+    deleteItem: (item: Item) => void,
     copyAndClearClipboard: (text: string, timeout?: number) => void,
     setEditableView: () => void,
     hidePassword: boolean;
     toggleHidePassword: () => void;
-}> = ({item, copyAndClearClipboard, setEditableView, hidePassword, toggleHidePassword}) => {
+}> = ({item, deleteItem, copyAndClearClipboard, setEditableView, hidePassword, toggleHidePassword}) => {
 
     if (item.isFolder() || item.deleted) {
         return (
@@ -60,7 +61,8 @@ const EntryView: React.FC<{
                                 <span>{(hidePassword ? "*".repeat(entry.password.length) : entry.password)}</span>
                                 <button className={`eye-button ${hidePassword ? "" : "selected"}`}
                                         onClick={() => toggleHidePassword()}
-                                >👁</button>
+                                >👁
+                                </button>
                             </div>
                             <button className={"copy-button"} onClick={() => copyAndClearClipboard(entry.password)}>🔗
                             </button>
@@ -81,9 +83,17 @@ const EntryView: React.FC<{
 
                         <div className={"entryViewAttribute"}>
                             <span>Notiz:</span>
-                            <span className={"attribute-value"} style={{height:"fit-content", padding:"12px", whiteSpace:"normal"}}>{entry.note}</span>
+                            <span className={"attribute-value"} style={{
+                                height: "fit-content",
+                                padding: "12px",
+                                whiteSpace: "normal"
+                            }}>{entry.note}</span>
                         </div>
                     </div>
+                </div>
+                <div className={"entryViewFooterButtons"}>
+                    <button className={"evenButton"} onClick={() => {setEditableView()}}>Bearbeiten</button>
+                    <button className={"evenButton"} onClick={() => deleteItem} style={{background:"darkred"}}>Löschen</button>
                 </div>
                 <div className="entryDateViewEntry">
                     <span>Erstellt am: {item.createdAt.toLocaleString()}</span>

@@ -545,6 +545,19 @@ input[type="number"] {
     height: 5vh;
 }
 
+.entryViewFooterButtons {
+    display: flex;
+    gap: 1vh;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+.evenButton {
+    width: 15vh;
+    height: 5vh;
+    box-shadow: none;
+}
+
 .scrollableContainer {
     overflow: auto;
     scrollbar-color: var(--panel) var(--bg);
