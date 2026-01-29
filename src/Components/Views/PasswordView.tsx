@@ -9,6 +9,8 @@ import ToastDialog from "./DialogViews/ToastDialog.tsx";
 import EditablePasswordView from "./EditablePasswordView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
 import SettingsView from "./SettingsView.tsx";
+import {useRepo} from "@automerge/automerge-repo-react-hooks";
+
 
 interface PasswordViewProps {
     automergeFacade?: AutomergeFacade | null,
@@ -21,6 +23,14 @@ interface PasswordViewProps {
  */
 const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbName, closeDatabase}) => {
     const passwordViewModel = usePasswortViewModel(automergeFacade as AutomergeFacade);
+
+    // Fügt das Repo als zu global hinzu, sodass man im Browser einfach auf das Repo zugreifen kann, zum debuggen.
+    // Nur während 'yarn dev' verfügbar, nach dem build nicht mehr
+    if (import.meta.env.DEV) {
+        // @ts-expect-error no error
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        window.handle = useRepo().find(automergeFacade!.automergeURL!);
+    }
 
     return (
         <div style={{margin: "10px", height: "95vh"}}>
@@ -73,8 +83,9 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                                 dirtyItemId={passwordViewModel.dirtyItemId}
                                 getCurItem={passwordViewModel.getCurEntry}
                                 openedDbName={openedDbName}
-                                selectedFolderId={passwordViewModel.selectedFolderId}
+
                                 updateItemTitle={passwordViewModel.updateItemTitle}
+                            selectedFolderId={passwordViewModel.selectedFolderId}
                             />}
                     </div>
 

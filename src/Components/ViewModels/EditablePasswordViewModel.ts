@@ -16,9 +16,20 @@ export const useEditablePasswordViewModel = (
     const [url, setUrl] = useState(entry.url);
     const [note, setNote] = useState(entry.note);
 
+    const titleDirty = title !== entry.title;
+    const usernameDirty = username !== entry.username;
+    const passwordDirty = password !== entry.password;
+    const urlDirty = url !== entry.url;
+    const noteDirty = note !== entry.note;
+
     function updateItemInAutomerge() {
-        updateItemAttribute(item.id, [["name", title], ["username", username], ["password", password], ["url", url], ["note", note]]);
-    }
+        const dirtyValues = [titleDirty, usernameDirty, passwordDirty, urlDirty, noteDirty];
+        const updateValues: [Attribute, string | Date][] = [["name", title], ["username", username], ["password", password], ["url", url], ["note", note]];
+
+        const changedValues = updateValues.filter((_item, index) => dirtyValues[index]);
+
+        updateItemAttribute(item.id, changedValues);
+    };
 
     function hasChanges(): boolean {
         return (title != entry.title || username != entry.username || password != entry.password || url != entry.url || note != entry.note);

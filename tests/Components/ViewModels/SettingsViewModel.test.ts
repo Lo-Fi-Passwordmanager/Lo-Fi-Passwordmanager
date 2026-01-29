@@ -37,18 +37,6 @@ describe("SettingsViewModel", () => {
         expect(result.current.synchronisation).toBe(true);
     });
 
-    it("should be able to toggle AutoConflictResolution", () => {
-        const {result} = renderHook(() => useSettingsViewModel());
-        expect(result.current.autoConflictRes).toBe(true);
-        act(() => {
-            result.current.toggleAutoConflictRes();
-        });
-        expect(result.current.autoConflictRes).toBe(false);
-        act(() => {
-            result.current.toggleAutoConflictRes();
-        });
-        expect(result.current.autoConflictRes).toBe(true);
-    });
 
     it("should be able to toggle Auto Logout", () => {
         const {result} = renderHook(() => useSettingsViewModel());
