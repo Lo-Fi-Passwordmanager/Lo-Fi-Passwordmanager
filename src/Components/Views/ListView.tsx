@@ -20,6 +20,7 @@ const ListView: React.FC<{
     isAscending: boolean,
     dirtyItemId: string | null,
     openedDbName: string,
+    selectedFolderId: string | null;
     updateItemTitle: (itemId: string, newTitle: string) => void;
 }> = ({
           item,
@@ -32,6 +33,7 @@ const ListView: React.FC<{
           isAscending,
           dirtyItemId,
           openedDbName,
+          selectedFolderId,
           updateItemTitle
       }) => {
     const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem, updateItemTitle);
@@ -60,7 +62,8 @@ const ListView: React.FC<{
         return (
             <>
                 {/* Name and Buttons */}
-                <div className="listViewTitleHeader">
+                {/*                                  vvvvvvvvvvvvv using aria-selected for scrolling to the clicked folder from filtered list view */}
+                <div className="listViewTitleHeader" aria-selected={selectedFolderId === item.id}>
                     {(item.id != "") &&
                         <button style={{marginRight: "15px", boxShadow: "none"}}
                                 onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? "▼" : "▷"}</button>}
@@ -76,7 +79,7 @@ const ListView: React.FC<{
                                 textOverflow: "ellipsis", // Adds the "..."
                                 verticalAlign: "middle"  // Keeps it aligned with buttons
                             }}
-                        >{(item.id != "") ? listViewModel.newTitle : openedDbName}</span>
+                        >{(item.id != "") ? item.title : openedDbName}</span>
                     }
                     {listViewModel.inEditName &&
                         <input type="text"
@@ -129,7 +132,8 @@ const ListView: React.FC<{
                                 sortCriterion={sortCriterion}
                                 isAscending={isAscending}
                                 dirtyItemId={dirtyItemId} openedDbName={""}
-                                updateItemTitle={updateItemTitle}/>;
+                                updateItemTitle={updateItemTitle}
+                                selectedFolderId={selectedFolderId}/>;
                         })}
                 </div>
             </>
