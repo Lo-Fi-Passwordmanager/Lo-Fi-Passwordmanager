@@ -63,19 +63,19 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                         {/*The basic ListView which shows all Items and Folders in their hierarchy*/}
                         {passwordViewModel.searchValue.length === 0 &&
                             <ListView
-                            item={passwordViewModel.getRootFolder()}
-                            setCurItem={passwordViewModel.setCurItem}
-                            setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
-                            setCurrentParent={passwordViewModel.setCurParent}
-                            deleteItem={passwordViewModel.deleteItem}
-                            sortCriterion={passwordViewModel.getCurSortCriterion()}
-                            isAscending={passwordViewModel.isAscending}
-                            dirtyItemId={passwordViewModel.dirtyItemId}
-                            getCurItem={passwordViewModel.getCurEntry}
-                            openedDbName={openedDbName}
-                            selectedFolderId={passwordViewModel.selectedFolderId}
-                            updateItemTitle={passwordViewModel.updateItemTitle}
-                        />}
+                                item={passwordViewModel.getRootFolder()}
+                                setCurItem={passwordViewModel.setCurItem}
+                                setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
+                                setCurrentParent={passwordViewModel.setCurParent}
+                                deleteItem={passwordViewModel.deleteItem}
+                                sortCriterion={passwordViewModel.getCurSortCriterion()}
+                                isAscending={passwordViewModel.isAscending}
+                                dirtyItemId={passwordViewModel.dirtyItemId}
+                                getCurItem={passwordViewModel.getCurEntry}
+                                openedDbName={openedDbName}
+                                selectedFolderId={passwordViewModel.selectedFolderId}
+                                updateItemTitle={passwordViewModel.updateItemTitle}
+                            />}
                     </div>
 
                 </div>
@@ -93,7 +93,9 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                     {passwordViewModel.inEditable &&
                         <EditablePasswordView item={passwordViewModel.getCurEntry()}
                                               updateItemAttribute={passwordViewModel.updateItemAttribute}
-                                              setEditableView={() => passwordViewModel.setInEditable(false)}/>}
+                                              setEditableView={() => passwordViewModel.setInEditable(false)}
+                                              hidePassword={passwordViewModel.hidePassword}
+                                              toggleHidePassword={passwordViewModel.toggleHidePassword}/>}
                 </div>
 
                 {/*A Toast that may be called at any time with a given message*/}

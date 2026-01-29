@@ -9,6 +9,8 @@ import Logo from "../../assets/logo_gelb.svg?inline";
  * @param item the entry that should be depicted
  * @param copyAndClearClipboard the function that copies a string to the clipboard and clears it afterwards
  * @param setEditableView a command to toggle the editable view to on
+ * @param hidePassword
+ * @param toggleHidePassword
  */
 const EntryView: React.FC<{
     item: Item,
@@ -34,7 +36,7 @@ const EntryView: React.FC<{
     } else if (item.isEntry()) {
         const entry = item as Entry;
         return (<>
-                <div className="entryViewEntry" style={{position: 'relative'}}>
+                <div className="entryViewEntry">
                     <button onClick={setEditableView}
                             style={{
                                 position: "absolute",
@@ -59,7 +61,7 @@ const EntryView: React.FC<{
 
                             <div className={"entryViewAttribute"}>
                                 <span style={{gridColumn: "span 20"}}>Passwort:</span>
-                                <div className={"attribute-value"} style={{gridColumn: "span 18"}}>
+                                <div className={"attribute-value"} style={{gridColumnEnd:"19"}}>
                                     <span>{(hidePassword ? "*".repeat(entry.password.length) : entry.password)}</span>
                                 </div>
                                 <button className={`eye-button ${hidePassword ? "" : "selected"}`}
@@ -89,7 +91,7 @@ const EntryView: React.FC<{
                                     height: "fit-content",
                                     padding: "10px",
                                     whiteSpace: "normal",
-                                    gridColumn: "span 20"
+                                    gridColumnEnd:"21"
                                 }}>{entry.note}</span>
                             </div>
                         </div>
