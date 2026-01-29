@@ -3,6 +3,8 @@ import {type Entry} from "../../Model/Entry.ts";
 import {type Item} from "../../Model/Item.ts";
 import Logo from "../../assets/logo_gelb.svg?inline";
 import EyeButton from "./ButtonViews/EyeButton.tsx";
+import ShareIcon from "./Icons/ShareIcon.tsx";
+import EditIcon from "./Icons/EditIcon.tsx";
 
 
 /**
@@ -38,15 +40,17 @@ const EntryView: React.FC<{
         const entry = item as Entry;
         return (<>
                 <div className="entryViewEntry">
-                    <button onClick={setEditableView}
-                            style={{
-                                position: "absolute",
-                                top: "10px",
-                                left: "10px",
-                                zIndex: 10,
-                                fontSize: "0.8em"
-                            }}>
-                        ✏️
+                    <button
+                        className="settingsButton"
+                        onClick={setEditableView}
+                        style={{
+                            position: "absolute",
+                            top: "10px",
+                            left: "10px",
+                            zIndex: 10,
+                            fontSize: "0.8em"
+                        }}>
+                        <EditIcon/>
                     </button>
                     <span className={"title-value"}>{entry.title}</span>
 
@@ -56,18 +60,20 @@ const EntryView: React.FC<{
                                 <span style={{gridColumn: "span 20"}}>Benutzername:</span>
                                 <span className={"attribute-value"}>{entry.username}</span>
                                 <button className={"copy-button"}
-                                        onClick={() => copyAndClearClipboard(entry.username)}>🔗
+                                        onClick={() => copyAndClearClipboard(entry.username)}>
+                                    <ShareIcon/>
                                 </button>
                             </div>
 
                             <div className={"entryViewAttribute"}>
                                 <span style={{gridColumn: "span 20"}}>Passwort:</span>
-                                <div className={"attribute-value"} style={{gridColumnEnd:"19"}}>
+                                <div className={"attribute-value"} style={{gridColumnEnd: "19"}}>
                                     <span>{(hidePassword ? "*".repeat(entry.password.length) : entry.password)}</span>
                                 </div>
                                 <EyeButton hidePassword={hidePassword} toggleHidePassword={toggleHidePassword}/>
                                 <button className={"copy-button"}
-                                        onClick={() => copyAndClearClipboard(entry.password)}>🔗
+                                        onClick={() => copyAndClearClipboard(entry.password)}>
+                                    <ShareIcon/>
                                 </button>
                             </div>
 
@@ -80,7 +86,8 @@ const EntryView: React.FC<{
                                    style={{textDecoration: "underline", color: "inherit"}}>
                                     {entry.url}
                                 </a>
-                                <button className={"copy-button"} onClick={() => copyAndClearClipboard(entry.url)}>🔗
+                                <button className={"copy-button"} onClick={() => copyAndClearClipboard(entry.url)}>
+                                    <ShareIcon/>
                                 </button>
                             </div>
 
@@ -90,7 +97,7 @@ const EntryView: React.FC<{
                                     height: "fit-content",
                                     padding: "10px",
                                     whiteSpace: "normal",
-                                    gridColumnEnd:"21"
+                                    gridColumnEnd: "21"
                                 }}>{entry.note}</span>
                             </div>
                         </div>

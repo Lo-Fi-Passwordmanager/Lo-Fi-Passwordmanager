@@ -2,13 +2,16 @@ import {useSettingsViewModel} from "../ViewModels/SettingsViewModel.ts";
 import React from "react";
 import type {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
+import SettingsIcon from "./Icons/SettingsIcon.tsx";
 
 const SettingsView: React.FC<{ automergeFacade?: AutomergeFacade | null }> = ({automergeFacade}) => {
     const viewmodel = useSettingsViewModel();
 
     if (!viewmodel.settingsOpen) {
         return (
-            <button className="settingsButton" onClick={() => viewmodel.setSettingsOpen(true)}>⚙️</button>
+            <button className="settingsButton" onClick={() => viewmodel.setSettingsOpen(true)}>
+                <SettingsIcon/>
+            </button>
         );
     }
 

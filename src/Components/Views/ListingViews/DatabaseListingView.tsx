@@ -3,6 +3,8 @@ import React from "react";
 import ToastDialog from "../DialogViews/ToastDialog.tsx";
 import DatabaseListingViewModel from "../../ViewModels/Listing/DatabaseListingViewModel.ts";
 import RenameDatabaseDialog from "../DialogViews/RenameDatabaseDialog.tsx";
+import ShareIcon from "../Icons/ShareIcon.tsx";
+import BinIcon from "../Icons/BinIcon.tsx";
 
 type DatabaseListingProps = {
     databases: Map<string, AutomergeUrl>,
@@ -23,15 +25,21 @@ const DatabaseListingView: React.FC<DatabaseListingProps> = ({databases, openDat
                 {/* List all available Databases which can be opened, shared or deleted */}
                 {Array.from(databases).map(([dbName, url]) => (
                     <div className={"DatabaseAndOptions"} key={dbName}>
-                        <button onClick={() => openDatabase(dbName)}>
+                        <button
+                            onClick={() => openDatabase(dbName)}>
                             {dbName}
                         </button>
-                        <button onClick={() => viewModel.copyToClipboard(url)} title="Copy URL">
-                            🔗
+                        <button
+                            className={"DBListingButton"}
+                            style={{padding:"1.1vh"}}
+                            onClick={() => viewModel.copyToClipboard(url)} title="Copy URL">
+                            <ShareIcon/>
                         </button>
                         <RenameDatabaseDialog oldName={dbName} renameDatabase={renameDatabase} />
-                        <button onClick={() => removeDatabase(dbName)}>
-                            🗑️
+                        <button
+                            className={"DBListingButton"}
+                            onClick={() => removeDatabase(dbName)}>
+                            <BinIcon/>
                         </button>
                     </div>
                 ))}

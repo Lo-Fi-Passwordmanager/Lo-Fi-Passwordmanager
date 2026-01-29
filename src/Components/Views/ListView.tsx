@@ -3,7 +3,8 @@ import {useListViewModel} from "../ViewModels/ListViewModel.ts";
 import {Entry} from "../../Model/Entry.ts";
 import React from "react";
 import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
-import FolderMenu from "./ButtonViews/FolderMenu.tsx";
+import FolderMenu from "./MenuViews/FolderMenu.tsx";
+import BinIcon from "./Icons/BinIcon.tsx";
 
 /**
  * The View that represents the whole database, which is represented by {@link Entry}/{@link Folder} Class Instances
@@ -52,7 +53,9 @@ const ListView: React.FC<{
                  onClick={() => setCurItem(entry)}>
                 <span style={{marginRight: "1ch"}}></span> <span>{entry.title}</span>
                 <div className={"btnWrapper"}>
-                    <button className="listViewEntry button" onClick={() => deleteItem(item)}>🗑️</button>
+                    <button className="listViewEntry button" onClick={() => deleteItem(item)}>
+                        <BinIcon/>
+                    </button>
                 </div>
             </div>
         )
@@ -101,13 +104,13 @@ const ListView: React.FC<{
                         />
                     }
                     <div className="btnWrapper">
-                        <FolderMenu
+                        {item.id !== "" ? <FolderMenu
                             onAdd={() => addButtonPressed()}
                             onDelete={() => deleteItem(item)}
                             onRename={() => {
                                 listViewModel.setAndStoreEditName(true);
                             }}
-                        />
+                        /> : <button className="listViewTitleHeader button" onClick={() => addButtonPressed()}>+</button>}
                     </div>
                 </div>
 
