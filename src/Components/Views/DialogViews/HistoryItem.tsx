@@ -12,32 +12,17 @@ export const HistoryItem: React.FC<{
 
     if (!historyEntry) return null;
     // Map types to visual config
-    const config = {
-        new: {icon: "✦", class: "status-new", label: viewmodel.itemIsFolder ? "Ordner erstellt" : "Eintrag erstellt"},
-        deleted: {
-            icon: "✕",
-            class: "status-deleted",
-            label: viewmodel.itemIsFolder ? "Ordner gelöscht" : "Eintrag gelöscht"
-        },
-        update: {
-            icon: "✎",
-            class: "status-update",
-            label: viewmodel.itemIsFolder ? "Ordner bearbeitet" : "Eintrag bearbeitet"
-        }
-    };
-
-    const current = config[viewmodel.itemType as keyof typeof config];
 
     return (
-        <div className={`timeline-item ${current.class}`}>
+        <div className={`timeline-item ${viewmodel.currentConfig.class}`}>
             <div className="timeline-marker">
-                <span className="marker-icon">{current.icon}</span>
+                <span className="marker-icon">{viewmodel.currentConfig.icon}</span>
                 <div className="marker-line"></div>
             </div>
 
             <div className="timeline-content">
                 <div className="timeline-header">
-                    <span className="timeline-label">{current.label}</span>
+                    <span className="timeline-label">{viewmodel.currentConfig.label}</span>
                     <span className="timeline-date">
                         {viewmodel.itemType === "update"
                             ? viewmodel.editedAt.toLocaleDateString()

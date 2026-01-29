@@ -82,6 +82,22 @@ export const useHistoryItemViewModel = (historyEntry: HistoryEntry, securityProv
 
     }
 
+    const config = {
+        new: {icon: "✦", class: "status-new", label: itemIsFolder ? "Ordner erstellt" : "Eintrag erstellt"},
+        deleted: {
+            icon: "✕",
+            class: "status-deleted",
+            label: itemIsFolder ? "Ordner gelöscht" : "Eintrag gelöscht"
+        },
+        update: {
+            icon: "✎",
+            class: "status-update",
+            label: itemIsFolder ? "Ordner bearbeitet" : "Eintrag bearbeitet"
+        }
+    };
+
+    const currentConfig = config[itemType as keyof typeof config];
+
     return {
         itemType,
         name,
@@ -96,6 +112,7 @@ export const useHistoryItemViewModel = (historyEntry: HistoryEntry, securityProv
         get,
         decrypt,
         convertDate,
-        getAttributeName
+        getAttributeName,
+        currentConfig
     };
 };
