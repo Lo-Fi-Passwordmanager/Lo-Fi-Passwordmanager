@@ -305,13 +305,17 @@ input[type="number"] {
     align-items: center;
 }
 
-.confirm-cancel-buttons {
+.confirm-cancel-buttons, .item-creation-buttons {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     gap: 2em;
     margin-top: 1em;
+}
+
+.item-creation-buttons {
+    margin-top: 0;
 }
 
 .confirm-cancel-buttons button:nth-child(2) {
@@ -336,6 +340,18 @@ input[type="number"] {
     height: 2.5rem;
     aspect-ratio: 1;
     padding: 0.7rem;
+}
+
+.entryViewFooterButtons {
+    display: flex;
+    gap: 1vh;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+.standard-button {
+    width: 7.5rem;
+    height: 2.5rem;
 }
 
 .passwordGenButton {
@@ -982,4 +998,20 @@ input[type="number"] {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+/* flashing item when clicked or created */
+@keyframes flashAnimation {
+    0% {
+        background-color: rgba(0, 102, 255, 0.4);
+        box-shadow: 0 0 10px rgba(0, 102, 255, 0.5);
+    }
+    100% {
+        background-color: var(--panel);
+        box-shadow: none;
+    }
+}
+
+.highlighted {
+    animation: flashAnimation 1s ease-out forwards;
 }

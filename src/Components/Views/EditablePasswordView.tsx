@@ -19,9 +19,11 @@ const EditablePasswordView: React.FC<{
     setEditableView: () => void;
     hidePassword: boolean;
     toggleHidePassword: () => void;
+    setInCreation: (inCreation: boolean) => void;
+    createItem: (item: Item) => void;
 }> = ({item, updateItemAttribute, setEditableView, hidePassword, toggleHidePassword}) => {
 
-    const viewmodel = useEditablePasswordViewModel(item, updateItemAttribute);
+    const viewmodel = useEditablePasswordViewModel(item, updateItemAttribute, createItem);
 
     if (item.isFolder() || item.deleted) {
         return (
@@ -94,6 +96,26 @@ const EditablePasswordView: React.FC<{
                         </div>
                     </div>
                 </div>
+                <div className={"entryViewFooterButtons"}>
+                    <button className={"standard-button"}
+                            onClick={() => {
+                                if (inCreation) {
+                                    setInCreation(false);
+                                    viewmodel.createItemInAutomerge();
+                                } else if (viewmodel.hasChanges()) {
+                                    viewmodel.updateItemInAutomerge();
+                                }
+                                setEditableView();
+                            }}>Speichern
+                    </button>
+                    <button className={"standard-button"}
+                            onClick={() => {
+                                setInCreation(false);
+                                setEditableView();
+                            }}>Abbrechen
+                    </button>
+                </div>
+
                 <div className="entryDateViewEntry">
                     <span>Erstellt am: {item.createdAt.toLocaleString()}</span>
                     <span>Bearbeitet am: {item.editedAt.toLocaleString()}</span>

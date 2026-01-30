@@ -17,11 +17,12 @@ import EditIcon from "./Icons/EditIcon.tsx";
  */
 const EntryView: React.FC<{
     item: Item,
+    deleteItem: (item: Item) => void,
     copyAndClearClipboard: (text: string, timeout?: number) => void,
     setEditableView: () => void,
     hidePassword: boolean;
     toggleHidePassword: () => void;
-}> = ({item, copyAndClearClipboard, setEditableView, hidePassword, toggleHidePassword}) => {
+}> = ({item, deleteItem, copyAndClearClipboard, setEditableView, hidePassword, toggleHidePassword}) => {
 
     if (item.isFolder() || item.deleted) {
         return (
@@ -102,6 +103,10 @@ const EntryView: React.FC<{
                             </div>
                         </div>
                     </div>
+                </div>
+                <div className={"entryViewFooterButtons"}>
+                    <button className={"standard-button"} onClick={() => {setEditableView()}}>Bearbeiten</button>
+                    <button className={"standard-button"} onClick={() => deleteItem(item)} style={{background:"darkred"}}>Löschen</button>
                 </div>
                 <div className="entryDateViewEntry">
                     <span>Erstellt am: {item.createdAt.toLocaleString()}</span>

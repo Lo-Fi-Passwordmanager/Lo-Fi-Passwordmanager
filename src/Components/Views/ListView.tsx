@@ -23,7 +23,9 @@ const ListView: React.FC<{
     isAscending: boolean,
     dirtyItemId: string | null,
     openedDbName: string,
-    selectedFolderId: string | null;
+    selectedItemId: string | null;
+    createdFolderId: string | null;
+    setCreatedFolderId: (folderId: string | null) => void;
     updateItemTitle: (itemId: string, newTitle: string) => void;
 }> = ({
           item,
@@ -36,10 +38,12 @@ const ListView: React.FC<{
           isAscending,
           dirtyItemId,
           openedDbName,
-          selectedFolderId,
-          updateItemTitle
+          selectedItemId,
+          createdFolderId,
+          updateItemTitle,
+          setCreatedFolderId
       }) => {
-    const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem, updateItemTitle);
+    const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem, updateItemTitle, setCreatedFolderId, createdFolderId);
 
     function addButtonPressed() {
         setItemCreationDialog();
@@ -50,8 +54,9 @@ const ListView: React.FC<{
     if (listViewModel.isItemEntry()) {
         const entry = listViewModel.getItem() as Entry;
         return (
-            <div className={`listViewEntry ${getCurItem().id === entry.id ? "selected" : ""}`}
-                 onClick={() => setCurItem(entry)}>
+            <div className={`listViewEntry ${getCurItem().id === entry.id ? "selected" : ""} ${selectedItemId === item.id ? "highlighted" : ""}`}
+                 onClick={() => setCurItem(entry)}
+                 aria-selected={selectedItemId === item.id}>
                 <span style={{marginRight: "1ch"}}></span> <span>{entry.title}</span>
                 <div className={"btnWrapper"}>
                     <button className="listViewEntry button" onClick={() => deleteItem(item)}>
@@ -68,14 +73,15 @@ const ListView: React.FC<{
         return (
             <>
                 {/* Name and Buttons */}
-                <div className={`listViewTitleHeader ${selectedFolderId === item.id ? "flash-highlight" : ""}`}
-                     aria-selected={selectedFolderId === item.id}>
-                    {/*^^^^^^^^^^ using aria-selected for scrolling to the clicked folder from filtered list view */}
+                <div className={`listViewTitleHeader ${selectedItemId === item.id ? "highlighted" : ""}`}
+                     aria-selected={selectedItemId === item.id}>
+                    {/*^^^^^^^^^^^ using aria-selected for scrolling to the clicked folder from filtered list view */}
+
                     {(item.id != "") &&
                         <button style={{marginRight: "15px", boxShadow: "none"}}
                                 onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? "▼" : "▷"}</button>}
 
-                    {!listViewModel.inEditName &&
+                    {(!listViewModel.inEditName && item.id !== createdFolderId) &&
                         <span
                             style={{
                                 marginLeft: item.id !== "" ? "" : "10px",
@@ -88,9 +94,10 @@ const ListView: React.FC<{
                             }}
                         >{(item.id != "") ? item.title : openedDbName}</span>
                     }
-                    {listViewModel.inEditName &&
+                    {(listViewModel.inEditName || item.id === createdFolderId) &&
                         <input type="text"
                                autoFocus
+                               onFocus={e => {e.target.select();}}
                                style={{marginLeft: ((item.id != "") ? "" : "10px"), border: "none"}}
                                value={listViewModel.newTitle}
                                onChange={(e) => listViewModel.setItemTitle(e.target.value)}
@@ -107,12 +114,12 @@ const ListView: React.FC<{
                     }
                     <div className="btnWrapper">
                         {item.id !== "" ? <FolderMenu
-                            onAdd={() => addButtonPressed()}
+                                onAdd={() => addButtonPressed()}
                             onDelete={() => deleteItem(item)}
                             onRename={() => {
                                 listViewModel.setAndStoreEditName(true);
-                            }}
-                        /> : <button className="listViewTitleHeader button" onClick={() => addButtonPressed()}>
+                                }}
+                            /> : <button className="listViewTitleHeader button" onClick={() => addButtonPressed()}>
                             <PlusIcon/>
                         </button>}
                     </div>
@@ -135,7 +142,10 @@ const ListView: React.FC<{
                                 isAscending={isAscending}
                                 dirtyItemId={dirtyItemId} openedDbName={""}
                                 updateItemTitle={updateItemTitle}
-                                selectedFolderId={selectedFolderId}/>;
+                                selectedItemId={selectedItemId}
+                                createdFolderId={createdFolderId}
+                                setCreatedFolderId={setCreatedFolderId}
+                            />;
                         })}
                 </div>
             </>

@@ -8,7 +8,6 @@ import {
     saveCurrentSortCriterion,
     saveIsAscending
 } from "../../Utility/Storage.ts";
-import type {Folder} from "../../Model/Folder.ts";
 
 export const SortCriteria = {
     Name: "NAME",
@@ -35,7 +34,11 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     const [inEditable, setInEditable] = useState(false);
     const [dirtyItemId, setDirtyItemId] = useState<string | null>(null);
     const [hidePassword, setHidePassword] = useState(true);
-    const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
+    const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+    const [createdFolderId, setCreatedFolderId] = useState<string | null>(null);
+    // State to track if we are in the process of creating a new entry
+    const [inEntryCreation, setInEntryCreation] = useState(false);
+
 
     function setCurItem(item: Item) {
         _setCurItem(item);
@@ -44,7 +47,6 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
 
     const [curSortCrit, setCurSortCrit] = useState<SortCriteria>(initSortCriterion);
     const [isAscending, setIsAscending] = useState<boolean>(initIsAscending);
-
     const [searchValue, setSearchValue] = useState<string>("");
 
     /**
@@ -122,10 +124,30 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         return reactiveFacade.tree.rootFolder;
     }
 
-    function addItem(item: Item, parentId: string): string {
-        toggleEditablePasswordView();
-        return reactiveFacade.insertItem(item, parentId);
+    /**
+     * Adds an item to the database and sets it as the current item
+     * Folders are directly created, if the item is an entry, it sets the view to editable and in entry creation mode.
+     */
+    function addItem(item: Item) {
+        if (item.isEntry()) {
+            setCurItem(item);
+            setInEntryCreation(true);
+            setInEditable(true);
+        } else {
+            const id = reactiveFacade.insertItem(item, curParent.id);
+            item.id = id;
+            setCurItem(item);
+            goToItem(item);
+            setCreatedFolderId(id);
+        }
     }
+
+    function createEntry(item: Item) {
+        item.id = reactiveFacade.insertItem(item, curParent.id);
+        setCurItem(item);
+        goToItem(item)
+    }
+
 
     function toggleEditablePasswordView() {
         setInEditablePasswordView(!inEditablePasswordView);
@@ -202,14 +224,16 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     }
 
     /**
-     * Navigates to the given folder by setting it as the current item and clearing the search value so the view shows the full hierarchy
+     * Navigates to the given item by setting it as the current item and clearing the search value so the view shows the full hierarchy
      */
-    function goToFolder(folder: Folder) {
-        setCurItem(folder);
+    function goToItem(item: Item) {
         setSearchValue("");
-        setSelectedFolderId(folder.id);
-        setTimeout(() => document.querySelector("[aria-selected='true']")?.scrollIntoView(), 0);
-        setTimeout(() => setSelectedFolderId(null), 1000);
+        setSelectedItemId(item.id);
+        setTimeout(() => document.querySelector("[aria-selected='true']")?.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        }), 0);
+        setTimeout(() => setSelectedItemId(null), 1000);
     }
 
     return {
@@ -220,8 +244,11 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         toastVisible,
         inEditable,
         hidePassword,
-        selectedFolderId,
+        selectedItemId,
+        inEntryCreation,
+        createdFolderId,
 
+        setInEntryCreation,
         toggleHidePassword,
         setSearchValue,
         copyToClipboardAndClear,
@@ -243,7 +270,9 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setAndStoreSortCriterion,
         toggleOrder,
         getCurSortCriterion,
-        goToFolder,
+        goToFolder: goToItem,
         updateItemTitle,
+        createEntry,
+        setCreatedFolderId,
     };
 };
