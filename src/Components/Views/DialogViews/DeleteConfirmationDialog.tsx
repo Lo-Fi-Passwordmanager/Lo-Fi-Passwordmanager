@@ -21,8 +21,8 @@ const DeleteConfirmationDialog: React.FC<{
                 Die Datenbank '<strong>{database}</strong>' wirklich löschen?
             </span>
                     <div>
-                        <button className={"rectangleButton"} onClick={() => onConfirmDb(database)}>
-                            Löschen
+                        <button className={"rectangle-button delete"} onClick={() => onConfirmDb(database)}>
+                            <HiTrash size={24}/> Löschen
                         </button>
                     </div>
                 </div>
