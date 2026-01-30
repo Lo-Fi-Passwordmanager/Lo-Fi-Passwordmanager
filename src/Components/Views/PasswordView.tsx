@@ -116,10 +116,10 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                     }
                 </div>
 
-                {passwordViewModel.openConfirmationDialog && <DeleteConfirmationDialog
-                    item={passwordViewModel.openConfirmationDialog}
-                    onConfirm={passwordViewModel.confirmDeletion}
-                    onClose={() => passwordViewModel.setOpenConfirmationDialog(null)}
+                {passwordViewModel.itemToDelete && <DeleteConfirmationDialog
+                    item={passwordViewModel.itemToDelete}
+                    onConfirmItem={passwordViewModel.confirmDeletion}
+                    onClose={() => passwordViewModel.setItemToDelete(null)}
                 />}
 
                 {/*A Toast that may be called at any time with a given message*/}
