@@ -21,6 +21,7 @@ const ListView: React.FC<{
     isAscending: boolean,
     dirtyItemId: string | null,
     openedDbName: string,
+    selectedFolderId: string | null;
     updateItemTitle: (itemId: string, newTitle: string) => void;
 }> = ({
           item,
@@ -33,6 +34,7 @@ const ListView: React.FC<{
           isAscending,
           dirtyItemId,
           openedDbName,
+          selectedFolderId,
           updateItemTitle
       }) => {
     const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem, updateItemTitle);
@@ -80,6 +82,8 @@ const ListView: React.FC<{
                      {...listViewModel.attributes}
                      {...listViewModel.listeners}
                 >
+                {/*                                  vvvvvvvvvvvvv using aria-selected for scrolling to the clicked folder from filtered list view */}
+                <div className="listViewTitleHeader" aria-selected={selectedFolderId === item.id}>
                     {(item.id != "") &&
                         <button style={{marginRight: "15px", boxShadow: "none"}}
                                 onClick={() => listViewModel.toggleExtended()}
@@ -151,7 +155,8 @@ const ListView: React.FC<{
                                 isAscending={isAscending}
                                 dirtyItemId={dirtyItemId}
                                 openedDbName={""}
-                            updateItemTitle={updateItemTitle}/>;
+                            updateItemTitle={updateItemTitle}
+                                selectedFolderId={selectedFolderId}/>;
                         })}
                 </div>
             </>

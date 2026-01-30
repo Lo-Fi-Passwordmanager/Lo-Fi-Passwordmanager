@@ -9,6 +9,7 @@ import {
     saveIsAscending
 } from "../../Utility/Storage.ts";
 import {type DragEndEvent, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
+import type {Folder} from "../../Model/Folder.ts";
 
 export const SortCriteria = {
     Name: "NAME",
@@ -35,6 +36,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     const [inEditable, setInEditable] = useState(false);
     const [dirtyItemId, setDirtyItemId] = useState<string | null>(null);
     const [hidePassword, setHidePassword] = useState(true);
+    const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
 
     function setCurItem(item: Item) {
         _setCurItem(item);
@@ -225,6 +227,18 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         })
     );
 
+    /**
+     * Navigates to the given folder by setting it as the current item and clearing the search value so the view shows the full hierarchy
+     */
+    function goToFolder(folder: Folder) {
+        setCurItem(folder);
+        setSearchValue("");
+        setSelectedFolderId(folder.id);
+        setTimeout(() =>
+            document.querySelector("[aria-selected='true']")?.scrollIntoView(), 0)
+
+    }
+
     return {
         dirtyItemId,
         isAscending,
@@ -233,6 +247,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         toastVisible,
         inEditable,
         hidePassword,
+        selectedFolderId,
         sensors,
 
         toggleHidePassword,
@@ -257,6 +272,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         toggleOrder,
         getCurSortCriterion,
         handleDragEnd,
+        goToFolder,
         updateItemTitle,
     };
 };

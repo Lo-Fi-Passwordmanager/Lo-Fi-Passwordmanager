@@ -1,6 +1,7 @@
 import type {AutomergeFacade} from "../../../Utility/AutomergeFacade.ts";
 import React from "react";
 import {saveFile} from "../../../Utility/InputOutputUtil.ts";
+import {HistoryDialog} from "./HistoryDialog.tsx";
 
 /**
  * The view that links to the {@link Settings} singleton and toggles its values.
@@ -21,7 +22,9 @@ const DatabaseSettingsView: React.FC<{ automergeFacade: AutomergeFacade }> = ({a
                     }>
                     URL kopieren
                 </button>
-                <button onClick={() => saveFile(automergeFacade.exportAutomergeToBinary())}>Verschlüsselt Exportieren</button>
+                <button onClick={() => saveFile(automergeFacade.exportAutomergeToBinary())}>Verschlüsselt Exportieren
+                </button>
+                <HistoryDialog automergeFacade={automergeFacade}/>
                 {/*
                 /* TODO Datenbank löschen und abmelden
                 <button>Datenbank lokal löschen</button>

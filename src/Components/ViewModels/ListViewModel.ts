@@ -21,7 +21,7 @@ export const useListViewModel = (topItem: Item,
     const item: Item = topItem;
     const [extended, setExtended] = useState(true);
     const [inEditName, setInEditName] = useState(false);
-    const [newTitle, setNewTitle] = useState(item.title);
+    const [newTitle, setItemTitle] = useState(item.title);
     const {active} = useDndContext();
 
     if (dirtyItemId && item.id === dirtyItemId) {
@@ -75,9 +75,6 @@ export const useListViewModel = (topItem: Item,
         return item.isEntry();
     }
 
-    function setItemTitle(newTitle: string): void {
-        setNewTitle(newTitle);
-    }
 
     /**
      * Updates the title of the item in the automerge doc, should only be called, if a updateItemTitle functino is given into the viewmodel

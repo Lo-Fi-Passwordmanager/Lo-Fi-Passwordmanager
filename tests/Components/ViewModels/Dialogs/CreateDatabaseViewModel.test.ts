@@ -1,7 +1,8 @@
 import {beforeEach, describe, it, expect, vi} from "vitest";
-import {act, renderHook} from "@testing-library/react";
+import {act, renderHook, waitFor} from "@testing-library/react";
 import {useCreateDatabaseViewModel} from "../../../../src/Components/ViewModels/Dialog/CreateDatabaseViewModel";
 import {isValidAutomergeUrl} from "@automerge/react";
+import {useState} from "react";
 
 describe('CreateDatabaseViewModel', ()=> {
 
@@ -82,11 +83,44 @@ describe('CreateDatabaseViewModel', ()=> {
             result.current.setField1("name");
             result.current.setField2("url");
             result.current.setSelectedImportType("url");
-        })
+        });
         act(()=> {
             result.current.handleConfirm();
         })
         expect(setToastMessage.mock.calls.length).toBe(0);
         expect(storeDatabase.mock.calls.length).toBe(1);
+    });
+
+    it('should be able to call to import a database from a file', async () => {
+        const {result} = renderHook(() => useCreateDatabaseViewModel(true, createDatabase, storeDatabase, setToastMessage, setShowToast, importDatabase));
+        const fileList: FileList = <FileList>{};
+        act(() => {
+            result.current.setSelectedImportType("file");
+            result.current.setField1("name");
+            result.current.setTargetFiles(fileList);
+        });
+        act(()=> {
+            result.current.handleConfirm();
+        });
+        await waitFor(() => {
+            expect(importDatabase.mock.calls.length).toBe(1);
+        })
+    });
+
+    it('should do nothing if creation type is invalid', async () => {
+        const {result} = renderHook(() => useCreateDatabaseViewModel(true, createDatabase, storeDatabase, setToastMessage, setShowToast, importDatabase));
+        act(() => {
+            result.current.setSelectedImportType("invalid");
+            result.current.setField1("stuff");
+            result.current.setField2("stuff");
+        });
+        act(() => {
+            result.current.handleConfirm();
+        });
+        await waitFor(() => {
+            expect(importDatabase.mock.calls.length).toBe(0);
+            expect(createDatabase.mock.calls.length).toBe(0);
+            expect(storeDatabase.mock.calls.length).toBe(0);
+        })
     })
 })

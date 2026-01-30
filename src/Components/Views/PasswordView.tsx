@@ -10,6 +10,8 @@ import EditablePasswordView from "./EditablePasswordView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
 import SettingsView from "./SettingsView.tsx";
 import {DndContext, pointerWithin} from "@dnd-kit/core";
+import {useRepo} from "@automerge/automerge-repo-react-hooks";
+
 
 interface PasswordViewProps {
     automergeFacade?: AutomergeFacade | null,
@@ -23,6 +25,13 @@ interface PasswordViewProps {
 const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbName, closeDatabase}) => {
     const passwordViewModel = usePasswortViewModel(automergeFacade as AutomergeFacade);
 
+    // Fügt das Repo als zu global hinzu, sodass man im Browser einfach auf das Repo zugreifen kann, zum debuggen.
+    // Nur während 'yarn dev' verfügbar, nach dem build nicht mehr
+    if (import.meta.env.DEV) {
+        // @ts-expect-error no error
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        window.handle = useRepo().find(automergeFacade!.automergeURL!);
+    }
 
     return (
         <div style={{margin: "10px", height: "95vh"}}>
@@ -44,6 +53,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                         toggleOrder={passwordViewModel.toggleOrder}
                         isAscending={passwordViewModel.isAscending}
                         setLiveSearchValue={passwordViewModel.setSearchValue}
+                        liveSearchValue={passwordViewModel.searchValue}
                         closeDatabase={closeDatabase}
                         setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
                     />
@@ -58,6 +68,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                             sortCriterion={passwordViewModel.getCurSortCriterion()}
                             isAscending={passwordViewModel.isAscending}
                             filterText={passwordViewModel.searchValue}
+                            goToFolder={passwordViewModel.goToFolder}
                         />}
                         <DndContext collisionDetection={pointerWithin}
                                     onDragEnd={passwordViewModel.handleDragEnd}
@@ -77,6 +88,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                                 getCurItem={passwordViewModel.getCurEntry}
                                 openedDbName={openedDbName}
                             updateItemTitle={passwordViewModel.updateItemTitle}/>}
+                            selectedFolderId={passwordViewModel.selectedFolderId}
                         </DndContext>
                     </div>
                 </div>

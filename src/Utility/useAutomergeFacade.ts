@@ -85,12 +85,13 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
      */
     function updateItem(itemId: string, changes: [Attribute, (string | Date)][]) {
         changeDoc(
-            (doc) => changes
-                .forEach(
+            (doc) => {
+                changes.forEach(
                     ([attr, val]) => updateValue(doc, itemId, itemsById, attr, (typeof val == "string" && attr !== "parentId") ? automergeFacade.getSecurityProvider()!.encryptValue(val) : val) //FIXME? parent ids verschlüsseln schlecht anscheinend
-                )
+                );
+                updateValue(doc, itemId, itemsById, "editedAt", new Date());
+            }
         );
-        changeDoc((doc) => updateValue(doc, itemId, itemsById, "editedAt", new Date()));
     }
 
     return {
