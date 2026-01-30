@@ -357,7 +357,7 @@ input[type="number"] {
     background-color: var(--panel);
     display: flex;
     border-radius: 12px;
-    margin: 5px 10px;
+    margin: 0.6vh 1vh;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -437,7 +437,7 @@ input[type="number"] {
     background-color: var(--dialog-bg);
     text-align: left;
     font-weight: 500;
-    margin: 5px 10px;
+    margin: 0.6vh 1vh;
     border: 3px solid transparent;
     transition: border-color 0.2s ease, transform 0.1s ease;
     box-sizing: border-box;
