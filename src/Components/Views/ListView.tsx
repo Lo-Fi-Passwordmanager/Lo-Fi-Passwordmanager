@@ -56,12 +56,13 @@ const ListView: React.FC<{
     if (listViewModel.isItemEntry()) {
         const entry = listViewModel.getItem() as Entry;
         return (
-            <div className={`listViewEntry ${getCurItem().id !== entry.id ? "" : "selected"} ${listViewModel.isDragging ? "dragged" : ""}`}
-                 onClick={() => setCurItem(entry)}
-                 style={dragStyle}
-                 ref={listViewModel.setDraggableRef}
-                 {...listViewModel.attributes}
-                 {...listViewModel.listeners}
+            <div
+                className={`listViewEntry ${getCurItem().id !== entry.id ? "" : "selected"} ${listViewModel.isDragging ? "dragged" : ""}`}
+                onClick={() => setCurItem(entry)}
+                style={dragStyle}
+                ref={listViewModel.setDraggableRef}
+                {...listViewModel.attributes}
+                {...listViewModel.listeners}
             >
                 <span style={{marginRight: "1ch"}}></span> <span>{entry.title}</span>
                 <div className="btnWrapper">
@@ -76,23 +77,24 @@ const ListView: React.FC<{
         return (
             <>
                 {/* Name and Buttons */}
-                    <div className={`listViewTitleHeader ${listViewModel.isDragging ? "dragged" : ""} ${listViewModel.isOver && !listViewModel.isDragging ? "over" : ""}`}
-                     ref={listViewModel.setFolderRef}
-                     style={dragStyle}
-                     {...listViewModel.attributes}
-                     {...listViewModel.listeners}
-                >
-                {/*                                  vvvvvvvvvvvvv using aria-selected for scrolling to the clicked folder from filtered list view */}
-                <div className="listViewTitleHeader" aria-selected={selectedFolderId === item.id}>
-                    {(item.id != "") &&
-                        <button style={{marginRight: "15px", boxShadow: "none"}}
-                                onClick={() => listViewModel.toggleExtended()}
-                                onPointerDown={(e) => e.stopPropagation()}
-                        >
-                            {listViewModel.getExtended() ? "▼" : "▷"}</button>}
+                    <div
+                        className={`listViewTitleHeader ${listViewModel.isDragging ? "dragged" : ""} ${listViewModel.isOver && !listViewModel.isDragging ? "over" : ""}`}
+                        ref={listViewModel.setFolderRef}
+                        style={dragStyle}
+                        {...listViewModel.attributes}
+                        {...listViewModel.listeners}
+                        aria-selected={selectedFolderId === item.id}>
+                        {/* ^^^^^^^^^ using aria-selected for scrolling to the clicked folder from filtered list view */}
+                        {(item.id != "") &&
+                            <button style={{marginRight: "15px", boxShadow: "none"}}
+                                    onClick={() => listViewModel.toggleExtended()}
+                                    onPointerDown={(e) => e.stopPropagation()}
+                            >
+                                {listViewModel.getExtended() ? "▼" : "▷"}</button>}
 
-                    {!listViewModel.inEditName && <span
-                        style={{marginLeft: item.id !== ""  ? "" : "10px",
+                        {!listViewModel.inEditName && <span
+                            style={{
+                                marginLeft: item.id !== "" ? "" : "10px",
                                 display: "inline-block", // Required for overflow to work
                                 maxWidth: "100%",        // Limits it to the parent's width
                                 whiteSpace: "nowrap",    // Prevents text from wrapping to a second line
@@ -100,67 +102,70 @@ const ListView: React.FC<{
                                 textOverflow: "ellipsis", // Adds the "..."
                                 verticalAlign: "middle"  // Keeps it aligned with buttons
                             }}>{(item.id != "") ? item.title : openedDbName}</span>
-                    }
-                    {listViewModel.inEditName &&
-                        <input type="text"
-                               autoFocus
-                               style={{marginLeft: ((item.id != "") ? "" : "10px"), border: "none"}}
-                               value={listViewModel.newTitle}
-                               onChange={(e) => listViewModel.setItemTitle(e.target.value)}
-                               onBlur={() => {
-                                   listViewModel.setAndStoreEditName(false);
-                                   listViewModel.updateTitleInAutomerge()
-                               }}
-                               onKeyDown={(e) => {
-                                   if (e.key === 'Enter') {
-                                       (e.target as HTMLInputElement).blur();
-                                   }
-                               }}
-                        />
-                    }
-                    <div className="btnWrapper">
-                        <button onClick={() => {
-                            addButtonPressed();
-                            listViewModel.setExtended(true);
-                        }}
-                                onPointerDown={(e) => e.stopPropagation()}>+
-                        </button>
-                        {(item.id != "") && (listViewModel.inEditName) &&
-                        <button onClick={() => listViewModel.setAndStoreEditName(false)}>
-                            ✏️
-                        </button>}
-                        {(item.id != "") && (!listViewModel.inEditName) &&
-                        <button onClick={() => listViewModel.setAndStoreEditName(true)}>
-                            ✏️
-                        </button>}
-                        {(item.id != "") && <button onClick={() => deleteItem(item)}
-                                                    onPointerDown={(e) => e.stopPropagation()}>🗑️</button>}
-                        {/* FIXME: Löschbestätigung einbauen */}</div>
-                </div>
-
-                {/* Recursive call of children with indent to visualizes depth in the tree */}
-                <div className="listViewEntryWrapper"
-                     style={{display: (listViewModel.getExtended() ? "block" : "none")}}>
-                    {listViewModel.getChildren() &&
-                        listViewModel.getChildren()!.map((item: Item, index: number) => {
-                            return <ListView
-                                key={index}
-                                item={item}
-                                setCurItem={setCurItem}
-                                getCurItem={getCurItem}
-                                setItemCreationDialog={setItemCreationDialog}
-                                setCurrentParent={setCurrentParent}
-                                deleteItem={deleteItem}
-                                sortCriterion={sortCriterion}
-                                isAscending={isAscending}
-                                dirtyItemId={dirtyItemId}
-                                openedDbName={""}
-                            updateItemTitle={updateItemTitle}
-                                selectedFolderId={selectedFolderId}/>;
-                        })}
-                </div>
+                        }
+                        {listViewModel.inEditName &&
+                            <input type="text"
+                                   autoFocus
+                                   style={{marginLeft: ((item.id != "") ? "" : "10px"), border: "none"}}
+                                   value={listViewModel.newTitle}
+                                   onChange={(e) => listViewModel.setItemTitle(e.target.value)}
+                                   onBlur={() => {
+                                       listViewModel.setAndStoreEditName(false);
+                                       listViewModel.updateTitleInAutomerge()
+                                   }}
+                                   onKeyDown={(e) => {
+                                       if (e.key === 'Enter') {
+                                           (e.target as HTMLInputElement).blur();
+                                       }
+                                   }}
+                            />
+                        }
+                        <div className="btnWrapper">
+                            <button onClick={() => {
+                                addButtonPressed();
+                                listViewModel.setExtended(true);
+                            }}
+                                    onPointerDown={(e) => e.stopPropagation()}>+
+                            </button>
+                            {(item.id != "") && (listViewModel.inEditName) &&
+                                <button onClick={() => listViewModel.setAndStoreEditName(false)}>
+                                    ✏️
+                                </button>}
+                            {(item.id != "") && (!listViewModel.inEditName) &&
+                                <button onClick={() => listViewModel.setAndStoreEditName(true)}>
+                                    ✏️
+                                </button>}
+                            {(item.id != "") && <button onClick={() => deleteItem(item)}
+                                                        onPointerDown={(e) => e.stopPropagation()}>🗑️</button>}
+                            {/* FIXME: Löschbestätigung einbauen */}
+                        </div>
+                    </div>
+                    {/* Recursive call of children with indent to visualizes depth in the tree */}
+                    <div className="listViewEntryWrapper"
+                         style={{display: (listViewModel.getExtended() ? "block" : "none")}}>
+                        {listViewModel.getChildren() &&
+                            listViewModel.getChildren()!.map((item: Item, index: number) => {
+                                return <ListView
+                                    key={index}
+                                    item={item}
+                                    setCurItem={setCurItem}
+                                    getCurItem={getCurItem}
+                                    setItemCreationDialog={setItemCreationDialog}
+                                    setCurrentParent={setCurrentParent}
+                                    deleteItem={deleteItem}
+                                    sortCriterion={sortCriterion}
+                                    isAscending={isAscending}
+                                    dirtyItemId={dirtyItemId}
+                                    openedDbName={""}
+                                    updateItemTitle={updateItemTitle}
+                                    selectedFolderId={selectedFolderId}
+                                />;
+                            })
+                        }
+                    </div>
             </>
-        );
+        )
+            ;
     }
 };
 

@@ -87,8 +87,10 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                                 dirtyItemId={passwordViewModel.dirtyItemId}
                                 getCurItem={passwordViewModel.getCurEntry}
                                 openedDbName={openedDbName}
-                            updateItemTitle={passwordViewModel.updateItemTitle}/>}
-                            selectedFolderId={passwordViewModel.selectedFolderId}
+                                updateItemTitle={passwordViewModel.updateItemTitle}
+                                selectedFolderId={passwordViewModel.selectedFolderId}
+
+                            />}
                         </DndContext>
                     </div>
                 </div>
