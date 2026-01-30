@@ -84,7 +84,7 @@ const EntryView: React.FC<{
                                 <span style={{gridColumn: "span 20"}}>Notiz:</span>
                                 <span className={"attribute-value"} style={{
                                     height: "fit-content",
-                                    padding: "10px",
+                                    paddingLeft: "10px",
                                     whiteSpace: "normal",
                                     gridColumnEnd: "21"
                                 }}>{entry.note}</span>
@@ -93,10 +93,10 @@ const EntryView: React.FC<{
                         <div className={"entryViewFooterButtons"}>
                             <button className={"rectangle-button"} onClick={() => {
                                 setEditableView()
-                            }}>
+                            }} style={{boxShadow: "none"}} >
                                 <HiPencil size={24}/> Bearbeiten
                             </button>
-                            <button className={"rectangle-button delete"} onClick={() => deleteItem(item)}>
+                            <button className={"rectangle-button delete"} onClick={() => deleteItem(item)} style={{boxShadow: "none"}}>
                                 <HiTrash size={24}/>Löschen
                             </button>
                         </div>

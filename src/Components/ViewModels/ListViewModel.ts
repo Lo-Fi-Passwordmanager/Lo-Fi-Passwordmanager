@@ -117,8 +117,8 @@ export const useListViewModel = (
      * Gets all descendant IDs of the current item if it is a folder
      */
     const descendantIds = useMemo(() => {
-        return isItemFolder() ? getDescendantIds(item) : [];
-    }, [item]);
+        return isItemFolder() ? getDescendantIds(topItem) : [];
+    }, [topItem]);
 
     /**
      * Determines if the current item is an invalid drop target for the active draggable item
@@ -126,8 +126,8 @@ export const useListViewModel = (
     const isInvalidDropTarget = useMemo(() => {
         if (!active) return false;
         const activeDescendants = active.data.current?.descendantIds as string[];
-        return activeDescendants.includes(item.id);
-    }, [active, item.id]);
+        return activeDescendants.includes(topItem.id);
+    }, [active, topItem.id]);
 
 
     // DnD Kit Draggable and Droppable setup
@@ -138,7 +138,7 @@ export const useListViewModel = (
         transform,
         isDragging
     } = useDraggable({
-        id: item.id,
+        id: topItem.id,
         data: {type: isItemFolder() ? 'folder' : 'entry',
             descendantIds: descendantIds}
     });
@@ -147,7 +147,7 @@ export const useListViewModel = (
         setNodeRef: setDroppableRef,
         isOver
     } = useDroppable({
-        id: item.id,
+        id: topItem.id,
         disabled: !isItemFolder() || isInvalidDropTarget
     });
 
