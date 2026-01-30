@@ -48,12 +48,12 @@ describe('HistoryItemViewModel', ()=> {
     });
 
     it('should be able to decrypt a value correctly', () => {
-        const {result} = renderHook(() => useHistoryItemViewModel(hEntryNew, secProvider));
-        let decypted
+        const {result} = renderHook(() => useHistoryItemViewModel(hFolderNew, secProvider));
+        let decrypted;
         act(() => {
-            decypted = result.current.decrypt(validation);
+            decrypted = result.current.decrypt(validation);
         })
-        expect(decypted != null).toBe(true);
+        expect(decrypted != null).toBe(true);
     });
 
     it('should be able to covert a number into the correct corresponding Date', ()=> {
