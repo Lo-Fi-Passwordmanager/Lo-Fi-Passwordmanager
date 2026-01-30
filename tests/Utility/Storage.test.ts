@@ -4,7 +4,7 @@ import {expect, it, describe, beforeEach, afterEach} from "vitest";
 import {AutomergeUrl} from "@automerge/automerge-repo";
 import {
     loadAllDatabases, loadCurrentSortCriterion, loadIsAscending,
-    removeDatabase,
+    removeDatabase, renameDatabase,
     saveCurrentSortCriterion,
     saveDatabases, saveIsAscending,
     storeDatabase
@@ -74,4 +74,17 @@ describe("PasswordManagerViewModel", () => {
         expect(loadIsAscending()).toBe(true);
     })
 
+    it('should be able to rename a database', ()=> {
+        storeDatabase("oldName", "automerge-id" as AutomergeUrl);
+        let reloadedMap = loadAllDatabases();
+        expect(reloadedMap.size).toBe(1);
+        expect(reloadedMap.get("oldName")).toBe("automerge-id");
+        renameDatabase("oldName", "newName");
+        reloadedMap = loadAllDatabases();
+        expect(reloadedMap.get("newName")).toBe("automerge-id");
+    });
+
+    it('Should throw if attempting to rename a database that doesnt exist', ()=> {
+        expect(() => renameDatabase("oldName", "newName")).toThrow("Database with name oldName does not exist.");
+    })
 })
