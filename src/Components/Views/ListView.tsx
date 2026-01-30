@@ -4,6 +4,7 @@ import {Entry} from "../../Model/Entry.ts";
 import React from "react";
 import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
 import {CSS} from "@dnd-kit/utilities";
+
 /* eslint-disable react-hooks/refs */ //react and the eslint do not like each other: https://github.com/facebook/react/issues/34775
 /**
  * The View that represents the whole database, which is represented by {@link Entry}/{@link Folder} Class Instances
@@ -44,7 +45,6 @@ const ListView: React.FC<{
         setCurrentParent!(item);
     }
 
-    //If the item to be shown is of type entry, than only its name will be shown
     // makes the dragged item follow the cursor
     const dragStyle = {
         transform: CSS.Translate.toString(listViewModel.transform),
