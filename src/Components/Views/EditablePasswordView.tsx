@@ -20,8 +20,9 @@ const EditablePasswordView: React.FC<{
     hidePassword: boolean;
     toggleHidePassword: () => void;
     setInCreation: (inCreation: boolean) => void;
+    inCreation: boolean;
     createItem: (item: Item) => void;
-}> = ({item, updateItemAttribute, setEditableView, hidePassword, toggleHidePassword}) => {
+}> = ({item, updateItemAttribute, setEditableView, hidePassword, toggleHidePassword, createItem, setInCreation, inCreation}) => {
 
     const viewmodel = useEditablePasswordViewModel(item, updateItemAttribute, createItem);
 
