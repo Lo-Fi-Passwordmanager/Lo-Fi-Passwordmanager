@@ -4,6 +4,7 @@ import {type Item} from "../../Model/Item.ts";
 import Logo from "../../assets/logo_gelb.svg?inline";
 import EyeButton from "./ButtonViews/EyeButton.tsx";
 import { HiMiniLink } from "react-icons/hi2";
+import {HiPencil, HiTrash} from "react-icons/hi";
 /**
  * The View that depicts an Entry with all its attributes at large scale
  * @param item the entry that should be depicted
@@ -92,9 +93,12 @@ const EntryView: React.FC<{
                         <div className={"entryViewFooterButtons"}>
                             <button className={"rectangle-button"} onClick={() => {
                                 setEditableView()
-                            }}>Bearbeiten
+                            }}>
+                                <HiPencil size={24}/> Bearbeiten
                             </button>
-                            <button className={"rectangle-button"} onClick={() => deleteItem(item)}>Löschen</button>
+                            <button className={"rectangle-button delete"} onClick={() => deleteItem(item)}>
+                                <HiTrash size={24}/>Löschen
+                            </button>
                         </div>
                     </div>
                 </div>

@@ -94,7 +94,7 @@ const EditablePasswordView: React.FC<{
                                         setEditableView();
                                     }}>Speichern
                             </button>
-                            <button className={"rectangle-button"}
+                            <button className={"rectangle-button cancel"}
                                     onClick={() => {
                                         setInCreation(false);
                                         setEditableView();
