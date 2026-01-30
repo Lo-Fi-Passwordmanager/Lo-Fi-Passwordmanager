@@ -5,6 +5,7 @@ import React from "react";
 import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
 import FolderMenu from "./MenuViews/FolderMenu.tsx";
 import BinIcon from "./Icons/BinIcon.tsx";
+import PlusIcon from "./Icons/PlusIcon.tsx";
 
 /**
  * The View that represents the whole database, which is represented by {@link Entry}/{@link Folder} Class Instances
@@ -111,7 +112,9 @@ const ListView: React.FC<{
                             onRename={() => {
                                 listViewModel.setAndStoreEditName(true);
                             }}
-                        /> : <button className="listViewTitleHeader button" onClick={() => addButtonPressed()}>+</button>}
+                        /> : <button className="listViewTitleHeader button" onClick={() => addButtonPressed()}>
+                            <PlusIcon/>
+                        </button>}
                     </div>
                 </div>
 

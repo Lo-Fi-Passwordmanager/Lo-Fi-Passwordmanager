@@ -41,7 +41,7 @@ const EntryView: React.FC<{
         return (<>
                 <div className="entryViewEntry">
                     <button
-                        className="settingsButton"
+                        className="squareButton"
                         onClick={setEditableView}
                         style={{
                             position: "absolute",
@@ -59,7 +59,7 @@ const EntryView: React.FC<{
                             <div className={"entryViewAttribute"}>
                                 <span style={{gridColumn: "span 20"}}>Benutzername:</span>
                                 <span className={"attribute-value"}>{entry.username}</span>
-                                <button className={"copy-button"}
+                                <button className={"copyButton"}
                                         onClick={() => copyAndClearClipboard(entry.username)}>
                                     <ShareIcon/>
                                 </button>
@@ -71,7 +71,7 @@ const EntryView: React.FC<{
                                     <span>{(hidePassword ? "*".repeat(entry.password.length) : entry.password)}</span>
                                 </div>
                                 <EyeButton hidePassword={hidePassword} toggleHidePassword={toggleHidePassword}/>
-                                <button className={"copy-button"}
+                                <button className={"copyButton"}
                                         onClick={() => copyAndClearClipboard(entry.password)}>
                                     <ShareIcon/>
                                 </button>
@@ -86,7 +86,7 @@ const EntryView: React.FC<{
                                    style={{textDecoration: "underline", color: "inherit"}}>
                                     {entry.url}
                                 </a>
-                                <button className={"copy-button"} onClick={() => copyAndClearClipboard(entry.url)}>
+                                <button className={"copyButton"} onClick={() => copyAndClearClipboard(entry.url)}>
                                     <ShareIcon/>
                                 </button>
                             </div>

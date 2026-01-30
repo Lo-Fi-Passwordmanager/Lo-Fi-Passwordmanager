@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useRef} from "react";
 import EditIcon from "../Icons/EditIcon.tsx";
 import BinIcon from "../Icons/BinIcon.tsx";
+import PlusIcon from "../Icons/PlusIcon.tsx";
 
 interface Props {
     onDelete: () => void;
@@ -38,7 +39,7 @@ const FolderMenu: React.FC<Props> = ({onDelete, onRename, onAdd}) => {
                     onAdd();
                     setIsOpen(false);
                 }}>
-                    +
+                    <PlusIcon/>
                 </button>
                 <button className="listViewTitleHeader button" onClick={() => {
                     onRename();

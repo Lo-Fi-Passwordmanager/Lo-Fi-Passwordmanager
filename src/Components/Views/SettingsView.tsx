@@ -4,6 +4,8 @@ import type {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
 import SettingsIcon from "./Icons/SettingsIcon.tsx";
 import Close from "./Icons/Close.tsx";
+import MinusIcon from "./Icons/MinusIcon.tsx";
+import PlusIcon from "./Icons/PlusIcon.tsx";
 
 const SettingsView: React.FC<{ automergeFacade?: AutomergeFacade | null }> = ({automergeFacade}) => {
     const viewmodel = useSettingsViewModel();
@@ -72,8 +74,8 @@ const SettingsView: React.FC<{ automergeFacade?: AutomergeFacade | null }> = ({a
                                     <div className={"numberInput"}>
                                         <input type="number" value={viewmodel.timeoutLength}
                                                onChange={(e) => viewmodel.setTimeOutLengthVM(e.target.value)} min="1"/>
-                                        <button onClick={viewmodel.decrease}>–</button>
-                                        <button onClick={viewmodel.increase}>+</button>
+                                        <button className={"squareButton"} style={{boxShadow:"none"}} onClick={viewmodel.decrease}><MinusIcon/></button>
+                                        <button className={"squareButton"} style={{boxShadow:"none"}} onClick={viewmodel.increase}><PlusIcon/></button>
                                     </div>
                                 </div>
                             )}

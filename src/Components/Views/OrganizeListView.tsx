@@ -1,5 +1,6 @@
 import React from 'react';
 import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
+import PlusIcon from "./Icons/PlusIcon.tsx";
 
 const OrganizeListView: React.FC<{
     getCurSortCriterion: () => SortCriteria,
@@ -25,14 +26,20 @@ const OrganizeListView: React.FC<{
                 {/*Giving each element a specific grid column to align them properly*/}
 
                 {/* Button to close the database and go back to the database selection */}
-                <button style={{gridColumn: "span 1"}} onClick={() => closeDatabase()}>⬅</button>
+                <button
+                    className={"squareButton"}
+                    style={{gridColumn: "span 1"}} onClick={() => closeDatabase()}>⬅
+                </button>
 
                 <input style={{gridColumn: "span 8"}} type="text" placeholder="Suchen..." value={liveSearchValue}
                        onChange={(event => setLiveSearchValue(event.target.value))}/>
                 {/* Search bar to filter the list of entries and folders */}
-                <button style={{gridColumn: "span 1", fontSize: "1.2em"}} onClick={() => {
+                <button
+                    className={"squareButton"}
+                    style={{gridColumn: "span 1"}} onClick={() => {
                     setItemCreationDialog();
-                }}>+
+                }}>
+                    <PlusIcon/>
                 </button>
 
                 <select style={{gridColumn: "span 9"}} value={getCurSortCriterion()}
@@ -42,7 +49,9 @@ const OrganizeListView: React.FC<{
                     <option value="EDITED">Bearbeitungsdatum</option>
                 </select>
 
-                <button style={{gridColumn: "span 1"}} onClick={() => {
+                <button
+                    className={"squareButton"}
+                    style={{gridColumn: "span 1"}} onClick={() => {
                     toggleOrder()
                 }}>
                     {isAscending ? '🡅' : '🡇'}

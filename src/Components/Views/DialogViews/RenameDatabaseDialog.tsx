@@ -15,7 +15,7 @@ const RenameDatabaseDialog: React.FC<RenameDatabaseDialogProps> = ({oldName, ren
         return (
             <>
             <button
-                className="DBListingButton"
+                className="squareButton"
                 onClick={() => viewModel.setRenameDatabaseOpen(true)}>
                 <EditIcon/>
             </button>
@@ -39,7 +39,7 @@ const RenameDatabaseDialog: React.FC<RenameDatabaseDialogProps> = ({oldName, ren
     } else {
         return (
             <button
-                className="DBListingButton"
+                className="squareButton"
                 onClick={() => viewModel.setRenameDatabaseOpen(true)}>
                 <EditIcon/>
             </button>

@@ -334,22 +334,38 @@ input[type="number"] {
     width: 100%;
 }
 
-.settingsButton {
+.squareButton, .settingsButton, .copyButton, .eyeButton {
     height: 5vh;
     aspect-ratio: 1;
-    padding: 1.2vh;
+    padding: 1.3vh;
+}
 
+.copyButton, .eyeButton {
+    margin-left: 2vh;
+    box-shadow: none;
+    grid-column-start: 20 !important;
+    grid-column: span 1;
+}
+
+.eyeButton {
+    padding: 1vh;
+    background-color: transparent;
+    color: var(--panel);
+    border: 1px solid var(--panel);
+    grid-column-start: 19 !important;
+}
+
+.eyeButton.selected {
+    color: var(--text);
+    background-color: var(--panel);
+}
+
+.settingsButton {
     float: right;
     position: absolute;
     top: 1%;
     right: 0.5%;
     z-index: 90;
-}
-
-.DBListingButton {
-    height: 5vh;
-    aspect-ratio: 1;
-    padding: 1.3vh;
 }
 
 .listViewTitleHeader {
@@ -529,29 +545,6 @@ input[type="number"] {
     height: 20%;
 }
 
-.copy-button, .eye-button {
-    height: 5vh;
-    aspect-ratio: 1;
-    margin-left: 2vh;
-    box-shadow: none;
-    grid-column-start: 20 !important;
-    grid-column: span 1;
-    padding: 1.3vh;
-}
-
-.eye-button {
-    padding: 1vh;
-    background-color: transparent;
-    color: var(--panel);
-    border: 1px solid var(--panel);
-    grid-column-start: 19 !important;
-}
-
-.eye-button.selected {
-    color: var(--text);
-    background-color: var(--panel);
-}
-
 .attribute-value, .title-value {
     box-sizing: border-box;
     border: 1px solid var(--panel);
@@ -678,7 +671,7 @@ input[type="number"] {
     width: 5vh;
     aspect-ratio: 1;
     margin-left: 2vh;
-    padding: 0;
+    padding: 1vh;
     box-shadow: none;
 
     display: flex;
@@ -693,9 +686,9 @@ input[type="number"] {
 .OrganizedListView {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    gap: 8px;
-    padding: 8px;
+    grid-template-rows: repeat(2, 5vh);
+    gap: 1vh;
+    padding: 1vh;
 }
 
 .FilteredListView__header {

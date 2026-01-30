@@ -30,14 +30,13 @@ const DatabaseListingView: React.FC<DatabaseListingProps> = ({databases, openDat
                             {dbName}
                         </button>
                         <button
-                            className={"DBListingButton"}
-                            style={{padding:"1.3vh"}}
+                            className={"squareButton"}
                             onClick={() => viewModel.copyToClipboard(url)} title="Copy URL">
                             <ShareIcon/>
                         </button>
                         <RenameDatabaseDialog oldName={dbName} renameDatabase={renameDatabase} />
                         <button
-                            className={"DBListingButton"}
+                            className={"squareButton"}
                             onClick={() => removeDatabase(dbName)}>
                             <BinIcon/>
                         </button>

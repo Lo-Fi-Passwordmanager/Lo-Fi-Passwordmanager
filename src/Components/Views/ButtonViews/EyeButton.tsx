@@ -12,7 +12,7 @@ const EyeButton: React.FC<{
 }> = ({hidePassword, toggleHidePassword}) => {
 
     return (
-        <button className={`eye-button ${hidePassword ? "" : "selected"}`}
+        <button className={`eyeButton ${hidePassword ? "" : "selected"}`}
                 onClick={() => toggleHidePassword()}>
             <EyeIcon enabled={!hidePassword}/>
         </button>
