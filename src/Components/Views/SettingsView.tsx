@@ -72,10 +72,13 @@ const SettingsView: React.FC<{ automergeFacade?: AutomergeFacade | null }> = ({a
                                 <div className={"timeout-setting"}>
                                     <label>Minuten bis Abmeldung: </label>
                                     <div className={"numberInput"}>
-                                        <input type="number" value={viewmodel.timeoutLength}
+                                        <input type="number" style={{maxHeight: "2.5rem"}}
+                                               value={viewmodel.timeoutLength}
                                                onChange={(e) => viewmodel.setTimeOutLengthVM(e.target.value)} min="1"/>
-                                        <button className={"squareButton"} style={{boxShadow:"none"}} onClick={viewmodel.decrease}><MinusIcon/></button>
-                                        <button className={"squareButton"} style={{boxShadow:"none"}} onClick={viewmodel.increase}><PlusIcon/></button>
+                                        <button className={"squareButton"} style={{boxShadow: "none"}}
+                                                onClick={viewmodel.decrease}><MinusIcon/></button>
+                                        <button className={"squareButton"} style={{boxShadow: "none"}}
+                                                onClick={viewmodel.increase}><PlusIcon/></button>
                                     </div>
                                 </div>
                             )}

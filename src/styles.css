@@ -112,7 +112,6 @@ header {
 }
 
 button, select {
-    justify-content: left;
     font-size: 1em;
     font-weight: 600;
     font-family: inherit;
@@ -274,12 +273,11 @@ button:focus-visible {
     align-items: center;
     gap: 8px;
     width: 300px;
+    height: 2.5rem;
 }
 
 .number-control {
     width: 50px;
-    max-height: 100%;
-    min-height: 100%;
     font-size: 1.5em;
     padding: 0;
     padding-bottom: 3px;
@@ -334,10 +332,24 @@ input[type="number"] {
     width: 100%;
 }
 
-.squareButton, .settingsButton, .copyButton, .eyeButton {
-    height: 5vh;
+.squareButton, .settingsButton, .copyButton, .eyeButton, .passwordGenButton {
+    height: 2.5rem;
     aspect-ratio: 1;
-    padding: 1.3vh;
+    padding: 0.7rem;
+}
+
+.passwordGenButton {
+    margin-left: 2vh;
+    padding: 0.6rem;
+    box-shadow: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
 }
 
 .copyButton, .eyeButton {
@@ -348,7 +360,7 @@ input[type="number"] {
 }
 
 .eyeButton {
-    padding: 1vh;
+    padding: 0.5rem;
     background-color: transparent;
     color: var(--panel);
     border: 1px solid var(--panel);
@@ -380,7 +392,7 @@ input[type="number"] {
     white-space: nowrap;
     align-items: center;
     padding-left: 10px;
-    height: 5vh;
+    height: 2.5rem;
 
     border: 3px solid transparent;
     transition: border-color 0.2s ease, transform 0.1s ease;
@@ -400,10 +412,10 @@ input[type="number"] {
 }
 
 .listViewTitleHeader button, .listViewEntry button {
-    height: 4vh;
+    height: 2rem;
     aspect-ratio: 1;
     margin: 5px;
-    padding: 0.7vh;
+    padding: 0.4rem;
     border-radius: 8px;
     justify-content: center;
 }
@@ -449,7 +461,7 @@ input[type="number"] {
     flex-direction: row;
     padding-left: 10px;
     border-radius: 10px;
-    height: 5vh;
+    height: 2.5rem;
     background-color: var(--dialog-bg);
     text-align: left;
     font-weight: 500;
@@ -540,7 +552,7 @@ input[type="number"] {
 .entryViewAttribute {
     display: grid;
     grid-template-columns: repeat(20, 1fr);
-    grid-template-rows: repeat(2, 5vh);
+    grid-template-rows: repeat(2, 2.5rem);
     align-items: start;
     height: 20%;
 }
@@ -550,8 +562,8 @@ input[type="number"] {
     border: 1px solid var(--panel);
     border-radius: 12px;
     padding: 0 12px;
-    min-height: 5vh;
-    height: 5vh;
+    min-height: 2.5rem;
+    height: 2.5rem;
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -570,8 +582,8 @@ input[type="number"] {
     font-weight: 550;
     width: fit-content;
     padding: 1.2%;
-    min-height: 5vh;
-    height: 5vh;
+    min-height: 2.5rem;
+    height: 2.5rem;
     border: none;
 }
 
@@ -667,26 +679,10 @@ input[type="number"] {
     grid-row-gap: 1.5%;
 }
 
-.passwordGenButton {
-    width: 5vh;
-    aspect-ratio: 1;
-    margin-left: 2vh;
-    padding: 1vh;
-    box-shadow: none;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 18px;
-    line-height: 1;
-    cursor: pointer;
-}
-
 .OrganizedListView {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
-    grid-template-rows: repeat(2, 5vh);
+    grid-template-rows: repeat(2, 2.5rem);
     gap: 1vh;
     padding: 1vh;
 }
@@ -790,8 +786,7 @@ input[type="number"] {
     max-width: 0;
     opacity: 0;
     transform: translateX(20px);
-    padding: 1vh;
-    padding-left: 3vh;
+    padding: 1vh 1vh 1vh 3vh;
 
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
