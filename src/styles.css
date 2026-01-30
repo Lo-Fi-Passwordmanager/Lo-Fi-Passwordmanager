@@ -582,12 +582,6 @@ input[type="number"] {
     border: none;
 }
 
-.scrollableContainer {
-    overflow: auto;
-    scrollbar-color: var(--panel) var(--bg);
-    scrollbar-width: none;
-}
-
 .closeButton {
     float: left;
     position: fixed;
@@ -838,9 +832,12 @@ input[type="number"] {
 }
 
 .scrollableContainer {
-    padding: 20px 10px;
+    padding: 1vh 0.5vh;
     display: flex;
     flex-direction: column;
+    overflow: auto;
+    scrollbar-color: var(--panel) var(--bg);
+    scrollbar-width: none;
 }
 
 /* Timeline Structure */

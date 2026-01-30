@@ -56,7 +56,9 @@ const EditablePasswordView: React.FC<{
                     <input className={"title-value"} type={"text"} value={viewmodel.title}
                            onChange={(e) => viewmodel.setTitle(e.target.value)}/>
 
-                    <div style={{height: '100%', width: '90%'}}>
+                    <div
+                        className={"scrollableContainer"}
+                        style={{height: '100%', width: '90%'}}>
                         <div className={"entryViewListing"}>
                             <div className={"entryViewAttribute"}>
                                 <span style={{gridColumn: "span 20"}}>Benutzername:</span>
