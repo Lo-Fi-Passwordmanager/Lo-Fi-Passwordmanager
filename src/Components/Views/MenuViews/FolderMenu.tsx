@@ -14,7 +14,7 @@ const FolderMenu: React.FC<Props> = ({onDelete, onRename, onAdd}) => {
 
     useEffect(() => {
         const handleClickOutside = () => {
-            if (menuRef.current) {
+            if (menuRef.current && !menuRef.current.contains(document.activeElement)) {
                 setIsOpen(false);
             }
         };
@@ -34,10 +34,16 @@ const FolderMenu: React.FC<Props> = ({onDelete, onRename, onAdd}) => {
         <div className="action-menu-wrapper" ref={menuRef} onClick={(e) => e.stopPropagation()}>
 
             <div className={`action-items ${isOpen ? "open" : ""}`}>
-                <button className="listViewTitleHeader button" onClick={onAdd}>
+                <button className="listViewTitleHeader button" onClick={() => {
+                    onAdd();
+                    setIsOpen(false);
+                }}>
                     +
                 </button>
-                <button className="listViewTitleHeader button" onClick={onRename}>
+                <button className="listViewTitleHeader button" onClick={() => {
+                    onRename();
+                    setIsOpen(false);
+                }}>
                     <EditIcon/>
                 </button>
                 <button className="listViewTitleHeader button" onClick={onDelete}>
