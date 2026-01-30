@@ -216,7 +216,7 @@ button:focus-visible {
     width: 100%;
 
     display: grid;
-    grid-template-columns: 8fr 1fr 1fr 1fr;
+    grid-template-columns: 12fr 1fr 1fr 1fr;
     gap: 8px;
 }
 
