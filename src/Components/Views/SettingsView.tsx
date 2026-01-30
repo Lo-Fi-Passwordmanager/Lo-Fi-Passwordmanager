@@ -117,7 +117,7 @@ const SettingsView: React.FC<{ automergeFacade?: AutomergeFacade | null }> = ({a
                                     Dabei wird die Datenspeicherung und Übertragung mithilfe der Automerge Bibliothek
                                     implementiert.
 
-                                    Zusätzlich benutzt werden die Bibliotheken Idle Timer und React DnD Kit.
+                                    Zusätzlich benutzt werden die Bibliotheken Idle Timer, React DnD Kit und React Icons.
                                 </p>
                             </section>
 
@@ -145,6 +145,11 @@ const SettingsView: React.FC<{ automergeFacade?: AutomergeFacade | null }> = ({a
                                     onClick={() => window.open("https://dndkit.com/", "_blank")}
                                     style={{padding: "8px 15px", cursor: "pointer"}}>
                                     DnD Kit
+                                </button>
+
+                                <button onClick={() => window.open("https://react-icons.github.io/react-icons/", "_blank")}
+                                        style={{padding: "8px 15px", cursor: "pointer"}}>
+                                    React Icons
                                 </button>
                             </div>
 
