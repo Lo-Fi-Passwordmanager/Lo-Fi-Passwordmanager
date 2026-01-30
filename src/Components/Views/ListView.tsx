@@ -40,7 +40,7 @@ const ListView: React.FC<{
           updateItemTitle,
           setCreatedFolderId
       }) => {
-    const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem, updateItemTitle, setCreatedFolderId);
+    const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem, updateItemTitle, setCreatedFolderId, createdFolderId);
 
     function addButtonPressed() {
         setItemCreationDialog();
