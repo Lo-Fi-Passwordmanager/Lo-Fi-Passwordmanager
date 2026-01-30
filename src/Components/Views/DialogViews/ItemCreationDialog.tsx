@@ -21,8 +21,8 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({
                     <Close className="closeIcon" color={"var(--text)"} onClick={cancelItemCreation}/>
                     <h3>Neues Element erstellen</h3>
                     <div className="item-creation-buttons">
-                        <button className={"standard-button"} onClick={viewmodel.createEntry}>Eintrag</button>
-                        <button className={"standard-button"} onClick={viewmodel.createFolder}>Ordner</button>
+                        <button className={"rectangle-button"} onClick={viewmodel.createEntry}>Eintrag</button>
+                        <button className={"rectangle-button"} onClick={viewmodel.createFolder}>Ordner</button>
                     </div>
                 </div>
             </div>

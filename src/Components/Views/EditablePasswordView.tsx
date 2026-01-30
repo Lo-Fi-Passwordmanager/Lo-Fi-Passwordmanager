@@ -39,29 +39,16 @@ const EditablePasswordView: React.FC<{
         );
     } else if (item.isEntry()) {
         return (
-            <>
+            <div className={"entryViewContainer"}>
                 <div className="entryViewEntry">
-                    <button onClick={() => {
-                        if (viewmodel.hasChanges()) {
-                            viewmodel.updateItemInAutomerge();
-                        }
-                        setEditableView();
-                    }}
-                            style={{
-                                position: "absolute",
-                                top: "10px",   // Distance from the top edge
-                                left: "10px",  // Distance from the left edge
-                                zIndex: 10,
-                                fontSize: "0.8em"// Ensures it sits on top of the div content
-                            }}>
-                        💾
-                    </button>
                     <input className={"title-value"} type={"text"} value={viewmodel.title}
                            onChange={(e) => viewmodel.setTitle(e.target.value)}/>
 
+                    <div className={"divider"} style={{height:0}}/>
+
                     <div
                         className={"scrollableContainer"}
-                        style={{height: '100%', width: '90%'}}>
+                        style={{height: '90%', width: '90%'}}>
                         <div className={"entryViewListing"}>
                             <div className={"entryViewAttribute"}>
                                 <span style={{gridColumn: "span 20"}}>Benutzername:</span>
@@ -95,33 +82,32 @@ const EditablePasswordView: React.FC<{
                                        }}/>
                             </div>
                         </div>
+                        <div className={"entryViewFooterButtons"}>
+                            <button className={"rectangle-button"}
+                                    onClick={() => {
+                                        if (inCreation) {
+                                            setInCreation(false);
+                                            viewmodel.createItemInAutomerge();
+                                        } else if (viewmodel.hasChanges()) {
+                                            viewmodel.updateItemInAutomerge();
+                                        }
+                                        setEditableView();
+                                    }}>Speichern
+                            </button>
+                            <button className={"rectangle-button"}
+                                    onClick={() => {
+                                        setInCreation(false);
+                                        setEditableView();
+                                    }}>Abbrechen
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div className={"entryViewFooterButtons"}>
-                    <button className={"standard-button"}
-                            onClick={() => {
-                                if (inCreation) {
-                                    setInCreation(false);
-                                    viewmodel.createItemInAutomerge();
-                                } else if (viewmodel.hasChanges()) {
-                                    viewmodel.updateItemInAutomerge();
-                                }
-                                setEditableView();
-                            }}>Speichern
-                    </button>
-                    <button className={"standard-button"}
-                            onClick={() => {
-                                setInCreation(false);
-                                setEditableView();
-                            }}>Abbrechen
-                    </button>
-                </div>
-
                 <div className="entryDateViewEntry">
                     <span>Erstellt am: {item.createdAt.toLocaleString()}</span>
                     <span>Bearbeitet am: {item.editedAt.toLocaleString()}</span>
                 </div>
-            </>
+            </div>
         );
     }
 

@@ -349,9 +349,13 @@ input[type="number"] {
     width: 100%;
 }
 
-.standard-button {
-    width: 7.5rem;
-    height: 2.5rem;
+.entryViewFooterButtons button:nth-child(2) {
+    background-color: var(--cancel-button);
+}
+
+.rectangle-button {
+    width: 10rem;
+    height: 3rem;
 }
 
 .passwordGenButton {
@@ -534,6 +538,12 @@ input[type="number"] {
     border-radius: 20px 0 0 20px;
 }
 
+.entryViewContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
 .entryViewEntry {
     font-size: 1em;
     padding: 50px 50px 0 50px;
@@ -561,8 +571,10 @@ input[type="number"] {
     display: flex;
     flex-direction: column;
     justify-content: start;
-    height: 100%;
-    margin-top: 5vh;
+    height: fit-content;
+    margin-top: 2.5rem;
+    margin-bottom: 5rem;
+    gap: 2.5rem;
 }
 
 .entryViewAttribute {
@@ -570,7 +582,6 @@ input[type="number"] {
     grid-template-columns: repeat(20, 1fr);
     grid-template-rows: repeat(2, 2.5rem);
     align-items: start;
-    height: 20%;
 }
 
 .attribute-value, .title-value {
@@ -725,6 +736,7 @@ input[type="number"] {
     align-items: center;
     justify-items: center;
     border-radius: 0 0 0 20px;
+    align-self: flex-end;
 }
 
 .dialogButtonContainer {

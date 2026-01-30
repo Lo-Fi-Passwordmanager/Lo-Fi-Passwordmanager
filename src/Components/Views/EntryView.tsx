@@ -4,8 +4,6 @@ import {type Item} from "../../Model/Item.ts";
 import Logo from "../../assets/logo_gelb.svg?inline";
 import EyeButton from "./ButtonViews/EyeButton.tsx";
 import ShareIcon from "./Icons/ShareIcon.tsx";
-import EditIcon from "./Icons/EditIcon.tsx";
-
 
 /**
  * The View that depicts an Entry with all its attributes at large scale
@@ -39,23 +37,13 @@ const EntryView: React.FC<{
         );
     } else if (item.isEntry()) {
         const entry = item as Entry;
-        return (<>
+        return (<div className="entryViewContainer">
                 <div className="entryViewEntry">
-                    <button
-                        className="squareButton"
-                        onClick={setEditableView}
-                        style={{
-                            position: "absolute",
-                            top: "10px",
-                            left: "10px",
-                            zIndex: 10,
-                            fontSize: "0.8em"
-                        }}>
-                        <EditIcon/>
-                    </button>
                     <span className={"title-value"}>{entry.title}</span>
 
-                    <div className={"scrollableContainer"} style={{height: '100%', width: '90%'}}>
+                    <div className={"divider"} style={{width:"50%"}}/>
+
+                    <div className={"scrollableContainer"} style={{width: '90%', height: '90%'}}>
                         <div className={"entryViewListing"}>
                             <div className={"entryViewAttribute"}>
                                 <span style={{gridColumn: "span 20"}}>Benutzername:</span>
@@ -102,20 +90,22 @@ const EntryView: React.FC<{
                                 }}>{entry.note}</span>
                             </div>
                         </div>
+                        <div className={"entryViewFooterButtons"}>
+                            <button className={"rectangle-button"} onClick={() => {
+                                setEditableView()
+                            }}>Bearbeiten
+                            </button>
+                            <button className={"rectangle-button"} onClick={() => deleteItem(item)}>Löschen</button>
+                        </div>
                     </div>
-                </div>
-                <div className={"entryViewFooterButtons"}>
-                    <button className={"standard-button"} onClick={() => {setEditableView()}}>Bearbeiten</button>
-                    <button className={"standard-button"} onClick={() => deleteItem(item)} style={{background:"darkred"}}>Löschen</button>
                 </div>
                 <div className="entryDateViewEntry">
                     <span>Erstellt am: {item.createdAt.toLocaleString()}</span>
                     <span>Bearbeitet am: {item.editedAt.toLocaleString()}</span>
                 </div>
-            </>
+            </div>
         );
     }
-
 }
 
 export default EntryView;
