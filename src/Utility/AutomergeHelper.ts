@@ -145,7 +145,7 @@ function findNestedValue(databaseRoot: DatabaseRoot, path: string[]): Item {
         return databaseRoot.rootFolder;
     }
 
-    let currentValue: Item | null = databaseRoot.getChildById(path[0]);
+    let currentValue: Item | null = databaseRoot.rootFolder.getChildById(path[0]);
 
     if (currentValue === null) {
         throw Error(`Child with ID ${path[0]} does not exist on DatabaseRoot.`);
