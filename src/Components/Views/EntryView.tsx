@@ -3,8 +3,7 @@ import {type Entry} from "../../Model/Entry.ts";
 import {type Item} from "../../Model/Item.ts";
 import Logo from "../../assets/logo_gelb.svg?inline";
 import EyeButton from "./ButtonViews/EyeButton.tsx";
-import ShareIcon from "./Icons/ShareIcon.tsx";
-
+import { HiMiniLink } from "react-icons/hi2";
 /**
  * The View that depicts an Entry with all its attributes at large scale
  * @param item the entry that should be depicted
@@ -50,7 +49,7 @@ const EntryView: React.FC<{
                                 <span className={"attribute-value"}>{entry.username}</span>
                                 <button className={"copyButton"}
                                         onClick={() => copyAndClearClipboard(entry.username)}>
-                                    <ShareIcon/>
+                                    <HiMiniLink size={24}/>
                                 </button>
                             </div>
 
@@ -62,7 +61,7 @@ const EntryView: React.FC<{
                                 <EyeButton hidePassword={hidePassword} toggleHidePassword={toggleHidePassword}/>
                                 <button className={"copyButton"}
                                         onClick={() => copyAndClearClipboard(entry.password)}>
-                                    <ShareIcon/>
+                                    <HiMiniLink size={24}/>
                                 </button>
                             </div>
 
@@ -76,7 +75,7 @@ const EntryView: React.FC<{
                                     {entry.url}
                                 </a>
                                 <button className={"copyButton"} onClick={() => copyAndClearClipboard(entry.url)}>
-                                    <ShareIcon/>
+                                    <HiMiniLink size={24}/>
                                 </button>
                             </div>
 

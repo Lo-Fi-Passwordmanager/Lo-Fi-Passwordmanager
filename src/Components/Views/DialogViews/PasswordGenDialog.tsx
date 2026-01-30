@@ -1,7 +1,7 @@
 import React from "react";
 import {type PasswordGenDialogProps, usePasswordGenViewModel} from "../../ViewModels/Dialog/PasswordGenViewModel.ts";
 import ToastDialog from "./ToastDialog.tsx";
-import PlusIcon from "../Icons/PlusIcon.tsx";
+import {HiMiniPlus} from "react-icons/hi2";
 
 
 
@@ -66,7 +66,7 @@ const PasswordGenDialog: React.FC<PasswordGenDialogProps> = ({newPassword}: Pass
             <button
                 className="passwordGenButton"
                 onClick={() => viewModel.setPasswordGenOpen(true)}>
-                <PlusIcon/>
+                <HiMiniPlus size={24}/>
             </button>
         );
     }

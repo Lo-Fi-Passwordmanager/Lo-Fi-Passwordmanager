@@ -339,7 +339,7 @@ input[type="number"] {
 .squareButton, .settingsButton, .copyButton, .eyeButton, .passwordGenButton {
     height: 2.5rem;
     aspect-ratio: 1;
-    padding: 0.7rem;
+    padding: 0.5rem;
 }
 
 .entryViewFooterButtons {
@@ -435,7 +435,7 @@ input[type="number"] {
     height: 2rem;
     aspect-ratio: 1;
     margin: 5px;
-    padding: 0.4rem;
+    padding: 0.2rem;
     border-radius: 8px;
     justify-content: center;
 }
@@ -712,6 +712,7 @@ input[type="number"] {
     grid-template-rows: repeat(2, 2.5rem);
     gap: 1vh;
     padding: 1vh;
+    justify-items: center;
 }
 
 .FilteredListView__header {

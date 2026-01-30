@@ -8,7 +8,7 @@ import type {Repo} from "@automerge/react";
 import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import  {type SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
-import PlusIcon from "./Icons/PlusIcon.tsx";
+import {HiMiniPlus} from "react-icons/hi2";
 
 
 const LoginView: React.FC<{
@@ -42,7 +42,7 @@ const LoginView: React.FC<{
                     <button
                         className={"squareButton"}
                         onClick={viewModel.openAddDialog}>
-                        <PlusIcon/>
+                        <HiMiniPlus size={24}/>
                     </button>
                 </div>
                 {/* Popup Dialog for adding a new Database */}

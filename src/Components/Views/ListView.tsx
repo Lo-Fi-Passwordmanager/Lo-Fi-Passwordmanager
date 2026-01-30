@@ -4,9 +4,8 @@ import {Entry} from "../../Model/Entry.ts";
 import React from "react";
 import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
 import FolderMenu from "./MenuViews/FolderMenu.tsx";
-import BinIcon from "./Icons/BinIcon.tsx";
-import PlusIcon from "./Icons/PlusIcon.tsx";
-
+import { HiMiniPlus } from "react-icons/hi2";
+import {HiTrash} from "react-icons/hi";
 /**
  * The View that represents the whole database, which is represented by {@link Entry}/{@link Folder} Class Instances
  * @param item the item which should be depicted, if this is a folder, all of its content is also depicted
@@ -60,7 +59,7 @@ const ListView: React.FC<{
                 <span style={{marginRight: "1ch"}}></span> <span>{entry.title}</span>
                 <div className={"btnWrapper"}>
                     <button className="listViewEntry button" onClick={() => deleteItem(item)}>
-                        <BinIcon/>
+                        <HiTrash size={24}/>
                     </button>
                 </div>
             </div>
@@ -120,7 +119,7 @@ const ListView: React.FC<{
                                 listViewModel.setAndStoreEditName(true);
                                 }}
                             /> : <button className="listViewTitleHeader button" onClick={() => addButtonPressed()}>
-                            <PlusIcon/>
+                            <HiMiniPlus size={24}/>
                         </button>}
                     </div>
                 </div>

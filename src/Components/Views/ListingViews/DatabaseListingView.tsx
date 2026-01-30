@@ -3,8 +3,8 @@ import React from "react";
 import ToastDialog from "../DialogViews/ToastDialog.tsx";
 import DatabaseListingViewModel from "../../ViewModels/Listing/DatabaseListingViewModel.ts";
 import RenameDatabaseDialog from "../DialogViews/RenameDatabaseDialog.tsx";
-import ShareIcon from "../Icons/ShareIcon.tsx";
-import BinIcon from "../Icons/BinIcon.tsx";
+import {HiMiniLink} from "react-icons/hi2";
+import {HiTrash} from "react-icons/hi";
 
 type DatabaseListingProps = {
     databases: Map<string, AutomergeUrl>,
@@ -32,13 +32,13 @@ const DatabaseListingView: React.FC<DatabaseListingProps> = ({databases, openDat
                         <button
                             className={"squareButton"}
                             onClick={() => viewModel.copyToClipboard(url)} title="Copy URL">
-                            <ShareIcon/>
+                            <HiMiniLink size={24}/>
                         </button>
                         <RenameDatabaseDialog oldName={dbName} renameDatabase={renameDatabase} />
                         <button
                             className={"squareButton"}
                             onClick={() => removeDatabase(dbName)}>
-                            <BinIcon/>
+                            <HiTrash size={24}/>
                         </button>
                     </div>
                 ))}

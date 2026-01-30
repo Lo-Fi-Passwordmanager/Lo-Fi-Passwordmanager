@@ -2,10 +2,8 @@ import {useSettingsViewModel} from "../ViewModels/SettingsViewModel.ts";
 import React from "react";
 import type {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
-import SettingsIcon from "./Icons/SettingsIcon.tsx";
 import Close from "./Icons/Close.tsx";
-import MinusIcon from "./Icons/MinusIcon.tsx";
-import PlusIcon from "./Icons/PlusIcon.tsx";
+import {HiMiniCog8Tooth, HiMiniMinus, HiMiniPlus} from "react-icons/hi2";
 
 const SettingsView: React.FC<{ automergeFacade?: AutomergeFacade | null }> = ({automergeFacade}) => {
     const viewmodel = useSettingsViewModel();
@@ -13,7 +11,7 @@ const SettingsView: React.FC<{ automergeFacade?: AutomergeFacade | null }> = ({a
     if (!viewmodel.settingsOpen) {
         return (
             <button className="settingsButton" onClick={() => viewmodel.setSettingsOpen(true)}>
-                <SettingsIcon/>
+                <HiMiniCog8Tooth size={24}/>
             </button>
         );
     }
@@ -76,9 +74,9 @@ const SettingsView: React.FC<{ automergeFacade?: AutomergeFacade | null }> = ({a
                                                value={viewmodel.timeoutLength}
                                                onChange={(e) => viewmodel.setTimeOutLengthVM(e.target.value)} min="1"/>
                                         <button className={"squareButton"} style={{boxShadow: "none"}}
-                                                onClick={viewmodel.decrease}><MinusIcon/></button>
+                                                onClick={viewmodel.decrease}><HiMiniMinus size={24}/></button>
                                         <button className={"squareButton"} style={{boxShadow: "none"}}
-                                                onClick={viewmodel.increase}><PlusIcon/></button>
+                                                onClick={viewmodel.increase}><HiMiniPlus size={24}/></button>
                                     </div>
                                 </div>
                             )}
