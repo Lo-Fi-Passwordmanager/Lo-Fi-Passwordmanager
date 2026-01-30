@@ -297,13 +297,17 @@ input[type="number"] {
     align-items: center;
 }
 
-.confirm-cancel-buttons {
+.confirm-cancel-buttons, .item-creation-buttons {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     gap: 2em;
     margin-top: 1em;
+}
+
+.item-creation-buttons {
+    margin-top: 0;
 }
 
 .confirm-cancel-buttons button:nth-child(2) {
@@ -552,10 +556,9 @@ input[type="number"] {
     width: 100%;
 }
 
-.evenButton {
+.standard-button {
     width: 15vh;
     height: 5vh;
-    box-shadow: none;
 }
 
 .scrollableContainer {

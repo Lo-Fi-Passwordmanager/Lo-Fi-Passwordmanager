@@ -8,7 +8,6 @@ import {
     saveCurrentSortCriterion,
     saveIsAscending
 } from "../../Utility/Storage.ts";
-import type {Folder} from "../../Model/Folder.ts";
 
 export const SortCriteria = {
     Name: "NAME",
@@ -35,7 +34,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     const [inEditable, setInEditable] = useState(false);
     const [dirtyItemId, setDirtyItemId] = useState<string | null>(null);
     const [hidePassword, setHidePassword] = useState(true);
-    const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
+    const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
     // State to track if we are in the process of creating a new entry
     const [inEntryCreation, setInEntryCreation] = useState(false);
 
@@ -132,12 +131,16 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
             setInEditable(true);
         } else {
             const id = reactiveFacade.insertItem(item, curParent.id);
+            item.id = id;
+            setCurItem(item);
+            goToItem(item);
         }
     }
 
     function createEntry(item: Item) {
         item.id = reactiveFacade.insertItem(item, curParent.id);
         setCurItem(item);
+        goToItem(item)
     }
 
 
@@ -216,12 +219,12 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     }
 
     /**
-     * Navigates to the given folder by setting it as the current item and clearing the search value so the view shows the full hierarchy
+     * Navigates to the given item by setting it as the current item and clearing the search value so the view shows the full hierarchy
      */
-    function goToFolder(folder: Folder) {
-        setCurItem(folder);
+    function goToItem(item: Item) {
+        setCurItem(item);
         setSearchValue("");
-        setSelectedFolderId(folder.id);
+        setSelectedItemId(item.id);
         setTimeout(() =>
             document.querySelector("[aria-selected='true']")?.scrollIntoView(), 0)
 
@@ -235,7 +238,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         toastVisible,
         inEditable,
         hidePassword,
-        selectedFolderId,
+        selectedItemId,
         inEntryCreation,
 
         setInEntryCreation,
@@ -260,7 +263,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setAndStoreSortCriterion,
         toggleOrder,
         getCurSortCriterion,
-        goToFolder,
+        goToFolder: goToItem,
         updateItemTitle,
         createEntry,
     };

@@ -84,7 +84,7 @@ const EditablePasswordView: React.FC<{
                     </div>
                 </div>
                 <div className={"entryViewFooterButtons"}>
-                    <button className={"evenButton"}
+                    <button className={"standard-button"}
                             onClick={() => {
                                 if (inCreation) {
                                     setInCreation(false);
@@ -95,7 +95,7 @@ const EditablePasswordView: React.FC<{
                                 setEditableView();
                             }}>Speichern
                     </button>
-                    <button className={"evenButton"}
+                    <button className={"standard-button"}
                             onClick={() => {
                                 setInCreation(false);
                                 setEditableView();

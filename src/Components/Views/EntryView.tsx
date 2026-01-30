@@ -92,8 +92,8 @@ const EntryView: React.FC<{
                     </div>
                 </div>
                 <div className={"entryViewFooterButtons"}>
-                    <button className={"evenButton"} onClick={() => {setEditableView()}}>Bearbeiten</button>
-                    <button className={"evenButton"} onClick={() => deleteItem} style={{background:"darkred"}}>Löschen</button>
+                    <button className={"standard-button"} onClick={() => {setEditableView()}}>Bearbeiten</button>
+                    <button className={"standard-button"} onClick={() => deleteItem(item)} style={{background:"darkred"}}>Löschen</button>
                 </div>
                 <div className="entryDateViewEntry">
                     <span>Erstellt am: {item.createdAt.toLocaleString()}</span>

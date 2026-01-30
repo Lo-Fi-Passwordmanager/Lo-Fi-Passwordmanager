@@ -1,6 +1,7 @@
 import React from "react";
 import {type Item} from "../../../Model/Item.ts";
 import {useItemCreationViewModel} from "../../ViewModels/Dialog/ItemCreationViewModel.ts";
+import Close from "../Icons/Close.tsx";
 
 interface ItemCreationDialogProps {
     addItem: (item: Item) => void;
@@ -17,13 +18,11 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({
     return (<>
             <div className="dialogOverlay">
                 <div className="dialog">
-                    <h3>Erstellen</h3>
-                    <div className="confirm-cancel-buttons">
-                        <button onClick={viewmodel.createEntry}>Eintrag</button>
-                        <button onClick={viewmodel.createFolder}>Ordner</button>
-                    </div>
-                    <div className="confirm-cancel-buttons">
-                        <button onClick={cancelItemCreation}>Abbrechen</button>
+                    <Close className="closeIcon" color={"var(--text)"} onClick={cancelItemCreation}/>
+                    <h3>Neues Element erstellen</h3>
+                    <div className="item-creation-buttons">
+                        <button className={"standard-button"} onClick={viewmodel.createEntry}>Eintrag</button>
+                        <button className={"standard-button"} onClick={viewmodel.createFolder}>Ordner</button>
                     </div>
                 </div>
             </div>

@@ -20,7 +20,7 @@ const ListView: React.FC<{
     isAscending: boolean,
     dirtyItemId: string | null,
     openedDbName: string,
-    selectedFolderId: string | null;
+    selectedItemId: string | null;
     updateItemTitle: (itemId: string, newTitle: string) => void;
 }> = ({
           item,
@@ -33,7 +33,7 @@ const ListView: React.FC<{
           isAscending,
           dirtyItemId,
           openedDbName,
-          selectedFolderId,
+          selectedItemId,
           updateItemTitle
       }) => {
     const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem, updateItemTitle);
@@ -48,7 +48,8 @@ const ListView: React.FC<{
         const entry = listViewModel.getItem() as Entry;
         return (
             <div className={`listViewEntry ${getCurItem().id === entry.id ? "selected" : ""}`}
-                 onClick={() => setCurItem(entry)}>
+                 onClick={() => setCurItem(entry)}
+                 aria-selected={selectedItemId === item.id}>
                 <span style={{marginRight: "1ch"}}></span> <span>{entry.title}</span>
             </div>
         );
@@ -60,7 +61,7 @@ const ListView: React.FC<{
             <>
                 {/* Name and Buttons */}
                 {/*                                  vvvvvvvvvvvvv using aria-selected for scrolling to the clicked folder from filtered list view */}
-                <div className="listViewTitleHeader" aria-selected={selectedFolderId === item.id}>
+                <div className="listViewTitleHeader" aria-selected={selectedItemId === item.id}>
                     {(item.id != "") &&
                         <button style={{marginRight: "15px", boxShadow: "none"}}
                                 onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? "▼" : "▷"}</button>}
@@ -130,7 +131,7 @@ const ListView: React.FC<{
                                 isAscending={isAscending}
                                 dirtyItemId={dirtyItemId} openedDbName={""}
                                 updateItemTitle={updateItemTitle}
-                                selectedFolderId={selectedFolderId}/>;
+                                selectedItemId={selectedItemId}/>;
                         })}
                 </div>
             </>
