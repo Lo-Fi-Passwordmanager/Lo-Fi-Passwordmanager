@@ -6,7 +6,10 @@ import {Entry} from "../../Model/Entry.ts";
 export const useEditablePasswordViewModel = (
     item: Item,
     updateItemAttribute: (itemId: string, changes: [Attribute, string | Date][]) => void,
-    createItem: (item: Item) => void
+    createItem: (item: Item) => void,
+    inCreation: boolean,
+    setInCreation: (inCreation: boolean) => void,
+    setEditableView: () => void
 ) => {
 //     'name' | 'createdAt' | 'editedAt' | 'parentId' | 'username' | 'password' | 'url' | 'note'
 
@@ -52,6 +55,24 @@ export const useEditablePasswordViewModel = (
         ));
     }
 
+    function saveEntry() {
+        if (inCreation) {
+            setInCreation(false);
+            createItemInAutomerge();
+        } else if (hasChanges()) {
+            updateItemInAutomerge();
+        }
+        setEditableView();
+    }
+
+    function cancelSaving() {
+        if (inCreation) {
+            setInCreation(false);
+            item.deleted = true; //FIXME: meckert rum aber eigentlich klappt es
+        }
+        setEditableView();
+    }
+
     return {
         title,
         username,
@@ -66,5 +87,7 @@ export const useEditablePasswordViewModel = (
         setNote,
         updateItemInAutomerge,
         createItemInAutomerge,
+        saveEntry,
+        cancelSaving
     };
 };
