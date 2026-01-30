@@ -37,7 +37,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     const [hidePassword, setHidePassword] = useState(true);
     const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
 
-    const [openConfirmationDialog, setOpenConfirmationDialog] = useState<Item | null>(null);
+    const [itemToDelete, setItemToDelete] = useState<Item | null>(null);
 
     function setCurItem(item: Item) {
         _setCurItem(item);
@@ -156,11 +156,11 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         if (item.id === "") {
             return;
         }
-        setOpenConfirmationDialog(item);
+        setItemToDelete(item);
     }
 
     function confirmDeletion(item: Item) {
-        setOpenConfirmationDialog(null);
+        setItemToDelete(null);
         reactiveFacade.deleteItem(item.id);
         item.deleted = true;
         setCurItem(curParent);
@@ -229,7 +229,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         inEditable,
         hidePassword,
         selectedFolderId,
-        openConfirmationDialog,
+        itemToDelete,
 
         toggleHidePassword,
         setSearchValue,
@@ -255,6 +255,6 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         goToFolder,
         updateItemTitle,
         confirmDeletion,
-        setOpenConfirmationDialog
+        setItemToDelete
     };
 };
