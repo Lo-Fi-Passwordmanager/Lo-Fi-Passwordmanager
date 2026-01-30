@@ -15,7 +15,9 @@ export const useListViewModel = (topItem: Item,
                                  isAscending: boolean,
                                  dirtyItemId: string | null,
                                  setCurrItem: (entry: Entry) => void,
-                                 updateItemTitle: (itemId: string, newTitle: string) => void) => {
+                                 updateItemTitle: (itemId: string, newTitle: string) => void,
+                                 setCreatedFolderId: (folderId: string | null) => void
+) => {
 
     const item: Item = topItem;
     const [extended, setExtended] = useState(true);
@@ -88,6 +90,7 @@ export const useListViewModel = (topItem: Item,
         if (inEditName) {
             updateTitleInAutomerge();
         }
+        setCreatedFolderId(null);
     }
 
     return {

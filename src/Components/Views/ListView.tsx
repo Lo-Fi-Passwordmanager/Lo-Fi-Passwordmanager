@@ -21,6 +21,8 @@ const ListView: React.FC<{
     dirtyItemId: string | null,
     openedDbName: string,
     selectedItemId: string | null;
+    createdFolderId: string | null;
+    setCreatedFolderId: (folderId: string | null) => void;
     updateItemTitle: (itemId: string, newTitle: string) => void;
 }> = ({
           item,
@@ -34,9 +36,11 @@ const ListView: React.FC<{
           dirtyItemId,
           openedDbName,
           selectedItemId,
-          updateItemTitle
+          createdFolderId,
+          updateItemTitle,
+          setCreatedFolderId
       }) => {
-    const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem, updateItemTitle);
+    const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem, updateItemTitle, setCreatedFolderId);
 
     function addButtonPressed() {
         setItemCreationDialog();
@@ -66,7 +70,7 @@ const ListView: React.FC<{
                         <button style={{marginRight: "15px", boxShadow: "none"}}
                                 onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? "▼" : "▷"}</button>}
 
-                    {!listViewModel.inEditName &&
+                    {(!listViewModel.inEditName && item.id !== createdFolderId) &&
                         <span
                             style={{
                                 marginLeft: item.id !== "" ? "" : "10px",
@@ -79,9 +83,10 @@ const ListView: React.FC<{
                             }}
                         >{(item.id != "") ? item.title : openedDbName}</span>
                     }
-                    {listViewModel.inEditName &&
+                    {(listViewModel.inEditName || item.id === createdFolderId) &&
                         <input type="text"
                                autoFocus
+                               onFocus={e => {e.target.select();}}
                                style={{marginLeft: ((item.id != "") ? "" : "10px"), border: "none"}}
                                value={listViewModel.newTitle}
                                onChange={(e) => listViewModel.setItemTitle(e.target.value)}
@@ -103,13 +108,13 @@ const ListView: React.FC<{
                         }}>+
                         </button>
                         {(item.id != "") && (listViewModel.inEditName) &&
-                        <button onClick={() => listViewModel.setAndStoreEditName(false)}>
-                            ✏️
-                        </button>}
+                            <button onClick={() => listViewModel.setAndStoreEditName(false)}>
+                                ✏️
+                            </button>}
                         {(item.id != "") && (!listViewModel.inEditName) &&
-                        <button onClick={() => listViewModel.setAndStoreEditName(true)}>
-                            ✏️
-                        </button>}
+                            <button onClick={() => listViewModel.setAndStoreEditName(true)}>
+                                ✏️
+                            </button>}
                         {(item.id != "") && <button onClick={() => deleteItem(item)}>🗑️</button>}
                         {/* FIXME: Löschbestätigung einbauen */}</div>
                 </div>
@@ -131,7 +136,10 @@ const ListView: React.FC<{
                                 isAscending={isAscending}
                                 dirtyItemId={dirtyItemId} openedDbName={""}
                                 updateItemTitle={updateItemTitle}
-                                selectedItemId={selectedItemId}/>;
+                                selectedItemId={selectedItemId}
+                                createdFolderId={createdFolderId}
+                                setCreatedFolderId={setCreatedFolderId}
+                            />;
                         })}
                 </div>
             </>

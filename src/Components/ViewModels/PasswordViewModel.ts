@@ -35,6 +35,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     const [dirtyItemId, setDirtyItemId] = useState<string | null>(null);
     const [hidePassword, setHidePassword] = useState(true);
     const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+    const [createdFolderId, setCreatedFolderId] = useState<string | null>(null);
     // State to track if we are in the process of creating a new entry
     const [inEntryCreation, setInEntryCreation] = useState(false);
 
@@ -124,6 +125,10 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         return reactiveFacade.tree.rootFolder;
     }
 
+    /**
+     * Adds an item to the database and sets it as the current item
+     * Folders are directly created, if the item is an entry, it sets the view to editable and in entry creation mode.
+     */
     function addItem(item: Item) {
         if (item.isEntry()) {
             setCurItem(item);
@@ -134,6 +139,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
             item.id = id;
             setCurItem(item);
             goToItem(item);
+            setCreatedFolderId(id);
         }
     }
 
@@ -240,6 +246,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         hidePassword,
         selectedItemId,
         inEntryCreation,
+        createdFolderId,
 
         setInEntryCreation,
         toggleHidePassword,
@@ -266,5 +273,6 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         goToFolder: goToItem,
         updateItemTitle,
         createEntry,
+        setCreatedFolderId,
     };
 };
