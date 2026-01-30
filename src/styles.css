@@ -935,3 +935,19 @@ input[type="number"] {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+/* flashing item when clicked or created */
+@keyframes flashAnimation {
+    0% {
+        background-color: rgba(0, 102, 255, 0.4);
+        box-shadow: 0 0 10px rgba(0, 102, 255, 0.5);
+    }
+    100% {
+        background-color: var(--panel);
+        box-shadow: none;
+    }
+}
+
+.highlighted {
+    animation: flashAnimation 1s ease-out forwards;
+}

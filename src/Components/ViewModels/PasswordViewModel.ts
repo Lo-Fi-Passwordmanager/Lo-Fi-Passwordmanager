@@ -47,7 +47,6 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
 
     const [curSortCrit, setCurSortCrit] = useState<SortCriteria>(initSortCriterion);
     const [isAscending, setIsAscending] = useState<boolean>(initIsAscending);
-
     const [searchValue, setSearchValue] = useState<string>("");
 
     /**
@@ -228,12 +227,13 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
      * Navigates to the given item by setting it as the current item and clearing the search value so the view shows the full hierarchy
      */
     function goToItem(item: Item) {
-        setCurItem(item);
         setSearchValue("");
         setSelectedItemId(item.id);
-        setTimeout(() =>
-            document.querySelector("[aria-selected='true']")?.scrollIntoView(), 0)
-
+        setTimeout(() => document.querySelector("[aria-selected='true']")?.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        }), 0);
+        setTimeout(() => setSelectedItemId(null), 1000);
     }
 
     return {

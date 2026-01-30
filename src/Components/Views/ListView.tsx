@@ -51,7 +51,7 @@ const ListView: React.FC<{
     if (listViewModel.isItemEntry()) {
         const entry = listViewModel.getItem() as Entry;
         return (
-            <div className={`listViewEntry ${getCurItem().id === entry.id ? "selected" : ""}`}
+            <div className={`listViewEntry ${getCurItem().id === entry.id ? "selected" : ""} ${selectedItemId === item.id ? "highlighted" : ""}`}
                  onClick={() => setCurItem(entry)}
                  aria-selected={selectedItemId === item.id}>
                 <span style={{marginRight: "1ch"}}></span> <span>{entry.title}</span>
@@ -65,7 +65,8 @@ const ListView: React.FC<{
             <>
                 {/* Name and Buttons */}
                 {/*                                  vvvvvvvvvvvvv using aria-selected for scrolling to the clicked folder from filtered list view */}
-                <div className="listViewTitleHeader" aria-selected={selectedItemId === item.id}>
+                <div className={`listViewTitleHeader ${selectedItemId === item.id ? "highlighted" : ""}`}
+                     aria-selected={selectedItemId === item.id}>
                     {(item.id != "") &&
                         <button style={{marginRight: "15px", boxShadow: "none"}}
                                 onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? "▼" : "▷"}</button>}
