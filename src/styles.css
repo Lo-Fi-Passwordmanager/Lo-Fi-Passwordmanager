@@ -24,6 +24,7 @@
     --panel: rgb(250, 150, 150);
     --overlay: rgba(0, 0, 0, 0.2);
     --outline: #818181;
+    --outline-droppable: #0a5ab4;
     --input-field: rgb(253, 220, 220);
     --dialog-bg: rgba(255, 200, 200);
     --cancel-button: #a3a3a3;
@@ -405,6 +406,16 @@ input[type="number"] {
     z-index: 90;
 }
 
+.dragged {
+    opacity: 0.5;
+    cursor: grabbing;
+}
+
+.over {
+    border: 2px dashed var(--outline-droppable) !important;
+    background-color: var(--bg) !important;
+}
+
 .listViewTitleHeader {
     flex-direction: row;
     background-color: var(--panel);
@@ -421,6 +432,8 @@ input[type="number"] {
 
     border: 3px solid transparent;
     transition: border-color 0.2s ease, transform 0.1s ease;
+    box-sizing: border-box;
+    border: 2px solid transparent;
     box-sizing: border-box;
 }
 
@@ -541,6 +554,8 @@ input[type="number"] {
     border: 2px solid var(--panel);
     border-right: 0;
     border-radius: 20px 0 0 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .entryViewContainer {
@@ -617,6 +632,15 @@ input[type="number"] {
     min-height: 2.5rem;
     height: 2.5rem;
     border: none;
+}
+
+.scrollableContainer {
+    scrollbar-color: var(--panel) var(--bg);
+    scrollbar-width: thin;
+    flex: 1;
+    overflow-y: scroll;
+    overflow-x: hidden !important;
+    max-width: 100%;
 }
 
 .closeButton {

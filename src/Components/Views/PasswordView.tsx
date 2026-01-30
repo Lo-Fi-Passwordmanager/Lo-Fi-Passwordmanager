@@ -9,6 +9,7 @@ import ToastDialog from "./DialogViews/ToastDialog.tsx";
 import EditablePasswordView from "./EditablePasswordView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
 import SettingsView from "./SettingsView.tsx";
+import {DndContext, pointerWithin} from "@dnd-kit/core";
 import {useRepo} from "@automerge/automerge-repo-react-hooks";
 import DeleteConfirmationDialog from "./DialogViews/DeleteConfirmationDialog.tsx";
 
@@ -43,7 +44,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                 />}
 
             <div className="passwordView">
-                <div className="borderBox scrollableContainer" style={{width: "30%"}}>
+                <div className="borderBox" style={{width: "30%"}}>
                     {/*Container for everything related to the search/Sort features */}
                     <OrganizeListView
                         getCurSortCriterion={passwordViewModel.getCurSortCriterion}
@@ -68,10 +69,13 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                             filterText={passwordViewModel.searchValue}
                             goToFolder={passwordViewModel.goToFolder}
                         />}
+                        <DndContext collisionDetection={pointerWithin}
+                                    onDragEnd={passwordViewModel.handleDragEnd}
+                                    sensors={passwordViewModel.sensors}
+                                    autoScroll={false}>
 
-                        {/*The basic ListView which shows all Items and Folders in their hierarchy*/}
-                        {passwordViewModel.searchValue.length === 0 &&
-                            <ListView
+                            {/*The basic ListView which shows all Items and Folders in their hierarchy*/}
+                            {passwordViewModel.searchValue.length === 0 && <ListView
                                 item={passwordViewModel.getRootFolder()}
                                 setCurItem={passwordViewModel.setCurItem}
                                 setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
@@ -88,8 +92,8 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                                 createdFolderId={passwordViewModel.createdFolderId}
                                 setCreatedFolderId={passwordViewModel.setCreatedFolderId}
                             />}
+                        </DndContext>
                     </div>
-
                 </div>
 
                 <div className="borderBox" style={{width: "70%", position: "relative"}}>

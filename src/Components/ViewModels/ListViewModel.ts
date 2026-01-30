@@ -1,8 +1,9 @@
 import {Item} from "../../Model/Item.ts";
 import {Folder} from "../../Model/Folder.ts";
 import type {Entry} from "../../Model/Entry.ts";
-import {useEffect, useState} from "react";
+import {useEffect, useState, useMemo} from "react";
 import {SortCriteria} from "./PasswordViewModel.ts";
+import {useDndContext, useDraggable, useDroppable} from "@dnd-kit/core";
 
 /**
  * The viewmodel used by the ListView. It has the utility needed for correctly deciding and differentiating {@link Entry} and {@link Folder}
@@ -24,6 +25,7 @@ export const useListViewModel = (
     const [extended, setExtended] = useState(true);
     const [inEditName, setInEditName] = useState(false);
     const [newTitle, setItemTitle] = useState(topItem.title);
+    const {active} = useDndContext();
 
     // reset the state if a folder was just created
     useEffect(() => {
@@ -101,6 +103,60 @@ export const useListViewModel = (
         setCreatedFolderId(null);
     }
 
+
+    const getDescendantIds = (item: Item): string[] => {
+        if (item.isEntry()) {
+            return [];
+        } else if (!(item as Folder).entries) {
+            return [];
+        }
+        return (item as Folder).entries.flatMap((child) => [child.id, ...getDescendantIds(child)]);
+    }
+
+    /**
+     * Gets all descendant IDs of the current item if it is a folder
+     */
+    const descendantIds = useMemo(() => {
+        return isItemFolder() ? getDescendantIds(item) : [];
+    }, [item]);
+
+    /**
+     * Determines if the current item is an invalid drop target for the active draggable item
+     */
+    const isInvalidDropTarget = useMemo(() => {
+        if (!active) return false;
+        const activeDescendants = active.data.current?.descendantIds as string[];
+        return activeDescendants.includes(item.id);
+    }, [active, item.id]);
+
+
+    // DnD Kit Draggable and Droppable setup
+    const {
+        attributes,
+        listeners,
+        setNodeRef: setDraggableRef,
+        transform,
+        isDragging
+    } = useDraggable({
+        id: item.id,
+        data: {type: isItemFolder() ? 'folder' : 'entry',
+            descendantIds: descendantIds}
+    });
+
+    const {
+        setNodeRef: setDroppableRef,
+        isOver
+    } = useDroppable({
+        id: item.id,
+        disabled: !isItemFolder() || isInvalidDropTarget
+    });
+
+    const setFolderRef = (node: HTMLDivElement | null) => {
+        if (!node) return;
+        setDraggableRef(node);
+        setDroppableRef(node);
+    };
+
     return {
         newTitle,
         inEditName,
@@ -113,6 +169,15 @@ export const useListViewModel = (
         getItem,
         toggleExtended,
         getExtended,
-        setExtended
+        setExtended,
+        descendantIds,
+        isInvalidDropTarget,
+        setFolderRef,
+        setDraggableRef,
+        attributes,
+        listeners,
+        isDragging,
+        transform,
+        isOver
     };
 };
