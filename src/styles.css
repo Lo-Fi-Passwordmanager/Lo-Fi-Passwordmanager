@@ -19,19 +19,19 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
-    --bg: rgb(255, 255, 255);
+    --bg: #ffebf0;
     --text: #000000;
-    --panel: rgb(250, 150, 150);
+    --panel: #ef9fb3;
     --overlay: rgba(0, 0, 0, 0.2);
     --outline: #818181;
     --outline-droppable: #0a5ab4;
-    --input-field: rgb(255, 200, 200);
-    --dialog-bg: rgba(255, 200, 200);
+    --input-field: #f5b2c1;
+    --dialog-bg: #f08fa7;
     --cancel-button: #a3a3a3;
     --delete-color: #e74c3c;
     --loading-overlay: rgba(0, 0, 0, 0.8);
     --loading-text: #FFFFFF;
-    --pale-color: gray;
+    --pale-color: #f9d7e1;
 
     /* Subtle shadows for depth */
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
