@@ -65,8 +65,10 @@ html, body {
 }
 
 .divider {
-    height: 1px;
-    background-color: color-mix(in srgb, transparent, var(--text) 30%);
+    height: 1px !important;
+    background-color: var(--panel);
+    margin: 10px 0;
+    width: 100%;
 }
 
 input {
@@ -336,13 +338,6 @@ input[type="number"] {
     width: auto;
 }
 
-.divider {
-    height: 1px;
-    background-color: var(--panel);
-    margin: 10px 0;
-    width: 100%;
-}
-
 .squareButton, .settingsButton, .copyButton, .eyeButton, .passwordGenButton {
     height: 2.5rem;
     aspect-ratio: 1;
@@ -354,6 +349,7 @@ input[type="number"] {
     gap: 1vh;
     justify-content: space-evenly;
     width: 100%;
+    margin: 2rem;
 }
 
 .rectangle-button {
@@ -436,11 +432,9 @@ input[type="number"] {
     padding-left: 10px;
     height: 2.5rem;
 
-    border: 3px solid transparent;
     transition: border-color 0.2s ease, transform 0.1s ease;
     box-sizing: border-box;
     border: 2px solid transparent;
-    box-sizing: border-box;
 }
 
 .listViewTitleHeader:hover {
@@ -513,9 +507,6 @@ input[type="number"] {
     border: 3px solid transparent;
     transition: border-color 0.2s ease, transform 0.1s ease;
     box-sizing: border-box;
-
-
-    /*grid formatting*/
     display: flex;
     align-items: center;
 }
@@ -572,13 +563,12 @@ input[type="number"] {
 
 .entryViewEntry {
     font-size: 1em;
-    padding: 50px 50px 0 50px;
+    padding: 0 50px 0 50px;
     width: 100%;
     height: 90%;
     display: flex;
     flex-direction: column;
     text-align: left;
-    gap: 10px 20px;
     box-sizing: border-box;
 
     word-break: break-all;
@@ -597,9 +587,8 @@ input[type="number"] {
     display: flex;
     flex-direction: column;
     justify-content: start;
-    height: fit-content;
-    margin-bottom: 5rem;
-    gap: 2.5rem;
+    height: calc(90% - 10px);
+    gap: 2vh;
 }
 
 .entryViewAttribute {
@@ -632,10 +621,10 @@ input[type="number"] {
     box-sizing: border-box;
     font-size: 1.5em;
     font-weight: 550;
-    width: fit-content;
     padding: 1.2%;
-    min-height: 2.5rem;
-    height: 2.5rem;
+    height: 7%;
+    min-height: fit-content;
+    margin-top: 3%;
     border: none;
 }
 
