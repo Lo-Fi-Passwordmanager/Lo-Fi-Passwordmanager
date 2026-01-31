@@ -8,7 +8,6 @@ import ItemCreationDialog from "./DialogViews/ItemCreationDialog.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
 import EditablePasswordView from "./EditablePasswordView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
-import SettingsView from "./SettingsView.tsx";
 import {DndContext, pointerWithin} from "@dnd-kit/core";
 import {useRepo} from "@automerge/automerge-repo-react-hooks";
 import DeleteConfirmationDialog from "./DialogViews/DeleteConfirmationDialog.tsx";
@@ -35,7 +34,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
     }
 
     return (
-        <div style={{margin: "10px", height: "95vh"}}>
+        <div style={{margin: "10px", height: "90vh"}}>
             {/*Dialog for creating a new Entry*/}
             {passwordViewModel.getInItemCreation() &&
                 <ItemCreationDialog
@@ -97,7 +96,6 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                 </div>
 
                 <div className="borderBox" style={{width: "70%", position: "relative"}}>
-                    <SettingsView automergeFacade={automergeFacade}/>
                     {/*Depending on the state, either shows the editable or the normal/noneditable passwordView*/}
                     {!passwordViewModel.inEditable &&
                         <EntryView item={passwordViewModel.getCurEntry()}

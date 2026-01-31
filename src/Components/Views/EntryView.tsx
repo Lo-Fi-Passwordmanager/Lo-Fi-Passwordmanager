@@ -57,7 +57,7 @@ const EntryView: React.FC<{
                             <div className={"entryViewAttribute"}>
                                 <span style={{gridColumn: "span 20"}}>Passwort:</span>
                                 <div className={"attribute-value"} style={{gridColumnEnd: "19"}}>
-                                    <span>{(hidePassword ? "*".repeat(entry.password.length) : entry.password)}</span>
+                                    <span>{(hidePassword ? "●".repeat(entry.password.length) : entry.password)}</span>
                                 </div>
                                 <EyeButton hidePassword={hidePassword} toggleHidePassword={toggleHidePassword}/>
                                 <button className={"copyButton"}
