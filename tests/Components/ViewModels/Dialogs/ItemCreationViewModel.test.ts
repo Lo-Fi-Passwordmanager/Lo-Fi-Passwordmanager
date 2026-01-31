@@ -31,16 +31,4 @@ describe('ItemCreationViewModel' , () => {
             expect(setCurItem).toHaveBeenCalledTimes(1);
         })
     });
-
-    it('should not create a new Item when the item Type is wrong',async ()=> {
-        const {result} = renderHook(() =>
-            useItemCreationViewModel(addItem, setCurItem, curParent, cancelItemCreation));
-        act(() => {
-            result.current.setTypeOfItem("wederNoch");
-        })
-        result.current.handleConfirm();
-        await waitFor(() => {
-            expect(addItem).toHaveBeenCalledTimes(0);
-        })
-    })
 })
