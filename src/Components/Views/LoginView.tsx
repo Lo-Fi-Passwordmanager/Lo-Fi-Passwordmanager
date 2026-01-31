@@ -8,6 +8,7 @@ import type {Repo} from "@automerge/react";
 import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import  {type SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
+import DeleteConfirmationDialog from "./DialogViews/DeleteConfirmationDialog.tsx";
 
 
 const LoginView: React.FC<{
@@ -66,6 +67,13 @@ const LoginView: React.FC<{
                     setShowToast={viewModel.setShowToast}
                     importDatabase={viewModel.importDatabaseFromFile}
                 />
+
+                <DeleteConfirmationDialog
+                    database={viewModel.databaseToDelete}
+                    onConfirmDb={viewModel.confirmDeleteDatabase}
+                    onClose={() => viewModel.setDatabaseToDelete(null)}
+                />
+
             </main>
             <ToastDialog message={viewModel.toastMessage}
                          isVisible={viewModel.showToast}

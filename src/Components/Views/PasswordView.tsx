@@ -10,6 +10,7 @@ import EditablePasswordView from "./EditablePasswordView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
 import SettingsView from "./SettingsView.tsx";
 import {useRepo} from "@automerge/automerge-repo-react-hooks";
+import DeleteConfirmationDialog from "./DialogViews/DeleteConfirmationDialog.tsx";
 
 
 interface PasswordViewProps {
@@ -105,6 +106,12 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                                               updateItemAttribute={passwordViewModel.updateItemAttribute}
                                               setEditableView={() => passwordViewModel.setInEditable(false)}/>}
                 </div>
+
+                {passwordViewModel.itemToDelete && <DeleteConfirmationDialog
+                    item={passwordViewModel.itemToDelete}
+                    onConfirmItem={passwordViewModel.confirmDeletion}
+                    onClose={() => passwordViewModel.setItemToDelete(null)}
+                />}
 
                 {/*A Toast that may be called at any time with a given message*/}
                 <ToastDialog message={passwordViewModel.toastMessage}
