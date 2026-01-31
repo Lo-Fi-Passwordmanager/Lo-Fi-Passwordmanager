@@ -207,6 +207,7 @@ export const useLoginViewModel = (
         setDatabases(updatedDatabases);
         removeDatabase(name);
         repo.delete(id);
+        setDatabaseToDelete(null);
     }
 
     /**
