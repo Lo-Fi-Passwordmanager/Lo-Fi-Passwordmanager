@@ -28,6 +28,10 @@
     --input-field: rgb(255, 200, 200);
     --dialog-bg: rgba(255, 200, 200);
     --cancel-button: #a3a3a3;
+    --delete-color: #e74c3c;
+    --loading-overlay: rgba(0, 0, 0, 0.8);
+    --loading-text: #FFFFFF;
+    --pale-color: gray;
 
     /* Subtle shadows for depth */
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -39,12 +43,12 @@
 [data-theme="dark"] {
     --bg: rgb(22, 24, 28);
     --text: #ffffff;
-    --panel: rgb(15, 76, 72);
+    --panel: #306844;
     --overlay: rgba(14, 14, 14, 0.5);
     --outline: #818181;
-    --input-field: rgb(15, 76, 72);
-    --dialog-bg: #1a2e2d;
-    --cancel-button: #3c3c3c;
+    --input-field: #2c4c3b;
+    --dialog-bg: #182c25;
+    --cancel-button: #455b55;
 
     --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 
@@ -359,7 +363,7 @@ input[type="number"] {
 }
 
 .delete {
-    background-color: #e74c3c;
+    background-color: var(--delete-color);
 }
 
 .cancel {
@@ -662,9 +666,9 @@ input[type="number"] {
 }
 
 .loadingOverlay {
-    background: rgba(0, 0, 0, 0.8);
+    background: var(--loading-overlay);
     backdrop-filter: blur(8px);
-    color: white;
+    color: var(--loading-text);
     position: fixed;
     inset: 0;
     display: flex;
@@ -747,7 +751,7 @@ input[type="number"] {
 }
 
 .entryDateViewEntry {
-    color: gray;
+    color: var(--pale-color);
     font-size: 1em;
     width: 100%;
     height: 10%;
@@ -851,8 +855,8 @@ input[type="number"] {
 
 @keyframes flashAnimation {
     0% {
-        background-color: rgba(0, 149, 255, 0.4); /* FIXME: Farben */
-        box-shadow: 0 0 10px rgba(0, 149, 255, 0.4);
+        background-color: var(--outline-droppable);
+        box-shadow: var(--outline-droppable);
     }
     100% {
         background-color: var(--panel);
@@ -860,7 +864,7 @@ input[type="number"] {
     }
 }
 
-.flash-highlight {
+.highlighted {
     animation: flashAnimation 1s ease-out forwards;
 }
 
@@ -953,13 +957,13 @@ input[type="number"] {
 
 /* State Colors */
 .status-new .timeline-label {
-    background: #dcfce7;
+    background: var(--loading-text);
     color: #166534;
 }
 
 .status-update .timeline-label {
-    background: #dbeafe;
-    color: #1e40af;
+    background: var(--loading-text);
+    color: var(--outline-droppable);
 }
 
 .status-deleted .timeline-content {
@@ -968,8 +972,8 @@ input[type="number"] {
 }
 
 .status-deleted .timeline-label {
-    background: #fee2e2;
-    color: #991b1b;
+    background: var(--loading-text);
+    color: var(--delete-color);
 }
 
 .item-name {
@@ -1034,22 +1038,6 @@ input[type="number"] {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-}
-
-/* flashing item when clicked or created */
-@keyframes flashAnimation {
-    0% {
-        background-color: rgba(0, 102, 255, 0.4);
-        box-shadow: 0 0 10px rgba(0, 102, 255, 0.5);
-    }
-    100% {
-        background-color: var(--panel);
-        box-shadow: none;
-    }
-}
-
-.highlighted {
-    animation: flashAnimation 1s ease-out forwards;
 }
 
 .confirmDeleteWrapper {
