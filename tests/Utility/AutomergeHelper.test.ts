@@ -22,5 +22,7 @@ describe('AutomergeHelper', () => {
         expect(folder.isEntry()).toBe(false);
     });
 
-    it('should ')
+    it('should ', ()=> {
+
+    })
 })
