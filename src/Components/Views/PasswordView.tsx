@@ -6,7 +6,7 @@ import {usePasswortViewModel} from "../ViewModels/PasswordViewModel.ts";
 import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import ItemCreationDialog from "./DialogViews/ItemCreationDialog.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
-import EditablePasswordView from "./EditablePasswordView.tsx";
+import EditableEntryView from "./EditableEntryView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
 import {DndContext, pointerWithin} from "@dnd-kit/core";
 import {useRepo} from "@automerge/automerge-repo-react-hooks";
@@ -42,7 +42,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                     cancelItemCreation={() => passwordViewModel.setInItemCreation(false)}
                 />}
 
-            <div className="passwordView">
+            <div className={`passwordView ${passwordViewModel.inEditable ? "editing" : ""}`}>
                 <div className="borderBox" style={{width: "30%"}}>
                     {/*Container for everything related to the search/Sort features */}
                     <OrganizeListView
@@ -106,12 +106,12 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                                    toggleHidePassword={passwordViewModel.toggleHidePassword}/>}
 
                     {passwordViewModel.inEditable &&
-                        <EditablePasswordView item={passwordViewModel.getCurEntry()}
-                                              updateItemAttribute={passwordViewModel.updateItemAttribute}
-                                              setEditableView={() => passwordViewModel.toggleInEdit()}
-                                              createItem={passwordViewModel.createEntry}
-                                              inCreation={passwordViewModel.inEntryCreation}
-                                              setInCreation={passwordViewModel.setInEntryCreation}
+                        <EditableEntryView item={passwordViewModel.getCurEntry()}
+                                           updateItemAttribute={passwordViewModel.updateItemAttribute}
+                                           setEditableView={() => passwordViewModel.toggleInEdit()}
+                                           createItem={passwordViewModel.createEntry}
+                                           inCreation={passwordViewModel.inEntryCreation}
+                                           setInCreation={passwordViewModel.setInEntryCreation}
                                               hidePassword={passwordViewModel.hidePassword}
                                               toggleHidePassword={passwordViewModel.toggleHidePassword}
                         />

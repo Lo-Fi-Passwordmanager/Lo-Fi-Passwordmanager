@@ -139,6 +139,15 @@ button, select {
     transition: transform 0.1s, active, filter 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* Disable buttons in password view unless editing an entry */
+.passwordView.editing button {
+    pointer-events: none;
+}
+
+.passwordView.editing .entryViewEntry.editing button {
+    pointer-events: auto;
+}
+
 select {
     border-right: 10px solid transparent
 }

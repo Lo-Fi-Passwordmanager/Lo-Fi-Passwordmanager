@@ -13,7 +13,7 @@ import EyeButton from "./ButtonViews/EyeButton.tsx";
  * @param updateItemAttribute the function on the active {@link AutomergeFacade} to update a item in the doc
  * @param setEditableView the function to close the editable passwordview
  */
-const EditablePasswordView: React.FC<{
+const EditableEntryView: React.FC<{
     item: Item,
     updateItemAttribute: (itemId: string, changes: [Attribute, string | Date][]) => void;
     setEditableView: () => void;
@@ -40,7 +40,7 @@ const EditablePasswordView: React.FC<{
     } else if (item.isEntry()) {
         return (
             <div className={"entryViewContainer"}>
-                <div className="entryViewEntry">
+                <div className="entryViewEntry editing">
                     <input className={"title-value"} type={"text"} value={viewmodel.title}
                            onChange={(e) => viewmodel.setTitle(e.target.value)}/>
 
@@ -105,4 +105,4 @@ const EditablePasswordView: React.FC<{
 
 };
 
-export default EditablePasswordView;
+export default EditableEntryView;
