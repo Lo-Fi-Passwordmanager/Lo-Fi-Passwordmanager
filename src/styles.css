@@ -590,7 +590,7 @@ input[type="number"] {
 .entryViewListing {
     display: flex;
     flex-direction: column;
-    justify-content: start;
+    justify-content: center;
     height: calc(90% - 10px);
     gap: 2vh;
 }
@@ -630,6 +630,7 @@ input[type="number"] {
     min-height: fit-content;
     margin-top: 3%;
     border: none;
+    width: fit-content;
 }
 
 .scrollableContainer {
