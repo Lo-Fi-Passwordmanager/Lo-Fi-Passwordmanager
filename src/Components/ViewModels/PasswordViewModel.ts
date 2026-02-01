@@ -255,6 +255,13 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     );
 
     /**
+     * Returns whether dragging is allowed in the current state
+     */
+    function allowDragging() {
+        return !inEditable && !inItemCreation && createdFolderId === null;
+    }
+
+    /**
      * Navigates to the given item by setting it as the current item and clearing the search value so the view shows the full hierarchy
      */
     function goToItem(item: Item) {
@@ -308,6 +315,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         confirmDeletion,
         createEntry,
         setCreatedFolderId,
-        setItemToDelete
+        setItemToDelete,
+        allowDragging
     };
 };

@@ -70,7 +70,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                         />}
                         <DndContext collisionDetection={pointerWithin}
                                     onDragEnd={passwordViewModel.handleDragEnd}
-                                    sensors={passwordViewModel.sensors}
+                                    sensors={passwordViewModel.allowDragging() ? passwordViewModel.sensors : []}
                                     autoScroll={false}>
 
                             {/*The basic ListView which shows all Items and Folders in their hierarchy*/}
