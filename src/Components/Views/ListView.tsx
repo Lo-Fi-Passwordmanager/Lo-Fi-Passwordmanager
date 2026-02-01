@@ -29,6 +29,7 @@ const ListView: React.FC<{
     createdFolderId: string | null;
     setCreatedFolderId: (folderId: string | null) => void;
     updateItemTitle: (itemId: string, newTitle: string) => void;
+    level: number;
 }> = ({
           item,
           setCurItem,
@@ -43,7 +44,8 @@ const ListView: React.FC<{
           selectedItemId,
           createdFolderId,
           updateItemTitle,
-          setCreatedFolderId
+          setCreatedFolderId,
+          level
       }) => {
     const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem, updateItemTitle, setCreatedFolderId, createdFolderId);
 
@@ -117,7 +119,9 @@ const ListView: React.FC<{
                         {(listViewModel.inEditName || item.id === createdFolderId) &&
                             <input type="text"
                                    autoFocus
-                                   onFocus={e => {e.target.select();}}
+                                   onFocus={e => {
+                                   e.target.select();
+                               }}
                                    style={{marginLeft: ((item.id != "") ? "" : "10px"), border: "none"}}
                                    value={listViewModel.newTitle}
                                    onChange={(e) => listViewModel.setItemTitle(e.target.value)}
@@ -142,33 +146,37 @@ const ListView: React.FC<{
                             /> : <button className="listViewTitleHeader button" onClick={() => addButtonPressed()}>
                                 <HiMiniPlus size={24}/>
                             </button>}
-                        </div>
-                    </div>
-                    {/* Recursive call of children with indent to visualizes depth in the tree */}
-                    <div className="listViewEntryWrapper"
-                         style={{display: (listViewModel.getExtended() ? "block" : "none")}}>
-                        {listViewModel.getChildren() &&
-                            listViewModel.getChildren()!.map((item: Item, index: number) => {
-                                return <ListView
-                                    key={index}
-                                    item={item}
-                                    setCurItem={setCurItem}
-                                    getCurItem={getCurItem}
-                                    setItemCreationDialog={setItemCreationDialog}
-                                    setCurrentParent={setCurrentParent}
-                                    deleteItem={deleteItem}
-                                    sortCriterion={sortCriterion}
-                                    isAscending={isAscending}
-                                    dirtyItemId={dirtyItemId}
-                                    openedDbName={""}
-                                    updateItemTitle={updateItemTitle}
-                                    selectedItemId={selectedItemId}
-                                    createdFolderId={createdFolderId}
-                                    setCreatedFolderId={setCreatedFolderId}
-                                />;
-                            })
-                        }
-                    </div>
+                        {(item.id != "") && (!listViewModel.inEditName) &&
+                            <button onClick={() => listViewModel.setAndStoreEditName(true)}>
+                                ✏️
+                            </button>}
+                        {(item.id != "") && <button onClick={() => deleteItem(item)}>🗑️</button>}
+                        {/* FIXME: Löschbestätigung einbauen */}</div>
+                </div>
+
+                {/* Recursive call of children with indent to visualizes depth in the tree */}
+                <div className="listViewEntryWrapper"
+                     style={{display: (listViewModel.getExtended() ? "block" : "none"), marginLeft: level <= 8 ? "15px" : "0px"}}>
+                    {listViewModel.getChildren() &&
+                        listViewModel.getChildren()!.map((item: Item) => {
+                            return <ListView
+                                item={item}
+                                setCurItem={setCurItem}
+                                getCurItem={getCurItem}
+                                setItemCreationDialog={setItemCreationDialog}
+                                setCurrentParent={setCurrentParent}
+                                deleteItem={deleteItem}
+                                sortCriterion={sortCriterion}
+                                isAscending={isAscending}
+                                dirtyItemId={dirtyItemId} openedDbName={""}
+                                updateItemTitle={updateItemTitle}
+                                selectedItemId={selectedItemId}
+                                createdFolderId={createdFolderId}
+                                setCreatedFolderId={setCreatedFolderId}
+                                level={level + 1}
+                            />;
+                        })}
+                </div>
             </>
         )
             ;
