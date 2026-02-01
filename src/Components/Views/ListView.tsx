@@ -4,7 +4,7 @@ import {Entry} from "../../Model/Entry.ts";
 import React from "react";
 import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
 import FolderMenu from "./MenuViews/FolderMenu.tsx";
-import { HiMiniPlus } from "react-icons/hi2";
+import {HiMiniPlus} from "react-icons/hi2";
 import {HiTrash} from "react-icons/hi";
 import {CSS} from "@dnd-kit/utilities";
 
@@ -75,7 +75,8 @@ const ListView: React.FC<{
                 aria-selected={selectedItemId === item.id}>
                 <span style={{marginRight: "1ch"}}></span> <span>{entry.title}</span>
                 <div className={"btnWrapper"}>
-                    <button className="listViewEntry button" onClick={() => deleteItem(item)} onPointerDown={(e) => e.stopPropagation()}>
+                    <button className="listViewEntry button" onClick={() => deleteItem(item)}
+                            onPointerDown={(e) => e.stopPropagation()}>
                         <HiTrash size={24}/>
                     </button>
                 </div>
@@ -89,25 +90,25 @@ const ListView: React.FC<{
         return (
             <>
                 {/* Name and Buttons */}
-                    <div
-                        className={`listViewTitleHeader ${listViewModel.isDragging ? "dragged" : ""} ${listViewModel.isOver && !listViewModel.isDragging ? "over" : ""} ${selectedItemId === item.id ? "highlighted" : ""}`}
-                        ref={listViewModel.setFolderRef}
-                        style={dragStyle}
-                        {...listViewModel.attributes}
-                        {...listViewModel.listeners}
-                        aria-selected={selectedItemId === item.id}>
-                        {/* ^^^^^^^^^ using aria-selected for scrolling to the clicked folder from filtered list view */}
-                        {(item.id != "") &&
-                            <button style={{marginRight: "15px", boxShadow: "none"}}
-                                    onClick={() => listViewModel.toggleExtended()}
-                                    onPointerDown={(e) => e.stopPropagation()}
-                            >
-                                {listViewModel.getExtended() ? "▼" : "▷"}</button>}
+                <div
+                    className={`listViewTitleHeader ${listViewModel.isDragging ? "dragged" : ""} ${listViewModel.isOver && !listViewModel.isDragging ? "over" : ""} ${selectedItemId === item.id ? "highlighted" : ""}`}
+                    ref={listViewModel.setFolderRef}
+                    style={dragStyle}
+                    {...listViewModel.attributes}
+                    {...listViewModel.listeners}
+                    aria-selected={selectedItemId === item.id}>
+                    {/* ^^^^^^^^^ using aria-selected for scrolling to the clicked folder from filtered list view */}
+                    {(item.id != "") &&
+                        <button style={{boxShadow: "none"}}
+                                onClick={() => listViewModel.toggleExtended()}
+                                onPointerDown={(e) => e.stopPropagation()}
+                        >
+                            {listViewModel.getExtended() ? "▼" : "▷"}</button>}
 
-                        {(!listViewModel.inEditName && item.id !== createdFolderId) &&
+                    {(!listViewModel.inEditName && item.id !== createdFolderId) &&
                         <span
                             style={{
-                                marginLeft: item.id !== "" ? "" : "10px",
+                                marginLeft: "10px",
                                 display: "inline-block", // Required for overflow to work
                                 maxWidth: "100%",        // Limits it to the parent's width
                                 whiteSpace: "nowrap",    // Prevents text from wrapping to a second line
@@ -115,48 +116,46 @@ const ListView: React.FC<{
                                 textOverflow: "ellipsis", // Adds the "..."
                                 verticalAlign: "middle"  // Keeps it aligned with buttons
                             }}>{(item.id != "") ? item.title : openedDbName}</span>
-                        }
-                        {(listViewModel.inEditName || item.id === createdFolderId) &&
-                            <input type="text"
-                                   autoFocus
-                                   onFocus={e => {
+                    }
+                    {(listViewModel.inEditName || item.id === createdFolderId) &&
+                        <input type="text"
+                               autoFocus
+                               onFocus={e => {
                                    e.target.select();
                                }}
-                                   style={{marginLeft: ((item.id != "") ? "" : "10px"), border: "none"}}
-                                   value={listViewModel.newTitle}
-                                   onChange={(e) => listViewModel.setItemTitle(e.target.value)}
-                                   onBlur={() => {
-                                       listViewModel.setAndStoreEditName(false);
-                                       listViewModel.updateTitleInAutomerge()
-                                   }}
-                                   onKeyDown={(e) => {
-                                       if (e.key === 'Enter') {
-                                           (e.target as HTMLInputElement).blur();
-                                       }
-                                   }}
-                            />
-                        }
-                        <div className="btnWrapper">
-                            {item.id !== "" ? <FolderMenu
-                                onAdd={() => addButtonPressed()}
-                                onDelete={() => deleteItem(item)}
-                                onRename={() => {
-                                    listViewModel.setAndStoreEditName(true);
-                                }}
-                            /> : <button className="listViewTitleHeader button" onClick={() => addButtonPressed()}>
-                                <HiMiniPlus size={24}/>
-                            </button>}
-                        {(item.id != "") && (!listViewModel.inEditName) &&
-                            <button onClick={() => listViewModel.setAndStoreEditName(true)}>
-                                ✏️
-                            </button>}
-                        {(item.id != "") && <button onClick={() => deleteItem(item)}>🗑️</button>}
-                        {/* FIXME: Löschbestätigung einbauen */}</div>
+                               style={{marginLeft: ((item.id != "") ? "" : "10px"), border: "none"}}
+                               value={listViewModel.newTitle}
+                               onChange={(e) => listViewModel.setItemTitle(e.target.value)}
+                               onBlur={() => {
+                                   listViewModel.setAndStoreEditName(false);
+                                   listViewModel.updateTitleInAutomerge()
+                               }}
+                               onKeyDown={(e) => {
+                                   if (e.key === 'Enter') {
+                                       (e.target as HTMLInputElement).blur();
+                                   }
+                               }}
+                        />
+                    }
+                    <div className="btnWrapper">
+                        {item.id !== "" ? <FolderMenu
+                            onAdd={() => addButtonPressed()}
+                            onDelete={() => deleteItem(item)}
+                            onRename={() => {
+                                listViewModel.setAndStoreEditName(true);
+                            }}
+                        /> : <button className="listViewTitleHeader button" onClick={() => addButtonPressed()}>
+                            <HiMiniPlus size={24}/>
+                        </button>}
+                    </div>
                 </div>
 
                 {/* Recursive call of children with indent to visualizes depth in the tree */}
                 <div className="listViewEntryWrapper"
-                     style={{display: (listViewModel.getExtended() ? "block" : "none"), marginLeft: level <= 8 ? "15px" : "0px"}}>
+                     style={{
+                         display: (listViewModel.getExtended() ? "block" : "none"),
+                         marginLeft: level <= 8 ? "15px" : "0px"
+                     }}>
                     {listViewModel.getChildren() &&
                         listViewModel.getChildren()!.map((item: Item) => {
                             return <ListView

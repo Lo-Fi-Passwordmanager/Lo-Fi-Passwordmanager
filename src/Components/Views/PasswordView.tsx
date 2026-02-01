@@ -85,9 +85,8 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                                 dirtyItemId={passwordViewModel.dirtyItemId}
                                 getCurItem={passwordViewModel.getCurEntry}
                                 openedDbName={openedDbName}
-
                                 updateItemTitle={passwordViewModel.updateItemTitle}
-                            selectedItemId={passwordViewModel.selectedItemId}
+                                selectedItemId={passwordViewModel.selectedItemId}
                                 createdFolderId={passwordViewModel.createdFolderId}
                                 setCreatedFolderId={passwordViewModel.setCreatedFolderId}
                                 level={0}
