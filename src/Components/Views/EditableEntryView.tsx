@@ -12,7 +12,7 @@ import PasswordGenDialog from "./DialogViews/PasswordGenDialog.tsx";
  * @param updateItemAttribute the function on the active {@link AutomergeFacade} to update a item in the doc
  * @param setEditableView the function to close the editable passwordview
  */
-const EditablePasswordView: React.FC<{
+const EditableEntryView: React.FC<{
     item: Item,
     updateItemAttribute: (itemId: string, changes: [Attribute, string | Date][]) => void;
     setEditableView: () => void; inCreation: boolean;
@@ -102,4 +102,4 @@ const EditablePasswordView: React.FC<{
 
 };
 
-export default EditablePasswordView;
+export default EditableEntryView;

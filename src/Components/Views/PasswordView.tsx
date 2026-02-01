@@ -6,7 +6,7 @@ import {usePasswortViewModel} from "../ViewModels/PasswordViewModel.ts";
 import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import ItemCreationDialog from "./DialogViews/ItemCreationDialog.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
-import EditablePasswordView from "./EditablePasswordView.tsx";
+import EditableEntryView from "./EditableEntryView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
 import SettingsView from "./SettingsView.tsx";
 import {useRepo} from "@automerge/automerge-repo-react-hooks";
@@ -103,12 +103,12 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                                    toggleHidePassword={passwordViewModel.toggleHidePassword}/>}
 
                     {passwordViewModel.inEditable &&
-                        <EditablePasswordView item={passwordViewModel.getCurEntry()}
-                                              updateItemAttribute={passwordViewModel.updateItemAttribute}
-                                              setEditableView={() => passwordViewModel.toggleInEdit()}
-                                              createItem={passwordViewModel.createEntry}
-                                              inCreation={passwordViewModel.inEntryCreation}
-                                              setInCreation={passwordViewModel.setInEntryCreation}
+                        <EditableEntryView item={passwordViewModel.getCurEntry()}
+                                           updateItemAttribute={passwordViewModel.updateItemAttribute}
+                                           setEditableView={() => passwordViewModel.toggleInEdit()}
+                                           createItem={passwordViewModel.createEntry}
+                                           inCreation={passwordViewModel.inEntryCreation}
+                                           setInCreation={passwordViewModel.setInEntryCreation}
 
                         />
                     }
