@@ -24,6 +24,7 @@ const ListView: React.FC<{
     createdFolderId: string | null;
     setCreatedFolderId: (folderId: string | null) => void;
     updateItemTitle: (itemId: string, newTitle: string) => void;
+    level: number;
 }> = ({
           item,
           setCurItem,
@@ -38,7 +39,8 @@ const ListView: React.FC<{
           selectedItemId,
           createdFolderId,
           updateItemTitle,
-          setCreatedFolderId
+          setCreatedFolderId,
+          level
       }) => {
     const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem, updateItemTitle, setCreatedFolderId, createdFolderId);
 
@@ -51,9 +53,10 @@ const ListView: React.FC<{
     if (listViewModel.isItemEntry()) {
         const entry = listViewModel.getItem() as Entry;
         return (
-            <div className={`listViewEntry ${getCurItem().id === entry.id ? "selected" : ""} ${selectedItemId === item.id ? "highlighted" : ""}`}
-                 onClick={() => setCurItem(entry)}
-                 aria-selected={selectedItemId === item.id}>
+            <div
+                className={`listViewEntry ${getCurItem().id === entry.id ? "selected" : ""} ${selectedItemId === item.id ? "highlighted" : ""}`}
+                onClick={() => setCurItem(entry)}
+                aria-selected={selectedItemId === item.id}>
                 <span style={{marginRight: "1ch"}}></span> <span>{entry.title}</span>
             </div>
         );
@@ -87,7 +90,9 @@ const ListView: React.FC<{
                     {(listViewModel.inEditName || item.id === createdFolderId) &&
                         <input type="text"
                                autoFocus
-                               onFocus={e => {e.target.select();}}
+                               onFocus={e => {
+                                   e.target.select();
+                               }}
                                style={{marginLeft: ((item.id != "") ? "" : "10px"), border: "none"}}
                                value={listViewModel.newTitle}
                                onChange={(e) => listViewModel.setItemTitle(e.target.value)}
@@ -122,11 +127,10 @@ const ListView: React.FC<{
 
                 {/* Recursive call of children with indent to visualizes depth in the tree */}
                 <div className="listViewEntryWrapper"
-                     style={{display: (listViewModel.getExtended() ? "block" : "none")}}>
+                     style={{display: (listViewModel.getExtended() ? "block" : "none"), marginLeft: level <= 8 ? "15px" : "0px"}}>
                     {listViewModel.getChildren() &&
-                        listViewModel.getChildren()!.map((item: Item, index: number) => {
+                        listViewModel.getChildren()!.map((item: Item) => {
                             return <ListView
-                                key={index}
                                 item={item}
                                 setCurItem={setCurItem}
                                 getCurItem={getCurItem}
@@ -140,6 +144,7 @@ const ListView: React.FC<{
                                 selectedItemId={selectedItemId}
                                 createdFolderId={createdFolderId}
                                 setCreatedFolderId={setCreatedFolderId}
+                                level={level + 1}
                             />;
                         })}
                 </div>

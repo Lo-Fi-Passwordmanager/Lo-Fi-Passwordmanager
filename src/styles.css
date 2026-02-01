@@ -421,7 +421,6 @@ input[type="number"] {
 }
 
 .listViewEntryWrapper {
-    margin-left: 15px;
     flex-direction: row;
     position: relative;
     --number-children: 0;
