@@ -37,6 +37,7 @@ export const useLoginViewModel = (
     const [isEnterPasswordDialogOpen, setIsEnterPasswordDialogOpen] = useState(false);
     const [showToast, setShowToast] = useState<boolean>(false);
     const [toastMessage, setToastMessage] = useState<string>("");
+    const [databaseToDelete, setDatabaseToDelete] = useState<string | null>(null);
 
     const setLoadingScreenActive = useLoadingScreen();
 
@@ -186,17 +187,27 @@ export const useLoginViewModel = (
 
 
     /**
-     * Removes a database from the list of available databases
+     * Initiates the deletion of a database
      *
-     * @param name the name of the database to remove
+     * @param name the name of the database to delete
      */
     function deleteDatabase(name: string) {
+        setDatabaseToDelete(name);
+    }
+
+    /**
+     * Confirms the deletion of a database
+     *
+     * @param name the name of the database to delete
+     */
+    function confirmDeleteDatabase(name: string) {
         const updatedDatabases = new Map(databases);
         const id = updatedDatabases.get(name)!;
         updatedDatabases.delete(name);
         setDatabases(updatedDatabases);
         removeDatabase(name);
         repo.delete(id);
+        setDatabaseToDelete(null);
     }
 
     /**
@@ -280,6 +291,7 @@ export const useLoginViewModel = (
         databases,
         showToast,
         toastMessage,
+        databaseToDelete,
 
         importDatabaseFromFile,
         setShowToast,
@@ -293,6 +305,8 @@ export const useLoginViewModel = (
         importDatabaseFromURL,
         setToastMessage,
         deleteDatabase,
-        changeDatabaseName
+        changeDatabaseName,
+        confirmDeleteDatabase,
+        setDatabaseToDelete,
     };
 };
