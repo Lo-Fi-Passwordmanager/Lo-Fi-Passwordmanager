@@ -41,7 +41,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                     cancelItemCreation={() => passwordViewModel.setInItemCreation(false)}
                 />}
 
-            <div className="passwordView">
+            <div className={`passwordView ${passwordViewModel.inEditable ? "editing" : ""}`}>
                 <div className="borderBox scrollableContainer" style={{width: "30%"}}>
                     {/*Container for everything related to the search/Sort features */}
                     <OrganizeListView

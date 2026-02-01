@@ -15,7 +15,8 @@ import PasswordGenDialog from "./DialogViews/PasswordGenDialog.tsx";
 const EditableEntryView: React.FC<{
     item: Item,
     updateItemAttribute: (itemId: string, changes: [Attribute, string | Date][]) => void;
-    setEditableView: () => void; inCreation: boolean;
+    setEditableView: () => void;
+    inCreation: boolean;
     setInCreation: (inCreation: boolean) => void;
     createItem: (item: Item) => void;
 }> = ({item, updateItemAttribute, setEditableView, setInCreation, inCreation, createItem}) => {
@@ -36,7 +37,7 @@ const EditableEntryView: React.FC<{
     } else if (item.isEntry()) {
         return (
             <>
-                <div className="entryViewEntry" style={{position: "relative"}}>
+                <div className="entryViewEntry editing" style={{position: "relative"}}>
                     <button onClick={() => {
                         if (viewmodel.hasChanges()) {
                             viewmodel.updateItemInAutomerge();
@@ -82,19 +83,19 @@ const EditableEntryView: React.FC<{
                                    onChange={(e) => viewmodel.setNote(e.target.value)}/>
                         </div>
                     </div>
-                </div>
-                <div className={"entryViewFooterButtons"}>
-                    <button className={"standard-button"}
-                            onClick={viewmodel.saveEntry}>Speichern
-                    </button>
-                    <button className={"standard-button"}
-                            onClick={viewmodel.cancelSaving}>Abbrechen
-                    </button>
-                </div>
+                    <div className={"entryViewFooterButtons"}>
+                        <button className={"standard-button"}
+                                onClick={viewmodel.saveEntry}>Speichern
+                        </button>
+                        <button className={"standard-button"}
+                                onClick={viewmodel.cancelSaving}>Abbrechen
+                        </button>
+                    </div>
 
-                <div className="entryDateViewEntry">
-                    <span>Erstellt am: {item.createdAt.toLocaleString()}</span>
-                    <span>Bearbeitet am: {item.editedAt.toLocaleString()}</span>
+                    <div className="entryDateViewEntry">
+                        <span>Erstellt am: {item.createdAt.toLocaleString()}</span>
+                        <span>Bearbeitet am: {item.editedAt.toLocaleString()}</span>
+                    </div>
                 </div>
             </>
         );
