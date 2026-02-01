@@ -8,6 +8,7 @@ import {
     saveCurrentSortCriterion,
     saveIsAscending
 } from "../../Utility/Storage.ts";
+import {useSettings} from "../../Model/Settings.ts";
 
 export const SortCriteria = {
     Name: "NAME",
@@ -23,7 +24,7 @@ export type SortCriteria = typeof SortCriteria[keyof typeof SortCriteria];
  */
 export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
 
-    const [inEditablePasswordView, setInEditablePasswordView] = useState(false);
+    const settings = useSettings();
     const [inItemCreation, setInItemCreation] = useState(false);
     const reactiveFacade = useAutomergeFacade(automergeFacade);
     const [curItem, _setCurItem] = useState<Item>(reactiveFacade.tree.rootFolder);
@@ -132,7 +133,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         if (item.isEntry()) {
             setCurItem(item);
             setInEntryCreation(true);
-            setInEditable(true);
+            toggleInEdit();
         } else {
             const id = reactiveFacade.insertItem(item, curParent.id);
             item.id = id;
@@ -149,12 +150,9 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     }
 
 
-    function toggleEditablePasswordView() {
-        setInEditablePasswordView(!inEditablePasswordView);
-    }
-
-    function getInEditablePasswordView() {
-        return inEditablePasswordView;
+    function toggleInEdit() {
+        settings.setSynchronization(inEditable);
+        setInEditable(!inEditable);
     }
 
     function getCurParent() {
@@ -260,8 +258,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setToastVisible,
         setInEditable,
         updateItemAttribute,
-        toggleEditablePasswordView,
-        getInEditablePasswordView,
+        toggleInEdit,
         getInItemCreation,
         setInItemCreation,
         setCurParent,
