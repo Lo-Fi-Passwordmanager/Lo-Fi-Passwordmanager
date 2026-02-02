@@ -35,19 +35,28 @@ const FolderMenu: React.FC<Props> = ({onDelete, onRename, onAdd, disabled}) => {
         <div className="action-menu-wrapper" ref={menuRef} onClick={(e) => e.stopPropagation()}>
 
             <div className={`action-items ${isOpen ? "open" : ""}`}>
-                <button className="listViewTitleHeader button" onClick={() => {
-                    onAdd();
-                    setIsOpen(false);
-                }}>
+                <button
+                    className="listViewTitleHeader button"
+                    disabled={!isOpen}
+                    onClick={() => {
+                        onAdd();
+                        setIsOpen(false);
+                    }}>
                     <HiMiniPlus size={24}/>
                 </button>
-                <button className="listViewTitleHeader button" onClick={() => {
-                    onRename();
-                    setIsOpen(false);
-                }}>
+                <button
+                    disabled={!isOpen}
+                    className="listViewTitleHeader button"
+                    onClick={() => {
+                        onRename();
+                        setIsOpen(false);
+                    }}>
                     <HiPencil size={24}/>
                 </button>
-                <button className="listViewTitleHeader button" onClick={onDelete}>
+                <button
+                    className="listViewTitleHeader button"
+                    disabled={!isOpen}
+                    onClick={onDelete}>
                     <HiTrash size={24}/>
                 </button>
             </div>
