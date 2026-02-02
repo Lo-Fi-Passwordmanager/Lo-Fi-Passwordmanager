@@ -31,6 +31,7 @@ const LoginDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                     autoFocus
                     onKeyDown={(e) => {
                         if (e.key === 'Enter') {viewModel.handleConfirm();}
+                        if (e.key === 'Escape') {onCancel();}
                     }}
                 />
 

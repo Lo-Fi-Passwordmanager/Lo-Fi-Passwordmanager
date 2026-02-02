@@ -1,5 +1,5 @@
 import React from "react";
-import {useLoginViewModel} from "../ViewModels/UseLoginViewModel.ts";
+import {loginViewModel} from "../ViewModels/LoginViewModel.ts";
 import DatabaseListingView from "./ListingViews/DatabaseListingView.tsx";
 import CreateDatabaseDialog from "./DialogViews/CreateDatabaseDialog.tsx";
 import LoginDatabaseDialog from "./DialogViews/LoginDatabaseDialog.tsx";
@@ -8,6 +8,7 @@ import type {Repo} from "@automerge/react";
 import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import  {type SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
+import {HiMiniPlus} from "react-icons/hi2";
 import DeleteConfirmationDialog from "./DialogViews/DeleteConfirmationDialog.tsx";
 
 
@@ -19,13 +20,13 @@ const LoginView: React.FC<{
     setOpenedDbName: (value: (((prevState: string) => string) | string)) => void
 }> = ({repo, setLoggedIn, setAutomergeFacade, securityProvider, setOpenedDbName}) => {
 
-    const viewModel = useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, securityProvider, setOpenedDbName);
+    const viewModel = loginViewModel(repo, setLoggedIn, setAutomergeFacade, securityProvider, setOpenedDbName);
 
     return (
         <div className="loginView">
 
             <img src={PWMLogo} className="logo" alt="Passwortmanager Logo"/>
-            <header> Passwort Manager</header>
+            <header>LoFi Passwordmanager</header>
             <main className="flexContainer">
 
                 <div className="databaseSelection">
@@ -39,8 +40,10 @@ const LoginView: React.FC<{
 
 
                     {/* Button for adding new Database */}
-                    <button onClick={viewModel.openAddDialog}>
-                        +
+                    <button
+                        className={"squareButton"}
+                        onClick={viewModel.openAddDialog}>
+                        <HiMiniPlus size={24}/>
                     </button>
                 </div>
                 {/* Popup Dialog for adding a new Database */}

@@ -1,5 +1,6 @@
 import React from "react";
 import {useRenameDatabaseViewModel} from "../../ViewModels/Dialog/RenameDatabaseViewModel.ts";
+import {HiPencil} from "react-icons/hi";
 
 
 interface RenameDatabaseDialogProps {
@@ -14,8 +15,9 @@ const RenameDatabaseDialog: React.FC<RenameDatabaseDialogProps> = ({oldName, ren
         return (
             <>
             <button
-                className="renameDatabaseButton"
-                onClick={() => viewModel.setRenameDatabaseOpen(true)}>✏️
+                className="squareButton"
+                onClick={() => viewModel.setRenameDatabaseOpen(true)}>
+                <HiPencil size={24}/>
             </button>
             <div className={"dialogOverlay"}>
                 <div className={"dialog"}>
@@ -37,8 +39,9 @@ const RenameDatabaseDialog: React.FC<RenameDatabaseDialogProps> = ({oldName, ren
     } else {
         return (
             <button
-                className="renameDatabaseButton"
-                onClick={() => viewModel.setRenameDatabaseOpen(true)}>✏️
+                className="squareButton"
+                onClick={() => viewModel.setRenameDatabaseOpen(true)}>
+                <HiPencil size={24}/>
             </button>
         );
     }

@@ -1,6 +1,7 @@
 import React from "react";
 import Dialog from "./Dialog.tsx";
 import {Item} from "../../../Model/Item.ts";
+import {HiTrash} from "react-icons/hi";
 
 const DeleteConfirmationDialog: React.FC<{
     database?: string | null,
@@ -20,8 +21,8 @@ const DeleteConfirmationDialog: React.FC<{
                 Die Datenbank '<strong>{database}</strong>' wirklich löschen?
             </span>
                     <div>
-                        <button className={"rectangleButton"} onClick={() => onConfirmDb(database)}>
-                            Löschen
+                        <button className={"rectangle-button delete"} onClick={() => onConfirmDb(database)}>
+                            <HiTrash size={24}/> Löschen
                         </button>
                     </div>
                 </div>
@@ -35,13 +36,12 @@ const DeleteConfirmationDialog: React.FC<{
                 Den {item.isEntry() ? "Eintrag" : "Ordner"} '<strong>{item.title}</strong>' wirklich löschen?
             </span>
                     <div>
-                        <button className={"rectangleButton"} onClick={() => onConfirmItem(item)}>
-                            Löschen
-                        </button>
-                    </div>
+                        <button className={"rectangle-button delete"} onClick={() => onConfirmItem(item)}>
+                            <HiTrash size={24}/> Löschen
+                    </button>
                 </div>
-            </Dialog>
-        );
-    }
+            </div>
+        </Dialog>
+    );}
 }
 export default DeleteConfirmationDialog;

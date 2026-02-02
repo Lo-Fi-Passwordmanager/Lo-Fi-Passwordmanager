@@ -2,21 +2,26 @@ import React from "react";
 import {type Entry} from "../../Model/Entry.ts";
 import {type Item} from "../../Model/Item.ts";
 import Logo from "../../assets/logo_gelb.svg?inline";
-
+import EyeButton from "./ButtonViews/EyeButton.tsx";
+import {HiMiniLink} from "react-icons/hi2";
+import {HiPencil, HiTrash} from "react-icons/hi";
 
 /**
  * The View that depicts an Entry with all its attributes at large scale
  * @param item the entry that should be depicted
  * @param copyAndClearClipboard the function that copies a string to the clipboard and clears it afterwards
  * @param setEditableView a command to toggle the editable view to on
+ * @param hidePassword
+ * @param toggleHidePassword
  */
 const EntryView: React.FC<{
     item: Item,
+    deleteItem: (item: Item) => void,
     copyAndClearClipboard: (text: string, timeout?: number) => void,
     setEditableView: () => void,
     hidePassword: boolean;
     toggleHidePassword: () => void;
-}> = ({item, copyAndClearClipboard, setEditableView, hidePassword, toggleHidePassword}) => {
+}> = ({item, deleteItem, copyAndClearClipboard, setEditableView, hidePassword, toggleHidePassword}) => {
 
     if (item.isFolder() || item.deleted) {
         return (
@@ -33,55 +38,71 @@ const EntryView: React.FC<{
         );
     } else if (item.isEntry()) {
         const entry = item as Entry;
-        return (<>
-                <div className="entryViewEntry" style={{position: 'relative'}}>
-                    <button onClick={setEditableView}
-                            style={{
-                                position: "absolute",
-                                top: "10px",
-                                left: "10px",
-                                zIndex: 10,
-                                fontSize: "0.8em"
-                            }}>
-                        ✏️
-                    </button>
-                    <span className={"title-value"}>{entry.title}</span>
-                    <div className={"entryViewListing"}>
-                        <div className={"entryViewAttribute"}>
-                            <span>Benutzername:</span>
-                            <span className={"attribute-value"}>{entry.username}</span>
-                            <button className={"copy-button"} onClick={() => copyAndClearClipboard(entry.username)}>🔗
-                            </button>
-                        </div>
+        return (<div className="entryViewContainer">
+                <div className="entryViewEntry">
+                    <div className={"title-value"}>
+                        {entry.title}
+                    </div>
 
-                        <div className={"entryViewAttribute"}>
-                            <span>Passwort:</span>
-                            <div className={"attribute-value"}>
-                                <span>{(hidePassword ? "*".repeat(entry.password.length) : entry.password)}</span>
-                                <button className={`eye-button ${hidePassword ? "" : "selected"}`}
-                                        onClick={() => toggleHidePassword()}
-                                >👁</button>
+                    <div className={"divider"} style={{width: "50%"}}/>
+
+                    <div className={"scrollableContainer"} style={{width: '90%'}}>
+                        <div className={"entryViewListing"}>
+                            <div className={"entryViewAttribute"}>
+                                <span style={{gridColumn: "span 20"}}>Benutzername:</span>
+                                <span className={"attribute-value"}>{entry.username}</span>
+                                <button className={"copyButton"}
+                                        onClick={() => copyAndClearClipboard(entry.username)}>
+                                    <HiMiniLink size={24}/>
+                                </button>
                             </div>
-                            <button className={"copy-button"} onClick={() => copyAndClearClipboard(entry.password)}>🔗
-                            </button>
-                        </div>
 
-                        <div className={"entryViewAttribute"}>
-                            {/* adds https://www. to the start of the link*/}
-                            <span>URL:</span>
-                            <a className={"attribute-value"}
-                               href={(entry.url.startsWith("http") ? entry.url : ("https://" + entry.url))}
-                               target="_blank" rel="noopener noreferrer"
-                               style={{textDecoration: "underline", color: "inherit"}}>
-                                {entry.url}
-                            </a>
-                            <button className={"copy-button"} onClick={() => copyAndClearClipboard(entry.url)}>🔗
-                            </button>
-                        </div>
+                            <div className={"entryViewAttribute"}>
+                                <span style={{gridColumn: "span 20"}}>Passwort:</span>
+                                <div className={"attribute-value"} style={{gridColumnEnd: "19"}}>
+                                    <span>{(hidePassword ? "●".repeat(entry.password.length) : entry.password)}</span>
+                                </div>
+                                <EyeButton hidePassword={hidePassword} toggleHidePassword={toggleHidePassword}/>
+                                <button className={"copyButton"}
+                                        onClick={() => copyAndClearClipboard(entry.password)}>
+                                    <HiMiniLink size={24}/>
+                                </button>
+                            </div>
 
-                        <div className={"entryViewAttribute"}>
-                            <span>Notiz:</span>
-                            <span className={"attribute-value"} style={{height:"fit-content", padding:"12px", whiteSpace:"normal"}}>{entry.note}</span>
+                            <div className={"entryViewAttribute"}>
+                                {/* adds https://www. to the start of the link*/}
+                                <span style={{gridColumn: "span 20"}}>URL:</span>
+                                <a className={"attribute-value"}
+                                   href={(entry.url.startsWith("http") ? entry.url : ("https://" + entry.url))}
+                                   target="_blank" rel="noopener noreferrer"
+                                   style={{textDecoration: "underline", color: "inherit"}}>
+                                    {entry.url}
+                                </a>
+                                <button className={"copyButton"} onClick={() => copyAndClearClipboard(entry.url)}>
+                                    <HiMiniLink size={24}/>
+                                </button>
+                            </div>
+
+                            <div className={"entryViewAttribute"}>
+                                <span style={{gridColumn: "span 20"}}>Notiz:</span>
+                                <span className={"attribute-value"} style={{
+                                    height: "fit-content",
+                                    paddingLeft: "10px",
+                                    whiteSpace: "normal",
+                                    gridColumnEnd: "21"
+                                }}>{entry.note}</span>
+                            </div>
+                        </div>
+                        <div className={"entryViewFooterButtons"}>
+                            <button className={"rectangle-button"} onClick={() => {
+                                setEditableView()
+                            }} style={{boxShadow: "none"}}>
+                                <HiPencil size={24}/> Bearbeiten
+                            </button>
+                            <button className={"rectangle-button delete"} onClick={() => deleteItem(item)}
+                                    style={{boxShadow: "none"}}>
+                                <HiTrash size={24}/>Löschen
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -89,10 +110,9 @@ const EntryView: React.FC<{
                     <span>Erstellt am: {item.createdAt.toLocaleString()}</span>
                     <span>Bearbeitet am: {item.editedAt.toLocaleString()}</span>
                 </div>
-            </>
+            </div>
         );
     }
-
 }
 
 export default EntryView;

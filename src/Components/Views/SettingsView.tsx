@@ -3,13 +3,20 @@ import React from "react";
 import type {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
 import Close from "./Icons/Close.tsx";
+import {HiMiniCog8Tooth, HiMiniMinus, HiMiniPlus} from "react-icons/hi2";
+import AddServerDialog from "./DialogViews/AddServerDialog.tsx";
+import {HiTrash} from "react-icons/hi";
 
-const SettingsView: React.FC<{ automergeFacade?: AutomergeFacade | null }> = ({automergeFacade}) => {
+const SettingsView: React.FC<{
+    automergeFacade?: AutomergeFacade | null;
+}> = ({automergeFacade}) => {
     const viewmodel = useSettingsViewModel();
 
     if (!viewmodel.settingsOpen) {
         return (
-            <button className="settingsButton" onClick={() => viewmodel.setSettingsOpen(true)}>⚙️</button>
+            <button className="settingsButton" onClick={() => viewmodel.setSettingsOpen(true)}>
+                <HiMiniCog8Tooth size={24}/>
+            </button>
         );
     }
 
@@ -67,11 +74,61 @@ const SettingsView: React.FC<{ automergeFacade?: AutomergeFacade | null }> = ({a
                                 <div className={"timeout-setting"}>
                                     <label>Minuten bis Abmeldung: </label>
                                     <div className={"numberInput"}>
-                                        <input type="number" value={viewmodel.timeoutLength}
+                                        <input type="number" style={{maxHeight: "2.5rem"}}
+                                               value={viewmodel.timeoutLength}
                                                onChange={(e) => viewmodel.setTimeOutLengthVM(e.target.value)} min="1"/>
-                                        <button onClick={viewmodel.decrease}>–</button>
-                                        <button onClick={viewmodel.increase}>+</button>
+                                        <button className={"squareButton"} style={{boxShadow: "none"}}
+                                                onClick={viewmodel.decrease}><HiMiniMinus size={24}/></button>
+                                        <button className={"squareButton"} style={{boxShadow: "none"}}
+                                                onClick={viewmodel.increase}><HiMiniPlus size={24}/></button>
                                     </div>
+                                </div>
+                            )}
+
+                            {automergeFacade ? (
+                                null
+                            ) : (
+                                <div className="server-settings">
+                                    <h4>Synchronisationsserver</h4>
+                                    <span>Aktueller Server:</span>
+                                    <div className="current-server">{viewmodel.serverName}</div>
+                                    {viewmodel.serverNames.length > 1 && (<div className="scrollableContainer server-list">
+                                        <span>Verfügbare Server:</span>
+
+                                        {viewmodel.serverNames.map((server) => (
+                                            viewmodel.serverName !== server ? (
+                                                <div className="server-item">
+                                                    <button
+                                                        onClick={() => viewmodel.selectServer(server)}
+                                                        style={{width: "100%"}}
+                                                    >
+                                                        <span>{server}</span>
+                                                    </button>
+                                                    {server !== "Automerge Sync Server" && (
+                                                        <button
+                                                            className="squareButton"
+                                                            onClick={() => viewmodel.removeServer(server)}
+                                                        >
+                                                            <HiTrash size={24}/>
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            ) : null
+                                        ))}
+                                    </div>)}
+                                    <button
+                                        className="squareButton"
+                                        onClick={() => viewmodel.setAddServerDialogOpen(true)}
+                                        style={{alignSelf: "center"}}
+                                    >
+                                        <HiMiniPlus size={24}/>
+                                    </button>
+                                    {viewmodel.addServerDialogOpen && (
+                                        <AddServerDialog
+                                            onAddServer={(name, url) => viewmodel.addServer(name, url)}
+                                            onClose={() => viewmodel.setAddServerDialogOpen(false)}
+                                        />
+                                    )}
                                 </div>
                             )}
                         </div>
@@ -111,7 +168,7 @@ const SettingsView: React.FC<{ automergeFacade?: AutomergeFacade | null }> = ({a
                                     Dabei wird die Datenspeicherung und Übertragung mithilfe der Automerge Bibliothek
                                     implementiert.
 
-                                    Zusätzlich benutzt werden die Bibliotheken Idle Timer und React DnD Kit.
+                                    Zusätzlich benutzt werden die Bibliotheken Idle Timer, React DnD Kit und React Icons.
                                 </p>
                             </section>
 
@@ -139,6 +196,11 @@ const SettingsView: React.FC<{ automergeFacade?: AutomergeFacade | null }> = ({a
                                     onClick={() => window.open("https://dndkit.com/", "_blank")}
                                     style={{padding: "8px 15px", cursor: "pointer"}}>
                                     DnD Kit
+                                </button>
+
+                                <button onClick={() => window.open("https://react-icons.github.io/react-icons/", "_blank")}
+                                        style={{padding: "8px 15px", cursor: "pointer"}}>
+                                    React Icons
                                 </button>
                             </div>
 

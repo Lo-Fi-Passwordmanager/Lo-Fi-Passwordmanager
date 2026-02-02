@@ -19,6 +19,10 @@ export const useSettingsViewModel = () => {
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [timeoutLength, setTimeoutLength] = useState(settings.getTimeoutLength());
     const [activeTab, setActiveTab] = useState<"general" | "database" | "about">("general");
+    const [serverName, setServerName] = useState<string>(settings.getServerName());
+    const [servers, setServers] = useState<Map<string, string>>(settings.getServers());
+    const [serverNames, setServerNames] = useState<string[]>(Array.from(servers.keys()));
+    const [addServerDialogOpen, setAddServerDialogOpen] = useState<boolean>(false);
 
 
     document.getElementsByTagName("html")[0]?.setAttribute("data-theme", darkMode ? "dark" : "light");
@@ -35,6 +39,20 @@ export const useSettingsViewModel = () => {
         //autoConflictRes,
         timeOutActive, settings, timeoutLength]);
 
+    useEffect(() => {
+        const handleUpdate = () => {
+            setServers(settings.getServers());
+        }
+        const unsubscribe = settings.subscribe(handleUpdate);
+        return () => {
+            unsubscribe();
+        };
+    }, [settings]);
+
+    useEffect(() => {
+        setServerNames(Array.from(servers.keys()));
+    }, [servers]);
+
 
     // Update darkMode
     function toggleDarkMode() {
@@ -44,6 +62,20 @@ export const useSettingsViewModel = () => {
 
     function toggleSynchronisation() {
         setSynchronisation(!synchronisation);
+    }
+
+    function addServer(name: string, url: string) {
+        //TODO: Add validation for name and url
+        settings.addServer(name, url);
+    }
+
+    function removeServer(server: string) {
+        settings.removeServer(server);
+    }
+
+    function selectServer(server: string) {
+        settings.setServerUrl(server);
+        setServerName(server);
     }
 
     /*
@@ -81,8 +113,11 @@ export const useSettingsViewModel = () => {
         settingsOpen,
         timeoutLength,
         activeTab,
-        setActiveTab,
+        serverName,
+        addServerDialogOpen,
+        serverNames,
 
+        setActiveTab,
         toggleDarkMode,
         toggleSynchronisation,
         //toggleAutoConflictRes,
@@ -91,5 +126,9 @@ export const useSettingsViewModel = () => {
         setTimeOutLengthVM,
         increase,
         decrease,
+        addServer,
+        removeServer,
+        setAddServerDialogOpen,
+        selectServer,
     };
 };
