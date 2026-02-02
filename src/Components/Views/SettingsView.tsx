@@ -3,8 +3,11 @@ import React from "react";
 import type {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
 import Close from "./Icons/Close.tsx";
+import AddServerDialog from "./DialogViews/AddServerDialog.tsx";
 
-const SettingsView: React.FC<{ automergeFacade?: AutomergeFacade | null }> = ({automergeFacade}) => {
+const SettingsView: React.FC<{
+    automergeFacade?: AutomergeFacade | null;
+}> = ({automergeFacade}) => {
     const viewmodel = useSettingsViewModel();
 
     if (!viewmodel.settingsOpen) {
@@ -74,6 +77,33 @@ const SettingsView: React.FC<{ automergeFacade?: AutomergeFacade | null }> = ({a
                                     </div>
                                 </div>
                             )}
+
+                            <div className="server-settings">
+                                <h4>Synchronisationsserver</h4>
+                                <span>Aktueller Server:</span>
+                                <div className="current-server-url">{viewmodel.serverUrl}</div>
+                                <div className="server-list">
+                                    {viewmodel.servers.length > 1 && viewmodel.servers.map((server) => (
+                                        viewmodel.serverUrl !== server ? (
+                                            <div className="server-item" key={server}>
+                                                <button onClick={() => viewmodel.selectServer(server)}>
+                                                    <span>{server}</span>
+                                                </button>
+                                                {server !== "wss://sync.automerge.org" && (
+                                                    <button onClick={() => viewmodel.removeServer(server)}>🗑️</button>
+                                                )}
+                                            </div>
+                                        ) : null
+                                    ))}
+                                </div>
+                                <button onClick={() => viewmodel.setAddServerDialogOpen(true)}>+</button>
+                                {viewmodel.addServerDialogOpen && (
+                                    <AddServerDialog
+                                        onAddServer={(url) => viewmodel.addServer(url)}
+                                        onClose={() => viewmodel.setAddServerDialogOpen(false)}
+                                    />
+                                )}
+                            </div>
                         </div>
                     )}
 

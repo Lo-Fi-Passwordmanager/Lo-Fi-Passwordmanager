@@ -36,6 +36,8 @@ export class Settings {
     private _darkMode: boolean;
     private _timeoutActive: boolean;
     private _timeoutLength: number;
+    private _serverUrl: string;
+    private _servers: string[];
 
     private listeners: SettingsListener[] = [];
 
@@ -46,6 +48,23 @@ export class Settings {
         const darkMode = localStorage.getItem(DARK_MODE)
         const timeoutActive = localStorage.getItem(TIMEOUT_ACTIVE)
         const timeoutLength = localStorage.getItem(TIMEOUT_LENGTH);
+        const serverUrl = localStorage.getItem("server_url");
+        const servers = localStorage.getItem("servers_list");
+
+        if (serverUrl) {
+            this._serverUrl = serverUrl;
+        } else {
+            localStorage.setItem("server_url", "wss://sync.automerge.org")
+            this._serverUrl = "wss://sync.automerge.org"
+        }
+
+        if (servers) {
+            this._servers = JSON.parse(servers);
+        } else {
+            const defaultServers = ["wss://sync.automerge.org"];
+            localStorage.setItem("servers_list", JSON.stringify(defaultServers))
+            this._servers = defaultServers;
+        }
 
         if (synchronisation) {
             this._synchronization = JSON.parse(synchronisation);
@@ -88,6 +107,34 @@ export class Settings {
             this.instance = new Settings();
         }
         return this.instance;
+    }
+
+    public getServerUrl(): string {
+        return this._serverUrl;
+    }
+
+    public setServerUrl(url: string) {
+        this._serverUrl = url;
+        localStorage.setItem("server_url", url);
+        this.notify();
+    }
+
+    public getServers(): string[] {
+        return this._servers;
+    }
+
+    public addServer(server: string): void {
+        if (!this._servers.includes(server)) {
+            this._servers.push(server);
+            localStorage.setItem("servers_list", JSON.stringify(this._servers));
+            this.notify();
+        }
+    }
+
+    public removeServer(server: string): void {
+        this._servers = this._servers.filter(s => s !== server);
+        localStorage.setItem("servers_list", JSON.stringify(this._servers));
+        this.notify();
     }
 
     public getSynchronization(): boolean {
