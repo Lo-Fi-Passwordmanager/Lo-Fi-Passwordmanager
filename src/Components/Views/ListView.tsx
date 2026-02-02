@@ -29,6 +29,7 @@ const ListView: React.FC<{
     createdFolderId: string | null;
     setCreatedFolderId: (folderId: string | null) => void;
     updateItemTitle: (itemId: string, newTitle: string) => void;
+    inEditable: boolean;
     level: number;
 }> = ({
           item,
@@ -45,6 +46,7 @@ const ListView: React.FC<{
           createdFolderId,
           updateItemTitle,
           setCreatedFolderId,
+          inEditable,
           level
       }) => {
     const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem, updateItemTitle, setCreatedFolderId, createdFolderId);
@@ -75,8 +77,11 @@ const ListView: React.FC<{
                 aria-selected={selectedItemId === item.id}>
                 <span style={{marginRight: "1ch"}}></span> <span>{entry.title}</span>
                 <div className={"btnWrapper"}>
-                    <button className="listViewEntry button" onClick={() => deleteItem(item)}
-                            onPointerDown={(e) => e.stopPropagation()}>
+                    <button className="listViewEntry button"
+                            onClick={() => deleteItem(item)}
+                            onPointerDown={(e) => e.stopPropagation()}
+                            disabled={inEditable}
+                    >
                         <HiTrash size={24}/>
                     </button>
                 </div>
@@ -139,12 +144,14 @@ const ListView: React.FC<{
                     }
                     <div className="btnWrapper">
                         {item.id !== "" ? <FolderMenu
+                            disabled={inEditable}
                             onAdd={() => addButtonPressed()}
                             onDelete={() => deleteItem(item)}
                             onRename={() => {
                                 listViewModel.setAndStoreEditName(true);
                             }}
-                        /> : <button className="listViewTitleHeader button" onClick={() => addButtonPressed()}>
+                        /> : <button className="listViewTitleHeader button" onClick={() => addButtonPressed()}
+                                     disabled={inEditable}>
                             <HiMiniPlus size={24}/>
                         </button>}
                     </div>
@@ -172,6 +179,7 @@ const ListView: React.FC<{
                                 selectedItemId={selectedItemId}
                                 createdFolderId={createdFolderId}
                                 setCreatedFolderId={setCreatedFolderId}
+                                inEditable={inEditable}
                                 level={level + 1}
                             />;
                         })}

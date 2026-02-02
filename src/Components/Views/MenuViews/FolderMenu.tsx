@@ -6,9 +6,10 @@ interface Props {
     onDelete: () => void;
     onRename: () => void;
     onAdd: () => void;
+    disabled: boolean;
 }
 
-const FolderMenu: React.FC<Props> = ({onDelete, onRename, onAdd}) => {
+const FolderMenu: React.FC<Props> = ({onDelete, onRename, onAdd, disabled}) => {
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
@@ -54,6 +55,7 @@ const FolderMenu: React.FC<Props> = ({onDelete, onRename, onAdd}) => {
             <button
                 className={`listViewTitleHeader button ${isOpen ? "active" : ""}`}
                 onClick={toggleMenu}
+                disabled={disabled}
             >
                 ⋮
             </button>

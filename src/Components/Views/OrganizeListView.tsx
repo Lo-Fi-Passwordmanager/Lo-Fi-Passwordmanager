@@ -11,12 +11,17 @@ const OrganizeListView: React.FC<{
     liveSearchValue: string,
     closeDatabase: () => void,
     setItemCreationDialog: () => void,
+    inEditable: boolean
 }> = ({
           getCurSortCriterion,
           setCurSortCriterion,
           toggleOrder,
-          isAscending, setLiveSearchValue, liveSearchValue, closeDatabase,
-          setItemCreationDialog
+          isAscending,
+          setLiveSearchValue,
+          liveSearchValue,
+          closeDatabase,
+          setItemCreationDialog,
+            inEditable
       }) => {
 
     return (
@@ -26,7 +31,8 @@ const OrganizeListView: React.FC<{
                 {/*Giving each element a specific grid column to align them properly*/}
 
                 {/* Button to close the database and go back to the database selection */}
-                <button className={"squareButton"} style={{gridColumn: "span 1", justifySelf:"flex-start"}} onClick={() => closeDatabase()}>
+                <button className={"squareButton"} style={{gridColumn: "span 1", justifySelf: "flex-start"}}
+                        onClick={() => closeDatabase()}>
                     ⬅
                 </button>
 
@@ -35,13 +41,16 @@ const OrganizeListView: React.FC<{
                 {/* Search bar to filter the list of entries and folders */}
                 <button
                     className={"squareButton"}
-                    style={{gridColumn: "span 1"}} onClick={() => {
-                    setItemCreationDialog();
-                }}>
+                    disabled={inEditable}
+                    style={{gridColumn: "span 1"}}
+                    onClick={() => {
+                        setItemCreationDialog();
+                    }}
+                >
                     <HiMiniPlus size={24}/>
                 </button>
 
-                <select style={{gridColumn: "span 9", width:"100%"}} value={getCurSortCriterion()}
+                <select style={{gridColumn: "span 9", width: "100%"}} value={getCurSortCriterion()}
                         onChange={(e) => setCurSortCriterion(e.target.value as SortCriteria)}>
                     <option value="NAME">Alphabetisch</option>
                     <option value="CREATED">Erstellungsdatum</option>

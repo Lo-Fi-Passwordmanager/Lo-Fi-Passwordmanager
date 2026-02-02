@@ -40,7 +40,7 @@ const EditableEntryView: React.FC<{
     } else if (item.isEntry()) {
         return (
             <div className={"entryViewContainer"}>
-                <div className="entryViewEntry editing">
+                <div className="entryViewEntry">
                     <input className={"title-value"} type={"text"} value={viewmodel.title}
                            onChange={(e) => viewmodel.setTitle(e.target.value)}/>
 

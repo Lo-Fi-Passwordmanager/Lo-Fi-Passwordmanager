@@ -42,7 +42,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                     cancelItemCreation={() => passwordViewModel.setInItemCreation(false)}
                 />}
 
-            <div className={`passwordView ${passwordViewModel.inEditable ? "editing" : ""}`}>
+            <div className={"passwordView"}>
                 <div className="borderBox" style={{width: "30%"}}>
                     {/*Container for everything related to the search/Sort features */}
                     <OrganizeListView
@@ -54,6 +54,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                         liveSearchValue={passwordViewModel.searchValue}
                         closeDatabase={closeDatabase}
                         setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
+                        inEditable={passwordViewModel.inEditable}
                     />
 
                     <div className="scrollableContainer">
@@ -89,6 +90,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                                 selectedItemId={passwordViewModel.selectedItemId}
                                 createdFolderId={passwordViewModel.createdFolderId}
                                 setCreatedFolderId={passwordViewModel.setCreatedFolderId}
+                                inEditable={passwordViewModel.inEditable}
                                 level={0}
                             />}
                         </DndContext>
