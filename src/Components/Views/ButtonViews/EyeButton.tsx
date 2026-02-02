@@ -10,20 +10,23 @@ import {HiEyeSlash} from "react-icons/hi2";
 const EyeButton: React.FC<{
     hidePassword: boolean;
     toggleHidePassword: () => void;
-}> = ({hidePassword, toggleHidePassword}) => {
+    size?: number;
+}> = ({hidePassword, toggleHidePassword, size}) => {
 
     if (!hidePassword) {
-    return (
-        <button className={`eyeButton ${hidePassword ? "" : "selected"}`}
-                onClick={() => toggleHidePassword()}>
-            <HiEye size={24}/>
-        </button>
-    );}
-    else {
         return (
             <button className={`eyeButton ${hidePassword ? "" : "selected"}`}
-                    onClick={() => toggleHidePassword()}>
-                <HiEyeSlash size={24} />
+                    onClick={() => toggleHidePassword()}
+                    style={size ? {height: size} : {}}>
+                <HiEye size={24}/>
+            </button>
+        );
+    } else {
+        return (
+            <button className={`eyeButton ${hidePassword ? "" : "selected"}`}
+                    onClick={() => toggleHidePassword()}
+                    style={size ? {height: size} : {}}>
+                <HiEyeSlash size={24}/>
             </button>
         );
     }

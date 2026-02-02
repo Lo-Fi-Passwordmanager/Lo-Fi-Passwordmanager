@@ -1,23 +1,37 @@
 import React from "react";
-import {
-    type TwoFieldDialogProps,
-    useCreateDatabaseViewModel
-} from "../../ViewModels/Dialog/CreateDatabaseViewModel.ts";
+import {useCreateDatabaseViewModel} from "../../ViewModels/Dialog/CreateDatabaseViewModel.ts";
 import Dialog from "./Dialog.tsx";
+import EyeButton from "../ButtonViews/EyeButton.tsx";
+import type {AutomergeUrl} from "@automerge/automerge-repo";
 
-
-const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
-                                                                 isOpen,
-                                                                 title,
-                                                                 label1,
-                                                                 label2,
-                                                                 createDatabase,
-                                                                 onCancel,
-                                                                 storeDatabase,
-                                                                 setToastMessage,
-                                                                 setShowToast,
-                                                                 importDatabase,
-                                                             }: TwoFieldDialogProps) => {
+const CreateDatabaseDialog: React.FC<{
+    isOpen: boolean,
+    title: string,
+    label1: string,
+    label2: string,
+    createDatabase: (field1: string, field2: string) => void,
+    onCancel: () => void,
+    storeDatabase: (name: string, autoMergeUrl: AutomergeUrl) => void,
+    setToastMessage: (message: string) => void,
+    setShowToast: (show: boolean) => void,
+    importDatabase: (targetFiles: (FileList | null), name: string) => void
+    hidePassword: boolean,
+    toggleHidePassword: () => void,
+}
+> = ({
+         isOpen,
+         title,
+         label1,
+         label2,
+         createDatabase,
+         onCancel,
+         storeDatabase,
+         setToastMessage,
+         setShowToast,
+         importDatabase,
+         hidePassword,
+         toggleHidePassword
+     }) => {
 
     const viewModel = useCreateDatabaseViewModel(isOpen, createDatabase, storeDatabase, setToastMessage, setShowToast, importDatabase);
 
@@ -53,20 +67,23 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
                     }}
                 />
                 <label>{label2}</label>
-                <input
-                    type="password"
-                    value={viewModel.field2}
-                    onChange={(e) => viewModel.setField2(e.target.value)}
-                    placeholder={label2}
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                            viewModel.handleConfirm();
-                        }
-                        if (e.key === 'Escape') {
-                            onCancel();
-                        }
-                    }}
-                />
+                <div className={"password-container"}>
+                    <input
+                        type={hidePassword ? "password" : "text"}
+                        value={viewModel.field2}
+                        onChange={(e) => viewModel.setField2(e.target.value)}
+                        placeholder={label2}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                viewModel.handleConfirm();
+                            }
+                            if (e.key === 'Escape') {
+                                onCancel();
+                            }
+                        }}
+                    />
+                    <EyeButton hidePassword={hidePassword} toggleHidePassword={toggleHidePassword} size={49}/>
+                </div>
                 <div className="confirm-cancel-buttons">
                     <button onClick={viewModel.handleConfirm}>Bestätigen</button>
                     <button onClick={onCancel}>Abbrechen</button>
@@ -149,5 +166,5 @@ const CreateDatabaseDialog: React.FC<TwoFieldDialogProps> = ({
         );
     }
 
-    }
-    export default CreateDatabaseDialog;
+}
+export default CreateDatabaseDialog;

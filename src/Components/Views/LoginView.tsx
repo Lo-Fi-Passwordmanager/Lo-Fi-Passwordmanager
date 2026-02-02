@@ -55,6 +55,8 @@ const LoginView: React.FC<{
                     onCancel={viewModel.closeEnterPasswordDialog}
                     setToastMessage={viewModel.setToastMessage}
                     setShowToast={viewModel.setShowToast}
+                    hidePassword={viewModel.hidePassword}
+                    toggleHidePassword={viewModel.toggleHidePassword}
                 />
 
                 {/* Pop Up Dialog for creating a new Database */}
@@ -69,6 +71,8 @@ const LoginView: React.FC<{
                     setToastMessage={viewModel.setToastMessage}
                     setShowToast={viewModel.setShowToast}
                     importDatabase={viewModel.importDatabaseFromFile}
+                    hidePassword={viewModel.hidePassword}
+                    toggleHidePassword={viewModel.toggleHidePassword}
                 />
 
                 <DeleteConfirmationDialog

@@ -1,15 +1,5 @@
 import {useEffect, useState} from "react";
 
-export interface TwoFieldDialogProps {
-    isOpen: boolean,
-    title: string,
-    label1: string,
-    onConfirm: (field1: string) => void,
-    onCancel: () => void,
-    setToastMessage: (message: string) => void,
-    setShowToast: (message: boolean) => void,
-}
-
 export const useLoginDatabaseViewModel = (isOpen: boolean,
                                           onConfirm: (field1: string) => void,
                                           setToastMessage: (message: string) => void,

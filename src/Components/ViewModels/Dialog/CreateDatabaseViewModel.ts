@@ -2,19 +2,6 @@ import {useEffect, useState} from "react";
 import {isValidAutomergeUrl} from "@automerge/react";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
 
-export interface TwoFieldDialogProps {
-    isOpen: boolean,
-    title: string,
-    label1: string,
-    label2: string,
-    createDatabase: (field1: string, field2: string) => void,
-    onCancel: () => void,
-    storeDatabase: (name: string, autoMergeUrl: AutomergeUrl) => void,
-    setToastMessage: (message: string) => void,
-    setShowToast: (show: boolean) => void,
-    importDatabase: (targetFiles: (FileList | null), name: string) => void
-}
-
 export const useCreateDatabaseViewModel = (isOpen: boolean,
                                            createDatabase: (field1: string, field2: string) => void,
                                            storeDatabase: (name: string, autoMergeUrl: AutomergeUrl) => void,

@@ -1115,3 +1115,8 @@ input[type="number"] {
     gap: 2rem;
     text-align: center;
 }
+
+.password-container {
+    display: flex;
+    align-items: center;
+}
