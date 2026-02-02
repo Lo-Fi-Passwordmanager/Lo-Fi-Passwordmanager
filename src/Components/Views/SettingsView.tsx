@@ -4,8 +4,11 @@ import type {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
 import Close from "./Icons/Close.tsx";
 import {HiMiniCog8Tooth, HiMiniMinus, HiMiniPlus} from "react-icons/hi2";
+import AddServerDialog from "./DialogViews/AddServerDialog.tsx";
 
-const SettingsView: React.FC<{ automergeFacade?: AutomergeFacade | null }> = ({automergeFacade}) => {
+const SettingsView: React.FC<{
+    automergeFacade?: AutomergeFacade | null;
+}> = ({automergeFacade}) => {
     const viewmodel = useSettingsViewModel();
 
     if (!viewmodel.settingsOpen) {
@@ -78,6 +81,42 @@ const SettingsView: React.FC<{ automergeFacade?: AutomergeFacade | null }> = ({a
                                         <button className={"squareButton"} style={{boxShadow: "none"}}
                                                 onClick={viewmodel.increase}><HiMiniPlus size={24}/></button>
                                     </div>
+                                </div>
+                            )}
+
+                            {automergeFacade ? (
+                                null
+                            ) : (
+                                <div className="server-settings">
+                                    <h4>Synchronisationsserver</h4>
+                                    <span>Aktueller Server:</span>
+                                    <div className="current-server">{viewmodel.serverName}</div>
+                                    {viewmodel.serverNames.length > 1 && (<div className="server-list">
+                                        {viewmodel.serverNames.map((server) => (
+                                            viewmodel.serverName !== server ? (
+                                                <div className="server-item">
+                                                    <button
+                                                        onClick={() => viewmodel.selectServer(server)}
+                                                        style={{width: "100%"}}
+                                                    >
+                                                        <span>{server}</span>
+                                                    </button>
+                                                    {server !== "Automerge Sync Server" && (
+                                                        <button
+                                                            onClick={() => viewmodel.removeServer(server)}
+                                                        >🗑️</button>
+                                                    )}
+                                                </div>
+                                            ) : null
+                                        ))}
+                                    </div>)}
+                                    <button onClick={() => viewmodel.setAddServerDialogOpen(true)}>+</button>
+                                    {viewmodel.addServerDialogOpen && (
+                                        <AddServerDialog
+                                            onAddServer={(name, url) => viewmodel.addServer(name, url)}
+                                            onClose={() => viewmodel.setAddServerDialogOpen(false)}
+                                        />
+                                    )}
                                 </div>
                             )}
                         </div>

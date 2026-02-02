@@ -24,7 +24,7 @@ export const usePasswordManagerViewModel = () => {
 
     const initialNetworkAdapters = [
         new BroadcastChannelNetworkAdapter(),
-        new WebSocketClientAdapter("wss://5bcaaf94-60ef-4757-b55c-5f2e443c480c.ka.bw-cloud-instance.org/")
+        new WebSocketClientAdapter(settings.getServerUrl()),
     ];
 
     const [networkAdapters, setNetworkAdapters] = useState<NetworkAdapterInterface[] | undefined>(synchronization ? initialNetworkAdapters : undefined);

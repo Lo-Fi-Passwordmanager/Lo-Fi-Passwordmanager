@@ -299,10 +299,43 @@ input[type="number"] {
     -moz-appearance: textfield;
 }
 
-.timeout-setting {
+.timeout-setting, .server-settings {
     display: flex;
     flex-direction: column;
     gap: 8px;
+}
+
+.server-settings {
+    width: 300px;
+}
+
+.server-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px;
+    border: 2px solid var(--panel);
+    border-radius: 16px;
+    max-width: 100%;
+}
+
+.current-server {
+    font-weight: 700;
+    text-decoration: underline;
+    width: 100%;
+    border: 2px solid var(--panel);
+    border-radius: 16px;
+    height: 2.5rem;
+    align-content: center;
+}
+
+.server-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 44px;
+    gap: 12px;
 }
 
 .flexContainer {
@@ -1044,7 +1077,7 @@ input[type="number"] {
     white-space: nowrap;
 }
 
-.confirmDeleteWrapper {
+.confirmDeleteWrapper, .addServerWrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
