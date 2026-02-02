@@ -82,17 +82,20 @@ const SettingsView: React.FC<{
                                 null
                             ) : (
                                 <div className="server-settings">
-                                    <h4 style={{justifySelf: "flex-start"}}>Synchronisationsserver</h4>
+                                    <h4>Synchronisationsserver</h4>
                                     <span>Aktueller Server:</span>
                                     <div className="current-server">{viewmodel.serverName}</div>
-                                    <div className="server-list">
-                                        {viewmodel.serverNames.length > 1 && viewmodel.serverNames.map((server) => (
+                                    {viewmodel.serverNames.length > 1 && (<div className="server-list">
+                                        {viewmodel.serverNames.map((server) => (
                                             viewmodel.serverName !== server ? (
                                                 <div className="server-item">
-                                                    <button onClick={() => viewmodel.selectServer(server)}>
+                                                    <button
+                                                        onClick={() => viewmodel.selectServer(server)}
+                                                        style={{width: "100%"}}
+                                                    >
                                                         <span>{server}</span>
                                                     </button>
-                                                    {server !== "wss://sync.automerge.org" && (
+                                                    {server !== "Automerge Sync Server" && (
                                                         <button
                                                             onClick={() => viewmodel.removeServer(server)}
                                                         >🗑️</button>
@@ -100,7 +103,7 @@ const SettingsView: React.FC<{
                                                 </div>
                                             ) : null
                                         ))}
-                                    </div>
+                                    </div>)}
                                     <button onClick={() => viewmodel.setAddServerDialogOpen(true)}>+</button>
                                     {viewmodel.addServerDialogOpen && (
                                         <AddServerDialog
