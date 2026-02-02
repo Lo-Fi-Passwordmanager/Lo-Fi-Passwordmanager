@@ -92,7 +92,9 @@ const SettingsView: React.FC<{
                                     <h4>Synchronisationsserver</h4>
                                     <span>Aktueller Server:</span>
                                     <div className="current-server">{viewmodel.serverName}</div>
-                                    {viewmodel.serverNames.length > 1 && (<div className="server-list">
+                                    {viewmodel.serverNames.length > 1 && (<div className="scrollableContainer server-list">
+                                        <span>Verfügbare Server:</span>
+
                                         {viewmodel.serverNames.map((server) => (
                                             viewmodel.serverName !== server ? (
                                                 <div className="server-item">

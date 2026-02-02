@@ -65,6 +65,7 @@ export const useSettingsViewModel = () => {
     }
 
     function addServer(name: string, url: string) {
+        //TODO: Add validation for name and url
         settings.addServer(name, url);
     }
 

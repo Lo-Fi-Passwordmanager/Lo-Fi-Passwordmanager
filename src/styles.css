@@ -313,12 +313,13 @@ input[type="number"] {
 .server-list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    padding: 12px;
+    gap: 12px !important;
+    padding: 12px !important;
     border: 2px solid var(--panel);
     border-radius: 16px;
     width: 100%;
-    max-width: 300px !important;
+    max-width: 300px;
+    max-height: 200px;
     box-sizing: border-box;
 }
 
@@ -679,14 +680,6 @@ input[type="number"] {
     width: fit-content;
 }
 
-.scrollableContainer {
-    scrollbar-color: var(--panel) var(--bg);
-    scrollbar-width: thin;
-    flex: 1;
-    overflow-y: scroll;
-    overflow-x: hidden !important;
-    max-width: 100%;
-}
 
 .closeButton {
     float: left;
@@ -938,12 +931,15 @@ input[type="number"] {
 }
 
 .scrollableContainer {
-    padding: 1vh 0.5vh;
     display: flex;
     flex-direction: column;
-    overflow: auto;
+    padding: 1vh 0.5vh;
     scrollbar-color: var(--panel) var(--bg);
-    scrollbar-width: none;
+    scrollbar-width: thin;
+    flex: 1;
+    overflow-y: scroll;
+    overflow-x: hidden !important;
+    max-width: 100%;
 }
 
 /* Timeline Structure */
