@@ -85,8 +85,8 @@ const CreateDatabaseDialog: React.FC<{
                     <EyeButton hidePassword={hidePassword} toggleHidePassword={toggleHidePassword} size={49}/>
                 </div>
                 <div className="confirm-cancel-buttons">
-                    <button onClick={viewModel.handleConfirm}>Bestätigen</button>
-                    <button onClick={onCancel}>Abbrechen</button>
+                    <button className={"rectangle-button"} onClick={viewModel.handleConfirm}>Bestätigen</button>
+                    <button className={"rectangle-button"} onClick={onCancel}>Abbrechen</button>
                 </div>
             </Dialog>
         );

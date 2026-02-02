@@ -36,7 +36,7 @@ const AddServerDialog: React.FC<{
                     />
                 </label>
                 <div className="dialogActions">
-                    <button className="rectangleButton" onClick={handleAddServer}>
+                    <button  className={"rectangle-button"} onClick={handleAddServer}>
                         Hinzufügen
                     </button>
                 </div>
