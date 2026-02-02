@@ -900,7 +900,7 @@ input[type="number"] {
     transform: translateX(0);
 }
 
-@keyframes flashAnimation {
+@keyframes flashAnimationFolder {
     0% {
         background-color: var(--outline-droppable);
         box-shadow: var(--outline-droppable);
@@ -911,8 +911,23 @@ input[type="number"] {
     }
 }
 
-.highlighted {
-    animation: flashAnimation 1s ease-out forwards;
+@keyframes flashAnimationEntry {
+    0% {
+        background-color: var(--outline-droppable);
+        box-shadow: var(--outline-droppable);
+    }
+    100% {
+        background-color: var(--dialog-bg);
+        box-shadow: none;
+    }
+}
+
+.highlighted.folder {
+    animation: flashAnimationFolder 1s ease-out forwards;
+}
+
+.highlighted.entry {
+    animation: flashAnimationEntry 1s ease-out forwards;
 }
 
 /* History Dialog Specifics */

@@ -68,7 +68,7 @@ const ListView: React.FC<{
         const entry = listViewModel.getItem() as Entry;
         return (
             <div
-                className={`listViewEntry ${getCurItem().id !== entry.id ? "" : "selected"} ${listViewModel.isDragging ? "dragged" : ""} ${selectedItemId === item.id ? "highlighted" : ""}`}
+                className={`listViewEntry ${getCurItem().id !== entry.id ? "" : "selected"} ${listViewModel.isDragging ? "dragged" : ""} ${selectedItemId === item.id ? "highlighted entry" : ""}`}
                 onClick={() => setCurItem(entry)}
                 style={dragStyle}
                 ref={listViewModel.setDraggableRef}
@@ -96,7 +96,7 @@ const ListView: React.FC<{
             <>
                 {/* Name and Buttons */}
                 <div
-                    className={`listViewTitleHeader ${listViewModel.isDragging ? "dragged" : ""} ${listViewModel.isOver && !listViewModel.isDragging ? "over" : ""} ${selectedItemId === item.id ? "highlighted" : ""}`}
+                    className={`listViewTitleHeader ${listViewModel.isDragging ? "dragged" : ""} ${listViewModel.isOver && !listViewModel.isDragging ? "over" : ""} ${selectedItemId === item.id ? "highlighted folder" : ""}`}
                     ref={listViewModel.setFolderRef}
                     style={dragStyle}
                     {...listViewModel.attributes}
