@@ -1120,3 +1120,12 @@ input[type="number"] {
     display: flex;
     align-items: center;
 }
+
+.settings-tab {
+    background: transparent;
+    border: 2px solid var(--panel);
+}
+
+.settings-tab.active {
+    background: var(--panel);
+}
