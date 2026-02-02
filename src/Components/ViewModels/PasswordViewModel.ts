@@ -249,7 +249,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     const sensors = useSensors(
         useSensor(PointerSensor, {
             activationConstraint: {
-                distance: 5,
+                distance: allowDragging() ? 5 : Infinity,
             },
         })
     );
@@ -316,6 +316,5 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         createEntry,
         setCreatedFolderId,
         setItemToDelete,
-        allowDragging
     };
 };

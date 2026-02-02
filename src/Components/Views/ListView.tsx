@@ -164,8 +164,9 @@ const ListView: React.FC<{
                          marginLeft: level <= 8 ? "15px" : "0px"
                      }}>
                     {listViewModel.getChildren() &&
-                        listViewModel.getChildren()!.map((item: Item) => {
+                        listViewModel.getChildren()!.map((item: Item, index: number) => {
                             return <ListView
+                                key={index}
                                 item={item}
                                 setCurItem={setCurItem}
                                 getCurItem={getCurItem}
