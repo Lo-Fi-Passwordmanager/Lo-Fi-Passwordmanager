@@ -6,10 +6,11 @@ import {usePasswortViewModel} from "../ViewModels/PasswordViewModel.ts";
 import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import ItemCreationDialog from "./DialogViews/ItemCreationDialog.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
-import EditablePasswordView from "./EditablePasswordView.tsx";
+import EditableEntryView from "./EditableEntryView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
-import SettingsView from "./SettingsView.tsx";
+import {DndContext, pointerWithin} from "@dnd-kit/core";
 import {useRepo} from "@automerge/automerge-repo-react-hooks";
+import DeleteConfirmationDialog from "./DialogViews/DeleteConfirmationDialog.tsx";
 
 
 interface PasswordViewProps {
@@ -33,18 +34,16 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
     }
 
     return (
-        <div style={{margin: "10px", height: "95vh"}}>
+        <div style={{margin: "10px", height: "90vh"}}>
             {/*Dialog for creating a new Entry*/}
             {passwordViewModel.getInItemCreation() &&
                 <ItemCreationDialog
                     addItem={passwordViewModel.addItem}
-                    curParent={passwordViewModel.getCurParent()}
                     cancelItemCreation={() => passwordViewModel.setInItemCreation(false)}
-                    setCurItem={passwordViewModel.setCurItem}
                 />}
 
-            <div className="passwordView">
-                <div className="borderBox scrollableContainer" style={{width: "30%"}}>
+            <div className={"passwordView"}>
+                <div className="borderBox" style={{width: "30%"}}>
                     {/*Container for everything related to the search/Sort features */}
                     <OrganizeListView
                         getCurSortCriterion={passwordViewModel.getCurSortCriterion}
@@ -55,6 +54,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                         liveSearchValue={passwordViewModel.searchValue}
                         closeDatabase={closeDatabase}
                         setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
+                        inEditable={passwordViewModel.inEditable}
                     />
 
                     <div className="scrollableContainer">
@@ -67,12 +67,15 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                             sortCriterion={passwordViewModel.getCurSortCriterion()}
                             isAscending={passwordViewModel.isAscending}
                             filterText={passwordViewModel.searchValue}
-                            goToFolder={passwordViewModel.goToFolder}
+                            goToFolder={passwordViewModel.goToItem}
                         />}
+                        <DndContext collisionDetection={pointerWithin}
+                                    onDragEnd={passwordViewModel.handleDragEnd}
+                                    sensors={passwordViewModel.sensors}
+                                    autoScroll={false}>
 
-                        {/*The basic ListView which shows all Items and Folders in their hierarchy*/}
-                        {passwordViewModel.searchValue.length === 0 &&
-                            <ListView
+                            {/*The basic ListView which shows all Items and Folders in their hierarchy*/}
+                            {passwordViewModel.searchValue.length === 0 && <ListView
                                 item={passwordViewModel.getRootFolder()}
                                 setCurItem={passwordViewModel.setCurItem}
                                 setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
@@ -84,27 +87,44 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                                 getCurItem={passwordViewModel.getCurEntry}
                                 openedDbName={openedDbName}
                                 updateItemTitle={passwordViewModel.updateItemTitle}
-                                selectedFolderId={passwordViewModel.selectedFolderId}
+                                selectedItemId={passwordViewModel.selectedItemId}
+                                createdFolderId={passwordViewModel.createdFolderId}
+                                setCreatedFolderId={passwordViewModel.setCreatedFolderId}
+                                inEditable={passwordViewModel.inEditable}
+                                level={0}
                             />}
+                        </DndContext>
                     </div>
-
                 </div>
 
                 <div className="borderBox" style={{width: "70%", position: "relative"}}>
-                    <SettingsView automergeFacade={automergeFacade}/>
                     {/*Depending on the state, either shows the editable or the normal/noneditable passwordView*/}
                     {!passwordViewModel.inEditable &&
                         <EntryView item={passwordViewModel.getCurEntry()}
+                                   deleteItem={passwordViewModel.deleteItem}
                                    copyAndClearClipboard={passwordViewModel.copyToClipboardAndClear}
-                                   setEditableView={() => passwordViewModel.setInEditable(true)}
+                                   setEditableView={() => passwordViewModel.toggleInEdit()}
                                    hidePassword={passwordViewModel.hidePassword}
                                    toggleHidePassword={passwordViewModel.toggleHidePassword}/>}
 
                     {passwordViewModel.inEditable &&
-                        <EditablePasswordView item={passwordViewModel.getCurEntry()}
-                                              updateItemAttribute={passwordViewModel.updateItemAttribute}
-                                              setEditableView={() => passwordViewModel.setInEditable(false)}/>}
+                        <EditableEntryView item={passwordViewModel.getCurEntry()}
+                                           updateItemAttribute={passwordViewModel.updateItemAttribute}
+                                           setEditableView={() => passwordViewModel.toggleInEdit()}
+                                           createItem={passwordViewModel.createEntry}
+                                           inCreation={passwordViewModel.inEntryCreation}
+                                           setInCreation={passwordViewModel.setInEntryCreation}
+                                              hidePassword={passwordViewModel.hidePassword}
+                                              toggleHidePassword={passwordViewModel.toggleHidePassword}
+                        />
+                    }
                 </div>
+
+                {passwordViewModel.itemToDelete && <DeleteConfirmationDialog
+                    item={passwordViewModel.itemToDelete}
+                    onConfirmItem={passwordViewModel.confirmDeletion}
+                    onClose={() => passwordViewModel.setItemToDelete(null)}
+                />}
 
                 {/*A Toast that may be called at any time with a given message*/}
                 <ToastDialog message={passwordViewModel.toastMessage}

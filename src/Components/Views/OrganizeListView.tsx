@@ -1,5 +1,6 @@
 import React from 'react';
 import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
+import {HiMiniPlus} from "react-icons/hi2";
 
 const OrganizeListView: React.FC<{
     getCurSortCriterion: () => SortCriteria,
@@ -10,12 +11,17 @@ const OrganizeListView: React.FC<{
     liveSearchValue: string,
     closeDatabase: () => void,
     setItemCreationDialog: () => void,
+    inEditable: boolean
 }> = ({
           getCurSortCriterion,
           setCurSortCriterion,
           toggleOrder,
-          isAscending, setLiveSearchValue, liveSearchValue, closeDatabase,
-          setItemCreationDialog
+          isAscending,
+          setLiveSearchValue,
+          liveSearchValue,
+          closeDatabase,
+          setItemCreationDialog,
+            inEditable
       }) => {
 
     return (
@@ -25,24 +31,35 @@ const OrganizeListView: React.FC<{
                 {/*Giving each element a specific grid column to align them properly*/}
 
                 {/* Button to close the database and go back to the database selection */}
-                <button style={{gridColumn: "span 1"}} onClick={() => closeDatabase()}>⬅</button>
+                <button className={"squareButton"} style={{gridColumn: "span 1", justifySelf: "flex-start"}}
+                        onClick={() => closeDatabase()}>
+                    ⬅
+                </button>
 
                 <input style={{gridColumn: "span 8"}} type="text" placeholder="Suchen..." value={liveSearchValue}
                        onChange={(event => setLiveSearchValue(event.target.value))}/>
                 {/* Search bar to filter the list of entries and folders */}
-                <button style={{gridColumn: "span 1", fontSize: "1.2em"}} onClick={() => {
-                    setItemCreationDialog();
-                }}>+
+                <button
+                    className={"squareButton"}
+                    disabled={inEditable}
+                    style={{gridColumn: "span 1"}}
+                    onClick={() => {
+                        setItemCreationDialog();
+                    }}
+                >
+                    <HiMiniPlus size={24}/>
                 </button>
 
-                <select style={{gridColumn: "span 9"}} value={getCurSortCriterion()}
+                <select style={{gridColumn: "span 9", width: "100%"}} value={getCurSortCriterion()}
                         onChange={(e) => setCurSortCriterion(e.target.value as SortCriteria)}>
                     <option value="NAME">Alphabetisch</option>
                     <option value="CREATED">Erstellungsdatum</option>
                     <option value="EDITED">Bearbeitungsdatum</option>
                 </select>
 
-                <button style={{gridColumn: "span 1"}} onClick={() => {
+                <button
+                    className={"squareButton"}
+                    style={{gridColumn: "span 1"}} onClick={() => {
                     toggleOrder()
                 }}>
                     {isAscending ? '🡅' : '🡇'}

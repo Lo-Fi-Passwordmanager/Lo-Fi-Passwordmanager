@@ -1,0 +1,31 @@
+import React from "react";
+import {HiEye} from "react-icons/hi";
+import {HiEyeSlash} from "react-icons/hi2";
+
+/**
+ * A button that toggles the visibility of a password
+ * @param hidePassword whether the password is currently hidden
+ * @param toggleHidePassword function to toggle the hidePassword state
+ */
+const EyeButton: React.FC<{
+    hidePassword: boolean;
+    toggleHidePassword: () => void;
+}> = ({hidePassword, toggleHidePassword}) => {
+
+    if (!hidePassword) {
+    return (
+        <button className={`eyeButton ${hidePassword ? "" : "selected"}`}
+                onClick={() => toggleHidePassword()}>
+            <HiEye size={24}/>
+        </button>
+    );}
+    else {
+        return (
+            <button className={`eyeButton ${hidePassword ? "" : "selected"}`}
+                    onClick={() => toggleHidePassword()}>
+                <HiEyeSlash size={24} />
+            </button>
+        );
+    }
+}
+export default EyeButton;

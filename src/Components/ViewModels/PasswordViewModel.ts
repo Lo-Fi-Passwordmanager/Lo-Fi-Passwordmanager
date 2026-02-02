@@ -8,7 +8,8 @@ import {
     saveCurrentSortCriterion,
     saveIsAscending
 } from "../../Utility/Storage.ts";
-import type {Folder} from "../../Model/Folder.ts";
+import {type DragEndEvent, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
+import {useSettings} from "../../Model/Settings.ts";
 
 export const SortCriteria = {
     Name: "NAME",
@@ -24,7 +25,7 @@ export type SortCriteria = typeof SortCriteria[keyof typeof SortCriteria];
  */
 export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
 
-    const [inEditablePasswordView, setInEditablePasswordView] = useState(false);
+    const settings = useSettings();
     const [inItemCreation, setInItemCreation] = useState(false);
     const reactiveFacade = useAutomergeFacade(automergeFacade);
     const [curItem, _setCurItem] = useState<Item>(reactiveFacade.tree.rootFolder);
@@ -35,7 +36,13 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     const [inEditable, setInEditable] = useState(false);
     const [dirtyItemId, setDirtyItemId] = useState<string | null>(null);
     const [hidePassword, setHidePassword] = useState(true);
-    const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
+    const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+    const [createdFolderId, setCreatedFolderId] = useState<string | null>(null);
+    // State to track if we are in the process of creating a new entry
+    const [inEntryCreation, setInEntryCreation] = useState(false);
+
+
+    const [itemToDelete, setItemToDelete] = useState<Item | null>(null);
 
     function setCurItem(item: Item) {
         _setCurItem(item);
@@ -44,7 +51,6 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
 
     const [curSortCrit, setCurSortCrit] = useState<SortCriteria>(initSortCriterion);
     const [isAscending, setIsAscending] = useState<boolean>(initIsAscending);
-
     const [searchValue, setSearchValue] = useState<string>("");
 
     /**
@@ -122,17 +128,34 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         return reactiveFacade.tree.rootFolder;
     }
 
-    function addItem(item: Item, parentId: string): string {
-        toggleEditablePasswordView();
-        return reactiveFacade.insertItem(item, parentId);
+    /**
+     * Adds an item to the database and sets it as the current item
+     * Folders are directly created, if the item is an entry, it sets the view to editable and in entry creation mode.
+     */
+    function addItem(item: Item) {
+        if (item.isEntry()) {
+            setCurItem(item);
+            setInEntryCreation(true);
+            toggleInEdit();
+        } else {
+            const id = reactiveFacade.insertItem(item, curParent.id);
+            item.id = id;
+            setCurItem(item);
+            goToItem(item);
+            setCreatedFolderId(id);
+        }
     }
 
-    function toggleEditablePasswordView() {
-        setInEditablePasswordView(!inEditablePasswordView);
+    function createEntry(item: Item) {
+        item.id = reactiveFacade.insertItem(item, curParent.id);
+        setCurItem(item);
+        goToItem(item)
     }
 
-    function getInEditablePasswordView() {
-        return inEditablePasswordView;
+
+    function toggleInEdit() {
+        settings.setSynchronization(inEditable);
+        setInEditable(!inEditable);
     }
 
     function getCurParent() {
@@ -154,10 +177,15 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         if (item.id === "") {
             return;
         }
+        setItemToDelete(item);
+    }
+
+    function confirmDeletion(item: Item) {
+        setItemToDelete(null);
         reactiveFacade.deleteItem(item.id);
         item.deleted = true;
-        setCurItem(getRootFolder());
-        setCurParent(getRootFolder());
+        setCurItem(curParent);
+        setCurParent(curParent);
     }
 
     function copyToClipboardAndClear(text: string, timeout: number = 10000) {
@@ -202,15 +230,48 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     }
 
     /**
-     * Navigates to the given folder by setting it as the current item and clearing the search value so the view shows the full hierarchy
+     * Handles the drag end event from dnd kit and updates the parentId of the dragged item
      */
-    function goToFolder(folder: Folder) {
-        setCurItem(folder);
-        setSearchValue("");
-        setSelectedFolderId(folder.id);
-        setTimeout(() =>
-            document.querySelector("[aria-selected='true']")?.scrollIntoView(), 0)
+    const handleDragEnd = (event: DragEndEvent) => {
+        const {active, over} = event;
+        if (!over) {
+            return;
+        }
+        if (active.id !== over.id) {
+            reactiveFacade.updateItem(active.id as string, [["parentId", over.id as string]]);
+        }
+    };
 
+    /**
+     * Sensor for dnd kit to start dragging after moving 5 pixels
+     * Otherwise it interferes with clicking to select items
+     */
+    const sensors = useSensors(
+        useSensor(PointerSensor, {
+            activationConstraint: {
+                distance: allowDragging() ? 5 : Infinity,
+            },
+        })
+    );
+
+    /**
+     * Returns whether dragging is allowed in the current state
+     */
+    function allowDragging() {
+        return !inEditable && !inItemCreation && createdFolderId === null;
+    }
+
+    /**
+     * Navigates to the given item by setting it as the current item and clearing the search value so the view shows the full hierarchy
+     */
+    function goToItem(item: Item) {
+        setSearchValue("");
+        setSelectedItemId(item.id);
+        setTimeout(() => document.querySelector("[aria-selected='true']")?.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        }), 0);
+        setTimeout(() => setSelectedItemId(null), 1000);
     }
 
     return {
@@ -221,8 +282,13 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         toastVisible,
         inEditable,
         hidePassword,
-        selectedFolderId,
+        selectedItemId,
+        inEntryCreation,
+        createdFolderId,
+        itemToDelete,
+        sensors,
 
+        setInEntryCreation,
         toggleHidePassword,
         setSearchValue,
         copyToClipboardAndClear,
@@ -234,8 +300,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setToastVisible,
         setInEditable,
         updateItemAttribute,
-        toggleEditablePasswordView,
-        getInEditablePasswordView,
+        toggleInEdit,
         getInItemCreation,
         setInItemCreation,
         setCurParent,
@@ -244,7 +309,12 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setAndStoreSortCriterion,
         toggleOrder,
         getCurSortCriterion,
-        goToFolder,
+        handleDragEnd,
+        goToItem,
         updateItemTitle,
+        confirmDeletion,
+        createEntry,
+        setCreatedFolderId,
+        setItemToDelete
     };
 };
