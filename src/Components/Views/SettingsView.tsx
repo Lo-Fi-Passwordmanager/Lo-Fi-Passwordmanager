@@ -5,6 +5,7 @@ import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
 import Close from "./Icons/Close.tsx";
 import {HiMiniCog8Tooth, HiMiniMinus, HiMiniPlus} from "react-icons/hi2";
 import AddServerDialog from "./DialogViews/AddServerDialog.tsx";
+import {HiTrash} from "react-icons/hi";
 
 const SettingsView: React.FC<{
     automergeFacade?: AutomergeFacade | null;
@@ -103,14 +104,23 @@ const SettingsView: React.FC<{
                                                     </button>
                                                     {server !== "Automerge Sync Server" && (
                                                         <button
+                                                            className="squareButton"
                                                             onClick={() => viewmodel.removeServer(server)}
-                                                        >🗑️</button>
+                                                        >
+                                                            <HiTrash size={24}/>
+                                                        </button>
                                                     )}
                                                 </div>
                                             ) : null
                                         ))}
                                     </div>)}
-                                    <button onClick={() => viewmodel.setAddServerDialogOpen(true)}>+</button>
+                                    <button
+                                        className="squareButton"
+                                        onClick={() => viewmodel.setAddServerDialogOpen(true)}
+                                        style={{alignSelf: "center"}}
+                                    >
+                                        <HiMiniPlus size={24}/>
+                                    </button>
                                     {viewmodel.addServerDialogOpen && (
                                         <AddServerDialog
                                             onAddServer={(name, url) => viewmodel.addServer(name, url)}
