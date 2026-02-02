@@ -67,7 +67,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                             sortCriterion={passwordViewModel.getCurSortCriterion()}
                             isAscending={passwordViewModel.isAscending}
                             filterText={passwordViewModel.searchValue}
-                            goToFolder={passwordViewModel.goToFolder}
+                            goToFolder={passwordViewModel.goToItem}
                         />}
                         <DndContext collisionDetection={pointerWithin}
                                     onDragEnd={passwordViewModel.handleDragEnd}
