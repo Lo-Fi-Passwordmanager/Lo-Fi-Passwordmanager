@@ -37,7 +37,7 @@ export class Settings {
     private _timeoutActive: boolean;
     private _timeoutLength: number;
     private _serverUrl: string;
-    private _servers: string[];
+    private _servers: Map<string, string>;
 
     private listeners: SettingsListener[] = [];
 
@@ -59,10 +59,15 @@ export class Settings {
         }
 
         if (servers) {
-            this._servers = JSON.parse(servers);
+            this._servers = new Map<string, string>();
+            JSON.parse(servers).forEach(([name, url]: [string, string]) => {
+                this._servers.set(name, url);
+            });
         } else {
-            const defaultServers = ["wss://sync.automerge.org"];
-            localStorage.setItem("servers_list", JSON.stringify(defaultServers))
+            const defaultServers = new Map<string, string>([
+                ["Automerge Sync Server", "wss://sync.automerge.org"]
+            ]);
+            localStorage.setItem("servers_list", JSON.stringify(Array.from(defaultServers.entries())));
             this._servers = defaultServers;
         }
 
@@ -113,27 +118,36 @@ export class Settings {
         return this._serverUrl;
     }
 
-    public setServerUrl(url: string) {
-        this._serverUrl = url;
-        localStorage.setItem("server_url", url);
+    public getServerName(): string {
+        for (const [name, url] of this._servers) {
+            if (url === this._serverUrl) {
+                return name;
+            }
+        }
+        return "Unknown Server";
+    }
+
+    public setServerUrl(name: string) {
+        this._serverUrl = this._servers.get(name) || "";
+        localStorage.setItem("server_url", this._serverUrl);
         this.notify();
     }
 
-    public getServers(): string[] {
-        return this._servers;
+    public getServers(): Map<string, string> {
+        return new Map(this._servers);
     }
 
-    public addServer(server: string): void {
-        if (!this._servers.includes(server)) {
-            this._servers.push(server);
-            localStorage.setItem("servers_list", JSON.stringify(this._servers));
+    public addServer(serverName: string, serverUrl: string): void {
+        if (!this._servers.get(serverName)) {
+            this._servers.set(serverName, serverUrl);
+            localStorage.setItem("servers_list", JSON.stringify(Array.from(this._servers.entries())));
             this.notify();
         }
     }
 
     public removeServer(server: string): void {
-        this._servers = this._servers.filter(s => s !== server);
-        localStorage.setItem("servers_list", JSON.stringify(this._servers));
+        this._servers = this._servers.delete(server) ? this._servers : this._servers;
+        localStorage.setItem("servers_list", JSON.stringify(Array.from(this._servers.entries())));
         this.notify();
     }
 

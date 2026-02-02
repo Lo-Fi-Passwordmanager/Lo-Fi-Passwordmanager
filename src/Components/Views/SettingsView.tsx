@@ -78,32 +78,38 @@ const SettingsView: React.FC<{
                                 </div>
                             )}
 
-                            <div className="server-settings">
-                                <h4>Synchronisationsserver</h4>
-                                <span>Aktueller Server:</span>
-                                <div className="current-server-url">{viewmodel.serverUrl}</div>
-                                <div className="server-list">
-                                    {viewmodel.servers.length > 1 && viewmodel.servers.map((server) => (
-                                        viewmodel.serverUrl !== server ? (
-                                            <div className="server-item" key={server}>
-                                                <button onClick={() => viewmodel.selectServer(server)}>
-                                                    <span>{server}</span>
-                                                </button>
-                                                {server !== "wss://sync.automerge.org" && (
-                                                    <button onClick={() => viewmodel.removeServer(server)}>🗑️</button>
-                                                )}
-                                            </div>
-                                        ) : null
-                                    ))}
+                            {automergeFacade ? (
+                                null
+                            ) : (
+                                <div className="server-settings">
+                                    <h4 style={{justifySelf: "flex-start"}}>Synchronisationsserver</h4>
+                                    <span>Aktueller Server:</span>
+                                    <div className="current-server">{viewmodel.serverName}</div>
+                                    <div className="server-list">
+                                        {viewmodel.serverNames.length > 1 && viewmodel.serverNames.map((server) => (
+                                            viewmodel.serverName !== server ? (
+                                                <div className="server-item">
+                                                    <button onClick={() => viewmodel.selectServer(server)}>
+                                                        <span>{server}</span>
+                                                    </button>
+                                                    {server !== "wss://sync.automerge.org" && (
+                                                        <button
+                                                            onClick={() => viewmodel.removeServer(server)}
+                                                        >🗑️</button>
+                                                    )}
+                                                </div>
+                                            ) : null
+                                        ))}
+                                    </div>
+                                    <button onClick={() => viewmodel.setAddServerDialogOpen(true)}>+</button>
+                                    {viewmodel.addServerDialogOpen && (
+                                        <AddServerDialog
+                                            onAddServer={(name, url) => viewmodel.addServer(name, url)}
+                                            onClose={() => viewmodel.setAddServerDialogOpen(false)}
+                                        />
+                                    )}
                                 </div>
-                                <button onClick={() => viewmodel.setAddServerDialogOpen(true)}>+</button>
-                                {viewmodel.addServerDialogOpen && (
-                                    <AddServerDialog
-                                        onAddServer={(url) => viewmodel.addServer(url)}
-                                        onClose={() => viewmodel.setAddServerDialogOpen(false)}
-                                    />
-                                )}
-                            </div>
+                            )}
                         </div>
                     )}
 

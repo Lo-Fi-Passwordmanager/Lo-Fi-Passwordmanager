@@ -19,8 +19,9 @@ export const useSettingsViewModel = () => {
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [timeoutLength, setTimeoutLength] = useState(settings.getTimeoutLength());
     const [activeTab, setActiveTab] = useState<"general" | "database" | "about">("general");
-    const [serverUrl, setServerUrl] = useState<string>(settings.getServerUrl());
-    const [servers, setServers] = useState<string[]>(settings.getServers());
+    const [serverName, setServerName] = useState<string>(settings.getServerName());
+    const [servers, setServers] = useState<Map<string, string>>(settings.getServers());
+    const [serverNames, setServerNames] = useState<string[]>(Array.from(servers.keys()));
     const [addServerDialogOpen, setAddServerDialogOpen] = useState<boolean>(false);
 
 
@@ -48,6 +49,10 @@ export const useSettingsViewModel = () => {
         };
     }, [settings]);
 
+    useEffect(() => {
+        setServerNames(Array.from(servers.keys()));
+    }, [servers]);
+
 
     // Update darkMode
     function toggleDarkMode() {
@@ -59,8 +64,8 @@ export const useSettingsViewModel = () => {
         setSynchronisation(!synchronisation);
     }
 
-    function addServer(url: string) {
-        settings.addServer(url);
+    function addServer(name: string, url: string) {
+        settings.addServer(name, url);
     }
 
     function removeServer(server: string) {
@@ -69,7 +74,7 @@ export const useSettingsViewModel = () => {
 
     function selectServer(server: string) {
         settings.setServerUrl(server);
-        setServerUrl(server);
+        setServerName(server);
     }
 
     /*
@@ -107,9 +112,9 @@ export const useSettingsViewModel = () => {
         settingsOpen,
         timeoutLength,
         activeTab,
-        serverUrl,
-        servers,
+        serverName,
         addServerDialogOpen,
+        serverNames,
 
         setActiveTab,
         toggleDarkMode,

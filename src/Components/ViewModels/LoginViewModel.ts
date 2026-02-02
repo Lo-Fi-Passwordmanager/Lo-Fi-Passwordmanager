@@ -17,7 +17,7 @@ import {uInt8ArrayFromFile} from "../../Utility/InputOutputUtil.ts";
  *
  * @returns all data and functions required by the LoginView
  */
-export const useLoginViewModel = (
+export const loginViewModel = (
     repo: Repo,
     setLoggedIn: (value: (((prevState: boolean) => boolean) | boolean)) => void,
     setAutomergeFacade: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void,

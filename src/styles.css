@@ -286,11 +286,36 @@ input[type="number"] {
     gap: 8px;
 }
 
-.server-listing {
+.server-settings {
+    width: 300px;
+}
+
+.server-list {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    padding: 12px;
+    border: 2px solid var(--panel);
+    border-radius: 16px;
+    max-width: 100%;
+}
+
+.current-server {
+    font-weight: 700;
+    text-decoration: underline;
     width: 100%;
+    border: 2px solid var(--panel);
+    border-radius: 16px;
+    height: 2.5rem;
+    align-content: center;
+}
+
+.server-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 44px;
 }
 
 .flexContainer {
