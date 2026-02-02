@@ -310,11 +310,11 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         toggleOrder,
         getCurSortCriterion,
         handleDragEnd,
-        goToFolder: goToItem,
+        goToItem,
         updateItemTitle,
         confirmDeletion,
         createEntry,
         setCreatedFolderId,
-        setItemToDelete,
+        setItemToDelete
     };
 };
