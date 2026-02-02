@@ -68,7 +68,16 @@ describe('AutomergeFacade', ()=> {
 
     it('should be able to return the SecurityProvider', ()=> {
         expect(automergeFacade.getSecurityProvider()).toBeInstanceOf(SecurityProvider)
-    })
+    });
+
+    it('should return null when history is called and automerge url is null', async ()=> {
+        expect(await automergeFacade.getHistory()).toBe(null);
+    });
+
+    /*it('should', async ()=> {
+        automergeFacade.createDatabase("salt", "string");
+        console.log(await automergeFacade.getHistory());
+    });*/
 })
 
 function createMockRepo() {
