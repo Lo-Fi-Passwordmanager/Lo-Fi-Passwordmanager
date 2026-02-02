@@ -118,5 +118,13 @@ describe('AutomergeHelper', () => {
     it('should throw when updating an item that doesnt exist', ()=> {
         const tree = buildDatabaseAsTree(doc, secProvider);
         expect(() => updateValue(doc, getObjectId(folder), tree[1], "name", "newName")).toThrow();
-    })
+    });
+
+    it('should be able to update a folder value', ()=> {
+        insertValue(doc, null, entry);
+        expect(doc.items.length).toBe(1);
+        const tree = buildDatabaseAsTree(doc, secProvider);
+        updateValue(doc, getObjectId(entry), tree[1], "name", "bla");
+        expect(doc.items[0].name).toBe("bla");
+    });
 })

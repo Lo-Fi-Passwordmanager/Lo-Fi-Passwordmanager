@@ -7,13 +7,21 @@ import {Entry} from "../../../src/Model/Entry";
 describe('EditablePasswordViewModel', () => {
     let item: Item;
     const updateItemAttribute = vi.fn();
+    const createItem = vi.fn();
+    let inCreation: boolean;
+    const setEditableView = vi.fn();
+
+    function setInCreation(inCre: boolean) {
+        inCreation = inCre;
+    }
 
     beforeEach(() => {
         item = new Entry("name", "id", new Date(), new Date(), "user", "password", "url", "note")
     })
 
     it('should call to update an automerge Item', async () => {
-        const {result} = renderHook(() => useEditablePasswordViewModel(item, updateItemAttribute));
+        const {result} = renderHook(() =>
+            useEditablePasswordViewModel(item, updateItemAttribute, createItem, inCreation, setInCreation, setEditableView));
         act(() => {
             result.current.updateItemInAutomerge();
         });
@@ -23,14 +31,16 @@ describe('EditablePasswordViewModel', () => {
     });
 
     it('should be able to tell if no attribute has changed', async ()=> {
-        const {result} = renderHook(() => useEditablePasswordViewModel(item, updateItemAttribute));
+        const {result} = renderHook(() =>
+            useEditablePasswordViewModel(item, updateItemAttribute, createItem, inCreation, setInCreation, setEditableView));
         await waitFor(() => {
             expect(result.current.hasChanges()).toBe(false);
         });
     });
 
     it('should be able to tell if an attribute has changed', async ()=> {
-        const {result} = renderHook(() => useEditablePasswordViewModel(item, updateItemAttribute));
+        const {result} = renderHook(() =>
+            useEditablePasswordViewModel(item, updateItemAttribute, createItem, inCreation, setInCreation, setEditableView));
         act(() => {
             result.current.setPassword("newPassword")
         })
@@ -38,4 +48,33 @@ describe('EditablePasswordViewModel', () => {
             expect(result.current.hasChanges()).toBe(true);
         });
     });
+
+    it('should be able to create an Item in Automerge', ()=> {
+        const {result} = renderHook(() =>
+            useEditablePasswordViewModel(item, updateItemAttribute, createItem, inCreation, setInCreation, setEditableView));
+        act(() => {
+            result.current.createItemInAutomerge();
+        });
+        expect(createItem).toHaveBeenCalled();
+    });
+
+    it('should', ()=> {
+        inCreation = false;
+        const {result} = renderHook(() =>
+            useEditablePasswordViewModel(item, updateItemAttribute, createItem, inCreation, setInCreation, setEditableView));
+        act(() => {
+            result.current.saveEntry();
+        })
+        expect(setEditableView).toHaveBeenCalled();
+    })
+
+    it('should be able to correctly save an entry', ()=> {
+        inCreation = true;
+        const {result} = renderHook(() =>
+            useEditablePasswordViewModel(item, updateItemAttribute, createItem, inCreation, setInCreation, setEditableView));
+        act(() => {
+            result.current.saveEntry();
+        });
+        expect(createItem).toHaveBeenCalled();
+    })
 });
