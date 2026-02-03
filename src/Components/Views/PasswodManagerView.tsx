@@ -39,8 +39,8 @@ const PasswordManagerView: React.FC = () => {
                 <RepoContext.Provider value={viewModel.repo}>
                     <div className={"header"} style={{height: '5vh', display: 'flex', alignItems: 'center', gap: '2rem'}}>
                         <img src={PWMLogo} className="logo header" alt="Passwortmanager Logo"/>
-                        <h2>LoFi Passwordmanager</h2>
-                        <SettingsView automergeFacade={viewModel.getAutomergeFacade()}/>
+                        <h2>LoFi Passwortmanager</h2>
+                        <SettingsView automergeFacade={viewModel.getAutomergeFacade()} openedDbName={viewModel.openedDatabaseName}/>
                     </div>
                     <PasswordView automergeFacade={viewModel.getAutomergeFacade()}
                                   closeDatabase={() => viewModel.closeLoggedIn()}

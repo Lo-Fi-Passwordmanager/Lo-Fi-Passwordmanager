@@ -3,11 +3,11 @@ import {isValidAutomergeUrl} from "@automerge/react";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
 
 export const useCreateDatabaseViewModel = (isOpen: boolean,
-                                           createDatabase: (field1: string, field2: string) => void,
-                                           storeDatabase: (name: string, autoMergeUrl: AutomergeUrl) => void,
-                                           setToastMessage: (message: string) => void,
-                                           setShowToast: (show: boolean) => void,
-                                           importDatabase: (targetFiles: (FileList | null), name: string) => void) => {
+    createDatabase: (field1: string, field2: string) => void,
+    storeDatabase: (name: string, autoMergeUrl: AutomergeUrl) => void,
+    setToastMessage: (message: string) => void,
+    setShowToast: (show: boolean) => void,
+    importDatabase: (targetFiles: (FileList | null), name: string) => void) => {
 
     //Valid states beeing, "new", "file" and "url"
     const [selectedImportType, setSelectedImportType] = useState("new");
@@ -22,6 +22,7 @@ export const useCreateDatabaseViewModel = (isOpen: boolean,
         if (isOpen) {
             setField1("");
             setField2("");
+            setTargetFiles(null);
         }
     }, [isOpen]);
 
@@ -36,7 +37,7 @@ export const useCreateDatabaseViewModel = (isOpen: boolean,
             importDatabase(targetFiles, field1);
         } else {
             if (!field1 || !field2) {
-                setToastMessage("Bitte alle Felder ausfüllen.")
+                setToastMessage("Bitte alle Felder ausfüllen.");
                 setShowToast(true);
                 return;
             }
@@ -44,7 +45,7 @@ export const useCreateDatabaseViewModel = (isOpen: boolean,
                 createDatabase(field1, field2);
             } else if (selectedImportType === "url") {
                 if (!isValidAutomergeUrl(("automerge:" + field2) as AutomergeUrl)) {
-                    setToastMessage("Keine valide AutomergeUrl.")
+                    setToastMessage("Keine valide AutomergeUrl.");
                     setShowToast(true);
                     return;
                 }
@@ -64,7 +65,6 @@ export const useCreateDatabaseViewModel = (isOpen: boolean,
         handleConfirm,
         setField1,
         setField2,
-        setSelectedImportType,
-        useEffect,
-    }
-}
+        setSelectedImportType
+    };
+};
