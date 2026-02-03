@@ -75,7 +75,7 @@ const ListView: React.FC<{
                 {...listViewModel.attributes}
                 {...listViewModel.listeners}
                 aria-selected={selectedItemId === item.id}>
-                <span style={{marginRight: "1ch"}}></span> <span>{entry.title}</span>
+                <span className={"item-title"}>{entry.title}</span>
                 <div className={"btnWrapper"}>
                     <button className="listViewEntry button"
                             onClick={() => deleteItem(item)}
@@ -111,16 +111,7 @@ const ListView: React.FC<{
                             {listViewModel.getExtended() ? "▼" : "▷"}</button>}
 
                     {(!listViewModel.inEditName && item.id !== createdFolderId) &&
-                        <span
-                            style={{
-                                marginLeft: "10px",
-                                display: "inline-block", // Required for overflow to work
-                                maxWidth: "100%",        // Limits it to the parent's width
-                                whiteSpace: "nowrap",    // Prevents text from wrapping to a second line
-                                overflow: "hidden",      // Hides the text that goes outside the bounds
-                                textOverflow: "ellipsis", // Adds the "..."
-                                verticalAlign: "middle"  // Keeps it aligned with buttons
-                            }}>{(item.id != "") ? item.title : openedDbName}</span>
+                        <span className={"item-title"}>{(item.id != "") ? item.title : openedDbName}</span>
                     }
                     {(listViewModel.inEditName || item.id === createdFolderId) &&
                         <input type="text"
