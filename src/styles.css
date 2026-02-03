@@ -230,8 +230,21 @@ button:focus-visible {
     width: 100%;
 
     display: grid;
-    grid-template-columns: 12fr 1fr 1fr 1fr;
+    grid-template-columns: 12fr 1fr 1fr 1fr 1fr;
     gap: 8px;
+}
+
+.qrDialog {
+    display: flex;
+    align-items: center;
+    max-width: 340px;
+
+    & .qrCode {
+        padding: 10px;
+        border-radius: 10px;
+        background-color: white;
+        margin-bottom: 15px
+    }
 }
 
 .databaseSelection {
@@ -812,6 +825,16 @@ input[type="number"] {
 .dialogButtonContainer {
     display: flex;
     flex-direction: row;
+}
+
+.urlWrapper {
+    display: flex;
+}
+
+.qrButton {
+    aspect-ratio: 1;
+    padding: 0.5rem;
+    margin-left: 1rem;
 }
 
 .dialogButtonContainer button {
