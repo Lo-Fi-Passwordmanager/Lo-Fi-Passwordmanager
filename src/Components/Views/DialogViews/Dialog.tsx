@@ -1,4 +1,4 @@
-import React, {type HTMLAttributes, type PropsWithChildren, useCallback} from "react";
+import React, {type HTMLAttributes, type PropsWithChildren, useEffect} from "react";
 import Close from "../Icons/Close.tsx";
 
 /**
@@ -15,11 +15,16 @@ const Dialog: React.FC<PropsWithChildren & HTMLAttributes<HTMLDivElement> & {
           ...props
       }) => {
 
-     useCallback((event: KeyboardEvent) => {
-        if (event.key === "Escape") {
-            onCloseDialog();
+    useEffect(() => {
+        const close = (e: { keyCode: number; }) => {
+            if(e.keyCode === 27){
+                onCloseDialog();
+            }
         }
-    }, [onCloseDialog]);
+        window.addEventListener('keydown', close)
+        return () => window.removeEventListener('keydown', close)
+    },[onCloseDialog])
+
 
     return (
         <div className={`settingsBackground dialogOverlay`}>
