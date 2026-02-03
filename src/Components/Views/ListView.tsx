@@ -31,6 +31,8 @@ const ListView: React.FC<{
     updateItemTitle: (itemId: string, newTitle: string) => void;
     inEditable: boolean;
     level: number;
+    toggleFolderExpansion: (folderId: string) => void;
+    isFolderExpanded: (folderId: string) => boolean;
 }> = ({
           item,
           setCurItem,
@@ -47,9 +49,11 @@ const ListView: React.FC<{
           updateItemTitle,
           setCreatedFolderId,
           inEditable,
-          level
+          level,
+          toggleFolderExpansion,
+          isFolderExpanded
       }) => {
-    const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem, updateItemTitle, setCreatedFolderId, createdFolderId);
+    const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem, updateItemTitle, setCreatedFolderId, createdFolderId, toggleFolderExpansion, isFolderExpanded);
 
     function addButtonPressed() {
         setItemCreationDialog();
@@ -105,10 +109,10 @@ const ListView: React.FC<{
                     {/* ^^^^^^^^^ using aria-selected for scrolling to the clicked folder from filtered list view */}
                     {(item.id != "") &&
                         <button style={{boxShadow: "none"}}
-                                onClick={() => listViewModel.toggleExtended()}
+                                onClick={() => listViewModel.toggleexpanded()}
                                 onPointerDown={(e) => e.stopPropagation()}
                         >
-                            {listViewModel.getExtended() ? "▼" : "▷"}</button>}
+                            {listViewModel.expanded ? "▼" : "▷"}</button>}
 
                     {(!listViewModel.inEditName && item.id !== createdFolderId) &&
                         <span className={"item-title"}>{(item.id != "") ? item.title : openedDbName}</span>
@@ -151,7 +155,7 @@ const ListView: React.FC<{
                 {/* Recursive call of children with indent to visualizes depth in the tree */}
                 <div className="listViewEntryWrapper"
                      style={{
-                         display: (listViewModel.getExtended() ? "block" : "none"),
+                         display: (listViewModel.expanded ? "block" : "none"),
                          marginLeft: level <= 8 ? "15px" : "0px"
                      }}>
                     {listViewModel.getChildren() &&
@@ -173,6 +177,8 @@ const ListView: React.FC<{
                                 setCreatedFolderId={setCreatedFolderId}
                                 inEditable={inEditable}
                                 level={level + 1}
+                                toggleFolderExpansion={toggleFolderExpansion}
+                                isFolderExpanded={isFolderExpanded}
                             />;
                         })}
                 </div>

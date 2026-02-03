@@ -19,10 +19,12 @@ export const useListViewModel = (
     setCurrItem: (entry: Entry) => void,
     updateItemTitle: (itemId: string, newTitle: string) => void,
     setCreatedFolderId: (folderId: string | null) => void,
-    createdFolderID: string | null
+    createdFolderID: string | null,
+    toggleFolderExpansion: (folderId: string) => void,
+    isFolderExpanded: (folderId: string) => boolean,
 ) => {
 
-    const [extended, setExtended] = useState(true);
+    const [expanded, setExpanded] = useState(() => isFolderExpanded(topItem.id));
     const [inEditName, setInEditName] = useState(false);
     const [newTitle, setItemTitle] = useState(topItem.title);
     const {active} = useDndContext();
@@ -65,12 +67,9 @@ export const useListViewModel = (
         }
     }
 
-    function toggleExtended() {
-        setExtended(!extended);
-    }
-
-    function getExtended() {
-        return extended;
+    function toggleexpanded() {
+        setExpanded(!expanded);
+        toggleFolderExpansion(topItem.id);
     }
 
     function getItem() {
@@ -167,9 +166,8 @@ export const useListViewModel = (
         isItemFolder,
         isItemEntry,
         getItem,
-        toggleExtended,
-        getExtended,
-        setExtended,
+        toggleexpanded,
+        setexpanded: setExpanded,
         descendantIds,
         isInvalidDropTarget,
         setFolderRef,
@@ -178,6 +176,7 @@ export const useListViewModel = (
         listeners,
         isDragging,
         transform,
-        isOver
+        isOver,
+        expanded
     };
 };

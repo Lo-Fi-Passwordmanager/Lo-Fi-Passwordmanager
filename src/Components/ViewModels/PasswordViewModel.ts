@@ -40,6 +40,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     const [createdFolderId, setCreatedFolderId] = useState<string | null>(null);
     // State to track if we are in the process of creating a new entry
     const [inEntryCreation, setInEntryCreation] = useState(false);
+    const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
 
 
     const [itemToDelete, setItemToDelete] = useState<Item | null>(null);
@@ -274,6 +275,22 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setTimeout(() => setSelectedItemId(null), 1000);
     }
 
+    function toggleFolderExpansion(folderId: string) {
+        if (!expandedFolders.has(folderId)) {
+            setExpandedFolders(prev => new Set(prev).add(folderId));
+        } else {
+            setExpandedFolders(prev => {
+                const newSet = new Set(prev);
+                newSet.delete(folderId);
+                return newSet;
+            });
+        }
+    }
+
+    function isFolderExpanded(folderId: string) {
+        return expandedFolders.has(folderId);
+    }
+
     return {
         dirtyItemId,
         isAscending,
@@ -315,6 +332,8 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         confirmDeletion,
         createEntry,
         setCreatedFolderId,
-        setItemToDelete
+        setItemToDelete,
+        toggleFolderExpansion,
+        isFolderExpanded,
     };
 };

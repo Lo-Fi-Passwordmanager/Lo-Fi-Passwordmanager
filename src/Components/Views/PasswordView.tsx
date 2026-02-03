@@ -91,6 +91,8 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                                 createdFolderId={passwordViewModel.createdFolderId}
                                 setCreatedFolderId={passwordViewModel.setCreatedFolderId}
                                 inEditable={passwordViewModel.inEditable}
+                                toggleFolderExpansion={passwordViewModel.toggleFolderExpansion}
+                                isFolderExpanded={passwordViewModel.isFolderExpanded}
                                 level={0}
                             />}
                         </DndContext>
