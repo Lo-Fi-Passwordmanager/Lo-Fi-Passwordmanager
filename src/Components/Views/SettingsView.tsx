@@ -50,7 +50,7 @@ const SettingsView: React.FC<{
                             <label className="checkboxRow">
                                 <input type="checkbox" checked={viewmodel.darkMode}
                                        onChange={viewmodel.toggleDarkMode}/>
-                                Darkmode
+                                Dark-Mode
                             </label>
 
                             <label className="checkboxRow">
@@ -89,9 +89,7 @@ const SettingsView: React.FC<{
                                 </div>
                             )}
 
-                            {automergeFacade ? (
-                                null
-                            ) : (
+                            {automergeFacade ? null : (
                                 <div className="server-settings">
                                     <h4>Synchronisationsserver</h4>
                                     <span>Aktueller Server:</span>
@@ -104,8 +102,14 @@ const SettingsView: React.FC<{
                                                 viewmodel.serverName !== server ? (
                                                     <div className="server-item">
                                                         <button
+                                                            style={{
+                                                                display: "block",
+                                                                whiteSpace: "nowrap",
+                                                                overflow: "hidden",
+                                                                textOverflow: "ellipsis",
+                                                                flex: 1
+                                                            }}
                                                             onClick={() => viewmodel.selectServer(server)}
-                                                            style={{width: "100%"}}
                                                         >
                                                             <span>{server}</span>
                                                         </button>
