@@ -9,7 +9,7 @@ export const useShareQRViewModel = (name: string, url: string) => {
         setShareName(!shareName);
     }
 
-    const qrValue = url + (shareName ? "|" + name : "");
+    const qrValue = url.replaceAll("automerge:", "") + (shareName ? "|" + name : "");
 
     return {
         shareQRCodeOpen,
