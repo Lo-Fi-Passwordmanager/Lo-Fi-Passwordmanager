@@ -76,7 +76,7 @@ describe('PasswordViewModel',() => {
         expect(result.current.inEditable).toBe(false);
     });
 
-    it('should be able to copy to the clipboard', ()=> {
+    it('should be able to toggle whether the ordner is ascending or descending', ()=> {
         const { result } = renderHook(() => usePasswortViewModel(automergeFacade));
         expect(result.current.isAscending).toBe(true);
         act(() => {
