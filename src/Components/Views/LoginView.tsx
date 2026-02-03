@@ -26,7 +26,7 @@ const LoginView: React.FC<{
         <div className="loginView">
 
             <img src={PWMLogo} className="logo" alt="Passwortmanager Logo"/>
-            <header>LoFi Passwordmanager</header>
+            <header>Lo-Fi Passwortmanager</header>
             <main className="flexContainer">
 
                 <div className="databaseSelection">
@@ -55,6 +55,8 @@ const LoginView: React.FC<{
                     onCancel={viewModel.closeEnterPasswordDialog}
                     setToastMessage={viewModel.setToastMessage}
                     setShowToast={viewModel.setShowToast}
+                    hidePassword={viewModel.hidePassword}
+                    toggleHidePassword={viewModel.toggleHidePassword}
                 />
 
                 {/* Pop Up Dialog for creating a new Database */}
@@ -69,6 +71,8 @@ const LoginView: React.FC<{
                     setToastMessage={viewModel.setToastMessage}
                     setShowToast={viewModel.setShowToast}
                     importDatabase={viewModel.importDatabaseFromFile}
+                    hidePassword={viewModel.hidePassword}
+                    toggleHidePassword={viewModel.toggleHidePassword}
                 />
 
                 <DeleteConfirmationDialog

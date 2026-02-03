@@ -1,6 +1,7 @@
 import React from "react";
 import {useRenameDatabaseViewModel} from "../../ViewModels/Dialog/RenameDatabaseViewModel.ts";
 import {HiPencil} from "react-icons/hi";
+import Dialog from "./Dialog.tsx";
 
 
 interface RenameDatabaseDialogProps {
@@ -19,9 +20,7 @@ const RenameDatabaseDialog: React.FC<RenameDatabaseDialogProps> = ({oldName, ren
                 onClick={() => viewModel.setRenameDatabaseOpen(true)}>
                 <HiPencil size={24}/>
             </button>
-            <div className={"dialogOverlay"}>
-                <div className={"dialog"}>
-                    <h3>Datenbank umbenennen:</h3>
+            <Dialog title={"Datenbank umbenennen:"} onCloseDialog={() => viewModel.setRenameDatabaseOpen(false)}>
                     <input
                         type={"text"}
                         value={viewModel.newName}
@@ -29,11 +28,10 @@ const RenameDatabaseDialog: React.FC<RenameDatabaseDialogProps> = ({oldName, ren
                         autoFocus
                     />
                     <div className={"confirm-cancel-buttons"}>
-                        <button onClick={() => viewModel.handleConfirm()}>Bestätigen</button>
-                        <button onClick={() => viewModel.setRenameDatabaseOpen(false)}>Abbrechen</button>
+                        <button className={"rectangle-button"} onClick={() => viewModel.handleConfirm()}>Bestätigen</button>
+                        <button className={"rectangle-button"} onClick={() => viewModel.setRenameDatabaseOpen(false)}>Abbrechen</button>
                     </div>
-                </div>
-            </div>
+                </Dialog>
             </>
         )
     } else {

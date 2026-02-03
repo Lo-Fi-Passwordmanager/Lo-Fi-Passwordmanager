@@ -38,6 +38,7 @@ export const loginViewModel = (
     const [showToast, setShowToast] = useState<boolean>(false);
     const [toastMessage, setToastMessage] = useState<string>("");
     const [databaseToDelete, setDatabaseToDelete] = useState<string | null>(null);
+    const [hidePassword, setHidePassword] = useState<boolean>(true);
 
     const setLoadingScreenActive = useLoadingScreen();
 
@@ -284,6 +285,14 @@ export const loginViewModel = (
         addDatabase(dbName, handle.url);
     }
 
+    /**
+     * Toggles the password from ****** to the string and back
+     */
+    function toggleHidePassword() {
+        setHidePassword(!hidePassword);
+    }
+
+
     return {
         databaseNames,
         isAddDialogOpen,
@@ -292,6 +301,7 @@ export const loginViewModel = (
         showToast,
         toastMessage,
         databaseToDelete,
+        hidePassword,
 
         importDatabaseFromFile,
         setShowToast,
@@ -308,5 +318,6 @@ export const loginViewModel = (
         changeDatabaseName,
         confirmDeleteDatabase,
         setDatabaseToDelete,
+        toggleHidePassword,
     };
 };

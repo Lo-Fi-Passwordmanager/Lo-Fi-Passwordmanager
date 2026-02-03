@@ -26,14 +26,17 @@ const SettingsView: React.FC<{
                 <Close className="closeIcon" color={"var(--text)"} onClick={() => viewmodel.setSettingsOpen(false)}/>
                 {/* Sidebar Navigation */}
                 <aside className="settings-sidebar">
-                    <h2>Einstellungen</h2>
-                    <button onClick={() => viewmodel.setActiveTab("general")}>
+                    <h2 style={{alignSelf: "flex-start"}}>Einstellungen</h2>
+                    <button className={`settings-tab ${viewmodel.activeTab === "general" ? "active" : ""}`}
+                            onClick={() => viewmodel.setActiveTab("general")}>
                         Allgemeine Einstellungen
                     </button>
-                    <button onClick={() => viewmodel.setActiveTab("database")}>
+                    <button className={`settings-tab ${viewmodel.activeTab === "database" ? "active" : ""}`}
+                            onClick={() => viewmodel.setActiveTab("database")}>
                         Datenbankeinstellungen
                     </button>
-                    <button onClick={() => viewmodel.setActiveTab("about")}>
+                    <button className={`settings-tab ${viewmodel.activeTab === "about" ? "active" : ""}`}
+                            onClick={() => viewmodel.setActiveTab("about")}>
                         Über die App
                     </button>
                 </aside>
@@ -47,7 +50,7 @@ const SettingsView: React.FC<{
                             <label className="checkboxRow">
                                 <input type="checkbox" checked={viewmodel.darkMode}
                                        onChange={viewmodel.toggleDarkMode}/>
-                                Darkmode
+                                Dark-Mode
                             </label>
 
                             <label className="checkboxRow">
@@ -76,7 +79,8 @@ const SettingsView: React.FC<{
                                     <div className={"numberInput"}>
                                         <input type="number" style={{maxHeight: "2.5rem"}}
                                                value={viewmodel.timeoutLength}
-                                               onChange={(e) => viewmodel.setTimeOutLengthVM(e.target.value)} min="1"/>
+                                               onChange={(e) => viewmodel.setTimeOutLengthVM(e.target.value)}
+                                               min="1"/>
                                         <button className={"squareButton"} style={{boxShadow: "none"}}
                                                 onClick={viewmodel.decrease}><HiMiniMinus size={24}/></button>
                                         <button className={"squareButton"} style={{boxShadow: "none"}}
@@ -85,37 +89,42 @@ const SettingsView: React.FC<{
                                 </div>
                             )}
 
-                            {automergeFacade ? (
-                                null
-                            ) : (
+                            {automergeFacade ? null : (
                                 <div className="server-settings">
                                     <h4>Synchronisationsserver</h4>
                                     <span>Aktueller Server:</span>
                                     <div className="current-server">{viewmodel.serverName}</div>
-                                    {viewmodel.serverNames.length > 1 && (<div className="scrollableContainer server-list">
-                                        <span>Verfügbare Server:</span>
+                                    {viewmodel.serverNames.length > 1 && (
+                                        <div className="scrollableContainer server-list">
+                                            <span>Verfügbare Server:</span>
 
-                                        {viewmodel.serverNames.map((server) => (
-                                            viewmodel.serverName !== server ? (
-                                                <div className="server-item">
-                                                    <button
-                                                        onClick={() => viewmodel.selectServer(server)}
-                                                        style={{width: "100%"}}
-                                                    >
-                                                        <span>{server}</span>
-                                                    </button>
-                                                    {server !== "Automerge Sync Server" && (
+                                            {viewmodel.serverNames.map((server) => (
+                                                viewmodel.serverName !== server ? (
+                                                    <div className="server-item">
                                                         <button
-                                                            className="squareButton"
-                                                            onClick={() => viewmodel.removeServer(server)}
+                                                            style={{
+                                                                display: "block",
+                                                                whiteSpace: "nowrap",
+                                                                overflow: "hidden",
+                                                                textOverflow: "ellipsis",
+                                                                flex: 1
+                                                            }}
+                                                            onClick={() => viewmodel.selectServer(server)}
                                                         >
-                                                            <HiTrash size={24}/>
+                                                            <span>{server}</span>
                                                         </button>
-                                                    )}
-                                                </div>
-                                            ) : null
-                                        ))}
-                                    </div>)}
+                                                        {server !== "Automerge Sync Server" && (
+                                                            <button
+                                                                className="squareButton"
+                                                                onClick={() => viewmodel.removeServer(server)}
+                                                            >
+                                                                <HiTrash size={24}/>
+                                                            </button>
+                                                        )}
+                                                    </div>
+                                                ) : null
+                                            ))}
+                                        </div>)}
                                     <button
                                         className="squareButton"
                                         onClick={() => viewmodel.setAddServerDialogOpen(true)}
@@ -165,10 +174,12 @@ const SettingsView: React.FC<{
                             <section className="about-section">
                                 <p>
                                     Dies ist eine kollaborative Anwendung zur Datenverwaltung.
-                                    Dabei wird die Datenspeicherung und Übertragung mithilfe der Automerge Bibliothek
+                                    Dabei wird die Datenspeicherung und Übertragung mithilfe der Automerge
+                                    Bibliothek
                                     implementiert.
 
-                                    Zusätzlich benutzt werden die Bibliotheken Idle Timer, React DnD Kit und React Icons.
+                                    Zusätzlich benutzt werden die Bibliotheken Idle Timer, React DnD Kit und React
+                                    Icons.
                                 </p>
                             </section>
 
@@ -198,8 +209,9 @@ const SettingsView: React.FC<{
                                     DnD Kit
                                 </button>
 
-                                <button onClick={() => window.open("https://react-icons.github.io/react-icons/", "_blank")}
-                                        style={{padding: "8px 15px", cursor: "pointer"}}>
+                                <button
+                                    onClick={() => window.open("https://react-icons.github.io/react-icons/", "_blank")}
+                                    style={{padding: "8px 15px", cursor: "pointer"}}>
                                     React Icons
                                 </button>
                             </div>
