@@ -176,8 +176,8 @@ const SettingsView: React.FC<{
                                         Bibliothek
                                         implementiert.
 
-                                        Zusätzlich benutzt werden die Bibliotheken Idle Timer, React DnD Kit und React
-                                        Icons.
+                                        Zusätzlich benutzt werden die Bibliotheken Idle Timer, React DnD Kit, React
+                                        Icons, QR Scanner und React QR Code.
                                     </p>
                                 </section>
 
@@ -209,6 +209,18 @@ const SettingsView: React.FC<{
 
                                     <button
                                         onClick={() => window.open("https://react-icons.github.io/react-icons/", "_blank")}
+                                        style={{padding: "8px 15px", cursor: "pointer"}}>
+                                        React Icons
+                                    </button>
+
+                                    <button
+                                        onClick={() => window.open("https://github.com/nimiq/qr-scanner", "_blank")}
+                                        style={{padding: "8px 15px", cursor: "pointer"}}>
+                                        QR Scanner
+                                    </button>
+
+                                    <button
+                                        onClick={() => window.open("https://github.com/rosskhanas/react-qr-code", "_blank")}
                                         style={{padding: "8px 15px", cursor: "pointer"}}>
                                         React Icons
                                     </button>
