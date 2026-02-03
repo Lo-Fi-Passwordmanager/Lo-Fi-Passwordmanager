@@ -47,9 +47,8 @@ const EditableEntryView: React.FC<{
                     <div className={"divider"} style={{background:"transparent"}}/>
 
                     <div
-                        className={"scrollableContainer"}
+                        className={"scrollableContainer entryViewListing"}
                         style={{height: '90%', width: '90%'}}>
-                        <div className={"entryViewListing"}>
                             <div className={"entryViewAttribute"}>
                                 <span style={{gridColumn: "span 20"}}>Benutzername:</span>
                                 <input className={"attribute-value editing"}
@@ -92,7 +91,6 @@ const EditableEntryView: React.FC<{
                                     onClick={viewmodel.cancelSaving
                                     }>Abbrechen
                             </button>
-                        </div>
                     </div>
                 </div>
                 <div className="entryDateViewEntry">

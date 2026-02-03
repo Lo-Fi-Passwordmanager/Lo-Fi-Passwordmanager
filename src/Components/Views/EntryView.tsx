@@ -9,10 +9,11 @@ import {HiPencil, HiTrash} from "react-icons/hi";
 /**
  * The View that depicts an Entry with all its attributes at large scale
  * @param item the entry that should be depicted
+ * @param deleteItem the function that deletes the current item
  * @param copyAndClearClipboard the function that copies a string to the clipboard and clears it afterwards
  * @param setEditableView a command to toggle the editable view to on
- * @param hidePassword
- * @param toggleHidePassword
+ * @param hidePassword whether the password should be hidden
+ * @param toggleHidePassword a command to toggle the hide password state
  */
 const EntryView: React.FC<{
     item: Item,
@@ -46,8 +47,7 @@ const EntryView: React.FC<{
 
                     <div className={"divider"} style={{width: "50%"}}/>
 
-                    <div className={"scrollableContainer"} style={{width: '90%'}}>
-                        <div className={"entryViewListing"}>
+                    <div className={"scrollableContainer entryViewListing"} style={{width: '90%'}}>
                             <div className={"entryViewAttribute"}>
                                 <span style={{gridColumn: "span 20"}}>Benutzername:</span>
                                 <span className={"attribute-value"}>{entry.username}</span>
@@ -104,7 +104,6 @@ const EntryView: React.FC<{
                                 <HiTrash size={24}/>Löschen
                             </button>
                         </div>
-                    </div>
                 </div>
                 <div className="entryDateViewEntry">
                     <span>Erstellt am: {item.createdAt.toLocaleString()}</span>

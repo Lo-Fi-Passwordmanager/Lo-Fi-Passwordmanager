@@ -624,7 +624,7 @@ input[type="number"] {
 
     word-break: break-all;
     white-space: normal;
-    align-items: center; /* Centers items vertically (top to bottom) */
+    align-items: center;
 }
 
 
@@ -638,8 +638,9 @@ input[type="number"] {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    height: calc(90% - 10px);
+    height: max-content;
     gap: 2vh;
+    scrollbar-width: none !important;
 }
 
 .entryViewAttribute {
