@@ -1,6 +1,6 @@
 import {useSettingsViewModel} from "../ViewModels/SettingsViewModel.ts";
 import React from "react";
-import type {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import  {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
 import Close from "./Icons/Close.tsx";
 import {HiMiniCog8Tooth, HiMiniMinus, HiMiniPlus} from "react-icons/hi2";
@@ -9,8 +9,9 @@ import {HiTrash} from "react-icons/hi";
 import Dialog from "./DialogViews/Dialog.tsx";
 
 const SettingsView: React.FC<{
-    automergeFacade?: AutomergeFacade | null;
-}> = ({automergeFacade}) => {
+    automergeFacade?: AutomergeFacade | null,
+    openedDbName?: string
+}> = ({automergeFacade, openedDbName}) => {
     const viewmodel = useSettingsViewModel();
 
     if (!viewmodel.settingsOpen) {
@@ -145,7 +146,8 @@ const SettingsView: React.FC<{
                             <div className="settingsContainer">
                                 <h3>Datenbankeinstellungen</h3>
                                 {automergeFacade ? (
-                                    <DatabaseSettingsView automergeFacade={automergeFacade}/>
+                                    <DatabaseSettingsView automergeFacade={automergeFacade}
+                                    openedDatabaseName={openedDbName}/>
                                 ) : (
                                     <p>Bitte Datenbank auswählen.</p>
                                 )}

@@ -882,13 +882,14 @@ input[type="number"] {
     flex-direction: row;
     overflow: hidden;
     min-height: 75%;
-    width: 45%;
+    width: fit-content;
+    max-width: 80%;
     max-height: 90%;
 }
 
 @media (min-width: 950px) {
     .settings-layout {
-        width: 780px;
+        min-width: 45%;
     }
 }
 

@@ -1,12 +1,16 @@
-import type {AutomergeFacade} from "../../../Utility/AutomergeFacade.ts";
+import  {type AutomergeFacade} from "../../../Utility/AutomergeFacade.ts";
 import React from "react";
 import {saveFile} from "../../../Utility/InputOutputUtil.ts";
 import {HistoryDialog} from "./HistoryDialog.tsx";
+import ShareQRDialog from "./ShareQRDialog.tsx";
 
 /**
  * The view that links to the {@link Settings} singleton and toggles its values.
  */
-const DatabaseSettingsView: React.FC<{ automergeFacade: AutomergeFacade }> = ({automergeFacade}) => {
+const DatabaseSettingsView: React.FC<{
+    automergeFacade: AutomergeFacade,
+    openedDatabaseName?: string
+}> = ({automergeFacade, openedDatabaseName}) => {
     // Auskommentiert, da es gerade nicht verwendet wird
     // const viewmodel = useDatabaseSettingsViewModel();
 
@@ -14,6 +18,7 @@ const DatabaseSettingsView: React.FC<{ automergeFacade: AutomergeFacade }> = ({a
         <>
             <div className="dbSettingsContainer">
                 {/* TODO Toast */}
+                <div>
                 <button
                     onClick={
                         () => navigator.clipboard.writeText(
@@ -22,6 +27,8 @@ const DatabaseSettingsView: React.FC<{ automergeFacade: AutomergeFacade }> = ({a
                     }>
                     URL kopieren
                 </button>
+                <ShareQRDialog name={openedDatabaseName!} url={(automergeFacade.automergeURL as string).replace("automerge:", "")} />
+                </div>
                 <button onClick={() => saveFile(automergeFacade.exportAutomergeToBinary())}>Verschlüsselt Exportieren
                 </button>
                 <HistoryDialog automergeFacade={automergeFacade}/>
