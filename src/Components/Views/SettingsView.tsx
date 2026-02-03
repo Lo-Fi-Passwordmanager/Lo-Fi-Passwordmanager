@@ -43,7 +43,7 @@ const SettingsView: React.FC<{
 
 
                 {/* Main Content Area */}
-                <main className="settings-content">
+                <main className="scrollableContainer settings-content">
                     {viewmodel.activeTab === "general" && (
                         <div className="settingsContainer">
                             <h3>Allgemeine Einstellungen</h3>

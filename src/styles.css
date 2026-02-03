@@ -18,6 +18,9 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    --standard-radius: 12px;
+    --small-radius: 8px;
+    --big-radius: 24px;
 
     --bg: #ffebf0;
     --text: #000000;
@@ -79,7 +82,7 @@ input {
     background-color: var(--input-field);
     color: var(--text);
     border: 2px solid transparent; /* Keeps layout stable */
-    border-radius: 12px;
+    border-radius: var(--standard-radius);
     padding: 12px 16px;
     font-size: 1rem;
     font-family: inherit;
@@ -124,7 +127,7 @@ button, select {
     font-family: inherit;
     padding: 10px 16px;
     /* Modernized Rounding */
-    border-radius: 14px;
+    border-radius: var(--standard-radius);
     border: none;
     cursor: pointer;
     background: var(--panel);
@@ -194,7 +197,7 @@ button:focus-visible {
     color: var(--text);
     padding: 20px;
     /* Increased Rounding */
-    border-radius: 24px;
+    border-radius: var(--big-radius);
     box-shadow: var(--shadow);
     display: flex;
     flex-direction: column;
@@ -250,7 +253,7 @@ button:focus-visible {
 }
 
 .settingsBackground {
-    border-radius: 20px; /* Modernized rounding */
+    border-radius: var(--big-radius);
     padding: 10px 20px;
     box-shadow: var(--shadow);
 }
@@ -316,7 +319,7 @@ input[type="number"] {
     gap: 12px !important;
     padding: 12px !important;
     border: 2px solid var(--panel);
-    border-radius: 16px;
+    border-radius: var(--standard-radius);
     width: 100%;
     max-width: 300px;
     max-height: 200px;
@@ -329,7 +332,7 @@ input[type="number"] {
     text-decoration: underline;
     width: 100%;
     border: 2px solid var(--panel);
-    border-radius: 16px;
+    border-radius: var(--standard-radius);
     height: 2.5rem;
     align-content: center;
     display: block;
@@ -469,11 +472,11 @@ input[type="number"] {
     background-color: var(--bg) !important;
 }
 
-.listViewTitleHeader {
+.listViewTitleHeader, .listViewEntry {
     flex-direction: row;
     background-color: var(--panel);
     display: flex;
-    border-radius: 12px;
+    border-radius: var(--standard-radius);
     margin: 0.6vh 1vh;
     font-weight: 800;
     text-transform: uppercase;
@@ -486,6 +489,23 @@ input[type="number"] {
     transition: border-color 0.2s ease, transform 0.1s ease;
     box-sizing: border-box;
     border: 2px solid transparent;
+}
+
+.listViewEntry {
+    border-radius: var(--standard-radius);
+    height: 2.5rem;
+    background-color: var(--dialog-bg);
+    text-align: left;
+    font-weight: 500;
+    margin: 0.6vh 1vh;
+    border: 3px solid transparent;
+    transition: border-color 0.2s ease, transform 0.1s ease;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .listViewTitleHeader:hover {
@@ -505,7 +525,7 @@ input[type="number"] {
     aspect-ratio: 1;
     margin: 5px;
     padding: 0.2rem;
-    border-radius: 8px;
+    border-radius: var(--small-radius);
     justify-content: center;
 }
 
@@ -544,22 +564,6 @@ input[type="number"] {
 .listViewEntry span {
     text-align: start;
     white-space: nowrap;
-}
-
-.listViewEntry {
-    flex-direction: row;
-    padding-left: 10px;
-    border-radius: 10px;
-    height: 2.5rem;
-    background-color: var(--dialog-bg);
-    text-align: left;
-    font-weight: 500;
-    margin: 0.6vh 1vh;
-    border: 3px solid transparent;
-    transition: border-color 0.2s ease, transform 0.1s ease;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
 }
 
 .listViewEntry:hover {
@@ -651,7 +655,7 @@ input[type="number"] {
 .attribute-value, .title-value {
     box-sizing: border-box;
     border: 1px solid var(--panel);
-    border-radius: 12px;
+    border-radius: var(--standard-radius);
     padding: 0 12px;
     min-height: 2.5rem;
     height: 2.5rem;
@@ -824,6 +828,7 @@ input[type="number"] {
     overflow: hidden;
     min-height: 75%;
     width: 45%;
+    max-height: 90%;
 }
 
 @media (min-width: 950px) {
@@ -984,7 +989,7 @@ input[type="number"] {
 .timeline-content {
     flex-grow: 1;
     background: var(--bg);
-    border-radius: 12px;
+    border-radius: var(--standard-radius);
     padding: 14px;
     border: 1px solid rgba(0, 0, 0, 0.05);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -1004,7 +1009,7 @@ input[type="number"] {
     text-transform: uppercase;
     letter-spacing: 0.05em;
     padding: 2px 8px;
-    border-radius: 4px;
+    border-radius: var(--small-radius);
 }
 
 .timeline-date {
@@ -1046,7 +1051,7 @@ input[type="number"] {
     gap: 6px;
     background: rgba(0, 0, 0, 0.03);
     padding: 8px;
-    border-radius: 8px;
+    border-radius: var(--standard-radius);
 }
 
 .change-row {
