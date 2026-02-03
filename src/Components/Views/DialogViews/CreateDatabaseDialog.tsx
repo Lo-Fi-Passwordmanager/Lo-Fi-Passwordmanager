@@ -3,6 +3,7 @@ import {useCreateDatabaseViewModel} from "../../ViewModels/Dialog/CreateDatabase
 import Dialog from "./Dialog.tsx";
 import EyeButton from "../ButtonViews/EyeButton.tsx";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
+import QRScannerDialog from "./QRScannerDialog.tsx";
 
 const CreateDatabaseDialog: React.FC<{
     isOpen: boolean,
@@ -19,19 +20,19 @@ const CreateDatabaseDialog: React.FC<{
     toggleHidePassword: () => void,
 }
 > = ({
-         isOpen,
-         title,
-         label1,
-         label2,
-         createDatabase,
-         onCancel,
-         storeDatabase,
-         setToastMessage,
-         setShowToast,
-         importDatabase,
-         hidePassword,
-         toggleHidePassword
-     }) => {
+    isOpen,
+    title,
+    label1,
+    label2,
+    createDatabase,
+    onCancel,
+    storeDatabase,
+    setToastMessage,
+    setShowToast,
+    importDatabase,
+    hidePassword,
+    toggleHidePassword
+}) => {
 
     const viewModel = useCreateDatabaseViewModel(isOpen, createDatabase, storeDatabase, setToastMessage, setShowToast, importDatabase);
 
@@ -43,10 +44,11 @@ const CreateDatabaseDialog: React.FC<{
                 <div className="dialogButtonContainer">
                     <button onClick={() => viewModel.setSelectedImportType("new")}>Neue Datenbank erstellen</button>
                     <button style={{color: "gray"}} onClick={() => viewModel.setSelectedImportType("url")}>Existierende
-                        Datenbank laden
+                                                                                                           Datenbank
+                                                                                                           laden
                     </button>
                     <button style={{color: "gray"}} onClick={() => viewModel.setSelectedImportType("file")}>Datenbank
-                        importieren
+                                                                                                            importieren
                     </button>
                 </div>
 
@@ -58,10 +60,10 @@ const CreateDatabaseDialog: React.FC<{
                     placeholder={label1}
                     autoFocus
                     onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
+                        if (e.key === "Enter") {
                             viewModel.handleConfirm();
                         }
-                        if (e.key === 'Escape') {
+                        if (e.key === "Escape") {
                             onCancel();
                         }
                     }}
@@ -74,10 +76,10 @@ const CreateDatabaseDialog: React.FC<{
                         onChange={(e) => viewModel.setField2(e.target.value)}
                         placeholder={label2}
                         onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
+                            if (e.key === "Enter") {
                                 viewModel.handleConfirm();
                             }
-                            if (e.key === 'Escape') {
+                            if (e.key === "Escape") {
                                 onCancel();
                             }
                         }}
@@ -95,7 +97,8 @@ const CreateDatabaseDialog: React.FC<{
             <Dialog title={title} onCloseDialog={onCancel}>
                 <div className="dialogButtonContainer">
                     <button style={{color: "gray"}} onClick={() => viewModel.setSelectedImportType("new")}>Neue
-                        Datenbank erstellen
+                                                                                                           Datenbank
+                                                                                                           erstellen
                     </button>
                     <button onClick={() => viewModel.setSelectedImportType("url")}>Existierende Datenbank laden
                     </button>
@@ -112,23 +115,29 @@ const CreateDatabaseDialog: React.FC<{
                     autoFocus
                 />
                 <label>Automerge Url</label>
-                <input
-                    type="text"
-                    value={viewModel.field2}
-                    onChange={(e) => viewModel.setField2(e.target.value)}
-                    placeholder={"Automerge Url"}
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                            viewModel.handleConfirm();
-                        }
-                        if (e.key === 'Escape') {
-                            onCancel();
-                        }
-                    }}
-                />
+                <div className="urlWrapper">
+                    <input
+                        type="text"
+                        value={viewModel.field2}
+                        onChange={(e) => viewModel.setField2(e.target.value)}
+                        placeholder={"Automerge Url"}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                viewModel.handleConfirm();
+                            }
+                            if (e.key === "Escape") {
+                                onCancel();
+                            }
+                        }}
+                    />
+                    <QRScannerDialog setInputFields={(name, url) => {
+                        viewModel.setField1(name);
+                        viewModel.setField2(url);
+                    }}/>
+                </div>
                 <div className="confirm-cancel-buttons">
-                    <button onClick={viewModel.handleConfirm}>Bestätigen</button>
-                    <button onClick={onCancel}>Abbrechen</button>
+                    <button className={"rectangle-button"} onClick={viewModel.handleConfirm}>Bestätigen</button>
+                    <button className={"rectangle-button"} onClick={onCancel}>Abbrechen</button>
                 </div>
             </Dialog>
         );
@@ -137,7 +146,8 @@ const CreateDatabaseDialog: React.FC<{
             <Dialog title={title} onCloseDialog={onCancel}>
                 <div className="dialogButtonContainer">
                     <button style={{color: "gray"}} onClick={() => viewModel.setSelectedImportType("new")}>Neue
-                        Datenbank erstellen
+                                                                                                           Datenbank
+                                                                                                           erstellen
                     </button>
                     <button style={{color: "gray"}}
                             onClick={() => viewModel.setSelectedImportType("url")}>Existierende Datenbank laden
@@ -153,18 +163,25 @@ const CreateDatabaseDialog: React.FC<{
                     autoFocus
                 />
                 <label>Datei auswählen</label>
+                <label htmlFor="file-upload" className="file-upload">
+                    {viewModel.targetFiles === null || viewModel.targetFiles.length < 1 ? <span>Datei auswählen</span> :
+                        <span className={"visible"}>{viewModel.targetFiles[0].name}</span>}
+                </label>
                 <input
+                    id="file-upload"
                     type="file"
-                    accept="*/*"
+                    accept=".encpwdb"
+                    style={{display: "none"}}
                     onChange={(event) => viewModel.setTargetFiles(event.target.files)}
                 />
+
                 <div className="confirm-cancel-buttons">
-                    <button onClick={viewModel.handleConfirm}>Bestätigen</button>
-                    <button onClick={onCancel}>Abbrechen</button>
+                    <button className={"rectangle-button"} onClick={viewModel.handleConfirm}>Bestätigen</button>
+                    <button className={"rectangle-button"} onClick={onCancel}>Abbrechen</button>
                 </div>
             </Dialog>
         );
     }
 
-}
+};
 export default CreateDatabaseDialog;
