@@ -136,8 +136,8 @@ const CreateDatabaseDialog: React.FC<{
                     }}/>
                 </div>
                 <div className="confirm-cancel-buttons">
-                    <button onClick={viewModel.handleConfirm}>Bestätigen</button>
-                    <button onClick={onCancel}>Abbrechen</button>
+                    <button className={"rectangle-button"} onClick={viewModel.handleConfirm}>Bestätigen</button>
+                    <button className={"rectangle-button"} onClick={onCancel}>Abbrechen</button>
                 </div>
             </Dialog>
         );
@@ -163,14 +163,21 @@ const CreateDatabaseDialog: React.FC<{
                     autoFocus
                 />
                 <label>Datei auswählen</label>
+                <label htmlFor="file-upload" className="file-upload">
+                    {viewModel.targetFiles === null || viewModel.targetFiles.length < 1 ? <span>Datei auswählen</span> :
+                        <span className={"visible"}>{viewModel.targetFiles[0].name}</span>}
+                </label>
                 <input
+                    id="file-upload"
                     type="file"
-                    accept="*/*"
+                    accept=".encpwdb"
+                    style={{display: "none"}}
                     onChange={(event) => viewModel.setTargetFiles(event.target.files)}
                 />
+
                 <div className="confirm-cancel-buttons">
-                    <button onClick={viewModel.handleConfirm}>Bestätigen</button>
-                    <button onClick={onCancel}>Abbrechen</button>
+                    <button className={"rectangle-button"} onClick={viewModel.handleConfirm}>Bestätigen</button>
+                    <button className={"rectangle-button"} onClick={onCancel}>Abbrechen</button>
                 </div>
             </Dialog>
         );
