@@ -4,6 +4,8 @@ import Dialog from "./Dialog.tsx";
 import {useShareQRViewModel} from "../../ViewModels/Dialog/ShareQRViewModel.ts";
 import QRCode from "react-qr-code";
 
+// QRCode Generator https://github.com/rosskhanas/react-qr-code
+
 
 interface ShareQRDialogProps {
     name: string,

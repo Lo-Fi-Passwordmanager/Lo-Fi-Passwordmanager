@@ -2,6 +2,8 @@ import {useEffect, useState} from "react";
 import QrScanner from "qr-scanner";
 import {isValidAutomergeUrl} from "@automerge/react";
 
+// QRScanner https://github.com/nimiq/qr-scanner
+
 export const useQRScannerViewModel = (setInputFields: (name: string, url: string) => void) => {
 
     const [qrScannerOpen, setQRScannerOpen_real] = useState(false);
@@ -41,7 +43,9 @@ export const useQRScannerViewModel = (setInputFields: (name: string, url: string
                 }
             }, {
                 highlightScanRegion: true,
-                highlightCodeOutline: true
+                highlightCodeOutline: true,
+                preferredCamera: "environment",
+                returnDetailedScanResult: true
             });
             qrScanner.start();
         }
