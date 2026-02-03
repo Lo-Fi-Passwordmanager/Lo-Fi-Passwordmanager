@@ -20,7 +20,8 @@ export const useListViewModel = (
     updateItemTitle: (itemId: string, newTitle: string) => void,
     setCreatedFolderId: (folderId: string | null) => void,
     createdFolderID: string | null,
-    toggleFolderExpansion: (folderId: string) => void,
+    expandFolderId: (folderId: string) => void,
+    collapseFolderId: (folderId: string) => void,
     isFolderExpanded: (folderId: string) => boolean,
 ) => {
 
@@ -67,9 +68,18 @@ export const useListViewModel = (
         }
     }
 
-    function toggleexpanded() {
+    function toggleExpanded() {
         setExpanded(!expanded);
-        toggleFolderExpansion(topItem.id);
+        if (!expanded) {
+            expandFolderId(topItem.id);
+        } else {
+            collapseFolderId(topItem.id);
+        }
+    }
+
+    function expandFolder() {
+        setExpanded(true);
+        expandFolderId(topItem.id);
     }
 
     function getItem() {
@@ -159,6 +169,15 @@ export const useListViewModel = (
     return {
         newTitle,
         inEditName,
+        descendantIds,
+        isInvalidDropTarget,
+        attributes,
+        listeners,
+        isDragging,
+        transform,
+        isOver,
+        expanded,
+
         setItemTitle,
         updateTitleInAutomerge,
         setAndStoreEditName,
@@ -166,17 +185,9 @@ export const useListViewModel = (
         isItemFolder,
         isItemEntry,
         getItem,
-        toggleexpanded,
-        setexpanded: setExpanded,
-        descendantIds,
-        isInvalidDropTarget,
+        toggleExpanded,
         setFolderRef,
         setDraggableRef,
-        attributes,
-        listeners,
-        isDragging,
-        transform,
-        isOver,
-        expanded
+        expandFolder,
     };
 };

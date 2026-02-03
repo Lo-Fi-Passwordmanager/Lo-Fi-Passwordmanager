@@ -141,6 +141,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         } else {
             const id = reactiveFacade.insertItem(item, curParent.id);
             item.id = id;
+            expandFolder(id);
             setCurItem(item);
             goToItem(item);
             setCreatedFolderId(id);
@@ -275,16 +276,16 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setTimeout(() => setSelectedItemId(null), 1000);
     }
 
-    function toggleFolderExpansion(folderId: string) {
-        if (!expandedFolders.has(folderId)) {
-            setExpandedFolders(prev => new Set(prev).add(folderId));
-        } else {
-            setExpandedFolders(prev => {
-                const newSet = new Set(prev);
-                newSet.delete(folderId);
-                return newSet;
-            });
-        }
+    function expandFolder(folderId: string) {
+        setExpandedFolders(prev => new Set(prev).add(folderId));
+    }
+
+    function collapseFolder(folderId: string) {
+        setExpandedFolders(prev => {
+            const newSet = new Set(prev);
+            newSet.delete(folderId);
+            return newSet;
+        });
     }
 
     function isFolderExpanded(folderId: string) {
@@ -333,7 +334,8 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         createEntry,
         setCreatedFolderId,
         setItemToDelete,
-        toggleFolderExpansion,
+        expandFolder,
+        collapseFolder,
         isFolderExpanded,
     };
 };
