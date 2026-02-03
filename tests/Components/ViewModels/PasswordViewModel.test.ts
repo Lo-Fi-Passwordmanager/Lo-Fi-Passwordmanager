@@ -6,11 +6,11 @@ import {usePasswortViewModel} from "../../../src/Components/ViewModels/PasswordV
 import {Entry} from "../../../src/Model/Entry";
 import {Folder} from "../../../src/Model/Folder";
 
-describe('PasswordViewModel',() => {
+describe('PasswordViewModel', () => {
     let automergeFacade;
     let repo;
     let entry;
-    let folder;
+    let rootFolder;
 
     vi.mock("@automerge/react", async (importOriginal) => {
         const actual = await importOriginal<typeof import("@automerge/react")>()
@@ -35,7 +35,7 @@ describe('PasswordViewModel',() => {
         automergeFacade = new AutomergeFacade(repo);
         automergeFacade.createDatabase("salt", "validation", "Database");
         entry = new Entry("name", "id", new Date(), new Date(), "user", "pass", "url", "note");
-        folder = new Folder("folderName", "folderId", new Date(), new Date());
+        rootFolder = new Folder("root", "", new Date(), new Date());
     })
 
     afterEach(() => {
@@ -63,8 +63,8 @@ describe('PasswordViewModel',() => {
         expect(result.current.hidePassword).toBe(true);
     });
 
-    it('should be able to return whether it is in item creation', ()=> {
-        const { result } = renderHook(() => usePasswortViewModel(automergeFacade));
+    it('should be able to return whether it is in item creation', () => {
+        const {result} = renderHook(() => usePasswortViewModel(automergeFacade));
         expect(result.current.inEditable).toBe(false);
         act(() => {
             result.current.toggleInEdit();
@@ -76,8 +76,8 @@ describe('PasswordViewModel',() => {
         expect(result.current.inEditable).toBe(false);
     });
 
-    it('should be able to toggle whether the ordner is ascending or descending', ()=> {
-        const { result } = renderHook(() => usePasswortViewModel(automergeFacade));
+    it('should be able to toggle whether the ordner is ascending or descending', () => {
+        const {result} = renderHook(() => usePasswortViewModel(automergeFacade));
         expect(result.current.isAscending).toBe(true);
         act(() => {
             result.current.toggleOrder();
@@ -89,8 +89,8 @@ describe('PasswordViewModel',() => {
         expect(result.current.isAscending).toBe(true);
     });
 
-    it('should be able to add an entry', ()=> {
-        const { result } = renderHook(() => usePasswortViewModel(automergeFacade));
+    it('should be able to add an entry', () => {
+        const {result} = renderHook(() => usePasswortViewModel(automergeFacade));
         act(() => {
             result.current.addItem(entry);
         });
@@ -117,4 +117,52 @@ describe('PasswordViewModel',() => {
     //     });
     //     expect(result.current.getRootFolder().entries.length).toBe(1);
     // });
+
+    it('should set an item to be deleted and delete after confirmation', () => {
+        const {result} = renderHook(() => usePasswortViewModel(automergeFacade));
+        act(() => {
+            result.current.setCurItem(entry);
+        })
+        act(() => {
+            result.current.deleteItem(result.current.curItem);
+        });
+        expect(result.current.itemToDelete).toStrictEqual(entry);
+
+        act(() => {
+            result.current.confirmDeletion(result.current.curItem);
+        });
+        expect(result.current.itemToDelete).toBeNull();
+        expect(result.current.curItem).not.toStrictEqual(entry);
+        expect(result.current.curItem === result.current.curParent)
+        expect(result.current.curParent.id === entry.parentId)
+        expect(entry.deleted).toBe(true);
+    });
+
+    it('should not delete the root folder on deletion confirmation', () => {
+        const {result} = renderHook(() => usePasswortViewModel(automergeFacade));
+        act(() => {
+            result.current.setCurItem(rootFolder);
+        })
+        act(() => {
+            result.current.deleteItem(result.current.curItem);
+        });
+        expect(result.current.itemToDelete).not.toStrictEqual(rootFolder);
+    });
+
+    it('copy to clipboard works as expected', async () => {
+        const {result} = renderHook(() => usePasswortViewModel(automergeFacade));
+        const writeTextMock = vi.fn();
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        navigator.clipboard = {
+            writeText: writeTextMock,
+        };
+
+        act(() => {
+            result.current.copyToClipboardAndClear("sample text");
+        });
+
+        expect(writeTextMock).toHaveBeenCalledWith("sample text");
+    });
+
 });
