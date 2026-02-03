@@ -40,7 +40,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     const [createdFolderId, setCreatedFolderId] = useState<string | null>(null);
     // State to track if we are in the process of creating a new entry
     const [inEntryCreation, setInEntryCreation] = useState(false);
-    const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
+    const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set([getRootFolder().id]));
 
 
     const [itemToDelete, setItemToDelete] = useState<Item | null>(null);
