@@ -10,5 +10,10 @@ export default defineConfig({
             '--localstorage-file',
             path.resolve(os.tmpdir(), `vitest-${process.pid}.localstorage`),
         ],
+        coverage: {
+            enabled: true,
+            provider: 'v8',
+            reporter: ['text', 'json', 'html'],
+        },
     },
 });
