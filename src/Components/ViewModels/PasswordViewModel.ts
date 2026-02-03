@@ -158,9 +158,6 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setInEditable(!inEditable);
     }
 
-    function getCurParent() {
-        return curParent;
-    }
 
     function updateItemAttribute(itemId: string, changes: [Attribute, string | Date][]) {
         reactiveFacade.updateItem(itemId, changes);
@@ -304,7 +301,6 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         getInItemCreation,
         setInItemCreation,
         setCurParent,
-        getCurParent,
         deleteItem,
         setAndStoreSortCriterion,
         toggleOrder,
