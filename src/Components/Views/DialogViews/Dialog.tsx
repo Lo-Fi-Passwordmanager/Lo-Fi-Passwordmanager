@@ -1,4 +1,4 @@
-import React, {type HTMLAttributes, type PropsWithChildren} from "react";
+import React, {type HTMLAttributes, type PropsWithChildren, useCallback} from "react";
 import Close from "../Icons/Close.tsx";
 
 /**
@@ -8,12 +8,19 @@ const Dialog: React.FC<PropsWithChildren & HTMLAttributes<HTMLDivElement> & {
     title: string,
     onCloseDialog: () => void
 }> = ({
-    children,
-    title,
-    onCloseDialog,
-    className,
-    ...props
-}) => {
+          children,
+          title,
+          onCloseDialog,
+          className,
+          ...props
+      }) => {
+
+     useCallback((event: KeyboardEvent) => {
+        if (event.key === "Escape") {
+            onCloseDialog();
+        }
+    }, [onCloseDialog]);
+
     return (
         <div className={`settingsBackground dialogOverlay`}>
             <div className={`dialog ${className}`} {...props}>
