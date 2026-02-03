@@ -3,8 +3,8 @@ import {HiOutlineQrcode} from "react-icons/hi";
 import Dialog from "./Dialog.tsx";
 import {useQRScannerViewModel} from "../../ViewModels/Dialog/qrScannerViewModel.ts";
 
-const QRScannerDialog: React.FC = () => {
-    const viewmodel = useQRScannerViewModel();
+const QRScannerDialog: React.FC<{ setInputFields: (name: string, url: string) => void }> = ({setInputFields}) => {
+    const viewmodel = useQRScannerViewModel(setInputFields);
 
     if (viewmodel.qrScannerOpen) {
         return (
@@ -17,6 +17,7 @@ const QRScannerDialog: React.FC = () => {
                 <Dialog title={"QR Code Scanner"} onCloseDialog={() => viewmodel.setQRScannerOpen(false)}
                         className="qrDialog">
                     <video id="qrVideo"/>
+                    {viewmodel.scanError && <p id="error">Ungültiger QR Code</p>}
                 </Dialog>
             </>
         );

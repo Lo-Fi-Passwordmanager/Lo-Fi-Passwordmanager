@@ -130,7 +130,10 @@ const CreateDatabaseDialog: React.FC<{
                             }
                         }}
                     />
-                    <QRScannerDialog/>
+                    <QRScannerDialog setInputFields={(name, url) => {
+                        viewModel.setField1(name);
+                        viewModel.setField2(url);
+                    }}/>
                 </div>
                 <div className="confirm-cancel-buttons">
                     <button onClick={viewModel.handleConfirm}>Bestätigen</button>

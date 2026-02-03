@@ -239,6 +239,8 @@ button:focus-visible {
     align-items: center;
     max-width: 340px;
     z-index: 900;
+    gap: 0;
+    max-height: 70%;
 
     & .qrCode {
         padding: 10px;
@@ -248,8 +250,14 @@ button:focus-visible {
     }
 }
 
+#error {
+    font-size: .8rem;
+    color: var(--outline);
+}
+
 #qrVideo {
     width: 100%;
+    border-radius: 10px;
 }
 
 .databaseSelection {
