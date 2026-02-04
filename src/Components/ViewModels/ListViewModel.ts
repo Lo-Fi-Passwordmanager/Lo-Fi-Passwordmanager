@@ -101,7 +101,7 @@ export const useListViewModel = (
 
 
     /**
-     * Updates the title of the topItem in the automerge doc, should only be called, if a updateItemTitle functino is given into the viewmodel
+     * Updates the title of the topItem in the automerge doc, should only be called, if a updateItemTitle funciton is given into the view model
      */
     function updateTitleInAutomerge() {
         updateItemTitle(topItem.id, newTitle);

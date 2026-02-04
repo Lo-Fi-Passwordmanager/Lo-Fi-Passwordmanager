@@ -174,6 +174,8 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         const id = curItem.id;
         setCurItem(getRootFolder());
         setDirtyItemId(id);
+
+
     }
 
     function updateItemTitle(itemId: string, newTitle: string) {
@@ -246,6 +248,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         }
         if (active.id !== over.id) {
             reactiveFacade.updateItem(active.id as string, [["parentId", over.id as string]]);
+            expandFolder(over.id as string);
         }
     };
 
