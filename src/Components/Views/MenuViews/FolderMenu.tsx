@@ -1,6 +1,7 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, {useEffect, useRef} from "react";
 import {HiMiniPlus} from "react-icons/hi2";
 import {HiPencil, HiTrash} from "react-icons/hi";
+import {useFolderMenuViewModel} from "../../ViewModels/Menu/FolderMenuViewModel.ts";
 
 interface Props {
     onDelete: () => void;
@@ -9,61 +10,65 @@ interface Props {
     disabled: boolean;
 }
 
+/**
+ * A 3-dot menu for folders which contains buttons to create an item, edit the title and delete the folder
+ *
+ * @param onDelete method to delete the folder
+ * @param onRename method to rename the folder
+ * @param onAdd method to add a new item to the folder
+ * @param disabled whether the menu is disabled
+ */
 const FolderMenu: React.FC<Props> = ({onDelete, onRename, onAdd, disabled}) => {
-    const [isOpen, setIsOpen] = useState(false);
+
+    const viewModel = useFolderMenuViewModel();
     const menuRef = useRef<HTMLDivElement>(null);
 
+    // close menu if clicked outside
     useEffect(() => {
         const handleClickOutside = () => {
-            if (menuRef.current && !menuRef.current.contains(document.activeElement)) {
-                setIsOpen(false);
+            if (menuRef.current && menuRef.current.contains(document.activeElement)) {
+                viewModel.setIsOpen(false);
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, []);
-
-    // prevent click from dragging item
-    const toggleMenu = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setIsOpen(!isOpen);
-    };
-
+    }, [viewModel]);
+    
     return (
         <div className="action-menu-wrapper" ref={menuRef} onClick={(e) => e.stopPropagation()}>
 
-            <div className={`action-items ${isOpen ? "open" : ""}`}>
+            <div className={`action-items ${viewModel.isOpen ? "open" : ""}`}>
                 <button
                     className="listViewTitleHeader button"
-                    disabled={!isOpen}
+                    disabled={!viewModel.isOpen}
                     onClick={() => {
                         onAdd();
-                        setIsOpen(false);
+                        viewModel.setIsOpen(false);
                     }}>
                     <HiMiniPlus size={24}/>
                 </button>
                 <button
-                    disabled={!isOpen}
+                    disabled={!viewModel.isOpen}
                     className="listViewTitleHeader button"
                     onClick={() => {
                         onRename();
-                        setIsOpen(false);
+                        viewModel.setIsOpen(false);
                     }}>
                     <HiPencil size={24}/>
                 </button>
                 <button
                     className="listViewTitleHeader button"
-                    disabled={!isOpen}
+                    disabled={!viewModel.isOpen}
                     onClick={onDelete}>
                     <HiTrash size={24}/>
                 </button>
             </div>
 
             <button
-                className={`listViewTitleHeader button ${isOpen ? "active" : ""}`}
-                onClick={toggleMenu}
+                className={`listViewTitleHeader button ${viewModel.isOpen ? "active" : ""}`}
+                onClick={viewModel.toggleMenu}
                 disabled={disabled}
             >
                 ⋮

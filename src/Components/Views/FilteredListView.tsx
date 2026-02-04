@@ -7,6 +7,7 @@ import {Folder} from "../../Model/Folder.ts";
 
 /**
  * The View that represents a filtered list of {@link Entry}/{@link Folder} Class Instances
+ *
  * @param root the root folder to start the filtering from
  * @param setCurItem the Method that selects an entry to be shown in the {@link EntryView}
  * @param goToFolder the method to navigate to a specific folder

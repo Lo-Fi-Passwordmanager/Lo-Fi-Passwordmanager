@@ -11,7 +11,14 @@ import ToastDialog from "./DialogViews/ToastDialog.tsx";
 import {HiMiniPlus} from "react-icons/hi2";
 import DeleteConfirmationDialog from "./DialogViews/DeleteConfirmationDialog.tsx";
 
-
+/**
+ * The view that should be shown, when the user is not logged in yet and can select/create a database to open plus other related actions
+ * @param repo the automerge repo
+ * @param setLoggedIn method to set the logged in state
+ * @param setAutomergeFacade method to set the automerge facade after opening a database
+ * @param securityProvider the security provider used for encryption/decryption
+ * @param setOpenedDbName method to set the name of the currently opened database
+ */
 const LoginView: React.FC<{
     repo: Repo,
     setLoggedIn: (value: (((prevState: boolean) => boolean) | boolean)) => void,

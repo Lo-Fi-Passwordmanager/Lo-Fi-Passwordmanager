@@ -17,7 +17,7 @@ import {CSS} from "@dnd-kit/utilities";
 const ListView: React.FC<{
     item: Item,
     setCurItem: (entry: Entry) => void,
-    getCurItem: () => Item,
+    curItem: Item;
     setItemCreationDialog: () => void,
     setCurrentParent?: (item: Item) => void,
     deleteItem: (item: Item) => void,
@@ -37,7 +37,7 @@ const ListView: React.FC<{
 }> = ({
           item,
           setCurItem,
-          getCurItem,
+          curItem,
           setItemCreationDialog,
           setCurrentParent,
           deleteItem,
@@ -74,7 +74,7 @@ const ListView: React.FC<{
         const entry = listViewModel.getItem() as Entry;
         return (
             <div
-                className={`listViewEntry ${getCurItem().id !== entry.id ? "" : "selected"} ${listViewModel.isDragging ? "dragged" : ""} ${selectedItemId === item.id ? "highlighted entry" : ""}`}
+                className={`listViewEntry ${curItem.id !== entry.id ? "" : "selected"} ${listViewModel.isDragging ? "dragged" : ""} ${selectedItemId === item.id ? "highlighted entry" : ""}`}
                 onClick={() => setCurItem(entry)}
                 style={dragStyle}
                 ref={listViewModel.setDraggableRef}
@@ -166,7 +166,7 @@ const ListView: React.FC<{
                                 key={index}
                                 item={item}
                                 setCurItem={setCurItem}
-                                getCurItem={getCurItem}
+                                curItem={curItem}
                                 setItemCreationDialog={setItemCreationDialog}
                                 setCurrentParent={setCurrentParent}
                                 deleteItem={deleteItem}

@@ -8,10 +8,11 @@ import EyeButton from "./ButtonViews/EyeButton.tsx";
 
 
 /**
- * The View that depicts an Entry with all its attributes at large scale while beeing editable
+ * The View that depicts an Entry with all its attributes at large scale while being editable
+ *
  * @param item the entry that should be depicted
  * @param updateItemAttribute the function on the active {@link AutomergeFacade} to update a item in the doc
- * @param setEditableView the function to close the editable passwordview
+ * @param setEditableView the function to close the editable passwordView
  */
 const EditableEntryView: React.FC<{
     item: Item,

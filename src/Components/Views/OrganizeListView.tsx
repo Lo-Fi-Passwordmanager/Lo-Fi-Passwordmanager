@@ -2,8 +2,21 @@ import React from 'react';
 import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
 import {HiMiniPlus} from "react-icons/hi2";
 
+/**
+ * The View that contains the search bar, sorting options and buttons to close the database and add new items
+ *
+ * @param curSortCriterion the current sort criterion
+ * @param setCurSortCriterion method to set the current sort criterion
+ * @param toggleOrder method to toggle between ascending and descending order
+ * @param isAscending whether the sorting is ascending or descending
+ * @param setLiveSearchValue method to set the current typed search value
+ * @param liveSearchValue the current typed search value
+ * @param closeDatabase method to close the currently opened database
+ * @param setItemCreationDialog method to open a dialog to create a new item
+ * @param inEditable whether the view is currently in editable mode to disable certain actions
+ */
 const OrganizeListView: React.FC<{
-    getCurSortCriterion: () => SortCriteria,
+    curSortCriterion: SortCriteria;
     setCurSortCriterion: (criterion: SortCriteria) => void,
     toggleOrder: () => void,
     isAscending: boolean,
@@ -13,7 +26,7 @@ const OrganizeListView: React.FC<{
     setItemCreationDialog: () => void,
     inEditable: boolean
 }> = ({
-          getCurSortCriterion,
+          curSortCriterion,
           setCurSortCriterion,
           toggleOrder,
           isAscending,
@@ -21,7 +34,7 @@ const OrganizeListView: React.FC<{
           liveSearchValue,
           closeDatabase,
           setItemCreationDialog,
-            inEditable
+          inEditable
       }) => {
 
     return (
@@ -50,7 +63,7 @@ const OrganizeListView: React.FC<{
                     <HiMiniPlus size={24}/>
                 </button>
 
-                <select style={{gridColumn: "span 9", width: "100%"}} value={getCurSortCriterion()}
+                <select style={{gridColumn: "span 9", width: "100%"}} value={curSortCriterion}
                         onChange={(e) => setCurSortCriterion(e.target.value as SortCriteria)}>
                     <option value="NAME">Alphabetisch</option>
                     <option value="CREATED">Erstellungsdatum</option>
