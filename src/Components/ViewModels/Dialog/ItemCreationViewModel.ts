@@ -3,8 +3,15 @@ import {Entry} from "../../../Model/Entry.ts";
 import {Folder} from "../../../Model/Folder.ts";
 import type {Item} from "../../../Model/Item.ts";
 
+/**
+ * The Viewmodel for {@link ItemCreationDialog}
+ *
+ * @param addItem a function to add an item to the data structure
+ * @param cancelItemCreation the function to set the visibility of this dialog
+ */
 export const useItemCreationViewModel = (
-    addItem: ((item: Item) => void), cancelItemCreation: () => void) => {
+    addItem: ((item: Item) => void),
+    cancelItemCreation: () => void) => {
 
     const [title, setTitle] = useState("");
     const [username, setUsername] = useState("");

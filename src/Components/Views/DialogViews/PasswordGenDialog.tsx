@@ -5,8 +5,8 @@ import {HiMiniPlus} from "react-icons/hi2";
 import Dialog from "./Dialog.tsx";
 
 
-const PasswordGenDialog: React.FC<PasswordGenDialogProps> = ({newPassword}: PasswordGenDialogProps) => {
-    const viewModel = usePasswordGenViewModel(newPassword);
+const PasswordGenDialog: React.FC<PasswordGenDialogProps> = ({setNewPassword}: PasswordGenDialogProps) => {
+    const viewModel = usePasswordGenViewModel(setNewPassword);
     if (viewModel.passwordGenOpen) {
         return (
             <Dialog title={"Passwortgenerator"} onCloseDialog={() => viewModel.setPasswordGenOpen(false)}>

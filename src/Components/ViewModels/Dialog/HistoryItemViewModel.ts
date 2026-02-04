@@ -5,8 +5,9 @@ import type {SecurityProvider} from "../../../Utility/Security/SecurityProvider.
 import {useState} from "react";
 
 /**
- * The ViewModel that is used for interfacing the {@link Settings} singleton.
- * It uses states to reload react when chaning settings, so that they get applied
+ * The ViewModel for a {@link HistoryItem} in the {@link HistoryDialog}
+ * @param historyEntry the Entry to be shown (should be retrieved from the Automerge history)
+ * @param securityProvider the security Provider used to decrypt the values
  */
 export const useHistoryItemViewModel = (historyEntry: HistoryEntry, securityProvider: SecurityProvider) => {
 

@@ -11,8 +11,6 @@ const DatabaseSettingsView: React.FC<{
     automergeFacade: AutomergeFacade,
     openedDatabaseName?: string
 }> = ({automergeFacade, openedDatabaseName}) => {
-    // Auskommentiert, da es gerade nicht verwendet wird
-    // const viewmodel = useDatabaseSettingsViewModel();
 
     return (
         <>

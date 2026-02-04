@@ -8,7 +8,7 @@ const LoginDatabaseDialog: React.FC<{
     isOpen: boolean,
     title: string,
     label1: string,
-    onConfirm: (field1: string) => void,
+    tryOpenDatabase: (field1: string) => void,
     onCancel: () => void,
     setToastMessage: (message: string) => void,
     setShowToast: (message: boolean) => void,
@@ -18,7 +18,7 @@ const LoginDatabaseDialog: React.FC<{
           isOpen,
           title,
           label1,
-          onConfirm,
+          tryOpenDatabase,
           onCancel,
           setToastMessage,
           setShowToast,
@@ -26,7 +26,7 @@ const LoginDatabaseDialog: React.FC<{
           toggleHidePassword
       }) => {
 
-    const viewModel = useLoginDatabaseViewModel(isOpen, onConfirm, setToastMessage, setShowToast);
+    const viewModel = useLoginDatabaseViewModel(isOpen, tryOpenDatabase, setToastMessage, setShowToast);
 
     if (!isOpen) return null;
 

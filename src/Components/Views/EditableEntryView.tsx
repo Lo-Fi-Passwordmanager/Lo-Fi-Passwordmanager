@@ -63,7 +63,7 @@ const EditableEntryView: React.FC<{
                                        onChange={(e) => viewmodel.setPassword(e.target.value)}/>
                                 <EyeButton hidePassword={hidePassword} toggleHidePassword={toggleHidePassword}/>
                                 <PasswordGenDialog
-                                    newPassword={(password: string) => viewmodel.setPassword(password)}/>
+                                    setNewPassword={(password: string) => viewmodel.setPassword(password)}/>
                             </div>
                             <div className={"entryViewAttribute"}>
                                 {/* adds https://www. to the start of the link*/}
