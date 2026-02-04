@@ -36,7 +36,7 @@ export const usePasswordManagerViewModel = () => {
 
     useEffect(() => {
         setPeerJsAdapter(new PeerjsNetworkAdapter(settings.getConnector()));
-        if (settings.getSynchronization()) {
+        if (settings.getSynchronization() || settings.getP2P()) {
             // Does not cause cascading renders (apparently) => ignore error
             setNetworkAdapters(initialNetworkAdapters);
 
