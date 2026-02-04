@@ -304,11 +304,7 @@ button:focus-visible {
     flex-direction: column;
     justify-content: center;
     width: 100%;
-
-    & > button {
-        margin-block: 5px;
-        margin-inline: unset;
-    }
+    gap: 12px;
 }
 
 .checkboxRow {

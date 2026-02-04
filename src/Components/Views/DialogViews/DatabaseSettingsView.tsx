@@ -11,15 +11,14 @@ const DatabaseSettingsView: React.FC<{
     automergeFacade: AutomergeFacade,
     openedDatabaseName?: string
 }> = ({automergeFacade, openedDatabaseName}) => {
-    // Auskommentiert, da es gerade nicht verwendet wird
-    // const viewmodel = useDatabaseSettingsViewModel();
 
     return (
         <>
             <div className="dbSettingsContainer">
                 {/* TODO Toast */}
-                <div>
+                <div style={{display:"flex", justifyContent:"space-between", gap:"12px"}}>
                 <button
+                    style={{width:"100%"}}
                     onClick={
                         () => navigator.clipboard.writeText(
                             (automergeFacade.automergeURL as string).replace("automerge:", "")
