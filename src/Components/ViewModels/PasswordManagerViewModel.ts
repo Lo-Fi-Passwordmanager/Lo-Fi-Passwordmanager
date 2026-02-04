@@ -29,17 +29,23 @@ export const usePasswordManagerViewModel = () => {
     const initialNetworkAdapters = [
         new BroadcastChannelNetworkAdapter(),
         new WebSocketClientAdapter(settings.getServerUrl()),
-        peerJsAdapter,
     ];
+    
+    const initialP2PNetworkAdapter = [
+        new BroadcastChannelNetworkAdapter(),
+        peerJsAdapter,
+    ]
 
     const [networkAdapters, setNetworkAdapters] = useState<NetworkAdapterInterface[] | undefined>(synchronization ? initialNetworkAdapters : undefined);
 
     useEffect(() => {
-        setPeerJsAdapter(new PeerjsNetworkAdapter(settings.getConnector()));
-        if (settings.getSynchronization() || settings.getP2P()) {
+        if (settings.getP2P()) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setNetworkAdapters(initialP2PNetworkAdapter);
+            setPeerJsAdapter(new PeerjsNetworkAdapter(settings.getConnector()));
+        } else if (settings.getSynchronization()) {
             // Does not cause cascading renders (apparently) => ignore error
             setNetworkAdapters(initialNetworkAdapters);
-
         } else {
             setNetworkAdapters(undefined);
         }
@@ -67,7 +73,7 @@ export const usePasswordManagerViewModel = () => {
     }
 
     const onIdle = () => {
-        if(Settings.getSettings().getTimeoutActive() && loggedIn) {
+        if (Settings.getSettings().getTimeoutActive() && loggedIn) {
             closeLoggedIn();
             setToastMessage("Der Nutzer wurde auf Grund von Inaktivität automatisch abgemeldet.");
             setToastVisible(true);
@@ -86,7 +92,7 @@ export const usePasswordManagerViewModel = () => {
         if (loggedIn) {
             idleTimer.reset()
         }
-    },[timeout]);
+    }, [timeout]);
 
     return {
         repo,

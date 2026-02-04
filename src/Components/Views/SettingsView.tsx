@@ -172,22 +172,22 @@ const SettingsView: React.FC<{
                                                     />
                                                 )}
                                             </div>)}
+                                        {!viewModel.P2P ? null :
+                                            <div className={"connection-settings"}>
+
+                                                <h4>Peer-To-Peer Verbidung</h4>
+                                                <label>Eigene Peer-ID:</label>
+                                                <label className={"current-server"}>{viewModel.getPeerId()}</label>
+                                                <label>Fremde Peer-ID:</label>
+                                                <input type="text"
+                                                       onChange={(e) => viewModel.setConnection(e.target.value)}
+                                                       value={Settings.getSettings().getConnector().peer}
+                                                       style={{marginBottom: "2vh"}}
+                                                />
+                                            </div>
+                                        }
                                     </div>
                                 )}
-                                {!viewModel.P2P ? null :
-                                    <div className={"connection-settings"}>
-
-                                        <h4>Peer-To-Peer Verbidung</h4>
-                                        <label>Eigene Peer-ID:</label>
-                                        <label className={"current-server"}>{viewModel.getPeerId()}</label>
-                                        <label>Fremde Peer-ID:</label>
-                                        <input type="text"
-                                               onChange={(e) => viewModel.setConnection(e.target.value)}
-                                               value={Settings.getSettings().getConnector().peer}
-                                               style={{marginBottom: "2vh"}}
-                                        />
-                                    </div>
-                                }
                             </div>
                         )}
 
