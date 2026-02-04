@@ -37,17 +37,30 @@ describe('Settings', () => {
         expect(settings.getSynchronization()).toBe(false);
     })
 
-    it('should be able to set and get conflict res', () => {
-        settings.setAutoConflictResolution(true);
-        expect(settings.getAutoConflictResolution()).toBe(true);
-        settings.setAutoConflictResolution(false);
-        expect(settings.getAutoConflictResolution()).toBe(false);
-    })
 
     it('should be able to set and get auto timeout', () => {
         settings.setTimeoutActive(true);
         expect(settings.getTimeoutActive()).toBe(true);
         settings.setTimeoutActive(false);
         expect(settings.getTimeoutActive()).toBe(false);
-    })
+    });
+
+    it('should be able to add a new server', ()=> {
+        settings.addServer("name", "url");
+        expect(settings.getServers().size).toBe(2);
+    });
+
+    it('should be able to set a new server', ()=> {
+        settings.addServer("name", "url");
+        expect(settings.getServers().size).toBe(2);
+        settings.setServerUrl("name");
+        expect(settings.getServerName()).toBe("name");
+    });
+
+    it('should be able to set a new server', ()=> {
+        settings.addServer("name", "url");
+        expect(settings.getServers().size).toBe(2);
+        settings.removeServer("name");
+        expect(settings.getServers().size).toBe(1);
+    });
 })

@@ -37,6 +37,8 @@ export const useLoginViewModel = (
     const [isEnterPasswordDialogOpen, setIsEnterPasswordDialogOpen] = useState(false);
     const [showToast, setShowToast] = useState<boolean>(false);
     const [toastMessage, setToastMessage] = useState<string>("");
+    const [databaseToDelete, setDatabaseToDelete] = useState<string | null>(null);
+    const [hidePassword, setHidePassword] = useState<boolean>(true);
 
     const setLoadingScreenActive = useLoadingScreen();
 
@@ -179,22 +181,34 @@ export const useLoginViewModel = (
 
         if (masterPassword) {
             tryOpenDatabase(masterPassword, name);
+        } else {
+            repo.find(url);
         }
     }
 
 
     /**
-     * Removes a database from the list of available databases
+     * Initiates the deletion of a database
      *
-     * @param name the name of the database to remove
+     * @param name the name of the database to delete
      */
     function deleteDatabase(name: string) {
+        setDatabaseToDelete(name);
+    }
+
+    /**
+     * Confirms the deletion of a database
+     *
+     * @param name the name of the database to delete
+     */
+    function confirmDeleteDatabase(name: string) {
         const updatedDatabases = new Map(databases);
         const id = updatedDatabases.get(name)!;
         updatedDatabases.delete(name);
         setDatabases(updatedDatabases);
         removeDatabase(name);
         repo.delete(id);
+        setDatabaseToDelete(null);
     }
 
     /**
@@ -247,13 +261,13 @@ export const useLoginViewModel = (
         }
 
         if (name === "") {
-            setToastMessage("Bitte wähle einen Namen")
+            setToastMessage("Bitte wähle einen Namen");
             setShowToast(true);
             return;
         }
 
         if (!FileList) {
-            setToastMessage("Bitte wähle eine Datei")
+            setToastMessage("Bitte wähle eine Datei");
             setShowToast(true);
             return;
         }
@@ -271,6 +285,14 @@ export const useLoginViewModel = (
         addDatabase(dbName, handle.url);
     }
 
+    /**
+     * Toggles the password from ****** to the string and back
+     */
+    function toggleHidePassword() {
+        setHidePassword(!hidePassword);
+    }
+
+
     return {
         databaseNames,
         isAddDialogOpen,
@@ -278,6 +300,8 @@ export const useLoginViewModel = (
         databases,
         showToast,
         toastMessage,
+        databaseToDelete,
+        hidePassword,
 
         importDatabaseFromFile,
         setShowToast,
@@ -292,5 +316,8 @@ export const useLoginViewModel = (
         setToastMessage,
         deleteDatabase,
         changeDatabaseName,
+        confirmDeleteDatabase,
+        setDatabaseToDelete,
+        toggleHidePassword,
     };
 };

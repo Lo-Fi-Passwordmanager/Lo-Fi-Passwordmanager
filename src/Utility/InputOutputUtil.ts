@@ -1,4 +1,4 @@
-export async function saveFile (dataPromise: Promise<Uint8Array<ArrayBufferLike> | undefined>)  {
+export async function saveFile(dataPromise: Promise<Uint8Array<ArrayBufferLike> | undefined>) {
     const data = await dataPromise;
     if (data == undefined) {
         console.error("No data received to save.");
@@ -9,13 +9,13 @@ export async function saveFile (dataPromise: Promise<Uint8Array<ArrayBufferLike>
     // Replace 'application/octet-stream' with your specific type (e.g., 'image/png')
 
     const stableData = new Uint8Array(data);
-    const blob = new Blob([stableData], { type: 'application/octet-stream' });
+    const blob = new Blob([stableData], {type: "application/octet-stream"});
 
     //Create a URL for the Blob and an anchor element to click on it
     const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.download = ('ExportierteDatenbank-' + new Date().toDateString() +  '.txt').replaceAll(" ", "-");
+    link.download = ("ExportierteDatenbank-" + new Date().toDateString() + ".encpwdb").replaceAll(" ", "-");
 
     document.body.appendChild(link);
     link.click();
@@ -25,7 +25,7 @@ export async function saveFile (dataPromise: Promise<Uint8Array<ArrayBufferLike>
     window.URL.revokeObjectURL(url);
 };
 
-export async function uInt8ArrayFromFile(fileList: FileList | null): Promise<Uint8Array<ArrayBuffer> | undefined>  {
+export async function uInt8ArrayFromFile(fileList: FileList | null): Promise<Uint8Array<ArrayBuffer> | undefined> {
     if (!fileList) {
         return;
     }

@@ -6,6 +6,7 @@ import PasswordView from "./PasswordView.tsx";
 import {RepoContext} from "@automerge/react";
 import LoadingScreen from "./DialogViews/LoadingScreen.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
+import PWMLogo from "../../assets/logo_gelb.svg?inline";
 
 const PasswordManagerView: React.FC = () => {
 
@@ -24,7 +25,7 @@ const PasswordManagerView: React.FC = () => {
                 <LoginView repo={viewModel.repo} setLoggedIn={viewModel.setLoggedIn}
                            setAutomergeFacade={viewModel.setAutomergeFacade}
                            securityProvider={viewModel.securityProvider}
-                setOpenedDbName={viewModel.setOpenedDatabaseName}/>
+                           setOpenedDbName={viewModel.setOpenedDatabaseName}/>
                 <ToastDialog message={viewModel.toastMessage}
                              isVisible={viewModel.toastVisible}
                              onClose={() => viewModel}>
@@ -36,9 +37,14 @@ const PasswordManagerView: React.FC = () => {
         return (
             <Suspense fallback={<LoadingScreen/>}>
                 <RepoContext.Provider value={viewModel.repo}>
+                    <div className={"header"} style={{height: '5vh', display: 'flex', alignItems: 'center', gap: '2rem'}}>
+                        <img src={PWMLogo} className="logo header" alt="Passwortmanager Logo"/>
+                        <h2>LoFi Passwortmanager</h2>
+                        <SettingsView automergeFacade={viewModel.getAutomergeFacade()} openedDbName={viewModel.openedDatabaseName}/>
+                    </div>
                     <PasswordView automergeFacade={viewModel.getAutomergeFacade()}
-                    closeDatabase={() => viewModel.closeLoggedIn()}
-                    openedDbName={viewModel.openedDatabaseName}/>
+                                  closeDatabase={() => viewModel.closeLoggedIn()}
+                                  openedDbName={viewModel.openedDatabaseName}/>
                 </RepoContext.Provider>
             </Suspense>
         );

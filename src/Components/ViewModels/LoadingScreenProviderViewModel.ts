@@ -14,14 +14,10 @@ export function useLoadingScreen() {
 }
 
 export const useLoadingScreenProviderViewModel = () => {
-    const [loading, setLoading] = useState(false);
-
-    function setLoadingScreen(active: boolean) {
-        setLoading(active);
-    }
+    const [loading, setLoadingScreen] = useState(false);
 
     return {
         loading,
-        setLoadingScreen
+        setLoadingScreen,
     };
 };

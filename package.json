@@ -1,5 +1,5 @@
 {
-  "name": "wallah",
+  "name": "Lo-Fi",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,12 +12,15 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
-    "test:ci": "vitest run"
+    "test:ci": "vitest run",
+    "coverage": "vitest --ui --coverage.enabled=true"
   },
   "dependencies": {
     "@automerge/automerge": "^3.2.2",
     "@automerge/automerge-repo": "^2.5.1",
     "@automerge/react": "^2.5.1",
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
     "@noble/ciphers": "^2.1.1",
     "@noble/hashes": "^2.0.1",
     "@testing-library/jest-dom": "^6.9.1",
@@ -25,10 +28,13 @@
     "automerge-repo-network-peerjs": "^1.2.3",
     "hdd": "^0.0.0",
     "jsdom": "^27.4.0",
+    "qr-scanner": "^1.4.2",
     "peerjs": "^1.5.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-icons": "^5.5.0",
     "react-idle-timer": "^5.7.2",
+    "react-qr-code": "^2.0.18",
     "vite-plugin-wasm": "^3.3.0"
   },
   "devDependencies": {
@@ -40,6 +46,7 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
     "@vitest/coverage-v8": "^4.0.17",
+    "@vitest/ui": "4.0.17",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",

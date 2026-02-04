@@ -13,11 +13,16 @@ export const useSettingsViewModel = () => {
     // Reactive state to store values during runtime
     const [darkMode, setDarkMode] = useState(settings.getDarkMode());
     const [synchronisation, setSynchronisation] = useState(settings.getSynchronization());
-    const [autoConflictRes, setAutoConflictRes] = useState(settings.getAutoConflictResolution());
+    // not working right now
+    //const [autoConflictRes, setAutoConflictRes] = useState(settings.getAutoConflictResolution());
     const [timeOutActive, setTimeOutActive] = useState(settings.getTimeoutActive());
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [timeoutLength, setTimeoutLength] = useState(settings.getTimeoutLength());
     const [activeTab, setActiveTab] = useState<"general" | "database" | "about">("general");
+    const [serverName, setServerName] = useState<string>(settings.getServerName());
+    const [servers, setServers] = useState<Map<string, string>>(settings.getServers());
+    const [serverNames, setServerNames] = useState<string[]>(Array.from(servers.keys()));
+    const [addServerDialogOpen, setAddServerDialogOpen] = useState<boolean>(false);
 
 
     document.getElementsByTagName("html")[0]?.setAttribute("data-theme", darkMode ? "dark" : "light");
@@ -27,10 +32,26 @@ export const useSettingsViewModel = () => {
     useEffect(() => {
         settings.setDarkMode(darkMode);
         settings.setSynchronization(synchronisation);
-        settings.setAutoConflictResolution(autoConflictRes);
+        //settings.setAutoConflictResolution(autoConflictRes);
         settings.setTimeoutActive(timeOutActive);
         settings.setTimeoutLength(timeoutLength);
-    }, [darkMode, synchronisation, autoConflictRes, timeOutActive, settings, timeoutLength]);
+    }, [darkMode, synchronisation,
+        //autoConflictRes,
+        timeOutActive, settings, timeoutLength]);
+
+    useEffect(() => {
+        const handleUpdate = () => {
+            setServers(settings.getServers());
+        }
+        const unsubscribe = settings.subscribe(handleUpdate);
+        return () => {
+            unsubscribe();
+        };
+    }, [settings]);
+
+    useEffect(() => {
+        setServerNames(Array.from(servers.keys()));
+    }, [servers]);
 
 
     // Update darkMode
@@ -43,9 +64,24 @@ export const useSettingsViewModel = () => {
         setSynchronisation(!synchronisation);
     }
 
+    function addServer(name: string, url: string) {
+        //TODO: Add validation for name and url
+        settings.addServer(name, url);
+    }
+
+    function removeServer(server: string) {
+        settings.removeServer(server);
+    }
+
+    function selectServer(server: string) {
+        settings.setServerUrl(server);
+        setServerName(server);
+    }
+
+    /*
     function toggleAutoConflictRes() {
         setAutoConflictRes(!autoConflictRes);
-    }
+    }*/
 
     function toggleTimeOutActive() {
         setTimeOutActive(!timeOutActive);
@@ -80,22 +116,29 @@ export const useSettingsViewModel = () => {
     return {
         darkMode,
         synchronisation,
-        autoConflictRes,
+        //autoConflictRes,
         timeOutActive,
         settingsOpen,
         timeoutLength,
         activeTab,
-        setActiveTab,
+        serverName,
+        addServerDialogOpen,
+        serverNames,
 
+        setActiveTab,
         setConnection,
         toggleDarkMode,
         toggleSynchronisation,
-        toggleAutoConflictRes,
+        //toggleAutoConflictRes,
         toggleTimeOutActive,
         setSettingsOpen,
         setTimeOutLengthVM,
         increase,
         decrease,
         getPeerId,
+        addServer,
+        removeServer,
+        setAddServerDialogOpen,
+        selectServer,
     };
 };

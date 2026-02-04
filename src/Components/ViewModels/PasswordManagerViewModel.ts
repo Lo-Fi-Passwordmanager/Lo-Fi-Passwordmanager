@@ -18,7 +18,7 @@ export const usePasswordManagerViewModel = () => {
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
     const [automergeFacade, setAutomergeFacade] = useState<AutomergeFacade | null>(null);
     const [securityProvider] = useState(() => new SecurityProvider());
-    const [timeout, setTimeout] = useState(Settings.getSettings().getTimeoutLength() * 60000);
+    const timeout = Settings.getSettings().getTimeoutLength() * 60000;
     const [toastMessage, setToastMessage] = useState("");
     const [toastVisible, setToastVisible] = useState(false);
     const [synchronization] = useState<boolean>(settings.getSynchronization());
@@ -28,7 +28,7 @@ export const usePasswordManagerViewModel = () => {
 
     const initialNetworkAdapters = [
         new BroadcastChannelNetworkAdapter(),
-        new WebSocketClientAdapter("wss://5bcaaf94-60ef-4757-b55c-5f2e443c480c.ka.bw-cloud-instance.org/"),
+        new WebSocketClientAdapter(settings.getServerUrl()),
         peerJsAdapter,
     ];
 
@@ -86,13 +86,7 @@ export const usePasswordManagerViewModel = () => {
         if (loggedIn) {
             idleTimer.reset()
         }
-    },[idleTimer, loggedIn, timeout]);
-
-    useEffect(() => {
-        return settings.subscribe(() => {
-            setTimeout(settings.getTimeoutLength() * 60000);
-        });
-    }, [settings]);
+    },[timeout]);
 
     return {
         repo,
