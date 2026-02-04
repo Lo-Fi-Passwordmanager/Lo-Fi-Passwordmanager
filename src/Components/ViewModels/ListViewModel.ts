@@ -16,7 +16,6 @@ import {useDndContext, useDraggable, useDroppable} from "@dnd-kit/core";
  * @param expandFolderId method to expand the folder with the given id
  * @param collapseFolderId method to collapse the folder with the given id
  * @param isFolderExpanded method to check if the folder with the given id is expanded
- * @param getSortedChildren method to get the sorted children of a folder
  */
 export const useListViewModel = (
     topItem: Item,

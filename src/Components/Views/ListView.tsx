@@ -11,8 +11,21 @@ import type {Folder} from "../../Model/Folder.ts";
 /* eslint-disable react-hooks/refs */ //react and the eslint do not like each other: https://github.com/facebook/react/issues/34775
 /**
  * The View that represents the whole database, which is represented by {@link Entry}/{@link Folder} Class Instances
- * @param item the item which should be depicted, if this is a folder, all of its content is also depicted
- * @param onSetEntry the Method that selects an entry to be shown in the {@link EntryView}
+ *
+ * @param item The current item to be shown
+ * @param setCurItem method to set the currently selected item
+ * @param curItem the currently selected item
+ * @param setItemCreationDialog method to open the item creation dialog
+ * @param setCurrentParent method to set the current parent folder
+ * @param deleteItem method to delete an item
+ * @param dirtyItemId
+ * @param openedDbName the name of the currently opened database
+ * @param selectedItemId the id of the item that was selected and is to be highlighted
+ * @param createdFolderId the id of the folder that was just created and is to be highlighted
+ * @param setCreatedFolderId method to set the id of the folder that was just created
+ * @param updateItemTitle method to update the title of an item
+ * @param inEditable whether an entry is currently being edited
+ * @param level the current level of indentation (depth in the tree)
  */
 const ListView: React.FC<{
     item: Item,
