@@ -76,7 +76,7 @@ export const useListViewModel = (
     }
 
     function toggleExpanded() {
-        if (isFolderExpanded(topItem.id)) {
+        if (!isFolderExpanded(topItem.id)) {
             expandFolderId(topItem.id);
         } else {
             collapseFolderId(topItem.id);
