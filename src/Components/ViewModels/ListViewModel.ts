@@ -11,6 +11,14 @@ import {useDndContext, useDraggable, useDroppable} from "@dnd-kit/core";
  * @param topItem the item that is on top of the list to be shown. Shows this item and all below
  * @param currentSortCrit the current sort criterion to be used
  * @param isAscending whether the sorting should be ascending or descending
+ * @param dirtyItemId the id of the item that was just modified externally and needs to be re-fetched
+ * @param setCurrItem method to set the current item in the parent view model
+ * @param updateItemTitle method to update the title of an item in the automerge doc
+ * @param setCreatedFolderId method to set the created folder id in the parent view model
+ * @param createdFolderID the id of the folder that was just created
+ * @param expandFolderId method to expand the folder with the given id
+ * @param collapseFolderId method to collapse the folder with the given id
+ * @param isFolderExpanded method to check if the folder with the given id is expanded
  */
 export const useListViewModel = (
     topItem: Item,
@@ -20,10 +28,12 @@ export const useListViewModel = (
     setCurrItem: (entry: Entry) => void,
     updateItemTitle: (itemId: string, newTitle: string) => void,
     setCreatedFolderId: (folderId: string | null) => void,
-    createdFolderID: string | null
+    createdFolderID: string | null,
+    expandFolderId: (folderId: string) => void,
+    collapseFolderId: (folderId: string) => void,
+    isFolderExpanded: (folderId: string) => boolean,
 ) => {
 
-    const [extended, setExtended] = useState(true);
     const [inEditName, setInEditName] = useState(false);
     const [newTitle, setItemTitle] = useState(topItem.title);
     const {active} = useDndContext();
@@ -66,12 +76,16 @@ export const useListViewModel = (
         }
     }
 
-    function toggleExtended() {
-        setExtended(!extended);
+    function toggleExpanded() {
+        if (!isFolderExpanded(topItem.id)) {
+            expandFolderId(topItem.id);
+        } else {
+            collapseFolderId(topItem.id);
+        }
     }
 
-    function getExtended() {
-        return extended;
+    function expandFolder() {
+        expandFolderId(topItem.id);
     }
 
     function getItem() {
@@ -88,7 +102,7 @@ export const useListViewModel = (
 
 
     /**
-     * Updates the title of the topItem in the automerge doc, should only be called, if a updateItemTitle function is given into the view model
+     * Updates the title of the topItem in the automerge doc, should only be called, if a updateItemTitle funciton is given into the view model
      */
     function updateTitleInAutomerge() {
         updateItemTitle(topItem.id, newTitle);
@@ -161,6 +175,14 @@ export const useListViewModel = (
     return {
         newTitle,
         inEditName,
+        descendantIds,
+        isInvalidDropTarget,
+        attributes,
+        listeners,
+        isDragging,
+        transform,
+        isOver,
+
         setItemTitle,
         updateTitleInAutomerge,
         setAndStoreEditName,
@@ -168,17 +190,9 @@ export const useListViewModel = (
         isItemFolder,
         isItemEntry,
         getItem,
-        toggleExtended,
-        getExtended,
-        setExtended,
-        descendantIds,
-        isInvalidDropTarget,
+        toggleExpanded,
         setFolderRef,
         setDraggableRef,
-        attributes,
-        listeners,
-        isDragging,
-        transform,
-        isOver
+        expandFolder,
     };
 };

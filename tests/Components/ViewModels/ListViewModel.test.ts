@@ -15,6 +15,9 @@ describe("ListViewModel", () => {
     const updateItemTitle = vi.fn();
     const setCreatedFolderId = vi.fn();
     const createdFolderId = null;
+    const isFolderExpanded = vi.fn();
+    const expandFolderId = vi.fn();
+    const collapseFolderId = vi.fn();
 
 
     const subFolder1 = new Folder("subFolder 1", "123", new Date(), new Date());
@@ -37,56 +40,42 @@ describe("ListViewModel", () => {
 
     it("should be able to tell when its a folder", () => {
         const {result} = renderHook(() =>
-            useListViewModel(topItem, currentSortCrit, isAscending, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId));
+            useListViewModel(topItem, currentSortCrit, isAscending, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded));
         expect(result.current.isItemFolder()).toBe(true);
         expect(result.current.isItemEntry()).toBe(false);
     });
 
     it("should be able to tell when its an entry", () => {
         const {result} = renderHook(() =>
-            useListViewModel(entry, currentSortCrit, isAscending, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId));
+            useListViewModel(entry, currentSortCrit, isAscending, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded));
         expect(result.current.isItemFolder()).toBe(false);
         expect(result.current.isItemEntry()).toBe(true);
     });
 
     it("should be able to return itself", () => {
         const {result} = renderHook(() =>
-            useListViewModel(topItem, currentSortCrit, isAscending, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId));
+            useListViewModel(topItem, currentSortCrit, isAscending, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded));
         expect(result.current.getItem()).toStrictEqual(topItem);
     });
 
     it("should be able to return its children", () => {
         const {result} = renderHook(() =>
-            useListViewModel(topItem, currentSortCrit, isAscending, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId));
+            useListViewModel(topItem, currentSortCrit, isAscending, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded));
         const children = result.current.getChildren();
         expect(children.length).toBe(4);
         const sortedByTitle = [subFolder1, entry, entry2, entry3].sort((a, b) => a.title.localeCompare(b.title));
         expect(children).toStrictEqual(sortedByTitle);
     });
 
-    it("should correctly handle to extended state", () => {
-        const {result} = renderHook(() =>
-            useListViewModel(topItem, currentSortCrit, isAscending, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId));
-        expect(result.current.getExtended()).toBe(true);
-        act(() => {
-            result.current.toggleExtended();
-        });
-        expect(result.current.getExtended()).toBe(false);
-        act(() => {
-            result.current.toggleExtended();
-        });
-        expect(result.current.getExtended()).toBe(true);
-    });
-
     it("should return nothing as childern when the item is an entry", () => {
         const {result} = renderHook(() =>
-            useListViewModel(entry, currentSortCrit, isAscending, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId));
+            useListViewModel(entry, currentSortCrit, isAscending, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded));
         expect(result.current.getChildren()).toBe(undefined);
     });
 
     it('should be able to call for an update to an item in automerge', async () => {
         const {result} = renderHook(() =>
-            useListViewModel(topItem, currentSortCrit, isAscending, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId));
+            useListViewModel(topItem, currentSortCrit, isAscending, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded));
         act(() => {
             result.current.setItemTitle("newName");
         })
