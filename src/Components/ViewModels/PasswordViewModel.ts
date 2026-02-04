@@ -282,15 +282,15 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     }
 
     function expandFolder(folderId: string) {
-        setExpandedFolders(prev => new Set(prev).add(folderId));
+        const newSet = new Set(expandedFolders);
+        newSet.add(folderId);
+        setExpandedFolders(newSet);
     }
 
     function collapseFolder(folderId: string) {
-        setExpandedFolders(prev => {
-            const newSet = new Set(prev);
-            newSet.delete(folderId);
-            return newSet;
-        });
+        const newSet = new Set(expandedFolders);
+        newSet.delete(folderId);
+        setExpandedFolders(newSet);
     }
 
     function isFolderExpanded(folderId: string) {
