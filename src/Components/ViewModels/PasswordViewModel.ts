@@ -107,24 +107,6 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         saveCurrentSortCriterion(criterion)
     }
 
-    /**
-     * returns the current sort criterion
-     */
-    function getCurSortCriterion() {
-        return curSortCrit;
-    }
-
-    /**
-     * returns the current entry that should be shown
-     */
-    function getCurEntry() {
-        return curItem;
-    }
-
-    function getInItemCreation() {
-        return inItemCreation;
-    }
-
     function getRootFolder() {
         return reactiveFacade.tree.rootFolder;
     }
@@ -165,9 +147,6 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setInEditable(!inEditable);
     }
 
-    function getCurParent() {
-        return curParent;
-    }
 
     function updateItemAttribute(itemId: string, changes: [Attribute, string | Date][]) {
         reactiveFacade.updateItem(itemId, changes);
@@ -313,13 +292,16 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         createdFolderId,
         itemToDelete,
         sensors,
+        curSortCrit,
+        curItem,
+        curParent,
+        inItemCreation,
 
         setInEntryCreation,
         toggleHidePassword,
         setSearchValue,
         copyToClipboardAndClear,
         setCurItem,
-        getCurEntry,
         getRootFolder,
         addItem,
         setToastMessage,
@@ -327,14 +309,11 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setInEditable,
         updateItemAttribute,
         toggleInEdit,
-        getInItemCreation,
         setInItemCreation,
         setCurParent,
-        getCurParent,
         deleteItem,
         setAndStoreSortCriterion,
         toggleOrder,
-        getCurSortCriterion,
         handleDragEnd,
         goToItem,
         updateItemTitle,

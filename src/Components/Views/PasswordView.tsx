@@ -36,7 +36,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
     return (
         <div style={{margin: "10px", height: "90vh"}}>
             {/*Dialog for creating a new Entry*/}
-            {passwordViewModel.getInItemCreation() &&
+            {passwordViewModel.inItemCreation &&
                 <ItemCreationDialog
                     addItem={passwordViewModel.addItem}
                     cancelItemCreation={() => passwordViewModel.setInItemCreation(false)}
@@ -46,7 +46,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                 <div className="borderBox" style={{width: "30%"}}>
                     {/*Container for everything related to the search/Sort features */}
                     <OrganizeListView
-                        getCurSortCriterion={passwordViewModel.getCurSortCriterion}
+                        getCurSortCriterion={() => passwordViewModel.curSortCrit}
                         setCurSortCriterion={passwordViewModel.setAndStoreSortCriterion}
                         toggleOrder={passwordViewModel.toggleOrder}
                         isAscending={passwordViewModel.isAscending}
@@ -64,7 +64,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                             root={passwordViewModel.getRootFolder()}
                             setCurItem={passwordViewModel.setCurItem}
                             deleteItem={passwordViewModel.deleteItem}
-                            sortCriterion={passwordViewModel.getCurSortCriterion()}
+                            sortCriterion={passwordViewModel.curSortCrit}
                             isAscending={passwordViewModel.isAscending}
                             filterText={passwordViewModel.searchValue}
                             goToFolder={passwordViewModel.goToItem}
@@ -81,10 +81,10 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                                 setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
                                 setCurrentParent={passwordViewModel.setCurParent}
                                 deleteItem={passwordViewModel.deleteItem}
-                                sortCriterion={passwordViewModel.getCurSortCriterion()}
+                                sortCriterion={passwordViewModel.curSortCrit}
                                 isAscending={passwordViewModel.isAscending}
                                 dirtyItemId={passwordViewModel.dirtyItemId}
-                                getCurItem={passwordViewModel.getCurEntry}
+                                getCurItem={() => passwordViewModel.curItem}
                                 openedDbName={openedDbName}
                                 updateItemTitle={passwordViewModel.updateItemTitle}
                                 selectedItemId={passwordViewModel.selectedItemId}
@@ -103,7 +103,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                 <div className="borderBox" style={{width: "70%", position: "relative"}}>
                     {/*Depending on the state, either shows the editable or the normal/noneditable passwordView*/}
                     {!passwordViewModel.inEditable &&
-                        <EntryView item={passwordViewModel.getCurEntry()}
+                        <EntryView item={passwordViewModel.curItem}
                                    deleteItem={passwordViewModel.deleteItem}
                                    copyAndClearClipboard={passwordViewModel.copyToClipboardAndClear}
                                    setEditableView={() => passwordViewModel.toggleInEdit()}
@@ -111,14 +111,14 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                                    toggleHidePassword={passwordViewModel.toggleHidePassword}/>}
 
                     {passwordViewModel.inEditable &&
-                        <EditableEntryView item={passwordViewModel.getCurEntry()}
+                        <EditableEntryView item={passwordViewModel.curItem}
                                            updateItemAttribute={passwordViewModel.updateItemAttribute}
                                            setEditableView={() => passwordViewModel.toggleInEdit()}
                                            createItem={passwordViewModel.createEntry}
                                            inCreation={passwordViewModel.inEntryCreation}
                                            setInCreation={passwordViewModel.setInEntryCreation}
-                                              hidePassword={passwordViewModel.hidePassword}
-                                              toggleHidePassword={passwordViewModel.toggleHidePassword}
+                                           hidePassword={passwordViewModel.hidePassword}
+                                           toggleHidePassword={passwordViewModel.toggleHidePassword}
                         />
                     }
                 </div>
