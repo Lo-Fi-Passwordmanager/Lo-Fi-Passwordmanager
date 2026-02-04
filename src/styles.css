@@ -425,9 +425,17 @@ input[type="number"] {
 }
 
 .logo.header {
-    margin: 0.1rem 0.1rem 0.1rem 2vh;
+    margin: 0.1rem 0.1rem 0.1rem 0;
     height: 100%;
     width: auto;
+}
+
+.password-manager-header {
+    height: 5vh;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 0 2vh;
 }
 
 .squareButton, .settingsButton, .copyButton, .eyeButton, .passwordGenButton {
@@ -495,11 +503,7 @@ input[type="number"] {
 }
 
 .settingsButton {
-    float: right;
-    position: absolute;
-    top: 1%;
-    right: 0.5%;
-    z-index: 90;
+    margin-left: auto;
 }
 
 .dragged {
@@ -1244,5 +1248,35 @@ input:checked + .slider:before {
 
     input:focus + .slider {
         box-shadow: 0 0 1px #1a3b3b;
+    }
+}
+
+.sync-status-indicator {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    position: absolute;
+    left: 50%;
+}
+
+
+/* 3D Spinning SVG */
+.icon-container {
+    perspective: 1000px;
+    display: inline-block;
+}
+
+.spinning-svg {
+    animation: spin-3d 6s infinite linear;
+    transform-origin: center;
+}
+
+@keyframes spin-3d {
+    from {
+        transform: rotateY(0deg);
+    }
+    to {
+        transform: rotateY(360deg);
     }
 }

@@ -35,7 +35,7 @@ const ShareQRDialog: React.FC<ShareQRDialogProps> = ({name, url}: ShareQRDialogP
                         Name der Datenbank auch teilen
                     </label>
 
-                    <QRCode value={viewmodel.qrValue} className="qrCode"/>
+                    <QRCode style={{marginTop:"2vh"}} value={viewmodel.qrValue} className="qrCode"/>
                 </Dialog>
             </>
         );

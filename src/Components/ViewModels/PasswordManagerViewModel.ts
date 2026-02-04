@@ -21,7 +21,6 @@ export const usePasswordManagerViewModel = () => {
     const timeout = Settings.getSettings().getTimeoutLength() * 60000;
     const [toastMessage, setToastMessage] = useState("");
     const [toastVisible, setToastVisible] = useState(false);
-    const [synchronization] = useState<boolean>(settings.getSynchronization());
     const [openedDatabaseName, setOpenedDatabaseName] = useState<string>("");
 
     const [peerJsAdapter, setPeerJsAdapter] = useState<PeerjsNetworkAdapter>(new PeerjsNetworkAdapter(connector));
@@ -30,19 +29,18 @@ export const usePasswordManagerViewModel = () => {
         new BroadcastChannelNetworkAdapter(),
         new WebSocketClientAdapter(settings.getServerUrl()),
     ];
-    
+
     const initialP2PNetworkAdapter = [
         new BroadcastChannelNetworkAdapter(),
         peerJsAdapter,
     ]
 
-    const [networkAdapters, setNetworkAdapters] = useState<NetworkAdapterInterface[] | undefined>(synchronization ? initialNetworkAdapters : undefined);
+    const [networkAdapters, setNetworkAdapters] = useState<NetworkAdapterInterface[] | undefined>(settings.getSynchronization() ? initialNetworkAdapters : (settings.getP2P() ? initialP2PNetworkAdapter : undefined));
 
     useEffect(() => {
+        setPeerJsAdapter(new PeerjsNetworkAdapter(settings.getConnector()));
         if (settings.getP2P()) {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
             setNetworkAdapters(initialP2PNetworkAdapter);
-            setPeerJsAdapter(new PeerjsNetworkAdapter(settings.getConnector()));
         } else if (settings.getSynchronization()) {
             // Does not cause cascading renders (apparently) => ignore error
             setNetworkAdapters(initialNetworkAdapters);
@@ -86,6 +84,14 @@ export const usePasswordManagerViewModel = () => {
         }
     }
 
+    function getSync(): string | null {
+        return settings.getSynchronization() ? "server" : (settings.getP2P() ? "p2p" : null);
+    }
+
+    function getServerName(): string {
+        return settings.getServerName();
+    }
+
     const idleTimer = useIdleTimer({timeout, onIdle, onActive, debounce: 100})
 
     useEffect(() => {
@@ -107,5 +113,7 @@ export const usePasswordManagerViewModel = () => {
         getAutomergeFacade,
         closeLoggedIn,
         setToastVisible,
+        getSync,
+        getServerName
     };
 };
