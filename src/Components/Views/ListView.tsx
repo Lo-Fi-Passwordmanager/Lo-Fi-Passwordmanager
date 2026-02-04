@@ -26,6 +26,10 @@ import type {Folder} from "../../Model/Folder.ts";
  * @param updateItemTitle method to update the title of an item
  * @param inEditable whether an entry is currently being edited
  * @param level the current level of indentation (depth in the tree)
+ * @param expandFolderId method to expand a folder by its id
+ * @param collapseFolderId method to collapse a folder by its id
+ * @param isFolderExpanded method to check whether a folder is expanded by its id
+ * @param getSortedChildren method to get the sorted children of a folder
  */
 const ListView: React.FC<{
     item: Item,
