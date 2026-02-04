@@ -504,6 +504,9 @@ input[type="number"] {
 
 .settingsButton {
     margin-left: auto;
+    position: absolute;
+    right: 2vh;
+    top: 1.5vh
 }
 
 .dragged {
@@ -1258,6 +1261,7 @@ input:checked + .slider:before {
     gap: 12px;
     position: absolute;
     left: 50%;
+    transform: translateX(-50%);
 }
 
 
