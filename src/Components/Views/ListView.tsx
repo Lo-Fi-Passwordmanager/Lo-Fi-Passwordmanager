@@ -114,7 +114,7 @@ const ListView: React.FC<{
                                 onClick={() => listViewModel.toggleExpanded()}
                                 onPointerDown={(e) => e.stopPropagation()}
                         >
-                            {listViewModel.expanded ? "▼" : "▷"}</button>}
+                            {isFolderExpanded(item.id) ? "▼" : "▷"}</button>}
 
                     {(!listViewModel.inEditName && item.id !== createdFolderId) &&
                         <span className={"item-title"}>{(item.id != "") ? item.title : openedDbName}</span>
@@ -157,7 +157,7 @@ const ListView: React.FC<{
                 {/* Recursive call of children with indent to visualizes depth in the tree */}
                 <div className="listViewEntryWrapper"
                      style={{
-                         display: (listViewModel.expanded ? "block" : "none"),
+                         display: (isFolderExpanded(item.id) ? "block" : "none"),
                          marginLeft: level <= 8 ? "15px" : "0px"
                      }}>
                     {listViewModel.getChildren() &&
@@ -186,8 +186,7 @@ const ListView: React.FC<{
                         })}
                 </div>
             </>
-        )
-            ;
+        );
     }
 };
 
