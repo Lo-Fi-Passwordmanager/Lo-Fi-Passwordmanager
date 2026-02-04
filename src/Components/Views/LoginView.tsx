@@ -74,10 +74,10 @@ const LoginView: React.FC<{
                     label2="Masterpasswort"
                     createDatabase={viewModel.createDatabase}
                     onCancel={viewModel.closeAddDialog}
-                    storeDatabase={viewModel.importDatabaseFromURL}
+                    importDatabaseFromURL={viewModel.importDatabaseFromURL}
                     setToastMessage={viewModel.setToastMessage}
                     setShowToast={viewModel.setShowToast}
-                    importDatabase={viewModel.importDatabaseFromFile}
+                    importDatabaseFromFile={viewModel.importDatabaseFromFile}
                     hidePassword={viewModel.hidePassword}
                     toggleHidePassword={viewModel.toggleHidePassword}
                 />

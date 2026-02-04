@@ -10,7 +10,11 @@ import {
 } from "../../Utility/Storage.ts";
 import {type DragEndEvent, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
 import {useSettings} from "../../Model/Settings.ts";
+import type {Folder} from "../../Model/Folder.ts";
 
+/**
+ * Criteria as enum by which items are sorted
+ */
 export const SortCriteria = {
     Name: "NAME",
     CreatedAt: "CREATED",
@@ -292,20 +296,58 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setTimeout(() => setSelectedItemId(null), 1000);
     }
 
+    /**
+     * Expands the folder with the given id
+     * @param folderId
+     */
     function expandFolder(folderId: string) {
         const newSet = new Set(expandedFolders);
         newSet.add(folderId);
         setExpandedFolders(newSet);
     }
 
+    /**
+     * Collapses the folder with the given id
+     * @param folderId
+     */
     function collapseFolder(folderId: string) {
         const newSet = new Set(expandedFolders);
         newSet.delete(folderId);
         setExpandedFolders(newSet);
     }
 
+    /**
+     * Returns whether the folder with the given id is expanded
+     * @param folderId
+     */
     function isFolderExpanded(folderId: string) {
         return expandedFolders.has(folderId);
+    }
+
+    /**
+     * Gets the children of the given folder, sorted by the current sort criterion and order
+     */
+    function getSortedChildren(folder: Folder): Item[] {
+        switch (`${curSortCrit}-${isAscending}`) {
+            case `${SortCriteria.Name}-true`:
+                return (folder).entries.slice().sort((a, b) => a.title.localeCompare(b.title));
+
+            case `${SortCriteria.Name}-false`:
+                return (folder).entries.slice().sort((a, b) => b.title.localeCompare(a.title));
+
+            case `${SortCriteria.CreatedAt}-true`:
+                return (folder).entries.slice().sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+
+            case `${SortCriteria.CreatedAt}-false`:
+                return (folder).entries.slice().sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+
+            case `${SortCriteria.EditedAt}-true`:
+                return (folder).entries.slice().sort((a, b) => a.editedAt.getTime() - b.editedAt.getTime());
+
+            case `${SortCriteria.EditedAt}-false`:
+                return (folder).entries.slice().sort((a, b) => b.editedAt.getTime() - a.editedAt.getTime());
+        }
+        return [];
     }
 
     return {
@@ -353,5 +395,6 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         expandFolder,
         collapseFolder,
         isFolderExpanded,
+        getSortedChildren,
     };
 };

@@ -12,7 +12,7 @@ import {useIdleTimer} from "react-idle-timer";
 import {Settings, useSettings} from "../../Model/Settings.ts";
 
 /**
- * The view model used by the PasswordManagerView.
+ * The view model used by the PasswordManagerView. Manages the state and logic for the password manager.
  */
 export const usePasswordManagerViewModel = () => {
     const settings = useSettings();

@@ -86,9 +86,9 @@ const SettingsView: React.FC<{
                                                    onChange={(e) => viewModel.setTimeOutLengthVM(e.target.value)}
                                                    min="1"/>
                                             <button className={"squareButton"} style={{boxShadow: "none"}}
-                                                    onClick={viewModel.decrease}><HiMiniMinus size={24}/></button>
+                                                    onClick={viewModel.decreaseTimeout}><HiMiniMinus size={24}/></button>
                                             <button className={"squareButton"} style={{boxShadow: "none"}}
-                                                    onClick={viewModel.increase}><HiMiniPlus size={24}/></button>
+                                                    onClick={viewModel.increaseTimeout}><HiMiniPlus size={24}/></button>
                                         </div>
                                     </div>
                                 )}

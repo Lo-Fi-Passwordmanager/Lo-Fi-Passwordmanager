@@ -2,11 +2,11 @@ import {type Item} from "../../Model/Item.ts";
 import {useListViewModel} from "../ViewModels/ListViewModel.ts";
 import {Entry} from "../../Model/Entry.ts";
 import React from "react";
-import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
 import FolderMenu from "./MenuViews/FolderMenu.tsx";
 import {HiMiniPlus} from "react-icons/hi2";
 import {HiTrash} from "react-icons/hi";
 import {CSS} from "@dnd-kit/utilities";
+import type {Folder} from "../../Model/Folder.ts";
 
 /* eslint-disable react-hooks/refs */ //react and the eslint do not like each other: https://github.com/facebook/react/issues/34775
 /**
@@ -21,8 +21,6 @@ const ListView: React.FC<{
     setItemCreationDialog: () => void,
     setCurrentParent?: (item: Item) => void,
     deleteItem: (item: Item) => void,
-    sortCriterion: SortCriteria,
-    isAscending: boolean,
     dirtyItemId: string | null,
     openedDbName: string,
     selectedItemId: string | null;
@@ -34,6 +32,7 @@ const ListView: React.FC<{
     expandFolderId: (folderId: string) => void;
     collapseFolderId: (folderId: string) => void;
     isFolderExpanded: (folderId: string) => boolean;
+    getSortedChildren: (folder: Folder) => Item[],
 }> = ({
           item,
           setCurItem,
@@ -41,8 +40,6 @@ const ListView: React.FC<{
           setItemCreationDialog,
           setCurrentParent,
           deleteItem,
-          sortCriterion,
-          isAscending,
           dirtyItemId,
           openedDbName,
           selectedItemId,
@@ -53,9 +50,10 @@ const ListView: React.FC<{
           level,
           expandFolderId,
           collapseFolderId,
-          isFolderExpanded
+          isFolderExpanded,
+          getSortedChildren,
       }) => {
-    const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId,collapseFolderId, isFolderExpanded);
+    const listViewModel = useListViewModel(item, dirtyItemId, setCurItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded);
 
     function addButtonPressed() {
         setItemCreationDialog();
@@ -160,8 +158,8 @@ const ListView: React.FC<{
                          display: (isFolderExpanded(item.id) ? "block" : "none"),
                          marginLeft: level <= 8 ? "15px" : "0px"
                      }}>
-                    {listViewModel.getChildren() &&
-                        listViewModel.getChildren()!.map((item: Item, index: number) => {
+                    {getSortedChildren(item as Folder) &&
+                        getSortedChildren(item as Folder)!.map((item: Item, index: number) => {
                             return <ListView
                                 key={index}
                                 item={item}
@@ -170,8 +168,7 @@ const ListView: React.FC<{
                                 setItemCreationDialog={setItemCreationDialog}
                                 setCurrentParent={setCurrentParent}
                                 deleteItem={deleteItem}
-                                sortCriterion={sortCriterion}
-                                isAscending={isAscending}
+                                getSortedChildren={getSortedChildren}
                                 dirtyItemId={dirtyItemId} openedDbName={""}
                                 updateItemTitle={updateItemTitle}
                                 selectedItemId={selectedItemId}

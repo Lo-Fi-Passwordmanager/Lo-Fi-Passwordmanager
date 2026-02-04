@@ -1,7 +1,6 @@
 import React from 'react';
 import {Entry} from "../../Model/Entry.ts";
 import {Item} from "../../Model/Item.ts";
-import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
 import {useFilteredListViewModel} from "../ViewModels/FilteredListViewModel.ts";
 import {Folder} from "../../Model/Folder.ts";
 
@@ -13,20 +12,19 @@ import {Folder} from "../../Model/Folder.ts";
  * @param goToFolder the method to navigate to a specific folder
  * @param deleteItem the method to delete a specific item
  * @param sortCriterion the current sort criterion
- * @param isAscending whether the sorting should be ascending or descending
  * @param filterText the text to filter the items by
+ * @param getSortedChildren function to get sorted children of a folder
  */
 const FilteredListView: React.FC<{
     root: Item,
     setCurItem: (entry: Entry) => void,
     goToFolder: (folder: Folder) => void,
     deleteItem: (item: Item) => void,
-    sortCriterion: SortCriteria,
-    isAscending: boolean,
     filterText: string
-}> = ({root, setCurItem, goToFolder,deleteItem, isAscending, sortCriterion, filterText}) => {
+    getSortedChildren: (folder: Folder) => Item[],
+}> = ({root, setCurItem, goToFolder,deleteItem, filterText, getSortedChildren}) => {
 
-    const viewModel = useFilteredListViewModel(root as Folder, filterText, sortCriterion, isAscending);
+    const viewModel = useFilteredListViewModel(root as Folder, filterText, getSortedChildren);
 
     const filteredEntries = viewModel.getFilteredEntries();
     const filteredFolders = viewModel.getFilteredFolders();

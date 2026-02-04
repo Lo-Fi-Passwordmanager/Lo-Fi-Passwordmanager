@@ -58,11 +58,11 @@ describe("SettingsViewModel", () => {
         });
         expect(result.current.timeoutLength).toBe(1);
         act(() => {
-            result.current.increase();
+            result.current.increaseTimeout();
         });
         expect(result.current.timeoutLength).toBe(2);
         act(() => {
-            result.current.decrease();
+            result.current.decreaseTimeout();
         });
         expect(result.current.timeoutLength).toBe(1);
     })
@@ -78,7 +78,7 @@ describe("SettingsViewModel", () => {
         });
         expect(result.current.timeoutLength).toBe(1);
         act(() => {
-            result.current.decrease();
+            result.current.decreaseTimeout();
         });
         expect(result.current.timeoutLength).toBe(1);
     })

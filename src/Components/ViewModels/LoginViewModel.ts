@@ -8,7 +8,8 @@ import {useLoadingScreen} from "./LoadingScreenProviderViewModel.ts";
 import {uInt8ArrayFromFile} from "../../Utility/InputOutputUtil.ts";
 
 /**
- * ViewModel for the LoginView
+ * ViewModel for the LoginView. Provides all data and functions required by the LoginView.
+ *
  * @param repo the automerge repo
  * @param setLoggedIn the function to update the View to switch from loginView to PasswordView.
  * @param setAutomergeFacade the function to update the automergeFacade of the used database on correct Login.
@@ -225,6 +226,11 @@ export const loginViewModel = (
         return true;
     }
 
+    /**
+     * Checks if an automerge url is available or already used
+     *
+     * @param url the automerge url to check
+     */
     function isAutomergeUrlAvailable(url: AutomergeUrl) {
         for (const value of databases.values()) {
             if (value === url) {
@@ -255,6 +261,12 @@ export const loginViewModel = (
     // Close the dialog to log in to a database
     const closeEnterPasswordDialog = () => setIsEnterPasswordDialogOpen(false);
 
+    /**
+     * Imports a database from a file and stores it in localStorage
+     *
+     * @param targetFiles the file list containing the database file
+     * @param name the name of the database
+     */
     async function importDatabaseFromFile(targetFiles: FileList | null, name: string) {
         if (!isNameAvailable(name)) {
             return;

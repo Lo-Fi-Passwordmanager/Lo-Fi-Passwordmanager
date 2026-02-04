@@ -2,15 +2,12 @@ import {Item} from "../../Model/Item.ts";
 import {Folder} from "../../Model/Folder.ts";
 import type {Entry} from "../../Model/Entry.ts";
 import {useEffect, useState, useMemo} from "react";
-import {SortCriteria} from "./PasswordViewModel.ts";
 import {useDndContext, useDraggable, useDroppable} from "@dnd-kit/core";
 
 /**
  * The view model used by the ListView. It has the utility needed for correctly deciding and differentiating {@link Entry} and {@link Folder}
  *
  * @param topItem the item that is on top of the list to be shown. Shows this item and all below
- * @param currentSortCrit the current sort criterion to be used
- * @param isAscending whether the sorting should be ascending or descending
  * @param dirtyItemId the id of the item that was just modified externally and needs to be re-fetched
  * @param setCurrItem method to set the current item in the parent view model
  * @param updateItemTitle method to update the title of an item in the automerge doc
@@ -19,11 +16,10 @@ import {useDndContext, useDraggable, useDroppable} from "@dnd-kit/core";
  * @param expandFolderId method to expand the folder with the given id
  * @param collapseFolderId method to collapse the folder with the given id
  * @param isFolderExpanded method to check if the folder with the given id is expanded
+ * @param getSortedChildren method to get the sorted children of a folder
  */
 export const useListViewModel = (
     topItem: Item,
-    currentSortCrit: SortCriteria,
-    isAscending: boolean,
     dirtyItemId: string | null,
     setCurrItem: (entry: Entry) => void,
     updateItemTitle: (itemId: string, newTitle: string) => void,
@@ -47,33 +43,6 @@ export const useListViewModel = (
 
     if (dirtyItemId && topItem.id === dirtyItemId) {
         setCurrItem(topItem as Entry);
-    }
-
-    /**
-     * Gets the children of the current item, sorted by the current sort criterion and order
-     */
-    function getChildren() {
-        if (topItem.isFolder()) {
-            switch (`${currentSortCrit}-${isAscending}`) {
-                case `${SortCriteria.Name}-true`:
-                    return (topItem as Folder).entries.slice().sort((a, b) => a.title.localeCompare(b.title));
-
-                case `${SortCriteria.Name}-false`:
-                    return (topItem as Folder).entries.slice().sort((a, b) => b.title.localeCompare(a.title));
-
-                case `${SortCriteria.CreatedAt}-true`:
-                    return (topItem as Folder).entries.slice().sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
-
-                case `${SortCriteria.CreatedAt}-false`:
-                    return (topItem as Folder).entries.slice().sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-
-                case `${SortCriteria.EditedAt}-true`:
-                    return (topItem as Folder).entries.slice().sort((a, b) => a.editedAt.getTime() - b.editedAt.getTime());
-
-                case `${SortCriteria.EditedAt}-false`:
-                    return (topItem as Folder).entries.slice().sort((a, b) => b.editedAt.getTime() - a.editedAt.getTime());
-            }
-        }
     }
 
     function toggleExpanded() {
@@ -186,7 +155,6 @@ export const useListViewModel = (
         setItemTitle,
         updateTitleInAutomerge,
         setAndStoreEditName,
-        getChildren,
         isItemFolder,
         isItemEntry,
         getItem,

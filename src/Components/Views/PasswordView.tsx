@@ -64,10 +64,9 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                             root={viewModel.getRootFolder()}
                             setCurItem={viewModel.setCurItem}
                             deleteItem={viewModel.deleteItem}
-                            sortCriterion={viewModel.curSortCrit}
-                            isAscending={viewModel.isAscending}
                             filterText={viewModel.searchValue}
                             goToFolder={viewModel.goToItem}
+                            getSortedChildren={viewModel.getSortedChildren}
                         />}
                         <DndContext collisionDetection={pointerWithin}
                                     onDragEnd={viewModel.handleDragEnd}
@@ -81,8 +80,6 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                                 setItemCreationDialog={() => viewModel.setInItemCreation(true)}
                                 setCurrentParent={viewModel.setCurParent}
                                 deleteItem={viewModel.deleteItem}
-                                sortCriterion={viewModel.curSortCrit}
-                                isAscending={viewModel.isAscending}
                                 dirtyItemId={viewModel.dirtyItemId}
                                 curItem={viewModel.curItem}
                                 openedDbName={openedDbName}
@@ -94,6 +91,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                                 expandFolderId={viewModel.expandFolder}
                                 collapseFolderId={viewModel.collapseFolder}
                                 isFolderExpanded={viewModel.isFolderExpanded}
+                                getSortedChildren={viewModel.getSortedChildren}
                                 level={0}
                             />}
                         </DndContext>
