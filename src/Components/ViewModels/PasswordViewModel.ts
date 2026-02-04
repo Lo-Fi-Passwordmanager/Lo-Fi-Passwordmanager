@@ -141,7 +141,10 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         } else {
             const id = reactiveFacade.insertItem(item, curParent.id);
             item.id = id;
+            // expand created folder
             expandFolder(id);
+            // expand parent folder
+            expandFolder(curParent.id);
             setCurItem(item);
             goToItem(item);
             setCreatedFolderId(id);
@@ -150,6 +153,8 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
 
     function createEntry(item: Item) {
         item.id = reactiveFacade.insertItem(item, curParent.id);
+        expandFolder(item.id);
+        expandFolder(curParent.id);
         setCurItem(item);
         goToItem(item)
     }
