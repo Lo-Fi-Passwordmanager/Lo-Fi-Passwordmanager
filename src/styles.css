@@ -918,6 +918,7 @@ input[type="number"] {
     justify-content: center;
     align-items: center;
     align-content: center;
+    max-width: 45%;
 }
 
 .settings-close-btn {
@@ -1188,4 +1189,15 @@ input[type="number"] {
 
 .settings-tab.active {
     background: var(--panel);
+}
+
+.about-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    justify-content: center;
+}
+
+.about-section {
+    max-width: 100%;
 }

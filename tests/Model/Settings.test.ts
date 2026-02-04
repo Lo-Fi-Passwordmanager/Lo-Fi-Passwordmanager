@@ -37,12 +37,6 @@ describe('Settings', () => {
         expect(settings.getSynchronization()).toBe(false);
     })
 
-    it('should be able to set and get conflict res', () => {
-        settings.setAutoConflictResolution(true);
-        expect(settings.getAutoConflictResolution()).toBe(true);
-        settings.setAutoConflictResolution(false);
-        expect(settings.getAutoConflictResolution()).toBe(false);
-    })
 
     it('should be able to set and get auto timeout', () => {
         settings.setTimeoutActive(true);

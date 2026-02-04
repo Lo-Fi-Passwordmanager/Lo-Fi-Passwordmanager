@@ -166,7 +166,7 @@ const SettingsView: React.FC<{
                                     <h2 style={{marginBottom: "5px"}}>Über diese Anwendung</h2>
                                 </div>
 
-                                <section className="about-section">
+                                <section>
                                     <p><strong>Version:</strong> 0.1.0-beta</p>
                                     <p><strong>Lizenz:</strong> MIT License</p>
                                 </section>
@@ -184,7 +184,7 @@ const SettingsView: React.FC<{
                                 </section>
 
                                 {/* Buttons für React und Automerge */}
-                                <div style={{display: "flex", gap: "10px", justifyContent: "center"}}>
+                                <div className="about-buttons">
                                     <button
                                         onClick={() => window.open("https://react.dev", "_blank")}
                                         style={{padding: "8px 15px", cursor: "pointer"}}>
@@ -207,12 +207,6 @@ const SettingsView: React.FC<{
                                         onClick={() => window.open("https://dndkit.com/", "_blank")}
                                         style={{padding: "8px 15px", cursor: "pointer"}}>
                                         DnD Kit
-                                    </button>
-
-                                    <button
-                                        onClick={() => window.open("https://react-icons.github.io/react-icons/", "_blank")}
-                                        style={{padding: "8px 15px", cursor: "pointer"}}>
-                                        React Icons
                                     </button>
 
                                     <button
