@@ -1,6 +1,6 @@
 import {useSettingsViewModel} from "../ViewModels/SettingsViewModel.ts";
 import React from "react";
-import  {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
 import Close from "./Icons/Close.tsx";
 import {HiMiniCog8Tooth, HiMiniMinus, HiMiniPlus} from "react-icons/hi2";
@@ -147,7 +147,7 @@ const SettingsView: React.FC<{
                                 <h3>Datenbankeinstellungen</h3>
                                 {automergeFacade ? (
                                     <DatabaseSettingsView automergeFacade={automergeFacade}
-                                    openedDatabaseName={openedDbName}/>
+                                                          openedDatabaseName={openedDbName}/>
                                 ) : (
                                     <p>Bitte Datenbank auswählen.</p>
                                 )}
@@ -210,6 +210,12 @@ const SettingsView: React.FC<{
                                     </button>
 
                                     <button
+                                        onClick={() => window.open("https://react-icons.github.io/react-icons/", "_blank")}
+                                        style={{padding: "8px 15px", cursor: "pointer"}}>
+                                        React Icons
+                                    </button>
+
+                                    <button
                                         onClick={() => window.open("https://github.com/nimiq/qr-scanner", "_blank")}
                                         style={{padding: "8px 15px", cursor: "pointer"}}>
                                         QR Scanner
@@ -218,7 +224,7 @@ const SettingsView: React.FC<{
                                     <button
                                         onClick={() => window.open("https://github.com/rosskhanas/react-qr-code", "_blank")}
                                         style={{padding: "8px 15px", cursor: "pointer"}}>
-                                        React Icons
+                                        React QR Code
                                     </button>
                                 </div>
 
