@@ -291,8 +291,8 @@ button:focus-visible {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: center;
     gap: 24px;
+    height: 100%;
 }
 
 .settingsBackground {
@@ -313,8 +313,7 @@ button:focus-visible {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    align-items: center;
-    gap: 8px;
+    gap: 12px;
     white-space: nowrap;
 }
 
@@ -339,14 +338,14 @@ input[type="number"] {
     -moz-appearance: textfield;
 }
 
-.timeout-setting, .server-settings {
+.timeout-setting, .connection-settings {
     display: flex;
     flex-direction: column;
     gap: 8px;
     align-items: flex-start;
 }
 
-.server-settings {
+.connection-settings {
     min-width: 300px;
     width: fit-content;
     max-width: 100%;
@@ -375,7 +374,7 @@ input[type="number"] {
     height: 2.5rem;
     align-content: center;
     display: block;
-    padding: 0 8px;
+    padding: 0 12px;
     white-space: nowrap;
     text-overflow: ellipsis !important;
     overflow: hidden;
@@ -909,7 +908,6 @@ input[type="number"] {
 .settings-content {
     background: var(--dialog-bg);
     flex: 1;
-    padding: 20px;
     overflow-y: auto;
     justify-items: center;
     justify-content: center;
@@ -1197,4 +1195,54 @@ input[type="number"] {
 
 .about-section {
     max-width: 400px;
+}
+
+/* TOGGLE SWITCH STYLES */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 28px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--cancel-button);
+    transition: .4s;
+    border-radius: var(--standard-radius);
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: var(--small-radius);
+}
+
+input:checked + .slider {
+    background-color: var(--panel);
+}
+
+input:checked + .slider:before {
+    transform: translateX(22px);
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #1a3b3b;
+    }
 }

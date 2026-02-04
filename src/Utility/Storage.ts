@@ -263,3 +263,21 @@ export function loadTimeoutLength(): number {
 export function storeTimeoutLength(length: number): void {
     localStorage.setItem(TIMEOUT_LENGTH, JSON.stringify(length));
 }
+
+/**
+ * Loads the boolean for the P2P setting from localStorage
+ *
+ * @returns the P2P setting
+ */
+export function loadP2PSetting(): boolean {
+    return localStorage.getItem("p2p") === "true";
+}
+
+/**
+ * stores the boolean for the P2P setting in localStorage
+ *
+ * @param isP2P the P2P boolean to store
+ */
+export function storeP2PSetting(isP2P: boolean): void {
+    localStorage.setItem("p2p", isP2P.toString());
+}

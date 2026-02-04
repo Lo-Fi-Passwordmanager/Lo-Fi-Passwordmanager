@@ -23,10 +23,9 @@ export const useSettingsViewModel = () => {
     const [servers, setServers] = useState<Map<string, string>>(settings.getServers());
     const [serverNames, setServerNames] = useState<string[]>(Array.from(servers.keys()));
     const [addServerDialogOpen, setAddServerDialogOpen] = useState<boolean>(false);
-
+    const [P2P, setP2P] = useState<boolean>(settings.getP2P());
 
     document.getElementsByTagName("html")[0]?.setAttribute("data-theme", darkMode ? "dark" : "light");
-
 
     // When darkMode is updated, update settings
     useEffect(() => {
@@ -112,6 +111,11 @@ export const useSettingsViewModel = () => {
         }
     }
 
+    function toggleP2P() {
+        setP2P(!P2P);
+        settings.setConnection(!P2P);
+    }
+
 
     return {
         darkMode,
@@ -124,6 +128,7 @@ export const useSettingsViewModel = () => {
         serverName,
         addServerDialogOpen,
         serverNames,
+        P2P,
 
         setActiveTab,
         setConnection,
@@ -140,5 +145,6 @@ export const useSettingsViewModel = () => {
         removeServer,
         setAddServerDialogOpen,
         selectServer,
+        toggleP2P
     };
 };
