@@ -290,7 +290,6 @@ button:focus-visible {
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    width: 100%;
     gap: 24px;
 }
 
@@ -1199,5 +1198,5 @@ input[type="number"] {
 }
 
 .about-section {
-    max-width: 100%;
+    max-width: 400px;
 }
