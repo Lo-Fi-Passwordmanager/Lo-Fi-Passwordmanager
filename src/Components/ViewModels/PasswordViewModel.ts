@@ -141,8 +141,9 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     }
 
     /**
-     * Creates a new entry in the database and sets it as the current item
-     * @param item
+     * Eventually creates an entry in the automerge doc after the user saved the temporary entry in the editable view.
+     *
+     * @param item the new entry
      */
     function createEntry(item: Item) {
         item.id = reactiveFacade.insertItem(item, curParent.id);
@@ -170,8 +171,6 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         const id = curItem.id;
         setCurItem(getRootFolder());
         setDirtyItemId(id);
-
-
     }
 
     /**
