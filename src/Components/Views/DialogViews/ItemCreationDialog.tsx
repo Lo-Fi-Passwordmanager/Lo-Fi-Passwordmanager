@@ -9,19 +9,25 @@ interface ItemCreationDialogProps {
     cancelItemCreation: () => void;
 }
 
+/**
+ * A dialog that allows the user to create a new item (entry or folder).
+ *
+ * @param addItem Function to add the newly created item.
+ * @param cancelItemCreation Function to cancel the item creation process.
+ */
 const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({
                                                                    addItem,
                                                                    cancelItemCreation,
                                                                }: ItemCreationDialogProps) => {
-    const viewmodel = useItemCreationViewModel(addItem, cancelItemCreation);
+    const viewModel = useItemCreationViewModel(addItem, cancelItemCreation);
 
 
     return (<>
             <Dialog title={"Neues Element erstellen"} onCloseDialog={cancelItemCreation}>
                 <Close className="closeIcon" color={"var(--text)"} onClick={cancelItemCreation}/>
                 <div className="item-creation-buttons">
-                    <button className={"rectangle-button"} onClick={viewmodel.createEntry}>Eintrag</button>
-                    <button className={"rectangle-button"} onClick={viewmodel.createFolder}>Ordner</button>
+                    <button className={"rectangle-button"} onClick={viewModel.createEntry}>Eintrag</button>
+                    <button className={"rectangle-button"} onClick={viewModel.createFolder}>Ordner</button>
                 </div>
             </Dialog>
         </>

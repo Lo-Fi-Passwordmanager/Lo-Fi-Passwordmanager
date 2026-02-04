@@ -7,14 +7,19 @@ import {HiMiniLink} from "react-icons/hi2";
 import {HiTrash} from "react-icons/hi";
 import ShareQRDialog from "../DialogViews/ShareQRDialog.tsx";
 
-type DatabaseListingProps = {
+/**
+ * View showing a listing of available databases with options to open, share, rename or delete them.
+ * @param databases a map of database names to their Automerge URLs
+ * @param openDatabase method to open a database by its name
+ * @param removeDatabase method to remove a database by its name
+ * @param renameDatabase method to rename a database from old name to new name
+ */
+const DatabaseListingView: React.FC<{
     databases: Map<string, AutomergeUrl>,
     openDatabase: (db: string) => void;
     removeDatabase: (db: string) => void;
     renameDatabase: (oldName: string, newName: string) => void;
-}
-
-const DatabaseListingView: React.FC<DatabaseListingProps> = ({
+}> = ({
     databases,
     openDatabase,
     removeDatabase,

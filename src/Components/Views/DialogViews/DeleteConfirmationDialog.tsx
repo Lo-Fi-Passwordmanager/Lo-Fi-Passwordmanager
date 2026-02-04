@@ -3,6 +3,15 @@ import Dialog from "./Dialog.tsx";
 import {Item} from "../../../Model/Item.ts";
 import {HiTrash} from "react-icons/hi";
 
+/**
+ * A dialog that confirms the deletion of either an item or a database.
+ *
+ * @param database the name of the database to be deleted (if any)
+ * @param item the item to be deleted (if any)
+ * @param onConfirmItem method called when the deletion of an item is confirmed
+ * @param onConfirmDb method called when the deletion of a database is confirmed
+ * @param onClose method called to close the dialog
+ */
 const DeleteConfirmationDialog: React.FC<{
     database?: string | null,
     item?: Item | null,

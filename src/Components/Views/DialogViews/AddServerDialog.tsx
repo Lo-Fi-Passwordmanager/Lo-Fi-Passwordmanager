@@ -1,6 +1,12 @@
 import React from "react";
 import Dialog from "./Dialog.tsx";
 
+/**
+ * A dialog that allows the user to add a new server by specifying its name and URL.
+ *
+ * @param onAddServer method that is called when the user adds a new server. It receives the server name and URL as parameters.
+ * @param onClose method that is called when the dialog is closed.
+ */
 const AddServerDialog: React.FC<{
     onAddServer: (name: string, url: string) => void,
     onClose: () => void

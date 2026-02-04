@@ -4,7 +4,11 @@ import ToastDialog from "./ToastDialog.tsx";
 import {HiMiniPlus} from "react-icons/hi2";
 import Dialog from "./Dialog.tsx";
 
-
+/**
+ * A dialog that allows the user to generate a new password with specified criteria.
+ *
+ * @param setNewPassword Function to set the newly generated password.
+ */
 const PasswordGenDialog: React.FC<PasswordGenDialogProps> = ({setNewPassword}: PasswordGenDialogProps) => {
     const viewModel = usePasswordGenViewModel(setNewPassword);
     if (viewModel.passwordGenOpen) {

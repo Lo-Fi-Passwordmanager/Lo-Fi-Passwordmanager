@@ -2,7 +2,13 @@ import React, {type HTMLAttributes, type PropsWithChildren, useEffect} from "rea
 import Close from "../Icons/Close.tsx";
 
 /**
- * The view that links to the {@link Settings} singleton and toggles its values.
+ * A generic dialog component that can be used to show any content in a dialog overlay.
+ *
+ * @param title The title of the dialog.
+ * @param onCloseDialog The function to call when the dialog should be closed.
+ * @param children The content to display inside the dialog.
+ * @param className Optional additional class names for the dialog container.
+ * @param props Additional HTML attributes for the dialog container.
  */
 const Dialog: React.FC<PropsWithChildren & HTMLAttributes<HTMLDivElement> & {
     title: string,

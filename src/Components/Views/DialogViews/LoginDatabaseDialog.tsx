@@ -3,7 +3,19 @@ import {useLoginDatabaseViewModel} from "../../ViewModels/Dialog/LoginDatabaseVi
 import Dialog from "./Dialog.tsx";
 import EyeButton from "../ButtonViews/EyeButton.tsx";
 
-
+/**
+ * A dialog that asks the user to input credentials to log in to a database.
+ *
+ * @param isOpen Whether the dialog is open.
+ * @param title The title of the dialog.
+ * @param label1 The label for the first input field.
+ * @param tryOpenDatabase Function to attempt to open the database with the provided credentials.
+ * @param onCancel Function to call when the dialog is canceled.
+ * @param setToastMessage Function to set the toast message.
+ * @param setShowToast Function to show or hide the toast message.
+ * @param hidePassword Whether to hide the password input.
+ * @param toggleHidePassword Function to toggle the visibility of the password input.
+ */
 const LoginDatabaseDialog: React.FC<{
     isOpen: boolean,
     title: string,
