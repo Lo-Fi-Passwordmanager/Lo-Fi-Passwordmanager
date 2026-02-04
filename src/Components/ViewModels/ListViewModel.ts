@@ -6,7 +6,8 @@ import {SortCriteria} from "./PasswordViewModel.ts";
 import {useDndContext, useDraggable, useDroppable} from "@dnd-kit/core";
 
 /**
- * The viewmodel used by the ListView. It has the utility needed for correctly deciding and differentiating {@link Entry} and {@link Folder}
+ * The view model used by the ListView. It has the utility needed for correctly deciding and differentiating {@link Entry} and {@link Folder}
+ *
  * @param topItem the item that is on top of the list to be shown. Shows this item and all below
  * @param currentSortCrit the current sort criterion to be used
  * @param isAscending whether the sorting should be ascending or descending
@@ -87,7 +88,7 @@ export const useListViewModel = (
 
 
     /**
-     * Updates the title of the topItem in the automerge doc, should only be called, if a updateItemTitle functino is given into the viewmodel
+     * Updates the title of the topItem in the automerge doc, should only be called, if a updateItemTitle function is given into the view model
      */
     function updateTitleInAutomerge() {
         updateItemTitle(topItem.id, newTitle);

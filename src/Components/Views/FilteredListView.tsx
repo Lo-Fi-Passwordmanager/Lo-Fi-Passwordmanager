@@ -5,6 +5,16 @@ import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
 import {useFilteredListViewModel} from "../ViewModels/FilteredListViewModel.ts";
 import {Folder} from "../../Model/Folder.ts";
 
+/**
+ * The View that represents a filtered list of {@link Entry}/{@link Folder} Class Instances
+ * @param root the root folder to start the filtering from
+ * @param setCurItem the Method that selects an entry to be shown in the {@link EntryView}
+ * @param goToFolder the method to navigate to a specific folder
+ * @param deleteItem the method to delete a specific item
+ * @param sortCriterion the current sort criterion
+ * @param isAscending whether the sorting should be ascending or descending
+ * @param filterText the text to filter the items by
+ */
 const FilteredListView: React.FC<{
     root: Item,
     setCurItem: (entry: Entry) => void,

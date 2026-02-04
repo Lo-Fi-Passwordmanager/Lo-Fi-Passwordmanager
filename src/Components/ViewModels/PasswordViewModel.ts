@@ -19,7 +19,7 @@ export const SortCriteria = {
 export type SortCriteria = typeof SortCriteria[keyof typeof SortCriteria];
 
 /**
- * The viewmodel for the PasswordView, which stores the currently displayed entry
+ * The view model used by the PasswordView. Contains all the logic and states needed for the child components.
  *
  * @param automergeFacade the Automergefacade that contains the database to be used
  */
@@ -36,22 +36,24 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     const [inEditable, setInEditable] = useState(false);
     const [dirtyItemId, setDirtyItemId] = useState<string | null>(null);
     const [hidePassword, setHidePassword] = useState(true);
+    // States to track selected and created items for visual feedback
     const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
     const [createdFolderId, setCreatedFolderId] = useState<string | null>(null);
     // State to track if we are in the process of creating a new entry
     const [inEntryCreation, setInEntryCreation] = useState(false);
-
+    const [curSortCrit, setCurSortCrit] = useState<SortCriteria>(initSortCriterion);
+    const [isAscending, setIsAscending] = useState<boolean>(initIsAscending);
+    const [searchValue, setSearchValue] = useState<string>("");
 
     const [itemToDelete, setItemToDelete] = useState<Item | null>(null);
 
+    /**
+     * sets the current item and clears the dirty item id
+     */
     function setCurItem(item: Item) {
         _setCurItem(item);
         setDirtyItemId(null);
     }
-
-    const [curSortCrit, setCurSortCrit] = useState<SortCriteria>(initSortCriterion);
-    const [isAscending, setIsAscending] = useState<boolean>(initIsAscending);
-    const [searchValue, setSearchValue] = useState<string>("");
 
     /**
      * initializes the sort criterion from the local storage, or uses the default value
@@ -146,22 +148,29 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         }
     }
 
+    /**
+     * Creates a new entry in the database and sets it as the current item
+     * @param item
+     */
     function createEntry(item: Item) {
         item.id = reactiveFacade.insertItem(item, curParent.id);
         setCurItem(item);
         goToItem(item)
     }
 
-
+    /**
+     * Toggles the inEditable state and updates the synchronization setting accordingly
+     */
     function toggleInEdit() {
         settings.setSynchronization(inEditable);
         setInEditable(!inEditable);
     }
 
-    function getCurParent() {
-        return curParent;
-    }
-
+    /**
+     * Updates the given attributes of the given item
+     * @param itemId
+     * @param changes
+     */
     function updateItemAttribute(itemId: string, changes: [Attribute, string | Date][]) {
         reactiveFacade.updateItem(itemId, changes);
         const id = curItem.id;
@@ -169,10 +178,19 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setDirtyItemId(id);
     }
 
+    /**
+     * Updates the title of the given item
+     * @param itemId the id of the item to be updated
+     * @param newTitle the new title of the item
+     */
     function updateItemTitle(itemId: string, newTitle: string) {
         reactiveFacade.updateItem(itemId, [["name", newTitle]]);
     }
 
+    /**
+     * Prepares the deletion of the given item by setting it to the itemToDelete state
+     * @param item the item to be deleted
+     */
     function deleteItem(item: Item) {
         if (item.id === "") {
             return;
@@ -180,6 +198,9 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setItemToDelete(item);
     }
 
+    /**
+     * Confirms the deletion of the given item, removes it from the database and updates the current item to the parent
+     */
     function confirmDeletion(item: Item) {
         setItemToDelete(null);
         reactiveFacade.deleteItem(item.id);
@@ -188,6 +209,10 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setCurParent(curParent);
     }
 
+    /**
+     * Copies the given text to the clipboard and clears it after the given timeout
+     * If the user is not focused on the tab when the timeout expires, it waits until they come back to clear the clipboard
+     */
     function copyToClipboardAndClear(text: string, timeout: number = 10000) {
         //If a timer is already running, cancel it. This is important for copying twice so that the first copy doesnt delete the second one
         if (clipboardTimerRef.current) {
@@ -304,7 +329,6 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         getInItemCreation,
         setInItemCreation,
         setCurParent,
-        getCurParent,
         deleteItem,
         setAndStoreSortCriterion,
         toggleOrder,

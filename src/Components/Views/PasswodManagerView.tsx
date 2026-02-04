@@ -8,6 +8,9 @@ import LoadingScreen from "./DialogViews/LoadingScreen.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
 import PWMLogo from "../../assets/logo_gelb.svg?inline";
 
+/**
+ * The main view of the password manager application. It handles the login state and displays either the login view or the password view.
+ */
 const PasswordManagerView: React.FC = () => {
 
     const viewModel = usePasswordManagerViewModel();
@@ -18,7 +21,7 @@ const PasswordManagerView: React.FC = () => {
         window.repo = viewModel.repo;
     }
 
-    if (!viewModel.getLoggedIn()) {
+    if (!viewModel.loggedIn) {
         return (
             <RepoContext.Provider value={viewModel.repo}>
                 <SettingsView/>
