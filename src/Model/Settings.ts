@@ -11,8 +11,10 @@ import {
     storeSelectedServerURL,
     storeServers,
     storeTimeoutLength,
-    storeTimeoutSettings,
+    storeTimeoutSettings, loadP2PSetting, storeP2PSetting,
 } from "../Utility/Storage.ts";
+import Peer, {type DataConnection} from "peerjs";
+
 
 type SettingsListener = () => void;
 
@@ -47,8 +49,11 @@ export class Settings {
     private _darkMode: boolean;
     private _timeoutActive: boolean;
     private _timeoutLength: number;
+    private peer: Peer;
+    private connector: DataConnection;
     private _serverUrl: string;
     private _servers: Map<string, string>;
+    private _p2p: boolean;
 
     private listeners: SettingsListener[] = [];
 
@@ -59,7 +64,9 @@ export class Settings {
         this._timeoutLength = loadTimeoutLength();
         this._serverUrl = loadSelectedServerURL();
         this._servers = loadServers();
-
+        this._p2p = loadP2PSetting();
+        this.peer = new Peer();
+        this.connector = this.peer.connect("");
     }
 
     public static getSettings(): Settings {
@@ -103,6 +110,16 @@ export class Settings {
     public removeServer(server: string): void {
         this._servers = this._servers.delete(server) ? this._servers : this._servers;
         storeServers(this._servers);
+        this.notify();
+    }
+
+    public getP2P(): boolean {
+        return this._p2p;
+    }
+
+    public setConnection(isP2P: boolean) {
+        this._p2p = isP2P;
+        storeP2PSetting(isP2P);
         this.notify();
     }
 
@@ -150,6 +167,23 @@ export class Settings {
         return () => {
             this.listeners = this.listeners.filter(l => l !== listener);
         };
+    }
+
+    public getPeer() {
+        return this.peer;
+    }
+
+    /**
+     * Connects your own peer to a given id
+     * @param id the id to connect to
+     */
+    public setConnector(id: string) {
+        this.connector = this.peer.connect(id);
+        this.notify();
+    }
+
+    public getConnector() {
+        return this.connector;
     }
 
     private notify() {

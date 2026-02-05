@@ -21,7 +21,7 @@ export const useSettingsViewModel = () => {
     const [servers, setServers] = useState<Map<string, string>>(settings.getServers());
     const [serverNames, setServerNames] = useState<string[]>(Array.from(servers.keys()));
     const [addServerDialogOpen, setAddServerDialogOpen] = useState<boolean>(false);
-
+    const [P2P, setP2P] = useState<boolean>(settings.getP2P());
     document.getElementsByTagName("html")[0]?.setAttribute("data-theme", darkMode ? "dark" : "light");
 
     // When darkMode is updated, update settings
@@ -100,6 +100,26 @@ export const useSettingsViewModel = () => {
         }
     }
 
+    /**
+     * Get own peer id
+     */
+    function getPeerId() {
+        return settings.getPeer().id;
+    }
+
+    /**
+     * Set the peer id to connect to
+     * @param id the id to connect to
+     */
+    function setConnection(id: string) {
+        settings.setConnector(id);
+    }
+
+    function toggleP2P() {
+        setP2P(!P2P);
+        settings.setConnection(!P2P);
+    }
+
 
     return {
         darkMode,
@@ -111,8 +131,10 @@ export const useSettingsViewModel = () => {
         serverName,
         addServerDialogOpen,
         serverNames,
+        P2P,
 
         setActiveTab,
+        setConnection,
         toggleDarkMode,
         toggleSynchronisation,
         toggleTimeOutActive,
@@ -120,9 +142,11 @@ export const useSettingsViewModel = () => {
         setTimeOutLengthVM,
         increaseTimeout,
         decreaseTimeout,
+        getPeerId,
         addServer,
         removeServer,
         setAddServerDialogOpen,
         selectServer,
+        toggleP2P
     };
 };

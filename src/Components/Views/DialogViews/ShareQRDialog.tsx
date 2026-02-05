@@ -6,16 +6,18 @@ import QRCode from "react-qr-code";
 
 // QRCode Generator https://github.com/rosskhanas/react-qr-code
 
+interface ShareQRDialogProps {
+    name: string,
+    url: string
+}
+
 /**
  * A dialog that shows a QR code to share a database.
  *
  * @param name The name of the database to share.
  * @param url The URL of the database to share.
  */
-const ShareQRDialog: React.FC<{
-    name: string,
-    url: string
-}> = ({name, url}) => {
+const ShareQRDialog: React.FC<ShareQRDialogProps> = ({name, url}: ShareQRDialogProps) => {
     const viewModel = useShareQRViewModel(name, url);
 
     if (viewModel.shareQRCodeOpen) {
@@ -29,12 +31,16 @@ const ShareQRDialog: React.FC<{
                 <Dialog title={"Datenbank teilen"} onCloseDialog={() => viewModel.setShareQRCodeOpen(false)}
                         className="qrDialog">
                     <p>Scanne den QR-Code auf einem anderen Gerät im "Datenbank hinzufügen" Dialog, um die Datenbank mit
-                        dem Namen "{name}"
-                        dort
-                        hinzuzufügen.</p>
+                       dem Namen "{name}"
+                       dort
+                       hinzuzufügen.</p>
                     <label className="checkboxRow">
-                        <input type="checkbox" checked={viewModel.shareName}
-                               onChange={viewModel.toggleShareName}/>
+                        <label className="switch">
+                            <input type="checkbox" checked={viewModel.shareName}
+                                   onChange={viewModel.toggleShareName}/>
+                            <span className="slider round"></span>
+                        </label>
+
                         Name der Datenbank auch teilen
                     </label>
 

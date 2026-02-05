@@ -1,4 +1,6 @@
 import {useSettingsViewModel} from "../ViewModels/SettingsViewModel.ts";
+import {Settings} from "../../Model/Settings.ts";
+
 import React from "react";
 import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
@@ -59,21 +61,42 @@ const SettingsView: React.FC<{
                         {viewModel.activeTab === "general" && (
                             <div className="settingsContainer">
                                 <h3>Allgemeine Einstellungen</h3>
+
+
                                 <label className="checkboxRow">
-                                    <input type="checkbox" checked={viewModel.darkMode}
-                                           onChange={viewModel.toggleDarkMode}/>
+                                    <label className="switch">
+                                        <input type="checkbox" checked={viewModel.darkMode}
+                                               onChange={viewModel.toggleDarkMode}/>
+                                        <span className="slider round"></span>
+                                    </label>
                                     Dark-Mode
                                 </label>
 
                                 <label className="checkboxRow">
-                                    <input type="checkbox" checked={viewModel.synchronisation}
-                                           onChange={viewModel.toggleSynchronisation}/>
+                                    <label className="switch">
+                                        <input type="checkbox" checked={viewModel.synchronisation}
+                                               onChange={viewModel.toggleSynchronisation}/>
+                                        <span className="slider round"></span>
+                                    </label>
                                     Synchronisation
                                 </label>
 
                                 <label className="checkboxRow">
-                                    <input type="checkbox" checked={viewModel.timeOutActive}
-                                           onChange={viewModel.toggleTimeOutActive}/>
+                                    <label className="switch">
+                                        <input type="checkbox" checked={viewModel.P2P}
+                                               onChange={viewModel.toggleP2P}/>
+                                        <span className="slider round"></span>
+                                    </label>
+                                    Peer-to-Peer Synchronisation
+                                </label>
+
+                                <label className="checkboxRow">
+                                    <label className="switch">
+                                        <input type="checkbox" checked={viewModel.timeOutActive}
+                                               onChange={viewModel.toggleTimeOutActive}/>
+                                        <span className="slider round"></span>
+                                    </label>
+
                                     Bei Inaktivität abmelden
                                 </label>
 
@@ -86,7 +109,8 @@ const SettingsView: React.FC<{
                                                    onChange={(e) => viewModel.setTimeOutLengthVM(e.target.value)}
                                                    min="1"/>
                                             <button className={"squareButton"} style={{boxShadow: "none"}}
-                                                    onClick={viewModel.decreaseTimeout}><HiMiniMinus size={24}/></button>
+                                                    onClick={viewModel.decreaseTimeout}><HiMiniMinus size={24}/>
+                                            </button>
                                             <button className={"squareButton"} style={{boxShadow: "none"}}
                                                     onClick={viewModel.increaseTimeout}><HiMiniPlus size={24}/></button>
                                         </div>
@@ -94,7 +118,7 @@ const SettingsView: React.FC<{
                                 )}
 
                                 {automergeFacade ? null : (
-                                    <div className="server-settings">
+                                    <div className="connection-settings">
                                         <h4>Synchronisationsserver</h4>
                                         <span>Aktueller Server:</span>
                                         <div className="current-server">{viewModel.serverName}</div>
@@ -142,6 +166,20 @@ const SettingsView: React.FC<{
                                                 onClose={() => viewModel.setAddServerDialogOpen(false)}
                                             />
                                         )}
+                                        {!viewModel.P2P ? null :
+                                            <div className={"connection-settings"}>
+
+                                                <h4>Peer-To-Peer Verbidung</h4>
+                                                <label>Eigene Peer-ID:</label>
+                                                <label className={"current-server"}>{viewModel.getPeerId()}</label>
+                                                <label>Fremde Peer-ID:</label>
+                                                <input type="text"
+                                                       onChange={(e) => viewModel.setConnection(e.target.value)}
+                                                       value={Settings.getSettings().getConnector().peer}
+                                                       style={{marginBottom: "2vh"}}
+                                                />
+                                            </div>
+                                        }
                                     </div>
                                 )}
                             </div>
