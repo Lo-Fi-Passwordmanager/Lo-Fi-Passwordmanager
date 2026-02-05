@@ -27,7 +27,7 @@ export type SortCriteria = typeof SortCriteria[keyof typeof SortCriteria];
  *
  * @param automergeFacade the Automergefacade that contains the database to be used
  */
-export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
+export const usePasswordViewModel = (automergeFacade: AutomergeFacade) => {
 
     const settings = useSettings();
     const [inItemCreation, setInItemCreation] = useState(false);
@@ -397,5 +397,7 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         collapseFolder,
         isFolderExpanded,
         getSortedChildren,
+        setCurSortCrit,
+        setIsAscending,
     };
 };

@@ -2,7 +2,7 @@ import React from "react";
 import ListView from "./ListView.tsx";
 import EntryView from "./EntryView.tsx";
 import OrganizeListView from "./OrganizeListView.tsx";
-import {usePasswortViewModel} from "../ViewModels/PasswordViewModel.ts";
+import {usePasswordViewModel} from "../ViewModels/PasswordViewModel.ts";
 import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import ItemCreationDialog from "./DialogViews/ItemCreationDialog.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
@@ -23,7 +23,7 @@ interface PasswordViewProps {
  * The view that should be shown, when the user opened a database successfully and shows the whole structure and one selected entry
  */
 const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbName, closeDatabase}) => {
-    const viewModel = usePasswortViewModel(automergeFacade as AutomergeFacade);
+    const viewModel = usePasswordViewModel(automergeFacade as AutomergeFacade);
 
     // Fügt das Repo als zu global hinzu, sodass man im Browser einfach auf das Repo zugreifen kann, zum debuggen.
     // Nur während 'yarn dev' verfügbar, nach dem build nicht mehr

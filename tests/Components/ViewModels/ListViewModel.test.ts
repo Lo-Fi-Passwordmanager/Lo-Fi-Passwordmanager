@@ -8,8 +8,6 @@ import {SortCriteria} from "../../../src/Components/ViewModels/PasswordViewModel
 describe("ListViewModel", () => {
 
     const topItem = new Folder("krasser Titel", "123", new Date(1), new Date(2));
-    const currentSortCrit = SortCriteria.Name;
-    const isAscending = true;
     const dirtyItemID: string = "";
     const setCurrItem = vi.fn();
     const updateItemTitle = vi.fn();
@@ -86,35 +84,5 @@ describe("ListViewModel", () => {
             expect(updateItemTitle).toHaveBeenCalledWith("123", "newName");
         })
     });
-
-    it('should be able to', () => {
-
-    })
-
-    /*it('should be able to sort according to criteria', () => {
-        let {result} = renderHook(() =>
-            useListViewModel(topItem, SortCriteria.Name, true, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId));
-        expect(result.current.getChildren()).toStrictEqual([entry, entry2, entry3, subFolder1]);
-
-        ({ result } = renderHook(() =>
-            useListViewModel(topItem, SortCriteria.Name, false, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId)));
-        expect(result.current.getChildren()).toStrictEqual([subFolder1, entry3, entry2, entry]);
-
-        ({ result } = renderHook(() =>
-            useListViewModel(topItem, SortCriteria.CreatedAt, true, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId)));
-        expect(result.current.getChildren()).toStrictEqual([entry3, entry, subFolder1, entry2]);
-
-        ({ result } = renderHook(() =>
-            useListViewModel(topItem, SortCriteria.CreatedAt, false, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId)));
-        expect(result.current.getChildren()).toStrictEqual([entry2, subFolder1, entry, entry3]);
-
-        ({ result } = renderHook(() =>
-            useListViewModel(topItem, SortCriteria.EditedAt, true, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId)));
-        expect(result.current.getChildren()).toStrictEqual([entry, subFolder1, entry2, entry3]);
-
-        ({ result } = renderHook(() =>
-            useListViewModel(topItem, SortCriteria.EditedAt, false, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId)));
-        expect(result.current.getChildren()).toStrictEqual([entry3, entry2, subFolder1, entry]);
-    })*/
 
 });
