@@ -208,8 +208,6 @@ button:focus-visible {
 }
 
 .dialog {
-    width: fit-content;
-    overflow: auto;
     background: var(--dialog-bg);
     color: var(--text);
     padding: 20px;
@@ -885,15 +883,14 @@ input[type="number"] {
     display: flex;
     flex-direction: row;
     overflow: hidden;
-    min-height: 75%;
+    height: 75%;
     width: fit-content;
     max-width: 80%;
-    max-height: 90%;
 }
 
 @media (min-width: 950px) {
     .settings-layout {
-        min-width: 45%;
+        min-width: 780px;
     }
 }
 

@@ -94,7 +94,8 @@ const SettingsView: React.FC<{
                                                    onChange={(e) => viewModel.setTimeOutLengthVM(e.target.value)}
                                                    min="1"/>
                                             <button className={"squareButton"} style={{boxShadow: "none"}}
-                                                    onClick={viewModel.decreaseTimeout}><HiMiniMinus size={24}/></button>
+                                                    onClick={viewModel.decreaseTimeout}><HiMiniMinus size={24}/>
+                                            </button>
                                             <button className={"squareButton"} style={{boxShadow: "none"}}
                                                     onClick={viewModel.increaseTimeout}><HiMiniPlus size={24}/></button>
                                         </div>
@@ -102,7 +103,7 @@ const SettingsView: React.FC<{
                                 )}
 
                                 {automergeFacade ? null : (
-                                    <div className="server-settings">
+                                    <div className="connection-settings">
                                         <h4>Synchronisationsserver</h4>
                                         <span>Aktueller Server:</span>
                                         <div className="current-server">{viewModel.serverName}</div>
