@@ -270,7 +270,13 @@ export function storeTimeoutLength(length: number): void {
  * @returns the P2P setting
  */
 export function loadP2PSetting(): boolean {
-    return localStorage.getItem("p2p") === "true";
+    const p2p = localStorage.getItem("p2p");
+    if (p2p != null) {
+        return JSON.parse(p2p);
+    } else {
+        localStorage.setItem("p2p", JSON.stringify("true"))
+        return true;
+    }
 }
 
 /**
@@ -279,5 +285,5 @@ export function loadP2PSetting(): boolean {
  * @param isP2P the P2P boolean to store
  */
 export function storeP2PSetting(isP2P: boolean): void {
-    localStorage.setItem("p2p", isP2P.toString());
+    localStorage.setItem("p2p", JSON.stringify(isP2P));
 }
