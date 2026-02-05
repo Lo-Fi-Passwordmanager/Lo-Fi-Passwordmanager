@@ -61,27 +61,42 @@ const SettingsView: React.FC<{
                         {viewModel.activeTab === "general" && (
                             <div className="settingsContainer">
                                 <h3>Allgemeine Einstellungen</h3>
+
+
                                 <label className="checkboxRow">
-                                    <input type="checkbox" checked={viewModel.darkMode}
-                                           onChange={viewModel.toggleDarkMode}/>
+                                    <label className="switch">
+                                        <input type="checkbox" checked={viewModel.darkMode}
+                                               onChange={viewModel.toggleDarkMode}/>
+                                        <span className="slider round"></span>
+                                    </label>
                                     Dark-Mode
                                 </label>
 
                                 <label className="checkboxRow">
-                                    <input type="checkbox" checked={viewModel.synchronisation}
-                                           onChange={viewModel.toggleSynchronisation}/>
+                                    <label className="switch">
+                                        <input type="checkbox" checked={viewModel.synchronisation}
+                                               onChange={viewModel.toggleSynchronisation}/>
+                                        <span className="slider round"></span>
+                                    </label>
                                     Synchronisation
                                 </label>
 
                                 <label className="checkboxRow">
-                                    <input type="checkbox" checked={viewModel.P2P}
-                                           onChange={viewModel.toggleP2P}/>
+                                    <label className="switch">
+                                        <input type="checkbox" checked={viewModel.P2P}
+                                               onChange={viewModel.toggleP2P}/>
+                                        <span className="slider round"></span>
+                                    </label>
                                     Peer-to-Peer Synchronisation
                                 </label>
 
                                 <label className="checkboxRow">
-                                    <input type="checkbox" checked={viewModel.timeOutActive}
-                                           onChange={viewModel.toggleTimeOutActive}/>
+                                    <label className="switch">
+                                        <input type="checkbox" checked={viewModel.timeOutActive}
+                                               onChange={viewModel.toggleTimeOutActive}/>
+                                        <span className="slider round"></span>
+                                    </label>
+
                                     Bei Inaktivität abmelden
                                 </label>
 

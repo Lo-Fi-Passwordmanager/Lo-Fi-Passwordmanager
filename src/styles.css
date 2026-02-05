@@ -892,6 +892,10 @@ input[type="number"] {
     .settings-layout {
         min-width: 780px;
     }
+
+    .connection-settings {
+        min-width: 400px;
+    }
 }
 
 .settings-sidebar {
