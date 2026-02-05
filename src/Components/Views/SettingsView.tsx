@@ -10,6 +10,11 @@ import AddServerDialog from "./DialogViews/AddServerDialog.tsx";
 import {HiTrash} from "react-icons/hi";
 import Dialog from "./DialogViews/Dialog.tsx";
 
+/**
+ * The View that represents the Settings Dialog and Button to open it
+ * @param automergeFacade the current AutomergeFacade instance
+ * @param openedDbName the name of the currently opened database
+ */
 const SettingsView: React.FC<{
     automergeFacade?: AutomergeFacade | null,
     openedDbName?: string
@@ -52,55 +57,31 @@ const SettingsView: React.FC<{
 
 
                     {/* Main Content Area */}
-                    <main className="scrollableContainer settings-content" style={{padding:"20px"}}>
+                    <main className="scrollableContainer settings-content">
                         {viewModel.activeTab === "general" && (
                             <div className="settingsContainer">
                                 <h3>Allgemeine Einstellungen</h3>
                                 <label className="checkboxRow">
-                                    <label className="switch">
-                                        <input
-                                            type="checkbox"
-                                            checked={viewModel.darkMode}
-                                            onChange={viewModel.toggleDarkMode}
-                                        />
-                                        <span className="slider round"></span>
-                                    </label>
+                                    <input type="checkbox" checked={viewModel.darkMode}
+                                           onChange={viewModel.toggleDarkMode}/>
                                     Dark-Mode
                                 </label>
 
                                 <label className="checkboxRow">
-                                    <label className="switch">
-                                        <input
-                                            type="checkbox"
-                                            checked={viewModel.synchronisation}
-                                            onChange={viewModel.toggleSynchronisation}
-                                        />
-                                        <span className="slider round"></span>
-                                    </label>
-                                    Server Synchronisation
+                                    <input type="checkbox" checked={viewModel.synchronisation}
+                                           onChange={viewModel.toggleSynchronisation}/>
+                                    Synchronisation
                                 </label>
 
                                 <label className="checkboxRow">
-                                    <label className="switch">
-                                        <input
-                                            type="checkbox"
-                                            checked={viewModel.P2P}
-                                            onChange={viewModel.toggleP2P}
-                                        />
-                                        <span className="slider round"></span>
-                                    </label>
+                                    <input type="checkbox" checked={viewModel.P2P}
+                                           onChange={viewModel.toggleP2P}/>
                                     Peer-to-Peer Synchronisation
                                 </label>
 
                                 <label className="checkboxRow">
-                                    <label className="switch">
-                                        <input
-                                            type="checkbox"
-                                            checked={viewModel.timeOutActive}
-                                            onChange={viewModel.toggleTimeOutActive}
-                                        />
-                                        <span className="slider round"></span>
-                                    </label>
+                                    <input type="checkbox" checked={viewModel.timeOutActive}
+                                           onChange={viewModel.toggleTimeOutActive}/>
                                     Bei Inaktivität abmelden
                                 </label>
 
@@ -113,65 +94,62 @@ const SettingsView: React.FC<{
                                                    onChange={(e) => viewModel.setTimeOutLengthVM(e.target.value)}
                                                    min="1"/>
                                             <button className={"squareButton"} style={{boxShadow: "none"}}
-                                                    onClick={viewModel.decrease}><HiMiniMinus size={24}/></button>
+                                                    onClick={viewModel.decreaseTimeout}><HiMiniMinus size={24}/></button>
                                             <button className={"squareButton"} style={{boxShadow: "none"}}
-                                                    onClick={viewModel.increase}><HiMiniPlus size={24}/></button>
+                                                    onClick={viewModel.increaseTimeout}><HiMiniPlus size={24}/></button>
                                         </div>
                                     </div>
                                 )}
 
                                 {automergeFacade ? null : (
-                                    <div>
-                                        {!viewModel.synchronisation ? null : (
-                                            <div className="connection-settings">
-                                                <h4>Synchronisationsserver</h4>
-                                                <span>Aktueller Server:</span>
-                                                <div className="current-server">{viewModel.serverName}</div>
-                                                {viewModel.serverNames.length > 1 && (
-                                                    <div className="scrollableContainer server-list">
-                                                        <span>Verfügbare Server:</span>
+                                    <div className="server-settings">
+                                        <h4>Synchronisationsserver</h4>
+                                        <span>Aktueller Server:</span>
+                                        <div className="current-server">{viewModel.serverName}</div>
+                                        {viewModel.serverNames.length > 1 && (
+                                            <div className="scrollableContainer server-list">
+                                                <span>Verfügbare Server:</span>
 
-                                                        {viewModel.serverNames.map((server) => (
-                                                            viewModel.serverName !== server ? (
-                                                                <div className="server-item">
-                                                                    <button
-                                                                        style={{
-                                                                            display: "block",
-                                                                            whiteSpace: "nowrap",
-                                                                            overflow: "hidden",
-                                                                            textOverflow: "ellipsis",
-                                                                            flex: 1
-                                                                        }}
-                                                                        onClick={() => viewModel.selectServer(server)}
-                                                                    >
-                                                                        <span>{server}</span>
-                                                                    </button>
-                                                                    {server !== "Automerge Sync Server" && (
-                                                                        <button
-                                                                            className="squareButton"
-                                                                            onClick={() => viewModel.removeServer(server)}
-                                                                        >
-                                                                            <HiTrash size={24}/>
-                                                                        </button>
-                                                                    )}
-                                                                </div>
-                                                            ) : null
-                                                        ))}
-                                                    </div>)}
-                                                <button
-                                                    className="squareButton"
-                                                    onClick={() => viewModel.setAddServerDialogOpen(true)}
-                                                    style={{alignSelf: "center", marginBottom:"2vh"}}
-                                                >
-                                                    <HiMiniPlus size={24}/>
-                                                </button>
-                                                {viewModel.addServerDialogOpen && (
-                                                    <AddServerDialog
-                                                        onAddServer={(name, url) => viewModel.addServer(name, url)}
-                                                        onClose={() => viewModel.setAddServerDialogOpen(false)}
-                                                    />
-                                                )}
+                                                {viewModel.serverNames.map((server) => (
+                                                    viewModel.serverName !== server ? (
+                                                        <div className="server-item">
+                                                            <button
+                                                                style={{
+                                                                    display: "block",
+                                                                    whiteSpace: "nowrap",
+                                                                    overflow: "hidden",
+                                                                    textOverflow: "ellipsis",
+                                                                    flex: 1
+                                                                }}
+                                                                onClick={() => viewModel.selectServer(server)}
+                                                            >
+                                                                <span>{server}</span>
+                                                            </button>
+                                                            {server !== "Automerge Sync Server" && (
+                                                                <button
+                                                                    className="squareButton"
+                                                                    onClick={() => viewModel.removeServer(server)}
+                                                                >
+                                                                    <HiTrash size={24}/>
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    ) : null
+                                                ))}
                                             </div>)}
+                                        <button
+                                            className="squareButton"
+                                            onClick={() => viewModel.setAddServerDialogOpen(true)}
+                                            style={{alignSelf: "center"}}
+                                        >
+                                            <HiMiniPlus size={24}/>
+                                        </button>
+                                        {viewModel.addServerDialogOpen && (
+                                            <AddServerDialog
+                                                onAddServer={(name, url) => viewModel.addServer(name, url)}
+                                                onClose={() => viewModel.setAddServerDialogOpen(false)}
+                                            />
+                                        )}
                                         {!viewModel.P2P ? null :
                                             <div className={"connection-settings"}>
 

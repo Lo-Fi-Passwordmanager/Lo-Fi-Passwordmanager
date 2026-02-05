@@ -8,6 +8,7 @@ import {HiPencil, HiTrash} from "react-icons/hi";
 
 /**
  * The View that depicts an Entry with all its attributes at large scale
+ *
  * @param item the entry that should be depicted
  * @param deleteItem the function that deletes the current item
  * @param copyAndClearClipboard the function that copies a string to the clipboard and clears it afterwards

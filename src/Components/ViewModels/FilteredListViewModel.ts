@@ -1,9 +1,19 @@
 import {Folder} from "../../Model/Folder.ts";
 import {Entry} from "../../Model/Entry.ts";
-import {SortCriteria} from "./PasswordViewModel.ts";
 import type {Item} from "../../Model/Item.ts";
 
-export const useFilteredListViewModel = (root: Folder, filterText: string, currentSortCrit: SortCriteria, isAscending: boolean) => {
+/**
+ * ViewModel for filtering and sorting entries and folders in a list view.
+ *
+ * @param root The root folder to start filtering from.
+ * @param filterText The text to filter entries and folders by.
+ * @param getSortedChildren Function to get sorted children of a folder.
+ */
+export const useFilteredListViewModel = (
+    root: Folder,
+    filterText: string,
+    getSortedChildren: (folder: Folder) => Item[],
+) => {
 
     /**
      * Gets the entries that match the filter text from the given start folder recursively
@@ -49,32 +59,6 @@ export const useFilteredListViewModel = (root: Folder, filterText: string, curre
             }
         }
         return getSortedChildren(filtered);
-    }
-
-    /**
-     * Gets the children of the given folder, sorted by the current sort criterion and order
-     */
-    function getSortedChildren(folder: Folder): Item[] {
-        switch (`${currentSortCrit}-${isAscending}`) {
-            case `${SortCriteria.Name}-true`:
-                return (folder).entries.slice().sort((a, b) => a.title.localeCompare(b.title));
-
-            case `${SortCriteria.Name}-false`:
-                return (folder).entries.slice().sort((a, b) => b.title.localeCompare(a.title));
-
-            case `${SortCriteria.CreatedAt}-true`:
-                return (folder).entries.slice().sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
-
-            case `${SortCriteria.CreatedAt}-false`:
-                return (folder).entries.slice().sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-
-            case `${SortCriteria.EditedAt}-true`:
-                return (folder).entries.slice().sort((a, b) => a.editedAt.getTime() - b.editedAt.getTime());
-
-            case `${SortCriteria.EditedAt}-false`:
-                return (folder).entries.slice().sort((a, b) => b.editedAt.getTime() - a.editedAt.getTime());
-        }
-        return [];
     }
 
     return {

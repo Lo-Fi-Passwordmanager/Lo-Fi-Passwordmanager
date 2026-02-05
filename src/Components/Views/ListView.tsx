@@ -2,27 +2,42 @@ import {type Item} from "../../Model/Item.ts";
 import {useListViewModel} from "../ViewModels/ListViewModel.ts";
 import {Entry} from "../../Model/Entry.ts";
 import React from "react";
-import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
 import FolderMenu from "./MenuViews/FolderMenu.tsx";
 import {HiMiniPlus} from "react-icons/hi2";
 import {HiTrash} from "react-icons/hi";
 import {CSS} from "@dnd-kit/utilities";
+import type {Folder} from "../../Model/Folder.ts";
 
 /* eslint-disable react-hooks/refs */ //react and the eslint do not like each other: https://github.com/facebook/react/issues/34775
 /**
  * The View that represents the whole database, which is represented by {@link Entry}/{@link Folder} Class Instances
- * @param item the item which should be depicted, if this is a folder, all of its content is also depicted
- * @param onSetEntry the Method that selects an entry to be shown in the {@link EntryView}
+ *
+ * @param item The current item to be shown
+ * @param setCurItem method to set the currently selected item
+ * @param curItem the currently selected item
+ * @param setItemCreationDialog method to open the item creation dialog
+ * @param setCurrentParent method to set the current parent folder
+ * @param deleteItem method to delete an item
+ * @param dirtyItemId
+ * @param openedDbName the name of the currently opened database
+ * @param selectedItemId the id of the item that was selected and is to be highlighted
+ * @param createdFolderId the id of the folder that was just created and is to be highlighted
+ * @param setCreatedFolderId method to set the id of the folder that was just created
+ * @param updateItemTitle method to update the title of an item
+ * @param inEditable whether an entry is currently being edited
+ * @param level the current level of indentation (depth in the tree)
+ * @param expandFolderId method to expand a folder by its id
+ * @param collapseFolderId method to collapse a folder by its id
+ * @param isFolderExpanded method to check whether a folder is expanded by its id
+ * @param getSortedChildren method to get the sorted children of a folder
  */
 const ListView: React.FC<{
     item: Item,
     setCurItem: (entry: Entry) => void,
-    getCurItem: () => Item,
+    curItem: Item;
     setItemCreationDialog: () => void,
     setCurrentParent?: (item: Item) => void,
     deleteItem: (item: Item) => void,
-    sortCriterion: SortCriteria,
-    isAscending: boolean,
     dirtyItemId: string | null,
     openedDbName: string,
     selectedItemId: string | null;
@@ -34,15 +49,14 @@ const ListView: React.FC<{
     expandFolderId: (folderId: string) => void;
     collapseFolderId: (folderId: string) => void;
     isFolderExpanded: (folderId: string) => boolean;
+    getSortedChildren: (folder: Folder) => Item[],
 }> = ({
           item,
           setCurItem,
-          getCurItem,
+          curItem,
           setItemCreationDialog,
           setCurrentParent,
           deleteItem,
-          sortCriterion,
-          isAscending,
           dirtyItemId,
           openedDbName,
           selectedItemId,
@@ -53,9 +67,10 @@ const ListView: React.FC<{
           level,
           expandFolderId,
           collapseFolderId,
-          isFolderExpanded
+          isFolderExpanded,
+          getSortedChildren,
       }) => {
-    const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId,collapseFolderId, isFolderExpanded);
+    const listViewModel = useListViewModel(item, dirtyItemId, setCurItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded);
 
     function addButtonPressed() {
         setItemCreationDialog();
@@ -74,7 +89,7 @@ const ListView: React.FC<{
         const entry = listViewModel.getItem() as Entry;
         return (
             <div
-                className={`listViewEntry ${getCurItem().id !== entry.id ? "" : "selected"} ${listViewModel.isDragging ? "dragged" : ""} ${selectedItemId === item.id ? "highlighted entry" : ""}`}
+                className={`listViewEntry ${curItem.id !== entry.id ? "" : "selected"} ${listViewModel.isDragging ? "dragged" : ""} ${selectedItemId === item.id ? "highlighted entry" : ""}`}
                 onClick={() => setCurItem(entry)}
                 style={dragStyle}
                 ref={listViewModel.setDraggableRef}
@@ -160,18 +175,17 @@ const ListView: React.FC<{
                          display: (isFolderExpanded(item.id) ? "block" : "none"),
                          marginLeft: level <= 8 ? "15px" : "0px"
                      }}>
-                    {listViewModel.getChildren() &&
-                        listViewModel.getChildren()!.map((item: Item, index: number) => {
+                    {getSortedChildren(item as Folder) &&
+                        getSortedChildren(item as Folder)!.map((item: Item, index: number) => {
                             return <ListView
                                 key={index}
                                 item={item}
                                 setCurItem={setCurItem}
-                                getCurItem={getCurItem}
+                                curItem={curItem}
                                 setItemCreationDialog={setItemCreationDialog}
                                 setCurrentParent={setCurrentParent}
                                 deleteItem={deleteItem}
-                                sortCriterion={sortCriterion}
-                                isAscending={isAscending}
+                                getSortedChildren={getSortedChildren}
                                 dirtyItemId={dirtyItemId} openedDbName={""}
                                 updateItemTitle={updateItemTitle}
                                 selectedItemId={selectedItemId}

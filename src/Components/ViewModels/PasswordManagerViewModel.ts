@@ -12,6 +12,9 @@ import {useIdleTimer} from "react-idle-timer";
 import {Settings, useSettings} from "../../Model/Settings.ts";
 import {PeerjsNetworkAdapter} from "automerge-repo-network-peerjs";
 
+/**
+ * The view model used by the PasswordManagerView. Manages the state and logic for the password manager.
+ */
 export const usePasswordManagerViewModel = () => {
     const settings = useSettings();
     const [connector] = useState(settings.getConnector());
@@ -55,10 +58,6 @@ export const usePasswordManagerViewModel = () => {
         storage:
             new IndexedDBStorageAdapter()
     });
-
-    function getLoggedIn(): boolean {
-        return loggedIn;
-    }
 
     function getAutomergeFacade(): AutomergeFacade | null {
         return automergeFacade;
@@ -106,8 +105,8 @@ export const usePasswordManagerViewModel = () => {
         toastMessage,
         toastVisible,
         openedDatabaseName,
+        loggedIn,
         setOpenedDatabaseName,
-        getLoggedIn,
         setLoggedIn,
         setAutomergeFacade,
         getAutomergeFacade,

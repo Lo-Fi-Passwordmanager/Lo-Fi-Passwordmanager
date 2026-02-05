@@ -10,7 +10,11 @@ import {
 } from "../../Utility/Storage.ts";
 import {type DragEndEvent, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
 import {useSettings} from "../../Model/Settings.ts";
+import type {Folder} from "../../Model/Folder.ts";
 
+/**
+ * Criteria as enum by which items are sorted
+ */
 export const SortCriteria = {
     Name: "NAME",
     CreatedAt: "CREATED",
@@ -19,11 +23,11 @@ export const SortCriteria = {
 export type SortCriteria = typeof SortCriteria[keyof typeof SortCriteria];
 
 /**
- * The viewmodel for the PasswordView, which stores the currently displayed entry
+ * The view model used by the PasswordView. Contains all the logic and states needed for the child components.
  *
  * @param automergeFacade the Automergefacade that contains the database to be used
  */
-export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
+export const usePasswordViewModel = (automergeFacade: AutomergeFacade) => {
 
     const settings = useSettings();
     const [inItemCreation, setInItemCreation] = useState(false);
@@ -36,23 +40,26 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
     const [inEditable, setInEditable] = useState(false);
     const [dirtyItemId, setDirtyItemId] = useState<string | null>(null);
     const [hidePassword, setHidePassword] = useState(true);
+    // States to track selected and created items for visual feedback
     const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
     const [createdFolderId, setCreatedFolderId] = useState<string | null>(null);
     // State to track if we are in the process of creating a new entry
     const [inEntryCreation, setInEntryCreation] = useState(false);
+    const [curSortCrit, setCurSortCrit] = useState<SortCriteria>(initSortCriterion);
+    const [isAscending, setIsAscending] = useState<boolean>(initIsAscending);
+    const [searchValue, setSearchValue] = useState<string>("");
     const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set([getRootFolder().id]));
 
 
     const [itemToDelete, setItemToDelete] = useState<Item | null>(null);
 
+    /**
+     * sets the current item and clears the dirty item id
+     */
     function setCurItem(item: Item) {
         _setCurItem(item);
         setDirtyItemId(null);
     }
-
-    const [curSortCrit, setCurSortCrit] = useState<SortCriteria>(initSortCriterion);
-    const [isAscending, setIsAscending] = useState<boolean>(initIsAscending);
-    const [searchValue, setSearchValue] = useState<string>("");
 
     /**
      * initializes the sort criterion from the local storage, or uses the default value
@@ -133,6 +140,11 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         }
     }
 
+    /**
+     * Eventually creates an entry in the automerge doc after the user saved the temporary entry in the editable view.
+     *
+     * @param item the new entry
+     */
     function createEntry(item: Item) {
         item.id = reactiveFacade.insertItem(item, curParent.id);
         expandFolder(item.id);
@@ -141,13 +153,19 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         goToItem(item)
     }
 
-
+    /**
+     * Toggles the inEditable state and updates the synchronization setting accordingly
+     */
     function toggleInEdit() {
         settings.setSynchronization(inEditable);
         setInEditable(!inEditable);
     }
 
-
+    /**
+     * Updates the given attributes of the given item
+     * @param itemId
+     * @param changes
+     */
     function updateItemAttribute(itemId: string, changes: [Attribute, string | Date][]) {
         reactiveFacade.updateItem(itemId, changes);
         const id = curItem.id;
@@ -157,10 +175,19 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
 
     }
 
+    /**
+     * Updates the title of the given item
+     * @param itemId the id of the item to be updated
+     * @param newTitle the new title of the item
+     */
     function updateItemTitle(itemId: string, newTitle: string) {
         reactiveFacade.updateItem(itemId, [["name", newTitle]]);
     }
 
+    /**
+     * Prepares the deletion of the given item by setting it to the itemToDelete state
+     * @param item the item to be deleted
+     */
     function deleteItem(item: Item) {
         if (item.id === "") {
             return;
@@ -168,6 +195,9 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setItemToDelete(item);
     }
 
+    /**
+     * Confirms the deletion of the given item, removes it from the database and updates the current item to the parent
+     */
     function confirmDeletion(item: Item) {
         setItemToDelete(null);
         reactiveFacade.deleteItem(item.id);
@@ -176,6 +206,10 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setCurParent(curParent);
     }
 
+    /**
+     * Copies the given text to the clipboard and clears it after the given timeout
+     * If the user is not focused on the tab when the timeout expires, it waits until they come back to clear the clipboard
+     */
     function copyToClipboardAndClear(text: string, timeout: number = 10000) {
         //If a timer is already running, cancel it. This is important for copying twice so that the first copy doesnt delete the second one
         if (clipboardTimerRef.current) {
@@ -263,20 +297,58 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         setTimeout(() => setSelectedItemId(null), 1000);
     }
 
+    /**
+     * Expands the folder with the given id
+     * @param folderId
+     */
     function expandFolder(folderId: string) {
         const newSet = new Set(expandedFolders);
         newSet.add(folderId);
         setExpandedFolders(newSet);
     }
 
+    /**
+     * Collapses the folder with the given id
+     * @param folderId
+     */
     function collapseFolder(folderId: string) {
         const newSet = new Set(expandedFolders);
         newSet.delete(folderId);
         setExpandedFolders(newSet);
     }
 
+    /**
+     * Returns whether the folder with the given id is expanded
+     * @param folderId
+     */
     function isFolderExpanded(folderId: string) {
         return expandedFolders.has(folderId);
+    }
+
+    /**
+     * Gets the children of the given folder, sorted by the current sort criterion and order
+     */
+    function getSortedChildren(folder: Folder): Item[] {
+        switch (`${curSortCrit}-${isAscending}`) {
+            case `${SortCriteria.Name}-true`:
+                return (folder).entries.slice().sort((a, b) => a.title.localeCompare(b.title));
+
+            case `${SortCriteria.Name}-false`:
+                return (folder).entries.slice().sort((a, b) => b.title.localeCompare(a.title));
+
+            case `${SortCriteria.CreatedAt}-true`:
+                return (folder).entries.slice().sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+
+            case `${SortCriteria.CreatedAt}-false`:
+                return (folder).entries.slice().sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+
+            case `${SortCriteria.EditedAt}-true`:
+                return (folder).entries.slice().sort((a, b) => a.editedAt.getTime() - b.editedAt.getTime());
+
+            case `${SortCriteria.EditedAt}-false`:
+                return (folder).entries.slice().sort((a, b) => b.editedAt.getTime() - a.editedAt.getTime());
+        }
+        return [];
     }
 
     return {
@@ -324,5 +396,8 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         expandFolder,
         collapseFolder,
         isFolderExpanded,
+        getSortedChildren,
+        setCurSortCrit,
+        setIsAscending,
     };
 };

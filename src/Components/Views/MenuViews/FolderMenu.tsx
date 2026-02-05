@@ -2,14 +2,20 @@ import React, {useState, useEffect, useRef} from "react";
 import {HiMiniPlus} from "react-icons/hi2";
 import {HiPencil, HiTrash} from "react-icons/hi";
 
-interface Props {
+/**
+ * A 3-dot menu for folders which contains buttons to create an item, edit the title and delete the folder
+ *
+ * @param onDelete method to delete the folder
+ * @param onRename method to rename the folder
+ * @param onAdd method to add a new item to the folder
+ * @param disabled whether the menu is disabled
+ */
+const FolderMenu: React.FC<{
     onDelete: () => void;
     onRename: () => void;
     onAdd: () => void;
     disabled: boolean;
-}
-
-const FolderMenu: React.FC<Props> = ({onDelete, onRename, onAdd, disabled}) => {
+}> = ({onDelete, onRename, onAdd, disabled}) => {
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 

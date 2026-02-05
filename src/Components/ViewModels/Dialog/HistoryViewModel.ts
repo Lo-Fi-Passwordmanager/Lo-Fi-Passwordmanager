@@ -3,8 +3,8 @@ import type {AutomergeFacade} from "../../../Utility/AutomergeFacade.ts";
 import type {HistoryEntry} from "../../../Model/Automerge/HistoryEntry.ts";
 
 /**
- * The ViewModel that is used for interfacing the {@link Settings} singleton.
- * It uses states to reload react when chaning settings, so that they get applied
+ * The Viewmodel for the {@link HistoryDialog}
+ * @param automergeFacade the automergefaced with the database that should be displayed
  */
 export const useHistoryViewModel = (automergeFacade: AutomergeFacade) => {
 

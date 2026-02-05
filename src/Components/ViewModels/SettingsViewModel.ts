@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 
 /**
  * The ViewModel that is used for interfacing the {@link Settings} singleton.
- * It uses states to reload react when chaning settings, so that they get applied
+ * It uses states to reload react when changing settings, so that they get applied
  */
 export const useSettingsViewModel = () => {
 
@@ -13,8 +13,6 @@ export const useSettingsViewModel = () => {
     // Reactive state to store values during runtime
     const [darkMode, setDarkMode] = useState(settings.getDarkMode());
     const [synchronisation, setSynchronisation] = useState(settings.getSynchronization());
-    // not working right now
-    //const [autoConflictRes, setAutoConflictRes] = useState(settings.getAutoConflictResolution());
     const [timeOutActive, setTimeOutActive] = useState(settings.getTimeoutActive());
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [timeoutLength, setTimeoutLength] = useState(settings.getTimeoutLength());
@@ -24,7 +22,6 @@ export const useSettingsViewModel = () => {
     const [serverNames, setServerNames] = useState<string[]>(Array.from(servers.keys()));
     const [addServerDialogOpen, setAddServerDialogOpen] = useState<boolean>(false);
     const [P2P, setP2P] = useState<boolean>(settings.getP2P());
-
     document.getElementsByTagName("html")[0]?.setAttribute("data-theme", darkMode ? "dark" : "light");
 
     // When darkMode is updated, update settings
@@ -63,24 +60,22 @@ export const useSettingsViewModel = () => {
         setSynchronisation(!synchronisation);
     }
 
+    // Add a new server to the settings
     function addServer(name: string, url: string) {
         //TODO: Add validation for name and url
         settings.addServer(name, url);
     }
 
+    // Remove a server from the settings
     function removeServer(server: string) {
         settings.removeServer(server);
     }
 
+    // Select a server from the settings
     function selectServer(server: string) {
         settings.setServerUrl(server);
         setServerName(server);
     }
-
-    /*
-    function toggleAutoConflictRes() {
-        setAutoConflictRes(!autoConflictRes);
-    }*/
 
     function toggleTimeOutActive() {
         setTimeOutActive(!timeOutActive);
@@ -93,22 +88,31 @@ export const useSettingsViewModel = () => {
         }
     }
 
-    function increase() {
+    //Increases timeout length by 1 minute
+    function increaseTimeout() {
         setTimeOutLengthVM((timeoutLength + 1).toString());
     }
 
+    // Decreases timeout length by 1 minute
+    function decreaseTimeout() {
+        if(timeoutLength > 1) {
+            setTimeOutLengthVM((timeoutLength - 1).toString());
+        }
+    }
+
+    /**
+     * Get own peer id
+     */
     function getPeerId() {
         return settings.getPeer().id;
     }
 
+    /**
+     * Set the peer id to connect to
+     * @param id the id to connect to
+     */
     function setConnection(id: string) {
         settings.setConnector(id);
-    }
-
-    function decrease() {
-        if(timeoutLength > 1) {
-            setTimeOutLengthVM((timeoutLength - 1).toString());
-        }
     }
 
     function toggleP2P() {
@@ -120,7 +124,6 @@ export const useSettingsViewModel = () => {
     return {
         darkMode,
         synchronisation,
-        //autoConflictRes,
         timeOutActive,
         settingsOpen,
         timeoutLength,
@@ -134,12 +137,11 @@ export const useSettingsViewModel = () => {
         setConnection,
         toggleDarkMode,
         toggleSynchronisation,
-        //toggleAutoConflictRes,
         toggleTimeOutActive,
         setSettingsOpen,
         setTimeOutLengthVM,
-        increase,
-        decrease,
+        increaseTimeout,
+        decreaseTimeout,
         getPeerId,
         addServer,
         removeServer,

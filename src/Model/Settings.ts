@@ -38,7 +38,11 @@ export function useSettings() {
     return settings;
 }
 
-
+/**
+ * The Settings class, implementing a singleton pattern.
+ * This guarantess that only one settings object can exist at a time.
+ * On the start of the programm the settings get loaded from the local storage
+ */
 export class Settings {
     private static instance: Settings;
     private _synchronization: boolean;
