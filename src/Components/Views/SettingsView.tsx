@@ -259,6 +259,12 @@ const SettingsView: React.FC<{
                                     </button>
 
                                     <button
+                                        onClick={() => window.open("https://react-icons.github.io/react-icons/", "_blank")}
+                                        style={{padding: "8px 15px", cursor: "pointer"}}>
+                                        React Icons
+                                    </button>
+
+                                    <button
                                         onClick={() => window.open("https://github.com/nimiq/qr-scanner", "_blank")}
                                         style={{padding: "8px 15px", cursor: "pointer"}}>
                                         QR Scanner
@@ -267,7 +273,7 @@ const SettingsView: React.FC<{
                                     <button
                                         onClick={() => window.open("https://github.com/rosskhanas/react-qr-code", "_blank")}
                                         style={{padding: "8px 15px", cursor: "pointer"}}>
-                                        React Icons
+                                        React QR Code
                                     </button>
                                 </div>
 

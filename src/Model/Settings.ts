@@ -126,6 +126,7 @@ export class Settings {
     public setSynchronization(value: boolean) {
         this._synchronization = value;
         storeSynchronizationSettings(value);
+        this.notify();
     }
 
 

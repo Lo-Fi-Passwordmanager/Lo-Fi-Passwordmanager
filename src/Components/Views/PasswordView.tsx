@@ -61,6 +61,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
 
                         {/*Shows only the Views, that match the given search input*/}
                         {passwordViewModel.searchValue.length > 0 && <FilteredListView
+                            key={0}
                             root={passwordViewModel.getRootFolder()}
                             setCurItem={passwordViewModel.setCurItem}
                             deleteItem={passwordViewModel.deleteItem}
@@ -76,6 +77,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
 
                             {/*The basic ListView which shows all Items and Folders in their hierarchy*/}
                             {passwordViewModel.searchValue.length === 0 && <ListView
+                                key={0}
                                 item={passwordViewModel.getRootFolder()}
                                 setCurItem={passwordViewModel.setCurItem}
                                 setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
