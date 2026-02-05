@@ -7,7 +7,6 @@ import {RepoContext} from "@automerge/react";
 import LoadingScreen from "./DialogViews/LoadingScreen.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
 import PWMLogo from "../../assets/logo_gelb.svg?inline";
-import LogoOutlines from "./Icons/LogoOutlines.tsx";
 
 const PasswordManagerView: React.FC = () => {
 
@@ -41,12 +40,6 @@ const PasswordManagerView: React.FC = () => {
                     <div className={"password-manager-header"}>
                         <img src={PWMLogo} className="logo header" alt="Passwortmanager Logo"/>
                         <h2>LoFi Passwortmanager</h2>
-                        {viewModel.getSync() && <div className={"sync-status-indicator"}>
-                            <div className={"icon-container"} style={{aspectRatio: 1, height: "3vh"}}>
-                                <LogoOutlines className="spinning-svg" color={"var(--panel)"}/>
-                            </div>
-                            <span>connected with '{viewModel.getSync() === "server" ? viewModel.getServerName() : "Peer-To-Peer"}'</span>
-                        </div>}
                         <SettingsView automergeFacade={viewModel.getAutomergeFacade()}
                                       openedDbName={viewModel.openedDatabaseName}/>
                     </div>
