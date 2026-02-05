@@ -1,5 +1,8 @@
 import type {AutomergeItem} from "./AutomergeItem.ts";
 
+/**
+ * The class that gets stored into the automergedocument as parent
+ */
 export class AutomergeDoc {
 
     salt: string
