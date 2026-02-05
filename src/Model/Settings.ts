@@ -13,7 +13,6 @@ import {
     storeTimeoutLength,
     storeTimeoutSettings,
 } from "../Utility/Storage.ts";
-import {node} from "globals";
 
 type SettingsListener = () => void;
 
