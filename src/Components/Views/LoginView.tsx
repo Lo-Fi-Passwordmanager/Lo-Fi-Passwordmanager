@@ -1,5 +1,5 @@
 import React from "react";
-import {loginViewModel} from "../ViewModels/LoginViewModel.ts";
+import {useLoginViewModel} from "../ViewModels/loginViewModel.ts";
 import DatabaseListingView from "./ListingViews/DatabaseListingView.tsx";
 import CreateDatabaseDialog from "./DialogViews/CreateDatabaseDialog.tsx";
 import LoginDatabaseDialog from "./DialogViews/LoginDatabaseDialog.tsx";
@@ -27,7 +27,7 @@ const LoginView: React.FC<{
     setOpenedDbName: (value: (((prevState: string) => string) | string)) => void
 }> = ({repo, setLoggedIn, setAutomergeFacade, securityProvider, setOpenedDbName}) => {
 
-    const viewModel = loginViewModel(repo, setLoggedIn, setAutomergeFacade, securityProvider, setOpenedDbName);
+    const viewModel = useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, securityProvider, setOpenedDbName);
 
     return (
         <div className="loginView">

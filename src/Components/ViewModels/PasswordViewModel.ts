@@ -171,6 +171,8 @@ export const usePasswortViewModel = (automergeFacade: AutomergeFacade) => {
         const id = curItem.id;
         setCurItem(getRootFolder());
         setDirtyItemId(id);
+
+
     }
 
     /**

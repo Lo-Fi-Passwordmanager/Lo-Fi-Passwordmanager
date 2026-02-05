@@ -38,7 +38,7 @@ const AddServerDialog: React.FC<{
                         type="text"
                         value={url}
                         onChange={(e) => setUrl(e.target.value)}
-                        placeholder="wws://my-server.org"
+                        placeholder="wss://my-server.org"
                     />
                 </label>
                 <div className="dialogActions">

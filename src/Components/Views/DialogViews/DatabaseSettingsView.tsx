@@ -16,8 +16,9 @@ const DatabaseSettingsView: React.FC<{
         <>
             <div className="dbSettingsContainer">
                 {/* TODO Toast */}
-                <div>
+                <div style={{display:"flex", justifyContent:"space-between", gap:"12px"}}>
                 <button
+                    style={{width:"100%"}}
                     onClick={
                         () => navigator.clipboard.writeText(
                             (automergeFacade.automergeURL as string).replace("automerge:", "")

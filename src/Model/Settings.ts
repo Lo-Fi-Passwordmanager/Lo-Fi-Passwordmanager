@@ -1,10 +1,18 @@
 import {useEffect, useState} from "react";
-
-const SYNCHRONISATION = "synchronisation";
-const AUTO_CONFLICT_RESOLUTION = "auto_conflict_resolution";
-const DARK_MODE = "dark_mode"
-const TIMEOUT_ACTIVE = "timeout_active"
-const TIMEOUT_LENGTH = "timeout_length"
+import {
+    loadDarkModeSetting,
+    loadSelectedServerURL,
+    loadServers,
+    loadSynchronizationSettings,
+    loadTimeoutLength,
+    loadTimeoutSettings,
+    storeSynchronizationSettings,
+    storeDarkModeSetting,
+    storeSelectedServerURL,
+    storeServers,
+    storeTimeoutLength,
+    storeTimeoutSettings,
+} from "../Utility/Storage.ts";
 
 type SettingsListener = () => void;
 
@@ -36,7 +44,6 @@ export function useSettings() {
 export class Settings {
     private static instance: Settings;
     private _synchronization: boolean;
-    private _autoConflictResolution: boolean;
     private _darkMode: boolean;
     private _timeoutActive: boolean;
     private _timeoutLength: number;
@@ -46,69 +53,13 @@ export class Settings {
     private listeners: SettingsListener[] = [];
 
     private constructor() {
-        //standard settings - think before changing
-        const synchronisation = localStorage.getItem(SYNCHRONISATION)
-        const autoConflictResolution = localStorage.getItem(AUTO_CONFLICT_RESOLUTION)
-        const darkMode = localStorage.getItem(DARK_MODE)
-        const timeoutActive = localStorage.getItem(TIMEOUT_ACTIVE)
-        const timeoutLength = localStorage.getItem(TIMEOUT_LENGTH);
-        const serverUrl = localStorage.getItem("server_url");
-        const servers = localStorage.getItem("servers_list");
+        this._synchronization = loadSynchronizationSettings();
+        this._darkMode = loadDarkModeSetting();
+        this._timeoutActive = loadTimeoutSettings();
+        this._timeoutLength = loadTimeoutLength();
+        this._serverUrl = loadSelectedServerURL();
+        this._servers = loadServers();
 
-        if (serverUrl) {
-            this._serverUrl = serverUrl;
-        } else {
-            localStorage.setItem("server_url", "wss://sync.automerge.org")
-            this._serverUrl = "wss://sync.automerge.org"
-        }
-
-        if (servers) {
-            this._servers = new Map<string, string>();
-            JSON.parse(servers).forEach(([name, url]: [string, string]) => {
-                this._servers.set(name, url);
-            });
-        } else {
-            const defaultServers = new Map<string, string>([
-                ["Automerge Sync Server", "wss://sync.automerge.org"]
-            ]);
-            localStorage.setItem("servers_list", JSON.stringify(Array.from(defaultServers.entries())));
-            this._servers = defaultServers;
-        }
-
-        if (synchronisation) {
-            this._synchronization = JSON.parse(synchronisation);
-        } else {
-            localStorage.setItem(SYNCHRONISATION, JSON.stringify(true))
-            this._synchronization = true
-        }
-
-        if (autoConflictResolution) {
-            this._autoConflictResolution = JSON.parse(autoConflictResolution);
-        } else {
-            localStorage.setItem(AUTO_CONFLICT_RESOLUTION, JSON.stringify(true))
-            this._autoConflictResolution = true
-        }
-
-        if (darkMode) {
-            this._darkMode = JSON.parse(darkMode);
-        } else {
-            localStorage.setItem(DARK_MODE, JSON.stringify(true))
-            this._darkMode = true
-        }
-
-        if (timeoutActive) {
-            this._timeoutActive = JSON.parse(timeoutActive);
-        } else {
-            localStorage.setItem(TIMEOUT_ACTIVE, JSON.stringify(true))
-            this._timeoutActive = true
-        }
-
-        if (timeoutLength != null) {
-            this._timeoutLength = JSON.parse(timeoutLength);
-        } else {
-            localStorage.setItem(TIMEOUT_LENGTH, JSON.stringify(10))
-            this._timeoutLength = 10;
-        }
     }
 
     public static getSettings(): Settings {
@@ -133,7 +84,7 @@ export class Settings {
 
     public setServerUrl(name: string) {
         this._serverUrl = this._servers.get(name) || "";
-        localStorage.setItem("server_url", this._serverUrl);
+        storeSelectedServerURL(this._serverUrl);
         this.notify();
     }
 
@@ -144,14 +95,14 @@ export class Settings {
     public addServer(serverName: string, serverUrl: string): void {
         if (!this._servers.get(serverName)) {
             this._servers.set(serverName, serverUrl);
-            localStorage.setItem("servers_list", JSON.stringify(Array.from(this._servers.entries())));
+            storeServers(this._servers);
             this.notify();
         }
     }
 
     public removeServer(server: string): void {
         this._servers = this._servers.delete(server) ? this._servers : this._servers;
-        localStorage.setItem("servers_list", JSON.stringify(Array.from(this._servers.entries())));
+        storeServers(this._servers);
         this.notify();
     }
 
@@ -161,18 +112,10 @@ export class Settings {
 
     public setSynchronization(value: boolean) {
         this._synchronization = value;
-        localStorage.setItem(SYNCHRONISATION, JSON.stringify(value));
+        storeSynchronizationSettings(value);
         this.notify();
     }
 
-    public getAutoConflictResolution(): boolean {
-        return this._autoConflictResolution;
-    }
-
-    public setAutoConflictResolution(value: boolean) {
-        this._autoConflictResolution = value;
-        localStorage.setItem(AUTO_CONFLICT_RESOLUTION, JSON.stringify(value))
-    }
 
     public getDarkMode(): boolean {
         return this._darkMode;
@@ -180,7 +123,7 @@ export class Settings {
 
     public setDarkMode(value: boolean) {
         this._darkMode = value;
-        localStorage.setItem(DARK_MODE, JSON.stringify(value))
+        storeDarkModeSetting(value);
     }
 
     public getTimeoutActive(): boolean {
@@ -189,7 +132,7 @@ export class Settings {
 
     public setTimeoutActive(value: boolean) {
         this._timeoutActive = value;
-        localStorage.setItem(TIMEOUT_ACTIVE, JSON.stringify(value))
+        storeTimeoutSettings(value);
     }
 
     public getTimeoutLength(): number {
@@ -198,7 +141,7 @@ export class Settings {
 
     public setTimeoutLength(length: number) {
         this._timeoutLength = length;
-        localStorage.setItem(TIMEOUT_LENGTH, JSON.stringify(length));
+        storeTimeoutLength(length);
         this.notify();
     }
 

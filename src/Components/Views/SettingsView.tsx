@@ -1,6 +1,6 @@
 import {useSettingsViewModel} from "../ViewModels/SettingsViewModel.ts";
 import React from "react";
-import  {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
 import Close from "./Icons/Close.tsx";
 import {HiMiniCog8Tooth, HiMiniMinus, HiMiniPlus} from "react-icons/hi2";
@@ -152,7 +152,7 @@ const SettingsView: React.FC<{
                                 <h3>Datenbankeinstellungen</h3>
                                 {automergeFacade ? (
                                     <DatabaseSettingsView automergeFacade={automergeFacade}
-                                    openedDatabaseName={openedDbName}/>
+                                                          openedDatabaseName={openedDbName}/>
                                 ) : (
                                     <p>Bitte Datenbank auswählen.</p>
                                 )}
@@ -171,7 +171,7 @@ const SettingsView: React.FC<{
                                     <h2 style={{marginBottom: "5px"}}>Über diese Anwendung</h2>
                                 </div>
 
-                                <section className="about-section">
+                                <section>
                                     <p><strong>Version:</strong> 0.1.0-beta</p>
                                     <p><strong>Lizenz:</strong> MIT License</p>
                                 </section>
@@ -189,7 +189,7 @@ const SettingsView: React.FC<{
                                 </section>
 
                                 {/* Buttons für React und Automerge */}
-                                <div style={{display: "flex", gap: "10px", justifyContent: "center"}}>
+                                <div className="about-buttons">
                                     <button
                                         onClick={() => window.open("https://react.dev", "_blank")}
                                         style={{padding: "8px 15px", cursor: "pointer"}}>
@@ -229,7 +229,7 @@ const SettingsView: React.FC<{
                                     <button
                                         onClick={() => window.open("https://github.com/rosskhanas/react-qr-code", "_blank")}
                                         style={{padding: "8px 15px", cursor: "pointer"}}>
-                                        React Icons
+                                        React QR Code
                                     </button>
                                 </div>
 
