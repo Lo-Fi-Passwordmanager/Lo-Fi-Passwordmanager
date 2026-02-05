@@ -11,6 +11,9 @@ import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import {useIdleTimer} from "react-idle-timer";
 import {Settings, useSettings} from "../../Model/Settings.ts";
 
+/**
+ * The view model used by the PasswordManagerView. Manages the state and logic for the password manager.
+ */
 export const usePasswordManagerViewModel = () => {
     const settings = useSettings();
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
@@ -43,10 +46,6 @@ export const usePasswordManagerViewModel = () => {
         storage:
             new IndexedDBStorageAdapter()
     });
-
-    function getLoggedIn(): boolean {
-        return loggedIn;
-    }
 
     function getAutomergeFacade(): AutomergeFacade | null {
         return automergeFacade;
@@ -86,8 +85,8 @@ export const usePasswordManagerViewModel = () => {
         toastMessage,
         toastVisible,
         openedDatabaseName,
+        loggedIn,
         setOpenedDatabaseName,
-        getLoggedIn,
         setLoggedIn,
         setAutomergeFacade,
         getAutomergeFacade,

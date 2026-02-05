@@ -8,10 +8,11 @@ import EyeButton from "./ButtonViews/EyeButton.tsx";
 
 
 /**
- * The View that depicts an Entry with all its attributes at large scale while beeing editable
+ * The View that depicts an Entry with all its attributes at large scale while being editable
+ *
  * @param item the entry that should be depicted
  * @param updateItemAttribute the function on the active {@link AutomergeFacade} to update a item in the doc
- * @param setEditableView the function to close the editable passwordview
+ * @param setEditableView the function to close the editable passwordView
  */
 const EditableEntryView: React.FC<{
     item: Item,
@@ -63,7 +64,7 @@ const EditableEntryView: React.FC<{
                                        onChange={(e) => viewmodel.setPassword(e.target.value)}/>
                                 <EyeButton hidePassword={hidePassword} toggleHidePassword={toggleHidePassword}/>
                                 <PasswordGenDialog
-                                    newPassword={(password: string) => viewmodel.setPassword(password)}/>
+                                    setNewPassword={(password: string) => viewmodel.setPassword(password)}/>
                             </div>
                             <div className={"entryViewAttribute"}>
                                 {/* adds https://www. to the start of the link*/}

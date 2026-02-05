@@ -6,36 +6,39 @@ import QRCode from "react-qr-code";
 
 // QRCode Generator https://github.com/rosskhanas/react-qr-code
 
-
-interface ShareQRDialogProps {
+/**
+ * A dialog that shows a QR code to share a database.
+ *
+ * @param name The name of the database to share.
+ * @param url The URL of the database to share.
+ */
+const ShareQRDialog: React.FC<{
     name: string,
     url: string
-}
+}> = ({name, url}) => {
+    const viewModel = useShareQRViewModel(name, url);
 
-const ShareQRDialog: React.FC<ShareQRDialogProps> = ({name, url}: ShareQRDialogProps) => {
-    const viewmodel = useShareQRViewModel(name, url);
-
-    if (viewmodel.shareQRCodeOpen) {
+    if (viewModel.shareQRCodeOpen) {
         return (
             <>
                 <button
                     className="squareButton"
-                    onClick={() => viewmodel.setShareQRCodeOpen(true)}>
+                    onClick={() => viewModel.setShareQRCodeOpen(true)}>
                     <HiOutlineQrcode size={24}/>
                 </button>
-                <Dialog title={"Datenbank teilen"} onCloseDialog={() => viewmodel.setShareQRCodeOpen(false)}
+                <Dialog title={"Datenbank teilen"} onCloseDialog={() => viewModel.setShareQRCodeOpen(false)}
                         className="qrDialog">
                     <p>Scanne den QR-Code auf einem anderen Gerät im "Datenbank hinzufügen" Dialog, um die Datenbank mit
-                       dem Namen "{name}"
-                       dort
-                       hinzuzufügen.</p>
+                        dem Namen "{name}"
+                        dort
+                        hinzuzufügen.</p>
                     <label className="checkboxRow">
-                        <input type="checkbox" checked={viewmodel.shareName}
-                               onChange={viewmodel.toggleShareName}/>
+                        <input type="checkbox" checked={viewModel.shareName}
+                               onChange={viewModel.toggleShareName}/>
                         Name der Datenbank auch teilen
                     </label>
 
-                    <QRCode value={viewmodel.qrValue} className="qrCode"/>
+                    <QRCode value={viewModel.qrValue} className="qrCode"/>
                 </Dialog>
             </>
         );
@@ -43,7 +46,7 @@ const ShareQRDialog: React.FC<ShareQRDialogProps> = ({name, url}: ShareQRDialogP
         return (
             <button
                 className="squareButton"
-                onClick={() => viewmodel.setShareQRCodeOpen(true)}>
+                onClick={() => viewModel.setShareQRCodeOpen(true)}>
                 <HiOutlineQrcode size={24}/>
             </button>
         );

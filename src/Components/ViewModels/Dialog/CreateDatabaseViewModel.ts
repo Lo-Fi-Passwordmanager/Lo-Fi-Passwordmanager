@@ -2,8 +2,18 @@ import {useEffect, useState} from "react";
 import {isValidAutomergeUrl} from "@automerge/react";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
 
+
+/**
+ * The Viewmodel for handling the {@link CreateDatabaseDialog} from the Login/Home Screen
+ * @param isOpen a boolean that should be true, if the dialog should be shown. Changing this, triggers the fields to reset their values.
+ * @param createDatabase the function to create the database with the given name and pasword
+ * @param storeDatabase the function to store a database by its automergeurl
+ * @param setToastMessage the functino to set the toast message
+ * @param setShowToast the function to actually display the toast
+ * @param importDatabase the function to import a database from a file
+ */
 export const useCreateDatabaseViewModel = (isOpen: boolean,
-    createDatabase: (field1: string, field2: string) => void,
+    createDatabase: (name: string, password: string) => void,
     storeDatabase: (name: string, autoMergeUrl: AutomergeUrl) => void,
     setToastMessage: (message: string) => void,
     setShowToast: (show: boolean) => void,

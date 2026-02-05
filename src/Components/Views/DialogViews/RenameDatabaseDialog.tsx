@@ -3,13 +3,16 @@ import {useRenameDatabaseViewModel} from "../../ViewModels/Dialog/RenameDatabase
 import {HiPencil} from "react-icons/hi";
 import Dialog from "./Dialog.tsx";
 
-
-interface RenameDatabaseDialogProps {
+/**
+ * A dialog that allows the user to rename a database.
+ *
+ * @param oldName The current name of the database.
+ * @param renameDatabase Function to rename the database.
+ */
+const RenameDatabaseDialog: React.FC<{
     oldName: string;
     renameDatabase: (oldName: string, newName: string) => void;
-}
-
-const RenameDatabaseDialog: React.FC<RenameDatabaseDialogProps> = ({oldName, renameDatabase}: RenameDatabaseDialogProps) => {
+}> = ({oldName, renameDatabase}) => {
     const viewModel = useRenameDatabaseViewModel(oldName, renameDatabase);
 
     if (viewModel.renameDatabaseOpen) {

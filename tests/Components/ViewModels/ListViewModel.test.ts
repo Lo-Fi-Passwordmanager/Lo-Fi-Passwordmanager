@@ -8,8 +8,6 @@ import {SortCriteria} from "../../../src/Components/ViewModels/PasswordViewModel
 describe("ListViewModel", () => {
 
     const topItem = new Folder("krasser Titel", "123", new Date(1), new Date(2));
-    const currentSortCrit = SortCriteria.Name;
-    const isAscending = true;
     const dirtyItemID: string = "";
     const setCurrItem = vi.fn();
     const updateItemTitle = vi.fn();
@@ -40,42 +38,42 @@ describe("ListViewModel", () => {
 
     it("should be able to tell when its a folder", () => {
         const {result} = renderHook(() =>
-            useListViewModel(topItem, currentSortCrit, isAscending, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded));
+            useListViewModel(topItem, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded));
         expect(result.current.isItemFolder()).toBe(true);
         expect(result.current.isItemEntry()).toBe(false);
     });
 
     it("should be able to tell when its an entry", () => {
         const {result} = renderHook(() =>
-            useListViewModel(entry, currentSortCrit, isAscending, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded));
+            useListViewModel(entry, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded));
         expect(result.current.isItemFolder()).toBe(false);
         expect(result.current.isItemEntry()).toBe(true);
     });
 
     it("should be able to return itself", () => {
         const {result} = renderHook(() =>
-            useListViewModel(topItem, currentSortCrit, isAscending, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded));
+            useListViewModel(topItem, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded));
         expect(result.current.getItem()).toStrictEqual(topItem);
     });
 
     it("should be able to return its children", () => {
         const {result} = renderHook(() =>
-            useListViewModel(topItem, currentSortCrit, isAscending, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded));
-        const children = result.current.getChildren();
+            useListViewModel(topItem, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded));
+        const children = result.current.descendantIds;
         expect(children.length).toBe(4);
-        const sortedByTitle = [subFolder1, entry, entry2, entry3].sort((a, b) => a.title.localeCompare(b.title));
-        expect(children).toStrictEqual(sortedByTitle);
+        //const sortedByTitle = [subFolder1, entry, entry2, entry3].sort((a, b) => a.title.localeCompare(b.title));
+        //expect(children).toStrictEqual(sortedByTitle);
     });
 
     it("should return nothing as childern when the item is an entry", () => {
         const {result} = renderHook(() =>
-            useListViewModel(entry, currentSortCrit, isAscending, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded));
-        expect(result.current.getChildren()).toBe(undefined);
+            useListViewModel(entry, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded));
+        expect(result.current.descendantIds.length).toBe(0);
     });
 
     it('should be able to call for an update to an item in automerge', async () => {
         const {result} = renderHook(() =>
-            useListViewModel(topItem, currentSortCrit, isAscending, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded));
+            useListViewModel(topItem, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded));
         act(() => {
             result.current.setItemTitle("newName");
         })
@@ -87,34 +85,4 @@ describe("ListViewModel", () => {
         })
     });
 
-    it('should be able to', () => {
-
-    })
-
-    it('should be able to sort according to criteria', () => {
-        let {result} = renderHook(() =>
-            useListViewModel(topItem, SortCriteria.Name, true, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId));
-        expect(result.current.getChildren()).toStrictEqual([entry, entry2, entry3, subFolder1]);
-
-        ({ result } = renderHook(() =>
-            useListViewModel(topItem, SortCriteria.Name, false, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId)));
-        expect(result.current.getChildren()).toStrictEqual([subFolder1, entry3, entry2, entry]);
-
-        ({ result } = renderHook(() =>
-            useListViewModel(topItem, SortCriteria.CreatedAt, true, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId)));
-        expect(result.current.getChildren()).toStrictEqual([entry3, entry, subFolder1, entry2]);
-
-        ({ result } = renderHook(() =>
-            useListViewModel(topItem, SortCriteria.CreatedAt, false, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId)));
-        expect(result.current.getChildren()).toStrictEqual([entry2, subFolder1, entry, entry3]);
-
-        ({ result } = renderHook(() =>
-            useListViewModel(topItem, SortCriteria.EditedAt, true, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId)));
-        expect(result.current.getChildren()).toStrictEqual([entry, subFolder1, entry2, entry3]);
-
-        ({ result } = renderHook(() =>
-            useListViewModel(topItem, SortCriteria.EditedAt, false, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId)));
-        expect(result.current.getChildren()).toStrictEqual([entry3, entry2, subFolder1, entry]);
-
-    })
 });

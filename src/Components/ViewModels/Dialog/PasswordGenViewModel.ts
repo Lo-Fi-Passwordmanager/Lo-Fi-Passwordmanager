@@ -8,10 +8,14 @@ import {
 } from "../../../Utility/PasswordGenerator.ts";
 
 export interface PasswordGenDialogProps {
-    newPassword: (password: string) => void;
+    setNewPassword: (password: string) => void;
 }
 
-export const usePasswordGenViewModel = (newPassword: (password: string) => void) => {
+/**
+ * The Viewmodel for {@link PasswordGenDialog}
+ * @param setNewPassword the function that writes the generated password into the correct field of the item
+ */
+export const usePasswordGenViewModel = (setNewPassword: (password: string) => void) => {
 
     const [length, setLength] = useState("20");
     const [uppercase, setUppercase] = useState(true);
@@ -29,7 +33,7 @@ export const usePasswordGenViewModel = (newPassword: (password: string) => void)
             return;
         }
         const characters: string[] = getCharacters(uppercase, lowercase, numbers, special);
-        newPassword(generatePassword(Number(length), characters));
+        setNewPassword(generatePassword(Number(length), characters));
         setPasswordGenOpen(false);
     }
 

@@ -5,6 +5,12 @@ import type {SecurityProvider} from "../../../Utility/Security/SecurityProvider.
 import {HiEye} from "react-icons/hi";
 import {HiEyeSlash} from "react-icons/hi2";
 
+/**
+ * A component that represents a single history item in the history dialog.
+ *
+ * @param historyEntry The history entry to display.
+ * @param securityProvider The security provider used for decrypting sensitive data.
+ */
 export const HistoryItem: React.FC<{
     historyEntry: HistoryEntry,
     securityProvider: SecurityProvider

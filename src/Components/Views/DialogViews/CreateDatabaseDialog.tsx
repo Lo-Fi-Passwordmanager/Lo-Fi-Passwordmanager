@@ -5,6 +5,23 @@ import EyeButton from "../ButtonViews/EyeButton.tsx";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
 import QRScannerDialog from "./QRScannerDialog.tsx";
 
+/**
+ * A dialog that allows the user to create a new database or import an existing one.
+ *
+ * @param isOpen whether the dialog is open
+ * @param title the title of the dialog
+ * @param label1 the label for the first input field
+ * @param label2 the label for the second input field
+ * @param createDatabase method to create a new database
+ * @param onCancel method to call when the dialog is cancelled
+ * @param importDatabaseFromURL method to import a database from a URL
+ * @param setToastMessage method to set the toast message
+ * @param setShowToast method to show or hide the toast
+ * @param importDatabaseFromFile method to import a database from a file
+ * @param hidePassword whether the password is hidden
+ * @param toggleHidePassword method to toggle the password visibility
+ * @constructor
+ */
 const CreateDatabaseDialog: React.FC<{
     isOpen: boolean,
     title: string,
@@ -12,10 +29,10 @@ const CreateDatabaseDialog: React.FC<{
     label2: string,
     createDatabase: (field1: string, field2: string) => void,
     onCancel: () => void,
-    storeDatabase: (name: string, autoMergeUrl: AutomergeUrl) => void,
+    importDatabaseFromURL: (name: string, autoMergeUrl: AutomergeUrl) => void,
     setToastMessage: (message: string) => void,
     setShowToast: (show: boolean) => void,
-    importDatabase: (targetFiles: (FileList | null), name: string) => void
+    importDatabaseFromFile: (targetFiles: (FileList | null), name: string) => void
     hidePassword: boolean,
     toggleHidePassword: () => void,
 }
@@ -26,15 +43,15 @@ const CreateDatabaseDialog: React.FC<{
     label2,
     createDatabase,
     onCancel,
-    storeDatabase,
+    importDatabaseFromURL,
     setToastMessage,
     setShowToast,
-    importDatabase,
+    importDatabaseFromFile,
     hidePassword,
     toggleHidePassword
 }) => {
 
-    const viewModel = useCreateDatabaseViewModel(isOpen, createDatabase, storeDatabase, setToastMessage, setShowToast, importDatabase);
+    const viewModel = useCreateDatabaseViewModel(isOpen, createDatabase, importDatabaseFromURL, setToastMessage, setShowToast, importDatabaseFromFile);
 
     if (!isOpen) return null;
 

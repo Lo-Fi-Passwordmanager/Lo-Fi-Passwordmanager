@@ -8,15 +8,20 @@ import AddServerDialog from "./DialogViews/AddServerDialog.tsx";
 import {HiTrash} from "react-icons/hi";
 import Dialog from "./DialogViews/Dialog.tsx";
 
+/**
+ * The View that represents the Settings Dialog and Button to open it
+ * @param automergeFacade the current AutomergeFacade instance
+ * @param openedDbName the name of the currently opened database
+ */
 const SettingsView: React.FC<{
     automergeFacade?: AutomergeFacade | null,
     openedDbName?: string
 }> = ({automergeFacade, openedDbName}) => {
-    const viewmodel = useSettingsViewModel();
+    const viewModel = useSettingsViewModel();
 
-    if (!viewmodel.settingsOpen) {
+    if (!viewModel.settingsOpen) {
         return (
-            <button className="settingsButton" onClick={() => viewmodel.setSettingsOpen(true)}>
+            <button className="settingsButton" onClick={() => viewModel.setSettingsOpen(true)}>
                 <HiMiniCog8Tooth size={24}/>
             </button>
         );
@@ -25,25 +30,25 @@ const SettingsView: React.FC<{
     return (
         <Dialog
             title="Einstellungen"
-            onCloseDialog={() => viewmodel.setSettingsOpen(false)}
+            onCloseDialog={() => viewModel.setSettingsOpen(false)}
         >
             <div className="settingsBackground dialogOverlay">
                 <div className="dialog settings-layout">
                     <Close className="closeIcon" color={"var(--text)"}
-                           onClick={() => viewmodel.setSettingsOpen(false)}/>
+                           onClick={() => viewModel.setSettingsOpen(false)}/>
                     {/* Sidebar Navigation */}
                     <aside className="settings-sidebar">
                         <h2 style={{alignSelf: "flex-start"}}>Einstellungen</h2>
-                        <button className={`settings-tab ${viewmodel.activeTab === "general" ? "active" : ""}`}
-                                onClick={() => viewmodel.setActiveTab("general")}>
+                        <button className={`settings-tab ${viewModel.activeTab === "general" ? "active" : ""}`}
+                                onClick={() => viewModel.setActiveTab("general")}>
                             Allgemeine Einstellungen
                         </button>
-                        <button className={`settings-tab ${viewmodel.activeTab === "database" ? "active" : ""}`}
-                                onClick={() => viewmodel.setActiveTab("database")}>
+                        <button className={`settings-tab ${viewModel.activeTab === "database" ? "active" : ""}`}
+                                onClick={() => viewModel.setActiveTab("database")}>
                             Datenbankeinstellungen
                         </button>
-                        <button className={`settings-tab ${viewmodel.activeTab === "about" ? "active" : ""}`}
-                                onClick={() => viewmodel.setActiveTab("about")}>
+                        <button className={`settings-tab ${viewModel.activeTab === "about" ? "active" : ""}`}
+                                onClick={() => viewModel.setActiveTab("about")}>
                             Über die App
                         </button>
                     </aside>
@@ -51,39 +56,39 @@ const SettingsView: React.FC<{
 
                     {/* Main Content Area */}
                     <main className="scrollableContainer settings-content">
-                        {viewmodel.activeTab === "general" && (
+                        {viewModel.activeTab === "general" && (
                             <div className="settingsContainer">
                                 <h3>Allgemeine Einstellungen</h3>
                                 <label className="checkboxRow">
-                                    <input type="checkbox" checked={viewmodel.darkMode}
-                                           onChange={viewmodel.toggleDarkMode}/>
+                                    <input type="checkbox" checked={viewModel.darkMode}
+                                           onChange={viewModel.toggleDarkMode}/>
                                     Dark-Mode
                                 </label>
 
                                 <label className="checkboxRow">
-                                    <input type="checkbox" checked={viewmodel.synchronisation}
-                                           onChange={viewmodel.toggleSynchronisation}/>
+                                    <input type="checkbox" checked={viewModel.synchronisation}
+                                           onChange={viewModel.toggleSynchronisation}/>
                                     Synchronisation
                                 </label>
 
                                 <label className="checkboxRow">
-                                    <input type="checkbox" checked={viewmodel.timeOutActive}
-                                           onChange={viewmodel.toggleTimeOutActive}/>
+                                    <input type="checkbox" checked={viewModel.timeOutActive}
+                                           onChange={viewModel.toggleTimeOutActive}/>
                                     Bei Inaktivität abmelden
                                 </label>
 
-                                {viewmodel.timeOutActive && (
+                                {viewModel.timeOutActive && (
                                     <div className={"timeout-setting"}>
                                         <label>Minuten bis Abmeldung: </label>
                                         <div className={"numberInput"}>
                                             <input type="number" style={{maxHeight: "2.5rem"}}
-                                                   value={viewmodel.timeoutLength}
-                                                   onChange={(e) => viewmodel.setTimeOutLengthVM(e.target.value)}
+                                                   value={viewModel.timeoutLength}
+                                                   onChange={(e) => viewModel.setTimeOutLengthVM(e.target.value)}
                                                    min="1"/>
                                             <button className={"squareButton"} style={{boxShadow: "none"}}
-                                                    onClick={viewmodel.decrease}><HiMiniMinus size={24}/></button>
+                                                    onClick={viewModel.decreaseTimeout}><HiMiniMinus size={24}/></button>
                                             <button className={"squareButton"} style={{boxShadow: "none"}}
-                                                    onClick={viewmodel.increase}><HiMiniPlus size={24}/></button>
+                                                    onClick={viewModel.increaseTimeout}><HiMiniPlus size={24}/></button>
                                         </div>
                                     </div>
                                 )}
@@ -92,13 +97,13 @@ const SettingsView: React.FC<{
                                     <div className="server-settings">
                                         <h4>Synchronisationsserver</h4>
                                         <span>Aktueller Server:</span>
-                                        <div className="current-server">{viewmodel.serverName}</div>
-                                        {viewmodel.serverNames.length > 1 && (
+                                        <div className="current-server">{viewModel.serverName}</div>
+                                        {viewModel.serverNames.length > 1 && (
                                             <div className="scrollableContainer server-list">
                                                 <span>Verfügbare Server:</span>
 
-                                                {viewmodel.serverNames.map((server) => (
-                                                    viewmodel.serverName !== server ? (
+                                                {viewModel.serverNames.map((server) => (
+                                                    viewModel.serverName !== server ? (
                                                         <div className="server-item">
                                                             <button
                                                                 style={{
@@ -108,14 +113,14 @@ const SettingsView: React.FC<{
                                                                     textOverflow: "ellipsis",
                                                                     flex: 1
                                                                 }}
-                                                                onClick={() => viewmodel.selectServer(server)}
+                                                                onClick={() => viewModel.selectServer(server)}
                                                             >
                                                                 <span>{server}</span>
                                                             </button>
                                                             {server !== "Automerge Sync Server" && (
                                                                 <button
                                                                     className="squareButton"
-                                                                    onClick={() => viewmodel.removeServer(server)}
+                                                                    onClick={() => viewModel.removeServer(server)}
                                                                 >
                                                                     <HiTrash size={24}/>
                                                                 </button>
@@ -126,15 +131,15 @@ const SettingsView: React.FC<{
                                             </div>)}
                                         <button
                                             className="squareButton"
-                                            onClick={() => viewmodel.setAddServerDialogOpen(true)}
+                                            onClick={() => viewModel.setAddServerDialogOpen(true)}
                                             style={{alignSelf: "center"}}
                                         >
                                             <HiMiniPlus size={24}/>
                                         </button>
-                                        {viewmodel.addServerDialogOpen && (
+                                        {viewModel.addServerDialogOpen && (
                                             <AddServerDialog
-                                                onAddServer={(name, url) => viewmodel.addServer(name, url)}
-                                                onClose={() => viewmodel.setAddServerDialogOpen(false)}
+                                                onAddServer={(name, url) => viewModel.addServer(name, url)}
+                                                onClose={() => viewModel.setAddServerDialogOpen(false)}
                                             />
                                         )}
                                     </div>
@@ -142,7 +147,7 @@ const SettingsView: React.FC<{
                             </div>
                         )}
 
-                        {viewmodel.activeTab === "database" && (
+                        {viewModel.activeTab === "database" && (
                             <div className="settingsContainer">
                                 <h3>Datenbankeinstellungen</h3>
                                 {automergeFacade ? (
@@ -154,7 +159,7 @@ const SettingsView: React.FC<{
                             </div>
                         )}
 
-                        {viewmodel.activeTab === "about" && (
+                        {viewModel.activeTab === "about" && (
                             <div className="settingsContainer about-view" style={{
                                 display: "flex",
                                 flexDirection: "column",

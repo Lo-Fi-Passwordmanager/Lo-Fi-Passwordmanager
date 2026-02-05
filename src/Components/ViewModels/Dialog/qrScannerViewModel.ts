@@ -4,6 +4,10 @@ import {isValidAutomergeUrl} from "@automerge/react";
 
 // QRScanner https://github.com/nimiq/qr-scanner
 
+/**
+ * The Viewmodel for {@link QRScannerDialog}
+ * @param setInputFields sets the arguments (name and url) for the given Database to the values of the scanned QR Code
+ */
 export const useQRScannerViewModel = (setInputFields: (name: string, url: string) => void) => {
 
     const [qrScannerOpen, setQRScannerOpen_real] = useState(false);

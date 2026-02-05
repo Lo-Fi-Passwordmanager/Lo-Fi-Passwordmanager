@@ -5,26 +5,31 @@ import {HistoryItem} from "./HistoryItem.tsx";
 import type {AutomergeFacade} from "../../../Utility/AutomergeFacade.ts";
 import type {HistoryEntry} from "../../../Model/Automerge/HistoryEntry.ts";
 
+/**
+ * A dialog that shows the history of changes made to the document.
+ *
+ * @param automergeFacade The automerge facade used to access the document history.
+ */
 export const HistoryDialog: React.FC<{ automergeFacade: AutomergeFacade }> = ({automergeFacade}) => {
 
-    const viewmodel = useHistoryViewModel(automergeFacade);
+    const viewModel = useHistoryViewModel(automergeFacade);
 
     return (
         <>
             <button
-                onClick={() => viewmodel.setHistoryOpen(true)}
+                onClick={() => viewModel.setHistoryOpen(true)}
             >
                 Änderungsverlauf
             </button>
             {
-                viewmodel.historyOpen &&
-                <Dialog title="Änderungsverlauf" onCloseDialog={() => viewmodel.setHistoryOpen(false)}
+                viewModel.historyOpen &&
+                <Dialog title="Änderungsverlauf" onCloseDialog={() => viewModel.setHistoryOpen(false)}
                         className="historyDialog">
                     <div className="divider"/>
 
                     <div className="scrollableContainer">
-                        {viewmodel.automergeHistory &&
-                            [...viewmodel.automergeHistory].reverse().map((historyEntry: HistoryEntry, index: number) => {
+                        {viewModel.automergeHistory &&
+                            [...viewModel.automergeHistory].reverse().map((historyEntry: HistoryEntry, index: number) => {
                                 return <HistoryItem key={index} historyEntry={historyEntry}
                                                     securityProvider={automergeFacade.getSecurityProvider()!}/>;
                             })}
