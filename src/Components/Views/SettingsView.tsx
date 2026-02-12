@@ -4,7 +4,6 @@ import {Settings} from "../../Model/Settings.ts";
 import React from "react";
 import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
-import Close from "./Icons/Close.tsx";
 import {HiMiniCog8Tooth, HiMiniMinus, HiMiniPlus} from "react-icons/hi2";
 import AddServerDialog from "./DialogViews/AddServerDialog.tsx";
 import {HiTrash} from "react-icons/hi";
@@ -32,13 +31,11 @@ const SettingsView: React.FC<{
 
     return (
         <Dialog
-            title="Einstellungen"
+            title=""
             onCloseDialog={() => viewModel.setSettingsOpen(false)}
+            className="settings-dialog"
         >
-            <div className="settingsBackground dialogOverlay">
-                <div className="dialog settings-layout">
-                    <Close className="closeIcon" color={"var(--text)"}
-                           onClick={() => viewModel.setSettingsOpen(false)}/>
+                <div className="settings-layout">
                     {/* Sidebar Navigation */}
                     <aside className="settings-sidebar">
                         <h2 style={{alignSelf: "flex-start"}}>Einstellungen</h2>
@@ -284,7 +281,6 @@ const SettingsView: React.FC<{
                         )}
                     </main>
                 </div>
-            </div>
         </Dialog>
     );
 };
