@@ -37,12 +37,14 @@ const DatabaseListingView: React.FC<{
                 {Array.from(databases).map(([dbName, url]) => (
                     <div className={"DatabaseAndOptions"} key={dbName}>
                         <button
-                            onClick={() => openDatabase(dbName)}>
+                            onClick={() => openDatabase(dbName)}
+                        title="Datenbank öffnen">
                             {dbName}
                         </button>
                         <button
                             className={"squareButton"}
-                            onClick={() => viewModel.copyToClipboard(url)} title="Copy URL">
+                            onClick={() => viewModel.copyToClipboard(url)}
+                            title="URL kopieren">
                             <HiMiniLink size={24}/>
                         </button>
                         <ShareQRDialog name={dbName} url={url}/>
@@ -50,7 +52,8 @@ const DatabaseListingView: React.FC<{
                         <button
                             className={"squareButton"}
                             onClick={() => removeDatabase(dbName)}>
-                            <HiTrash size={24}/>
+                            <HiTrash size={24}
+                            title="Datenbank entfernen"/>
                         </button>
                     </div>
                 ))}

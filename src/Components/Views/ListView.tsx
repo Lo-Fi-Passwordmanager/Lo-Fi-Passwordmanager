@@ -102,6 +102,7 @@ const ListView: React.FC<{
                             onClick={() => deleteItem(item)}
                             onPointerDown={(e) => e.stopPropagation()}
                             disabled={inEditable}
+                            title="Eintrag löschen"
                     >
                         <HiTrash size={24}/>
                     </button>
@@ -128,6 +129,7 @@ const ListView: React.FC<{
                         <button style={{boxShadow: "none"}}
                                 onClick={() => listViewModel.toggleExpanded()}
                                 onPointerDown={(e) => e.stopPropagation()}
+                                title={isFolderExpanded(item.id) ? "Ordner einklappen" : "Ordner ausklappen"}
                         >
                             {isFolderExpanded(item.id) ? "▼" : "▷"}</button>}
 
@@ -162,7 +164,9 @@ const ListView: React.FC<{
                             onRename={() => {
                                 listViewModel.setAndStoreEditName(true);
                             }}
-                        /> : <button className="listViewTitleHeader button" onClick={() => addButtonPressed()}
+                        /> : <button className="listViewTitleHeader button"
+                                     title="Eintrag ins Startverzeichnis Hinzufügen"
+                                     onClick={() => addButtonPressed()}
                                      disabled={inEditable}>
                             <HiMiniPlus size={24}/>
                         </button>}

@@ -44,7 +44,7 @@ const OrganizeListView: React.FC<{
                 {/*Giving each element a specific grid column to align them properly*/}
 
                 {/* Button to close the database and go back to the database selection */}
-                <button className={"squareButton"} style={{gridColumn: "span 1", justifySelf: "flex-start"}}
+                <button className={"squareButton"} title="Datenbank schließen" style={{gridColumn: "span 1", justifySelf: "flex-start"}}
                         onClick={() => closeDatabase()}>
                     ⬅
                 </button>
@@ -59,6 +59,7 @@ const OrganizeListView: React.FC<{
                     onClick={() => {
                         setItemCreationDialog();
                     }}
+                    title="Eintrag ins Startverzeichnis hinzufügen"
                 >
                     <HiMiniPlus size={24}/>
                 </button>
@@ -74,7 +75,8 @@ const OrganizeListView: React.FC<{
                     className={"squareButton"}
                     style={{gridColumn: "span 1"}} onClick={() => {
                     toggleOrder()
-                }}>
+                }}
+                title={isAscending ? "Absteigend sortieren" : "Aufsteigend sortieren"}>
                     {isAscending ? '🡅' : '🡇'}
                 </button>
             </div>

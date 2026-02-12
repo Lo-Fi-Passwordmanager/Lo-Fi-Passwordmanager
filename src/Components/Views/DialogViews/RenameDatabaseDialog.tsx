@@ -41,6 +41,7 @@ const RenameDatabaseDialog: React.FC<{
         return (
             <button
                 className="squareButton"
+                title="Datenbank umbenennen"
                 onClick={() => viewModel.setRenameDatabaseOpen(true)}>
                 <HiPencil size={24}/>
             </button>
