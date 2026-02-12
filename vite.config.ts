@@ -8,6 +8,7 @@ import {viteSingleFile} from "vite-plugin-singlefile";
 import path from "node:path";
 import os from "node:os";
 import process from "node:process";
+import {configDefaults} from "vitest/config";
 
 export default defineConfig({
   build: {
@@ -24,13 +25,17 @@ export default defineConfig({
   },
     test: {
         environment: "jsdom",
+      exclude: [
+        ...configDefaults.exclude,
+        'e2e',
+      ],
       coverage: {
         enabled: true,
         provider: 'v8',
         include: ['src/**/*.{ts,tsx}'],
         exclude: ['scryptConfig.ts', // excluding since the config is used to reduce scrypt-time during tests only and therefore can't be covered
                   'src/Components/Views',
-                  'main.tsx'
+                  'main.tsx',
         ],
         reporter: ['text', 'html', 'lcov'],
         reportsDirectory: './coverage',
