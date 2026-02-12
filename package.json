@@ -13,7 +13,8 @@
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:ci": "vitest run",
-    "coverage": "vitest --ui --coverage.enabled=true"
+    "coverage": "vitest --ui --coverage.enabled=true",
+    "test:e2e": "DEPLOYMENT_URL=http://localhost:5173 playwright test"
   },
   "dependencies": {
     "@automerge/automerge": "^3.2.2",
