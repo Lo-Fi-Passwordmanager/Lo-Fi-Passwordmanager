@@ -1,7 +1,7 @@
 /// <reference types="vitest/config" />
 
 // vite.config.ts
-import { defineConfig } from "vite";
+import {defineConfig} from "vite";
 import react from "@vitejs/plugin-react";
 import wasm from "vite-plugin-wasm";
 import {viteSingleFile} from "vite-plugin-singlefile";
@@ -11,40 +11,41 @@ import process from "node:process";
 import {configDefaults} from "vitest/config";
 
 export default defineConfig({
-  build: {
-    target: "esnext",
-    minify: false,
-    sourcemap: true
-  },
+    build: {
+        target: "esnext",
+        minify: false,
+        sourcemap: true
+    },
 
-  plugins: [wasm(), react(), viteSingleFile()],
+    plugins: [wasm(), react(), viteSingleFile()],
 
-  worker: {
-    format: "es",
-    plugins: () => [wasm()]
-  },
+    worker: {
+        format: "es",
+        plugins: () => [wasm()]
+    },
     test: {
         environment: "jsdom",
-      exclude: [
-        ...configDefaults.exclude,
-        'e2e',
-      ],
-      coverage: {
-        enabled: true,
-        provider: 'v8',
-        include: ['src/**/*.{ts,tsx}'],
-        exclude: ['scryptConfig.ts', // excluding since the config is used to reduce scrypt-time during tests only and therefore can't be covered
-                  'src/Components/Views',
-                  'main.tsx',
+        exclude: [
+            ...configDefaults.exclude,
+            "e2e"
         ],
-        reporter: ['text', 'html', 'lcov'],
-        reportsDirectory: './coverage',
-      },
-      setupFiles: ['./tests/testSetup.ts'],
-      globals: true,
-      execArgv: [
-        '--localstorage-file',
-        path.resolve(os.tmpdir(), `vitest-${process.pid}.localstorage`),
-      ],
-    },
+        coverage: {
+            enabled: true,
+            reportOnFailure: true,
+            provider: "v8",
+            include: ["src/**/*.{ts,tsx}"],
+            exclude: ["scryptConfig.ts", // excluding since the config is used to reduce scrypt-time during tests only and therefore can't be covered
+                "src/Components/Views",
+                "main.tsx"
+            ],
+            reporter: ["text", "html", "lcov"],
+            reportsDirectory: "./coverage"
+        },
+        setupFiles: ["./tests/testSetup.ts"],
+        globals: true,
+        execArgv: [
+            "--localstorage-file",
+            path.resolve(os.tmpdir(), `vitest-${process.pid}.localstorage`)
+        ]
+    }
 });

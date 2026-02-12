@@ -52,6 +52,7 @@ const ShareQRDialog: React.FC<ShareQRDialogProps> = ({name, url}: ShareQRDialogP
         return (
             <button
                 className="squareButton"
+                title="QR-Code anzeigen"
                 onClick={() => viewModel.setShareQRCodeOpen(true)}>
                 <HiOutlineQrcode size={24}/>
             </button>
