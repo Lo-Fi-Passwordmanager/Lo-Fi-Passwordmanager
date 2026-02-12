@@ -181,7 +181,7 @@ describe('UseLoginViewModel', () => {
             result.current.closeDatabase();
         })
         await waitFor(()=> {
-            expect(setLoggedIn()).toHaveBeenCalled;
+            expect(setLoggedIn).toHaveBeenCalled();
         })
         act(() => {
             result.current.openEnterPasswordDialog("name");
