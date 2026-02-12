@@ -18,7 +18,7 @@ tests:
     - chmod og= $ID_ED25519
     - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'cd /home/ubuntu/automerge/reports/coverage/ && rm -rf *'
     - scp -i $ID_ED25519 -o StrictHostKeyChecking=no -r ./coverage/** $SERVER_USER@$SERVER_IP:/home/ubuntu/automerge/reports/coverage/
-    - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'cd /home/ubuntu/automerge/reports/coverage/ && sed -i "s/href=\"/href=\".\//g" index.html && sed -i "s/href=\".\/https:\/\//href=\"https:\/\//g" index.html'
+    - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'cd /home/ubuntu/automerge/reports/coverage/ && sed -i "s/href=\"/href=\"coverage\//g" index.html && sed -i "s/href=\"coverage\/https:\/\//href=\"https:\/\//g" index.html'
 
 test-build:
   dependencies:
