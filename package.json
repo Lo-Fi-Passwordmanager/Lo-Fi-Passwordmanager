@@ -28,8 +28,8 @@
     "automerge-repo-network-peerjs": "^1.2.3",
     "hdd": "^0.0.0",
     "jsdom": "^27.4.0",
-    "qr-scanner": "^1.4.2",
     "peerjs": "^1.5.5",
+    "qr-scanner": "^1.4.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.5.0",
@@ -40,6 +40,7 @@
   "devDependencies": {
     "@automerge/automerge-repo-react-hooks": "^2.5.1",
     "@eslint/js": "^9.39.1",
+    "@playwright/test": "^1.58.2",
     "@testing-library/dom": "^10.4.1",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.7",
