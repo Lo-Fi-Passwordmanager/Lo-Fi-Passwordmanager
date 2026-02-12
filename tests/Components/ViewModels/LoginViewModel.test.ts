@@ -72,7 +72,7 @@ describe('UseLoginViewModel', () => {
     it('should an error if a database is attempted to be opened but there is not database given', async () => {
         const {result} = renderHook(() =>
             useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, secProv, setOpenedDbName));
-        await expect(result.current.tryOpenDatabase("password")).rejects.toThrow("No database selected");
+        expect(result.current.tryOpenDatabase("password")).rejects.toThrow("No database selected");
     })
 
     /*
@@ -170,7 +170,7 @@ describe('UseLoginViewModel', () => {
     it('should throw when the database doesnt exist', async () => {
         const {result} = renderHook(() =>
             useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, secProv, setOpenedDbName));
-        await expect(result.current.tryOpenDatabase("password", "name")).rejects.toThrow("Database doesn't exist");
+        expect(result.current.tryOpenDatabase("password", "name")).rejects.toThrow("Database doesn't exist");
     })
 
     it("should be able to open the selcted database", async () => {
@@ -206,5 +206,42 @@ describe('UseLoginViewModel', () => {
         });
     });
 
+    it('should change the name of the database', async () => {
+        const {result} = renderHook(() =>
+            useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, secProv, setOpenedDbName));
+        act(() => {
+            result.current.createDatabase("name", "password");
+        })
+        await waitFor(() => {
+            expect(result.current.databases.size).toBe(1);
+        });
+        act(() => {
+            result.current.changeDatabaseName("name", "otherName");
+        })
+        await waitFor(() => {
+            expect(result.current.databases.size).toBe(1);
+            expect(result.current.databases.get("otherName")).toBeDefined();
+            expect(result.current.databases.get("name")).toBeUndefined();
+        });
+    });
 
+    it('should not change the name of the database if the new name already exists', async () => {
+        const {result} = renderHook(() =>
+            useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, secProv, setOpenedDbName));
+        act(() => {
+            result.current.createDatabase("name", "password");
+            result.current.createDatabase("otherName", "password");
+        })
+        await waitFor(() => {
+            expect(result.current.databases.size).toBe(2);
+        });
+        act(() => {
+            result.current.changeDatabaseName("name", "otherName");
+        })
+        await waitFor(() => {
+            expect(result.current.databases.size).toBe(2);
+            expect(result.current.databases.get("otherName")).toBeDefined();
+            expect(result.current.databases.get("name")).toBeDefined();
+        });
+    });
 })
