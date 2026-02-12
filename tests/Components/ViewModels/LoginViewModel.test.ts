@@ -75,7 +75,7 @@ describe('UseLoginViewModel', () => {
         expect(result.current.tryOpenDatabase("password")).rejects.toThrow("No database selected");
     })
 
-    /*
+
     it('should be able to import a database from an url', async () => {
         const {result} = renderHook(() =>
             useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, secProv, setOpenedDbName));
@@ -89,12 +89,12 @@ describe('UseLoginViewModel', () => {
         act(() => {
             database = result.current.databases.get("name");
         })
-        act(() => {
-            result.current.deleteDatabase("name");
-        })
+        await waitFor(() => {
+            result.current.confirmDeleteDatabase("name");
+        });
         await waitFor(() => {
             expect(result.current.databases.size).toBe(0);
-        });
+        })
         act(() => {
             result.current.importDatabaseFromURL("name", database);
         })
@@ -102,10 +102,10 @@ describe('UseLoginViewModel', () => {
             expect(result.current.databases.size).toBe(1);
         });
     })
-    */
 
-    it('should be able to reject a wrong import from a url', async ()=> {
-        const { result } = renderHook(() =>
+
+    it('should be able to reject a wrong import from a url', async () => {
+        const {result} = renderHook(() =>
             useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, secProv, setOpenedDbName));
         act(() => {
             result.current.createDatabase("name", "password");
@@ -116,7 +116,7 @@ describe('UseLoginViewModel', () => {
         await waitFor(() => {
             expect(result.current.databases.get("name")).toBeDefined();
         });
-        const database= result.current.databases.get("name");
+        const database = result.current.databases.get("name");
         act(() => {
             result.current.importDatabaseFromURL("name", database);
         })
@@ -150,7 +150,7 @@ describe('UseLoginViewModel', () => {
         });
     });
 
-    it("should be able to open and close the add databaseDialog", async ()=> {
+    it("should be able to open and close the add databaseDialog", async () => {
         const {result} = renderHook(() =>
             useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, secProv, setOpenedDbName));
         act(() => {
@@ -180,7 +180,7 @@ describe('UseLoginViewModel', () => {
             result.current.createDatabase("name", "password");
             result.current.closeDatabase();
         })
-        await waitFor(()=> {
+        await waitFor(() => {
             expect(setLoggedIn).toHaveBeenCalled();
         })
         act(() => {
@@ -198,7 +198,7 @@ describe('UseLoginViewModel', () => {
             result.current.createDatabase("name", "password");
             result.current.closeDatabase();
         });
-        await waitFor(()=> {
+        await waitFor(() => {
             expect(setLoggedIn).toHaveBeenCalled();
         })
         await waitFor(() => {
@@ -243,5 +243,19 @@ describe('UseLoginViewModel', () => {
             expect(result.current.databases.get("otherName")).toBeDefined();
             expect(result.current.databases.get("name")).toBeDefined();
         });
+    });
+
+    it('should show a toast when an error occurs', async () => {
+        const {result} = renderHook(() =>
+            useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, secProv, setOpenedDbName));
+        act(() => {
+           localStorage.setItem("databases", JSON.stringify([["name", "automerge:EmPo3STbfDKx16VXWAeZYzo5p28"]]));
+        });
+        act(() => {
+            result.current.tryOpenDatabase("password", "name");
+        });
+            await waitFor(() => {
+                expect(result.current.toastMessage).toBe("Automerge konnte die Datenbank nicht laden!");
+            });
     });
 })
