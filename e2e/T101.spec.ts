@@ -82,7 +82,9 @@ test('T101Part1', async ({ page }) => {
     await page.getByRole('textbox', { name: 'Masterpasswort' }).click();
     await page.getByRole('textbox', { name: 'Masterpasswort' }).fill('Masterpasswort');
     await page.getByRole('button', { name: 'Bestätigen' }).click();
-    await expect(page.getByRole('heading', { name: 'LoFi Passwortmanager' })).toBeVisible();
+    //überprüft das wir angemeldet sind
+    await expect(page.getByRole('textbox', {name: 'Suchen...'})).toBeVisible();
+    await expect(page.getByRole('button', { name: '⬅' })).toBeVisible();
 
     await page.getByRole('button', { name: '⬅' }).click();
     await expect(page.getByRole('button', { name: 'Datenbankname' })).toBeVisible();
