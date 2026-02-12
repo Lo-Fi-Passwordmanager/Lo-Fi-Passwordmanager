@@ -208,11 +208,7 @@ export function deleteValue(d: AutomergeDoc, itemId: string, itemsById: Map<stri
     d.items.splice(index, 1);
 
     if (isFolder(item)) {
-        //for (const value of d.items) {
-         //   if (value.parentId === itemId) {
-         //       deleteValue(d, getObjectId(value)!, itemsById);
-         //   }
-        for (const item of itemsById.values()) {        //FIXME: das behebt den Bug: for some reason enhält d.items nicht alle kinder
+        for (const item of itemsById.values()) {
             if (item.parentId === itemId) {
                 deleteValue(d, getObjectId(item)!, itemsById);
             }
