@@ -42,6 +42,7 @@
     background-color: var(--bg);
 
     @media (max-width: 768px) {
+        line-height: 1;
         --standard-radius: 10px;
         --small-radius: 6px;
         --big-radius: 12px;
@@ -1358,12 +1359,14 @@ input:checked + .slider:before {
     .passwordViewList {
         width: 100%;
         border: none;
+        max-height: 40%;
     }
 
     .passwordViewEntry {
         width: 100%;
         border: none;
-        height: 70% !important;
+        min-height: 50%;
+        height: fit-content;
         overflow-y: scroll;
     }
 
@@ -1398,7 +1401,7 @@ input:checked + .slider:before {
     }
     .entryDateViewEntry {
         display: none;
-        height: 0%;
+        height: 0;
     }
 
     .organizeListView {
@@ -1406,5 +1409,13 @@ input:checked + .slider:before {
         border: 1px solid var(--panel);
         border-right: none;
         border-left: none;
+    }
+
+    .dialog {
+        min-width: 60%;
+        padding: 10px;
+        margin-top: auto;
+        margin-left: 0;
+        margin-right: 0;
     }
 }
