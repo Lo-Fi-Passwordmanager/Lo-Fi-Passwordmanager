@@ -1,4 +1,5 @@
 import { test, expect} from "@playwright/test";
+import {waitFor} from "@testing-library/react";
 
 test('T101', async ({ page }) => {
     await page.goto('http://localhost:5173/');
@@ -59,8 +60,8 @@ test('T101', async ({ page }) => {
     await page.getByRole('button', { name: 'Bestätigen' }).click();
     await page.getByRole('button', { name: 'Name' }).click();
     await page.getByRole('textbox', { name: 'Masterpasswort' }).fill('Masterpasswort');
-    await page.getByRole('textbox', { name: 'Masterpasswort' }).press('Enter');
+    await page.getByRole('textbox', { name: 'Masterpasswort' }).click();
 
-    await expect(page.getByRole('heading', { name: 'LoFi Passwortmanager' })).toBeVisible();
-    await expect(page.getBy)
+    await expect(page.getByRole('textbox', {name: 'Suchen...'})).toBeVisible();
+    await expect(page.getByRole('button', { name: '⬅' })).toBeVisible();
 });

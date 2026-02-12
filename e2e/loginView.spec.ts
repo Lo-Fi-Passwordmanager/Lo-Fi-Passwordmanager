@@ -1,14 +1,14 @@
 import { test, expect } from '@playwright/test';
 
 test('to open the app correctly', async ({ page }) => {
-    await page.goto('http://localhost:5173/');
+    await page.goto('');
 
     await expect(page).toHaveTitle(/Local-First Passwortmanager/);
     await expect(page.getByRole('img', { name: 'Passwortmanager Logo' })).toBeVisible();
 });
 
 test('click the + button and check that every menu is correct', async ({ page }) => {
-    await page.goto('http://localhost:5173/');
+    await page.goto('');
 
     await page.getByRole('main').getByRole('button').click();
     await expect(page.getByRole('heading', { name: 'Neue Datenbank erstellen' })).toBeVisible();
