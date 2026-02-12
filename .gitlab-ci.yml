@@ -14,7 +14,6 @@ tests:
     - if: $CI_COMMIT_BRANCH != 'main'
     - if: $CI_COMMIT_BRANCH == 'main'
   image: mcr.microsoft.com/playwright:v1.58.2-noble
-  parallel: 8
   script:
     - yarn test:ci
     - yarn playwright test
