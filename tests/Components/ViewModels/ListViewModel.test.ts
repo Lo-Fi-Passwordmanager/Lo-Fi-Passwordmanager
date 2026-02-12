@@ -3,7 +3,6 @@ import {Folder} from "../../../src/Model/Folder";
 import {Entry} from "../../../src/Model/Entry";
 import {act, renderHook, waitFor} from "@testing-library/react";
 import {useListViewModel} from "../../../src/Components/ViewModels/ListViewModel";
-import {SortCriteria} from "../../../src/Components/ViewModels/PasswordViewModel";
 
 describe("ListViewModel", () => {
 
@@ -61,8 +60,12 @@ describe("ListViewModel", () => {
             useListViewModel(topItem, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded));
         const children = result.current.descendantIds;
         expect(children.length).toBe(4);
-        //const sortedByTitle = [subFolder1, entry, entry2, entry3].sort((a, b) => a.title.localeCompare(b.title));
-        //expect(children).toStrictEqual(sortedByTitle);
+    });
+
+    it('should return an empty list if the folder has no children', () => {
+        const {result} = renderHook(() =>
+            useListViewModel(subFolder1, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded));
+        expect(result.current.descendantIds.length).toBe(0);
     });
 
     it("should return nothing as childern when the item is an entry", () => {
@@ -83,6 +86,64 @@ describe("ListViewModel", () => {
         await waitFor(() => {
             expect(updateItemTitle).toHaveBeenCalledWith("123", "newName");
         })
+    });
+
+    it('should set the current item after an update in automerge', async () => {
+        renderHook(() =>
+            useListViewModel(topItem, "123", setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded));
+        await waitFor(() => {
+            expect(setCurrItem).toHaveBeenCalledWith(topItem);
+        })
+    });
+
+    it('should expand and collapse the folder', async () => {
+        const {result} = renderHook(() =>
+            useListViewModel(topItem, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded));
+        act(() => {
+            result.current.toggleExpanded();
+        });
+        await waitFor(() => {
+            expect(expandFolderId).toHaveBeenCalledWith("123");
+        });
+        isFolderExpanded.mockReturnValue(true);
+        act(() => {
+            result.current.toggleExpanded();
+        });
+        await waitFor(() => {
+            expect(collapseFolderId).toHaveBeenCalledWith("123");
+        });
+        act(() => {
+            result.current.expandFolder();
+        });
+        await waitFor(() => {
+            expect(expandFolderId).toHaveBeenCalledWith("123");
+        });
+    });
+
+    it('should return if the top item is an entry', async () => {
+        const {result} = renderHook(() =>
+            useListViewModel(entry, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded));
+        const item = result.current.getItem();
+        expect(item).toStrictEqual(entry);
+        expect(result.current.isItemEntry()).toBe(true);
+    })
+
+    it('should toggle the edit name state and store the new name', async () => {
+        const {result} = renderHook(() =>
+            useListViewModel(entry, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded));
+        act(() => {
+            result.current.setAndStoreEditName(true);
+        });
+        expect(result.current.inEditName).toBe(true);
+        act(() => {
+            result.current.setItemTitle("newName");
+        });
+        expect(result.current.newTitle).toBe("newName");
+        act(() => {
+            result.current.setAndStoreEditName(false);
+        });
+        expect(result.current.inEditName).toBe(false);
+        expect(updateItemTitle).toHaveBeenCalledWith("id123", "newName");
     });
 
 });
