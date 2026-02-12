@@ -44,6 +44,7 @@ const FolderMenu: React.FC<{
                 <button
                     className="listViewTitleHeader button"
                     disabled={!isOpen}
+                    title="Eintrag hinzufügen"
                     onClick={() => {
                         onAdd();
                         setIsOpen(false);
@@ -53,6 +54,7 @@ const FolderMenu: React.FC<{
                 <button
                     disabled={!isOpen}
                     className="listViewTitleHeader button"
+                    title="Ordner umbennen"
                     onClick={() => {
                         onRename();
                         setIsOpen(false);
@@ -61,6 +63,7 @@ const FolderMenu: React.FC<{
                 </button>
                 <button
                     className="listViewTitleHeader button"
+                    title="Ordner löschen"
                     disabled={!isOpen}
                     onClick={onDelete}>
                     <HiTrash size={24}/>
@@ -71,6 +74,7 @@ const FolderMenu: React.FC<{
                 className={`listViewTitleHeader button ${isOpen ? "active" : ""}`}
                 onClick={toggleMenu}
                 disabled={disabled}
+                title={isOpen ? "Menü schließen" : "Menü öffnen"}
             >
                 ⋮
             </button>

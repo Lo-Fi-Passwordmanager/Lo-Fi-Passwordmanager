@@ -23,7 +23,8 @@ const SettingsView: React.FC<{
 
     if (!viewModel.settingsOpen) {
         return (
-            <button className="settingsButton" onClick={() => viewModel.setSettingsOpen(true)}>
+            <button className="settingsButton" onClick={() => viewModel.setSettingsOpen(true)}
+                    title="Einstellungen öffnen" >
                 <HiMiniCog8Tooth size={24}/>
             </button>
         );
