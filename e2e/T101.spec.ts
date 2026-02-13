@@ -1,4 +1,5 @@
 import {expect, test} from "@playwright/test";
+import {SCRYPT_PARAMS} from "../src/Utility/Security/scryptConfig";
 
 test('T101', async ({ page }) => {
     await page.goto("");
@@ -46,7 +47,7 @@ test('T101', async ({ page }) => {
     //abmelden
     await page.getByRole('img').nth(2).click();
     await page.getByRole('button', { name: '⬅' }).click();
-    await expect(page.getByRole('button', { name: 'Copy URL' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'URL kopieren' })).toBeVisible();
     //Db löschen
     await page.getByRole('button').nth(5).click();
     await expect(page.getByRole('heading', { name: 'Löschen bestätigen' })).toBeVisible();
@@ -103,10 +104,12 @@ test('T101Part1', async ({ page }) => {
 test('T101URL', async ({ page }) => {
     await page.goto("");
     await expect(page.getByRole('img', { name: 'Passwortmanager Logo' })).toBeVisible();
-    await page.getByRole('main').getByRole('button').click();
+
+    await page.getByRole('button', { name: 'Neue Datenbank erstellen' }).click();
     await expect(page.getByRole('heading', { name: 'Neue Datenbank erstellen' })).toBeVisible();
     await page.getByRole('button', { name: 'Existierende Datenbank laden' }).click();
-    await expect(page.getByRole('textbox', { name: 'Name' })).toBeVisible();
+    await expect(page.getByRole('textbox', { name: 'Automerge Url' })).toBeVisible();
+
     //Db Daten eingeben und anmelden
     await page.getByRole('textbox', { name: 'Automerge Url' }).click();
     await page.getByRole('textbox', { name: 'Automerge Url' }).fill('BykRCDMtsdF2twjS38WMfwvDQeZ');
@@ -114,9 +117,13 @@ test('T101URL', async ({ page }) => {
     await page.getByRole('textbox', { name: 'Name' }).fill('Datenbankname');
     await page.getByRole('button', { name: 'Bestätigen' }).click();
     await page.getByRole('button', { name: 'Datenbankname' }).click();
+    await expect(page.getByRole('heading', { name: 'Datenbank öffnen' })).toBeVisible();
     await page.getByRole('textbox', { name: 'Masterpasswort' }).fill('Masterpasswort');
     await page.getByRole('button', { name: 'Bestätigen' }).click();
+
+    await expect(page.getByRole('button', {name: 'Datenbank erstellen'})).toBeVisible();
+
     //überprüft das wir angemeldet sind
-    await expect(page.getByRole('textbox', {name: 'Suchen...'})).toBeVisible();
+    await expect(page.getByRole('textbox', { name: 'Suchen...' })).toBeVisible();
     await expect(page.getByRole('button', { name: '⬅' })).toBeVisible();
 })
