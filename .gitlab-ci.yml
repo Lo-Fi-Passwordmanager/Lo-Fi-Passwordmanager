@@ -19,6 +19,8 @@ tests:
 
 playwright:
   stage: test
+  tags:
+    - "kgr2-instance-standard"
   variables:
     DEPLOYMENT_URL: "https://5bcaaf94-60ef-4757-b55c-5f2e443c480c.ka.bw-cloud-instance.org/test"
   rules:
@@ -51,6 +53,8 @@ test-report:
 
 playwright-report:
   stage: test-report
+  tags:
+    - "kgr2-instance-standard"
   variables:
     DEPLOYMENT_URL: "https://5bcaaf94-60ef-4757-b55c-5f2e443c480c.ka.bw-cloud-instance.org/test"
   rules:
