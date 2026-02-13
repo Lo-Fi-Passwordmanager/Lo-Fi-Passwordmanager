@@ -7,7 +7,7 @@ import {
     removeDatabase, renameDatabase,
     saveCurrentSortCriterion,
     saveDatabases, saveIsAscending,
-    storeDatabase
+    storeDatabase, loadServers, loadSelectedServerURL, storeServers, storeSelectedServerURL
 } from "../../src/Utility/Storage";
 
 const testMap = new Map<string, AutomergeUrl>();
@@ -87,4 +87,31 @@ describe("PasswordManagerViewModel", () => {
     it('Should throw if attempting to rename a database that doesnt exist', ()=> {
         expect(() => renameDatabase("oldName", "newName")).toThrow("Database with name oldName does not exist.");
     })
+
+    it('should be able to load and save servers', () => {
+        localStorage.setItem("servers_list", JSON.stringify([["server", "wss://server1.com"]]));
+        const servers = loadServers();
+        expect(servers).toEqual(new Map<string, string>([["server", "wss://server1.com"]]));
+        servers.set("server2", "wss://server2.com");
+        storeServers(servers);
+        const storedServers = localStorage.getItem("servers_list");
+        expect(storedServers).toBe(JSON.stringify([["server", "wss://server1.com"], ["server2", "wss://server2.com"]]));
+    });
+
+    it('should return the default server list if no servers are stored', () => {
+        const servers = loadServers();
+        expect(servers).toEqual(new Map<string, string>([["Automerge Sync Server", "wss://sync.automerge.org"]]));
+    });
+
+    it('should be able to load and save the selected server URL', () => {
+        localStorage.setItem("server_url", "wss://server1.com");
+        expect(loadSelectedServerURL()).toBe("wss://server1.com");
+        storeSelectedServerURL("wss://server2.com");
+        expect(localStorage.getItem("server_url")).toBe("wss://server2.com");
+    });
+
+    it ('should return the default server URL if no URL is stored', () => {
+        expect(loadSelectedServerURL()).toBe("wss://sync.automerge.org");
+        expect(localStorage.getItem("server_url")).toBe("wss://sync.automerge.org");
+    });
 })

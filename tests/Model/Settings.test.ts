@@ -57,10 +57,23 @@ describe('Settings', () => {
         expect(settings.getServerName()).toBe("name");
     });
 
-    it('should be able to set a new server', ()=> {
+    it('should be able to remove a server', ()=> {
         settings.addServer("name", "url");
         expect(settings.getServers().size).toBe(2);
         settings.removeServer("name");
         expect(settings.getServers().size).toBe(1);
     });
+
+    it('should return no server url if no server is set', ()=> {
+        settings.setServerUrl("invalid server name");
+        expect(settings.getServerName()).toBe("Unknown Server");
+    });
+
+    it('should activate P2P Synchronisation', ()=> {
+        settings.setConnection(true);
+        expect(settings.getP2P()).toBe(true);
+        settings.setConnection(false);
+        expect(settings.getP2P()).toBe(false);
+    });
+
 })
