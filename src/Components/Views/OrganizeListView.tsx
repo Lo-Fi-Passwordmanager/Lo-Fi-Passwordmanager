@@ -38,7 +38,7 @@ const OrganizeListView: React.FC<{
       }) => {
 
     return (
-        <div className={"borderBox"} style={{borderLeft: "0", borderTop: "0"}}>
+        <div className={"organizeListView"}>
             {/*Container for every related to the search/Sort features plus log out button*/}
             <div className={"OrganizedListView"}>
                 {/*Giving each element a specific grid column to align them properly*/}
