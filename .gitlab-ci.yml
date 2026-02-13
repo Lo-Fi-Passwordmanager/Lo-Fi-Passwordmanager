@@ -5,6 +5,7 @@ before_script:
 
 stages:
   - test
+  - test-report
   - build
 
 tests:
@@ -35,7 +36,7 @@ playwright:
 
 # Uploads the test report to the server
 test-report:
-  stage: test
+  stage: test-report
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH != 'main'
@@ -49,7 +50,7 @@ test-report:
 
 
 playwright-report:
-  stage: test
+  stage: test-report
   dependencies:
     - playwright
   variables:
@@ -64,6 +65,8 @@ playwright-report:
     - yarn install
     - yarn build
     - chmod og= $ID_ED25519
+    - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'cd /home/ubuntu/automerge/test/ && rm -rf *'
+    - scp -i $ID_ED25519 -o StrictHostKeyChecking=no -r ./dist/** $SERVER_USER@$SERVER_IP:/home/ubuntu/automerge/test/
     - yarn playwright test || true
     - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'cd /home/ubuntu/automerge/reports/playwright/ && rm -rf *'
     - scp -i $ID_ED25519 -o StrictHostKeyChecking=no -r ./playwright-report/** $SERVER_USER@$SERVER_IP:/home/ubuntu/automerge/reports/playwright/
