@@ -3,7 +3,7 @@ import {expect, test} from "@playwright/test";
 test("T101", async ({page}) => {
 
     if (page.context().browser() && page.context().browser().browserType().name() == "chromium") {
-        await page.context().grantPermissions(["clipboard-read"]);
+        await page.context().grantPermissions(["clipboard-read", "clipboard-write"]);
     }
 
     await page.goto("");
