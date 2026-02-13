@@ -41,6 +41,9 @@ test('T101', async ({ page }) => {
     await expect(page.getByRole('heading', { name: 'Datenbankeinstellungen' })).toBeVisible();
     //automerge url kopieren und DB exportieren
     await page.getByRole('button', { name: 'URL kopieren' }).click();
+    const copiedText = await page.evaluate(() => {
+        return navigator.clipboard.readText();
+    });
     const download1Promise = page.waitForEvent('download');
     await page.getByRole('button', { name: 'Verschlüsselt Exportieren' }).dblclick();
     const download1 = await download1Promise;
@@ -59,7 +62,7 @@ test('T101', async ({ page }) => {
     await expect(page.getByRole('textbox', { name: 'Name' })).toBeVisible();
     //Db Daten eingeben und anmelden
     await page.getByRole('textbox', { name: 'Automerge Url' }).click();
-    await page.getByRole('textbox', { name: 'Automerge Url' }).fill('BykRCDMtsdF2twjS38WMfwvDQeZ');
+    await page.getByRole('textbox', { name: 'Automerge Url' }).fill(copiedText);
     await page.getByRole('textbox', { name: 'Name' }).click();
     await page.getByRole('textbox', { name: 'Name' }).fill('Datenbankname');
     await page.getByRole('button', { name: 'Bestätigen' }).click();
@@ -112,7 +115,7 @@ test('T101URL', async ({ page }) => {
 
     //Db Daten eingeben und anmelden
     await page.getByRole('textbox', { name: 'Automerge Url' }).click();
-    await page.getByRole('textbox', { name: 'Automerge Url' }).fill('BykRCDMtsdF2twjS38WMfwvDQeZ');
+    await page.getByRole('textbox', { name: 'Automerge Url' }).fill('3SLSyunA52oN1V9LN7Eq6RZQnqFA');
     await page.getByRole('textbox', { name: 'Name' }).click();
     await page.getByRole('textbox', { name: 'Name' }).fill('Datenbankname');
     await page.getByRole('button', { name: 'Bestätigen' }).click();
@@ -120,10 +123,8 @@ test('T101URL', async ({ page }) => {
     await expect(page.getByRole('heading', { name: 'Datenbank öffnen' })).toBeVisible();
     await page.getByRole('textbox', { name: 'Masterpasswort' }).fill('Masterpasswort');
     await page.getByRole('button', { name: 'Bestätigen' }).click();
-
-    await expect(page.getByRole('button', {name: 'Datenbank erstellen'})).toBeVisible();
-
     //überprüft das wir angemeldet sind
     await expect(page.getByRole('textbox', { name: 'Suchen...' })).toBeVisible();
     await expect(page.getByRole('button', { name: '⬅' })).toBeVisible();
+    await page.getByRole('button', { name: '⬅'}).click();
 })
