@@ -14,11 +14,22 @@ tests:
     - if: $CI_COMMIT_BRANCH != 'main'
     - if: $CI_COMMIT_BRANCH == 'main'
   script:
+    - yarn test:ci
+
+# Uploads the test report to the server
+test-report:
+  stage: test
+  rules:
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH != 'main'
+    - if: $CI_COMMIT_BRANCH == 'main'
+  script:
     - yarn test:ci || true
     - chmod og= $ID_ED25519
     - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'cd /home/ubuntu/automerge/reports/coverage/ && rm -rf *'
     - scp -i $ID_ED25519 -o StrictHostKeyChecking=no -r ./coverage/** $SERVER_USER@$SERVER_IP:/home/ubuntu/automerge/reports/coverage/
     - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'cd /home/ubuntu/automerge/reports/coverage/ && sed -i "s/href=\"/href=\"coverage\//g" index.html && sed -i "s/href=\"coverage\/https:\/\//href=\"https:\/\//g" index.html'
+
 
 test-build:
   dependencies:
