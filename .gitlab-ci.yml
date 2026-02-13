@@ -25,7 +25,6 @@ playwright:
     - if: $CI_COMMIT_BRANCH != 'main'
     - if: $CI_COMMIT_BRANCH == 'main'
   image: mcr.microsoft.com/playwright:v1.58.2-noble
-  allow_failure: true
   script:
     - yarn install
     - yarn build
