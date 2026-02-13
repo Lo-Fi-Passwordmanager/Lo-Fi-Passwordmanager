@@ -23,7 +23,7 @@ test('click the + button and check that every menu is correct', async ({ page })
     await expect(page.getByRole('textbox', { name: 'Datenbankname' })).toBeVisible();
     await expect(page.locator('label').nth(2)).toBeVisible();
 
-    await page.getByRole('button', { name: 'Neue Datenbank erstellen' }).click();
+    await page.locator('button:has-text("Neue Datenbank erstellen")').click();
     await expect(page.getByRole('textbox', { name: 'Datenbankname' })).toBeVisible();
     await expect(page.getByRole('textbox', { name: 'Masterpasswort' })).toBeVisible();
 
