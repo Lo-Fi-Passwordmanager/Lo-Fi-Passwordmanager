@@ -206,7 +206,6 @@ describe('UseLoginViewModel', () => {
         });
     });
 
-    /*
     it('should change the name of the database', async () => {
         const {result} = renderHook(() =>
             useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, secProv, setOpenedDbName));
@@ -245,7 +244,6 @@ describe('UseLoginViewModel', () => {
             expect(result.current.databases.get("name")).toBeDefined();
         });
     });
-    */
 
     it('should show a toast when an error occurs', async () => {
         const {result} = renderHook(() =>
