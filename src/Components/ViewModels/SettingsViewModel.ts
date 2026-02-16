@@ -117,7 +117,7 @@ export const useSettingsViewModel = () => {
 
     function toggleP2P() {
         setP2P(!P2P);
-        settings.setConnection(!P2P);
+        settings.setPeer2Peer(!P2P);
     }
 
 

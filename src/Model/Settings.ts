@@ -117,7 +117,7 @@ export class Settings {
         return this._p2p;
     }
 
-    public setConnection(isP2P: boolean) {
+    public setPeer2Peer(isP2P: boolean) {
         this._p2p = isP2P;
         storeP2PSetting(isP2P);
         this.notify();
@@ -156,6 +156,10 @@ export class Settings {
         return this._timeoutLength;
     }
 
+    /**
+     * The idle timeout in Minutes
+     * @param length
+     */
     public setTimeoutLength(length: number) {
         this._timeoutLength = length;
         storeTimeoutLength(length);
