@@ -170,7 +170,7 @@ describe('PasswordViewModel', () => {
         expect(result.current.itemToDelete).not.toStrictEqual(rootFolder);
     });
 
-    it('copy to clipboard works as expected', async () => {
+    it('copy to clipboard works', async () => {
         const {result} = renderHook(() => usePasswordViewModel(automergeFacade));
         const writeTextMock = vi.fn();
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -185,6 +185,69 @@ describe('PasswordViewModel', () => {
 
         expect(writeTextMock).toHaveBeenCalledWith("sample text");
     });
+
+
+    it('deleting clipboard works', () => {
+        vi.useFakeTimers()
+        vi.spyOn(document, 'hasFocus').mockReturnValue(true)
+
+        const { result } = renderHook(() => usePasswordViewModel(automergeFacade))
+
+        const writeTextMock = vi.fn();
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        navigator.clipboard = {
+            writeText: writeTextMock,
+        };
+
+        act(() => {
+            result.current.copyToClipboardAndClear('sample text', 10000)
+        })
+        expect(writeTextMock).toHaveBeenLastCalledWith('sample text')
+
+        vi.advanceTimersByTime(10000)
+        expect(writeTextMock).toHaveBeenLastCalledWith('');
+    })
+
+
+    it('deleting clipboard after copying again works', () => {
+        vi.useFakeTimers()
+        vi.spyOn(document, 'hasFocus').mockReturnValue(true)
+
+        const { result } = renderHook(() => usePasswordViewModel(automergeFacade))
+
+        const writeTextMock = vi.fn();
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        navigator.clipboard = {
+            writeText: writeTextMock,
+        };
+
+        act(() => {
+            result.current.copyToClipboardAndClear('sample text', 10000)
+        })
+        expect(writeTextMock).toHaveBeenLastCalledWith('sample text')
+
+
+        vi.advanceTimersByTime(5000)
+
+
+        act(() => {
+            result.current.copyToClipboardAndClear('sample text2', 10000)
+        })
+        expect(writeTextMock).toHaveBeenLastCalledWith('sample text2')
+
+        vi.advanceTimersByTime(5000)
+
+        expect(writeTextMock).toHaveBeenLastCalledWith('sample text2');
+
+        vi.advanceTimersByTime(5000)
+        expect(writeTextMock).toHaveBeenLastCalledWith('');
+    })
+
+
+
+
 
     it('should be able to sort according to criteria', () => {
         let {result} = renderHook(() =>
