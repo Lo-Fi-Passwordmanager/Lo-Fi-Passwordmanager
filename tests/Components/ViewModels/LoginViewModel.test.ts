@@ -85,7 +85,7 @@ describe('UseLoginViewModel', () => {
         await waitFor(() => {
             expect(result.current.databases.size).toBe(1);
         });
-        let database : AutomergeUrl;
+        let database: AutomergeUrl;
         act(() => {
             database = result.current.databases.get("name");
         })
@@ -249,13 +249,36 @@ describe('UseLoginViewModel', () => {
         const {result} = renderHook(() =>
             useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, secProv, setOpenedDbName));
         act(() => {
-           localStorage.setItem("databases", JSON.stringify([["name", "automerge:EmPo3STbfDKx16VXWAeZYzo5p28"]]));
+            localStorage.setItem("databases", JSON.stringify([["name", "automerge:EmPo3STbfDKx16VXWAeZYzo5p28"]]));
         });
         act(() => {
             result.current.tryOpenDatabase("password", "name");
         });
-            await waitFor(() => {
-                expect(result.current.toastMessage).toBe("Automerge konnte die Datenbank nicht laden!");
-            });
+        await waitFor(() => {
+            expect(result.current.toastMessage).toBe("Automerge konnte die Datenbank nicht laden!");
+        });
     });
+
+    it('should fail loading a database from file without file', async () => {
+        const {result} = renderHook(() => useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, secProv, setOpenedDbName));
+        act(() => {
+            result.current.importDatabaseFromFile(null, "new Database");
+        });
+        await waitFor(() => {
+            expect(result.current.toastMessage).toBe("Bitte wähle eine Datei.");
+        });
+    })
+
+    it('should fail loading a database from file without name', async () => {
+        const {result} = renderHook(() => useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, secProv, setOpenedDbName));
+        act(() => {
+            result.current.importDatabaseFromFile(null, "");
+        });
+        await waitFor(() => {
+            expect(result.current.toastMessage).toBe("Bitte wähle einen Namen.");
+        });
+    })
+
+
+
 })
