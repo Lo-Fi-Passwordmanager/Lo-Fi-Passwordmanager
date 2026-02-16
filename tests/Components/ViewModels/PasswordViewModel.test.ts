@@ -246,6 +246,36 @@ describe('PasswordViewModel', () => {
     })
 
 
+    it('deleting clipboard works even when out of focus', () => {
+        vi.useFakeTimers()
+        vi.spyOn(document, 'hasFocus').mockReturnValue(false)
+
+        const { result } = renderHook(() => usePasswordViewModel(automergeFacade))
+
+        const writeTextMock = vi.fn();
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        navigator.clipboard = {
+            writeText: writeTextMock,
+        };
+
+        act(() => {
+            result.current.copyToClipboardAndClear('sample text', 10000)
+        })
+        expect(writeTextMock).toHaveBeenLastCalledWith('sample text')
+
+        vi.advanceTimersByTime(10000)
+        expect(writeTextMock).toHaveBeenLastCalledWith('sample text');
+
+        //simulates focusing back into tab
+        vi.spyOn(document, 'hasFocus').mockReturnValue(true);
+        act(() => {
+            window.dispatchEvent(new Event('focus'))
+        })
+        expect(writeTextMock).toHaveBeenLastCalledWith('');
+    })
+
+
 
 
 
