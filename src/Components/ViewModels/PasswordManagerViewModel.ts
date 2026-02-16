@@ -40,16 +40,25 @@ export const usePasswordManagerViewModel = () => {
 
     const [networkAdapters, setNetworkAdapters] = useState<NetworkAdapterInterface[] | undefined>(settings.getSynchronization() ? initialNetworkAdapters : (settings.getP2P() ? initialP2PNetworkAdapter : undefined));
 
-    useEffect(() => {
-        setPeerJsAdapter(new PeerjsNetworkAdapter(settings.getConnector()));
-        if (settings.getP2P()) {
-            setNetworkAdapters(initialP2PNetworkAdapter);
-        } else if (settings.getSynchronization()) {
-            // Does not cause cascading renders (apparently) => ignore error
-            setNetworkAdapters(initialNetworkAdapters);
-        } else {
-            setNetworkAdapters(undefined);
+
+
+    function getNetworkAdapters(): NetworkAdapterInterface[] | undefined {
+        const networkAdapters: NetworkAdapterInterface[] = [new BroadcastChannelNetworkAdapter()];
+
+        if (settings.getSynchronization()) {
+            networkAdapters.push(new WebSocketClientAdapter(settings.getServerUrl()))
         }
+        if (settings.getP2P()) {
+            networkAdapters.push(new PeerjsNetworkAdapter(settings.getConnector()));
+        }
+        return networkAdapters;
+    }
+
+
+    useEffect(() => {
+        // Does not cause cascading renders (apparently) => ignore error
+        setPeerJsAdapter(new PeerjsNetworkAdapter(settings.getConnector()));
+        setNetworkAdapters(getNetworkAdapters());
     }, [settings]);
 
 
@@ -92,6 +101,7 @@ export const usePasswordManagerViewModel = () => {
     }
 
     const idleTimer = useIdleTimer({timeout, onIdle, onActive, debounce: 100})
+
 
     useEffect(() => {
         if (loggedIn) {
