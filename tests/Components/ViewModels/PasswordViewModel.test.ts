@@ -5,6 +5,7 @@ import {renderHook, act} from "@testing-library/react";
 import {usePasswordViewModel} from "../../../src/Components/ViewModels/PasswordViewModel";
 import {Entry} from "../../../src/Model/Entry";
 import {Folder} from "../../../src/Model/Folder";
+import {SecurityProvider} from "../../../src/Utility/Security/SecurityProvider";
 
 describe('PasswordViewModel', () => {
     let automergeFacade;
@@ -15,6 +16,7 @@ describe('PasswordViewModel', () => {
     let entry3;
     let subFolder1;
     let rootFolder;
+    let testFolder;
 
     vi.mock("@automerge/react", async (importOriginal) => {
         const actual = await importOriginal<typeof import("@automerge/react")>()
@@ -36,8 +38,12 @@ describe('PasswordViewModel', () => {
 
     beforeEach(() => {
         repo = new Repo();
-        automergeFacade = new AutomergeFacade(repo);
-        automergeFacade.createDatabase("salt", "validation", "Database");
+        const secProv = new SecurityProvider();
+        const salt = secProv.getNewSalt();
+        const validation = secProv.getNewValidation("1234", salt);
+        secProv.verifyMasterPassword("1234", salt, validation)
+        automergeFacade = new AutomergeFacade(repo, null, secProv);
+        automergeFacade.createDatabase(salt, validation);
 
         topFolder = new Folder("TopFolder", "123", new Date(1), new Date(2));
         subFolder1 = new Folder("subFolder 1", "123", new Date(4), new Date(8));
@@ -45,6 +51,7 @@ describe('PasswordViewModel', () => {
         entry3 = new Entry("Name3", "id123", new Date(2), new Date(12), "benutzer1", "password", "url", "note");
         entry2 = new Entry("Name2", "id234", new Date(5), new Date(10), "name2", "password", "url", "note");
         rootFolder = new Folder("root", "", new Date(), new Date());
+        testFolder = new Folder("Test Folder", "1");
 
         topFolder.addItem(subFolder1);
         topFolder.addItem(entry);
@@ -103,12 +110,21 @@ describe('PasswordViewModel', () => {
         expect(result.current.isAscending).toBe(true);
     });
 
-    it('should be able to add an entry', () => {
+    it('should be able to add an entry in temp editable state', () => {
         const {result} = renderHook(() => usePasswordViewModel(automergeFacade));
         act(() => {
             result.current.addItem(entry);
         });
         expect(result.current.curItem).toStrictEqual(entry);
+    });
+    
+    
+    it('should be able to add a folder', () => {
+        const {result} = renderHook(() => usePasswordViewModel(automergeFacade));
+        act(() => {
+            result.current.addItem(testFolder);
+        });
+        expect(result.current.curItem).toStrictEqual(testFolder);
     });
 
 

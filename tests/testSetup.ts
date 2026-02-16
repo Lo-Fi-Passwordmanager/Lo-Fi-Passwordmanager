@@ -1,6 +1,10 @@
 //Für react hooks testen
 import '@testing-library/jest-dom'
+import { webcrypto } from "node:crypto"
 
+if (!globalThis.crypto) {
+    globalThis.crypto = webcrypto as any
+}
 
 //Für indexedDb tests
 import { setup } from 'vitest-indexeddb';
