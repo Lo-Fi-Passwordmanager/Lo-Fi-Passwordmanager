@@ -28,6 +28,7 @@ export const usePasswordManagerViewModel = () => {
 
     const [peerJsAdapter, setPeerJsAdapter] = useState<PeerjsNetworkAdapter>(new PeerjsNetworkAdapter(connector));
 
+    /*
     const initialNetworkAdapters = [
         new BroadcastChannelNetworkAdapter(),
         new WebSocketClientAdapter(settings.getServerUrl()),
@@ -36,11 +37,7 @@ export const usePasswordManagerViewModel = () => {
     const initialP2PNetworkAdapter = [
         new BroadcastChannelNetworkAdapter(),
         peerJsAdapter,
-    ]
-
-    const [networkAdapters, setNetworkAdapters] = useState<NetworkAdapterInterface[] | undefined>(settings.getSynchronization() ? initialNetworkAdapters : (settings.getP2P() ? initialP2PNetworkAdapter : undefined));
-
-
+    ] */
 
     function getNetworkAdapters(): NetworkAdapterInterface[] | undefined {
         const networkAdapters: NetworkAdapterInterface[] = [new BroadcastChannelNetworkAdapter()];
@@ -54,11 +51,12 @@ export const usePasswordManagerViewModel = () => {
         return networkAdapters;
     }
 
-
+    const [networkAdapters, setNetworkAdapters] = useState<NetworkAdapterInterface[] | undefined>(getNetworkAdapters());
     useEffect(() => {
         // Does not cause cascading renders (apparently) => ignore error
         setPeerJsAdapter(new PeerjsNetworkAdapter(settings.getConnector()));
         setNetworkAdapters(getNetworkAdapters());
+        console.log(getNetworkAdapters())
     }, [settings]);
 
 

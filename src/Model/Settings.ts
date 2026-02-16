@@ -67,6 +67,12 @@ export class Settings {
         this._p2p = loadP2PSetting();
         this.peer = new Peer();
         this.connector = this.peer.connect("");
+        this.peer.on('connection', function(conn) {
+            conn.on('data', function(data){
+                // Will print 'hi!'
+                console.log(data);
+            });
+        });
     }
 
     public static getSettings(): Settings {
@@ -178,6 +184,12 @@ export class Settings {
      * @param id the id to connect to
      */
     public setConnector(id: string) {
+        // on open will be launch when you successfully connect to PeerServer
+        this.connector.on('open', function () {
+            // here you have conn.id
+            this.connector.send('hi!');
+        });
+
         this.connector = this.peer.connect(id);
         this.notify();
     }
