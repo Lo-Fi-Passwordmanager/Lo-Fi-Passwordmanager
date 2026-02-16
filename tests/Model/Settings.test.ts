@@ -70,9 +70,9 @@ describe('Settings', () => {
     });
 
     it('should activate P2P Synchronisation', ()=> {
-        settings.setConnection(true);
+        settings.setPeer2Peer(true);
         expect(settings.getP2P()).toBe(true);
-        settings.setConnection(false);
+        settings.setPeer2Peer(false);
         expect(settings.getP2P()).toBe(false);
     });
 
