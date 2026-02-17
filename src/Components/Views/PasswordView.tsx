@@ -115,8 +115,8 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                                            createItem={viewModel.createEntry}
                                            inCreation={viewModel.inEntryCreation}
                                            setInCreation={viewModel.setInEntryCreation}
-                                              hidePassword={viewModel.hidePassword}
-                                              toggleHidePassword={viewModel.toggleHidePassword}
+                                           hidePassword={viewModel.hidePassword}
+                                           toggleHidePassword={viewModel.toggleHidePassword}
                         />
                     }
                 </div>
