@@ -8,6 +8,7 @@ import {HiMiniCog8Tooth, HiMiniMinus, HiMiniPlus} from "react-icons/hi2";
 import AddServerDialog from "./DialogViews/AddServerDialog.tsx";
 import {HiTrash} from "react-icons/hi";
 import Dialog from "./DialogViews/Dialog.tsx";
+import ToastDialog from "./DialogViews/ToastDialog.tsx";
 
 /**
  * The View that represents the Settings Dialog and Button to open it
@@ -164,6 +165,8 @@ const SettingsView: React.FC<{
                                                 <AddServerDialog
                                                     onAddServer={(name, url) => viewModel.addServer(name, url)}
                                                     onClose={() => viewModel.setAddServerDialogOpen(false)}
+                                                    setShowToast={viewModel.setShowToast}
+                                                    setToastMessage={viewModel.setToastMessage}
                                                 />
                                             )}
                                         </>
@@ -287,6 +290,9 @@ const SettingsView: React.FC<{
                     )}
                 </main>
             </div>
+            <ToastDialog message={viewModel.toastMessage}
+                         isVisible={viewModel.showToast}
+                         onClose={() => viewModel.setShowToast(false)}/>
         </Dialog>
     );
 };
