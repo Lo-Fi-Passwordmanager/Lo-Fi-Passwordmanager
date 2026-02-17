@@ -46,7 +46,8 @@ export const usePasswordManagerViewModel = () => {
             networkAdapters.push(new WebSocketClientAdapter(settings.getServerUrl()))
         }
         if (settings.getP2P()) {
-            networkAdapters.push(new PeerjsNetworkAdapter(settings.getConnector()));
+            networkAdapters.push(settings.getP2PAdapter());
+            console.log(settings.getP2PAdapter());
         }
         return networkAdapters;
     }

@@ -14,6 +14,7 @@ import {
     storeTimeoutSettings, loadP2PSetting, storeP2PSetting,
 } from "../Utility/Storage.ts";
 import Peer, {type DataConnection} from "peerjs";
+import {PeerjsNetworkAdapter} from "automerge-repo-network-peerjs";
 
 
 type SettingsListener = () => void;
@@ -54,6 +55,7 @@ export class Settings {
     private _serverUrl: string;
     private _servers: Map<string, string>;
     private _p2p: boolean;
+    private p2pAdapter: PeerjsNetworkAdapter;
 
     private listeners: SettingsListener[] = [];
 
@@ -67,12 +69,16 @@ export class Settings {
         this._p2p = loadP2PSetting();
         this.peer = new Peer();
         this.connector = this.peer.connect("");
-        this.peer.on('connection', function(conn) {
-            conn.on('data', function(data){
-                // Will print 'hi!'
-                console.log(data);
-            });
-        });
+        this.p2pAdapter = new PeerjsNetworkAdapter(this.connector);
+
+
+        //When someone is connecting to this peer, establish the direction in the other way
+        this.peer.on('connection', incomingConn => {
+            incomingConn.on('open', () => {
+                this.p2pAdapter = new PeerjsNetworkAdapter(incomingConn);
+                console.log("Versuche zurück zu verbinden")
+            })
+        })
     }
 
     public static getSettings(): Settings {
@@ -127,6 +133,10 @@ export class Settings {
         this._p2p = isP2P;
         storeP2PSetting(isP2P);
         this.notify();
+    }
+
+    public getP2PAdapter(): PeerjsNetworkAdapter {
+        return this.p2pAdapter;
     }
 
     public getSynchronization(): boolean {
@@ -184,11 +194,12 @@ export class Settings {
      * @param id the id to connect to
      */
     public setConnector(id: string) {
-        // on open will be launch when you successfully connect to PeerServer
-        this.connector.on('open', function () {
-            // here you have conn.id
-            this.connector.send('hi!');
-        });
+
+        this.peer.connect(id);
+        this.peer.on('open', () => {
+            const conn = this.peer.connect(id)
+            this.p2pAdapter = new PeerjsNetworkAdapter(conn);
+        })
 
         this.connector = this.peer.connect(id);
         this.notify();
