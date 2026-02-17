@@ -17,7 +17,6 @@ import {PeerjsNetworkAdapter} from "automerge-repo-network-peerjs";
  */
 export const usePasswordManagerViewModel = () => {
     const settings = useSettings();
-    const [connector] = useState(settings.getConnector());
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
     const [automergeFacade, setAutomergeFacade] = useState<AutomergeFacade | null>(null);
     const [securityProvider] = useState(() => new SecurityProvider());
@@ -25,8 +24,6 @@ export const usePasswordManagerViewModel = () => {
     const [toastMessage, setToastMessage] = useState("");
     const [toastVisible, setToastVisible] = useState(false);
     const [openedDatabaseName, setOpenedDatabaseName] = useState<string>("");
-
-    const [peerJsAdapter, setPeerJsAdapter] = useState<PeerjsNetworkAdapter>(new PeerjsNetworkAdapter(connector));
 
     /*
     const initialNetworkAdapters = [
@@ -52,17 +49,9 @@ export const usePasswordManagerViewModel = () => {
         return networkAdapters;
     }
 
-    const [networkAdapters, setNetworkAdapters] = useState<NetworkAdapterInterface[] | undefined>(getNetworkAdapters());
-    useEffect(() => {
-        // Does not cause cascading renders (apparently) => ignore error
-        setPeerJsAdapter(new PeerjsNetworkAdapter(settings.getConnector()));
-        setNetworkAdapters(getNetworkAdapters());
-        console.log(getNetworkAdapters())
-    }, [settings]);
-
 
     const repo = new Repo({
-        network: networkAdapters,
+        network: getNetworkAdapters(),
         storage:
             new IndexedDBStorageAdapter()
     });
