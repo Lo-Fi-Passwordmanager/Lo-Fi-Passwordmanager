@@ -91,7 +91,7 @@ export const useLoginViewModel = (
      * Tries to open a database with the provided master password
      *
      * @param masterPassword the master password to decrypt the database
-     * @param name optional name of the database if an database was just added
+     * @param name optional name of the database if a database was just added
      */
     const tryOpenDatabase = async (masterPassword: string, name?: string) => {
             let dbUrl: AutomergeUrl | undefined;
@@ -107,7 +107,7 @@ export const useLoginViewModel = (
             }
 
             setLoadingScreenActive(true);
-            setOpenedDbName(selectedDatabase!);
+            setOpenedDbName(selectedDatabase ?? name ?? "");
             const facade = new AutomergeFacade(repo, dbUrl, securityProvider);
             let salt: string | null;
             let validation: string | null;
@@ -330,6 +330,6 @@ export const useLoginViewModel = (
         changeDatabaseName,
         confirmDeleteDatabase,
         setDatabaseToDelete,
-        toggleHidePassword,
+        toggleHidePassword
     };
 };
