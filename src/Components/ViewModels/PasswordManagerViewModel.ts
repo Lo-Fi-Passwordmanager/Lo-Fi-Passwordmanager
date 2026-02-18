@@ -32,17 +32,22 @@ export const usePasswordManagerViewModel = () => {
         storage: new IndexedDBStorageAdapter()
     }));
 
+    const syncEnabled = settings.getSynchronization();
+    const p2pEnabled = settings.getP2P();
+    const connectorsSize = settings.getConnectorsToAdapters().size;
+    const connectorAdapter = settings.getConnectorsToAdapters();
+    const serverUrl = settings.getServerUrl();
     //Whenever something about the synchronisation happens, the old adapters get removed and new ones get added.
     //This enables the repo the be kept as state while still changing the adapters
     useEffect(() => {
         const removeArray: NetworkAdapterInterface[] = [];
 
         for (const adapter of repo.networkSubsystem.adapters) {
-            if (!settings.getSynchronization() && adapter instanceof WebSocketClientAdapter) {
+            if (!syncEnabled && adapter instanceof WebSocketClientAdapter) {
                 removeArray.push(adapter);
-            } else if (!settings.getP2P() && adapter instanceof PeerjsNetworkAdapter) {
+            } else if (!p2pEnabled && adapter instanceof PeerjsNetworkAdapter) {
                 removeArray.push(adapter);
-            } else if (adapter instanceof PeerjsNetworkAdapter && !settings.getConnectorsToAdapters().has(adapter.getPeerId())) {
+            } else if (adapter instanceof PeerjsNetworkAdapter && !connectorAdapter.has(adapter.getPeerId())) {
                 removeArray.push(adapter);
             }
         }
@@ -50,19 +55,21 @@ export const usePasswordManagerViewModel = () => {
             repo.networkSubsystem.removeNetworkAdapter(adapter);
         }
 
-        if (settings.getSynchronization() && !repo.networkSubsystem.adapters.some(a => a instanceof WebSocketClientAdapter)) {
+        if (syncEnabled && !repo.networkSubsystem.adapters.some(a => a instanceof WebSocketClientAdapter)) {
             repo.networkSubsystem.addNetworkAdapter(
-                new WebSocketClientAdapter(settings.getServerUrl())
+                new WebSocketClientAdapter(serverUrl)
             );
         }
 
-        for (const adapter of settings.getConnectorsToAdapters().values()) {
+        for (const adapter of connectorAdapter.values()) {
             if (!repo.networkSubsystem.adapters.includes(adapter[1])) {
                 repo.networkSubsystem.addNetworkAdapter(adapter[1]);
             }
         }
 
-    }, [settings.getSynchronization(), settings.getP2P(), settings.getConnectorsToAdapters().size]);
+        console.log(repo.networkSubsystem.adapters);
+
+    }, [syncEnabled, p2pEnabled, connectorsSize, connectorAdapter, repo.networkSubsystem, serverUrl]);
 
     function getAutomergeFacade(): AutomergeFacade | null {
         return automergeFacade;

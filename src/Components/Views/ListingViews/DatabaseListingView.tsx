@@ -44,7 +44,7 @@ const DatabaseListingView: React.FC<{
                         </button>
                         <button
                             className={"squareButton"}
-                            onClick={() => viewModel.copyToClipboard(url)}
+                            onClick={() => void viewModel.copyToClipboard(url)}
                             title="URL kopieren">
                             <HiMiniLink size={24}/>
                         </button>
