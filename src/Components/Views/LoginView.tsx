@@ -60,7 +60,7 @@ const LoginView: React.FC<{
                     isOpen={viewModel.isEnterPasswordDialogOpen}
                     title="Datenbank öffnen"
                     label1="Masterpasswort"
-                    tryOpenDatabase={() => viewModel.tryOpenDatabase}
+                    tryOpenDatabase={viewModel.tryOpenDatabase}
                     onCancel={viewModel.closeEnterPasswordDialog}
                     setToastMessage={viewModel.setToastMessage}
                     setShowToast={viewModel.setShowToast}
