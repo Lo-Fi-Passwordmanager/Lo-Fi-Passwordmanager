@@ -63,7 +63,7 @@ export const useLoginViewModel = (
 
         // Das Timeout an dieser Stelle sorgt dafür, dass der enthaltene Codeblock ans Ende der aktuell auszuführenden Aktionen geschoben wird,
         // wodurch das Rendering des Ladescreens ermöglicht wird, bevor der SecurityProvider den Thread blockiert.
-        setTimeout(() => {
+        setTimeout(async () => {
             const salt = securityProvider.getNewSalt();
             const validation = securityProvider.getNewValidation(masterPassword, salt);
 
@@ -71,7 +71,7 @@ export const useLoginViewModel = (
             automergeFacade.createDatabase(salt, validation);
 
             const url = automergeFacade.automergeURL!;
-            addDatabase(name, url, masterPassword);
+            await addDatabase(name, url, masterPassword);
         }, 0);
     };
 
@@ -160,12 +160,12 @@ export const useLoginViewModel = (
      * @param name the name of the database
      * @param url the automerge url of the database
      */
-    function importDatabaseFromURL(name: string, url: AutomergeUrl) {
+    async function importDatabaseFromURL(name: string, url: AutomergeUrl) {
         if (!isNameAvailable(name) || !isAutomergeUrlAvailable(url)) {
             setLoadingScreenActive(false);
             return;
         }
-        addDatabase(name, url);
+        await addDatabase(name, url);
     }
 
     /**
@@ -174,7 +174,7 @@ export const useLoginViewModel = (
      * @param url the automerge url of the new database
      * @param masterPassword optional master password to directly open the database after creation
      */
-    function addDatabase(name: string, url: AutomergeUrl, masterPassword?: string) {
+    async function addDatabase(name: string, url: AutomergeUrl, masterPassword?: string) {
         closeAddDialog();
 
         storeDatabase(name, url);
@@ -182,9 +182,9 @@ export const useLoginViewModel = (
         setSelectedDatabase(name);
 
         if (masterPassword) {
-            tryOpenDatabase(masterPassword, name);
+            await tryOpenDatabase(masterPassword, name);
         } else {
-            repo.find(url);
+            await repo.find(url);
         }
     }
 
@@ -295,7 +295,7 @@ export const useLoginViewModel = (
         storeDatabase(dbName, handle.url);
         setSelectedDatabase(dbName);
         setIsAddDialogOpen(false);
-        addDatabase(dbName, handle.url);
+        await addDatabase(dbName, handle.url);
     }
 
     /**

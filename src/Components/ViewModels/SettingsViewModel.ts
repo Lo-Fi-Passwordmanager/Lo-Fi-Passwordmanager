@@ -57,15 +57,17 @@ export const useSettingsViewModel = () => {
     }, [servers]);
 
 
+    const connectorsToAdaptersHook = settingsHook.getConnectorsToAdapters();
     useEffect(() => {
-        setOtherPeerMap(settings.getConnectorsToAdapters())
-    }, [settings.getConnectorsToAdapters()]);
+        setOtherPeerMap(connectorsToAdaptersHook)
+    }, [connectorsToAdaptersHook]);
 
+    const connectorHook = settingsHook.getConnector();
     useEffect(() => {
-        if (settings.getConnector() != null) {
-            setRemotePeerId(settings.getConnector().peer)
+        if (connectorHook != null) {
+            setRemotePeerId(connectorHook.peer)
         }
-    }, [settingsHook.getConnector()]);
+    }, [connectorHook]);
 
 
     // Update darkMode

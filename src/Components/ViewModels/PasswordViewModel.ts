@@ -222,13 +222,13 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade) => {
 
         setToastMessage("In die Zwischenablage kopiert");
         setToastVisible(true);
-        navigator.clipboard.writeText(text);
+        void navigator.clipboard.writeText(text);
 
 
         //after the timeout check for focus and clear the clipboard when focused
         clipboardTimerRef.current = window.setTimeout(() => {
             if (document.hasFocus()) {
-                navigator.clipboard.writeText("");
+                void navigator.clipboard.writeText("");
                 setToastMessage("Zwischenablage gelöscht");
                 setToastVisible(true);
                 clipboardTimerRef.current = null;
@@ -237,7 +237,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade) => {
                 setToastMessage("Löschen ausstehend (bitte Tab fokussieren)");
                 window.addEventListener("focus",
                     () => {
-                        navigator.clipboard.writeText("");
+                        void navigator.clipboard.writeText("");
                         setToastMessage("Zwischenablage gelöscht");
                         setToastVisible(true);
                     },
