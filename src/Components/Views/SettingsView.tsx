@@ -130,7 +130,7 @@ const SettingsView: React.FC<{
 
                                                     {viewModel.serverNames.map((server) => (
                                                         viewModel.serverName !== server ? (
-                                                            <div className="server-item">
+                                                            <div className="server-item" key={server}>
                                                                 <button
                                                                     style={{
                                                                         display: "block",
@@ -202,7 +202,7 @@ const SettingsView: React.FC<{
                                             <span>Verbundene Peers:</span>
 
                                             {Array.from(viewModel.otherPeerMap.keys()).map((id) => (
-                                                <div className="server-item">
+                                                <div className="server-item" key={id}>
                                                     <button
                                                         style={{
                                                             display: "block",

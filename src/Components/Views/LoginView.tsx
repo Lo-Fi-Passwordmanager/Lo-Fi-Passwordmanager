@@ -60,7 +60,7 @@ const LoginView: React.FC<{
                     isOpen={viewModel.isEnterPasswordDialogOpen}
                     title="Datenbank öffnen"
                     label1="Masterpasswort"
-                    tryOpenDatabase={viewModel.tryOpenDatabase}
+                    tryOpenDatabase={() => viewModel.tryOpenDatabase}
                     onCancel={viewModel.closeEnterPasswordDialog}
                     setToastMessage={viewModel.setToastMessage}
                     setShowToast={viewModel.setShowToast}
@@ -79,7 +79,8 @@ const LoginView: React.FC<{
                     importDatabaseFromURL={viewModel.importDatabaseFromURL}
                     setToastMessage={viewModel.setToastMessage}
                     setShowToast={viewModel.setShowToast}
-                    importDatabaseFromFile={viewModel.importDatabaseFromFile}
+                    importDatabaseFromFile={(files, name) => {
+                    void viewModel.importDatabaseFromFile(files, name);}}
                     hidePassword={viewModel.hidePassword}
                     toggleHidePassword={viewModel.toggleHidePassword}
                 />

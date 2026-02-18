@@ -31,8 +31,8 @@ const ShareQRDialog: React.FC<ShareQRDialogProps> = ({name, url}: ShareQRDialogP
                 </button>
                 <Dialog title={"Datenbank teilen"} onCloseDialog={() => viewModel.setShareQRCodeOpen(false)}
                         className="qrDialog">
-                    <p>Scanne den QR-Code auf einem anderen Gerät im "Datenbank hinzufügen" Dialog, um die Datenbank mit
-                       dem Namen "{name}"
+                    <p>Scanne den QR-Code auf einem anderen Gerät im &quot;Datenbank hinzufügen&quot; Dialog, um die Datenbank mit
+                       dem Namen &quot;{name}&quot;
                        dort
                        hinzuzufügen.</p>
                     <label className="checkboxRow">

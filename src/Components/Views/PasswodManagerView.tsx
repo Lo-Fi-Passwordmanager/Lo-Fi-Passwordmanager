@@ -16,11 +16,6 @@ const PasswordManagerView: React.FC = () => {
 
     const viewModel = usePasswordManagerViewModel();
 
-    // Fügt das Repo als zu global hinzu, sodass man im Browser einfach auf das Repo zugreifen kann, zum debuggen.
-    // Nur während 'yarn dev' verfügbar, nach dem build nicht mehr
-    if (import.meta.env.DEV) {
-        window.repo = viewModel.repo;
-    }
 
     if (!viewModel.loggedIn) {
         return (

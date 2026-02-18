@@ -156,7 +156,9 @@ export class AutomergeFacade {
                     if (historyItem === undefined) {
                         historyItem = {
                             itemId: prevItemId,
-                            changes: newValue ? new Map([[changedValueKey, newValue]]) : new Map(),
+                            changes: newValue
+                                ? new Map<string, string | number>([[changedValueKey, newValue]])
+                                : new Map<string, string | number>(),
                             type: (action === "del") ? "deleted" : "update",
                             item: prevItem
                         };

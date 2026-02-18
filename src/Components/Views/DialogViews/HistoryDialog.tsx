@@ -19,7 +19,7 @@ export const HistoryDialog: React.FC<{ automergeFacade: AutomergeFacade }> = ({a
         <>
             <button
                 onClick={() => {viewModel.setHistoryOpen(true);
-                viewModel.loadHistory()}}
+                    void viewModel.loadHistory();}}
             >
                 Änderungsverlauf
             </button>
