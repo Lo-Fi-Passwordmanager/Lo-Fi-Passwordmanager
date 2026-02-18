@@ -54,7 +54,7 @@ describe('Settings', () => {
         settings.addServer("name", "url");
         expect(settings.getServers().size).toBe(2);
         settings.setServerUrl("name");
-        expect(settings.getServerName()).toBe("name");
+        expect(settings.getActiveServerName()).toBe("name");
     });
 
     it('should be able to set a new server', ()=> {

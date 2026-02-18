@@ -31,6 +31,8 @@ export const usePasswordManagerViewModel = () => {
         storage: new IndexedDBStorageAdapter(),
     }));
 
+    //Whenever something about the synchronisation happens, the old adapters get removed and new ones get added.
+    //This enables the repo the be kept as state while still changing the adapters
     useEffect(() => {
         const removeArray: NetworkAdapterInterface[] = [];
 
@@ -67,6 +69,9 @@ export const usePasswordManagerViewModel = () => {
         return automergeFacade;
     }
 
+    /**
+     * This closes the Passwordview and loggs out the user
+     */
     function closeLoggedIn(): void {
         setLoggedIn(false);
         setAutomergeFacade(null);
@@ -92,7 +97,7 @@ export const usePasswordManagerViewModel = () => {
     }
 
     function getServerName(): string {
-        return settings.getServerName();
+        return settings.getActiveServerName();
     }
 
     const idleTimer = useIdleTimer({timeout, onIdle, onActive, debounce: 100})

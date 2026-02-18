@@ -54,7 +54,7 @@ export class Settings {
     private _timeoutLength: number;
     private peer: Peer;
     private connector: DataConnection;
-    private _serverUrl: string;
+    private _activeServerUrl: string;
     private _servers: Map<string, string>;
     private _p2p: boolean;
     private p2pAdapter: PeerjsNetworkAdapter;
@@ -68,14 +68,12 @@ export class Settings {
         this._darkMode = loadDarkModeSetting();
         this._timeoutActive = loadTimeoutSettings();
         this._timeoutLength = loadTimeoutLength();
-        this._serverUrl = loadSelectedServerURL();
+        this._activeServerUrl = loadSelectedServerURL();
         this._servers = loadServers();
         this._p2p = loadP2PSetting();
         this.peer = new Peer();
         this.connector = null as unknown as DataConnection;
         this.p2pAdapter = null as unknown as PeerjsNetworkAdapter;
-
-
 
 
         //When someone is connecting to this peer, establish the direction in the other way
@@ -84,11 +82,6 @@ export class Settings {
                 this.setupConnection(incomingConn);
             })
         })
-
-        this.peer.on('open', () => {
-            console.log("Connected with id: " + this.peer.id);
-        })
-
     }
 
     public static getSettings(): Settings {
@@ -99,12 +92,16 @@ export class Settings {
     }
 
     public getServerUrl(): string {
-        return this._serverUrl;
+        return this._activeServerUrl;
     }
 
-    public getServerName(): string {
+
+    /**
+     * Returns the name of the active Server
+     */
+    public getActiveServerName(): string {
         for (const [name, url] of this._servers) {
-            if (url === this._serverUrl) {
+            if (url === this._activeServerUrl) {
                 return name;
             }
         }
@@ -112,8 +109,8 @@ export class Settings {
     }
 
     public setServerUrl(name: string) {
-        this._serverUrl = this._servers.get(name) || "";
-        storeSelectedServerURL(this._serverUrl);
+        this._activeServerUrl = this._servers.get(name) || "";
+        storeSelectedServerURL(this._activeServerUrl);
         this.notify();
     }
 
@@ -121,6 +118,11 @@ export class Settings {
         return new Map(this._servers);
     }
 
+    /**
+     * Adds a new server to the server list, if the name does not already exist
+     * @param serverName the name to be stored with the server
+     * @param serverUrl the url of the server
+     */
     public addServer(serverName: string, serverUrl: string): void {
         if (!this._servers.get(serverName)) {
             this._servers.set(serverName, serverUrl);
@@ -154,7 +156,7 @@ export class Settings {
 
     public setSynchronization(value: boolean, editing?: boolean) {
         this._synchronization = value;
-        storeSynchronizationSettings(value, editing? editing : false);
+        storeSynchronizationSettings(value, editing ? editing : false);
         this.notify();
     }
 
@@ -220,7 +222,7 @@ export class Settings {
         if (!entry) return;
 
         const [conn, adapter] = entry;
-        conn.send({ type: "disconnect" });
+        conn.send({type: "disconnect"});
         // IMPORTANT: notify BEFORE close so Repo removes adapter cleanly
         this.connectorsToAdapters.delete(id);
         this.notify();
@@ -241,6 +243,10 @@ export class Settings {
         this.listeners.forEach(l => l());
     }
 
+    /**
+     * Starts a new connection with the given connector and also adds the automerge PeerJsAdapter
+     * @param conn the connector that the
+     */
     private setupConnection(conn: DataConnection) {
         const adapter = new PeerjsNetworkAdapter(conn);
 
@@ -258,6 +264,10 @@ export class Settings {
         });
     }
 
+    /**
+     * Closes the connection and disconnects the adapter
+     * @param peerId the id of the peer on the other side of the connection
+     */
     private cleanupConnection(peerId: string) {
         const entry = this.connectorsToAdapters.get(peerId);
         if (!entry) return;
