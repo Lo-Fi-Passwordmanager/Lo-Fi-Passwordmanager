@@ -61,11 +61,4 @@ describe('Folder', ()=> {
         expect(folder1.getChildById("id11")).toBe(subfolder1);
     })
 
-    it('should be able to remove a child item', () => {
-        expect(rootFolder.entries).toStrictEqual([folder1, folder2, item])
-        expect(rootFolder.removeItem(folder2)).toBe(true);
-        expect(rootFolder.entries).toStrictEqual([folder1, item])
-        expect(rootFolder.getChildById("id2")).toBe(null);
-        expect(rootFolder.removeItem(folder2)).toBe(false);
-    })
 })

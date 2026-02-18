@@ -2,7 +2,6 @@ import {beforeEach, describe, it, expect, vi} from "vitest";
 import {act, renderHook, waitFor} from "@testing-library/react";
 import {useCreateDatabaseViewModel} from "../../../../src/Components/ViewModels/Dialog/CreateDatabaseViewModel";
 import {isValidAutomergeUrl} from "@automerge/react";
-import {useState} from "react";
 
 describe('CreateDatabaseViewModel', ()=> {
 
@@ -26,20 +25,20 @@ describe('CreateDatabaseViewModel', ()=> {
     })
     //TODO bisschen dummer test
     it('should correctly assign fields when isOpen is true', () => {
-        const {result} = renderHook(() => useCreateDatabaseViewModel(true, createDatabase, storeDatabase, setToastMessage, setShowToast, importDatabase));
+        const {result} = renderHook(() => useCreateDatabaseViewModel(createDatabase, storeDatabase, setToastMessage, setShowToast, importDatabase));
         expect(result.current.field1).toBe("");
         expect(result.current.field2).toBe("");
 
     })
 
     it('should correctly assign fields when is Open is false', () => {
-        const {result} = renderHook(() => useCreateDatabaseViewModel(false, createDatabase, storeDatabase, setToastMessage, setShowToast, importDatabase));
+        const {result} = renderHook(() => useCreateDatabaseViewModel(createDatabase, storeDatabase, setToastMessage, setShowToast, importDatabase));
         expect(result.current.field1).toBe("");
         expect(result.current.field2).toBe("");
     })
 
     it('should create a toast when no input is given', ()=> {
-        const {result} = renderHook(() => useCreateDatabaseViewModel(true, createDatabase, storeDatabase, setToastMessage, setShowToast, importDatabase));
+        const {result} = renderHook(() => useCreateDatabaseViewModel(createDatabase, storeDatabase, setToastMessage, setShowToast, importDatabase));
         act(()=> {
             result.current.handleConfirm();
         })
@@ -48,7 +47,7 @@ describe('CreateDatabaseViewModel', ()=> {
     })
 
     it('should call to create new Database correctly',async ()=> {
-        const {result} = renderHook(() => useCreateDatabaseViewModel(true, createDatabase, storeDatabase, setToastMessage, setShowToast, importDatabase));
+        const {result} = renderHook(() => useCreateDatabaseViewModel(createDatabase, storeDatabase, setToastMessage, setShowToast, importDatabase));
         act(()=> {
             result.current.setField1("name");
             result.current.setField2("url");
@@ -62,7 +61,7 @@ describe('CreateDatabaseViewModel', ()=> {
     })
 
     it('should create a toast when the url is wrong',async ()=> {
-        const {result} = renderHook(() => useCreateDatabaseViewModel(true, createDatabase, storeDatabase, setToastMessage, setShowToast, importDatabase));
+        const {result} = renderHook(() => useCreateDatabaseViewModel(createDatabase, storeDatabase, setToastMessage, setShowToast, importDatabase));
         vi.mocked(isValidAutomergeUrl).mockReturnValue(false);
         act(()=> {
             result.current.setField1("name");
@@ -77,7 +76,7 @@ describe('CreateDatabaseViewModel', ()=> {
     })
 
     it('should be able call to store a database from a url', ()=> {
-        const {result} = renderHook(() => useCreateDatabaseViewModel(true, createDatabase, storeDatabase, setToastMessage, setShowToast, importDatabase));
+        const {result} = renderHook(() => useCreateDatabaseViewModel(createDatabase, storeDatabase, setToastMessage, setShowToast, importDatabase));
         vi.mocked(isValidAutomergeUrl).mockReturnValue(true);
         act(()=> {
             result.current.setField1("name");
@@ -92,7 +91,7 @@ describe('CreateDatabaseViewModel', ()=> {
     });
 
     it('should be able to call to import a database from a file', async () => {
-        const {result} = renderHook(() => useCreateDatabaseViewModel(true, createDatabase, storeDatabase, setToastMessage, setShowToast, importDatabase));
+        const {result} = renderHook(() => useCreateDatabaseViewModel(createDatabase, storeDatabase, setToastMessage, setShowToast, importDatabase));
         const fileList: FileList = <FileList>{};
         act(() => {
             result.current.setSelectedImportType("file");
@@ -108,7 +107,7 @@ describe('CreateDatabaseViewModel', ()=> {
     });
 
     it('should do nothing if creation type is invalid', async () => {
-        const {result} = renderHook(() => useCreateDatabaseViewModel(true, createDatabase, storeDatabase, setToastMessage, setShowToast, importDatabase));
+        const {result} = renderHook(() => useCreateDatabaseViewModel(createDatabase, storeDatabase, setToastMessage, setShowToast, importDatabase));
         act(() => {
             result.current.setSelectedImportType("invalid");
             result.current.setField1("stuff");
