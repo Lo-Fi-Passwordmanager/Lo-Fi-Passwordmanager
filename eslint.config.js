@@ -33,7 +33,10 @@ export default defineConfig([
             sourceType: 'module',
             globals: globals.browser,
             parserOptions: {
-                project: ['./tsconfig.json'],
+                // Point to the specific configs, not the empty "solution" root
+                project: ['./tsconfig.app.json', './tsconfig.node.json'],
+                // Use the current directory as the base for those paths
+                tsconfigRootDir: import.meta.dirname,
             },
         },
 
