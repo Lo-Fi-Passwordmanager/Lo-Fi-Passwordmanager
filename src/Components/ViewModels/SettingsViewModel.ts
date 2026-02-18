@@ -1,4 +1,4 @@
-import {Settings} from "../../Model/Settings";
+import {Settings, useSettings} from "../../Model/Settings";
 
 import {useEffect, useState} from "react";
 
@@ -9,7 +9,7 @@ import {useEffect, useState} from "react";
 export const useSettingsViewModel = () => {
 
     const settings = Settings.getSettings();
-
+    const settingsHook = useSettings()
     // Reactive state to store values during runtime
     const [darkMode, setDarkMode] = useState(settings.getDarkMode());
     const [synchronisation, setSynchronisation] = useState(settings.getSynchronization());
@@ -51,6 +51,12 @@ export const useSettingsViewModel = () => {
     useEffect(() => {
         setServerNames(Array.from(servers.keys()));
     }, [servers]);
+
+    useEffect(() => {
+        if (settings.getConnector() != null) {
+            setRemotePeerId(settings.getConnector().peer)
+        }
+    }, [settingsHook.getConnector()]);
 
 
     // Update darkMode

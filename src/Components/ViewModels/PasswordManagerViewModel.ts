@@ -54,8 +54,6 @@ export const usePasswordManagerViewModel = () => {
             repo.networkSubsystem.addNetworkAdapter(settings.getP2PAdapter());
         }
         console.log(repo.networkSubsystem.adapters);
-        repo.networkSubsystem.disconnect();
-        repo.networkSubsystem.reconnect();
 
     }, [settings.getSynchronization(), settings.getP2P()]);
 

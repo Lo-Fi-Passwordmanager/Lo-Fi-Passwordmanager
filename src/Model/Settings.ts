@@ -78,6 +78,8 @@ export class Settings {
         this.peer.on('connection', incomingConn => {
             incomingConn.on('open', async () => {
                 this.p2pAdapter = new PeerjsNetworkAdapter(incomingConn);
+                this.connector = incomingConn;
+                this.notify()
                 console.log("Versuche zurück zu verbinden zu id: " + incomingConn.peer);
                 console.log(this.p2pAdapter);
             })

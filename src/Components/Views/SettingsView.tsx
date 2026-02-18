@@ -1,5 +1,4 @@
 import {useSettingsViewModel} from "../ViewModels/SettingsViewModel.ts";
-import {Settings} from "../../Model/Settings.ts";
 
 import React from "react";
 import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
