@@ -44,7 +44,9 @@ export const usePasswordManagerViewModel = () => {
             }
         }
         for (const adapter of removeArray) {
-            repo.networkSubsystem.removeNetworkAdapter(adapter);
+            if (adapter.peerId) {
+                repo.networkSubsystem.removeNetworkAdapter(adapter);
+            }
         }
 
         if (settings.getSynchronization() && !repo.networkSubsystem.adapters.some(a => a instanceof WebSocketClientAdapter)) {
