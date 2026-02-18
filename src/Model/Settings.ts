@@ -1,17 +1,19 @@
 import {useEffect, useState} from "react";
 import {
     loadDarkModeSetting,
+    loadP2PSetting,
     loadSelectedServerURL,
     loadServers,
     loadSynchronizationSettings,
     loadTimeoutLength,
     loadTimeoutSettings,
-    storeSynchronizationSettings,
     storeDarkModeSetting,
+    storeP2PSetting,
     storeSelectedServerURL,
     storeServers,
+    storeSynchronizationSettings,
     storeTimeoutLength,
-    storeTimeoutSettings, loadP2PSetting, storeP2PSetting,
+    storeTimeoutSettings,
 } from "../Utility/Storage.ts";
 import Peer, {type DataConnection} from "peerjs";
 import {PeerjsNetworkAdapter} from "automerge-repo-network-peerjs";
@@ -68,16 +70,21 @@ export class Settings {
         this._servers = loadServers();
         this._p2p = loadP2PSetting();
         this.peer = new Peer();
-        this.connector = this.peer.connect("");
-        this.p2pAdapter = new PeerjsNetworkAdapter(this.connector);
+        this.connector = null as any;
+        this.p2pAdapter = null as any;
 
 
         //When someone is connecting to this peer, establish the direction in the other way
         this.peer.on('connection', incomingConn => {
-            incomingConn.on('open', () => {
+            incomingConn.on('open', async () => {
                 this.p2pAdapter = new PeerjsNetworkAdapter(incomingConn);
-                console.log("Versuche zurück zu verbinden")
+                console.log("Versuche zurück zu verbinden zu id: " + incomingConn.peer);
+                console.log(this.p2pAdapter);
             })
+        })
+
+        this.peer.on('open', () => {
+            console.log("Connected with id: " + this.peer.id);
         })
     }
 
@@ -122,14 +129,13 @@ export class Settings {
     public removeServer(server: string): void {
         this._servers = this._servers.delete(server) ? this._servers : this._servers;
         storeServers(this._servers);
-        this.notify();
     }
 
     public getP2P(): boolean {
         return this._p2p;
     }
 
-    public setConnection(isP2P: boolean) {
+    public setP2PActive(isP2P: boolean) {
         this._p2p = isP2P;
         storeP2PSetting(isP2P);
         this.notify();
@@ -194,15 +200,15 @@ export class Settings {
      * @param id the id to connect to
      */
     public setConnector(id: string) {
-
-        this.peer.connect(id);
-        this.peer.on('open', () => {
-            const conn = this.peer.connect(id)
-            this.p2pAdapter = new PeerjsNetworkAdapter(conn);
-        })
+        if (this.connector?.open) return;
 
         this.connector = this.peer.connect(id);
-        this.notify();
+
+        this.connector.on("open", async () => {
+            this.p2pAdapter = new PeerjsNetworkAdapter(this.connector);
+            this.notify();
+            console.log("Connected with id: " + id);
+        });
     }
 
     public getConnector() {

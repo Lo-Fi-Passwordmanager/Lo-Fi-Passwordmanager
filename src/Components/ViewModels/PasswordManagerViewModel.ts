@@ -5,11 +5,12 @@ import {
     Repo,
     WebSocketClientAdapter
 } from "@automerge/react";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import {useIdleTimer} from "react-idle-timer";
 import {Settings, useSettings} from "../../Model/Settings.ts";
+import {NetworkAdapter} from "@automerge/automerge-repo/slim";
 import {PeerjsNetworkAdapter} from "automerge-repo-network-peerjs";
 
 /**
@@ -25,36 +26,39 @@ export const usePasswordManagerViewModel = () => {
     const [toastVisible, setToastVisible] = useState(false);
     const [openedDatabaseName, setOpenedDatabaseName] = useState<string>("");
 
-    /*
-    const initialNetworkAdapters = [
-        new BroadcastChannelNetworkAdapter(),
-        new WebSocketClientAdapter(settings.getServerUrl()),
-    ];
 
-    const initialP2PNetworkAdapter = [
-        new BroadcastChannelNetworkAdapter(),
-        peerJsAdapter,
-    ] */
+    const [repo] = useState(new Repo({
+        network: [new BroadcastChannelNetworkAdapter()],
+        storage: new IndexedDBStorageAdapter(),
+    }));
 
-    function getNetworkAdapters(): NetworkAdapterInterface[] | undefined {
-        const networkAdapters: NetworkAdapterInterface[] = [new BroadcastChannelNetworkAdapter()];
+    useEffect(() => {
+        const removeArray: NetworkAdapterInterface[] = [];
+
+        for (const adapter of repo.networkSubsystem.adapters) {
+            if (!settings.getSynchronization() && adapter instanceof WebSocketClientAdapter) {
+                removeArray.push(adapter);
+            }
+            if (!settings.getP2P() && adapter instanceof PeerjsNetworkAdapter) {
+                removeArray.push(adapter);
+            }
+        }
+        for (const adapter of removeArray) {
+            repo.networkSubsystem.removeNetworkAdapter(adapter);
+        }
 
         if (settings.getSynchronization()) {
-            networkAdapters.push(new WebSocketClientAdapter(settings.getServerUrl()))
+            repo.networkSubsystem.addNetworkAdapter(new WebSocketClientAdapter(settings.getServerUrl()));
         }
-        if (settings.getP2P()) {
-            networkAdapters.push(settings.getP2PAdapter());
-            console.log(settings.getP2PAdapter());
+
+        if (settings.getP2P() && settings.getConnector() != null && !repo.networkSubsystem.adapters.includes(settings.getP2PAdapter())) {
+            repo.networkSubsystem.addNetworkAdapter(settings.getP2PAdapter());
         }
-        return networkAdapters;
-    }
+        console.log(repo.networkSubsystem.adapters);
+        repo.networkSubsystem.disconnect();
+        repo.networkSubsystem.reconnect();
 
-
-    const repo = new Repo({
-        network: getNetworkAdapters(),
-        storage:
-            new IndexedDBStorageAdapter()
-    });
+    }, [settings.getSynchronization(), settings.getP2P()]);
 
     function getAutomergeFacade(): AutomergeFacade | null {
         return automergeFacade;

@@ -178,10 +178,16 @@ const SettingsView: React.FC<{
                                             <label className={"current-server"}>{viewModel.getPeerId()}</label>
                                             <label>Fremde Peer-ID:</label>
                                             <input type="text"
-                                                   onChange={(e) => viewModel.setConnection(e.target.value)}
-                                                   value={Settings.getSettings().getConnector().peer}
+                                                   value={viewModel.remotePeerId}
+                                                   onChange={(e) => viewModel.setRemotePeerId(e.target.value)}
                                                    style={{marginBottom: "2vh"}}
                                             />
+                                            <button
+                                                className="squareButton"
+                                                onClick={viewModel.connectToPeer}
+                                            >
+                                                Verbinden
+                                            </button>
                                         </div>
                                     }
                                 </div>
