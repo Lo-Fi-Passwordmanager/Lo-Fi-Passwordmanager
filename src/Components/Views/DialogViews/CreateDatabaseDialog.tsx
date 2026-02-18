@@ -51,7 +51,7 @@ const CreateDatabaseDialog: React.FC<{
     toggleHidePassword
 }) => {
 
-    const viewModel = useCreateDatabaseViewModel(isOpen, createDatabase, importDatabaseFromURL, setToastMessage, setShowToast, importDatabaseFromFile);
+    const viewModel = useCreateDatabaseViewModel(createDatabase, importDatabaseFromURL, setToastMessage, setShowToast, importDatabaseFromFile);
 
     if (!isOpen) return null;
 

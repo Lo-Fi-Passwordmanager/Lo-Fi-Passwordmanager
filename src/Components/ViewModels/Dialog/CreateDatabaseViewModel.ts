@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {isValidAutomergeUrl} from "@automerge/react";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
 
@@ -12,7 +12,7 @@ import type {AutomergeUrl} from "@automerge/automerge-repo";
  * @param setShowToast the function to actually display the toast
  * @param importDatabase the function to import a database from a file
  */
-export const useCreateDatabaseViewModel = (isOpen: boolean,
+export const useCreateDatabaseViewModel = (
     createDatabase: (name: string, password: string) => void,
     storeDatabase: (name: string, autoMergeUrl: AutomergeUrl) => void,
     setToastMessage: (message: string) => void,
@@ -25,16 +25,6 @@ export const useCreateDatabaseViewModel = (isOpen: boolean,
     const [field2, setField2] = useState("");
     const [targetFiles, setTargetFiles] = useState<FileList | null>(null);
 
-    /**
-     * Resets the input fields when the dialog is opened
-     */
-    useEffect(() => {
-        if (isOpen) {
-            setField1("");
-            setField2("");
-            setTargetFiles(null);
-        }
-    }, [isOpen]);
 
     /**
      * Handles the confirm action based on the current mode (create new or import)
@@ -63,6 +53,9 @@ export const useCreateDatabaseViewModel = (isOpen: boolean,
                 return;
             }
         }
+        setField1("");
+        setField2("");
+        setTargetFiles(null);
     }
 
     return {
