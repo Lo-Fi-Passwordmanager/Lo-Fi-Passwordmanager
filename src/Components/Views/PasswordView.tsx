@@ -2,14 +2,15 @@ import React from "react";
 import ListView from "./ListView.tsx";
 import EntryView from "./EntryView.tsx";
 import OrganizeListView from "./OrganizeListView.tsx";
-import {usePasswortViewModel} from "../ViewModels/PasswordViewModel.ts";
+import {usePasswordViewModel} from "../ViewModels/PasswordViewModel.ts";
 import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import ItemCreationDialog from "./DialogViews/ItemCreationDialog.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
-import EditablePasswordView from "./EditablePasswordView.tsx";
+import EditableEntryView from "./EditableEntryView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
-import SettingsView from "./SettingsView.tsx";
+import {DndContext, pointerWithin} from "@dnd-kit/core";
 import {useRepo} from "@automerge/automerge-repo-react-hooks";
+import DeleteConfirmationDialog from "./DialogViews/DeleteConfirmationDialog.tsx";
 
 
 interface PasswordViewProps {
@@ -22,7 +23,7 @@ interface PasswordViewProps {
  * The view that should be shown, when the user opened a database successfully and shows the whole structure and one selected entry
  */
 const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbName, closeDatabase}) => {
-    const passwordViewModel = usePasswortViewModel(automergeFacade as AutomergeFacade);
+    const viewModel = usePasswordViewModel(automergeFacade as AutomergeFacade);
 
     // Fügt das Repo als zu global hinzu, sodass man im Browser einfach auf das Repo zugreifen kann, zum debuggen.
     // Nur während 'yarn dev' verfügbar, nach dem build nicht mehr
@@ -33,83 +34,103 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
     }
 
     return (
-        <div style={{margin: "10px", height: "95vh"}}>
+        <div style={{margin: "10px", height: "90vh"}}>
             {/*Dialog for creating a new Entry*/}
-            {passwordViewModel.getInItemCreation() &&
+            {viewModel.inItemCreation &&
                 <ItemCreationDialog
-                    addItem={passwordViewModel.addItem}
-                    curParent={passwordViewModel.getCurParent()}
-                    cancelItemCreation={() => passwordViewModel.setInItemCreation(false)}
-                    setCurItem={passwordViewModel.setCurItem}
+                    addItem={viewModel.addItem}
+                    cancelItemCreation={() => viewModel.setInItemCreation(false)}
                 />}
 
-            <div className="passwordView">
-                <div className="borderBox scrollableContainer" style={{width: "30%"}}>
+            <div className={"passwordView"}>
+                <div className="passwordViewList">
                     {/*Container for everything related to the search/Sort features */}
                     <OrganizeListView
-                        getCurSortCriterion={passwordViewModel.getCurSortCriterion}
-                        setCurSortCriterion={passwordViewModel.setAndStoreSortCriterion}
-                        toggleOrder={passwordViewModel.toggleOrder}
-                        isAscending={passwordViewModel.isAscending}
-                        setLiveSearchValue={passwordViewModel.setSearchValue}
-                        liveSearchValue={passwordViewModel.searchValue}
+                        curSortCriterion={viewModel.curSortCrit}
+                        setCurSortCriterion={viewModel.setAndStoreSortCriterion}
+                        toggleOrder={viewModel.toggleOrder}
+                        isAscending={viewModel.isAscending}
+                        setLiveSearchValue={viewModel.setSearchValue}
+                        liveSearchValue={viewModel.searchValue}
                         closeDatabase={closeDatabase}
-                        setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
+                        setItemCreationDialog={() => viewModel.setInItemCreation(true)}
+                        inEditable={viewModel.inEditable}
                     />
 
                     <div className="scrollableContainer">
 
                         {/*Shows only the Views, that match the given search input*/}
-                        {passwordViewModel.searchValue.length > 0 && <FilteredListView
-                            root={passwordViewModel.getRootFolder()}
-                            setCurItem={passwordViewModel.setCurItem}
-                            deleteItem={passwordViewModel.deleteItem}
-                            sortCriterion={passwordViewModel.getCurSortCriterion()}
-                            isAscending={passwordViewModel.isAscending}
-                            filterText={passwordViewModel.searchValue}
-                            goToFolder={passwordViewModel.goToFolder}
+                        {viewModel.searchValue.length > 0 && <FilteredListView
+                            root={viewModel.getRootFolder()}
+                            setCurItem={viewModel.setCurItem}
+                            deleteItem={viewModel.deleteItem}
+                            filterText={viewModel.searchValue}
+                            goToFolder={viewModel.goToItem}
+                            getSortedChildren={viewModel.getSortedChildren}
                         />}
+                        <DndContext collisionDetection={pointerWithin}
+                                    onDragEnd={viewModel.handleDragEnd}
+                                    sensors={viewModel.sensors}
+                                    autoScroll={false}>
 
-                        {/*The basic ListView which shows all Items and Folders in their hierarchy*/}
-                        {passwordViewModel.searchValue.length === 0 &&
-                            <ListView
-                                item={passwordViewModel.getRootFolder()}
-                                setCurItem={passwordViewModel.setCurItem}
-                                setItemCreationDialog={() => passwordViewModel.setInItemCreation(true)}
-                                setCurrentParent={passwordViewModel.setCurParent}
-                                deleteItem={passwordViewModel.deleteItem}
-                                sortCriterion={passwordViewModel.getCurSortCriterion()}
-                                isAscending={passwordViewModel.isAscending}
-                                dirtyItemId={passwordViewModel.dirtyItemId}
-                                getCurItem={passwordViewModel.getCurEntry}
+                            {/*The basic ListView which shows all Items and Folders in their hierarchy*/}
+                            {viewModel.searchValue.length === 0 && <ListView
+                                item={viewModel.getRootFolder()}
+                                setCurItem={viewModel.setCurItem}
+                                setItemCreationDialog={() => viewModel.setInItemCreation(true)}
+                                setCurrentParent={viewModel.setCurParent}
+                                deleteItem={viewModel.deleteItem}
+                                dirtyItemId={viewModel.dirtyItemId}
+                                curItem={viewModel.curItem}
                                 openedDbName={openedDbName}
-                                updateItemTitle={passwordViewModel.updateItemTitle}
-                                selectedFolderId={passwordViewModel.selectedFolderId}
+                                updateItemTitle={viewModel.updateItemTitle}
+                                selectedItemId={viewModel.selectedItemId}
+                                createdFolderId={viewModel.createdFolderId}
+                                setCreatedFolderId={viewModel.setCreatedFolderId}
+                                inEditable={viewModel.inEditable}
+                                expandFolderId={viewModel.expandFolder}
+                                collapseFolderId={viewModel.collapseFolder}
+                                isFolderExpanded={viewModel.isFolderExpanded}
+                                getSortedChildren={viewModel.getSortedChildren}
+                                level={0}
                             />}
+                        </DndContext>
                     </div>
-
                 </div>
 
-                <div className="borderBox" style={{width: "70%", position: "relative"}}>
-                    <SettingsView automergeFacade={automergeFacade}/>
+                <div className="passwordViewEntry">
                     {/*Depending on the state, either shows the editable or the normal/noneditable passwordView*/}
-                    {!passwordViewModel.inEditable &&
-                        <EntryView item={passwordViewModel.getCurEntry()}
-                                   copyAndClearClipboard={passwordViewModel.copyToClipboardAndClear}
-                                   setEditableView={() => passwordViewModel.setInEditable(true)}
-                                   hidePassword={passwordViewModel.hidePassword}
-                                   toggleHidePassword={passwordViewModel.toggleHidePassword}/>}
+                    {!viewModel.inEditable &&
+                        <EntryView item={viewModel.curItem}
+                                   deleteItem={viewModel.deleteItem}
+                                   copyAndClearClipboard={viewModel.copyToClipboardAndClear}
+                                   setEditableView={() => viewModel.toggleInEdit()}
+                                   hidePassword={viewModel.hidePassword}
+                                   toggleHidePassword={viewModel.toggleHidePassword}/>}
 
-                    {passwordViewModel.inEditable &&
-                        <EditablePasswordView item={passwordViewModel.getCurEntry()}
-                                              updateItemAttribute={passwordViewModel.updateItemAttribute}
-                                              setEditableView={() => passwordViewModel.setInEditable(false)}/>}
+                    {viewModel.inEditable &&
+                        <EditableEntryView item={viewModel.curItem}
+                                           updateItemAttribute={viewModel.updateItemAttribute}
+                                           setEditableView={() => viewModel.toggleInEdit()}
+                                           createItem={viewModel.createEntry}
+                                           inCreation={viewModel.inEntryCreation}
+                                           setInCreation={viewModel.setInEntryCreation}
+                                           hidePassword={viewModel.hidePassword}
+                                           toggleHidePassword={viewModel.toggleHidePassword}
+                        />
+                    }
                 </div>
+
+                {viewModel.itemToDelete && <DeleteConfirmationDialog
+                    item={viewModel.itemToDelete}
+                    onConfirmItem={viewModel.confirmDeletion}
+                    onClose={() => viewModel.setItemToDelete(null)}
+                />}
 
                 {/*A Toast that may be called at any time with a given message*/}
-                <ToastDialog message={passwordViewModel.toastMessage}
-                             isVisible={passwordViewModel.toastVisible}
-                             onClose={() => passwordViewModel.setToastVisible(false)}>
+                <ToastDialog message={viewModel.toastMessage}
+                             isVisible={viewModel.toastVisible}
+                             onClose={() => viewModel.setToastVisible(false)}>
                 </ToastDialog>
             </div>
         </div>

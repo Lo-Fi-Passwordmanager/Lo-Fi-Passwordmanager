@@ -1,5 +1,5 @@
 import React from "react";
-import {useLoginViewModel} from "../ViewModels/UseLoginViewModel.ts";
+import {useLoginViewModel} from "../ViewModels/loginViewModel.ts";
 import DatabaseListingView from "./ListingViews/DatabaseListingView.tsx";
 import CreateDatabaseDialog from "./DialogViews/CreateDatabaseDialog.tsx";
 import LoginDatabaseDialog from "./DialogViews/LoginDatabaseDialog.tsx";
@@ -8,8 +8,17 @@ import type {Repo} from "@automerge/react";
 import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import  {type SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
+import {HiMiniPlus} from "react-icons/hi2";
+import DeleteConfirmationDialog from "./DialogViews/DeleteConfirmationDialog.tsx";
 
-
+/**
+ * The view that should be shown, when the user is not logged in yet and can select/create a database to open plus other related actions
+ * @param repo the automerge repo
+ * @param setLoggedIn method to set the logged in state
+ * @param setAutomergeFacade method to set the automerge facade after opening a database
+ * @param securityProvider the security provider used for encryption/decryption
+ * @param setOpenedDbName method to set the name of the currently opened database
+ */
 const LoginView: React.FC<{
     repo: Repo,
     setLoggedIn: (value: (((prevState: boolean) => boolean) | boolean)) => void,
@@ -24,7 +33,7 @@ const LoginView: React.FC<{
         <div className="loginView">
 
             <img src={PWMLogo} className="logo" alt="Passwortmanager Logo"/>
-            <header> Passwort Manager</header>
+            <header>Lo-Fi Passwort&shy;manager</header>
             <main className="flexContainer">
 
                 <div className="databaseSelection">
@@ -38,8 +47,11 @@ const LoginView: React.FC<{
 
 
                     {/* Button for adding new Database */}
-                    <button onClick={viewModel.openAddDialog}>
-                        +
+                    <button
+                        className={"squareButton"}
+                        title="Neue Datenbank erstellen"
+                        onClick={viewModel.openAddDialog}>
+                        <HiMiniPlus size={24}/>
                     </button>
                 </div>
                 {/* Popup Dialog for adding a new Database */}
@@ -47,10 +59,12 @@ const LoginView: React.FC<{
                     isOpen={viewModel.isEnterPasswordDialogOpen}
                     title="Datenbank öffnen"
                     label1="Masterpasswort"
-                    onConfirm={viewModel.tryOpenDatabase}
+                    tryOpenDatabase={viewModel.tryOpenDatabase}
                     onCancel={viewModel.closeEnterPasswordDialog}
                     setToastMessage={viewModel.setToastMessage}
                     setShowToast={viewModel.setShowToast}
+                    hidePassword={viewModel.hidePassword}
+                    toggleHidePassword={viewModel.toggleHidePassword}
                 />
 
                 {/* Pop Up Dialog for creating a new Database */}
@@ -61,11 +75,20 @@ const LoginView: React.FC<{
                     label2="Masterpasswort"
                     createDatabase={viewModel.createDatabase}
                     onCancel={viewModel.closeAddDialog}
-                    storeDatabase={viewModel.importDatabaseFromURL}
+                    importDatabaseFromURL={viewModel.importDatabaseFromURL}
                     setToastMessage={viewModel.setToastMessage}
                     setShowToast={viewModel.setShowToast}
-                    importDatabase={viewModel.importDatabaseFromFile}
+                    importDatabaseFromFile={viewModel.importDatabaseFromFile}
+                    hidePassword={viewModel.hidePassword}
+                    toggleHidePassword={viewModel.toggleHidePassword}
                 />
+
+                <DeleteConfirmationDialog
+                    database={viewModel.databaseToDelete}
+                    onConfirmDb={viewModel.confirmDeleteDatabase}
+                    onClose={() => viewModel.setDatabaseToDelete(null)}
+                />
+
             </main>
             <ToastDialog message={viewModel.toastMessage}
                          isVisible={viewModel.showToast}

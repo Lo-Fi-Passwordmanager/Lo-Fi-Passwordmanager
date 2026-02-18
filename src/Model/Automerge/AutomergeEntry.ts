@@ -1,5 +1,8 @@
 import {AutomergeItem} from "./AutomergeItem.ts";
 
+/**
+ * The Entry class that gets stored into the automergedocument
+ */
 export class AutomergeEntry extends AutomergeItem {
     username: string;
     password: string;

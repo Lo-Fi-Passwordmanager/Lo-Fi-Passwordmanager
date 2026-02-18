@@ -1,6 +1,6 @@
 import {afterEach, beforeEach, describe, expect, it, vi} from "vitest";
 import {act, renderHook, waitFor} from "@testing-library/react";
-import {useLoginViewModel} from "../../../src/Components/ViewModels/UseLoginViewModel";
+import {useLoginViewModel} from "../../../src/Components/ViewModels/loginViewModel";
 import {AutomergeUrl, Repo} from "@automerge/react";
 import {SecurityProvider} from "../../../src/Utility/Security/SecurityProvider";
 
@@ -62,7 +62,7 @@ describe('UseLoginViewModel', () => {
             expect(result.current.databases.size).toBe(1);
         });
         act(() => {
-            result.current.deleteDatabase("name");
+            result.current.confirmDeleteDatabase("name");
         })
         await waitFor(() => {
             expect(result.current.databases.size).toBe(0);

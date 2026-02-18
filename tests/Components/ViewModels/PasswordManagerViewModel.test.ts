@@ -18,11 +18,11 @@ describe("PasswordManagerViewModel", () => {
 
     it("should be able to state whether the user is logged in", () => {
         const { result } = renderHook(() => usePasswordManagerViewModel());
-        expect(result.current.getLoggedIn()).toBe(false);
+        expect(result.current.loggedIn).toBe(false);
         act(()=>{
             result.current.setLoggedIn(true);
         })
-        expect(result.current.getLoggedIn()).toBe(true);
+        expect(result.current.loggedIn).toBe(true);
     })
 
     it("should be able to return its AutomergeFacade",() => {
@@ -36,11 +36,11 @@ describe("PasswordManagerViewModel", () => {
 
     it("should be able log out correctly", () => {
         const { result } = renderHook(() => usePasswordManagerViewModel());
-        expect(result.current.getLoggedIn()).toBe(false);
+        expect(result.current.loggedIn).toBe(false);
         act(()=>{
             result.current.setLoggedIn(true);
         })
-        expect(result.current.getLoggedIn()).toBe(true);
+        expect(result.current.loggedIn).toBe(true);
         const repo = new Repo();
         act(()=>{
             result.current.setAutomergeFacade(new AutomergeFacade(repo));
@@ -49,7 +49,7 @@ describe("PasswordManagerViewModel", () => {
         act(()=>{
             result.current.closeLoggedIn();
         })
-        expect(result.current.getLoggedIn()).toBe(false);
+        expect(result.current.loggedIn).toBe(false);
         let foo: string;
         try {
             foo = result.current.securityProvider.encryptValue(" ");

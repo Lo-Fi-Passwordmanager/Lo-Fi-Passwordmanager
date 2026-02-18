@@ -2,7 +2,15 @@ import React from "react";
 import type {HistoryEntry} from "../../../Model/Automerge/HistoryEntry.ts";
 import {useHistoryItemViewModel} from "../../ViewModels/Dialog/HistoryItemViewModel.ts";
 import type {SecurityProvider} from "../../../Utility/Security/SecurityProvider.ts";
+import {HiEye} from "react-icons/hi";
+import {HiEyeSlash} from "react-icons/hi2";
 
+/**
+ * A component that represents a single history item in the history dialog.
+ *
+ * @param historyEntry The history entry to display.
+ * @param securityProvider The security provider used for decrypting sensitive data.
+ */
 export const HistoryItem: React.FC<{
     historyEntry: HistoryEntry,
     securityProvider: SecurityProvider
@@ -42,18 +50,20 @@ export const HistoryItem: React.FC<{
                                         <span
                                             className="attr-name">{viewmodel.getAttributeName(attribute)}{attribute === "password" ?
                                             <span style={{marginLeft: "1ch", cursor: "pointer"}}
-                                                  onClick={viewmodel.togglePasswordVisible}>👁</span> : ""}</span>
+                                                  onClick={viewmodel.togglePasswordVisible}>
+                                                {viewmodel.passwordVisible ? <HiEye/> : <HiEyeSlash/>}
+                                            </span> : ""}</span>
                                         <span className="change-path">
                                             {attribute === "password" ?
                                                 <span className="old-val">
-                                                    {viewmodel.passwordVisible ? viewmodel.get(attribute) : "*".repeat(viewmodel.get(attribute)!.length)}
+                                                    {viewmodel.passwordVisible ? viewmodel.get(attribute) : "●".repeat(viewmodel.get(attribute)!.length)}
                                                 </span> :
                                                 <span className="old-val">{viewmodel.get(attribute)}</span>
                                             }
                                             <span className="arrow">→</span>
                                             {attribute === "password" ?
                                                 <span className="new-val">
-                                                    {viewmodel.passwordVisible ? viewmodel.decrypt(newValue as string) : "*".repeat(viewmodel.decrypt(newValue as string)!.length)}
+                                                    {viewmodel.passwordVisible ? viewmodel.decrypt(newValue as string) : "●".repeat(viewmodel.decrypt(newValue as string)!.length)}
                                                 </span> :
                                                 <span className="new-val">
                                                     {(typeof newValue === "string") ? viewmodel.decrypt(newValue) : viewmodel.convertDate(newValue)}
@@ -75,11 +85,14 @@ export const HistoryItem: React.FC<{
                                 </span>
                             </div>}
                             {viewmodel.password && <div className="change-row">
-                                <span className="attr-name">Passwort<span style={{marginLeft: "1ch", cursor: "pointer"}}
-                                                                          onClick={viewmodel.togglePasswordVisible}>👁</span></span>
+                                <span className="attr-name">Passwort
+                                    <span style={{marginLeft: "1ch", cursor: "pointer"}}
+                                          onClick={viewmodel.togglePasswordVisible}>
+                                                {viewmodel.passwordVisible ? <HiEye/> : <HiEyeSlash/>}
+                                </span></span>
                                 <span className="change-path">
                                     <span className="new-val">
-                                        {viewmodel.passwordVisible ? viewmodel.password : "*".repeat(viewmodel.password.length)}
+                                        {viewmodel.passwordVisible ? viewmodel.password : "●".repeat(viewmodel.password.length)}
                                     </span>
                                 </span>
                             </div>}

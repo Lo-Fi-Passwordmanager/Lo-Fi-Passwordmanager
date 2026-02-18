@@ -8,7 +8,8 @@ import {useLoadingScreen} from "./LoadingScreenProviderViewModel.ts";
 import {uInt8ArrayFromFile} from "../../Utility/InputOutputUtil.ts";
 
 /**
- * ViewModel for the LoginView
+ * ViewModel for the LoginView. Provides all data and functions required by the LoginView.
+ *
  * @param repo the automerge repo
  * @param setLoggedIn the function to update the View to switch from loginView to PasswordView.
  * @param setAutomergeFacade the function to update the automergeFacade of the used database on correct Login.
@@ -37,6 +38,8 @@ export const useLoginViewModel = (
     const [isEnterPasswordDialogOpen, setIsEnterPasswordDialogOpen] = useState(false);
     const [showToast, setShowToast] = useState<boolean>(false);
     const [toastMessage, setToastMessage] = useState<string>("");
+    const [databaseToDelete, setDatabaseToDelete] = useState<string | null>(null);
+    const [hidePassword, setHidePassword] = useState<boolean>(true);
 
     const setLoadingScreenActive = useLoadingScreen();
 
@@ -88,7 +91,7 @@ export const useLoginViewModel = (
      * Tries to open a database with the provided master password
      *
      * @param masterPassword the master password to decrypt the database
-     * @param name optional name of the database if an database was just added
+     * @param name optional name of the database if a database was just added
      */
     const tryOpenDatabase = async (masterPassword: string, name?: string) => {
             let dbUrl: AutomergeUrl | undefined;
@@ -104,7 +107,7 @@ export const useLoginViewModel = (
             }
 
             setLoadingScreenActive(true);
-            setOpenedDbName(selectedDatabase!);
+            setOpenedDbName(selectedDatabase ?? name ?? "");
             const facade = new AutomergeFacade(repo, dbUrl, securityProvider);
             let salt: string | null;
             let validation: string | null;
@@ -186,17 +189,27 @@ export const useLoginViewModel = (
 
 
     /**
-     * Removes a database from the list of available databases
+     * Initiates the deletion of a database
      *
-     * @param name the name of the database to remove
+     * @param name the name of the database to delete
      */
     function deleteDatabase(name: string) {
+        setDatabaseToDelete(name);
+    }
+
+    /**
+     * Confirms the deletion of a database
+     *
+     * @param name the name of the database to delete
+     */
+    function confirmDeleteDatabase(name: string) {
         const updatedDatabases = new Map(databases);
         const id = updatedDatabases.get(name)!;
         updatedDatabases.delete(name);
         setDatabases(updatedDatabases);
         removeDatabase(name);
         repo.delete(id);
+        setDatabaseToDelete(null);
     }
 
     /**
@@ -213,6 +226,11 @@ export const useLoginViewModel = (
         return true;
     }
 
+    /**
+     * Checks if an automerge url is available or already used
+     *
+     * @param url the automerge url to check
+     */
     function isAutomergeUrlAvailable(url: AutomergeUrl) {
         for (const value of databases.values()) {
             if (value === url) {
@@ -243,6 +261,12 @@ export const useLoginViewModel = (
     // Close the dialog to log in to a database
     const closeEnterPasswordDialog = () => setIsEnterPasswordDialogOpen(false);
 
+    /**
+     * Imports a database from a file and stores it in localStorage
+     *
+     * @param targetFiles the file list containing the database file
+     * @param name the name of the database
+     */
     async function importDatabaseFromFile(targetFiles: FileList | null, name: string) {
         if (!isNameAvailable(name)) {
             return;
@@ -273,6 +297,14 @@ export const useLoginViewModel = (
         addDatabase(dbName, handle.url);
     }
 
+    /**
+     * Toggles the password from ****** to the string and back
+     */
+    function toggleHidePassword() {
+        setHidePassword(!hidePassword);
+    }
+
+
     return {
         databaseNames,
         isAddDialogOpen,
@@ -280,6 +312,8 @@ export const useLoginViewModel = (
         databases,
         showToast,
         toastMessage,
+        databaseToDelete,
+        hidePassword,
 
         importDatabaseFromFile,
         setShowToast,
@@ -293,6 +327,9 @@ export const useLoginViewModel = (
         importDatabaseFromURL,
         setToastMessage,
         deleteDatabase,
-        changeDatabaseName
+        changeDatabaseName,
+        confirmDeleteDatabase,
+        setDatabaseToDelete,
+        toggleHidePassword
     };
 };

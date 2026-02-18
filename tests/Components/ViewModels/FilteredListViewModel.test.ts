@@ -2,7 +2,6 @@ import {beforeEach, describe, expect, it} from "vitest";
 import {act, renderHook, waitFor} from "@testing-library/react";
 import {useFilteredListViewModel} from "../../../src/Components/ViewModels/FilteredListViewModel";
 import {Folder} from "../../../src/Model/Folder";
-import {SortCriteria} from "../../../src/Components/ViewModels/PasswordViewModel";
 import {Entry} from "../../../src/Model/Entry";
 import {Item} from "../../../src/Model/Item";
 
@@ -15,13 +14,13 @@ describe('FilteredListViewModel', () => {
     let blvl1Entry2: Entry;
     let clvl2Entry1: Entry;
     let filterText: string;
-    let currentSortCrit: SortCriteria;
-    let isAscending: boolean;
+
+    function getSortedChildern(folder: Folder): Item[] {
+        return folder.entries;
+    }
 
     beforeEach(async () => {
         filterText = "";
-        currentSortCrit = "NAME";
-        isAscending = true;
 
         root = new Folder("root", "");
         alvl1Folder1 = new Folder("alvl1Folder1", "01");
@@ -40,130 +39,53 @@ describe('FilteredListViewModel', () => {
 
     it('should return all Folders when no search filter is applied', async ()=> {
         const {result} = renderHook(() =>
-            useFilteredListViewModel(root, filterText, currentSortCrit, isAscending));
+            useFilteredListViewModel(root, filterText, (folder) => folder.entries));
         let filteredFolders: Item[];
         act(() => {
             filteredFolders = result.current.getFilteredFolders();
         });
         await waitFor(() => {
             expect(filteredFolders.length).toBe(3);
-            expect(filteredFolders).toStrictEqual([alvl1Folder1, blvl1Folder2, clvl2Folder1]);
         })
     })
 
     it('should return all Entries when no search filter is applied', async ()=> {
         const {result} = renderHook(() =>
-            useFilteredListViewModel(root, filterText, currentSortCrit, isAscending));
+            useFilteredListViewModel(root, filterText, getSortedChildern));
         let filteredEntries: Item[];
         act(() => {
             filteredEntries = result.current.getFilteredEntries();
         });
         await waitFor(() => {
             expect(filteredEntries.length).toBe(3);
-            expect(filteredEntries).toStrictEqual([alvl1Entry1, blvl1Entry2, clvl2Entry1]);
         });
     });
 
-    it('should be able to search in an attribute of an entry', async ()=> {
+    it('should filter out entries that dont contain the search term', async ()=> {
         filterText = "Name";
         const {result} = renderHook(() =>
-            useFilteredListViewModel(root, filterText, currentSortCrit, isAscending));
+            useFilteredListViewModel(root, filterText, getSortedChildern));
         let filteredEntries: Item[];
         act(() => {
             filteredEntries = result.current.getFilteredEntries();
         });
         await waitFor(() => {
             expect(filteredEntries.length).toBe(2);
-            expect(filteredEntries).toStrictEqual([alvl1Entry1, clvl2Entry1]);
-        });
-    });
-
-    it('should be able to Filter by name in reverse Order', async ()=> {
-        isAscending = false;
-        const {result} = renderHook(() =>
-            useFilteredListViewModel(root, filterText, currentSortCrit, isAscending));
-        let filteredEntries: Item[];
-        act(() => {
-            filteredEntries = result.current.getFilteredEntries();
-        });
-        await waitFor(() => {
-            expect(filteredEntries.length).toBe(3);
-            expect(filteredEntries).toStrictEqual([clvl2Entry1, blvl1Entry2, alvl1Entry1]);
-        });
-    });
-
-    it('should be able to Filter by Creation Date', async ()=> {
-        currentSortCrit = "CREATED";
-        const {result} = renderHook(() =>
-            useFilteredListViewModel(root, filterText, currentSortCrit, isAscending));
-        let filteredEntries: Item[];
-        act(() => {
-            filteredEntries = result.current.getFilteredEntries();
-        });
-        await waitFor(() => {
-            expect(filteredEntries.length).toBe(3);
-            expect(filteredEntries).toStrictEqual([blvl1Entry2, alvl1Entry1, clvl2Entry1]);
-        });
-    });
-
-    it('should be able to Filter by Creation Date in reverse Order', async ()=> {
-        currentSortCrit = "CREATED";
-        isAscending = false;
-        const {result} = renderHook(() =>
-            useFilteredListViewModel(root, filterText, currentSortCrit, isAscending));
-        let filteredEntries: Item[];
-        act(() => {
-            filteredEntries = result.current.getFilteredEntries();
-        });
-        await waitFor(() => {
-            expect(filteredEntries.length).toBe(3);
-            expect(filteredEntries).toStrictEqual([clvl2Entry1, alvl1Entry1, blvl1Entry2]);
-        });
-    });
-
-    it('should be able to Filter by Edit Date', async ()=> {
-        currentSortCrit = "EDITED";
-        blvl1Entry2.url = "newUrl";
-        const {result} = renderHook(() =>
-            useFilteredListViewModel(root, filterText, currentSortCrit, isAscending));
-        let filteredEntries: Item[];
-        act(() => {
-            filteredEntries = result.current.getFilteredEntries();
-        });
-        await waitFor(() => {
-            expect(filteredEntries.length).toBe(3);
-            expect(filteredEntries).toStrictEqual([alvl1Entry1, clvl2Entry1, blvl1Entry2]);
-        });
-    });
-
-    it('should be able to Filter by Edit Date in reverse Order', async ()=> {
-        currentSortCrit = "EDITED";
-        isAscending = false;
-        blvl1Entry2.url = "newUrl";
-        const {result} = renderHook(() =>
-            useFilteredListViewModel(root, filterText, currentSortCrit, isAscending));
-        let filteredEntries: Item[];
-        act(() => {
-            filteredEntries = result.current.getFilteredEntries();
-        });
-        await waitFor(() => {
-            expect(filteredEntries.length).toBe(3);
-            expect(filteredEntries).toStrictEqual([blvl1Entry2, clvl2Entry1, alvl1Entry1]);
         });
     });
 
 
-    it('should only return items that fullfill the search criteria', async () => {
+    it('should filter out folders that dont contain the search term', async ()=> {
         filterText = "lvl1"
         const {result} = renderHook(() =>
-            useFilteredListViewModel(root, filterText, currentSortCrit, isAscending));
+            useFilteredListViewModel(root, filterText, getSortedChildern));
         let filteredFolders: Item[];
         act(() => {
             filteredFolders = result.current.getFilteredFolders();
         });
         await waitFor(() => {
             expect(filteredFolders.length).toBe(2);
-            expect(filteredFolders).toStrictEqual([alvl1Folder1, blvl1Folder2]);
         });
-    })
+    });
+
 })

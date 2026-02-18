@@ -1,10 +1,23 @@
 import {useEffect, useState} from "react";
+import {
+    loadDarkModeSetting,
+    loadP2PSetting,
+    loadSelectedServerURL,
+    loadServers,
+    loadSynchronizationSettings,
+    loadTimeoutLength,
+    loadTimeoutSettings,
+    storeDarkModeSetting,
+    storeP2PSetting,
+    storeSelectedServerURL,
+    storeServers,
+    storeSynchronizationSettings,
+    storeTimeoutLength,
+    storeTimeoutSettings,
+} from "../Utility/Storage.ts";
+import Peer, {type DataConnection} from "peerjs";
+import {PeerjsNetworkAdapter} from "../PeerJsNetworkAdapter.ts";
 
-const SYNCHRONISATION = "synchronisation";
-const AUTO_CONFLICT_RESOLUTION = "auto_conflict_resolution";
-const DARK_MODE = "dark_mode"
-const TIMEOUT_ACTIVE = "timeout_active"
-const TIMEOUT_LENGTH = "timeout_length"
 
 type SettingsListener = () => void;
 
@@ -28,59 +41,54 @@ export function useSettings() {
     return settings;
 }
 
-
+/**
+ * The Settings class, implementing a singleton pattern.
+ * This guarantess that only one settings object can exist at a time.
+ * On the start of the programm the settings get loaded from the local storage
+ */
 export class Settings {
     private static instance: Settings;
     private _synchronization: boolean;
-    private _autoConflictResolution: boolean;
     private _darkMode: boolean;
     private _timeoutActive: boolean;
     private _timeoutLength: number;
+    private peer: Peer;
+    private connector: DataConnection;
+    private _serverUrl: string;
+    private _servers: Map<string, string>;
+    private _p2p: boolean;
+    private p2pAdapter: PeerjsNetworkAdapter;
+
+    private connectorsToAdapters: Map<string, [DataConnection, PeerjsNetworkAdapter]> = new Map();
 
     private listeners: SettingsListener[] = [];
 
     private constructor() {
-        //standard settings - think before changing
-        const synchronisation = localStorage.getItem(SYNCHRONISATION)
-        const autoConflictResolution = localStorage.getItem(AUTO_CONFLICT_RESOLUTION)
-        const darkMode = localStorage.getItem(DARK_MODE)
-        const timeoutActive = localStorage.getItem(TIMEOUT_ACTIVE)
-        const timeoutLength = localStorage.getItem(TIMEOUT_LENGTH);
+        this._synchronization = loadSynchronizationSettings();
+        this._darkMode = loadDarkModeSetting();
+        this._timeoutActive = loadTimeoutSettings();
+        this._timeoutLength = loadTimeoutLength();
+        this._serverUrl = loadSelectedServerURL();
+        this._servers = loadServers();
+        this._p2p = loadP2PSetting();
+        this.peer = new Peer();
+        this.connector = null as unknown as DataConnection;
+        this.p2pAdapter = null as unknown as PeerjsNetworkAdapter;
 
-        if (synchronisation) {
-            this._synchronization = JSON.parse(synchronisation);
-        } else {
-            localStorage.setItem(SYNCHRONISATION, JSON.stringify(true))
-            this._synchronization = true
-        }
 
-        if (autoConflictResolution) {
-            this._autoConflictResolution = JSON.parse(autoConflictResolution);
-        } else {
-            localStorage.setItem(AUTO_CONFLICT_RESOLUTION, JSON.stringify(true))
-            this._autoConflictResolution = true
-        }
 
-        if (darkMode) {
-            this._darkMode = JSON.parse(darkMode);
-        } else {
-            localStorage.setItem(DARK_MODE, JSON.stringify(true))
-            this._darkMode = true
-        }
 
-        if (timeoutActive) {
-            this._timeoutActive = JSON.parse(timeoutActive);
-        } else {
-            localStorage.setItem(TIMEOUT_ACTIVE, JSON.stringify(true))
-            this._timeoutActive = true
-        }
+        //When someone is connecting to this peer, establish the direction in the other way
+        this.peer.on('connection', incomingConn => {
+            incomingConn.on('open', async () => {
+                this.setupConnection(incomingConn);
+            })
+        })
 
-        if (timeoutLength != null) {
-            this._timeoutLength = JSON.parse(timeoutLength);
-        } else {
-            localStorage.setItem(TIMEOUT_LENGTH, JSON.stringify(10))
-            this._timeoutLength = 10;
-        }
+        this.peer.on('open', () => {
+            console.log("Connected with id: " + this.peer.id);
+        })
+
     }
 
     public static getSettings(): Settings {
@@ -90,24 +98,66 @@ export class Settings {
         return this.instance;
     }
 
+    public getServerUrl(): string {
+        return this._serverUrl;
+    }
+
+    public getServerName(): string {
+        for (const [name, url] of this._servers) {
+            if (url === this._serverUrl) {
+                return name;
+            }
+        }
+        return "Unknown Server";
+    }
+
+    public setServerUrl(name: string) {
+        this._serverUrl = this._servers.get(name) || "";
+        storeSelectedServerURL(this._serverUrl);
+        this.notify();
+    }
+
+    public getServers(): Map<string, string> {
+        return new Map(this._servers);
+    }
+
+    public addServer(serverName: string, serverUrl: string): void {
+        if (!this._servers.get(serverName)) {
+            this._servers.set(serverName, serverUrl);
+            storeServers(this._servers);
+            this.notify();
+        }
+    }
+
+    public removeServer(server: string): void {
+        this._servers = this._servers.delete(server) ? this._servers : this._servers;
+        storeServers(this._servers);
+    }
+
+    public getP2P(): boolean {
+        return this._p2p;
+    }
+
+    public setP2PActive(isP2P: boolean) {
+        this._p2p = isP2P;
+        storeP2PSetting(isP2P);
+        this.notify();
+    }
+
+    public getP2PAdapter(): PeerjsNetworkAdapter {
+        return this.p2pAdapter;
+    }
+
     public getSynchronization(): boolean {
         return this._synchronization;
     }
 
-    public setSynchronization(value: boolean) {
+    public setSynchronization(value: boolean, editing?: boolean) {
         this._synchronization = value;
-        localStorage.setItem(SYNCHRONISATION, JSON.stringify(value));
+        storeSynchronizationSettings(value, editing? editing : false);
         this.notify();
     }
 
-    public getAutoConflictResolution(): boolean {
-        return this._autoConflictResolution;
-    }
-
-    public setAutoConflictResolution(value: boolean) {
-        this._autoConflictResolution = value;
-        localStorage.setItem(AUTO_CONFLICT_RESOLUTION, JSON.stringify(value))
-    }
 
     public getDarkMode(): boolean {
         return this._darkMode;
@@ -115,7 +165,7 @@ export class Settings {
 
     public setDarkMode(value: boolean) {
         this._darkMode = value;
-        localStorage.setItem(DARK_MODE, JSON.stringify(value))
+        storeDarkModeSetting(value);
     }
 
     public getTimeoutActive(): boolean {
@@ -124,7 +174,7 @@ export class Settings {
 
     public setTimeoutActive(value: boolean) {
         this._timeoutActive = value;
-        localStorage.setItem(TIMEOUT_ACTIVE, JSON.stringify(value))
+        storeTimeoutSettings(value);
     }
 
     public getTimeoutLength(): number {
@@ -133,7 +183,7 @@ export class Settings {
 
     public setTimeoutLength(length: number) {
         this._timeoutLength = length;
-        localStorage.setItem(TIMEOUT_LENGTH, JSON.stringify(length));
+        storeTimeoutLength(length);
         this.notify();
     }
 
@@ -144,7 +194,89 @@ export class Settings {
         };
     }
 
+    public getPeer() {
+        return this.peer;
+    }
+
+    /**
+     * Connects your own peer to a given id
+     * @param id the id to connect to
+     */
+    public addConnector(id: string) {
+
+        const conn = this.peer.connect(id);
+
+        conn.on("open", () => {
+            this.setupConnection(conn);
+        });
+    }
+
+    /**
+     * Removes the Connection to the peer with the given id
+     * @param id the id of the other peer
+     */
+    public removeConnector(id: string) {
+        const entry = this.connectorsToAdapters.get(id);
+        if (!entry) return;
+
+        const [conn, adapter] = entry;
+        conn.send({ type: "disconnect" });
+        // IMPORTANT: notify BEFORE close so Repo removes adapter cleanly
+        this.connectorsToAdapters.delete(id);
+        this.notify();
+
+        adapter.disconnect();
+        conn.close();
+    }
+
+    public getConnectorsToAdapters(): Map<string, [DataConnection, PeerjsNetworkAdapter]> {
+        return this.connectorsToAdapters;
+    }
+
+    public getConnector() {
+        return this.connector;
+    }
+
     private notify() {
         this.listeners.forEach(l => l());
+    }
+
+    private setupConnection(conn: DataConnection) {
+        const adapter = new PeerjsNetworkAdapter(conn);
+
+        this.connectorsToAdapters.set(conn.peer, [conn, adapter]);
+        this.notify();
+
+        conn.on("data", (msg: any) => {
+            if (msg?.type === "disconnect") {
+                this.cleanupConnection(conn.peer);
+            }
+        });
+
+        conn.on("close", () => {
+            this.cleanupConnection(conn.peer);
+        });
+    }
+
+    private cleanupConnection(peerId: string) {
+        const entry = this.connectorsToAdapters.get(peerId);
+        if (!entry) return;
+
+        const [conn, adapter] = entry;
+
+        this.connectorsToAdapters.delete(peerId);
+        this.notify();
+
+        try {
+            adapter.disconnect();
+        } catch {
+            console.error("unable to disconnect")
+        }
+
+        try {
+            conn.close();
+        } catch {
+            console.error("unable to close")
+        }
     }
 }

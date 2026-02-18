@@ -1,21 +1,30 @@
 import React from 'react';
 import {Entry} from "../../Model/Entry.ts";
 import {Item} from "../../Model/Item.ts";
-import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
 import {useFilteredListViewModel} from "../ViewModels/FilteredListViewModel.ts";
 import {Folder} from "../../Model/Folder.ts";
 
+/**
+ * The View that represents a filtered list of {@link Entry}/{@link Folder} Class Instances
+ *
+ * @param root the root folder to start the filtering from
+ * @param setCurItem the Method that selects an entry to be shown in the {@link EntryView}
+ * @param goToFolder the method to navigate to a specific folder
+ * @param deleteItem the method to delete a specific item
+ * @param sortCriterion the current sort criterion
+ * @param filterText the text to filter the items by
+ * @param getSortedChildren function to get sorted children of a folder
+ */
 const FilteredListView: React.FC<{
     root: Item,
     setCurItem: (entry: Entry) => void,
     goToFolder: (folder: Folder) => void,
     deleteItem: (item: Item) => void,
-    sortCriterion: SortCriteria,
-    isAscending: boolean,
     filterText: string
-}> = ({root, setCurItem, goToFolder,deleteItem, isAscending, sortCriterion, filterText}) => {
+    getSortedChildren: (folder: Folder) => Item[],
+}> = ({root, setCurItem, goToFolder,deleteItem, filterText, getSortedChildren}) => {
 
-    const viewModel = useFilteredListViewModel(root as Folder, filterText, sortCriterion, isAscending);
+    const viewModel = useFilteredListViewModel(root as Folder, filterText, getSortedChildren);
 
     const filteredEntries = viewModel.getFilteredEntries();
     const filteredFolders = viewModel.getFilteredFolders();
@@ -27,7 +36,11 @@ const FilteredListView: React.FC<{
                     Gefundene Einträge
                 </div>
                 {filteredEntries.map((item: Item, index: number) => {
-                    return <div className="listViewEntry" key={index} onClick={() => setCurItem(item as Entry)}>
+                    return <div
+                        className="listViewEntry"
+                        key={index}
+                        onClick={() => setCurItem(item as Entry)}
+                    >
                         <span style={{marginLeft: "5px"}}></span> <span>{item.title}</span>
                         <div className={"btnWrapper"}>
                             <button onClick={() => deleteItem(item)}>🗑️</button>
@@ -42,9 +55,10 @@ const FilteredListView: React.FC<{
                     Gefundene Ordner
                 </div>
                 {filteredFolders.map((item: Item, index: number) => {
-                    return <div className="listViewTitleHeader"
-                                key={index}
-                                onClick={() => goToFolder(item as Folder)}
+                    return <div
+                        className="listViewTitleHeader"
+                        key={index}
+                        onClick={() => goToFolder(item as Folder)}
                     >
                         <span style={{marginLeft: "5px"}}></span> <span>{item.title}</span>
                         <div className={"btnWrapper"}>

@@ -1,5 +1,10 @@
 import type {AutomergeUrl} from "@automerge/automerge-repo";
 
+const SYNCHRONISATION = "synchronisation";
+const DARK_MODE = "dark_mode"
+const TIMEOUT_ACTIVE = "timeout_active"
+const TIMEOUT_LENGTH = "timeout_length"
+
 /**
  * Loads all database names with their automerge url from localStorage
  *
@@ -109,4 +114,185 @@ export function loadIsAscending(): boolean | null {
  */
 export function saveIsAscending(isAscending: boolean): void {
     localStorage.setItem('isAscending', isAscending.toString());
+}
+
+/**
+ * Gets the selected server URL from localStorage, or stores and returns the default if not present
+ *
+ * @returns the selected server URL
+ */
+export function loadSelectedServerURL(): string {
+    const url = localStorage.getItem("server_url");
+    if (url) {
+        return url;
+    } else {
+        localStorage.setItem("server_url", "wss://sync.automerge.org")
+        return "wss://sync.automerge.org";
+    }
+}
+
+/**
+ * Loads the list of servers from localStorage, or stores and returns the default list if not present
+ *
+ * @returns a map of server names to URLs
+ */
+export function loadServers(): Map<string, string> {
+    const serverList = localStorage.getItem("servers_list");
+    if (serverList) {
+        const servers = new Map<string, string>();
+        JSON.parse(serverList).forEach(([name, url]: [string, string]) => {
+            servers.set(name, url);
+        });
+        return servers;
+    } else {
+        const defaultServers = new Map<string, string>([
+            ["Automerge Sync Server", "wss://sync.automerge.org"]
+        ]);
+        localStorage.setItem("servers_list", JSON.stringify(Array.from(defaultServers.entries())));
+        return defaultServers;
+    }
+}
+
+/** stores the selected server URL in localStorage
+ *
+ * @param url the server URL to store
+ */
+export function storeSelectedServerURL(url: string): void {
+    localStorage.setItem("server_url", url);
+}
+
+/** stores the list of servers in localStorage
+ *
+ * @param servers a map of server names to URLs
+ */
+export function storeServers(servers: Map<string, string>): void {
+    localStorage.setItem("servers_list", JSON.stringify(Array.from(servers.entries())));
+}
+
+/**
+ * Loads the boolean for the synchronization setting from localStorage or stores and returns the default if not present
+ *
+ * @returns the synchronization setting
+ */
+export function loadSynchronizationSettings(): boolean {
+    const synchronisation = localStorage.getItem(SYNCHRONISATION);
+    const editing = localStorage.getItem("was-editing");
+    if (synchronisation && editing) {
+        if (JSON.parse(synchronisation) === false && JSON.parse(editing) === true) {
+            storeSynchronizationSettings(true, false);
+            return true;
+        }
+    }
+    if (synchronisation) {
+        return JSON.parse(synchronisation);
+    } else {
+        localStorage.setItem(SYNCHRONISATION, JSON.stringify(true))
+        return true;
+    }
+}
+
+/** stores the boolean for the synchronization setting in localStorage
+ *
+ * @param value the synchronization setting to store
+ * @param editing if the synchronization was turned because the user was editing an entry
+ */
+export function storeSynchronizationSettings(value: boolean, editing: boolean): void {
+    localStorage.setItem(SYNCHRONISATION, JSON.stringify(value));
+    localStorage.setItem("was-editing", JSON.stringify(editing));
+}
+
+/**
+ * Loads the boolean for the dark mode setting from localStorage or stores and returns the default if not present
+ *
+ * @returns the dark mode setting
+ */
+export function loadDarkModeSetting(): boolean {
+    const darkMode = localStorage.getItem(DARK_MODE);
+    if (darkMode) {
+        return JSON.parse(darkMode);
+    } else {
+        localStorage.setItem(DARK_MODE, JSON.stringify(true))
+        return true
+    }
+}
+
+/**
+ * stores the boolean for the dark mode setting in localStorage
+ *
+ * @param value the dark mode setting to store
+ */
+export function storeDarkModeSetting(value: boolean): void {
+    localStorage.setItem(DARK_MODE, JSON.stringify(value));
+}
+
+/**
+ * Loads the boolean for the timeout active setting from localStorage or stores and returns the default if not present
+ *
+ * @returns the timeout active setting
+ */
+export function loadTimeoutSettings(): boolean {
+    const timeoutActive = localStorage.getItem(TIMEOUT_ACTIVE);
+    if (timeoutActive) {
+        return JSON.parse(timeoutActive);
+    } else {
+        localStorage.setItem(TIMEOUT_ACTIVE, JSON.stringify(true))
+        return true
+    }
+}
+
+/**
+ * stores the boolean for the timeout active setting in localStorage
+ *
+ * @param value the timeout active setting to store
+ */
+export function storeTimeoutSettings(value: boolean): void {
+    localStorage.setItem(TIMEOUT_ACTIVE, JSON.stringify(value));
+}
+
+/**
+ * Loads the timeout length from localStorage or stores and returns the default if not present
+ *
+ * @returns the timeout length
+ */
+export function loadTimeoutLength(): number {
+    const timeoutLength = localStorage.getItem(TIMEOUT_LENGTH);
+    if (timeoutLength != null) {
+        return JSON.parse(timeoutLength);
+    } else {
+        localStorage.setItem(TIMEOUT_LENGTH, JSON.stringify(10))
+        return 10;
+    }
+}
+
+/**
+ * stores the timeout length in localStorage
+ *
+ * @param length the timeout length to store
+ */
+export function storeTimeoutLength(length: number): void {
+    localStorage.setItem(TIMEOUT_LENGTH, JSON.stringify(length));
+}
+
+/**
+ * Loads the boolean for the P2P setting from localStorage
+ *
+ * @returns the P2P setting
+ */
+export function loadP2PSetting(): boolean {
+    const p2p = localStorage.getItem("p2p");
+    if (p2p != null) {
+        return JSON.parse(p2p);
+    } else {
+        localStorage.setItem("p2p", JSON.stringify(true))
+        return true;
+    }
+}
+
+/**
+ * stores the boolean for the P2P setting in localStorage
+ *
+ * @param isP2P the P2P boolean to store
+ */
+export function storeP2PSetting(isP2P: boolean): void {
+    localStorage.setItem("p2p", JSON.stringify(isP2P));
 }

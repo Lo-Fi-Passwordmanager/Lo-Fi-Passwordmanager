@@ -1,17 +1,15 @@
 import {useEffect, useState} from "react";
 
-export interface TwoFieldDialogProps {
-    isOpen: boolean,
-    title: string,
-    label1: string,
-    onConfirm: (field1: string) => void,
-    onCancel: () => void,
-    setToastMessage: (message: string) => void,
-    setShowToast: (message: boolean) => void,
-}
 
+/**
+ * The Viewmodel for {@link LoginDatabaseDialog}
+ * @param isOpen a boolean for the visibility of the dialog, changing this triggers the fields to reset their values
+ * @param tryOpenDatabase the function that tries to decrypt the selected Database with the password
+ * @param setToastMessage sets the message of the toast
+ * @param setShowToast actually shows the toast
+ */
 export const useLoginDatabaseViewModel = (isOpen: boolean,
-                                          onConfirm: (field1: string) => void,
+                                          tryOpenDatabase: (field1: string) => void,
                                           setToastMessage: (message: string) => void,
                                           setShowToast: (message: boolean) => void,
                                           ) => {
@@ -36,7 +34,7 @@ export const useLoginDatabaseViewModel = (isOpen: boolean,
             setShowToast(true);
             return;
         }
-        onConfirm(field1);
+        tryOpenDatabase(field1);
     };
 
     return {

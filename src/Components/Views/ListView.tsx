@@ -2,59 +2,114 @@ import {type Item} from "../../Model/Item.ts";
 import {useListViewModel} from "../ViewModels/ListViewModel.ts";
 import {Entry} from "../../Model/Entry.ts";
 import React from "react";
-import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
+import FolderMenu from "./MenuViews/FolderMenu.tsx";
+import {HiMiniPlus} from "react-icons/hi2";
+import {HiTrash} from "react-icons/hi";
+import {CSS} from "@dnd-kit/utilities";
+import type {Folder} from "../../Model/Folder.ts";
 
+/* eslint-disable react-hooks/refs */ //react and the eslint do not like each other: https://github.com/facebook/react/issues/34775
 /**
  * The View that represents the whole database, which is represented by {@link Entry}/{@link Folder} Class Instances
- * @param item the item which should be depicted, if this is a folder, all of its content is also depicted
- * @param onSetEntry the Method that selects an entry to be shown in the {@link EntryView}
+ *
+ * @param item The current item to be shown
+ * @param setCurItem method to set the currently selected item
+ * @param curItem the currently selected item
+ * @param setItemCreationDialog method to open the item creation dialog
+ * @param setCurrentParent method to set the current parent folder
+ * @param deleteItem method to delete an item
+ * @param dirtyItemId
+ * @param openedDbName the name of the currently opened database
+ * @param selectedItemId the id of the item that was selected and is to be highlighted
+ * @param createdFolderId the id of the folder that was just created and is to be highlighted
+ * @param setCreatedFolderId method to set the id of the folder that was just created
+ * @param updateItemTitle method to update the title of an item
+ * @param inEditable whether an entry is currently being edited
+ * @param level the current level of indentation (depth in the tree)
+ * @param expandFolderId method to expand a folder by its id
+ * @param collapseFolderId method to collapse a folder by its id
+ * @param isFolderExpanded method to check whether a folder is expanded by its id
+ * @param getSortedChildren method to get the sorted children of a folder
  */
 const ListView: React.FC<{
     item: Item,
     setCurItem: (entry: Entry) => void,
-    getCurItem: () => Item,
+    curItem: Item;
     setItemCreationDialog: () => void,
     setCurrentParent?: (item: Item) => void,
     deleteItem: (item: Item) => void,
-    sortCriterion: SortCriteria,
-    isAscending: boolean,
     dirtyItemId: string | null,
     openedDbName: string,
-    selectedFolderId: string | null;
+    selectedItemId: string | null;
+    createdFolderId: string | null;
+    setCreatedFolderId: (folderId: string | null) => void;
     updateItemTitle: (itemId: string, newTitle: string) => void;
+    inEditable: boolean;
+    level: number;
+    expandFolderId: (folderId: string) => void;
+    collapseFolderId: (folderId: string) => void;
+    isFolderExpanded: (folderId: string) => boolean;
+    getSortedChildren: (folder: Folder) => Item[],
 }> = ({
           item,
           setCurItem,
-          getCurItem,
+          curItem,
           setItemCreationDialog,
           setCurrentParent,
           deleteItem,
-          sortCriterion,
-          isAscending,
           dirtyItemId,
           openedDbName,
-          selectedFolderId,
-          updateItemTitle
+          selectedItemId,
+          createdFolderId,
+          updateItemTitle,
+          setCreatedFolderId,
+          inEditable,
+          level,
+          expandFolderId,
+          collapseFolderId,
+          isFolderExpanded,
+          getSortedChildren,
       }) => {
-    const listViewModel = useListViewModel(item, sortCriterion, isAscending, dirtyItemId, setCurItem, updateItemTitle);
+    const listViewModel = useListViewModel(item, dirtyItemId, setCurItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded);
 
     function addButtonPressed() {
         setItemCreationDialog();
         setCurrentParent!(item);
     }
 
-    //If the item to be shown is of type entry, than only its name will be shown
+    // makes the dragged item follow the cursor
+    const dragStyle = {
+        transform: CSS.Translate.toString(listViewModel.transform),
+    };
+
+    /**
+     * If the item to be shown is of type entry, than only its name will be shown
+     */
     if (listViewModel.isItemEntry()) {
         const entry = listViewModel.getItem() as Entry;
         return (
-            <div className={`listViewEntry ${getCurItem().id === entry.id ? "selected" : ""}`}
-                 onClick={() => setCurItem(entry)}>
-                <span style={{marginRight: "1ch"}}></span> <span>{entry.title}</span>
-                <div className="btnWrapper">
-                    <button onClick={() => deleteItem(item)}>🗑️</button>
+            <div
+                className={`listViewEntry ${curItem.id !== entry.id ? "" : "selected"} ${listViewModel.isDragging ? "dragged" : ""} ${selectedItemId === item.id ? "highlighted entry" : ""}`}
+                onClick={() => setCurItem(entry)}
+                style={dragStyle}
+                ref={listViewModel.setDraggableRef}
+                {...listViewModel.attributes}
+                {...listViewModel.listeners}
+                aria-selected={selectedItemId === item.id}>
+                <span className={"item-title"}>{entry.title}</span>
+                <div className={"btnWrapper"}>
+                    <button className="listViewEntry button"
+                            onClick={() => deleteItem(item)}
+                            onPointerDown={(e) => e.stopPropagation()}
+                            disabled={inEditable}
+                            title="Eintrag löschen"
+                    >
+                        <HiTrash size={24}/>
+                    </button>
                 </div>
             </div>
-        );
+        )
+            ;
 
         //If the item is a folder, than all of its children get shown recursivley by creating a {@link ListView} of all of its children.
         //Furthermore a button that extends/collapses the folder and a Button to add a new Element are shown next to the title
@@ -62,28 +117,31 @@ const ListView: React.FC<{
         return (
             <>
                 {/* Name and Buttons */}
-                {/*                                  vvvvvvvvvvvvv using aria-selected for scrolling to the clicked folder from filtered list view */}
-                <div className="listViewTitleHeader" aria-selected={selectedFolderId === item.id}>
+                <div
+                    className={`listViewTitleHeader ${listViewModel.isDragging ? "dragged" : ""} ${listViewModel.isOver && !listViewModel.isDragging ? "over" : ""} ${selectedItemId === item.id ? "highlighted folder" : ""}`}
+                    ref={listViewModel.setFolderRef}
+                    style={dragStyle}
+                    {...listViewModel.attributes}
+                    {...listViewModel.listeners}
+                    aria-selected={selectedItemId === item.id}>
+                    {/* ^^^^^^^^^ using aria-selected for scrolling to the clicked folder from filtered list view */}
                     {(item.id != "") &&
-                        <button style={{marginRight: "15px", boxShadow: "none"}}
-                                onClick={() => listViewModel.toggleExtended()}>{listViewModel.getExtended() ? "▼" : "▷"}</button>}
+                        <button style={{boxShadow: "none"}}
+                                onClick={() => listViewModel.toggleExpanded()}
+                                onPointerDown={(e) => e.stopPropagation()}
+                                title={isFolderExpanded(item.id) ? "Ordner einklappen" : "Ordner ausklappen"}
+                        >
+                            {isFolderExpanded(item.id) ? "▼" : "▷"}</button>}
 
-                    {!listViewModel.inEditName &&
-                        <span
-                            style={{
-                                marginLeft: item.id !== "" ? "" : "10px",
-                                display: "inline-block", // Required for overflow to work
-                                maxWidth: "100%",        // Limits it to the parent's width
-                                whiteSpace: "nowrap",    // Prevents text from wrapping to a second line
-                                overflow: "hidden",      // Hides the text that goes outside the bounds
-                                textOverflow: "ellipsis", // Adds the "..."
-                                verticalAlign: "middle"  // Keeps it aligned with buttons
-                            }}
-                        >{(item.id != "") ? item.title : openedDbName}</span>
+                    {(!listViewModel.inEditName && item.id !== createdFolderId) &&
+                        <span className={"item-title"}>{(item.id != "") ? item.title : openedDbName}</span>
                     }
-                    {listViewModel.inEditName &&
+                    {(listViewModel.inEditName || item.id === createdFolderId) &&
                         <input type="text"
                                autoFocus
+                               onFocus={e => {
+                                   e.target.select();
+                               }}
                                style={{marginLeft: ((item.id != "") ? "" : "10px"), border: "none"}}
                                value={listViewModel.newTitle}
                                onChange={(e) => listViewModel.setItemTitle(e.target.value)}
@@ -99,41 +157,50 @@ const ListView: React.FC<{
                         />
                     }
                     <div className="btnWrapper">
-                        <button onClick={() => {
-                            addButtonPressed();
-                            listViewModel.setExtended(true);
-                        }}>+
-                        </button>
-                        {(item.id != "") && (listViewModel.inEditName) &&
-                        <button onClick={() => listViewModel.setAndStoreEditName(false)}>
-                            ✏️
+                        {item.id !== "" ? <FolderMenu
+                            disabled={inEditable}
+                            onAdd={() => addButtonPressed()}
+                            onDelete={() => deleteItem(item)}
+                            onRename={() => {
+                                listViewModel.setAndStoreEditName(true);
+                            }}
+                        /> : <button className="listViewTitleHeader button"
+                                     title="Eintrag ins Startverzeichnis Hinzufügen"
+                                     onClick={() => addButtonPressed()}
+                                     disabled={inEditable}>
+                            <HiMiniPlus size={24}/>
                         </button>}
-                        {(item.id != "") && (!listViewModel.inEditName) &&
-                        <button onClick={() => listViewModel.setAndStoreEditName(true)}>
-                            ✏️
-                        </button>}
-                        {(item.id != "") && <button onClick={() => deleteItem(item)}>🗑️</button>}
-                        {/* FIXME: Löschbestätigung einbauen */}</div>
+                    </div>
                 </div>
 
                 {/* Recursive call of children with indent to visualizes depth in the tree */}
                 <div className="listViewEntryWrapper"
-                     style={{display: (listViewModel.getExtended() ? "block" : "none")}}>
-                    {listViewModel.getChildren() &&
-                        listViewModel.getChildren()!.map((item: Item, index: number) => {
+                     style={{
+                         display: (isFolderExpanded(item.id) ? "block" : "none"),
+                         marginLeft: level <= 8 ? "15px" : "0px"
+                     }}>
+                    {getSortedChildren(item as Folder) &&
+                        getSortedChildren(item as Folder)!.map((item: Item, index: number) => {
                             return <ListView
                                 key={index}
                                 item={item}
                                 setCurItem={setCurItem}
-                                getCurItem={getCurItem}
+                                curItem={curItem}
                                 setItemCreationDialog={setItemCreationDialog}
                                 setCurrentParent={setCurrentParent}
                                 deleteItem={deleteItem}
-                                sortCriterion={sortCriterion}
-                                isAscending={isAscending}
+                                getSortedChildren={getSortedChildren}
                                 dirtyItemId={dirtyItemId} openedDbName={""}
                                 updateItemTitle={updateItemTitle}
-                                selectedFolderId={selectedFolderId}/>;
+                                selectedItemId={selectedItemId}
+                                createdFolderId={createdFolderId}
+                                setCreatedFolderId={setCreatedFolderId}
+                                inEditable={inEditable}
+                                level={level + 1}
+                                expandFolderId={expandFolderId}
+                                collapseFolderId={collapseFolderId}
+                                isFolderExpanded={isFolderExpanded}
+                            />;
                         })}
                 </div>
             </>
