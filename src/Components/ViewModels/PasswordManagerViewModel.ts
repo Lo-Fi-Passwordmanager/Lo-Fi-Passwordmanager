@@ -10,14 +10,13 @@ import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import {useIdleTimer} from "react-idle-timer";
 import {Settings, useSettings} from "../../Model/Settings.ts";
-import {PeerjsNetworkAdapter} from "automerge-repo-network-peerjs";
+import {PeerjsNetworkAdapter} from "../../PeerJsNetworkAdapter.ts";
 
 /**
  * The view model used by the PasswordManagerView. Manages the state and logic for the password manager.
  */
 export const usePasswordManagerViewModel = () => {
     const settings = useSettings();
-    const [connector] = useState(settings.getConnector());
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
     const [automergeFacade, setAutomergeFacade] = useState<AutomergeFacade | null>(null);
     const [securityProvider] = useState(() => new SecurityProvider());
@@ -26,38 +25,43 @@ export const usePasswordManagerViewModel = () => {
     const [toastVisible, setToastVisible] = useState(false);
     const [openedDatabaseName, setOpenedDatabaseName] = useState<string>("");
 
-    const [peerJsAdapter, setPeerJsAdapter] = useState<PeerjsNetworkAdapter>(new PeerjsNetworkAdapter(connector));
 
-    const initialNetworkAdapters = [
-        new BroadcastChannelNetworkAdapter(),
-        new WebSocketClientAdapter(settings.getServerUrl()),
-    ];
-
-    const initialP2PNetworkAdapter = [
-        new BroadcastChannelNetworkAdapter(),
-        peerJsAdapter,
-    ]
-
-    const [networkAdapters, setNetworkAdapters] = useState<NetworkAdapterInterface[] | undefined>(settings.getSynchronization() ? initialNetworkAdapters : (settings.getP2P() ? initialP2PNetworkAdapter : undefined));
+    const [repo] = useState(new Repo({
+        network: [new BroadcastChannelNetworkAdapter()],
+        storage: new IndexedDBStorageAdapter(),
+    }));
 
     useEffect(() => {
-        setPeerJsAdapter(new PeerjsNetworkAdapter(settings.getConnector()));
-        if (settings.getP2P()) {
-            setNetworkAdapters(initialP2PNetworkAdapter);
-        } else if (settings.getSynchronization()) {
-            // Does not cause cascading renders (apparently) => ignore error
-            setNetworkAdapters(initialNetworkAdapters);
-        } else {
-            setNetworkAdapters(undefined);
+        const removeArray: NetworkAdapterInterface[] = [];
+
+        for (const adapter of repo.networkSubsystem.adapters) {
+            if (!settings.getSynchronization() && adapter instanceof WebSocketClientAdapter) {
+                removeArray.push(adapter);
+            }else if (!settings.getP2P() && adapter instanceof PeerjsNetworkAdapter) {
+                removeArray.push(adapter);
+            } else if (adapter instanceof PeerjsNetworkAdapter && !settings.getConnectorsToAdapters().has(adapter.getPeerId())) {
+                removeArray.push(adapter);
+            }
         }
-    }, [settings]);
+        for (const adapter of removeArray) {
+            repo.networkSubsystem.removeNetworkAdapter(adapter);
+        }
 
+        if (settings.getSynchronization() && !repo.networkSubsystem.adapters.some(a => a instanceof WebSocketClientAdapter)) {
+            repo.networkSubsystem.addNetworkAdapter(
+                new WebSocketClientAdapter(settings.getServerUrl())
+            );
+        }
 
-    const repo = new Repo({
-        network: networkAdapters,
-        storage:
-            new IndexedDBStorageAdapter()
-    });
+        for (const adapter of settings.getConnectorsToAdapters().values()) {
+            if (!repo.networkSubsystem.adapters.includes(adapter[1])) {
+                repo.networkSubsystem.addNetworkAdapter(adapter[1]);
+            }
+        }
+
+        console.log(repo.networkSubsystem.adapters);
+
+    }, [settings.getSynchronization(), settings.getP2P(), settings.getConnectorsToAdapters().size]);
 
     function getAutomergeFacade(): AutomergeFacade | null {
         return automergeFacade;
@@ -92,6 +96,7 @@ export const usePasswordManagerViewModel = () => {
     }
 
     const idleTimer = useIdleTimer({timeout, onIdle, onActive, debounce: 100})
+
 
     useEffect(() => {
         if (loggedIn) {
