@@ -84,7 +84,7 @@ describe("PasswordManagerViewModel", () => {
         })
         expect(result.current.getSync()).toBe("p2p");
         act(()=>{
-            settings.setPeer2Peer(false)
+            settings.setP2PActive(false)
         })
         expect(result.current.getSync()).toBe(null);
     })
