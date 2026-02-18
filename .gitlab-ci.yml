@@ -15,6 +15,7 @@ tests:
     - if: $CI_COMMIT_BRANCH == 'main'
   script:
     - yarn test:ci
+    - yarn lint
 
 # Uploads the test report to the server
 test-report:
