@@ -1,6 +1,6 @@
 import {isValidAutomergeUrl} from "@automerge/react";
 import QrScanner from "qr-scanner";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 
 // QRScanner https://github.com/nimiq/qr-scanner
 
@@ -8,19 +8,18 @@ import {useEffect, useState} from "react";
  * The Viewmodel for {@link QRScannerDialog}
  * @param setInputFields sets the arguments (name and url) for the given Database to the values of the scanned QR Code
  */
-export const useQRScannerViewModel = (setInputFields: (name: string, url: string) => void) => {
+const useQRScannerViewModel = (setInputFields: (name: string, url: string) => void) => {
 
     const [qrScannerOpen, setQRScannerOpen_real] = useState(false);
     const [scanError, setScanError] = useState(false);
 
-    let qrScanner: QrScanner | null = null;
+    const qrScanner = useRef<QrScanner | null>(null);
 
     useEffect(() => {
         if (qrScannerOpen) {
             const videoStream = document.getElementById("qrVideo")! as HTMLVideoElement;
 
-
-            qrScanner = new QrScanner(videoStream, result => {
+            qrScanner.current = new QrScanner(videoStream, result => {
                 if (result) {
 
                     const regex = new RegExp(`^(?<url>\\w+)(?:\\|(?<name>.*?))?$`);
@@ -51,19 +50,19 @@ export const useQRScannerViewModel = (setInputFields: (name: string, url: string
                 preferredCamera: "environment",
                 returnDetailedScanResult: true
             });
-            qrScanner.start();
+            void qrScanner.current.start();
         }
-    }, [qrScannerOpen]);
+    }, [qrScannerOpen, setInputFields]);
 
     function setQRScannerOpen(open: boolean) {
         if (open) {
             setQRScannerOpen_real(open);
         } else {
-            if (qrScanner) {
-                qrScanner.stop();
-                qrScanner.destroy();
-                // eslint-disable-next-line react-hooks/immutability
-                qrScanner = null;
+            if (qrScanner.current) {
+                qrScanner.current.stop();
+                qrScanner.current.destroy();
+
+                qrScanner.current = null;
             }
 
             setQRScannerOpen_real(open);
@@ -76,3 +75,4 @@ export const useQRScannerViewModel = (setInputFields: (name: string, url: string
         scanError
     };
 };
+export default useQRScannerViewModel;
