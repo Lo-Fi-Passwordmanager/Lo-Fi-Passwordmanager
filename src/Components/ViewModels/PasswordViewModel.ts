@@ -312,7 +312,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade) => {
      */
     function expandFoldersInPath(item: Item) {
         const path = getPath(item);
-        path.forEach(folderId => expandFolder(folderId));
+        expandMultipleFolders(path);
     }
 
     /**
@@ -340,6 +340,16 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade) => {
         if (!expanded.includes(folderId)) {
             setExpandedFolders([...expanded, folderId]);
         }
+    }
+
+    function expandMultipleFolders(folderIds: string[]) {
+        const withoutDuplicates: string[] = [];
+        for (const folderId of folderIds) {
+            if (!expandedFolders.includes(folderId)) {
+                withoutDuplicates.push(folderId);
+            }
+        }
+        setExpandedFolders(expandedFolders.concat(withoutDuplicates));
     }
 
     /**
