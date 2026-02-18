@@ -149,9 +149,9 @@ export class Settings {
         return this._synchronization;
     }
 
-    public setSynchronization(value: boolean) {
+    public setSynchronization(value: boolean, editing?: boolean) {
         this._synchronization = value;
-        storeSynchronizationSettings(value);
+        storeSynchronizationSettings(value, editing? editing : false);
         this.notify();
     }
 

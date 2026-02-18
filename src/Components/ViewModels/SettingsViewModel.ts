@@ -22,6 +22,8 @@ export const useSettingsViewModel = () => {
     const [serverNames, setServerNames] = useState<string[]>(Array.from(servers.keys()));
     const [addServerDialogOpen, setAddServerDialogOpen] = useState<boolean>(false);
     const [P2P, setP2P] = useState<boolean>(settings.getP2P());
+    const [showToast, setShowToast] = useState<boolean>(false);
+    const [toastMessage, setToastMessage] = useState<string>("");
     const [remotePeerId, setRemotePeerId] = useState("");
     document.getElementsByTagName("html")[0]?.setAttribute("data-theme", darkMode ? "dark" : "light");
 
@@ -61,9 +63,7 @@ export const useSettingsViewModel = () => {
         setSynchronisation(!synchronisation);
     }
 
-    // Add a new server to the settings
-    function addServer(name: string, url: string) {
-        //TODO: Add validation for name and url
+    function addSyncServer(name: string, url: string) {
         settings.addServer(name, url);
     }
 
@@ -133,6 +133,8 @@ export const useSettingsViewModel = () => {
         addServerDialogOpen,
         serverNames,
         P2P,
+        toastMessage,
+        showToast,
 
         setActiveTab,
         setConnection,
@@ -144,11 +146,13 @@ export const useSettingsViewModel = () => {
         increaseTimeout,
         decreaseTimeout,
         getPeerId,
-        addServer,
+        addSyncServer,
         removeServer,
         setAddServerDialogOpen,
         selectServer,
         toggleP2P,
+        setToastMessage,
+        setShowToast,
         remotePeerId,
         setRemotePeerId,
         connectToPeer: () => Settings.getSettings().setConnector(remotePeerId),

@@ -157,7 +157,9 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade) => {
      * Toggles the inEditable state and updates the synchronization setting accordingly
      */
     function toggleInEdit() {
-        settings.setSynchronization(inEditable);
+        if (settings.getSynchronization()) {
+            settings.setSynchronization(inEditable, !inEditable);
+        }
         setInEditable(!inEditable);
     }
 
