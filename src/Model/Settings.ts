@@ -1,4 +1,7 @@
+import Peer, {type DataConnection} from "peerjs";
 import {useEffect, useState} from "react";
+
+import {PeerjsNetworkAdapter} from "../customNetworkAdapter/PeerJsNetworkAdapter.ts";
 import {
     loadDarkModeSetting,
     loadP2PSetting,
@@ -15,8 +18,6 @@ import {
     storeTimeoutLength,
     storeTimeoutSettings,
 } from "../Utility/Storage.ts";
-import Peer, {type DataConnection} from "peerjs";
-import {PeerjsNetworkAdapter} from "../customNetworkAdapter/PeerJsNetworkAdapter.ts";
 
 
 type SettingsListener = () => void;

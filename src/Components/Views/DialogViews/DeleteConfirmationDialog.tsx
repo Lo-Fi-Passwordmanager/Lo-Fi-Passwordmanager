@@ -1,7 +1,8 @@
 import React from "react";
-import Dialog from "./Dialog.tsx";
-import {Item} from "../../../Model/Item.ts";
 import {HiTrash} from "react-icons/hi";
+
+import Dialog from "./Dialog.tsx";
+import type {Item} from "../../../Model/Item.ts";
 
 /**
  * A dialog that confirms the deletion of either an item or a database.

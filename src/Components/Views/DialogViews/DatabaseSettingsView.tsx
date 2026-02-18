@@ -1,8 +1,9 @@
-import {type AutomergeFacade} from "../../../Utility/AutomergeFacade.ts";
 import React from "react";
-import {saveFile} from "../../../Utility/InputOutputUtil.ts";
+
 import {HistoryDialog} from "./HistoryDialog.tsx";
 import ShareQRDialog from "./ShareQRDialog.tsx";
+import {type AutomergeFacade} from "../../../Utility/AutomergeFacade.ts";
+import {saveFile} from "../../../Utility/InputOutputUtil.ts";
 import {removeDatabase} from "../../../Utility/Storage.ts";
 
 /**

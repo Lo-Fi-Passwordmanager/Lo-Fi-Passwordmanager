@@ -1,4 +1,5 @@
 import React from "react";
+
 import LoadingSpinner from "../Icons/LoadingSpinner.tsx";
 
 const LoadingScreen: React.FC = () => {

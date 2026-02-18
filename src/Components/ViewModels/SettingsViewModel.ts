@@ -1,8 +1,9 @@
-import {Settings, useSettings} from "../../Model/Settings";
 
-import {useEffect, useState} from "react";
 import type {DataConnection} from "peerjs";
+import {useEffect, useState} from "react";
+
 import type {PeerjsNetworkAdapter} from "../../customNetworkAdapter/PeerJsNetworkAdapter.ts";
+import {Settings, useSettings} from "../../Model/Settings";
 
 /**
  * The ViewModel that is used for interfacing the {@link Settings} singleton.

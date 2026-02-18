@@ -1,16 +1,18 @@
+import {type DragEndEvent, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
 import {useRef, useState} from "react";
-import {type Attribute, AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
-import {useAutomergeFacade} from "../../Utility/useAutomergeFacade.ts";
+
+import type {Folder} from "../../Model/Folder.ts";
 import type {Item} from "../../Model/Item.ts";
+import {useSettings} from "../../Model/Settings.ts";
+import type { AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import {type Attribute} from "../../Utility/AutomergeFacade.ts";
 import {
     loadCurrentSortCriterion,
     loadIsAscending,
     saveCurrentSortCriterion,
     saveIsAscending
 } from "../../Utility/Storage.ts";
-import {type DragEndEvent, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
-import {useSettings} from "../../Model/Settings.ts";
-import type {Folder} from "../../Model/Folder.ts";
+import {useAutomergeFacade} from "../../Utility/useAutomergeFacade.ts";
 
 /**
  * Criteria as enum by which items are sorted

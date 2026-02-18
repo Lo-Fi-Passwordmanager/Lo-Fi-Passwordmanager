@@ -1,7 +1,8 @@
+import {useState} from "react";
+
+import {Entry} from "../../Model/Entry.ts";
 import type {Item} from "../../Model/Item.ts";
 import {type Attribute} from "../../Utility/AutomergeFacade.ts";
-import {useState} from "react";
-import {Entry} from "../../Model/Entry.ts";
 
 export const useEditablePasswordViewModel = (
     item: Item,

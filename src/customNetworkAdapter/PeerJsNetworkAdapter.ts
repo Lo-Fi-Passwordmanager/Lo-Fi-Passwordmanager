@@ -1,7 +1,7 @@
 import { EventEmitter } from "eventemitter3";
+import type {DataConnection} from "peerjs";
 
 import type * as t from "./types.ts";
-import type {DataConnection} from "peerjs";
 
 type EventTypes = { data: t.NetworkMessageAlert };
 
@@ -42,7 +42,7 @@ export class PeerjsNetworkAdapter
     }
 
     getPeerId(): string {
-        return (this.#conn as DataConnection).peer;
+        return (this.#conn).peer;
     }
 
     isReady() {

@@ -6,11 +6,12 @@ import {
     WebSocketClientAdapter
 } from "@automerge/react";
 import {useEffect, useState} from "react";
-import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
-import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import {useIdleTimer} from "react-idle-timer";
-import {Settings, useSettings} from "../../Model/Settings.ts";
+
 import {PeerjsNetworkAdapter} from "../../customNetworkAdapter/PeerJsNetworkAdapter.ts";
+import {Settings, useSettings} from "../../Model/Settings.ts";
+import type {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 
 /**
  * The view model used by the PasswordManagerView. Manages the state and logic for the password manager.

@@ -1,5 +1,6 @@
 import React from "react";
 import {HiOutlineQrcode} from "react-icons/hi";
+
 import Dialog from "./Dialog.tsx";
 import {useQRScannerViewModel} from "../../ViewModels/Dialog/qrScannerViewModel.ts";
 

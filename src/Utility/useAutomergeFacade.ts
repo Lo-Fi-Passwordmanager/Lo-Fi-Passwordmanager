@@ -1,9 +1,7 @@
 import {useDocument} from "@automerge/react";
-import {AutomergeDoc} from "../Model/Automerge/AutomergeDoc.ts";
-import {DatabaseRoot} from "../Model/DatabaseRoot.ts";
-import type {AutomergeItem} from "../Model/Automerge/AutomergeItem.ts";
-import type {Item} from "../Model/Item.ts";
-import {type Attribute, AutomergeFacade} from "./AutomergeFacade.ts";
+
+import type { AutomergeFacade} from "./AutomergeFacade.ts";
+import {type Attribute} from "./AutomergeFacade.ts";
 import {
     automergeItemFromDatabaseItem,
     buildDatabaseAsTree,
@@ -12,6 +10,10 @@ import {
     isFolder,
     updateValue
 } from "./AutomergeHelper.ts";
+import type {AutomergeDoc} from "../Model/Automerge/AutomergeDoc.ts";
+import type {AutomergeItem} from "../Model/Automerge/AutomergeItem.ts";
+import type {DatabaseRoot} from "../Model/DatabaseRoot.ts";
+import type {Item} from "../Model/Item.ts";
 
 
 /**

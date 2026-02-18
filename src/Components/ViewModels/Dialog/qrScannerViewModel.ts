@@ -1,6 +1,6 @@
-import {useEffect, useState} from "react";
-import QrScanner from "qr-scanner";
 import {isValidAutomergeUrl} from "@automerge/react";
+import QrScanner from "qr-scanner";
+import {useEffect, useState} from "react";
 
 // QRScanner https://github.com/nimiq/qr-scanner
 

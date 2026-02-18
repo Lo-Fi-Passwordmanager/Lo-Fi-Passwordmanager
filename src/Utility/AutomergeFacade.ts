@@ -1,7 +1,9 @@
-import {type DocHandle, getObjectId, isValidAutomergeUrl, Repo} from "@automerge/react";
-import {AutomergeDoc} from "../Model/Automerge/AutomergeDoc.ts";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
-import {SecurityProvider} from "./Security/SecurityProvider.ts";
+import type { Repo} from "@automerge/react";
+import {type DocHandle, getObjectId, isValidAutomergeUrl} from "@automerge/react";
+
+import type {SecurityProvider} from "./Security/SecurityProvider.ts";
+import {AutomergeDoc} from "../Model/Automerge/AutomergeDoc.ts";
 import type {HistoryEntry} from "../Model/Automerge/HistoryEntry.ts";
 
 export type Attribute = "name" | "createdAt" | "editedAt" | "parentId" | "username" | "password" | "url" | "note"
@@ -39,7 +41,7 @@ export class AutomergeFacade {
      * @param validation die Validation der neuen Datenbank
      */
     createDatabase(salt: string, validation: string) {
-        const handle = this._repo.create<AutomergeDoc>(new AutomergeDoc(salt!, validation!));
+        const handle = this._repo.create<AutomergeDoc>(new AutomergeDoc(salt, validation));
         this._automergeURL = handle.url;
         this._salt = salt;
         this._validation = validation;

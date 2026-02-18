@@ -1,8 +1,9 @@
 import React from 'react';
-import {Entry} from "../../Model/Entry.ts";
-import {Item} from "../../Model/Item.ts";
+
+import type {Entry} from "../../Model/Entry.ts";
+import type {Folder} from "../../Model/Folder.ts";
+import type {Item} from "../../Model/Item.ts";
 import {useFilteredListViewModel} from "../ViewModels/FilteredListViewModel.ts";
-import {Folder} from "../../Model/Folder.ts";
 
 /**
  * The View that represents a filtered list of {@link Entry}/{@link Folder} Class Instances
@@ -41,7 +42,7 @@ const FilteredListView: React.FC<{
                         key={index}
                         onClick={() => setCurItem(item as Entry)}
                     >
-                        <span style={{marginLeft: "5px"}}></span> <span>{item.title}</span>
+                        <span style={{marginLeft: "5px"}} /> <span>{item.title}</span>
                         <div className={"btnWrapper"}>
                             <button onClick={() => deleteItem(item)}>🗑️</button>
                         </div>
@@ -60,7 +61,7 @@ const FilteredListView: React.FC<{
                         key={index}
                         onClick={() => goToFolder(item as Folder)}
                     >
-                        <span style={{marginLeft: "5px"}}></span> <span>{item.title}</span>
+                        <span style={{marginLeft: "5px"}} /> <span>{item.title}</span>
                         <div className={"btnWrapper"}>
                             <button onClick={() => deleteItem(item)}>🗑️</button>
                         </div>

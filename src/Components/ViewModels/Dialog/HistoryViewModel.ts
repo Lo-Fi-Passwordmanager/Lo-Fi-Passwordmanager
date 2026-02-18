@@ -1,6 +1,7 @@
 import {useState} from "react";
-import type {AutomergeFacade} from "../../../Utility/AutomergeFacade.ts";
+
 import type {HistoryEntry} from "../../../Model/Automerge/HistoryEntry.ts";
+import type {AutomergeFacade} from "../../../Utility/AutomergeFacade.ts";
 
 /**
  * The Viewmodel for the {@link HistoryDialog}

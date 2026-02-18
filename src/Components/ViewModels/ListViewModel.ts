@@ -1,8 +1,10 @@
-import {Item} from "../../Model/Item.ts";
-import {Folder} from "../../Model/Folder.ts";
-import type {Entry} from "../../Model/Entry.ts";
-import {useEffect, useState, useMemo} from "react";
 import {useDndContext, useDraggable, useDroppable} from "@dnd-kit/core";
+import {useEffect, useState, useMemo} from "react";
+
+import type {Entry} from "../../Model/Entry.ts";
+import type {Folder} from "../../Model/Folder.ts";
+import type {Item} from "../../Model/Item.ts";
+
 
 /**
  * The view model used by the ListView. It has the utility needed for correctly deciding and differentiating {@link Entry} and {@link Folder}

@@ -1,12 +1,16 @@
+import {CSS} from "@dnd-kit/utilities";
+import React from "react";
+import {HiTrash} from "react-icons/hi";
+import {HiMiniPlus} from "react-icons/hi2";
+
+import FolderMenu from "./MenuViews/FolderMenu.tsx";
+import type {Entry} from "../../Model/Entry.ts";
+import type {Folder} from "../../Model/Folder.ts";
 import {type Item} from "../../Model/Item.ts";
 import {useListViewModel} from "../ViewModels/ListViewModel.ts";
-import {Entry} from "../../Model/Entry.ts";
-import React from "react";
-import FolderMenu from "./MenuViews/FolderMenu.tsx";
-import {HiMiniPlus} from "react-icons/hi2";
-import {HiTrash} from "react-icons/hi";
-import {CSS} from "@dnd-kit/utilities";
-import type {Folder} from "../../Model/Folder.ts";
+
+
+
 
 /* eslint-disable react-hooks/refs */ //react and the eslint do not like each other: https://github.com/facebook/react/issues/34775
 /**
@@ -180,7 +184,7 @@ const ListView: React.FC<{
                          marginLeft: level <= 8 ? "15px" : "0px"
                      }}>
                     {getSortedChildren(item as Folder) &&
-                        getSortedChildren(item as Folder)!.map((item: Item, index: number) => {
+                        getSortedChildren(item as Folder).map((item: Item, index: number) => {
                             return <ListView
                                 key={index}
                                 item={item}

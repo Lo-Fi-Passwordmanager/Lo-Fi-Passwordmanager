@@ -1,12 +1,13 @@
-import React, {Suspense} from "react";
-import {usePasswordManagerViewModel} from "../ViewModels/PasswordManagerViewModel.ts";
-import LoginView from "./LoginView.tsx";
-import SettingsView from "./SettingsView.tsx";
-import PasswordView from "./PasswordView.tsx";
 import {RepoContext} from "@automerge/react";
+import React, {Suspense} from "react";
+
 import LoadingScreen from "./DialogViews/LoadingScreen.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
+import LoginView from "./LoginView.tsx";
+import PasswordView from "./PasswordView.tsx";
+import SettingsView from "./SettingsView.tsx";
 import PWMLogo from "../../assets/logo_gelb.svg?inline";
+import {usePasswordManagerViewModel} from "../ViewModels/PasswordManagerViewModel.ts";
 
 /**
  * The main view of the password manager application. It handles the login state and displays either the login view or the password view.
@@ -31,8 +32,7 @@ const PasswordManagerView: React.FC = () => {
                            setOpenedDbName={viewModel.setOpenedDatabaseName}/>
                 <ToastDialog message={viewModel.toastMessage}
                              isVisible={viewModel.toastVisible}
-                             onClose={() => viewModel}>
-                </ToastDialog>
+                             onClose={() => viewModel} />
             </RepoContext.Provider>
 
         );

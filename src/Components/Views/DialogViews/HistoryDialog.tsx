@@ -1,9 +1,10 @@
 import React from "react";
-import {useHistoryViewModel} from "../../ViewModels/Dialog/HistoryViewModel.ts";
+
 import Dialog from "./Dialog.tsx";
 import {HistoryItem} from "./HistoryItem.tsx";
-import type {AutomergeFacade} from "../../../Utility/AutomergeFacade.ts";
 import type {HistoryEntry} from "../../../Model/Automerge/HistoryEntry.ts";
+import type {AutomergeFacade} from "../../../Utility/AutomergeFacade.ts";
+import {useHistoryViewModel} from "../../ViewModels/Dialog/HistoryViewModel.ts";
 
 /**
  * A dialog that shows the history of changes made to the document.

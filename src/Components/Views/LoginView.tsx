@@ -1,15 +1,16 @@
-import React from "react";
-import {useLoginViewModel} from "../ViewModels/loginViewModel.ts";
-import DatabaseListingView from "./ListingViews/DatabaseListingView.tsx";
-import CreateDatabaseDialog from "./DialogViews/CreateDatabaseDialog.tsx";
-import LoginDatabaseDialog from "./DialogViews/LoginDatabaseDialog.tsx";
-import PWMLogo from "../../assets/logo_gelb.svg?inline";
 import type {Repo} from "@automerge/react";
+import React from "react";
+import {HiMiniPlus} from "react-icons/hi2";
+
+import {useLoginViewModel} from "../ViewModels/loginViewModel.ts";
+import CreateDatabaseDialog from "./DialogViews/CreateDatabaseDialog.tsx";
+import DeleteConfirmationDialog from "./DialogViews/DeleteConfirmationDialog.tsx";
+import LoginDatabaseDialog from "./DialogViews/LoginDatabaseDialog.tsx";
+import ToastDialog from "./DialogViews/ToastDialog.tsx";
+import DatabaseListingView from "./ListingViews/DatabaseListingView.tsx";
+import PWMLogo from "../../assets/logo_gelb.svg?inline";
 import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import  {type SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
-import ToastDialog from "./DialogViews/ToastDialog.tsx";
-import {HiMiniPlus} from "react-icons/hi2";
-import DeleteConfirmationDialog from "./DialogViews/DeleteConfirmationDialog.tsx";
 
 /**
  * The view that should be shown, when the user is not logged in yet and can select/create a database to open plus other related actions

@@ -1,11 +1,12 @@
-import {useEffect, useState} from "react";
-import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
-import type {Repo} from "@automerge/react";
-import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
-import {loadAllDatabases, removeDatabase, renameDatabase, storeDatabase} from "../../Utility/Storage.ts";
+import type {Repo} from "@automerge/react";
+import {useEffect, useState} from "react";
+
 import {useLoadingScreen} from "./LoadingScreenProviderViewModel.ts";
+import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {uInt8ArrayFromFile} from "../../Utility/InputOutputUtil.ts";
+import type {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
+import {loadAllDatabases, removeDatabase, renameDatabase, storeDatabase} from "../../Utility/Storage.ts";
 
 /**
  * ViewModel for the LoginView. Provides all data and functions required by the LoginView.
@@ -135,8 +136,8 @@ export const useLoginViewModel = (
             setTimeout(() => {
                 try {
                     if (securityProvider.verifyMasterPassword(masterPassword, salt, validation)) {
-                        setLoggedIn!(true);
-                        setAutomergeFacade!(facade);
+                        setLoggedIn(true);
+                        setAutomergeFacade(facade);
                         setLoadingScreenActive(false);
                         setSelectedDatabase(null);
                     } else {
@@ -244,7 +245,7 @@ export const useLoginViewModel = (
 
     // close the currently opened database
     const closeDatabase = () => {
-        setLoggedIn!(false);
+        setLoggedIn(false);
         securityProvider.clearKey();
     };
 
