@@ -33,7 +33,7 @@ const LoginView: React.FC<{
         <div className="loginView">
 
             <img src={PWMLogo} className="logo" alt="Passwortmanager Logo"/>
-            <header>Lo-Fi Passwortmanager</header>
+            <header>Lo-Fi Passwort&shy;manager</header>
             <main className="flexContainer">
 
                 <div className="databaseSelection">

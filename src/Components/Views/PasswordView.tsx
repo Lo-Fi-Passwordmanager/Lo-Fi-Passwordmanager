@@ -43,7 +43,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                 />}
 
             <div className={"passwordView"}>
-                <div className="borderBox" style={{width: "30%"}}>
+                <div className="passwordViewList">
                     {/*Container for everything related to the search/Sort features */}
                     <OrganizeListView
                         curSortCriterion={viewModel.curSortCrit}
@@ -98,7 +98,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                     </div>
                 </div>
 
-                <div className="borderBox" style={{width: "70%", position: "relative"}}>
+                <div className="passwordViewEntry">
                     {/*Depending on the state, either shows the editable or the normal/noneditable passwordView*/}
                     {!viewModel.inEditable &&
                         <EntryView item={viewModel.curItem}
@@ -115,8 +115,8 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                                            createItem={viewModel.createEntry}
                                            inCreation={viewModel.inEntryCreation}
                                            setInCreation={viewModel.setInEntryCreation}
-                                              hidePassword={viewModel.hidePassword}
-                                              toggleHidePassword={viewModel.toggleHidePassword}
+                                           hidePassword={viewModel.hidePassword}
+                                           toggleHidePassword={viewModel.toggleHidePassword}
                         />
                     }
                 </div>
