@@ -1,8 +1,10 @@
-import {Item} from "../../Model/Item.ts";
-import {Folder} from "../../Model/Folder.ts";
-import type {Entry} from "../../Model/Entry.ts";
-import {useEffect, useState, useMemo} from "react";
 import {useDndContext, useDraggable, useDroppable} from "@dnd-kit/core";
+import {useEffect, useMemo, useState} from "react";
+
+import type {Entry} from "../../Model/Entry.ts";
+import type {Folder} from "../../Model/Folder.ts";
+import type {Item} from "../../Model/Item.ts";
+
 
 /**
  * The view model used by the ListView. It has the utility needed for correctly deciding and differentiating {@link Entry} and {@link Folder}
@@ -26,7 +28,7 @@ export const useListViewModel = (
     createdFolderID: string | null,
     expandFolderId: (folderId: string) => void,
     collapseFolderId: (folderId: string) => void,
-    isFolderExpanded: (folderId: string) => boolean,
+    isFolderExpanded: (folderId: string) => boolean
 ) => {
 
     const [inEditName, setInEditName] = useState(false);
@@ -35,7 +37,9 @@ export const useListViewModel = (
 
     // reset the state if a folder was just created
     useEffect(() => {
-        if(createdFolderID === topItem.id) {
+        if (createdFolderID === topItem.id) {
+            //FIXME
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setItemTitle(topItem.title);
         }
     }, [createdFolderID, topItem.id, topItem.title]);
@@ -94,13 +98,14 @@ export const useListViewModel = (
             return [];
         }
         return (item as Folder).entries.flatMap((child) => [child.id, ...getDescendantIds(child)]);
-    }
+    };
 
     /**
      * Gets all descendant IDs of the current item if it is a folder
      */
     const descendantIds = useMemo(() => {
-        return isItemFolder() ? getDescendantIds(topItem) : [];
+        if (!topItem.isFolder()) return [];
+        return getDescendantIds(topItem);
     }, [topItem]);
 
     /**
@@ -122,8 +127,10 @@ export const useListViewModel = (
         isDragging
     } = useDraggable({
         id: topItem.id,
-        data: {type: isItemFolder() ? 'folder' : 'entry',
-            descendantIds: descendantIds}
+        data: {
+            type: isItemFolder() ? "folder" : "entry",
+            descendantIds: descendantIds
+        }
     });
 
     const {
@@ -160,6 +167,6 @@ export const useListViewModel = (
         toggleExpanded,
         setFolderRef,
         setDraggableRef,
-        expandFolder,
+        expandFolder
     };
 };

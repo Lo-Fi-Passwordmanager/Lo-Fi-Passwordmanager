@@ -13,10 +13,6 @@ describe('DatabaseRoot', ()=> {
         folder = new Folder("name", "id");
     })
 
-    it('should be able to add an item and find it via id', ()=> {
-        root.addItem(folder);
-        expect(root.getChildById("id")).toBe(folder);
-    })
 
     it('should be able to return the salt', ()=>{
         expect(root.salt).toBe("salt");

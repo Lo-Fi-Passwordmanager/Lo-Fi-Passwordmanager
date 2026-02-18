@@ -1,8 +1,9 @@
-import {type AutomergeFacade} from "../../../Utility/AutomergeFacade.ts";
 import React from "react";
-import {saveFile} from "../../../Utility/InputOutputUtil.ts";
+
 import {HistoryDialog} from "./HistoryDialog.tsx";
 import ShareQRDialog from "./ShareQRDialog.tsx";
+import {type AutomergeFacade} from "../../../Utility/AutomergeFacade.ts";
+import {saveFile} from "../../../Utility/InputOutputUtil.ts";
 import {removeDatabase} from "../../../Utility/Storage.ts";
 
 /**
@@ -22,7 +23,7 @@ const DatabaseSettingsView: React.FC<{
                     <button
                         style={{width: "100%"}}
                         onClick={
-                            () => navigator.clipboard.writeText(
+                            () => void navigator.clipboard.writeText(
                                 (automergeFacade.automergeURL as string).replace("automerge:", "")
                             )
                         }>
@@ -31,7 +32,7 @@ const DatabaseSettingsView: React.FC<{
                     <ShareQRDialog name={openedDatabaseName!}
                                    url={(automergeFacade.automergeURL as string).replace("automerge:", "")}/>
                 </div>
-                <button onClick={() => saveFile(automergeFacade.exportAutomergeToBinary())}>Verschlüsselt Exportieren
+                <button onClick={() => void saveFile(automergeFacade.exportAutomergeToBinary())}>Verschlüsselt Exportieren
                 </button>
                 <HistoryDialog automergeFacade={automergeFacade}/>
                 <button

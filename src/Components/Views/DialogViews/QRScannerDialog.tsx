@@ -1,7 +1,8 @@
 import React from "react";
 import {HiOutlineQrcode} from "react-icons/hi";
+
 import Dialog from "./Dialog.tsx";
-import {useQRScannerViewModel} from "../../ViewModels/Dialog/qrScannerViewModel.ts";
+import useQRScannerViewModel from "../../ViewModels/Dialog/qrScannerViewModel.ts";
 
 /**
  * A dialog that allows the user to scan a QR code of a shared database.

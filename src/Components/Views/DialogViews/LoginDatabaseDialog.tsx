@@ -1,6 +1,7 @@
 import React from "react";
-import {useLoginDatabaseViewModel} from "../../ViewModels/Dialog/LoginDatabaseViewModel.ts";
+
 import Dialog from "./Dialog.tsx";
+import {useLoginDatabaseViewModel} from "../../ViewModels/Dialog/LoginDatabaseViewModel.ts";
 import EyeButton from "../ButtonViews/EyeButton.tsx";
 
 /**

@@ -140,7 +140,7 @@ export function loadServers(): Map<string, string> {
     const serverList = localStorage.getItem("servers_list");
     if (serverList) {
         const servers = new Map<string, string>();
-        JSON.parse(serverList).forEach(([name, url]: [string, string]) => {
+        (JSON.parse(serverList) as [[name: string, url: string]]).forEach(([name, url]: [string, string]) => {
             servers.set(name, url);
         });
         return servers;
@@ -184,7 +184,7 @@ export function loadSynchronizationSettings(): boolean {
         }
     }
     if (synchronisation) {
-        return JSON.parse(synchronisation);
+        return JSON.parse(synchronisation) as boolean;
     } else {
         localStorage.setItem(SYNCHRONISATION, JSON.stringify(true))
         return true;
@@ -209,7 +209,7 @@ export function storeSynchronizationSettings(value: boolean, editing: boolean): 
 export function loadDarkModeSetting(): boolean {
     const darkMode = localStorage.getItem(DARK_MODE);
     if (darkMode) {
-        return JSON.parse(darkMode);
+        return JSON.parse(darkMode) as boolean;
     } else {
         localStorage.setItem(DARK_MODE, JSON.stringify(true))
         return true
@@ -233,7 +233,7 @@ export function storeDarkModeSetting(value: boolean): void {
 export function loadTimeoutSettings(): boolean {
     const timeoutActive = localStorage.getItem(TIMEOUT_ACTIVE);
     if (timeoutActive) {
-        return JSON.parse(timeoutActive);
+        return JSON.parse(timeoutActive) as boolean;
     } else {
         localStorage.setItem(TIMEOUT_ACTIVE, JSON.stringify(true))
         return true
@@ -257,7 +257,7 @@ export function storeTimeoutSettings(value: boolean): void {
 export function loadTimeoutLength(): number {
     const timeoutLength = localStorage.getItem(TIMEOUT_LENGTH);
     if (timeoutLength != null) {
-        return JSON.parse(timeoutLength);
+        return JSON.parse(timeoutLength) as number;
     } else {
         localStorage.setItem(TIMEOUT_LENGTH, JSON.stringify(10))
         return 10;
@@ -281,7 +281,7 @@ export function storeTimeoutLength(length: number): void {
 export function loadP2PSetting(): boolean {
     const p2p = localStorage.getItem("p2p");
     if (p2p != null) {
-        return JSON.parse(p2p);
+        return JSON.parse(p2p) as boolean;
     } else {
         localStorage.setItem("p2p", JSON.stringify(true))
         return true;

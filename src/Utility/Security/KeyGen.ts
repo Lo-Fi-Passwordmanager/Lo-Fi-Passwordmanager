@@ -1,6 +1,7 @@
-import type {IKeyGen} from './IKeyGen.ts';
-import {scrypt} from "@noble/hashes/scrypt.js";
 import {randomBytes} from "@noble/ciphers/utils.js";
+import {scrypt} from "@noble/hashes/scrypt.js";
+
+import type {IKeyGen} from './IKeyGen.ts';
 import {SCRYPT_PARAMS} from "./scryptConfig.ts";
 
 const SALT_LENGTH = 32; //Length in Bytes of the Salt used to derive the Key from the password.

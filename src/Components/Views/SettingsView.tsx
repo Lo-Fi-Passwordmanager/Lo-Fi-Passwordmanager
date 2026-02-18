@@ -1,14 +1,14 @@
-import {useSettingsViewModel} from "../ViewModels/SettingsViewModel.ts";
-
 import React from "react";
-import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
-import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
+import {HiTrash} from "react-icons/hi";
 import {HiMiniCog8Tooth, HiMiniMinus, HiMiniPlus} from "react-icons/hi2";
-import AddServerDialog from "./DialogViews/AddServerDialog.tsx";
 
+import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import {useSettingsViewModel} from "../ViewModels/SettingsViewModel.ts";
+import AddServerDialog from "./DialogViews/AddServerDialog.tsx";
+import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
 import Dialog from "./DialogViews/Dialog.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
-import {HiTrash} from "react-icons/hi";
+
 
 /**
  * The View that represents the Settings Dialog and Button to open it
@@ -67,7 +67,7 @@ const SettingsView: React.FC<{
                                 <label className="switch">
                                     <input type="checkbox" checked={viewModel.darkMode}
                                            onChange={viewModel.toggleDarkMode}/>
-                                    <span className="slider round"></span>
+                                    <span className="slider round" />
                                 </label>
                                 Dark-Mode
                             </label>
@@ -76,7 +76,7 @@ const SettingsView: React.FC<{
                                 <label className="switch">
                                     <input type="checkbox" checked={viewModel.synchronisation}
                                            onChange={viewModel.toggleSynchronisation}/>
-                                    <span className="slider round"></span>
+                                    <span className="slider round" />
                                 </label>
                                 Server Synchronisation
                             </label>
@@ -85,7 +85,7 @@ const SettingsView: React.FC<{
                                 <label className="switch">
                                     <input type="checkbox" checked={viewModel.P2P}
                                            onChange={viewModel.toggleP2P}/>
-                                    <span className="slider round"></span>
+                                    <span className="slider round" />
                                 </label>
                                 Peer-to-Peer Synchronisation
                             </label>
@@ -94,7 +94,7 @@ const SettingsView: React.FC<{
                                 <label className="switch">
                                     <input type="checkbox" checked={viewModel.timeOutActive}
                                            onChange={viewModel.toggleTimeOutActive}/>
-                                    <span className="slider round"></span>
+                                    <span className="slider round" />
                                 </label>
 
                                 Bei Inaktivität abmelden
@@ -130,7 +130,7 @@ const SettingsView: React.FC<{
 
                                                     {viewModel.serverNames.map((server) => (
                                                         viewModel.serverName !== server ? (
-                                                            <div className="server-item">
+                                                            <div className="server-item" key={server}>
                                                                 <button
                                                                     style={{
                                                                         display: "block",
@@ -202,7 +202,7 @@ const SettingsView: React.FC<{
                                             <span>Verbundene Peers:</span>
 
                                             {Array.from(viewModel.otherPeerMap.keys()).map((id) => (
-                                                <div className="server-item">
+                                                <div className="server-item" key={id}>
                                                     <button
                                                         style={{
                                                             display: "block",
@@ -217,7 +217,7 @@ const SettingsView: React.FC<{
 
                                                     <button
                                                         className="squareButton"
-                                                        onClick={() => viewModel.removePeer(id)}>
+                                                        onClick={() => void viewModel.removePeer(id)}>
                                                         <HiTrash size={24}/>
                                                     </button>
                                                 </div>
@@ -320,8 +320,7 @@ const SettingsView: React.FC<{
                                      style={{fontSize: "0.8em", opacity: 0.7, marginTop: "20px"}}>
                                 <p>Copyright © {new Date().getFullYear()}</p>
                                 <p style={{maxWidth: "500px"}}>
-                                    Die Software wird "wie besehen" bereitgestellt, ohne jegliche ausdrückliche oder
-                                    implizierte Gewährleistung.
+                                    Die Software wird &quot;wie besehen&quot; bereitgestellt, ohne jegliche ausdrückliche oder
                                 </p>
                             </section>
                         </div>

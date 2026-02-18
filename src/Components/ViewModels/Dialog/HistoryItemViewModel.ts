@@ -1,8 +1,10 @@
-import type {HistoryEntry} from "../../../Model/Automerge/HistoryEntry.ts";
+import {useState} from "react";
+
 import type {AutomergeEntry} from "../../../Model/Automerge/AutomergeEntry.ts";
+import type {HistoryEntry} from "../../../Model/Automerge/HistoryEntry.ts";
 import {isFolder} from "../../../Utility/AutomergeHelper.ts";
 import type {SecurityProvider} from "../../../Utility/Security/SecurityProvider.ts";
-import {useState} from "react";
+
 
 /**
  * The ViewModel for a {@link HistoryItem} in the {@link HistoryDialog}
@@ -104,7 +106,7 @@ export const useHistoryItemViewModel = (historyEntry: HistoryEntry, securityProv
         }
     };
 
-    const currentConfig = config[itemType as keyof typeof config];
+    const currentConfig = config[itemType];
 
     return {
         itemType,

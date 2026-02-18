@@ -1,10 +1,12 @@
 import React from "react";
+import {HiPencil, HiTrash} from "react-icons/hi";
+import {HiMiniLink} from "react-icons/hi2";
+
+import EyeButton from "./ButtonViews/EyeButton.tsx";
+import Logo from "../../assets/logo_gelb.svg?inline";
 import {type Entry} from "../../Model/Entry.ts";
 import {type Item} from "../../Model/Item.ts";
-import Logo from "../../assets/logo_gelb.svg?inline";
-import EyeButton from "./ButtonViews/EyeButton.tsx";
-import {HiMiniLink} from "react-icons/hi2";
-import {HiPencil, HiTrash} from "react-icons/hi";
+
 
 /**
  * The View that depicts an Entry with all its attributes at large scale

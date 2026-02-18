@@ -22,14 +22,4 @@ export class Folder extends Item {
         this.updateEditedAt();
     }
 
-    public removeItem(item: Item): boolean {
-        const index = this._entries.indexOf(item);
-        this.updateEditedAt();
-        if (index >= 0) {
-            this._entries.splice(index, 1);
-            return true;
-        }
-        return false;
-    }
-
 }

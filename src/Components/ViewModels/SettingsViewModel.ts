@@ -1,8 +1,9 @@
-import {Settings, useSettings} from "../../Model/Settings";
 
-import {useEffect, useState} from "react";
 import type {DataConnection} from "peerjs";
-import type {PeerjsNetworkAdapter} from "../../PeerJsNetworkAdapter.ts";
+import {useEffect, useState} from "react";
+
+import type {PeerjsNetworkAdapter} from "../../../customNetworkAdapter/PeerJsNetworkAdapter.ts";
+import {Settings, useSettings} from "../../Model/Settings";
 
 /**
  * The ViewModel that is used for interfacing the {@link Settings} singleton.
@@ -19,7 +20,7 @@ export const useSettingsViewModel = () => {
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [timeoutLength, setTimeoutLength] = useState(settings.getTimeoutLength());
     const [activeTab, setActiveTab] = useState<"general" | "database" | "about">("general");
-    const [serverName, setServerName] = useState<string>(settings.getServerName());
+    const [serverName, setServerName] = useState<string>(settings.getActiveServerName());
     const [servers, setServers] = useState<Map<string, string>>(settings.getServers());
     const [serverNames, setServerNames] = useState<string[]>(Array.from(servers.keys()));
     const [addServerDialogOpen, setAddServerDialogOpen] = useState<boolean>(false);
@@ -56,15 +57,17 @@ export const useSettingsViewModel = () => {
     }, [servers]);
 
 
+    const connectorsToAdaptersHook = settingsHook.getConnectorsToAdapters();
     useEffect(() => {
-        setOtherPeerMap(settings.getConnectorsToAdapters())
-    }, [settings.getConnectorsToAdapters()]);
+        setOtherPeerMap(connectorsToAdaptersHook)
+    }, [connectorsToAdaptersHook]);
 
+    const connectorHook = settingsHook.getConnector();
     useEffect(() => {
-        if (settings.getConnector() != null) {
-            setRemotePeerId(settings.getConnector().peer)
+        if (connectorHook != null) {
+            setRemotePeerId(connectorHook.peer)
         }
-    }, [settingsHook.getConnector()]);
+    }, [connectorHook]);
 
 
     // Update darkMode
@@ -135,8 +138,8 @@ export const useSettingsViewModel = () => {
         settings.setP2PActive(!P2P);
     }
 
-    function removePeer(id: string) {
-        settings.removeConnector(id);
+    async function removePeer(id: string) {
+        await settings.removeConnector(id);
     }
 
 
