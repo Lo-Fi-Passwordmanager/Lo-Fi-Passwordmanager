@@ -163,7 +163,7 @@ const SettingsView: React.FC<{
                                             </button>
                                             {viewModel.addServerDialogOpen && (
                                                 <AddServerDialog
-                                                    onAddServer={(name, url) => viewModel.addServer(name, url)}
+                                                    onAddServer={(name, url) => viewModel.addSyncServer(name, url)}
                                                     onClose={() => viewModel.setAddServerDialogOpen(false)}
                                                     setShowToast={viewModel.setShowToast}
                                                     setToastMessage={viewModel.setToastMessage}
