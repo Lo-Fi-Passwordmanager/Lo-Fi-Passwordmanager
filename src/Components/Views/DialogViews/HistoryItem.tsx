@@ -74,6 +74,21 @@ export const HistoryItem: React.FC<{
                                 );
                             })}
                         </div>
+                    ) : (viewmodel.itemType == "move") ? (
+                        <div className="change-list">
+                            <div className="change-row">
+                                <span
+                                    className="attr-name">{viewmodel.oldParent ? "" : "Neuer "}Übergeordneter Ordner</span>
+                                <span className="change-path">
+                                    {viewmodel.oldParent && <><span
+                                        className="old-val move">{viewmodel.oldParent}</span><span
+                                        className="arrow">→</span></>}
+                                    <span className="new-val move">
+                                        {viewmodel.parent}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
                     ) : (
                         <div className="change-list">
                             {viewmodel.username && <div className="change-row">

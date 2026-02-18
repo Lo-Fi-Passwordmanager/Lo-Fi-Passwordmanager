@@ -129,7 +129,8 @@ export class AutomergeFacade {
                             itemId: newItemId,
                             changes: new Map(),
                             type: "new",
-                            item: newItem
+                            item: newItem,
+                            oldParent: ""
                         };
                         continue;
                     }
@@ -143,21 +144,35 @@ export class AutomergeFacade {
 
                     const changedValueKey = change.path[2] as string;
                     let newValue: string | number | null = null;
+                    let oldParent = "";
 
                     if (action === "put" || action === "splice") {
                         newValue = (change.value as string | number);
+                    }
+
+                    if (changedValueKey === "parentId") {
+                        if (prevItem.parentId) {
+                            oldParent = prevDoc.doc().items.find((item) => getObjectId(item) == prevItem.parentId)!.name;
+                        }
+                        if (newValue) {
+                            newValue = currentDoc.doc().items.find((item) => getObjectId(item) == newValue)!.name;
+                        }
                     }
 
                     if (historyItem === undefined) {
                         historyItem = {
                             itemId: prevItemId,
                             changes: newValue ? new Map([[changedValueKey, newValue]]) : new Map(),
-                            type: (action === "del") ? "deleted" : "update",
-                            item: prevItem
+                            type: (action === "del") ? "deleted" : (changedValueKey === "parentId") ? "move" : "update",
+                            item: prevItem,
+                            oldParent: oldParent
                         };
                     } else {
                         if (newValue) {
                             historyItem.changes.set(changedValueKey, newValue);
+                            if (changedValueKey === "parentId") {
+                                historyItem.type = "move";
+                            }
                         }
                     }
                 }

@@ -27,12 +27,14 @@ export const useHistoryItemViewModel = (historyEntry: HistoryEntry, securityProv
     let password: string | null = null;
     let url: string | null = null;
     let note: string | null = null;
+    const oldParent = decrypt(historyEntry.oldParent);
+    const parent = decrypt(historyEntry.changes.get("parentId") as string);
 
     if (!isFolder(historyEntry.item)) {
-        username = securityProvider.decryptValue((historyEntry.item as AutomergeEntry).username);
-        password = securityProvider.decryptValue((historyEntry.item as AutomergeEntry).password);
-        url = securityProvider.decryptValue((historyEntry.item as AutomergeEntry).url);
-        note = securityProvider.decryptValue((historyEntry.item as AutomergeEntry).note);
+        username = decrypt((historyEntry.item as AutomergeEntry).username);
+        password = decrypt((historyEntry.item as AutomergeEntry).password);
+        url = decrypt((historyEntry.item as AutomergeEntry).url);
+        note = decrypt((historyEntry.item as AutomergeEntry).note);
     }
 
     const changes = historyEntry.changes;
@@ -101,6 +103,11 @@ export const useHistoryItemViewModel = (historyEntry: HistoryEntry, securityProv
             icon: "✎",
             class: "status-update",
             label: itemIsFolder ? "Ordner bearbeitet" : "Eintrag bearbeitet"
+        },
+        move: {
+            icon: ">",
+            class: "status-move",
+            label: itemIsFolder ? "Ordner verschoben" : "Eintrag verschoben"
         }
     };
 
@@ -115,6 +122,8 @@ export const useHistoryItemViewModel = (historyEntry: HistoryEntry, securityProv
         note,
         editedAt,
         createdAt,
+        oldParent,
+        parent,
         changes,
         itemIsFolder,
         get,
