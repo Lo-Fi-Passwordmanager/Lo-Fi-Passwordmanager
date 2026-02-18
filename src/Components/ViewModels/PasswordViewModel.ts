@@ -50,7 +50,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade) => {
     const [curSortCrit, setCurSortCrit] = useState<SortCriteria>(initSortCriterion);
     const [isAscending, setIsAscending] = useState<boolean>(initIsAscending);
     const [searchValue, setSearchValue] = useState<string>("");
-    const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set([getRootFolder().id]));
+    const [expandedFolders, setExpandedFolders] = useState<string[]>([getRootFolder().id]);
 
 
     const [itemToDelete, setItemToDelete] = useState<Item | null>(null);
@@ -289,9 +289,41 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade) => {
     }
 
     /**
+     * Recursively searches for the path to the given target item starting from the given folder. Returns an array of item ids representing the path.
+     * @param target the item to find the path to
+     * @param folder the folder to start searching from, defaults to the root folder
+     * @param path the current path of item ids, used for recursion, defaults to an empty array
+     */
+    function getPath(target: Item, folder: Folder = getRootFolder(), path: string[] = []): string[] {
+        for (const item of folder.entries) {
+            if (item.id === target.id) {
+                return [...path, item.id];
+            } else if (item.isFolder()) {
+                const result = getPath(target, item as Folder, [...path, item.id]);
+                if (result.length > 0) {
+                    return result;
+                }
+            }
+        }
+        return [];
+    }
+
+    /**
+     * Expands all folders in the path to the given item, so that the item is visible in the hierarchy
+     * @param item the item to expand the path to
+     */
+    function expandFoldersInPath(item: Item) {
+        const path = getPath(item);
+        expandMultipleFolders(path);
+    }
+
+    /**
      * Navigates to the given item by setting it as the current item and clearing the search value so the view shows the full hierarchy
      */
     function goToItem(item: Item) {
+
+        expandFoldersInPath(item);
+
         setSearchValue("");
         setSelectedItemId(item.id);
         setTimeout(() => document.querySelector("[aria-selected='true']")?.scrollIntoView({
@@ -306,9 +338,20 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade) => {
      * @param folderId
      */
     function expandFolder(folderId: string) {
-        const newSet = new Set(expandedFolders);
-        newSet.add(folderId);
-        setExpandedFolders(newSet);
+        const expanded = expandedFolders;
+        if (!expanded.includes(folderId)) {
+            setExpandedFolders([...expanded, folderId]);
+        }
+    }
+
+    function expandMultipleFolders(folderIds: string[]) {
+        const withoutDuplicates: string[] = [];
+        for (const folderId of folderIds) {
+            if (!expandedFolders.includes(folderId)) {
+                withoutDuplicates.push(folderId);
+            }
+        }
+        setExpandedFolders(expandedFolders.concat(withoutDuplicates));
     }
 
     /**
@@ -316,9 +359,10 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade) => {
      * @param folderId
      */
     function collapseFolder(folderId: string) {
-        const newSet = new Set(expandedFolders);
-        newSet.delete(folderId);
-        setExpandedFolders(newSet);
+        const expanded = expandedFolders;
+        if (expanded.includes(folderId)) {
+            setExpandedFolders(expanded.filter(id => id !== folderId));
+        }
     }
 
     /**
@@ -326,7 +370,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade) => {
      * @param folderId
      */
     function isFolderExpanded(folderId: string) {
-        return expandedFolders.has(folderId);
+        return expandedFolders.includes(folderId);
     }
 
     /**
