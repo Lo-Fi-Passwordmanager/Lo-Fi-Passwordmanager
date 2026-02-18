@@ -40,7 +40,7 @@ export const HistoryItem: React.FC<{
                 </div>
 
                 <div className="timeline-body">
-                    <h4 className="item-name">{viewmodel.name || "Unbenannt"}</h4>
+                    <h4 className={`item-name ${viewmodel.itemIsFolder ? "folder" : ""}`}>{viewmodel.name || "Unbenannt"}</h4>
 
                     {viewmodel.itemType === "update" ? (
                         <div className="change-list">
@@ -82,9 +82,9 @@ export const HistoryItem: React.FC<{
                                     className="attr-name">{viewmodel.oldParent ? "" : "Neuer "}Übergeordneter Ordner</span>
                                 <span className="change-path">
                                     {viewmodel.oldParent && <><span
-                                        className="old-val move">{viewmodel.oldParent}</span><span
+                                        className="old-val folder">{viewmodel.oldParent}</span><span
                                         className="arrow">→</span></>}
-                                    <span className="new-val move">
+                                    <span className="new-val folder">
                                         {viewmodel.parent}
                                     </span>
                                 </span>
