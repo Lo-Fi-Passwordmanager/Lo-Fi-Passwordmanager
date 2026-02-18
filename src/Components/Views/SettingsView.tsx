@@ -176,21 +176,23 @@ const SettingsView: React.FC<{
                                     {!viewModel.P2P ? null :
                                         <div className={"connection-settings"}>
 
-                                            <h4>Peer-To-Peer Verbidung</h4>
+                                            <h4>Peer-To-Peer Verbindung</h4>
                                             <label>Eigene Peer-ID:</label>
                                             <label className={"current-server"}>{viewModel.getPeerId()}</label>
                                             <label>Fremde Peer-ID:</label>
-                                            <input type="text"
-                                                   value={viewModel.remotePeerId}
-                                                   onChange={(e) => viewModel.setRemotePeerId(e.target.value)}
-                                                   style={{marginBottom: "2vh"}}
-                                            />
-                                            <button
-                                                className="squareButton"
-                                                onClick={viewModel.connectToPeer}
-                                            >
-                                                Verbinden
-                                            </button>
+                                            <div className={"peer-connection-input"}
+                                                style={{display: "flex", marginBottom: "2vh", gap: "10px", justifyContent: "space-between", width: "100%"}}> {/* for some reason are the styles from the css not applying */}
+                                                <input type="text"
+                                                       value={viewModel.remotePeerId}
+                                                       onChange={(e) => viewModel.setRemotePeerId(e.target.value)}
+                                                />
+                                                <button
+                                                    className="rectangle-button"
+                                                    onClick={viewModel.connectToPeer}
+                                                >
+                                                    Verbinden
+                                                </button>
+                                            </div>
                                         </div>
                                     }
 
@@ -199,25 +201,25 @@ const SettingsView: React.FC<{
                                             <span>Verbundene Peers:</span>
 
                                             {Array.from(viewModel.otherPeerMap.keys()).map((id) => (
-                                                    <div className="server-item">
-                                                        <button
-                                                            style={{
-                                                                display: "block",
-                                                                whiteSpace: "nowrap",
-                                                                overflow: "hidden",
-                                                                textOverflow: "ellipsis",
-                                                                flex: 1
-                                                            }}
-                                                        >
-                                                            <span>{id}</span>
-                                                        </button>
+                                                <div className="server-item">
+                                                    <button
+                                                        style={{
+                                                            display: "block",
+                                                            whiteSpace: "nowrap",
+                                                            overflow: "hidden",
+                                                            textOverflow: "ellipsis",
+                                                            flex: 1
+                                                        }}
+                                                    >
+                                                        <span>{id}</span>
+                                                    </button>
 
-                                                        <button
-                                                            className="squareButton"
-                                                            onClick={() => viewModel.removePeer(id)}>
-                                                            <HiTrash size={24}/>
-                                                        </button>
-                                                    </div>
+                                                    <button
+                                                        className="squareButton"
+                                                        onClick={() => viewModel.removePeer(id)}>
+                                                        <HiTrash size={24}/>
+                                                    </button>
+                                                </div>
                                             ))}
                                         </div>)}
 

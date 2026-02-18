@@ -661,6 +661,7 @@ input[type="number"] {
     flex-direction: column;
     width: 30%;
 }
+
 .passwordViewEntry {
     border: 2px solid var(--panel);
     border-right: 0;
@@ -1320,13 +1321,6 @@ input:checked + .slider:before {
 }
 
 
-
-
-
-
-
-
-
 /* Mobile Phones should render differently*/
 @media (max-width: 768px) {
     .settings-layout {
@@ -1351,6 +1345,15 @@ input:checked + .slider:before {
     .numberInput, .connection-settings, .server-list, .current-server, input {
         width: 95% !important;
         max-width: 100%;
+    }
+
+    .peer-connection-input {
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 2vh;
+        gap: 10px;
+        justify-content: space-between;
+        width: 100%;
     }
 
     .passwordView {
@@ -1400,6 +1403,7 @@ input:checked + .slider:before {
     .entryViewEntry {
         height: 100%;
     }
+
     .entryDateViewEntry {
         display: none;
         height: 0;
