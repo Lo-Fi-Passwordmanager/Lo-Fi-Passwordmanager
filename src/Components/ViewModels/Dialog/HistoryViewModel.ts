@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import type {AutomergeFacade} from "../../../Utility/AutomergeFacade.ts";
 import type {HistoryEntry} from "../../../Model/Automerge/HistoryEntry.ts";
 
@@ -18,16 +18,10 @@ export const useHistoryViewModel = (automergeFacade: AutomergeFacade) => {
 
     const [historyOpen, setHistoryOpen] = useState(false);
 
-    useEffect(() => {
-        if (historyOpen) {
-            loadHistory();
-        }
-    }, [historyOpen]);
-
     return {
         historyOpen,
-        history,
         setHistoryOpen,
+        loadHistory,
         automergeHistory
     };
 };
