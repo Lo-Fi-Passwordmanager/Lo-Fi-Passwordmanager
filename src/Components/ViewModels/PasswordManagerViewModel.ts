@@ -10,7 +10,7 @@ import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import {useIdleTimer} from "react-idle-timer";
 import {Settings, useSettings} from "../../Model/Settings.ts";
-import {PeerjsNetworkAdapter} from "../../PeerJsNetworkAdapter.ts";
+import {PeerjsNetworkAdapter} from "../../customNetworkAdapter/PeerJsNetworkAdapter.ts";
 
 /**
  * The view model used by the PasswordManagerView. Manages the state and logic for the password manager.

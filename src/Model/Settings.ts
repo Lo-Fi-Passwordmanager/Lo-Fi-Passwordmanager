@@ -16,7 +16,7 @@ import {
     storeTimeoutSettings,
 } from "../Utility/Storage.ts";
 import Peer, {type DataConnection} from "peerjs";
-import {PeerjsNetworkAdapter} from "../PeerJsNetworkAdapter.ts";
+import {PeerjsNetworkAdapter} from "../customNetworkAdapter/PeerJsNetworkAdapter.ts";
 
 
 type SettingsListener = () => void;

@@ -1,6 +1,6 @@
 import { EventEmitter } from "eventemitter3";
-// @ts-ignore
-import type * as t from "./types.js";
+
+import type * as t from "./types.ts";
 import type {DataConnection} from "peerjs";
 
 type EventTypes = { data: t.NetworkMessageAlert };
