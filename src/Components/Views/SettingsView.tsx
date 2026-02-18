@@ -5,9 +5,10 @@ import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
 import {HiMiniCog8Tooth, HiMiniMinus, HiMiniPlus} from "react-icons/hi2";
 import AddServerDialog from "./DialogViews/AddServerDialog.tsx";
-import {HiTrash} from "react-icons/hi";
+
 import Dialog from "./DialogViews/Dialog.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
+import {HiTrash} from "react-icons/hi";
 
 /**
  * The View that represents the Settings Dialog and Button to open it
@@ -192,6 +193,34 @@ const SettingsView: React.FC<{
                                             </button>
                                         </div>
                                     }
+
+                                    {viewModel.otherPeerMap.size > 0 && viewModel.P2P && (
+                                        <div className="scrollableContainer server-list">
+                                            <span>Verbundene Peers:</span>
+
+                                            {Array.from(viewModel.otherPeerMap.keys()).map((id) => (
+                                                    <div className="server-item">
+                                                        <button
+                                                            style={{
+                                                                display: "block",
+                                                                whiteSpace: "nowrap",
+                                                                overflow: "hidden",
+                                                                textOverflow: "ellipsis",
+                                                                flex: 1
+                                                            }}
+                                                        >
+                                                            <span>{id}</span>
+                                                        </button>
+
+                                                        <button
+                                                            className="squareButton"
+                                                            onClick={() => viewModel.removePeer(id)}>
+                                                            <HiTrash size={24}/>
+                                                        </button>
+                                                    </div>
+                                            ))}
+                                        </div>)}
+
                                 </div>
                             )}
                         </div>

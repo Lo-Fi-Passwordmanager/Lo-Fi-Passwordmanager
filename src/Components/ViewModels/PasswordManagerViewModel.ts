@@ -37,8 +37,9 @@ export const usePasswordManagerViewModel = () => {
         for (const adapter of repo.networkSubsystem.adapters) {
             if (!settings.getSynchronization() && adapter instanceof WebSocketClientAdapter) {
                 removeArray.push(adapter);
-            }
-            if (!settings.getP2P() && adapter instanceof PeerjsNetworkAdapter) {
+            }else if (!settings.getP2P() && adapter instanceof PeerjsNetworkAdapter) {
+                removeArray.push(adapter);
+            } else if (adapter instanceof PeerjsNetworkAdapter && !settings.getConnectorsToAdapters().has(adapter.getPeerId())) {
                 removeArray.push(adapter);
             }
         }
@@ -50,12 +51,15 @@ export const usePasswordManagerViewModel = () => {
             repo.networkSubsystem.addNetworkAdapter(new WebSocketClientAdapter(settings.getServerUrl()));
         }
 
-        if (settings.getP2P() && settings.getConnector() != null && !repo.networkSubsystem.adapters.includes(settings.getP2PAdapter())) {
-            repo.networkSubsystem.addNetworkAdapter(settings.getP2PAdapter());
+        for (const adapter of settings.getConnectorsToAdapters().values()) {
+            if (!repo.networkSubsystem.adapters.includes(adapter[1])) {
+                repo.networkSubsystem.addNetworkAdapter(adapter[1]);
+            }
         }
+
         console.log(repo.networkSubsystem.adapters);
 
-    }, [settings.getSynchronization(), settings.getP2P(), settings.getP2PAdapter()]);
+    }, [settings.getSynchronization(), settings.getP2P(), settings.getConnectorsToAdapters().size]);
 
     function getAutomergeFacade(): AutomergeFacade | null {
         return automergeFacade;

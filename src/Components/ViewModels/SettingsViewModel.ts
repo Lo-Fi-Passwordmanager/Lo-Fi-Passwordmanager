@@ -1,6 +1,8 @@
 import {Settings, useSettings} from "../../Model/Settings";
 
 import {useEffect, useState} from "react";
+import type {DataConnection} from "peerjs";
+import type {PeerjsNetworkAdapter} from "../../PeerJsNetworkAdapter.ts";
 
 /**
  * The ViewModel that is used for interfacing the {@link Settings} singleton.
@@ -25,6 +27,7 @@ export const useSettingsViewModel = () => {
     const [showToast, setShowToast] = useState<boolean>(false);
     const [toastMessage, setToastMessage] = useState<string>("");
     const [remotePeerId, setRemotePeerId] = useState("");
+    const [otherPeerMap, setOtherPeerMap] = useState<Map<string, [DataConnection, PeerjsNetworkAdapter]>>(settings.getConnectorsToAdapters())
     document.getElementsByTagName("html")[0]?.setAttribute("data-theme", darkMode ? "dark" : "light");
 
     // When darkMode is updated, update settings
@@ -51,6 +54,11 @@ export const useSettingsViewModel = () => {
     useEffect(() => {
         setServerNames(Array.from(servers.keys()));
     }, [servers]);
+
+
+    useEffect(() => {
+        setOtherPeerMap(settings.getConnectorsToAdapters())
+    }, [settings.getConnectorsToAdapters()]);
 
     useEffect(() => {
         if (settings.getConnector() != null) {
@@ -119,12 +127,16 @@ export const useSettingsViewModel = () => {
      * @param id the id to connect to
      */
     function setConnection(id: string) {
-        settings.setConnector(id);
+        settings.addConnector(id);
     }
 
     function toggleP2P() {
         setP2P(!P2P);
         settings.setP2PActive(!P2P);
+    }
+
+    function removePeer(id: string) {
+        settings.removeConnector(id);
     }
 
 
@@ -161,7 +173,9 @@ export const useSettingsViewModel = () => {
         setShowToast,
         remotePeerId,
         setRemotePeerId,
-        connectToPeer: () => Settings.getSettings().setConnector(remotePeerId),
+        connectToPeer: () => Settings.getSettings().addConnector(remotePeerId),
+        otherPeerMap,
+        removePeer,
 
     };
 };

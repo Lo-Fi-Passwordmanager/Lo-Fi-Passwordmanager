@@ -59,6 +59,8 @@ export class Settings {
     private _p2p: boolean;
     private p2pAdapter: PeerjsNetworkAdapter;
 
+    private connectorsToAdapters: Map<string, [DataConnection, PeerjsNetworkAdapter]> = new Map();
+
     private listeners: SettingsListener[] = [];
 
     private constructor() {
@@ -70,8 +72,10 @@ export class Settings {
         this._servers = loadServers();
         this._p2p = loadP2PSetting();
         this.peer = new Peer();
-        this.connector = null as any;
-        this.p2pAdapter = null as any;
+        this.connector = null as unknown as DataConnection;
+        this.p2pAdapter = null as unknown as PeerjsNetworkAdapter;
+
+
 
 
         //When someone is connecting to this peer, establish the direction in the other way
@@ -79,15 +83,15 @@ export class Settings {
             incomingConn.on('open', async () => {
                 this.p2pAdapter = new PeerjsNetworkAdapter(incomingConn);
                 this.connector = incomingConn;
-                this.notify()
-                console.log("Versuche zurück zu verbinden zu id: " + incomingConn.peer);
-                console.log(this.p2pAdapter);
+                this.connectorsToAdapters.set(incomingConn.peer ,[incomingConn, this.p2pAdapter])
+                this.notify();
             })
         })
 
         this.peer.on('open', () => {
             console.log("Connected with id: " + this.peer.id);
         })
+
     }
 
     public static getSettings(): Settings {
@@ -201,16 +205,41 @@ export class Settings {
      * Connects your own peer to a given id
      * @param id the id to connect to
      */
-    public setConnector(id: string) {
-        if (this.connector?.open) return;
+    public addConnector(id: string) {
 
-        this.connector = this.peer.connect(id);
+        const tempCon = this.peer.connect(id);
+        this.connector = tempCon;
 
         this.connector.on("open", async () => {
-            this.p2pAdapter = new PeerjsNetworkAdapter(this.connector);
+            this.p2pAdapter = new PeerjsNetworkAdapter(tempCon);
+            this.connectorsToAdapters.set(id, [tempCon, this.p2pAdapter])
             this.notify();
             console.log("Connected with id: " + id);
         });
+    }
+
+    /**
+     * Removes the Connection to the peer with the given id
+     * @param id the id of the other peer
+     */
+    public removeConnector(id: string) {
+        let tempRemoveCon = null;
+        for (const connector of this.connectorsToAdapters.keys()) {
+            if (connector === id) {
+                tempRemoveCon = connector;
+            }
+        }
+
+        if (tempRemoveCon != null) {
+            this.connectorsToAdapters.get(tempRemoveCon)![1].disconnect();
+            this.connectorsToAdapters.get(tempRemoveCon)![0].close();
+            this.connectorsToAdapters.delete(tempRemoveCon);
+        }
+        this.notify();
+    }
+
+    public getConnectorsToAdapters(): Map<string, [DataConnection, PeerjsNetworkAdapter]> {
+        return this.connectorsToAdapters;
     }
 
     public getConnector() {

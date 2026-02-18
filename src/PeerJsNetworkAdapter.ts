@@ -1,5 +1,6 @@
 import { EventEmitter } from "eventemitter3";
 import type * as t from "./types.js";
+import type {DataConnection} from "peerjs";
 
 type EventTypes = { data: t.NetworkMessageAlert };
 
@@ -10,6 +11,9 @@ type EventTypes = { data: t.NetworkMessageAlert };
  *    MessageChannelNetworkAdapter (point-to-point)
  *    https://github.com/automerge/automerge-repo/blob/main/packages/automerge-repo-network-messagechannel/src/index.ts
  *
+ *
+ *  copy of https://github.com/automerge/automerge-repo-network-peerjs
+ *  with small changes
  */
 export class PeerjsNetworkAdapter
     extends EventEmitter<t.NetworkAdapterEvents>
@@ -36,6 +40,10 @@ export class PeerjsNetworkAdapter
         this.#conn = conn;
     }
 
+    getPeerId(): string {
+        return (this.#conn as DataConnection).peer;
+    }
+
     isReady() {
         return this.#ready;
     }
@@ -43,6 +51,7 @@ export class PeerjsNetworkAdapter
     whenReady() {
         return this.#readyPromise;
     }
+
 
     connect(peerId: t.PeerId, meta?: t.PeerMetadata) {
         const senderId = (this.peerId = peerId);
