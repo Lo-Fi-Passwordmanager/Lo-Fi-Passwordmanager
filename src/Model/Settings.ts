@@ -1,7 +1,7 @@
 import Peer, {type DataConnection} from "peerjs";
 import {useEffect, useState} from "react";
 
-import {PeerjsNetworkAdapter} from "../customNetworkAdapter/PeerJsNetworkAdapter.ts";
+import {PeerjsNetworkAdapter} from "../../customNetworkAdapter/PeerJsNetworkAdapter.ts";
 import {
     loadDarkModeSetting,
     loadP2PSetting,
@@ -32,6 +32,7 @@ export function useSettings() {
             // When notify() is called, we update state to trigger a re-render
             //The code below moves the settings object to a new address in memory, forcing react to rerender it
             //FIXME somehow this should just be able to rerender by increasing a counter or smth but I couldnt do it ~Jesko
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             setSettings(Object.assign(Object.create(Object.getPrototypeOf(Settings.getSettings())), Settings.getSettings()));
 
         });
@@ -79,7 +80,7 @@ export class Settings {
 
         //When someone is connecting to this peer, establish the direction in the other way
         this.peer.on('connection', incomingConn => {
-            incomingConn.on('open', async () => {
+            incomingConn.on('open',  () => {
                 this.setupConnection(incomingConn);
             })
         })
@@ -218,12 +219,12 @@ export class Settings {
      * Removes the Connection to the peer with the given id
      * @param id the id of the other peer
      */
-    public removeConnector(id: string) {
+    public async removeConnector(id: string) {
         const entry = this.connectorsToAdapters.get(id);
         if (!entry) return;
 
         const [conn, adapter] = entry;
-        conn.send({type: "disconnect"});
+        await conn.send({type: "disconnect"});
         // IMPORTANT: notify BEFORE close so Repo removes adapter cleanly
         this.connectorsToAdapters.delete(id);
         this.notify();
@@ -254,8 +255,12 @@ export class Settings {
         this.connectorsToAdapters.set(conn.peer, [conn, adapter]);
         this.notify();
 
-        conn.on("data", (msg: any) => {
-            if (msg?.type === "disconnect") {
+        conn.on("data", (data: unknown) => {
+            if (data &&
+                typeof data === "object" &&
+                "type" in data &&
+                (data as { type: string }).type === "disconnect"
+            ) {
                 this.cleanupConnection(conn.peer);
             }
         });

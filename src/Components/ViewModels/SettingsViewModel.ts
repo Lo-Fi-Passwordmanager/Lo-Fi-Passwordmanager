@@ -2,7 +2,7 @@
 import type {DataConnection} from "peerjs";
 import {useEffect, useState} from "react";
 
-import type {PeerjsNetworkAdapter} from "../../customNetworkAdapter/PeerJsNetworkAdapter.ts";
+import type {PeerjsNetworkAdapter} from "../../../customNetworkAdapter/PeerJsNetworkAdapter.ts";
 import {Settings, useSettings} from "../../Model/Settings";
 
 /**

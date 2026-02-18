@@ -1,5 +1,4 @@
 import { EventEmitter } from "eventemitter3";
-import type {DataConnection} from "peerjs";
 
 import type * as t from "./types.ts";
 

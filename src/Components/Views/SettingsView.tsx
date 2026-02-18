@@ -320,8 +320,7 @@ const SettingsView: React.FC<{
                                      style={{fontSize: "0.8em", opacity: 0.7, marginTop: "20px"}}>
                                 <p>Copyright © {new Date().getFullYear()}</p>
                                 <p style={{maxWidth: "500px"}}>
-                                    Die Software wird "wie besehen" bereitgestellt, ohne jegliche ausdrückliche oder
-                                    implizierte Gewährleistung.
+                                    Die Software wird &quot;wie besehen&quot; bereitgestellt, ohne jegliche ausdrückliche oder
                                 </p>
                             </section>
                         </div>
