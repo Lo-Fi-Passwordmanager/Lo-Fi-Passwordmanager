@@ -38,6 +38,8 @@ export const useListViewModel = (
     // reset the state if a folder was just created
     useEffect(() => {
         if (createdFolderID === topItem.id) {
+            //FIXME
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setItemTitle(topItem.title);
         }
     }, [createdFolderID, topItem.id, topItem.title]);
@@ -102,7 +104,8 @@ export const useListViewModel = (
      * Gets all descendant IDs of the current item if it is a folder
      */
     const descendantIds = useMemo(() => {
-        return isItemFolder() ? getDescendantIds(topItem) : [];
+        if (!topItem.isFolder()) return [];
+        return getDescendantIds(topItem);
     }, [topItem]);
 
     /**

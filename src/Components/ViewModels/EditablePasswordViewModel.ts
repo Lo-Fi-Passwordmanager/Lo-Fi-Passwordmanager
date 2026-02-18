@@ -69,6 +69,7 @@ export const useEditablePasswordViewModel = (
     function cancelSaving() {
         if (inCreation) {
             setInCreation(false);
+            // eslint-disable-next-line react-hooks/immutability
             item.deleted = true; //FIXME: meckert rum aber eigentlich klappt es
         }
         setEditableView();

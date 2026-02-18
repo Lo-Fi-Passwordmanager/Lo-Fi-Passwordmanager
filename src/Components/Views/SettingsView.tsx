@@ -217,7 +217,7 @@ const SettingsView: React.FC<{
 
                                                     <button
                                                         className="squareButton"
-                                                        onClick={() => viewModel.removePeer(id)}>
+                                                        onClick={() => void viewModel.removePeer(id)}>
                                                         <HiTrash size={24}/>
                                                     </button>
                                                 </div>
