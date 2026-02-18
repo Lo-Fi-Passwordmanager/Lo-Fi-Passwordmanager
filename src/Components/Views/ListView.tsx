@@ -209,7 +209,7 @@ const ListView: React.FC<{
                 </div>
             </>
         );
-    }
+    }}
 ;
 
 export default ListView;

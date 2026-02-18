@@ -41,9 +41,6 @@ const FilteredListView: React.FC<{
                         onClick={() => setCurItem(item as Entry)}
                     >
                         <span style={{marginLeft: "5px"}} /> <span>{item.title}</span>
-                        <div className={"btnWrapper"}>
-                            <button onClick={() => deleteItem(item)}>🗑️</button>
-                        </div>
                     </div>
                 })}
             </div>
@@ -60,9 +57,6 @@ const FilteredListView: React.FC<{
                         onClick={() => goToFolder(item as Folder)}
                     >
                         <span style={{marginLeft: "5px"}} /> <span>{item.title}</span>
-                        <div className={"btnWrapper"}>
-                            <button onClick={() => deleteItem(item)}>🗑️</button>
-                        </div>
                     </div>
                 })}
             </div>
