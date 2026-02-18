@@ -3,7 +3,6 @@ import React from "react";
 import {saveFile} from "../../../Utility/InputOutputUtil.ts";
 import {HistoryDialog} from "./HistoryDialog.tsx";
 import ShareQRDialog from "./ShareQRDialog.tsx";
-import {useLoginViewModel} from "../../ViewModels/loginViewModel.ts";
 import {removeDatabase} from "../../../Utility/Storage.ts";
 
 /**
