@@ -63,7 +63,6 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                         {viewModel.searchValue.length > 0 && <FilteredListView
                             root={viewModel.getRootFolder()}
                             setCurItem={viewModel.setCurItem}
-                            deleteItem={viewModel.deleteItem}
                             filterText={viewModel.searchValue}
                             goToFolder={viewModel.goToItem}
                             getSortedChildren={viewModel.getSortedChildren}

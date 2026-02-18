@@ -11,7 +11,6 @@ import {Folder} from "../../Model/Folder.ts";
  * @param setCurItem the Method that selects an entry to be shown in the {@link EntryView}
  * @param goToFolder the method to navigate to a specific folder
  * @param deleteItem the method to delete a specific item
- * @param sortCriterion the current sort criterion
  * @param filterText the text to filter the items by
  * @param getSortedChildren function to get sorted children of a folder
  */
@@ -19,10 +18,9 @@ const FilteredListView: React.FC<{
     root: Item,
     setCurItem: (entry: Entry) => void,
     goToFolder: (folder: Folder) => void,
-    deleteItem: (item: Item) => void,
     filterText: string
     getSortedChildren: (folder: Folder) => Item[],
-}> = ({root, setCurItem, goToFolder,deleteItem, filterText, getSortedChildren}) => {
+}> = ({root, setCurItem, goToFolder, filterText, getSortedChildren}) => {
 
     const viewModel = useFilteredListViewModel(root as Folder, filterText, getSortedChildren);
 
@@ -42,9 +40,6 @@ const FilteredListView: React.FC<{
                         onClick={() => setCurItem(item as Entry)}
                     >
                         <span style={{marginLeft: "5px"}}></span> <span>{item.title}</span>
-                        <div className={"btnWrapper"}>
-                            <button onClick={() => deleteItem(item)}>🗑️</button>
-                        </div>
                     </div>
                 })}
             </div>
@@ -61,9 +56,6 @@ const FilteredListView: React.FC<{
                         onClick={() => goToFolder(item as Folder)}
                     >
                         <span style={{marginLeft: "5px"}}></span> <span>{item.title}</span>
-                        <div className={"btnWrapper"}>
-                            <button onClick={() => deleteItem(item)}>🗑️</button>
-                        </div>
                     </div>
                 })}
             </div>
