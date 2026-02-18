@@ -55,7 +55,7 @@ export const usePasswordManagerViewModel = () => {
         }
         console.log(repo.networkSubsystem.adapters);
 
-    }, [settings.getSynchronization(), settings.getP2P()]);
+    }, [settings.getSynchronization(), settings.getP2P(), settings.getP2PAdapter()]);
 
     function getAutomergeFacade(): AutomergeFacade | null {
         return automergeFacade;
