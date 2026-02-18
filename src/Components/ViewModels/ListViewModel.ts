@@ -1,5 +1,5 @@
 import {useDndContext, useDraggable, useDroppable} from "@dnd-kit/core";
-import {useEffect, useState, useMemo} from "react";
+import {useEffect, useMemo, useState} from "react";
 
 import type {Entry} from "../../Model/Entry.ts";
 import type {Folder} from "../../Model/Folder.ts";
@@ -28,7 +28,7 @@ export const useListViewModel = (
     createdFolderID: string | null,
     expandFolderId: (folderId: string) => void,
     collapseFolderId: (folderId: string) => void,
-    isFolderExpanded: (folderId: string) => boolean,
+    isFolderExpanded: (folderId: string) => boolean
 ) => {
 
     const [inEditName, setInEditName] = useState(false);
@@ -37,7 +37,7 @@ export const useListViewModel = (
 
     // reset the state if a folder was just created
     useEffect(() => {
-        if(createdFolderID === topItem.id) {
+        if (createdFolderID === topItem.id) {
             setItemTitle(topItem.title);
         }
     }, [createdFolderID, topItem.id, topItem.title]);
@@ -96,7 +96,7 @@ export const useListViewModel = (
             return [];
         }
         return (item as Folder).entries.flatMap((child) => [child.id, ...getDescendantIds(child)]);
-    }
+    };
 
     /**
      * Gets all descendant IDs of the current item if it is a folder
@@ -124,8 +124,10 @@ export const useListViewModel = (
         isDragging
     } = useDraggable({
         id: topItem.id,
-        data: {type: isItemFolder() ? 'folder' : 'entry',
-            descendantIds: descendantIds}
+        data: {
+            type: isItemFolder() ? "folder" : "entry",
+            descendantIds: descendantIds
+        }
     });
 
     const {
@@ -162,6 +164,6 @@ export const useListViewModel = (
         toggleExpanded,
         setFolderRef,
         setDraggableRef,
-        expandFolder,
+        expandFolder
     };
 };

@@ -29,7 +29,7 @@ export const usePasswordManagerViewModel = () => {
 
     const [repo] = useState(new Repo({
         network: [new BroadcastChannelNetworkAdapter()],
-        storage: new IndexedDBStorageAdapter(),
+        storage: new IndexedDBStorageAdapter()
     }));
 
     //Whenever something about the synchronisation happens, the old adapters get removed and new ones get added.
@@ -40,7 +40,7 @@ export const usePasswordManagerViewModel = () => {
         for (const adapter of repo.networkSubsystem.adapters) {
             if (!settings.getSynchronization() && adapter instanceof WebSocketClientAdapter) {
                 removeArray.push(adapter);
-            }else if (!settings.getP2P() && adapter instanceof PeerjsNetworkAdapter) {
+            } else if (!settings.getP2P() && adapter instanceof PeerjsNetworkAdapter) {
                 removeArray.push(adapter);
             } else if (adapter instanceof PeerjsNetworkAdapter && !settings.getConnectorsToAdapters().has(adapter.getPeerId())) {
                 removeArray.push(adapter);
@@ -61,8 +61,6 @@ export const usePasswordManagerViewModel = () => {
                 repo.networkSubsystem.addNetworkAdapter(adapter[1]);
             }
         }
-
-        console.log(repo.networkSubsystem.adapters);
 
     }, [settings.getSynchronization(), settings.getP2P(), settings.getConnectorsToAdapters().size]);
 
@@ -85,13 +83,13 @@ export const usePasswordManagerViewModel = () => {
             setToastMessage("Der Nutzer wurde auf Grund von Inaktivität automatisch abgemeldet.");
             setToastVisible(true);
         }
-    }
+    };
 
     const onActive = () => {
         if (toastVisible) {
             setToastVisible(false);
         }
-    }
+    };
 
     function getSync(): string | null {
         return settings.getSynchronization() ? "server" : (settings.getP2P() ? "p2p" : null);
@@ -101,12 +99,12 @@ export const usePasswordManagerViewModel = () => {
         return settings.getActiveServerName();
     }
 
-    const idleTimer = useIdleTimer({timeout, onIdle, onActive, debounce: 100})
+    const idleTimer = useIdleTimer({timeout, onIdle, onActive, debounce: 100});
 
 
     useEffect(() => {
         if (loggedIn) {
-            idleTimer.reset()
+            idleTimer.reset();
         }
     }, [timeout]);
 
