@@ -17,8 +17,9 @@ import {HiTrash} from "react-icons/hi";
  */
 const SettingsView: React.FC<{
     automergeFacade?: AutomergeFacade | null,
-    openedDbName?: string
-}> = ({automergeFacade, openedDbName}) => {
+    openedDbName?: string,
+    closeDatabase?: () => void,
+}> = ({automergeFacade, openedDbName, closeDatabase}) => {
     const viewModel = useSettingsViewModel();
 
     if (!viewModel.settingsOpen) {
@@ -233,7 +234,8 @@ const SettingsView: React.FC<{
                             <h3>Datenbankeinstellungen</h3>
                             {automergeFacade ? (
                                 <DatabaseSettingsView automergeFacade={automergeFacade}
-                                                      openedDatabaseName={openedDbName}/>
+                                                      openedDatabaseName={openedDbName}
+                                                    closeDatabase={closeDatabase!}/>
                             ) : (
                                 <p>Bitte Datenbank auswählen.</p>
                             )}

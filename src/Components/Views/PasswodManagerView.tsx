@@ -44,7 +44,9 @@ const PasswordManagerView: React.FC = () => {
                         <img src={PWMLogo} className="logo header" alt="Passwortmanager Logo"/>
                         <h2>LoFi Passwortmanager</h2>
                         <SettingsView automergeFacade={viewModel.getAutomergeFacade()}
-                                      openedDbName={viewModel.openedDatabaseName}/>
+                                      openedDbName={viewModel.openedDatabaseName}
+                                      closeDatabase={() => viewModel.closeLoggedIn()}
+                        />
                     </div>
 
                     <PasswordView automergeFacade={viewModel.getAutomergeFacade()}
