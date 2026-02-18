@@ -81,10 +81,7 @@ export class Settings {
         //When someone is connecting to this peer, establish the direction in the other way
         this.peer.on('connection', incomingConn => {
             incomingConn.on('open', async () => {
-                this.p2pAdapter = new PeerjsNetworkAdapter(incomingConn);
-                this.connector = incomingConn;
-                this.connectorsToAdapters.set(incomingConn.peer ,[incomingConn, this.p2pAdapter])
-                this.notify();
+                this.setupConnection(incomingConn);
             })
         })
 
@@ -207,14 +204,10 @@ export class Settings {
      */
     public addConnector(id: string) {
 
-        const tempCon = this.peer.connect(id);
-        this.connector = tempCon;
+        const conn = this.peer.connect(id);
 
-        this.connector.on("open", async () => {
-            this.p2pAdapter = new PeerjsNetworkAdapter(tempCon);
-            this.connectorsToAdapters.set(id, [tempCon, this.p2pAdapter])
-            this.notify();
-            console.log("Connected with id: " + id);
+        conn.on("open", () => {
+            this.setupConnection(conn);
         });
     }
 
@@ -223,19 +216,17 @@ export class Settings {
      * @param id the id of the other peer
      */
     public removeConnector(id: string) {
-        let tempRemoveCon = null;
-        for (const connector of this.connectorsToAdapters.keys()) {
-            if (connector === id) {
-                tempRemoveCon = connector;
-            }
-        }
+        const entry = this.connectorsToAdapters.get(id);
+        if (!entry) return;
 
-        if (tempRemoveCon != null) {
-            this.connectorsToAdapters.get(tempRemoveCon)![1].disconnect();
-            this.connectorsToAdapters.get(tempRemoveCon)![0].close();
-            this.connectorsToAdapters.delete(tempRemoveCon);
-        }
+        const [conn, adapter] = entry;
+        conn.send({ type: "disconnect" });
+        // IMPORTANT: notify BEFORE close so Repo removes adapter cleanly
+        this.connectorsToAdapters.delete(id);
         this.notify();
+
+        adapter.disconnect();
+        conn.close();
     }
 
     public getConnectorsToAdapters(): Map<string, [DataConnection, PeerjsNetworkAdapter]> {
@@ -248,5 +239,44 @@ export class Settings {
 
     private notify() {
         this.listeners.forEach(l => l());
+    }
+
+    private setupConnection(conn: DataConnection) {
+        const adapter = new PeerjsNetworkAdapter(conn);
+
+        this.connectorsToAdapters.set(conn.peer, [conn, adapter]);
+        this.notify();
+
+        conn.on("data", (msg: any) => {
+            if (msg?.type === "disconnect") {
+                this.cleanupConnection(conn.peer);
+            }
+        });
+
+        conn.on("close", () => {
+            this.cleanupConnection(conn.peer);
+        });
+    }
+
+    private cleanupConnection(peerId: string) {
+        const entry = this.connectorsToAdapters.get(peerId);
+        if (!entry) return;
+
+        const [conn, adapter] = entry;
+
+        this.connectorsToAdapters.delete(peerId);
+        this.notify();
+
+        try {
+            adapter.disconnect();
+        } catch {
+            console.error("unable to disconnect")
+        }
+
+        try {
+            conn.close();
+        } catch {
+            console.error("unable to close")
+        }
     }
 }

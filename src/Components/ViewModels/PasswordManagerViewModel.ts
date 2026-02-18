@@ -47,8 +47,10 @@ export const usePasswordManagerViewModel = () => {
             repo.networkSubsystem.removeNetworkAdapter(adapter);
         }
 
-        if (settings.getSynchronization()) {
-            repo.networkSubsystem.addNetworkAdapter(new WebSocketClientAdapter(settings.getServerUrl()));
+        if (settings.getSynchronization() && !repo.networkSubsystem.adapters.some(a => a instanceof WebSocketClientAdapter)) {
+            repo.networkSubsystem.addNetworkAdapter(
+                new WebSocketClientAdapter(settings.getServerUrl())
+            );
         }
 
         for (const adapter of settings.getConnectorsToAdapters().values()) {
