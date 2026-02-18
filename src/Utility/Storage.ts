@@ -274,7 +274,7 @@ export function loadP2PSetting(): boolean {
     if (p2p != null) {
         return JSON.parse(p2p);
     } else {
-        localStorage.setItem("p2p", JSON.stringify("true"))
+        localStorage.setItem("p2p", JSON.stringify(true))
         return true;
     }
 }
