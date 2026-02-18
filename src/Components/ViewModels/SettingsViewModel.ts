@@ -138,8 +138,8 @@ export const useSettingsViewModel = () => {
         settings.setP2PActive(!P2P);
     }
 
-    function removePeer(id: string) {
-        settings.removeConnector(id);
+    async function removePeer(id: string) {
+        await settings.removeConnector(id);
     }
 
 

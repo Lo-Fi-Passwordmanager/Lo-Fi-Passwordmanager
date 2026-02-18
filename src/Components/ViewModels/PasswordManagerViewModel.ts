@@ -103,10 +103,8 @@ export const usePasswordManagerViewModel = () => {
 
 
     useEffect(() => {
-        if (loggedIn) {
-            idleTimer.reset();
-        }
-    }, [timeout]);
+        idleTimer.reset();
+    }, [idleTimer, timeout]);
 
     return {
         repo,
