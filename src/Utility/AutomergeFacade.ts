@@ -86,6 +86,9 @@ export class AutomergeFacade {
         return this._securityProvider;
     }
 
+    /**
+     * Returns the history of the automergedoc. This is async and the promise is fullfiled once the whole history is stored.
+     */
     async getHistory(): Promise<HistoryEntry[] | null> {
         if (this._automergeURL === null) {
             return null;
