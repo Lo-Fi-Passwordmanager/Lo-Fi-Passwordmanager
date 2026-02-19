@@ -43,8 +43,6 @@ test-report:
 
 
 test-build:
-  dependencies:
-    - tests
   stage: build
   rules:
     - if: $CI_COMMIT_TAG
@@ -61,7 +59,8 @@ test-build:
 build:
   stage: build
   dependencies:
-    - tests
+    - unitTest
+    - integrationTest
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH == 'main'
