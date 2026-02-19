@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import {expect, test} from "./global-teardown";
 
 test('to open the app correctly', async ({ page }) => {
     await page.goto('');
@@ -119,6 +119,7 @@ test("auto logout input field", async ({ page }) => {
     await page.getByRole('spinbutton').press('Enter');
     await expect(page.getByRole('spinbutton')).toHaveValue('100');
 });
+
 test("add server field", async ({ page }) => {
     await page.goto('');
     await page.getByRole('button', {name: 'Einstellungen öffnen'}).click();
