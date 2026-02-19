@@ -1,6 +1,6 @@
 import {expect, test} from "@playwright/test";
 
-test('test', async ({ page }) => {
+test('Creating a new Entry', async ({ page }) => {
     await page.goto('');
     await page.getByRole('button', { name: 'Neue Datenbank erstellen' }).click();
     await page.getByRole('textbox', { name: 'Datenbankname' }).fill('Name');
