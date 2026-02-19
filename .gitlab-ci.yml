@@ -11,6 +11,10 @@ stages:
 
 lint:
   stage: lint
+  rules:
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH != 'main'
+    - if: $CI_COMMIT_BRANCH == 'main'
   script:
     - yarn eslint
 
@@ -25,6 +29,10 @@ unitTest:
 
 integrationTest:
   stage: integrationTest
+  rules:
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH != 'main'
+    - if: $CI_COMMIT_BRANCH == 'main'
   script: yarn test .\integrationTests
 
 # Uploads the test report to the server
