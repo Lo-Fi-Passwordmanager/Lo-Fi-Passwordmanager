@@ -44,6 +44,9 @@ export const useHistoryItemViewModel = (historyEntry: HistoryEntry, securityProv
     const itemIsFolder = isFolder(historyEntry.item);
 
     function decrypt(value: string) {
+        if (value === undefined || value === "") {
+            return "";
+        }
         return securityProvider.decryptValue(value);
     }
 
