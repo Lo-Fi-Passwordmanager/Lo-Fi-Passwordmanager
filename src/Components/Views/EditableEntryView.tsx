@@ -1,10 +1,11 @@
 import React from "react";
-import {type Item} from "../../Model/Item.ts";
+
+import EyeButton from "./ButtonViews/EyeButton.tsx";
+import PasswordGenDialog from "./DialogViews/PasswordGenDialog.tsx";
 import Logo from "../../assets/logo_gelb.svg?inline";
+import {type Item} from "../../Model/Item.ts";
 import type {Attribute} from "../../Utility/AutomergeFacade.ts";
 import {useEditablePasswordViewModel} from "../ViewModels/EditablePasswordViewModel.ts";
-import PasswordGenDialog from "./DialogViews/PasswordGenDialog.tsx";
-import EyeButton from "./ButtonViews/EyeButton.tsx";
 
 
 /**
@@ -67,7 +68,6 @@ const EditableEntryView: React.FC<{
                                     setNewPassword={(password: string) => viewmodel.setPassword(password)}/>
                             </div>
                             <div className={"entryViewAttribute"}>
-                                {/* adds https://www. to the start of the link*/}
                                 <span style={{gridColumn: "span 20"}}>URL:</span>
                                 <input className={"attribute-value editing"} type={"text"} value={viewmodel.url}
                                        onChange={(e) => viewmodel.setUrl(e.target.value)}/>

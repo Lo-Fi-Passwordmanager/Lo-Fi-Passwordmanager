@@ -1,9 +1,10 @@
 import React from "react";
-import type {HistoryEntry} from "../../../Model/Automerge/HistoryEntry.ts";
-import {useHistoryItemViewModel} from "../../ViewModels/Dialog/HistoryItemViewModel.ts";
-import type {SecurityProvider} from "../../../Utility/Security/SecurityProvider.ts";
 import {HiEye} from "react-icons/hi";
 import {HiEyeSlash} from "react-icons/hi2";
+
+import type {HistoryEntry} from "../../../Model/Automerge/HistoryEntry.ts";
+import type {SecurityProvider} from "../../../Utility/Security/SecurityProvider.ts";
+import {useHistoryItemViewModel} from "../../ViewModels/Dialog/HistoryItemViewModel.ts";
 
 /**
  * A component that represents a single history item in the history dialog.
@@ -25,7 +26,7 @@ export const HistoryItem: React.FC<{
         <div className={`timeline-item ${viewmodel.currentConfig.class}`}>
             <div className="timeline-marker">
                 <span className="marker-icon">{viewmodel.currentConfig.icon}</span>
-                <div className="marker-line"></div>
+                <div className="marker-line" />
             </div>
 
             <div className="timeline-content">

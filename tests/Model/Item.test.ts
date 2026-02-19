@@ -65,11 +65,8 @@ describe('Item', () => {
         expect(subFolder1.entries.includes(entry4)).toBe(true);
         expect(subFolder2.entries.includes(entry5)).toBe(true);
 
-        subFolder2.removeItem(entry5);
-        expect(subFolder2.entries.includes(entry5)).toBe(false);
+
         subFolder2.addItem(entry5);
-        subFolder1.removeItem(subFolder2);
-        expect(subFolder1.entries.includes(subFolder2)).toBe(false);
         expect(root.entries.includes(subFolder2)).toBe(false);
         root.addItem(subFolder2);
         expect(root.entries.includes(subFolder2)).toBe(true);

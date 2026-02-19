@@ -1,7 +1,6 @@
+import type {Entry} from "../../Model/Entry.ts";
 import {Folder} from "../../Model/Folder.ts";
-import {Entry} from "../../Model/Entry.ts";
 import type {Item} from "../../Model/Item.ts";
-
 /**
  * ViewModel for filtering and sorting entries and folders in a list view.
  *

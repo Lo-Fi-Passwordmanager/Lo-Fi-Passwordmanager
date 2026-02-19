@@ -1,12 +1,13 @@
-import React, {Suspense} from "react";
-import {usePasswordManagerViewModel} from "../ViewModels/PasswordManagerViewModel.ts";
-import LoginView from "./LoginView.tsx";
-import SettingsView from "./SettingsView.tsx";
-import PasswordView from "./PasswordView.tsx";
 import {RepoContext} from "@automerge/react";
+import React, {Suspense} from "react";
+
 import LoadingScreen from "./DialogViews/LoadingScreen.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
+import LoginView from "./LoginView.tsx";
+import PasswordView from "./PasswordView.tsx";
+import SettingsView from "./SettingsView.tsx";
 import PWMLogo from "../../assets/logo_gelb.svg?inline";
+import {usePasswordManagerViewModel} from "../ViewModels/PasswordManagerViewModel.ts";
 
 /**
  * The main view of the password manager application. It handles the login state and displays either the login view or the password view.
@@ -15,11 +16,6 @@ const PasswordManagerView: React.FC = () => {
 
     const viewModel = usePasswordManagerViewModel();
 
-    // Fügt das Repo als zu global hinzu, sodass man im Browser einfach auf das Repo zugreifen kann, zum debuggen.
-    // Nur während 'yarn dev' verfügbar, nach dem build nicht mehr
-    if (import.meta.env.DEV) {
-        window.repo = viewModel.repo;
-    }
 
     if (!viewModel.loggedIn) {
         return (
@@ -31,8 +27,7 @@ const PasswordManagerView: React.FC = () => {
                            setOpenedDbName={viewModel.setOpenedDatabaseName}/>
                 <ToastDialog message={viewModel.toastMessage}
                              isVisible={viewModel.toastVisible}
-                             onClose={() => viewModel}>
-                </ToastDialog>
+                             onClose={() => viewModel} />
             </RepoContext.Provider>
 
         );
@@ -44,7 +39,9 @@ const PasswordManagerView: React.FC = () => {
                         <img src={PWMLogo} className="logo header" alt="Passwortmanager Logo"/>
                         <h2>LoFi Passwortmanager</h2>
                         <SettingsView automergeFacade={viewModel.getAutomergeFacade()}
-                                      openedDbName={viewModel.openedDatabaseName}/>
+                                      openedDbName={viewModel.openedDatabaseName}
+                                      closeDatabase={() => viewModel.closeLoggedIn()}
+                        />
                     </div>
 
                     <PasswordView automergeFacade={viewModel.getAutomergeFacade()}

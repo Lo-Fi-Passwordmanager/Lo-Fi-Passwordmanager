@@ -21,5 +21,20 @@ describe('PasswordGenerator', () => {
         for (const s in letters){
             expect(concatChars.includes(s));
         }
+    });
+
+    it('should not check for character set when the password is too short', () => {
+        const password = generatePassword(3, characters);
+        expect(password.length).toBe(3);
+    });
+
+    //short password since it will have to nearly always do multiple loops until it includes all sets
+    it('should always contain all selected character sets', ()=> {
+        const password = generatePassword(4, characters);
+        expect(password.length).toBe(4);
+        const letters = password.split("")
+        for (const s in letters){
+            expect(concatChars.includes(s));
+        }
     })
 })

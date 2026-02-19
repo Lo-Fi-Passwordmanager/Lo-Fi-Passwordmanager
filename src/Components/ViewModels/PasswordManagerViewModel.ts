@@ -6,18 +6,18 @@ import {
     WebSocketClientAdapter
 } from "@automerge/react";
 import {useEffect, useState} from "react";
-import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
-import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import {useIdleTimer} from "react-idle-timer";
+
+import {PeerjsNetworkAdapter} from "../../../customNetworkAdapter/PeerJsNetworkAdapter.ts";
 import {Settings, useSettings} from "../../Model/Settings.ts";
-import {PeerjsNetworkAdapter} from "automerge-repo-network-peerjs";
+import type {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 
 /**
  * The view model used by the PasswordManagerView. Manages the state and logic for the password manager.
  */
 export const usePasswordManagerViewModel = () => {
     const settings = useSettings();
-    const [connector] = useState(settings.getConnector());
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
     const [automergeFacade, setAutomergeFacade] = useState<AutomergeFacade | null>(null);
     const [securityProvider] = useState(() => new SecurityProvider());
@@ -26,43 +26,58 @@ export const usePasswordManagerViewModel = () => {
     const [toastVisible, setToastVisible] = useState(false);
     const [openedDatabaseName, setOpenedDatabaseName] = useState<string>("");
 
-    const [peerJsAdapter, setPeerJsAdapter] = useState<PeerjsNetworkAdapter>(new PeerjsNetworkAdapter(connector));
 
-    const initialNetworkAdapters = [
-        new BroadcastChannelNetworkAdapter(),
-        new WebSocketClientAdapter(settings.getServerUrl()),
-    ];
+    const [repo] = useState(new Repo({
+        network: [new BroadcastChannelNetworkAdapter()],
+        storage: new IndexedDBStorageAdapter()
+    }));
 
-    const initialP2PNetworkAdapter = [
-        new BroadcastChannelNetworkAdapter(),
-        peerJsAdapter,
-    ]
-
-    const [networkAdapters, setNetworkAdapters] = useState<NetworkAdapterInterface[] | undefined>(settings.getSynchronization() ? initialNetworkAdapters : (settings.getP2P() ? initialP2PNetworkAdapter : undefined));
-
+    const syncEnabled = settings.getSynchronization();
+    const p2pEnabled = settings.getP2P();
+    const connectorsSize = settings.getConnectorsToAdapters().size;
+    const connectorAdapter = settings.getConnectorsToAdapters();
+    const serverUrl = settings.getServerUrl();
+    //Whenever something about the synchronisation happens, the old adapters get removed and new ones get added.
+    //This enables the repo the be kept as state while still changing the adapters
     useEffect(() => {
-        setPeerJsAdapter(new PeerjsNetworkAdapter(settings.getConnector()));
-        if (settings.getP2P()) {
-            setNetworkAdapters(initialP2PNetworkAdapter);
-        } else if (settings.getSynchronization()) {
-            // Does not cause cascading renders (apparently) => ignore error
-            setNetworkAdapters(initialNetworkAdapters);
-        } else {
-            setNetworkAdapters(undefined);
+        const removeArray: NetworkAdapterInterface[] = [];
+
+        for (const adapter of repo.networkSubsystem.adapters) {
+            if (!syncEnabled && adapter instanceof WebSocketClientAdapter) {
+                removeArray.push(adapter);
+            } else if (!p2pEnabled && adapter instanceof PeerjsNetworkAdapter) {
+                removeArray.push(adapter);
+            } else if (adapter instanceof PeerjsNetworkAdapter && !connectorAdapter.has(adapter.getPeerId())) {
+                removeArray.push(adapter);
+            }
         }
-    }, [settings]);
+        for (const adapter of removeArray) {
+            repo.networkSubsystem.removeNetworkAdapter(adapter);
+        }
 
+        if (syncEnabled && !repo.networkSubsystem.adapters.some(a => a instanceof WebSocketClientAdapter)) {
+            repo.networkSubsystem.addNetworkAdapter(
+                new WebSocketClientAdapter(serverUrl)
+            );
+        }
 
-    const repo = new Repo({
-        network: networkAdapters,
-        storage:
-            new IndexedDBStorageAdapter()
-    });
+        for (const adapter of connectorAdapter.values()) {
+            if (!repo.networkSubsystem.adapters.includes(adapter[1])) {
+                repo.networkSubsystem.addNetworkAdapter(adapter[1]);
+            }
+        }
+
+        console.log(repo.networkSubsystem.adapters);
+
+    }, [syncEnabled, p2pEnabled, connectorsSize, connectorAdapter, repo.networkSubsystem, serverUrl]);
 
     function getAutomergeFacade(): AutomergeFacade | null {
         return automergeFacade;
     }
 
+    /**
+     * This closes the Passwordview and loggs out the user
+     */
     function closeLoggedIn(): void {
         setLoggedIn(false);
         setAutomergeFacade(null);
@@ -75,29 +90,28 @@ export const usePasswordManagerViewModel = () => {
             setToastMessage("Der Nutzer wurde auf Grund von Inaktivität automatisch abgemeldet.");
             setToastVisible(true);
         }
-    }
+    };
 
     const onActive = () => {
         if (toastVisible) {
             setToastVisible(false);
         }
-    }
+    };
 
     function getSync(): string | null {
         return settings.getSynchronization() ? "server" : (settings.getP2P() ? "p2p" : null);
     }
 
     function getServerName(): string {
-        return settings.getServerName();
+        return settings.getActiveServerName();
     }
 
-    const idleTimer = useIdleTimer({timeout, onIdle, onActive, debounce: 100})
+    const idleTimer = useIdleTimer({timeout, onIdle, onActive, debounce: 100});
+
 
     useEffect(() => {
-        if (loggedIn) {
-            idleTimer.reset()
-        }
-    }, [timeout]);
+        idleTimer.reset();
+    }, [idleTimer, timeout]);
 
     return {
         repo,

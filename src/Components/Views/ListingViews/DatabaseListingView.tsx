@@ -1,11 +1,12 @@
 import type {AutomergeUrl} from "@automerge/automerge-repo";
 import React from "react";
-import ToastDialog from "../DialogViews/ToastDialog.tsx";
+import {HiTrash} from "react-icons/hi";
+import {HiMiniLink} from "react-icons/hi2";
+
 import DatabaseListingViewModel from "../../ViewModels/Listing/DatabaseListingViewModel.ts";
 import RenameDatabaseDialog from "../DialogViews/RenameDatabaseDialog.tsx";
-import {HiMiniLink} from "react-icons/hi2";
-import {HiTrash} from "react-icons/hi";
 import ShareQRDialog from "../DialogViews/ShareQRDialog.tsx";
+import ToastDialog from "../DialogViews/ToastDialog.tsx";
 
 /**
  * View showing a listing of available databases with options to open, share, rename or delete them.
@@ -43,7 +44,7 @@ const DatabaseListingView: React.FC<{
                         </button>
                         <button
                             className={"squareButton"}
-                            onClick={() => viewModel.copyToClipboard(url)}
+                            onClick={() => void viewModel.copyToClipboard(url)}
                             title="URL kopieren">
                             <HiMiniLink size={24}/>
                         </button>

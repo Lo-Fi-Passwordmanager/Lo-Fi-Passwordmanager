@@ -1,6 +1,7 @@
 import React from 'react';
-import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
 import {HiMiniPlus} from "react-icons/hi2";
+
+import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
 
 /**
  * The View that contains the search bar, sorting options and buttons to close the database and add new items
@@ -38,7 +39,7 @@ const OrganizeListView: React.FC<{
       }) => {
 
     return (
-        <div className={"borderBox"} style={{borderLeft: "0", borderTop: "0"}}>
+        <div className={"organizeListView"}>
             {/*Container for every related to the search/Sort features plus log out button*/}
             <div className={"OrganizedListView"}>
                 {/*Giving each element a specific grid column to align them properly*/}

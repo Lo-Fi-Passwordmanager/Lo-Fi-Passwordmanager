@@ -1,6 +1,9 @@
-import {Settings} from "../../Model/Settings";
 
+import type {DataConnection} from "peerjs";
 import {useEffect, useState} from "react";
+
+import type {PeerjsNetworkAdapter} from "../../../customNetworkAdapter/PeerJsNetworkAdapter.ts";
+import {Settings, useSettings} from "../../Model/Settings";
 
 /**
  * The ViewModel that is used for interfacing the {@link Settings} singleton.
@@ -9,7 +12,7 @@ import {useEffect, useState} from "react";
 export const useSettingsViewModel = () => {
 
     const settings = Settings.getSettings();
-
+    const settingsHook = useSettings()
     // Reactive state to store values during runtime
     const [darkMode, setDarkMode] = useState(settings.getDarkMode());
     const [synchronisation, setSynchronisation] = useState(settings.getSynchronization());
@@ -17,11 +20,15 @@ export const useSettingsViewModel = () => {
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [timeoutLength, setTimeoutLength] = useState(settings.getTimeoutLength());
     const [activeTab, setActiveTab] = useState<"general" | "database" | "about">("general");
-    const [serverName, setServerName] = useState<string>(settings.getServerName());
+    const [serverName, setServerName] = useState<string>(settings.getActiveServerName());
     const [servers, setServers] = useState<Map<string, string>>(settings.getServers());
     const [serverNames, setServerNames] = useState<string[]>(Array.from(servers.keys()));
     const [addServerDialogOpen, setAddServerDialogOpen] = useState<boolean>(false);
     const [P2P, setP2P] = useState<boolean>(settings.getP2P());
+    const [showToast, setShowToast] = useState<boolean>(false);
+    const [toastMessage, setToastMessage] = useState<string>("");
+    const [remotePeerId, setRemotePeerId] = useState("");
+    const [otherPeerMap, setOtherPeerMap] = useState<Map<string, [DataConnection, PeerjsNetworkAdapter]>>(settings.getConnectorsToAdapters())
     document.getElementsByTagName("html")[0]?.setAttribute("data-theme", darkMode ? "dark" : "light");
 
     // When darkMode is updated, update settings
@@ -50,6 +57,19 @@ export const useSettingsViewModel = () => {
     }, [servers]);
 
 
+    const connectorsToAdaptersHook = settingsHook.getConnectorsToAdapters();
+    useEffect(() => {
+        setOtherPeerMap(connectorsToAdaptersHook)
+    }, [connectorsToAdaptersHook]);
+
+    const connectorHook = settingsHook.getConnector();
+    useEffect(() => {
+        if (connectorHook != null) {
+            setRemotePeerId(connectorHook.peer)
+        }
+    }, [connectorHook]);
+
+
     // Update darkMode
     function toggleDarkMode() {
         setDarkMode(!darkMode);
@@ -60,9 +80,7 @@ export const useSettingsViewModel = () => {
         setSynchronisation(!synchronisation);
     }
 
-    // Add a new server to the settings
-    function addServer(name: string, url: string) {
-        //TODO: Add validation for name and url
+    function addSyncServer(name: string, url: string) {
         settings.addServer(name, url);
     }
 
@@ -112,12 +130,16 @@ export const useSettingsViewModel = () => {
      * @param id the id to connect to
      */
     function setConnection(id: string) {
-        settings.setConnector(id);
+        settings.addConnector(id);
     }
 
     function toggleP2P() {
         setP2P(!P2P);
-        settings.setConnection(!P2P);
+        settings.setP2PActive(!P2P);
+    }
+
+    async function removePeer(id: string) {
+        await settings.removeConnector(id);
     }
 
 
@@ -132,6 +154,8 @@ export const useSettingsViewModel = () => {
         addServerDialogOpen,
         serverNames,
         P2P,
+        toastMessage,
+        showToast,
 
         setActiveTab,
         setConnection,
@@ -143,10 +167,18 @@ export const useSettingsViewModel = () => {
         increaseTimeout,
         decreaseTimeout,
         getPeerId,
-        addServer,
+        addSyncServer,
         removeServer,
         setAddServerDialogOpen,
         selectServer,
-        toggleP2P
+        toggleP2P,
+        setToastMessage,
+        setShowToast,
+        remotePeerId,
+        setRemotePeerId,
+        connectToPeer: () => Settings.getSettings().addConnector(remotePeerId),
+        otherPeerMap,
+        removePeer,
+
     };
 };

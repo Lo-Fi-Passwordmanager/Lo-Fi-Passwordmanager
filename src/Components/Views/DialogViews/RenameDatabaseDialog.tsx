@@ -1,7 +1,8 @@
 import React from "react";
-import {useRenameDatabaseViewModel} from "../../ViewModels/Dialog/RenameDatabaseViewModel.ts";
 import {HiPencil} from "react-icons/hi";
+
 import Dialog from "./Dialog.tsx";
+import {useRenameDatabaseViewModel} from "../../ViewModels/Dialog/RenameDatabaseViewModel.ts";
 
 /**
  * A dialog that allows the user to rename a database.

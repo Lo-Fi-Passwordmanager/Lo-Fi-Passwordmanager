@@ -4,9 +4,15 @@ before_script:
   - yarn install
 
 stages:
+  - lint
   - test-report
   - test
   - build
+
+lint:
+  stage: lint
+  script:
+    - yarn eslint
 
 tests:
   stage: test

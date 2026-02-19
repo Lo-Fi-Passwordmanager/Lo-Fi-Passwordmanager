@@ -1,8 +1,9 @@
 import React from "react";
+
+import Dialog from "./Dialog.tsx";
 import {type Item} from "../../../Model/Item.ts";
 import {useItemCreationViewModel} from "../../ViewModels/Dialog/ItemCreationViewModel.ts";
 import Close from "../Icons/Close.tsx";
-import Dialog from "./Dialog.tsx";
 
 interface ItemCreationDialogProps {
     addItem: (item: Item) => void;
