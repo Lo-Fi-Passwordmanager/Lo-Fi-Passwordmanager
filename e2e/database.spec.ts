@@ -1,6 +1,6 @@
 import {expect, test} from "@playwright/test";
 
-test("T101", async ({page}) => {
+test("create a new DB, delete it and add it again via URL", async ({page}) => {
 
     if (page.context().browser() && page.context().browser().browserType().name() == "chromium") {
         await page.context().grantPermissions(["clipboard-read", "clipboard-write"]);
@@ -78,7 +78,7 @@ test("T101", async ({page}) => {
     await expect(page.getByRole("button", {name: "⬅"})).toBeVisible();
 });
 
-test("T101Part1", async ({page}) => {
+test("create a Database and rename it", async ({page}) => {
     await page.goto("");
     await expect(page.getByRole("img", {name: "Passwortmanager Logo"})).toBeVisible();
 
@@ -108,7 +108,7 @@ test("T101Part1", async ({page}) => {
     await page.getByRole("button", {name: "Bestätigen"}).click();
 });
 
-test("T101URL", async ({page}) => {
+test("add a database with a link", async ({page}) => {
     await page.goto("");
     await expect(page.getByRole("img", {name: "Passwortmanager Logo"})).toBeVisible();
 
