@@ -4,8 +4,14 @@ before_script:
   - yarn install
 
 stages:
+  - lint
   - test
   - build
+
+lint:
+  stage: lint
+  script:
+    - yarn eslint
 
 tests:
   stage: test
@@ -15,7 +21,6 @@ tests:
     - if: $CI_COMMIT_BRANCH == 'main'
   script:
     - yarn test:ci
-    - yarn eslint
 
 # Uploads the test report to the server
 test-report:
