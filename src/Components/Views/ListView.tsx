@@ -145,6 +145,7 @@ const ListView: React.FC<{
                                    autoFocus
                                    onFocus={e => {
                                        e.target.select();
+                                       listViewModel.setItemTitle(item.title);
                                    }}
                                    style={{marginLeft: ((item.id != "") ? "" : "10px"), border: "none"}}
                                    value={listViewModel.newTitle}
