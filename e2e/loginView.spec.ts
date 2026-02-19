@@ -44,7 +44,7 @@ test("that the user is able to click through the pages of the settings menu", as
 });
 
 test("should check that all settings toggle buttons work correctly", async ({ page }) => {
-    await page.goto('http://localhost:5173/');
+    await page.goto('');
     await page.getByRole('button', { name: 'Einstellungen öffnen' }).click();
     //Dark Mode
     await expect(page.locator('#root')).toMatchAriaSnapshot(`
@@ -106,7 +106,7 @@ test("should check that all settings toggle buttons work correctly", async ({ pa
 });
 
 test("auto logout input field", async ({ page }) => {
-    await page.goto('http://localhost:5173/');
+    await page.goto('');
     await page.getByRole('button', {name: 'Einstellungen öffnen'}).click();
     await expect(page.getByRole('spinbutton')).toHaveValue('10');
     await page.getByRole('button').nth(4).click();
@@ -120,7 +120,7 @@ test("auto logout input field", async ({ page }) => {
     await expect(page.getByRole('spinbutton')).toHaveValue('100');
 });
 test("add server field", async ({ page }) => {
-    await page.goto('http://localhost:5173/');
+    await page.goto('');
     await page.getByRole('button', {name: 'Einstellungen öffnen'}).click();
 
     await page.getByRole('button').nth(5).click();
