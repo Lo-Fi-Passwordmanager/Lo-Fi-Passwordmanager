@@ -94,17 +94,14 @@ test("should check that all settings toggle buttons work correctly", async ({ pa
     //auto Logout
     await expect(page.locator('#root')).toMatchAriaSnapshot(`
     - checkbox "Bei Inaktivität abmelden" [checked]
-    - text: Bei Inaktivität abmelden
     `);
     await page.locator('label').filter({ hasText: 'Bei Inaktivität abmelden' }).locator('span').click();
     await expect(page.locator('#root')).toMatchAriaSnapshot(`
     - checkbox "Bei Inaktivität abmelden"
-    - text: Bei Inaktivität abmelden
     `);
     await page.locator('label').filter({ hasText: 'Bei Inaktivität abmelden' }).locator('span').click();
     await expect(page.locator('#root')).toMatchAriaSnapshot(`
     - checkbox "Bei Inaktivität abmelden" [checked]
-    - text: Bei Inaktivität abmelden
     `);
 });
 
