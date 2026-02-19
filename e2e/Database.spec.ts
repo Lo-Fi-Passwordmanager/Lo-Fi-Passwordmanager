@@ -17,16 +17,16 @@ test("create a new DB, delete it and add it again via URL", async ({page}) => {
     await page.getByRole("textbox", {name: "Masterpasswort"}).click();
     await page.getByRole("textbox", {name: "Masterpasswort"}).fill("Masterpasswort");
     await page.getByRole("button", {name: "Bestätigen"}).click();
-    //überprüft das wir angemeldet sind
+    //überprüft, ob wir angemeldet sind
     await expect(page.getByRole("textbox", {name: "Suchen..."})).toBeVisible();
     await expect(page.getByRole("button", {name: "⬅"})).toBeVisible();
     //meldet sich ab
     await page.getByRole("button", {name: "⬅"}).click();
     await expect(page.getByRole("button", {name: "Datenbankname"})).toBeVisible();
-    //klickt auf den umbennen button
+    //klickt auf den umbenennen button
     await page.getByRole("button").nth(4).click();
     await expect(page.getByRole("heading", {name: "Datenbank umbenennen:"})).toBeVisible();
-    //bennent die Datenbank um
+    //benennt die Datenbank um
     await page.getByRole("textbox").click();
     await page.getByRole("textbox").fill("NeuerName");
     await page.getByRole("button", {name: "Bestätigen"}).click();
@@ -73,7 +73,7 @@ test("create a new DB, delete it and add it again via URL", async ({page}) => {
     await page.getByRole("button", {name: "Datenbankname"}).click();
     await page.getByRole("textbox", {name: "Masterpasswort"}).fill("Masterpasswort");
     await page.getByRole("button", {name: "Bestätigen"}).click();
-    //überprüft das wir angemeldet sind
+    //überprüft, ob wir angemeldet sind
     await expect(page.getByRole("textbox", {name: "Suchen..."})).toBeVisible();
     await expect(page.getByRole("button", {name: "⬅"})).toBeVisible();
 });
@@ -90,7 +90,7 @@ test("create a Database and rename it", async ({page}) => {
     await page.getByRole("textbox", {name: "Masterpasswort"}).click();
     await page.getByRole("textbox", {name: "Masterpasswort"}).fill("Masterpasswort");
     await page.getByRole("button", {name: "Bestätigen"}).click();
-    //überprüft das wir angemeldet sind
+    //überprüft, ob wir angemeldet sind
     await expect(page.getByRole("textbox", {name: "Suchen..."})).toBeVisible();
     await expect(page.getByRole("button", {name: "⬅"})).toBeVisible();
 
@@ -127,7 +127,7 @@ test("add a database with a link", async ({page}) => {
     await expect(page.getByRole("heading", {name: "Datenbank öffnen"})).toBeVisible();
     await page.getByRole("textbox", {name: "Masterpasswort"}).fill("Masterpasswort");
     await page.getByRole("button", {name: "Bestätigen"}).click();
-    //überprüft das wir angemeldet sind
+    //überprüft, ob wir angemeldet sind
     await expect(page.getByRole("textbox", {name: "Suchen..."})).toBeVisible();
     await expect(page.getByRole("button", {name: "⬅"})).toBeVisible();
     await page.getByRole("button", {name: "⬅"}).click();
