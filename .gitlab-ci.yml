@@ -25,7 +25,7 @@ unitTest:
     - if: $CI_COMMIT_BRANCH != 'main'
     - if: $CI_COMMIT_BRANCH == 'main'
   script:
-    - yarn test:ci
+    - yarn test ./tests
 
 integrationTest:
   stage: integrationTest
@@ -33,7 +33,7 @@ integrationTest:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH != 'main'
     - if: $CI_COMMIT_BRANCH == 'main'
-  script: yarn test .\integrationTests
+  script: yarn test ./integrationTests
 
 # Uploads the test report to the server
 test-report:
