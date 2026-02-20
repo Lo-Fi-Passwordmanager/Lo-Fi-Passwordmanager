@@ -1,5 +1,7 @@
-import React from "react";
+import React, {useState} from "react";
+import {HiTrash} from "react-icons/hi";
 
+import DeleteConfirmationDialog from "./DeleteConfirmationDialog.tsx";
 import {HistoryDialog} from "./HistoryDialog.tsx";
 import ShareQRDialog from "./ShareQRDialog.tsx";
 import {type AutomergeFacade} from "../../../Utility/AutomergeFacade.ts";
@@ -14,6 +16,7 @@ const DatabaseSettingsView: React.FC<{
     openedDatabaseName?: string,
     closeDatabase: () => void,
 }> = ({automergeFacade, openedDatabaseName, closeDatabase}) => {
+    const [inDeletion, setInDeletion] = useState(false);
 
     return (
         <>
@@ -36,16 +39,26 @@ const DatabaseSettingsView: React.FC<{
                 </button>
                 <HistoryDialog automergeFacade={automergeFacade}/>
                 <button
+                    className={"delete"}
                     onClick={() => {
-                        removeDatabase(openedDatabaseName!);
-                        closeDatabase();
-                    }}>Datenbank lokal löschen
+                        setInDeletion(true)
+                    }}>Datenbank lokal löschen   <HiTrash size={24}/>
                 </button>
                 {/*
                 TODO Hier export (Datei)
                 <button>Unverschlüsselt Exportieren</button>
 
                 */}
+                {inDeletion && (<DeleteConfirmationDialog
+                    database={openedDatabaseName}
+                    onConfirmDb={(db) => {
+                        closeDatabase();
+                        removeDatabase(db);
+                        setInDeletion(false);
+                    }}
+                    onClose={() => setInDeletion(false)}
+                />)}
+
             </div>
         </>
     );
