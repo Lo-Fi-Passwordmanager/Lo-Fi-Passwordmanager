@@ -24,7 +24,7 @@ export default defineConfig({
         istanbul({
             include: 'src/*',
             extension: ['.js', '.ts', '.jsx', '.tsx'],
-            requireEnv: false,
+            requireEnv: true,
         }),
     ].filter(Boolean),
 

@@ -15,7 +15,7 @@
     "test:ci": "vitest run",
     "coverage": "vitest --ui --coverage.enabled=true",
     "e2e": "playwright test",
-    "e2e:coverage": "cross-env E2E=true nyc playwright test --project=chromium",
+    "e2e:coverage": "cross-env COVERAGE=true E2E=true nyc playwright test --project=chromium",
     "e2e:report": "nyc report --reporter=html"
   },
   "dependencies": {

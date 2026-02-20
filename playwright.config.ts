@@ -32,7 +32,7 @@ export default defineConfig({
         trace: "on"
     },
 
-    timeout: 180000,
+    timeout: 30000,
 
     /* Configure projects for major browsers */
     projects: process.env.COVERAGE
@@ -55,8 +55,10 @@ export default defineConfig({
 
     // Run your local dev server before starting the tests */
     webServer: {
-        command: 'cross-env E2E=true yarn dev',
+        command: process.env.COVERAGE
+            ? 'cross-env E2E=true yarn dev'
+            : 'yarn dev',
         url: 'http://localhost:5173',
-        reuseExistingServer: !process.env.CI,
+        reuseExistingServer: false,
     },
 });
