@@ -57,19 +57,19 @@ describe('Item', () => {
     })
 
     it('moving folder', () => {
-        expect(root.entries.includes(entry)).toBe(true);
-        expect(root.entries.includes(entry2)).toBe(true);
-        expect(root.entries.includes(entry3)).toBe(true);
-        expect(root.entries.includes(subFolder1)).toBe(true);
-        expect(subFolder1.entries.includes(subFolder2)).toBe(true);
-        expect(subFolder1.entries.includes(entry4)).toBe(true);
-        expect(subFolder2.entries.includes(entry5)).toBe(true);
+        expect(root.items.includes(entry)).toBe(true);
+        expect(root.items.includes(entry2)).toBe(true);
+        expect(root.items.includes(entry3)).toBe(true);
+        expect(root.items.includes(subFolder1)).toBe(true);
+        expect(subFolder1.items.includes(subFolder2)).toBe(true);
+        expect(subFolder1.items.includes(entry4)).toBe(true);
+        expect(subFolder2.items.includes(entry5)).toBe(true);
 
 
         subFolder2.addItem(entry5);
-        expect(root.entries.includes(subFolder2)).toBe(false);
+        expect(root.items.includes(subFolder2)).toBe(false);
         root.addItem(subFolder2);
-        expect(root.entries.includes(subFolder2)).toBe(true);
+        expect(root.items.includes(subFolder2)).toBe(true);
     })
 
     it('should correctly handle its creation and last edited date', () =>{
