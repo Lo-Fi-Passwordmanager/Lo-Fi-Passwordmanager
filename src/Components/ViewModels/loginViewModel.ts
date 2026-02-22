@@ -27,7 +27,7 @@ export const useLoginViewModel = (
     setOpenedDbName: ((value: (((prevState: string) => string) | string)) => void)
 ) => {
     // map of database names to their automerge urls
-    const [databases, setDatabases] = useState(() => loadAllDatabases());
+    const [databases, setDatabases] = useState(loadAllDatabases());
     // names of all available databases to show in the listing
     const [databaseNames, setDatabaseNames] = useState<string[]>([]);
 
@@ -54,7 +54,7 @@ export const useLoginViewModel = (
      * @param name the name of the database
      * @param masterPassword the masterpassword that gets used for encryption
      */
-    const createDatabase = (name: string, masterPassword: string) => {
+     const createDatabase = (name: string, masterPassword: string) => {
         setLoadingScreenActive(true);
         if (!isNameAvailable(name)) {
             setLoadingScreenActive(false);
@@ -178,7 +178,8 @@ export const useLoginViewModel = (
         closeAddDialog();
 
         storeDatabase(name, url);
-        setDatabases(loadAllDatabases);
+        //FIXME Sollte hier loadAllDatabases ( ) also mit klammern stehen?
+        setDatabases(loadAllDatabases());
         setSelectedDatabase(name);
 
         if (masterPassword) {

@@ -18,7 +18,7 @@ import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
  */
 export const usePasswordManagerViewModel = () => {
     const settings = useSettings();
-    const [loggedIn, setLoggedIn] = useState<boolean>(false);
+    const [loggedIn, setLogedIn] = useState<boolean>(false);
     const [automergeFacade, setAutomergeFacade] = useState<AutomergeFacade | null>(null);
     const [securityProvider] = useState(() => new SecurityProvider());
     const timeout = Settings.getSettings().getTimeoutLength() * 60000;
@@ -26,6 +26,9 @@ export const usePasswordManagerViewModel = () => {
     const [toastVisible, setToastVisible] = useState(false);
     const [openedDatabaseName, setOpenedDatabaseName] = useState<string>("");
 
+    function setLoggedIn(value: boolean) {
+        setLogedIn(value);
+    }
 
     const [repo] = useState(new Repo({
         network: [new BroadcastChannelNetworkAdapter()],

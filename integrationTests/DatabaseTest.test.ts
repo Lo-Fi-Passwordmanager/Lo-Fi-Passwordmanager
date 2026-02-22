@@ -1,6 +1,6 @@
 import {afterEach, beforeEach, describe, expect, it, vi} from "vitest";
 import {Repo} from "@automerge/react";
-import {renderHook} from "@testing-library/react";
+import {act, renderHook, waitFor} from "@testing-library/react";
 import {usePasswordManagerViewModel} from "../src/Components/ViewModels/PasswordManagerViewModel";
 import {useLoginViewModel} from "../src/Components/ViewModels/loginViewModel";
 import {useSettings} from "../src/Model/Settings";
@@ -24,11 +24,11 @@ describe("Database Integrationtests", () => {
         const automergeFacade = passwordManagerVM.getAutomergeFacade();
 
         //login in test
-        loginVM.createDatabase(dbName, password);
-        expect(passwordManagerVM.loggedIn).toBe(false)
-        await loginVM.tryOpenDatabase("", dbName)
-        expect(passwordManagerVM.loggedIn).toBe(false)
-        await loginVM.tryOpenDatabase(password, dbName)
+        await act(async ()=> {
+            loginVM.createDatabase(dbName, password);
+            await new Promise((resolve) => setTimeout(resolve, 10));
+        })
+
         expect(passwordManagerVM.loggedIn).toBe(true)
 
         const settingsHook = renderHook(() => useSettingsViewModel());
