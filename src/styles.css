@@ -576,6 +576,7 @@ input[type="number"] {
     padding: 0.2rem;
     border-radius: var(--small-radius);
     justify-content: center;
+    z-index: 10;
 }
 
 .listViewTitleHeader button {
