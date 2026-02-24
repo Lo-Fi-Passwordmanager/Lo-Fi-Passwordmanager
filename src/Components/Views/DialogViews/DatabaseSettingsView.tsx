@@ -40,9 +40,10 @@ const DatabaseSettingsView: React.FC<{
                 <HistoryDialog automergeFacade={automergeFacade}/>
                 <button
                     className={"delete"}
+                    style={{gap:"0.2rem"}}
                     onClick={() => {
                         setInDeletion(true)
-                    }}>Datenbank lokal löschen   <HiTrash size={24}/>
+                    }}><HiTrash size={24}/> Datenbank lokal löschen
                 </button>
                 {/*
                 TODO Hier export (Datei)

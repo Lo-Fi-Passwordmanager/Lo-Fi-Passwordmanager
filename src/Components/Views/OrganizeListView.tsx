@@ -60,7 +60,7 @@ const OrganizeListView: React.FC<{
                     onClick={() => {
                         setItemCreationDialog();
                     }}
-                    title="Eintrag ins Startverzeichnis hinzufügen"
+                    title="Eintrag ins zuletzt geöffnete Verzeichnis hinzufügen"
                 >
                     <HiMiniPlus size={24}/>
                 </button>

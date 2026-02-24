@@ -26,7 +26,8 @@ const ShareQRDialog: React.FC<ShareQRDialogProps> = ({name, url}: ShareQRDialogP
             <>
                 <button
                     className="squareButton"
-                    onClick={() => viewModel.setShareQRCodeOpen(true)}>
+                    onClick={() => viewModel.setShareQRCodeOpen(true)}
+                >
                     <HiOutlineQrcode size={24}/>
                 </button>
                 <Dialog title={"Datenbank teilen"} onCloseDialog={() => viewModel.setShareQRCodeOpen(false)}
