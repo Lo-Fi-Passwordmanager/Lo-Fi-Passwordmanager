@@ -498,6 +498,12 @@ input[type="number"] {
     grid-column: span 1;
 }
 
+.copyButton.selected {
+    background-color: transparent;
+    color: var(--panel);
+    border: 1px solid var(--panel);
+}
+
 .qrButton,
 .eyeButton {
     padding: 0.5rem;
