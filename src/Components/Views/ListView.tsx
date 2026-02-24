@@ -2,6 +2,7 @@ import {CSS} from "@dnd-kit/utilities";
 import React from "react";
 import {HiTrash} from "react-icons/hi";
 import {HiMiniPlus} from "react-icons/hi2";
+import {ImKey} from "react-icons/im";
 
 import FolderMenu from "./MenuViews/FolderMenu.tsx";
 import type {Entry} from "../../Model/Entry.ts";
@@ -100,6 +101,7 @@ const ListView: React.FC<{
                     {...listViewModel.attributes}
                     {...listViewModel.listeners}
                     aria-selected={selectedItemId === item.id}>
+                    <button style={{background:"none", boxShadow:"none"}}> <ImKey size={18}/> </button>
                     <span className={"item-title"}>{entry.title}</span>
                     <div className={"btnWrapper"}>
                         <button className="listViewEntry button"
