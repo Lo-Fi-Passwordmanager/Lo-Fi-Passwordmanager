@@ -147,6 +147,7 @@ const SettingsView: React.FC<{
                                                                     <button
                                                                         className="squareButton"
                                                                         onClick={() => viewModel.removeServer(server)}
+                                                                        title={"Server entfernen"}
                                                                     >
                                                                         <HiTrash size={24}/>
                                                                     </button>
@@ -160,7 +161,7 @@ const SettingsView: React.FC<{
                                                 onClick={() => viewModel.setAddServerDialogOpen(true)}
                                                 style={{alignSelf: "center"}}
                                             >
-                                                <HiMiniPlus size={24}/>
+                                                <HiMiniPlus size={24} title={"Sync Server hinzufügen"}/>
                                             </button>
                                             {viewModel.addServerDialogOpen && (
                                                 <AddServerDialog
@@ -190,6 +191,7 @@ const SettingsView: React.FC<{
                                                 <button
                                                     className="rectangle-button"
                                                     onClick={viewModel.connectToPeer}
+                                                    title={"Mit Peer verbinden"}
                                                 >
                                                     Verbinden
                                                 </button>
@@ -217,7 +219,9 @@ const SettingsView: React.FC<{
 
                                                     <button
                                                         className="squareButton"
-                                                        onClick={() => void viewModel.removePeer(id)}>
+                                                        onClick={() => void viewModel.removePeer(id)}
+                                                        title={"Peer entfernen"}
+                                                    >
                                                         <HiTrash size={24}/>
                                                     </button>
                                                 </div>
