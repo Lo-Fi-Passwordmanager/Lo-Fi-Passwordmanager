@@ -51,7 +51,7 @@ const OrganizeListView: React.FC<{
                 </button>
 
                 <input style={{gridColumn: "span 8"}} type="text" placeholder="Suchen..." value={liveSearchValue}
-                       onChange={(event => setLiveSearchValue(event.target.value))}/>
+                       onChange={(event => setLiveSearchValue(event.target.value))} title={"Nach Einträgen und Ordnern suchen"} />
                 {/* Search bar to filter the list of entries and folders */}
                 <button
                     className={"squareButton"}
@@ -66,7 +66,7 @@ const OrganizeListView: React.FC<{
                 </button>
 
                 <select style={{gridColumn: "span 9", width: "100%"}} value={curSortCriterion}
-                        onChange={(e) => setCurSortCriterion(e.target.value as SortCriteria)}>
+                        onChange={(e) => setCurSortCriterion(e.target.value as SortCriteria)} title={"Einträge und Ordner sortieren"}>
                     <option value="NAME">Alphabetisch</option>
                     <option value="CREATED">Erstellungsdatum</option>
                     <option value="EDITED">Bearbeitungsdatum</option>
