@@ -656,6 +656,28 @@ input[type="number"] {
     display: flex;
     flex-direction: column;
     width: 30%;
+    position: relative;
+}
+
+{/* outline connecting list view to entry view*/}
+.passwordViewList::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    right: -20px;
+    width: 25px;
+    height: 2px;
+    background-color: var(--panel);
+}
+
+.passwordViewList::before {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    right: -20px;
+    width: 25px;
+    height: 2px;
+    background-color: var(--panel);
 }
 
 .passwordViewEntry {
@@ -664,18 +686,19 @@ input[type="number"] {
     border-radius: var(--big-radius) 0 0 var(--big-radius);
     display: flex;
     flex-direction: column;
-    width: 70%;
     position: relative;
+    width: 70%;
+    min-height: 50%;
 }
 
 .organizeListView {
     border: 2px solid var(--panel);
-    border-right: 0;
     border-radius: var(--big-radius) 0 0 var(--big-radius);
     display: flex;
     flex-direction: column;
     border-left: 0;
     border-right: 0;
+    border-top: 0;
 }
 
 .entryViewContainer {
@@ -1354,15 +1377,6 @@ input:checked + .slider:before {
         border: none;
         max-height: 40%;
     }
-
-    .passwordViewEntry {
-        width: 100%;
-        border: none;
-        min-height: 50%;
-        height: fit-content;
-        overflow-y: scroll;
-    }
-
 
     .entryViewAttribute {
         display: flex;
