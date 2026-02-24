@@ -477,21 +477,7 @@ input[type="number"] {
     background-color: var(--cancel-button);
 }
 
-.passwordGenButton {
-    margin-left: 2vh;
-    padding: 0.6rem;
-    box-shadow: none;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 18px;
-    line-height: 1;
-    cursor: pointer;
-}
-
-.copyButton, .eyeButton {
+.copyButton, .eyeButton, .passwordGenButton {
     margin-left: 15px;
     box-shadow: none;
     grid-column-start: 20 !important;

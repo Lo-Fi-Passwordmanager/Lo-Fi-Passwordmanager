@@ -65,7 +65,9 @@ const PasswordGenDialog: React.FC<PasswordGenDialogProps> = ({setNewPassword}: P
         return (
             <button
                 className="passwordGenButton"
-                onClick={() => viewModel.setPasswordGenOpen(true)}>
+                onClick={() => viewModel.setPasswordGenOpen(true)}
+                title={"Passwort generieren"}
+            >
                 <HiMiniPlus size={24}/>
             </button>
         );

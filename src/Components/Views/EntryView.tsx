@@ -91,11 +91,15 @@ const EntryView: React.FC<{
                     <div className={"entryViewFooterButtons"}>
                         <button className={"rectangle-button"} onClick={() => {
                             setEditableView();
-                        }} style={{boxShadow: "none"}}>
+                        }} style={{boxShadow: "none"}}
+                                title={"Eintrag bearbeiten"}
+                        >
                             <HiPencil size={24}/> Bearbeiten
                         </button>
                         <button className={"rectangle-button delete"} onClick={() => deleteItem(item)}
-                                style={{boxShadow: "none"}}>
+                                style={{boxShadow: "none"}}
+                                title={"Eintrag löschen"}
+                        >
                             <HiTrash size={24}/>Löschen
                         </button>
                     </div>

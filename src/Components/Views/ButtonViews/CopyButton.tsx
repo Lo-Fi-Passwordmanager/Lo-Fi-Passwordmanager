@@ -19,7 +19,9 @@ const CopyButton: React.FC<{
                 setClicked(true)
                 setTimeout(() => setClicked(false), 2000);
                 copyAndClearClipboard(attributeValue)
-            }}>
+            }}
+                    title={"In Zwischenablage kopieren"}
+            >
                 <HiMiniClipboardDocumentList size={24}/>
             </button>
         );
