@@ -49,6 +49,10 @@
     }
 }
 
+a {
+    color: var(--text);
+}
+
 /* DARK THEME */
 [data-theme="dark"] {
     --bg: rgb(22, 24, 28);
