@@ -22,16 +22,16 @@
     --small-radius: 8px;
     --big-radius: 24px;
 
-    --bg: #ffebf0;
+    --bg: #ffffff;
     --text: #000000;
-    --panel: #ef9fb3;
+    --primary: #f2acbd;
+    --secondary: #ffe1e1;
     --overlay: rgba(0, 0, 0, 0.2);
-    --outline: #818181;
+    --outline: #b3b3b3;
     --outline-droppable: #0a5ab4;
     --input-field: #f5b2c1;
-    --dialog-bg: #f08fa7;
-    --cancel-button: #a3a3a3;
-    --delete-color: #e74c3c;
+    --cancel-button: #d1d1d1;
+    --delete-button: #ff5a50;
     --loading-overlay: rgba(0, 0, 0, 0.8);
     --loading-text: #FFFFFF;
     --pale-color: #f9d7e1;
@@ -53,13 +53,13 @@
 [data-theme="dark"] {
     --bg: rgb(22, 24, 28);
     --text: #ffffff;
-    --panel: #306844;
+    --primary: #306844;
+    --secondary: #182c25;
     --overlay: rgba(14, 14, 14, 0.5);
     --outline: #818181;
     --input-field: #2c4c3b;
-    --dialog-bg: #182c25;
     --cancel-button: #455b55;
-
+    --delete-button: #e74c3c;
     --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 
     background-color: var(--bg);
@@ -80,7 +80,7 @@ html, body {
 
 .divider {
     height: 1px !important;
-    background-color: var(--panel);
+    background-color: var(--primary);
     margin: 10px 0;
     width: 100%;
 }
@@ -104,8 +104,8 @@ input {
 input:focus {
     outline: none;
     background-color: var(--bg); /* Shifts slightly for contrast */
-    border-color: var(--panel); /* Uses your accent color */
-    box-shadow: 0 0 0 4px var(--panel); /* Soft glow using --panel */
+    border-color: var(--primary); /* Uses your accent color */
+    box-shadow: 0 0 0 4px var(--primary); /* Soft glow using --primary */
 }
 
 .file-upload > span,
@@ -152,7 +152,7 @@ button, select {
     border-radius: var(--standard-radius);
     border: none;
     cursor: pointer;
-    background: var(--panel);
+    background: var(--primary);
     color: var(--text);
 
     display: flex;
@@ -194,7 +194,7 @@ h1 {
 
 /* Focused elements use a cleaner ring */
 button:focus-visible {
-    outline: 3px solid var(--panel);
+    outline: 3px solid var(--primary);
     outline-offset: 2px;
 }
 
@@ -210,12 +210,12 @@ button:focus-visible {
     padding: 20px;
     z-index: 100;
     overflow: auto;
-    scrollbar-color: var(--panel) var(--bg);
+    scrollbar-color: var(--primary) var(--bg);
     scrollbar-width: thin;
 }
 
 .dialog {
-    background: var(--dialog-bg);
+    background: var(--secondary);
     color: var(--text);
     padding: 20px;
     /* Increased Rounding */
@@ -367,7 +367,7 @@ input[type="number"] {
     flex-direction: column;
     gap: 12px !important;
     padding: 12px !important;
-    border: 2px solid var(--panel);
+    border: 2px solid var(--primary);
     border-radius: var(--standard-radius);
     width: 100%;
     max-width: 300px;
@@ -380,7 +380,7 @@ input[type="number"] {
     font-weight: 700;
     text-decoration: underline;
     width: 100%;
-    border: 2px solid var(--panel);
+    border: 2px solid var(--primary);
     border-radius: var(--standard-radius);
     height: 2.5rem;
     align-content: center;
@@ -431,7 +431,7 @@ input[type="number"] {
 .logo {
     margin: 2em;
     width: 15vmin;
-    filter: drop-shadow(0 0 1.5em var(--panel));
+    filter: drop-shadow(0 0 1.5em var(--primary));
     transition: filter 0.3s ease;
 }
 
@@ -470,7 +470,7 @@ input[type="number"] {
 }
 
 .delete {
-    background-color: var(--delete-color);
+    background-color: var(--delete-button);
 }
 
 .cancel {
@@ -486,23 +486,23 @@ input[type="number"] {
 
 .copyButton.selected {
     background-color: transparent;
-    color: var(--panel);
-    border: 1px solid var(--panel);
+    color: var(--primary);
+    border: 1px solid var(--primary);
 }
 
 .qrButton,
 .eyeButton {
     padding: 0.5rem;
     background-color: transparent;
-    color: var(--panel);
-    border: 1px solid var(--panel);
+    color: var(--primary);
+    border: 1px solid var(--primary);
     grid-column-start: 19 !important;
 }
 
 .qrButton,
 .eyeButton.selected {
     color: var(--text);
-    background-color: var(--panel);
+    background-color: var(--primary);
 }
 
 .settingsButton {
@@ -534,7 +534,7 @@ input[type="number"] {
 
 .listViewTitleHeader, .listViewEntry {
     flex-direction: row;
-    background-color: var(--panel);
+    background-color: var(--primary);
     display: flex;
     border-radius: var(--standard-radius);
     margin: 0.6vh 1vh;
@@ -553,7 +553,7 @@ input[type="number"] {
 }
 
 .listViewEntry {
-    background-color: var(--dialog-bg);
+    background-color: var(--secondary);
     font-weight: 500;
 }
 
@@ -580,11 +580,11 @@ input[type="number"] {
 }
 
 .listViewTitleHeader button {
-    background-color: var(--dialog-bg);
+    background-color: var(--secondary);
 }
 
 .listViewEntry button {
-    background-color: var(--panel);
+    background-color: var(--primary);
 }
 
 .listViewTitleHeader.button.active {
@@ -607,7 +607,7 @@ input[type="number"] {
 
 .listViewTitleHeader input:focus {
     /* Removes outline */
-    box-shadow: inset 0 0 0 2px var(--panel);
+    box-shadow: inset 0 0 0 2px var(--primary);
 }
 
 .listViewEntry span {
@@ -617,11 +617,11 @@ input[type="number"] {
 
 .listViewEntry:hover {
     filter: brightness(1.05);
-    border-color: var(--panel);
+    border-color: var(--primary);
 }
 
 .listViewEntry.selected {
-    border: 2px solid var(--panel);
+    border: 2px solid var(--primary);
     box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
     align-items: center;
     white-space: nowrap;
@@ -651,7 +651,7 @@ input[type="number"] {
 }
 
 .passwordViewList {
-    border: 2px solid var(--panel);
+    border: 2px solid var(--primary);
     border-right: 0;
     border-radius: var(--big-radius) 0 0 var(--big-radius);
     display: flex;
@@ -665,24 +665,24 @@ input[type="number"] {
     content: '';
     position: absolute;
     top: -2px;
-    right: -20px;
-    width: 25px;
+    right: -30px;
+    width: 40px;
     height: 2px;
-    background-color: var(--panel);
+    background-color: var(--primary);
 }
 
 .passwordViewList::before {
     content: '';
     position: absolute;
     bottom: -2px;
-    right: -20px;
-    width: 25px;
+    right: -30px;
+    width: 40px;
     height: 2px;
-    background-color: var(--panel);
+    background-color: var(--primary);
 }
 
 .passwordViewEntry {
-    border: 2px solid var(--panel);
+    border: 2px solid var(--primary);
     border-right: 0;
     border-radius: var(--big-radius) 0 0 var(--big-radius);
     display: flex;
@@ -693,7 +693,7 @@ input[type="number"] {
 }
 
 .organizeListView {
-    border: 2px solid var(--panel);
+    border: 2px solid var(--primary);
     border-radius: var(--big-radius) 0 0 var(--big-radius);
     display: flex;
     flex-direction: column;
@@ -748,7 +748,7 @@ input[type="number"] {
 
 .attribute-value, .title-value {
     box-sizing: border-box;
-    border: 1px solid var(--panel);
+    border: 1px solid var(--primary);
     border-radius: var(--standard-radius);
     padding: 0 12px;
     min-height: 2.5rem;
@@ -792,7 +792,7 @@ input[type="number"] {
     bottom: 24px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: var(--panel);
+    background-color: var(--primary);
     color: var(--text);
     padding: 12px 24px;
     /* Pill Shape */
@@ -819,7 +819,7 @@ input[type="number"] {
 .loadingSpinner {
     width: 80px;
     aspect-ratio: 1;
-    fill: var(--panel);
+    fill: var(--primary);
     animation: 2s linear infinite spinner-rotation;
     z-index: 102;
 }
@@ -896,7 +896,7 @@ input[type="number"] {
     display: grid;
     grid-template-columns: 1fr 1fr;
     flex-direction: column;
-    background-color: var(--dialog-bg);
+    background-color: var(--secondary);
     text-align: left;
     gap: 10px 20px;
     align-items: center;
@@ -949,11 +949,11 @@ input[type="number"] {
 }
 
 .settings-sidebar {
-    background: var(--dialog-bg);
+    background: var(--secondary);
     padding: 20px;
     display: flex;
     flex-direction: column;
-    border-right: 1px solid var(--panel);
+    border-right: 1px solid var(--primary);
 }
 
 .settings-sidebar button {
@@ -965,7 +965,7 @@ input[type="number"] {
 
 
 .settings-content {
-    background: var(--dialog-bg);
+    background: var(--secondary);
     flex: 1;
     overflow-y: auto;
     justify-items: center;
@@ -1009,7 +1009,7 @@ input[type="number"] {
         box-shadow: var(--outline-droppable);
     }
     100% {
-        background-color: var(--panel);
+        background-color: var(--primary);
         box-shadow: none;
     }
 }
@@ -1020,7 +1020,7 @@ input[type="number"] {
         box-shadow: var(--outline-droppable);
     }
     100% {
-        background-color: var(--dialog-bg);
+        background-color: var(--secondary);
         box-shadow: none;
     }
 }
@@ -1044,7 +1044,7 @@ input[type="number"] {
     display: flex;
     flex-direction: column;
     padding: 1vh 0.5vh;
-    scrollbar-color: var(--panel) var(--bg);
+    scrollbar-color: var(--primary) var(--bg);
     scrollbar-width: thin;
     flex: 1;
     overflow-y: scroll;
@@ -1075,14 +1075,14 @@ input[type="number"] {
     justify-content: center;
     font-size: 14px;
     background: var(--input-field);
-    border: 2px solid var(--panel);
+    border: 2px solid var(--primary);
     z-index: 2;
 }
 
 .marker-line {
     width: 2px;
     flex-grow: 1;
-    background: var(--panel);
+    background: var(--primary);
     opacity: 0.3;
     margin-top: 4px;
 }
@@ -1141,7 +1141,7 @@ input[type="number"] {
 
 .status-deleted .timeline-label {
     background: var(--loading-text);
-    color: var(--delete-color);
+    color: var(--delete-button);
 }
 
 .item-name {
@@ -1185,7 +1185,7 @@ input[type="number"] {
 }
 
 .arrow {
-    color: var(--panel);
+    color: var(--primary);
     font-weight: bold;
 }
 
@@ -1233,11 +1233,11 @@ input[type="number"] {
 
 .settings-tab {
     background: transparent;
-    border: 2px solid var(--panel);
+    border: 2px solid var(--primary);
 }
 
 .settings-tab.active {
-    background: var(--panel);
+    background: var(--primary);
 }
 
 .about-buttons {
@@ -1290,7 +1290,7 @@ input[type="number"] {
 }
 
 input:checked + .slider {
-    background-color: var(--panel);
+    background-color: var(--primary);
 }
 
 input:checked + .slider:before {
@@ -1350,7 +1350,7 @@ input:checked + .slider:before {
 
     .settings-sidebar {
         border-right: none;
-        border-top: 1px solid var(--panel);
+        border-top: 1px solid var(--primary);
     }
 
 
@@ -1415,7 +1415,7 @@ input:checked + .slider:before {
 
     .organizeListView {
         border-radius: 0;
-        border: 1px solid var(--panel);
+        border: 1px solid var(--primary);
         border-right: none;
         border-left: none;
     }
