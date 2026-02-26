@@ -488,6 +488,9 @@ input[type="number"] {
     background-color: transparent;
     color: var(--primary);
     border: 1px solid var(--primary);
+    transform: none;
+    box-shadow: none;!important;
+    cursor: auto;
 }
 
 .qrButton,
