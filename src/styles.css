@@ -34,7 +34,7 @@
     --delete-button: #ff5a50;
     --loading-overlay: rgba(0, 0, 0, 0.8);
     --loading-text: #FFFFFF;
-    --pale-color: #f9d7e1;
+    --pale-color: #7d7d7d;
 
     /* Subtle shadows for depth */
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -60,6 +60,7 @@
     --input-field: #2c4c3b;
     --cancel-button: #455b55;
     --delete-button: #e74c3c;
+    --pale-color: #d5d5d5;
     --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 
     background-color: var(--bg);
