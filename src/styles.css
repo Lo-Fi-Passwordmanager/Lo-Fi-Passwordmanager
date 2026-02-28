@@ -1117,6 +1117,15 @@ input[type="number"] {
     color: #166534;
 }
 
+.status-move .timeline-label {
+    background: var(--loading-text);
+    color: #da9003;
+}
+
+.folder {
+    text-transform: uppercase;
+}
+
 .status-update .timeline-label {
     background: var(--loading-text);
     color: var(--outline-droppable);

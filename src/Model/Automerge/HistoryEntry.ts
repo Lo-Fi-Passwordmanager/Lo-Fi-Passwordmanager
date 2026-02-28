@@ -12,9 +12,13 @@ export type HistoryEntry = {
     /**
      * Was für eine Art der Modifikation war die Änderung
      */
-    type: "new" | "deleted" | "update"
+    type: "new" | "deleted" | "update" | "move"
     /**
      * Das alte Item (vor der Änderungen), bzw das neue Item, wenn es neu erstellt wurde.
      */
-    item: AutomergeItem
+    item: AutomergeItem,
+    /**
+     * Der Name des ursprünglichen Parent Ordners
+     */
+    oldParent: string
 }
