@@ -131,7 +131,14 @@ function buildPath(item: AutomergeItem, itemsById: Map<string, AutomergeItem>): 
         return [];
     }
 
-    return buildPath(itemsById.get(item.parentId)!, itemsById).concat(item.parentId);
+    const parent = itemsById.get(item.parentId);
+
+    if (parent === undefined) {
+        console.info("Found item with invalid parent id, treating as empty parent id.");
+        return [];
+    }
+
+    return buildPath(parent, itemsById).concat(item.parentId);
 }
 
 /**
@@ -205,15 +212,15 @@ export function deleteValue(d: AutomergeDoc, itemId: string, itemsById: Map<stri
 
     const index = d.items.indexOf(item);
 
-    d.items.splice(index, 1);
-
     if (isFolder(item)) {
-        for (const item of itemsById.values()) {
+        for (const item of d.items) {
             if (item.parentId === itemId) {
                 deleteValue(d, getObjectId(item)!, itemsById);
             }
         }
     }
+
+    d.items.splice(index, 1);
 }
 
 export function updateValue(d: AutomergeDoc, itemId: string, itemsById: Map<string, AutomergeItem>, attribute: Attribute, newValue: string | Date) {
