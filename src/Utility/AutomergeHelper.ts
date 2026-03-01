@@ -210,8 +210,6 @@ export function deleteValue(d: AutomergeDoc, itemId: string, itemsById: Map<stri
         throw new Error(`Cannot find parent object with ID ${itemId}`);
     }
 
-    const index = d.items.indexOf(item);
-
     if (isFolder(item)) {
         for (const item of d.items) {
             if (item.parentId === itemId) {
@@ -220,6 +218,7 @@ export function deleteValue(d: AutomergeDoc, itemId: string, itemsById: Map<stri
         }
     }
 
+    const index = d.items.indexOf(item);
     d.items.splice(index, 1);
 }
 
