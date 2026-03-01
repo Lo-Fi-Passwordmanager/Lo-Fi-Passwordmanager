@@ -35,10 +35,7 @@ export async function uInt8ArrayFromFile(fileList: FileList | null): Promise<Uin
     }
     try {
         const buffer = await file.arrayBuffer();
-        const uint8 = new Uint8Array(buffer);
-
-        console.log("File loaded as Uint8Array:", uint8);
-        return uint8;
+        return new Uint8Array(buffer);
     } catch (error) {
         console.error("Error reading file:", error);
     }

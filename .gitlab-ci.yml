@@ -16,7 +16,7 @@ lint:
     - if: $CI_COMMIT_BRANCH != 'main'
     - if: $CI_COMMIT_BRANCH == 'main'
   script:
-    - yarn eslint
+    - yarn eslint 
 
 unitTest:
   stage: unitTest

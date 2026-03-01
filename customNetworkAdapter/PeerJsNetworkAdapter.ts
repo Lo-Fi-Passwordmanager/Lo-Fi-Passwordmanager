@@ -59,7 +59,7 @@ export class PeerjsNetworkAdapter
         const peerMetadata = meta ?? {};
 
         const handleOpen = () => {
-            console.log("P2P Connection Open - Sending Arrive");
+            //Arrive Handshake
             this.#transmit({ type: "arrive", senderId, peerMetadata });
         };
 

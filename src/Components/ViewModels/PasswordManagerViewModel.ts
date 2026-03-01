@@ -70,8 +70,6 @@ export const usePasswordManagerViewModel = () => {
             }
         }
 
-        console.log(repo.networkSubsystem.adapters);
-
     }, [syncEnabled, p2pEnabled, connectorsSize, connectorAdapter, repo.networkSubsystem, serverUrl]);
 
     function getAutomergeFacade(): AutomergeFacade | null {
