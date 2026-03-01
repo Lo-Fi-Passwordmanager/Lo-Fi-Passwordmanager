@@ -212,7 +212,7 @@ export function deleteValue(d: AutomergeDoc, itemId: string, itemsById: Map<stri
     }
 
     if (isFolder(item)) {
-        for (const item of d.items) {
+        for (const item of itemsById.values()) {
             if (item.parentId === itemId) {
                 deleteValue(d, getObjectId(item)!, itemsById);
             }
