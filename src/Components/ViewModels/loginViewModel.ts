@@ -332,6 +332,7 @@ export const useLoginViewModel = (
         changeDatabaseName,
         confirmDeleteDatabase,
         setDatabaseToDelete,
-        toggleHidePassword
+        toggleHidePassword,
+        addDatabase,
     };
 };

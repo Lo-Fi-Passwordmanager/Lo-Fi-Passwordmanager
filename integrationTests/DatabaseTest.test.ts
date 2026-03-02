@@ -1,59 +1,87 @@
-import {afterEach, beforeEach, describe, expect, it, vi} from "vitest";
-import {Repo} from "@automerge/react";
+import {describe, expect, it} from "vitest";
 import {act, renderHook, waitFor} from "@testing-library/react";
 import {usePasswordManagerViewModel} from "../src/Components/ViewModels/PasswordManagerViewModel";
 import {useLoginViewModel} from "../src/Components/ViewModels/loginViewModel";
-import {useSettings} from "../src/Model/Settings";
-import {useSettingsViewModel} from "../src/Components/ViewModels/SettingsViewModel";
-import {removeDatabase} from "../src/Utility/Storage";
-import {SecurityProvider} from "../src/Utility/Security/SecurityProvider";
+import {useHistoryViewModel} from "../src/Components/ViewModels/Dialog/HistoryViewModel";
 
 describe("Database Integrationtests", () => {
     const password = "kuhlesPasswort#123$"
     const dbName = "tolleDatenbank$§\\"
 
 
-    it('should be able to succesfully create a Database and then use all Export/Share features', async () => {
-        //It should be noted that       const PasswordManagerVM = passwordManagerHook.result.current
-        //does not work, because the hook is a stale snapshot (the render returns a new object)
+
+    it('should create and then reopen and load a database', async () => {
         const passwordManagerHook = renderHook(() => usePasswordManagerViewModel());
-        const secProv = new SecurityProvider()
-        const loginViewModelHook = renderHook(() => useLoginViewModel(passwordManagerHook.result.current.repo, passwordManagerHook.result.current.setLoggedIn, passwordManagerHook.result.current.setAutomergeFacade, secProv, passwordManagerHook.result.current.setOpenedDatabaseName));
-        const salt = secProv.getNewSalt()
-        const validation = secProv.getNewValidation(password, salt);
+        const { repo, securityProvider } = passwordManagerHook.result.current;
+        const loginViewModelHook = renderHook(() => useLoginViewModel(
+            repo,
+            passwordManagerHook.result.current.setLoggedIn,
+            passwordManagerHook.result.current.setAutomergeFacade,
+            securityProvider,
+            passwordManagerHook.result.current.setOpenedDatabaseName
+        ));
 
-        expect(passwordManagerHook.result.current.loggedIn).toBe(false)
-        //login in test and wait 500ms for the login process to be completed
-        await act(async ()=> {
-            loginViewModelHook.result.current.createDatabase(dbName, password);
-            await new Promise((resolve) => setTimeout(resolve, 500));
-        })
 
-        expect(passwordManagerHook.result.current.loggedIn).toBe(true)
+
+        //create and login / logout
         await act(async () => {
-            passwordManagerHook.result.current.setLoggedIn(false);
-        })
-        expect(passwordManagerHook.result.current.loggedIn).toBe(false)
+            loginViewModelHook.result.current.createDatabase(dbName, password);
+        });
+        await waitFor(() => expect(passwordManagerHook.result.current.loggedIn).toBe(true));
 
 
 
-        const settingsHook = renderHook(() => useSettingsViewModel());
-        const settingsVM = settingsHook.result.current;
-        //FIXME hier fehlt jetzt History check
+        const newDbName = "RenamedDatabase";
+        await act(async () => {
+            loginViewModelHook.result.current.changeDatabaseName(dbName, newDbName);
+        });
+        expect(loginViewModelHook.result.current.databaseNames).toContain(newDbName);
+        expect(loginViewModelHook.result.current.databaseNames).not.toContain(dbName);
 
 
 
-        //export URL and File Test
-        const saveFile = passwordManagerHook.result.current.getAutomergeFacade().exportAutomergeToBinary()
-        const url = passwordManagerHook.result.current.getAutomergeFacade().automergeURL
+        const facade = passwordManagerHook.result.current.getAutomergeFacade()!;
+        const historyHook = renderHook(() => useHistoryViewModel(facade));
 
-        //close Database and Delete
-        removeDatabase(dbName);
-        act(()=> {
+        await act(async () => {
+            await historyHook.result.current.loadHistory();
+        });
+
+        expect(historyHook.result.current.automergeHistory).not.toBeNull();
+        expect(historyHook.result.current.automergeHistory!.length).toEqual(0);
+        //FIXME getting the repo here to actually add items is weird ~Jesko
+
+
+        const exportedBinary = await facade.exportAutomergeToBinary();
+        expect(exportedBinary).toBeInstanceOf(Uint8Array);
+
+
+        const shareUrl = facade.automergeURL;
+        expect(shareUrl).toContain('automerge:');
+
+
+
+        // We clear current login state to simulate a fresh start and add the database again
+        await act(async () => {
             passwordManagerHook.result.current.closeLoggedIn();
-        })
+        });
+
+        const importedDbName = "ImportedFromBinary";
+        await act(async () => {
+            const handle = repo.import(exportedBinary!);
+            await loginViewModelHook.result.current.addDatabase(importedDbName, handle.url);
+        });
+
+        await act(async () => {
+            await loginViewModelHook.result.current.tryOpenDatabase(password, importedDbName);
+        });
+        await waitFor(() => expect(passwordManagerHook.result.current.loggedIn).toBe(true));
 
 
-        //expect(loginVM.tryOpenDatabase(password, dbName)).toThrowError(new Error("No database selected"))
+        await act(async () => {
+            loginViewModelHook.result.current.confirmDeleteDatabase(importedDbName);
+        });
+
+        expect(loginViewModelHook.result.current.databaseNames).not.toContain(importedDbName);
     });
 })
