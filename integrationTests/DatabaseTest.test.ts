@@ -22,7 +22,7 @@ describe("Database Integrationtests", () => {
         ));
 
 
-
+        await waitFor(() => expect(passwordManagerHook.result.current.loggedIn).toBe(false));
         //create and login / logout
         await act(async () => {
             loginViewModelHook.result.current.createDatabase(dbName, password);
