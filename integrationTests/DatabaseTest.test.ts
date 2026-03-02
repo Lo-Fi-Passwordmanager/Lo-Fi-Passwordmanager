@@ -22,6 +22,7 @@ describe("Database Integrationtests", () => {
         const salt = secProv.getNewSalt()
         const validation = secProv.getNewValidation(password, salt);
 
+        expect(passwordManagerHook.result.current.loggedIn).toBe(false)
         //login in test and wait 500ms for the login process to be completed
         await act(async ()=> {
             loginViewModelHook.result.current.createDatabase(dbName, password);
@@ -29,6 +30,12 @@ describe("Database Integrationtests", () => {
         })
 
         expect(passwordManagerHook.result.current.loggedIn).toBe(true)
+        await act(async () => {
+            passwordManagerHook.result.current.setLoggedIn(false);
+        })
+        expect(passwordManagerHook.result.current.loggedIn).toBe(false)
+
+
 
         const settingsHook = renderHook(() => useSettingsViewModel());
         const settingsVM = settingsHook.result.current;
