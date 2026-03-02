@@ -1,4 +1,4 @@
-import {expect, test} from "./global-teardown";
+import {expect, test} from "@playwright/test";
 
 test('to open the app correctly', async ({ page }) => {
     await page.goto('');

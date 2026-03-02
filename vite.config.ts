@@ -10,7 +10,7 @@ import os from "node:os";
 import process from "node:process";
 import {configDefaults} from "vitest/config";
 //playwright coverage
-import istanbul from 'vite-plugin-istanbul'
+//import istanbul from 'vite-plugin-istanbul'
 
 export default defineConfig({
     build: {
@@ -20,12 +20,12 @@ export default defineConfig({
     },
 
     plugins: [wasm(), react(), viteSingleFile(),
-        process.env.E2E &&
+        /*process.env.E2E &&
         istanbul({
             include: 'src/*',
             extension: ['.js', '.ts', '.jsx', '.tsx'],
             requireEnv: true,
-        }),
+        }),*/
     ].filter(Boolean),
 
     worker: {

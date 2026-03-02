@@ -1,4 +1,4 @@
-import {expect, test} from "./global-teardown";
+import {expect, test} from "@playwright/test";
 /*
 test("create a new DB, delete it and add it again via URL", async ({page}) => {
 
