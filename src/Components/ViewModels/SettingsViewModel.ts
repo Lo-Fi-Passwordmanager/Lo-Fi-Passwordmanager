@@ -97,8 +97,8 @@ export const useSettingsViewModel = () => {
         // directly change settings so the UI doenst change
         settings.setSynchronization(false)
         setTimeout(() => {
-            setSynchronisation(true);
-        }, 10); // Timeout is needed to ensure that the synchronisation setting is updated before it is toggled on again
+            settings.setSynchronization(true);
+        }, 50); // Timeout is needed to ensure that the synchronisation setting is updated before it is toggled on again
     }
 
     function toggleTimeOutActive() {
