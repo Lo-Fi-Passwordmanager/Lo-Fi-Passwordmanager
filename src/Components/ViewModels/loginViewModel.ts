@@ -21,7 +21,7 @@ import {loadAllDatabases, removeDatabase, renameDatabase, storeDatabase} from ".
  */
 export const useLoginViewModel = (
     repo: Repo,
-    setLoggedIn: (value: (((prevState: boolean) => boolean) | boolean)) => void,
+    setLoggedIn: (value: boolean) => void,
     setAutomergeFacade: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void,
     securityProvider: SecurityProvider,
     setOpenedDbName: ((value: (((prevState: string) => string) | string)) => void)

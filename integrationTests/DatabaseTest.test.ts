@@ -14,22 +14,21 @@ describe("Database Integrationtests", () => {
 
 
     it('should be able to succesfully create a Database and then use all Export/Share features', async () => {
+        //It should be noted that       const PasswordManagerVM = passwordManagerHook.result.current
+        //does not work, because the hook is a stale snapshot (the render returns a new object)
         const passwordManagerHook = renderHook(() => usePasswordManagerViewModel());
-        const passwordManagerVM = passwordManagerHook.result.current;
         const secProv = new SecurityProvider()
-        const loginViewModelHook = renderHook(() => useLoginViewModel(passwordManagerVM.repo, passwordManagerVM.setLoggedIn, passwordManagerVM.setAutomergeFacade, secProv, passwordManagerVM.setOpenedDatabaseName));
-        const loginVM = loginViewModelHook.result.current;
+        const loginViewModelHook = renderHook(() => useLoginViewModel(passwordManagerHook.result.current.repo, passwordManagerHook.result.current.setLoggedIn, passwordManagerHook.result.current.setAutomergeFacade, secProv, passwordManagerHook.result.current.setOpenedDatabaseName));
         const salt = secProv.getNewSalt()
         const validation = secProv.getNewValidation(password, salt);
-        const automergeFacade = passwordManagerVM.getAutomergeFacade();
 
-        //login in test
+        //login in test and wait 500ms for the login process to be completed
         await act(async ()=> {
-            loginVM.createDatabase(dbName, password);
-            await new Promise((resolve) => setTimeout(resolve, 10));
+            loginViewModelHook.result.current.createDatabase(dbName, password);
+            await new Promise((resolve) => setTimeout(resolve, 500));
         })
 
-        expect(passwordManagerVM.loggedIn).toBe(true)
+        expect(passwordManagerHook.result.current.loggedIn).toBe(true)
 
         const settingsHook = renderHook(() => useSettingsViewModel());
         const settingsVM = settingsHook.result.current;
@@ -38,12 +37,15 @@ describe("Database Integrationtests", () => {
 
 
         //export URL and File Test
-        const saveFile = automergeFacade.exportAutomergeToBinary()
-        const url = automergeFacade.automergeURL
+        const saveFile = passwordManagerHook.result.current.getAutomergeFacade().exportAutomergeToBinary()
+        const url = passwordManagerHook.result.current.getAutomergeFacade().automergeURL
 
         //close Database and Delete
         removeDatabase(dbName);
-        passwordManagerVM.closeLoggedIn();
+        act(()=> {
+            passwordManagerHook.result.current.closeLoggedIn();
+        })
+
 
         //expect(loginVM.tryOpenDatabase(password, dbName)).toThrowError(new Error("No database selected"))
     });
