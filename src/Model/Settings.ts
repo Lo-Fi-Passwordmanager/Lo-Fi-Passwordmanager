@@ -23,24 +23,19 @@ import {
 type SettingsListener = () => void;
 
 export function useSettings() {
-    // Local state to force React to re-render
-    const [settings, setSettings] = useState(Settings.getSettings());
+    //This mess below changes the version number of the settings, so that useEffect/observers trigger correctly
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    const [version, setVersion] = useState(0);
 
     useEffect(() => {
-        // Subscribe to changes in the Singleton
-        const subscribe = Settings.getSettings().subscribe(() => {
-            // When notify() is called, we update state to trigger a re-render
-            //The code below moves the settings object to a new address in memory, forcing react to rerender it
-            //FIXME somehow this should just be able to rerender by increasing a counter or smth but I couldnt do it ~Jesko
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-            setSettings(Object.assign(Object.create(Object.getPrototypeOf(Settings.getSettings())), Settings.getSettings()));
-
+        const unsubscribe = Settings.getSettings().subscribe(() => {
+            setVersion(v => v + 1); // Force re-render
         });
-
-        return () => subscribe(); // Cleanup on unmount
+        return () => unsubscribe();
     }, []);
 
-    return settings;
+    return Settings.getSettings();
 }
 
 /**
@@ -50,6 +45,7 @@ export function useSettings() {
  */
 export class Settings {
     private static instance: Settings;
+    //This refers to the synchronisation via the server
     private _synchronization: boolean;
     private _darkMode: boolean;
     private _timeoutActive: boolean;
@@ -59,7 +55,6 @@ export class Settings {
     private _activeServerUrl: string;
     private _servers: Map<string, string>;
     private _p2p: boolean;
-    private p2pAdapter: PeerjsNetworkAdapter;
 
     private connectorsToAdapters: Map<string, [DataConnection, PeerjsNetworkAdapter]> = new Map();
 
@@ -75,7 +70,6 @@ export class Settings {
         this._p2p = loadP2PSetting();
         this.peer = new Peer();
         this.connector = null as unknown as DataConnection;
-        this.p2pAdapter = null as unknown as PeerjsNetworkAdapter;
 
 
         //When someone is connecting to this peer, establish the direction in the other way
@@ -148,14 +142,15 @@ export class Settings {
         this.notify();
     }
 
-    public getP2PAdapter(): PeerjsNetworkAdapter {
-        return this.p2pAdapter;
-    }
-
     public getSynchronization(): boolean {
         return this._synchronization;
     }
 
+    /**
+     * Sets the value of synchronisation to the given value. If the second parameter is set to false, this will not persist on restart
+     * @param value
+     * @param editing
+     */
     public setSynchronization(value: boolean, editing?: boolean) {
         this._synchronization = value;
         if (!editing) {
