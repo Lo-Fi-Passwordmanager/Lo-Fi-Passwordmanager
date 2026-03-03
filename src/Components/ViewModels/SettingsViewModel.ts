@@ -38,9 +38,7 @@ export const useSettingsViewModel = () => {
         //settings.setAutoConflictResolution(autoConflictRes);
         settings.setTimeoutActive(timeOutActive);
         settings.setTimeoutLength(timeoutLength);
-    }, [darkMode, synchronisation,
-        //autoConflictRes,
-        timeOutActive, settings, timeoutLength]);
+    }, [darkMode, synchronisation, timeOutActive, settings, timeoutLength]);
 
     useEffect(() => {
         const handleUpdate = () => {
