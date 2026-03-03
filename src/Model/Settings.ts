@@ -80,7 +80,7 @@ export class Settings {
 
         //When someone is connecting to this peer, establish the direction in the other way
         this.peer.on('connection', incomingConn => {
-            incomingConn.on('open',  () => {
+            incomingConn.on('open', () => {
                 this.setupConnection(incomingConn);
             })
         })
@@ -158,7 +158,9 @@ export class Settings {
 
     public setSynchronization(value: boolean, editing?: boolean) {
         this._synchronization = value;
-        storeSynchronizationSettings(value, editing ? editing : false);
+        if (!editing) {
+            storeSynchronizationSettings(value);
+        }
         this.notify();
     }
 
