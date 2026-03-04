@@ -52,7 +52,7 @@ test("create a new DB, delete it and add it again via URL", async ({page}) => {
     await page.getByRole("button", {name: "Verschlüsselt Exportieren"}).dblclick();
     const download1 = await download1Promise;
     //abmelden
-    await page.getByRole("img").nth(2).click();
+    await page.getByRole('img').first().click();
     await page.getByRole("button", {name: "⬅"}).click();
     await expect(page.getByRole("button", {name: "URL kopieren"})).toBeVisible();
     //Db löschen
