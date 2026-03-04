@@ -39,7 +39,7 @@ test("create a new DB, delete it and add it again via URL", async ({page}) => {
     await expect(page.getByRole("button", {name: "⬅"})).toBeVisible();
     //Einstellungen öffnen
     await page.getByRole("button").first().click();
-    await expect(page.locator("h1")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Allgemeine Einstellungen" })).toBeVisible();
     //DB Einstellung öffnen
     await page.getByRole("button", {name: "Datenbankeinstellungen"}).dblclick();
     await expect(page.getByRole("heading", {name: "Datenbankeinstellungen"})).toBeVisible();
