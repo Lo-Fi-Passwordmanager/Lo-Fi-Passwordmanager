@@ -1,5 +1,5 @@
 import {expect, test} from "@playwright/test";
-/*
+
 test("create a new DB, delete it and add it again via URL", async ({page}) => {
 
     if (page.context().browser() && page.context().browser().browserType().name() == "chromium") {
@@ -77,7 +77,7 @@ test("create a new DB, delete it and add it again via URL", async ({page}) => {
     await expect(page.getByRole("textbox", {name: "Suchen..."})).toBeVisible();
     await expect(page.getByRole("button", {name: "⬅"})).toBeVisible();
 });
-*/
+
 test("create a Database and rename it", async ({page}) => {
     await page.goto("");
     await expect(page.getByRole("img", {name: "Passwortmanager Logo"})).toBeVisible();
@@ -107,7 +107,7 @@ test("create a Database and rename it", async ({page}) => {
     await page.getByRole("textbox", {name: "Masterpasswort"}).fill("Masterpasswort");
     await page.getByRole("button", {name: "Bestätigen"}).click();
 });
-/*
+
 test("add a database with a link", async ({page}) => {
     await page.goto("");
     await expect(page.getByRole("img", {name: "Passwortmanager Logo"})).toBeVisible();
@@ -132,4 +132,3 @@ test("add a database with a link", async ({page}) => {
     await expect(page.getByRole("button", {name: "⬅"})).toBeVisible();
     await page.getByRole("button", {name: "⬅"}).click();
 });
-*/

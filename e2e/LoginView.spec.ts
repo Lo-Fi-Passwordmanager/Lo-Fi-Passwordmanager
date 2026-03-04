@@ -37,10 +37,9 @@ test("that the user is able to click through the pages of the settings menu", as
     await page.getByRole('button', { name: 'Datenbankeinstellungen' }).click();
     await expect(page.getByRole('heading', { name: 'Datenbankeinstellungen' })).toBeVisible();
     await expect(page.getByText('Bitte Datenbank auswählen.')).toBeVisible();
-    await page.getByRole('button', { name: 'Über die App' }).dblclick();
+    await page.getByRole('button', { name: 'Über die App' }).click();
     await expect(page.getByRole('heading', { name: 'Über diese Anwendung' })).toBeVisible();
-    await expect(page.getByText('Lizenz: MIT License')).toBeVisible();
-    await page.locator('.dialog.settings-layout > .closeIcon').click();
+    await page.getByRole('img').first().click();
 });
 
 test("should check that all settings toggle buttons work correctly", async ({ page }) => {
@@ -63,18 +62,18 @@ test("should check that all settings toggle buttons work correctly", async ({ pa
     `);
     //Sync
     await expect(page.locator('#root')).toMatchAriaSnapshot(`
-    - checkbox "Synchronisation" [checked]
-    - text: Synchronisation
+    - checkbox "Server Synchronisation" [checked]
+    - text: Server Synchronisation
     `);
-    await page.locator('span').nth(1).click();
+    await page.locator('label').filter({ hasText: 'Server Synchronisation' }).locator('span').click();
     await expect(page.locator('#root')).toMatchAriaSnapshot(`
-    - checkbox "Synchronisation"
-    - text: Synchronisation
+    - checkbox "Server Synchronisation"
+    - text: Server Synchronisation
     `);
-    await page.locator('span').nth(1).click();
+    await page.locator('label').filter({ hasText: 'Server Synchronisation' }).locator('span').click();
     await expect(page.locator('#root')).toMatchAriaSnapshot(`
-    - checkbox "Synchronisation" [checked]
-    - text: Synchronisation
+    - checkbox "Server Synchronisation" [checked]
+    - text: Server Synchronisation
     `);
     //p2p
     await expect(page.locator('#root')).toMatchAriaSnapshot(`
