@@ -481,21 +481,19 @@ input[type="number"] {
 .copyButton, .eyeButton, .passwordGenButton {
     margin-left: 15px;
     box-shadow: none;
-    grid-column-start: 20 !important;
+    grid-column-start: 20;
     grid-column: span 1;
 }
 
 .copyButton.selected {
     background-color: transparent;
     color: var(--primary);
-    border: 1px solid var(--primary);
     transform: none;
-    box-shadow: none;!important;
+    box-shadow: none;
     cursor: auto;
 }
 
-.qrButton,
-.eyeButton {
+.qrButton, .eyeButton {
     padding: 0.5rem;
     background-color: transparent;
     color: var(--primary);
@@ -503,8 +501,14 @@ input[type="number"] {
     grid-column-start: 19 !important;
 }
 
-.qrButton,
-.eyeButton.selected {
+.copyButton {
+    padding: 0.5rem;
+    background-color: var(--primary);
+    color: var(--text);
+    border: 1px solid var(--primary);
+}
+
+.qrButton, .eyeButton.selected {
     color: var(--text);
     background-color: var(--primary);
 }
