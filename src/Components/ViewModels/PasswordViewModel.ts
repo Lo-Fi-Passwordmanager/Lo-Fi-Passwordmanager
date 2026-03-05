@@ -295,7 +295,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade) => {
      * @param path the current path of item ids, used for recursion, defaults to an empty array
      */
     function getPath(target: Item, folder: Folder = getRootFolder(), path: string[] = []): string[] {
-        for (const item of folder.entries) {
+        for (const item of folder.items) {
             if (item.id === target.id) {
                 return [...path, item.id];
             } else if (item.isFolder()) {
@@ -379,22 +379,22 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade) => {
     function getSortedChildren(folder: Folder): Item[] {
         switch (`${curSortCrit}-${isAscending}`) {
             case `${SortCriteria.Name}-true`:
-                return (folder).entries.slice().sort((a, b) => a.title.localeCompare(b.title));
+                return (folder).items.slice().sort((a, b) => a.title.localeCompare(b.title));
 
             case `${SortCriteria.Name}-false`:
-                return (folder).entries.slice().sort((a, b) => b.title.localeCompare(a.title));
+                return (folder).items.slice().sort((a, b) => b.title.localeCompare(a.title));
 
             case `${SortCriteria.CreatedAt}-true`:
-                return (folder).entries.slice().sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+                return (folder).items.slice().sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
 
             case `${SortCriteria.CreatedAt}-false`:
-                return (folder).entries.slice().sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+                return (folder).items.slice().sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 
             case `${SortCriteria.EditedAt}-true`:
-                return (folder).entries.slice().sort((a, b) => a.editedAt.getTime() - b.editedAt.getTime());
+                return (folder).items.slice().sort((a, b) => a.editedAt.getTime() - b.editedAt.getTime());
 
             case `${SortCriteria.EditedAt}-false`:
-                return (folder).entries.slice().sort((a, b) => b.editedAt.getTime() - a.editedAt.getTime());
+                return (folder).items.slice().sort((a, b) => b.editedAt.getTime() - a.editedAt.getTime());
         }
         return [];
     }

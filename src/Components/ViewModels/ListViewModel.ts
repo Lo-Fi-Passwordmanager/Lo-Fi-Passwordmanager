@@ -88,10 +88,10 @@ export const useListViewModel = (
     const getDescendantIds = (item: Item): string[] => {
         if (item.isEntry()) {
             return [];
-        } else if (!(item as Folder).entries) {
+        } else if (!(item as Folder).items) {
             return [];
         }
-        return (item as Folder).entries.flatMap((child) => [child.id, ...getDescendantIds(child)]);
+        return (item as Folder).items.flatMap((child) => [child.id, ...getDescendantIds(child)]);
     };
 
     /**
