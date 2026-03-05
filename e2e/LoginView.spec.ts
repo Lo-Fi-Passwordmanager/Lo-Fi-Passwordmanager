@@ -1,4 +1,4 @@
-import {expect, test} from "@playwright/test";
+import {expect, test} from "./playwrightSetup";
 
 test('to open the app correctly', async ({ page }) => {
     await page.goto('');

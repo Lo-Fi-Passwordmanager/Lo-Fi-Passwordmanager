@@ -1,4 +1,4 @@
-import {expect, test} from "@playwright/test";
+import {expect, test} from "./playwrightSetup";
 
 test("create a new DB, delete it and add it again via URL", async ({page}) => {
 

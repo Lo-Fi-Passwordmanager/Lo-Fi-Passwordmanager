@@ -35,14 +35,14 @@ export default defineConfig({
     timeout: 30000,
 
     /* Configure projects for major browsers */
-    projects: /*process.env.COVERAGE
+    projects: process.env.COVERAGE
         ? [
             {
                 name: 'chromium',
                 use: { ...devices['Desktop Chrome'] },
             },
         ]
-        :*/ [
+        : [
             {
                 name: 'chromium',
                 use: { ...devices['Desktop Chrome'] },
@@ -55,9 +55,9 @@ export default defineConfig({
 
     // Run your local dev server before starting the tests */
     webServer: {
-        command: //process.env.COVERAGE
-            //? 'cross-env E2E=true yarn dev'
-            //:
+        command: process.env.COVERAGE
+            ? 'cross-env E2E=true yarn dev'
+            :
             'yarn dev',
         url: 'http://localhost:5173',
         reuseExistingServer: false,
