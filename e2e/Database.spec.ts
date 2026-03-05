@@ -52,11 +52,11 @@ test("create a new DB, delete it and add it again via URL", async ({page}) => {
     await page.getByRole("button", {name: "Verschlüsselt Exportieren"}).dblclick();
     const download1 = await download1Promise;
     //abmelden
-    await page.getByRole('img').first().click();
+    await page.getByRole('img').nth(1).click();
     await page.getByRole("button", {name: "⬅"}).click();
     await expect(page.getByRole("button", {name: "URL kopieren"})).toBeVisible();
     //Db löschen
-    await page.getByRole("button").nth(5).click();
+    await page.getByRole('button').filter({ hasText: 'Datenbank entfernen' }).click();
     await expect(page.getByRole("heading", {name: "Löschen bestätigen"})).toBeVisible();
     await page.getByRole("button", {name: "Löschen"}).dblclick();
     //Menu für Db mit url laden öffnen
