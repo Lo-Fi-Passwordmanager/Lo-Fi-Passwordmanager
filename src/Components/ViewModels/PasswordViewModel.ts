@@ -8,7 +8,7 @@ import type { AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {type Attribute} from "../../Utility/AutomergeFacade.ts";
 import {
     loadCurrentSortCriterion,
-    loadIsAscending,
+    loadIsAscending, loadSynchronizationSettings,
     saveCurrentSortCriterion,
     saveIsAscending
 } from "../../Utility/Storage.ts";
@@ -159,7 +159,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade) => {
      * Toggles the inEditable state and updates the synchronization setting accordingly
      */
     function toggleInEdit() {
-        if (settings.getSynchronization()) {
+        if (loadSynchronizationSettings()) { // only toggle if sync is enabled beforehand
             settings.setSynchronization(inEditable, !inEditable);
         }
         setInEditable(!inEditable);

@@ -1,4 +1,3 @@
-
 import type {DataConnection} from "peerjs";
 import {useEffect, useState} from "react";
 
@@ -91,15 +90,23 @@ export const useSettingsViewModel = () => {
     function selectServer(server: string) {
         settings.setServerUrl(server);
         setServerName(server);
+
+        // Toggle synchronisation off and on again to ensure that the new server is connected
+        // directly change settings so the UI doenst change
+        settings.setSynchronization(false)
+        setTimeout(() => {
+            settings.setSynchronization(true);
+        }, 50); // Timeout is needed to ensure that the synchronisation setting is updated before it is toggled on again
     }
 
     function toggleTimeOutActive() {
         setTimeOutActive(!timeOutActive);
     }
+
     //Checks that timeout cant be 0 or less since that causes the whole app to be unusable
     function setTimeOutLengthVM(newLength: string) {
-        const length:number = Number(newLength);
-        if(length >= 1) {
+        const length: number = Number(newLength);
+        if (length >= 1) {
             setTimeoutLength(length);
         }
     }
@@ -111,7 +118,7 @@ export const useSettingsViewModel = () => {
 
     // Decreases timeout length by 1 minute
     function decreaseTimeout() {
-        if(timeoutLength > 1) {
+        if (timeoutLength > 1) {
             setTimeOutLengthVM((timeoutLength - 1).toString());
         }
     }
