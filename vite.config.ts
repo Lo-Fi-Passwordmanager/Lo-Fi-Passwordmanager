@@ -28,7 +28,10 @@ export default defineConfig({
             enabled: true,
             reportOnFailure: true,
             provider: 'v8',
-            include: ['src/test/**/*.{ts,tsx}'],
+            include:
+            process.env.INTEGRATION == "true"
+                ? ['src/integrationTests/**/*.{ts,tsx}']
+                : ['src/test/**/*.{ts,tsx}'],
             exclude: ['scryptConfig.ts', // excluding since the config is used to reduce scrypt-time during tests only and therefore can't be covered
                 'src/Components/Views',
                 'main.tsx'

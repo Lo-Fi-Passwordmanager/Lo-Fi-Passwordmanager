@@ -14,7 +14,7 @@
     "test:coverage": "vitest run --coverage",
     "test:ci": "vitest run",
     "coverage": "vitest --ui --coverage.enabled=true",
-    "integration": "yarn test ./integrationTests --ui"
+    "integration": "INTEGRATION=true vitest run --coverage ./integrationTests"
   },
   "dependencies": {
     "@automerge/automerge": "^3.2.2",
