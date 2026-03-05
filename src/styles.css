@@ -49,6 +49,10 @@
     }
 }
 
+a {
+    color: var(--text);
+}
+
 /* DARK THEME */
 [data-theme="dark"] {
     --bg: rgb(22, 24, 28);
@@ -1111,6 +1115,15 @@ input[type="number"] {
 .status-new .timeline-label {
     background: var(--loading-text);
     color: #166534;
+}
+
+.status-move .timeline-label {
+    background: var(--loading-text);
+    color: #da9003;
+}
+
+.folder {
+    text-transform: uppercase;
 }
 
 .status-update .timeline-label {

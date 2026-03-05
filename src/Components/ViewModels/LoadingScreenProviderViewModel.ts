@@ -2,8 +2,7 @@ import {type Context, createContext, useContext, useState} from "react";
 
 type LoadingScreenContext = (active: boolean) => void
 
-// @ts-expect-error variable is necessary for type compatibility
-export const LoadingContext: Context<LoadingScreenContext> = createContext((active) => {});
+export const LoadingContext: Context<LoadingScreenContext> = createContext((_active) => {});
 
 export function useLoadingScreen() {
     const context = useContext(LoadingContext);
@@ -18,6 +17,6 @@ export const useLoadingScreenProviderViewModel = () => {
 
     return {
         loading,
-        setLoadingScreen,
+        setLoadingScreen
     };
 };

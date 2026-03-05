@@ -190,15 +190,6 @@ export const useLoginViewModel = (
 
 
     /**
-     * Initiates the deletion of a database
-     *
-     * @param name the name of the database to delete
-     */
-    function deleteDatabase(name: string) {
-        setDatabaseToDelete(name);
-    }
-
-    /**
      * Confirms the deletion of a database
      *
      * @param name the name of the database to delete
@@ -327,7 +318,6 @@ export const useLoginViewModel = (
         closeEnterPasswordDialog,
         importDatabaseFromURL,
         setToastMessage,
-        deleteDatabase,
         changeDatabaseName,
         confirmDeleteDatabase,
         setDatabaseToDelete,
