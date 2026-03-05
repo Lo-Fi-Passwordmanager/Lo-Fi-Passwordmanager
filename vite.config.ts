@@ -22,7 +22,7 @@ export default defineConfig({
     plugins: [wasm(), react(), viteSingleFile(),
         process.env.E2E &&
         istanbul({
-            include: 'src/*',
+            include: ['src/**/*'],
             extension: ['.js', '.ts', '.jsx', '.tsx'],
             requireEnv: true,
         }),

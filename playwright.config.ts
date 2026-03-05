@@ -56,7 +56,7 @@ export default defineConfig({
     // Run your local dev server before starting the tests */
     webServer: {
         command: process.env.COVERAGE
-            ? 'cross-env E2E=true yarn dev'
+            ? 'cross-env E2E=true VITE_COVERAGE=true yarn dev'
             :
             'yarn dev',
         url: 'http://localhost:5173',
