@@ -215,6 +215,10 @@ const SettingsView: React.FC<{
                                                         <span>{id}</span>
                                                     </button>
 
+                                                    <span>
+                                                        {viewModel.otherPeerMap.get(id)![1].isReady() ? "Ja" : "Nein"}
+                                                    </span>
+
                                                     <button
                                                         className="squareButton"
                                                         onClick={() => void viewModel.removePeer(id)}>
