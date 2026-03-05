@@ -24,26 +24,34 @@ export default defineConfig({
     },
     test: {
         environment: "jsdom",
+        include:
+            process.env.INTEGRATION == "true"
+                ? ['./integrationTests/**/*.test.{ts,tsx}']
+                : ['./tests/**/*.test.{ts,tsx}'],
         coverage: {
             enabled: true,
             reportOnFailure: true,
             provider: 'v8',
-            include:
-            process.env.INTEGRATION == "true"
-                ? ['src/integrationTests/**/*.{ts,tsx}']
-                : ['src/test/**/*.{ts,tsx}'],
+            include: ['src/**/*.{ts,tsx}'],
             exclude: ['scryptConfig.ts', // excluding since the config is used to reduce scrypt-time during tests only and therefore can't be covered
                 'src/Components/Views',
                 'main.tsx'
             ],
             reporter: ['text', 'html', 'lcov'],
-            reportsDirectory: './coverage',
+            reportsDirectory:
+                process.env.INTEGRATION === "true"
+                    ? './coverage/integration'
+                    : './coverage/component'
         },
-        setupFiles: ['./tests/testSetup.ts'],
+        setupFiles:
+            process.env.INTEGRATION == "true"
+                ? ['./integrationTests/testSetup.ts']
+                : ['./tests/testSetup.ts'],
         globals: true,
         execArgv: [
             '--localstorage-file',
             path.resolve(os.tmpdir(), `vitest-${process.pid}.localstorage`),
         ],
+
     },
 });
