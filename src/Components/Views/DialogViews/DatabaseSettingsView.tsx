@@ -37,10 +37,10 @@ const DatabaseSettingsView: React.FC<{
                             () => {
                                 void navigator.clipboard.writeText(
                                     (automergeFacade.automergeURL as string).replace("automerge:", ""));
-                                setToast("In die Zwischenablage kopiert")
+                                setToast("Dokument ID in die Zwischenablage kopiert")
                             }
                         }>
-                        URL kopieren
+                        Dokument ID kopieren
                     </button>
                     <ShareQRDialog name={openedDatabaseName!}
                                    url={(automergeFacade.automergeURL as string).replace("automerge:", "")}/>

@@ -45,7 +45,7 @@ const DatabaseListingView: React.FC<{
                         <button
                             className={"squareButton"}
                             onClick={() => void viewModel.copyToClipboard(url)}
-                            title="URL kopieren">
+                            title="Dokument ID kopieren">
                             <HiMiniLink size={24}/>
                         </button>
                         <ShareQRDialog name={dbName} url={url}/>
@@ -59,7 +59,7 @@ const DatabaseListingView: React.FC<{
                     </div>
                 ))}
                 <ToastDialog
-                    message="URL in die Zwischenablage kopiert!"
+                    message="Dokument ID in die Zwischenablage kopiert!"
                     isVisible={viewModel.showToast}
                     onClose={() => viewModel.setShowToast(false)}
                 />
