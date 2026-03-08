@@ -4,10 +4,10 @@ import {HiTrash} from "react-icons/hi";
 import DeleteConfirmationDialog from "./DeleteConfirmationDialog.tsx";
 import {HistoryDialog} from "./HistoryDialog.tsx";
 import ShareQRDialog from "./ShareQRDialog.tsx";
+import ToastDialog from "./ToastDialog.tsx";
 import {type AutomergeFacade} from "../../../Utility/AutomergeFacade.ts";
 import {saveFile} from "../../../Utility/InputOutputUtil.ts";
 import {removeDatabase} from "../../../Utility/Storage.ts";
-import ToastDialog from "./ToastDialog.tsx";
 
 /**
  * The view that links to the {@link Settings} singleton and toggles its values.

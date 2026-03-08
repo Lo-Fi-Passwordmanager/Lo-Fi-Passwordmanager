@@ -263,7 +263,8 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade) => {
         if (!over) {
             return;
         }
-        if (active.id !== over.id) {
+        if (active.id !== over.id
+                && reactiveFacade.itemsById.get(active.id as string)?.parentId !== over.id) {
             reactiveFacade.updateItem(active.id as string, [["parentId", over.id as string]]);
             expandFolder(over.id as string);
         }
