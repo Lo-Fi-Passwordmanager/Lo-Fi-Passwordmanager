@@ -4,17 +4,17 @@ import {AutomergeFacade} from "../../src/Utility/AutomergeFacade";
 import {SecurityProvider} from "../../src/Utility/Security/SecurityProvider";
 
 
-describe('AutomergeFacade', ()=> {
+describe('AutomergeFacade mocked Repo', () => {
     let automergeFacade: AutomergeFacade;
     let repo: Repo;
     const secProvider = new SecurityProvider();
 
-    beforeEach(()=> {
+    beforeEach(() => {
         repo = createMockRepo();
         automergeFacade = new AutomergeFacade(repo, undefined, secProvider);
     })
 
-    afterEach(()=> {
+    afterEach(() => {
 
     })
 
@@ -42,7 +42,7 @@ describe('AutomergeFacade', ()=> {
         expect(validation).toBe(null);
     })
 
-    it("should throw an error when the url is invalid", ()=> {
+    it("should throw an error when the url is invalid", () => {
         const repo = createMockRepo();
         expect(() => {
             new AutomergeFacade(repo, 'invalid-url');
@@ -66,11 +66,11 @@ describe('AutomergeFacade', ()=> {
         expect(validation).toBe("validation");
     })
 
-    it('should be able to return the SecurityProvider', ()=> {
+    it('should be able to return the SecurityProvider', () => {
         expect(automergeFacade.getSecurityProvider()).toBeInstanceOf(SecurityProvider)
     });
 
-    it('should return null when history is called and automerge url is null', async ()=> {
+    it('should return null when history is called and automerge url is null', async () => {
         expect(await automergeFacade.getHistory()).toBe(null);
     });
 
@@ -79,6 +79,76 @@ describe('AutomergeFacade', ()=> {
         console.log(await automergeFacade.getHistory());
     });*/
 })
+
+describe('AutomergeFacade unmocked Repo', () => {
+
+    let automergeFacade: AutomergeFacade;
+    let repo: Repo;
+    const secProvider = new SecurityProvider();
+
+    beforeEach(() => {
+        repo = new Repo({
+                network: [],
+                storage: undefined,
+            }
+        )
+        automergeFacade = new AutomergeFacade(repo, undefined, secProvider);
+    })
+
+    it('should return null if automergeURL is not set', async () => {
+        const history = await automergeFacade.getHistory();
+        expect(history).toBeNull();
+    });
+
+    it('should correctly track inserts and updates in history', async () => {
+        automergeFacade.createDatabase('test-salt', 'test-validation');
+        const handle = await repo.find<any>(automergeFacade.automergeURL!);
+        await handle.whenReady();
+
+        handle.change((doc: any) => {
+            doc.items = [];
+        });
+
+        handle.change((doc: any) => {
+            doc.items.push({ name: 'Test Item 1', note: 'Start' });
+        });
+
+        handle.change((doc: any) => {
+            doc.items[0].name = 'Test Item Updated';
+        });
+
+        const history = await automergeFacade.getHistory();
+
+
+        expect(history).not.toBeNull();
+
+        const itemChanges = history!.filter(h => h.item && h.type !== undefined);
+
+        expect(itemChanges.length).toBeGreaterThanOrEqual(2);
+
+        const updateEntry = itemChanges.find(h => h.type === 'update');
+        expect(updateEntry).toBeDefined();
+        expect(updateEntry?.changes.get('name')).toBe('Test Item Updated');
+    });
+
+    it('should export the database to a Uint8Array', async () => {
+        automergeFacade.createDatabase('export-salt', 'export-validation');
+
+        const handle = await repo.find(automergeFacade.automergeURL!);
+        await handle.whenReady();
+
+        // put some data in the document
+        handle.change((doc: any) => {
+            doc.items = [{ name: 'Export Me' }];
+        });
+
+        const binary = await automergeFacade.exportAutomergeToBinary();
+
+        expect(binary).toBeDefined();
+        expect(binary).toBeInstanceOf(Uint8Array);
+        expect(binary!.length).toBeGreaterThan(0);
+    });
+});
 
 function createMockRepo() {
     return {
