@@ -25,6 +25,8 @@ tests:
 
 playwright:
   stage: test
+  tags:
+    - "kgr2-instance-standard"
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH != 'main'
@@ -49,8 +51,10 @@ test-report:
     - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'cd /home/ubuntu/automerge/reports/coverage/ && sed -i "s/href=\"/href=\"coverage\//g" index.html && sed -i "s/href=\"coverage\/https:\/\//href=\"https:\/\//g" index.html'
 
 
-playwright-report:
+playwright-coverage:
   stage: test
+  tags:
+    - "kgr2-instance-standard"
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH != 'main'
@@ -64,9 +68,12 @@ playwright-report:
     - yarn e2e:report || true
     - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'cd /home/ubuntu/automerge/reports/playwright-coverage/ && rm -rf *'
     - scp -i $ID_ED25519 -o StrictHostKeyChecking=no -r ./coverage/** $SERVER_USER@$SERVER_IP:/home/ubuntu/automerge/reports/playwright-coverage/
+    - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'cd /home/ubuntu/automerge/reports/playwright-coverage/ && sed -i "s/src=\"/src=\"ecov\//g" index.html '
 
-playwright-coverage:
+playwright-report:
   stage: test
+  tags:
+    - "kgr2-instance-standard"
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH != 'main'
