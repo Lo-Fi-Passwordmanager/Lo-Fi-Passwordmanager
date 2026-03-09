@@ -1,7 +1,6 @@
 import {describe, it, expect, beforeEach, afterEach, vi} from "vitest";
 import {act, renderHook} from "@testing-library/react";
-import {useQRScannerViewModel} from "../../../../src/Components/ViewModels/Dialog/qrScannerViewModel";
-
+import useQRScannerViewModel from "../../../../src/Components/ViewModels/Dialog/qrScannerViewModel"
 describe('qrScannerViewModel', ()=> {
     let setInputFields;
 

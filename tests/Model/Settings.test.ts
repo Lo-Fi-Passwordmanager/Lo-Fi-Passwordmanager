@@ -66,7 +66,7 @@ describe('Settings', () => {
 
     it('should return no server url if no server is set', ()=> {
         settings.setServerUrl("invalid server name");
-        expect(settings.getServerName()).toBe("Unknown Server");
+        expect(settings.getActiveServerName()).toBe("Unknown Server");
     });
 
     it('should activate P2P Synchronisation', ()=> {

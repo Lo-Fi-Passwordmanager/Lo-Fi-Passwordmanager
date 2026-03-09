@@ -140,6 +140,9 @@ describe("ListViewModel", () => {
         });
         expect(result.current.newTitle).toBe("newName");
         act(() => {
+            result.current.updateTitleInAutomerge();
+        });
+        act(() => {
             result.current.setAndStoreEditName(false);
         });
         expect(result.current.inEditName).toBe(false);
