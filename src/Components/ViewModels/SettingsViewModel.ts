@@ -30,19 +30,18 @@ export const useSettingsViewModel = () => {
     const [otherPeerMap, setOtherPeerMap] = useState<Map<string, [DataConnection, PeerjsNetworkAdapter]>>(settings.getConnectorsToAdapters())
     document.getElementsByTagName("html")[0]?.setAttribute("data-theme", darkMode ? "dark" : "light");
 
-    // When darkMode is updated, update settings
     useEffect(() => {
         settings.setDarkMode(darkMode);
         settings.setSynchronization(synchronisation);
-        //settings.setAutoConflictResolution(autoConflictRes);
         settings.setTimeoutActive(timeOutActive);
         settings.setTimeoutLength(timeoutLength);
     }, [darkMode, synchronisation, timeOutActive, settings, timeoutLength]);
 
     useEffect(() => {
         const handleUpdate = () => {
-            setServers(settings.getServers());
+            setServers(new Map(settings.getServers()));
         }
+
         const unsubscribe = settings.subscribe(handleUpdate);
         return () => {
             unsubscribe();
@@ -82,12 +81,12 @@ export const useSettingsViewModel = () => {
     }
 
     // Remove a server from the settings
-    function removeServer(server: string) {
+    function removeSyncServer(server: string) {
         settings.removeServer(server);
     }
 
     // Select a server from the settings
-    function selectServer(server: string) {
+    function selectSyncServer(server: string) {
         settings.setServerUrl(server);
         setServerName(server);
 
@@ -173,9 +172,9 @@ export const useSettingsViewModel = () => {
         decreaseTimeout,
         getPeerId,
         addSyncServer,
-        removeServer,
+        removeSyncServer,
         setAddServerDialogOpen,
-        selectServer,
+        selectSyncServer,
         toggleP2P,
         setToastMessage,
         setShowToast,

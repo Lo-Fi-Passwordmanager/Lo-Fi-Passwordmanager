@@ -68,9 +68,6 @@ export const usePasswordManagerViewModel = () => {
                 repo.networkSubsystem.addNetworkAdapter(adapter[1]);
             }
         }
-
-        console.log(repo.networkSubsystem.adapters);
-
     }, [syncEnabled, p2pEnabled, connectorsSize, connectorAdapter, repo.networkSubsystem, serverUrl]);
 
     function getAutomergeFacade(): AutomergeFacade | null {
