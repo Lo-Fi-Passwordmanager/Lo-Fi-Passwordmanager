@@ -26,9 +26,7 @@ tests:
 playwright:
   stage: test
   tags:
-    - "kgr1-instance-extraordinary"
-  variables:
-    DEPLOYMENT_URL: "https://5bcaaf94-60ef-4757-b55c-5f2e443c480c.ka.bw-cloud-instance.org/test"
+    - "kgr1-instance-experimental"
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH != 'main'
@@ -36,15 +34,11 @@ playwright:
   image: mcr.microsoft.com/playwright:v1.58.2-noble
   script:
     - yarn install
-    - yarn build --mode development
-    - chmod og= $ID_ED25519
-    - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'cd /home/ubuntu/automerge/test/ && rm -rf *'
-    - scp -i $ID_ED25519 -o StrictHostKeyChecking=no -r ./dist/** $SERVER_USER@$SERVER_IP:/home/ubuntu/automerge/test/
     - yarn playwright test
 
 # Uploads the test report to the server
 test-report:
-  stage: test-report
+  stage: test
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH != 'main'
@@ -54,15 +48,13 @@ test-report:
     - chmod og= $ID_ED25519
     - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'cd /home/ubuntu/automerge/reports/coverage/ && rm -rf *'
     - scp -i $ID_ED25519 -o StrictHostKeyChecking=no -r ./coverage/** $SERVER_USER@$SERVER_IP:/home/ubuntu/automerge/reports/coverage/
-    - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'cd /home/ubuntu/automerge/reports/coverage/ && sed -i "s/href=\"/href=\"coverage\//g" index.html && sed -i "s/href=\"coverage\/https:\/\//href=\"https:\/\//g" index.html'
+    - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'cd /home/ubuntu/automerge/reports/coverage/ && sed -i "s/src=\"/src=\"coverage\//g" index.html && sed -i "s/href=\"/href=\"coverage\//g" index.html && sed -i "s/href=\"coverage\/https:\/\//href=\"https:\/\//g" index.html'
 
 
-playwright-report:
-  stage: test-report
+playwright-coverage:
+  stage: test
   tags:
-    - "kgr1-instance-extraordinary"
-  variables:
-    DEPLOYMENT_URL: "https://5bcaaf94-60ef-4757-b55c-5f2e443c480c.ka.bw-cloud-instance.org/test"
+    - "kgr1-instance-experimental"
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH != 'main'
@@ -71,10 +63,26 @@ playwright-report:
   allow_failure: true
   script:
     - yarn install
-    - yarn build --mode development
     - chmod og= $ID_ED25519
-    - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'cd /home/ubuntu/automerge/test/ && rm -rf *'
-    - scp -i $ID_ED25519 -o StrictHostKeyChecking=no -r ./dist/** $SERVER_USER@$SERVER_IP:/home/ubuntu/automerge/test/
+    - yarn e2e:coverage || true
+    - yarn e2e:report || true
+    - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'cd /home/ubuntu/automerge/reports/playwright-coverage/ && rm -rf *'
+    - scp -i $ID_ED25519 -o StrictHostKeyChecking=no -r ./coverage/** $SERVER_USER@$SERVER_IP:/home/ubuntu/automerge/reports/playwright-coverage/
+    - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'cd /home/ubuntu/automerge/reports/playwright-coverage/ && sed -i "s/src=\"/src=\"ecov\//g" index.html && sed -i "s/href=\"/href=\"ecov\//g" index.html && sed -i "s/href=\"ecov\/https:\/\//href=\"https:\/\//g" index.html'
+
+playwright-report:
+  stage: test
+  tags:
+    - "kgr1-instance-experimental"
+  rules:
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH != 'main'
+    - if: $CI_COMMIT_BRANCH == 'main'
+  image: mcr.microsoft.com/playwright:v1.58.2-noble
+  allow_failure: true
+  script:
+    - yarn install
+    - chmod og= $ID_ED25519
     - yarn playwright test --trace on || true
     - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'cd /home/ubuntu/automerge/reports/playwright/ && rm -rf *'
     - scp -i $ID_ED25519 -o StrictHostKeyChecking=no -r ./playwright-report/** $SERVER_USER@$SERVER_IP:/home/ubuntu/automerge/reports/playwright/
