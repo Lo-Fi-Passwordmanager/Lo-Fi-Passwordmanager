@@ -26,7 +26,7 @@ tests:
 playwright:
   stage: test
   tags:
-    - "kgr2-instance-standard"
+    - "kgr1-instance-experimental"
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH != 'main'
@@ -54,7 +54,7 @@ test-report:
 playwright-coverage:
   stage: test
   tags:
-    - "kgr2-instance-standard"
+    - "kgr1-instance-experimental"
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH != 'main'
@@ -73,7 +73,7 @@ playwright-coverage:
 playwright-report:
   stage: test
   tags:
-    - "kgr2-instance-standard"
+    - "kgr1-instance-experimental"
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH != 'main'
