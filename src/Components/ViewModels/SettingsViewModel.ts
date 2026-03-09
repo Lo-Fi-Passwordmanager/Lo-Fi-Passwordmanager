@@ -82,6 +82,10 @@ export const useSettingsViewModel = () => {
 
     // Remove a server from the settings
     function removeSyncServer(server: string) {
+        if (server === serverName) {
+            console.error("Cannot remove the currently selected server");
+            return;
+        }
         settings.removeServer(server);
     }
 
