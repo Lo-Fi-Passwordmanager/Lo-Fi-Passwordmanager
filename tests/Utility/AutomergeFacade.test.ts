@@ -1,5 +1,5 @@
 import {afterEach, beforeEach, describe, expect, it, vi} from "vitest";
-import {Repo} from "@automerge/react";
+import {getObjectId, Repo} from "@automerge/react";
 import {AutomergeFacade} from "../../src/Utility/AutomergeFacade";
 import {SecurityProvider} from "../../src/Utility/Security/SecurityProvider";
 
@@ -147,6 +147,49 @@ describe('AutomergeFacade unmocked Repo', () => {
         expect(binary).toBeDefined();
         expect(binary).toBeInstanceOf(Uint8Array);
         expect(binary!.length).toBeGreaterThan(0);
+    });
+
+    it('should identify parent changes as item move and resolve folder names', async () => {
+        automergeFacade.createDatabase('move-salt', 'move-validation');
+        const handle = await repo.find<any>(automergeFacade.automergeURL!);
+        await handle.whenReady();
+
+        handle.change((doc: any) => {
+            doc.items = [];
+        });
+
+        handle.change((doc: any) => {
+            doc.items.push({ name: 'folder A' });
+            doc.items.push({ name: 'folder B' });
+            doc.items.push({ name: 'entry' });
+        });
+
+        const docState = handle.doc();
+        const folderAId = getObjectId(docState.items[0]);
+        const folderBId = getObjectId(docState.items[1]);
+
+        // first move: move entry  into folder A
+        handle.change((doc: any) => {
+            doc.items[2].parentId = folderAId;
+        });
+
+        // second move: move entry from folder A to folder B
+        handle.change((doc: any) => {
+            doc.items[2].parentId = folderBId;
+        });
+
+        const history = await automergeFacade.getHistory();
+        expect(history).not.toBeNull();
+
+        const moveChanges = history!.filter(h => h.type === 'move');
+
+        expect(moveChanges.length).toBe(2);
+
+        expect(moveChanges[0].oldParent).toBe('');
+        expect(moveChanges[0].changes.get('parentId')).toBe('folder A');
+
+        expect(moveChanges[1].oldParent).toBe('folder A');
+        expect(moveChanges[1].changes.get('parentId')).toBe('folder B');
     });
 });
 
