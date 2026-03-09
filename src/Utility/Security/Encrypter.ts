@@ -1,7 +1,8 @@
-import type {IEncrypter} from "./IEncrypter.ts";
 import { gcmsiv } from "@noble/ciphers/aes.js";
 import {hexToBytes, bytesToHex, bytesToUtf8, utf8ToBytes, randomBytes, type Cipher} from "@noble/ciphers/utils.js";
+
 import {DecryptionError} from "./DecryptionError.ts";
+import type {IEncrypter} from "./IEncrypter.ts";
 
 const NONCE_LENGTH = 12; //Length of the Nonce in Bytes
 const SEPARATOR = " "; // Symbol that separates the Nonce and ciphertext. Should never be a symbol in hex

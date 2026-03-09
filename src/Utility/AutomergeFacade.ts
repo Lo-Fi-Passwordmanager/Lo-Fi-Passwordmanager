@@ -1,7 +1,9 @@
-import {type DocHandle, getObjectId, isValidAutomergeUrl, Repo} from "@automerge/react";
-import {AutomergeDoc} from "../Model/Automerge/AutomergeDoc.ts";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
-import {SecurityProvider} from "./Security/SecurityProvider.ts";
+import type { Repo} from "@automerge/react";
+import {type DocHandle, getObjectId, isValidAutomergeUrl} from "@automerge/react";
+
+import type {SecurityProvider} from "./Security/SecurityProvider.ts";
+import {AutomergeDoc} from "../Model/Automerge/AutomergeDoc.ts";
 import type {HistoryEntry} from "../Model/Automerge/HistoryEntry.ts";
 
 export type Attribute = "name" | "createdAt" | "editedAt" | "parentId" | "username" | "password" | "url" | "note"
@@ -39,7 +41,7 @@ export class AutomergeFacade {
      * @param validation die Validation der neuen Datenbank
      */
     createDatabase(salt: string, validation: string) {
-        const handle = this._repo.create<AutomergeDoc>(new AutomergeDoc(salt!, validation!));
+        const handle = this._repo.create<AutomergeDoc>(new AutomergeDoc(salt, validation));
         this._automergeURL = handle.url;
         this._salt = salt;
         this._validation = validation;
@@ -86,6 +88,9 @@ export class AutomergeFacade {
         return this._securityProvider;
     }
 
+    /**
+     * Returns the history of the automergedoc. This is async and the promise is fullfiled once the whole history is stored.
+     */
     async getHistory(): Promise<HistoryEntry[] | null> {
         if (this._automergeURL === null) {
             return null;
@@ -129,7 +134,8 @@ export class AutomergeFacade {
                             itemId: newItemId,
                             changes: new Map(),
                             type: "new",
-                            item: newItem
+                            item: newItem,
+                            oldParent: ""
                         };
                         continue;
                     }
@@ -143,21 +149,37 @@ export class AutomergeFacade {
 
                     const changedValueKey = change.path[2] as string;
                     let newValue: string | number | null = null;
+                    let oldParent = "";
 
                     if (action === "put" || action === "splice") {
                         newValue = (change.value as string | number);
                     }
 
+                    if (changedValueKey === "parentId") {
+                        if (prevItem.parentId) {
+                            oldParent = prevDoc.doc().items.find((item) => getObjectId(item) == prevItem.parentId)!.name;
+                        }
+                        if (newValue) {
+                            newValue = currentDoc.doc().items.find((item) => getObjectId(item) == newValue)!.name;
+                        }
+                    }
+
                     if (historyItem === undefined) {
                         historyItem = {
                             itemId: prevItemId,
-                            changes: newValue ? new Map([[changedValueKey, newValue]]) : new Map(),
-                            type: (action === "del") ? "deleted" : "update",
-                            item: prevItem
+                            changes: newValue
+                                ? new Map<string, string | number>([[changedValueKey, newValue]])
+                                : new Map<string, string | number>(),
+                            type: (action === "del") ? "deleted" : (changedValueKey === "parentId") ? "move" : "update",
+                            item: prevItem,
+                            oldParent: oldParent
                         };
                     } else {
                         if (newValue) {
                             historyItem.changes.set(changedValueKey, newValue);
+                            if (changedValueKey === "parentId") {
+                                historyItem.type = "move";
+                            }
                         }
                     }
                 }

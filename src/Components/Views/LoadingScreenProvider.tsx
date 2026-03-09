@@ -1,6 +1,7 @@
+import React from "react";
+
 import LoadingScreen from "./DialogViews/LoadingScreen.tsx";
 import {LoadingContext, useLoadingScreenProviderViewModel} from "../ViewModels/LoadingScreenProviderViewModel.ts";
-import React from "react";
 
 /**
  * The provider for the loading screen context. It provides the ability to show and hide the loading screen.

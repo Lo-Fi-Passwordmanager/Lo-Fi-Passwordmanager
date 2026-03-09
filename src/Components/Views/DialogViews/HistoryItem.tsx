@@ -1,9 +1,10 @@
 import React from "react";
-import type {HistoryEntry} from "../../../Model/Automerge/HistoryEntry.ts";
-import {useHistoryItemViewModel} from "../../ViewModels/Dialog/HistoryItemViewModel.ts";
-import type {SecurityProvider} from "../../../Utility/Security/SecurityProvider.ts";
 import {HiEye} from "react-icons/hi";
 import {HiEyeSlash} from "react-icons/hi2";
+
+import type {HistoryEntry} from "../../../Model/Automerge/HistoryEntry.ts";
+import type {SecurityProvider} from "../../../Utility/Security/SecurityProvider.ts";
+import {useHistoryItemViewModel} from "../../ViewModels/Dialog/HistoryItemViewModel.ts";
 
 /**
  * A component that represents a single history item in the history dialog.
@@ -25,7 +26,7 @@ export const HistoryItem: React.FC<{
         <div className={`timeline-item ${viewmodel.currentConfig.class}`}>
             <div className="timeline-marker">
                 <span className="marker-icon">{viewmodel.currentConfig.icon}</span>
-                <div className="marker-line"></div>
+                <div className="marker-line" />
             </div>
 
             <div className="timeline-content">
@@ -39,7 +40,7 @@ export const HistoryItem: React.FC<{
                 </div>
 
                 <div className="timeline-body">
-                    <h4 className="item-name">{viewmodel.name || "Unbenannt"}</h4>
+                    <h4 className={`item-name ${viewmodel.itemIsFolder ? "folder" : ""}`}>{viewmodel.name || "Unbenannt"}</h4>
 
                     {viewmodel.itemType === "update" ? (
                         <div className="change-list">
@@ -73,6 +74,21 @@ export const HistoryItem: React.FC<{
                                     </div>
                                 );
                             })}
+                        </div>
+                    ) : (viewmodel.itemType == "move") ? (
+                        <div className="change-list">
+                            <div className="change-row">
+                                <span
+                                    className="attr-name">{viewmodel.oldParent ? "" : "Neuer "}Übergeordneter Ordner</span>
+                                <span className="change-path">
+                                    {viewmodel.oldParent && <><span
+                                        className="old-val folder">{viewmodel.oldParent}</span><span
+                                        className="arrow">→</span></>}
+                                    <span className="new-val folder">
+                                        {viewmodel.parent}
+                                    </span>
+                                </span>
+                            </div>
                         </div>
                     ) : (
                         <div className="change-list">

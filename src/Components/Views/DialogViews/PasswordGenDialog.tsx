@@ -1,8 +1,9 @@
 import React from "react";
-import {type PasswordGenDialogProps, usePasswordGenViewModel} from "../../ViewModels/Dialog/PasswordGenViewModel.ts";
-import ToastDialog from "./ToastDialog.tsx";
 import {HiMiniPlus} from "react-icons/hi2";
+
 import Dialog from "./Dialog.tsx";
+import ToastDialog from "./ToastDialog.tsx";
+import {type PasswordGenDialogProps, usePasswordGenViewModel} from "../../ViewModels/Dialog/PasswordGenViewModel.ts";
 
 /**
  * A dialog that allows the user to generate a new password with specified criteria.
@@ -57,9 +58,7 @@ const PasswordGenDialog: React.FC<PasswordGenDialogProps> = ({setNewPassword}: P
                 </div>
                 <ToastDialog message={viewModel.toastMessage}
                              isVisible={viewModel.toastVisible}
-                             onClose={() => viewModel.setToastVisible(false)}>
-
-                </ToastDialog>
+                             onClose={() => viewModel.setToastVisible(false)} />
             </Dialog>
         );
     } else {

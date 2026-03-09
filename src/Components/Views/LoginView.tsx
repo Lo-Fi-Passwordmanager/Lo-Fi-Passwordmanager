@@ -1,15 +1,16 @@
-import React from "react";
-import {useLoginViewModel} from "../ViewModels/loginViewModel.ts";
-import DatabaseListingView from "./ListingViews/DatabaseListingView.tsx";
-import CreateDatabaseDialog from "./DialogViews/CreateDatabaseDialog.tsx";
-import LoginDatabaseDialog from "./DialogViews/LoginDatabaseDialog.tsx";
-import PWMLogo from "../../assets/logo_gelb.svg?inline";
 import type {Repo} from "@automerge/react";
+import React from "react";
+import {HiMiniPlus} from "react-icons/hi2";
+
+import {useLoginViewModel} from "../ViewModels/loginViewModel.ts";
+import CreateDatabaseDialog from "./DialogViews/CreateDatabaseDialog.tsx";
+import DeleteConfirmationDialog from "./DialogViews/DeleteConfirmationDialog.tsx";
+import LoginDatabaseDialog from "./DialogViews/LoginDatabaseDialog.tsx";
+import ToastDialog from "./DialogViews/ToastDialog.tsx";
+import DatabaseListingView from "./ListingViews/DatabaseListingView.tsx";
+import PWMLogo from "../../assets/logo_gelb.svg?inline";
 import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import  {type SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
-import ToastDialog from "./DialogViews/ToastDialog.tsx";
-import {HiMiniPlus} from "react-icons/hi2";
-import DeleteConfirmationDialog from "./DialogViews/DeleteConfirmationDialog.tsx";
 
 /**
  * The view that should be shown, when the user is not logged in yet and can select/create a database to open plus other related actions
@@ -41,7 +42,7 @@ const LoginView: React.FC<{
                     <DatabaseListingView
                         databases={viewModel.databases}
                         openDatabase={viewModel.openEnterPasswordDialog}
-                        removeDatabase={viewModel.deleteDatabase}
+                        removeDatabase={viewModel.setDatabaseToDelete}
                         renameDatabase={viewModel.changeDatabaseName}
                     />
 
@@ -59,7 +60,7 @@ const LoginView: React.FC<{
                     isOpen={viewModel.isEnterPasswordDialogOpen}
                     title="Datenbank öffnen"
                     label1="Masterpasswort"
-                    tryOpenDatabase={viewModel.tryOpenDatabase}
+                    tryOpenDatabase={(password, name?:string) => {void viewModel.tryOpenDatabase(password, name)}}
                     onCancel={viewModel.closeEnterPasswordDialog}
                     setToastMessage={viewModel.setToastMessage}
                     setShowToast={viewModel.setShowToast}
@@ -75,10 +76,11 @@ const LoginView: React.FC<{
                     label2="Masterpasswort"
                     createDatabase={viewModel.createDatabase}
                     onCancel={viewModel.closeAddDialog}
-                    importDatabaseFromURL={viewModel.importDatabaseFromURL}
+                    importDatabaseFromURL={(name, url) => {void viewModel.importDatabaseFromURL(name, url);}}
                     setToastMessage={viewModel.setToastMessage}
                     setShowToast={viewModel.setShowToast}
-                    importDatabaseFromFile={viewModel.importDatabaseFromFile}
+                    importDatabaseFromFile={(files, name) => {
+                    void viewModel.importDatabaseFromFile(files, name);}}
                     hidePassword={viewModel.hidePassword}
                     toggleHidePassword={viewModel.toggleHidePassword}
                 />

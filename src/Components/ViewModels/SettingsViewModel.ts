@@ -1,8 +1,8 @@
-import {Settings, useSettings} from "../../Model/Settings";
-
-import {useEffect, useState} from "react";
 import type {DataConnection} from "peerjs";
-import type {PeerjsNetworkAdapter} from "../../PeerJsNetworkAdapter.ts";
+import {useEffect, useState} from "react";
+
+import type {PeerjsNetworkAdapter} from "../../../customNetworkAdapter/PeerJsNetworkAdapter.ts";
+import {Settings, useSettings} from "../../Model/Settings";
 
 /**
  * The ViewModel that is used for interfacing the {@link Settings} singleton.
@@ -19,7 +19,7 @@ export const useSettingsViewModel = () => {
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [timeoutLength, setTimeoutLength] = useState(settings.getTimeoutLength());
     const [activeTab, setActiveTab] = useState<"general" | "database" | "about">("general");
-    const [serverName, setServerName] = useState<string>(settings.getServerName());
+    const [serverName, setServerName] = useState<string>(settings.getActiveServerName());
     const [servers, setServers] = useState<Map<string, string>>(settings.getServers());
     const [serverNames, setServerNames] = useState<string[]>(Array.from(servers.keys()));
     const [addServerDialogOpen, setAddServerDialogOpen] = useState<boolean>(false);
@@ -37,9 +37,7 @@ export const useSettingsViewModel = () => {
         //settings.setAutoConflictResolution(autoConflictRes);
         settings.setTimeoutActive(timeOutActive);
         settings.setTimeoutLength(timeoutLength);
-    }, [darkMode, synchronisation,
-        //autoConflictRes,
-        timeOutActive, settings, timeoutLength]);
+    }, [darkMode, synchronisation, timeOutActive, settings, timeoutLength]);
 
     useEffect(() => {
         const handleUpdate = () => {
@@ -56,15 +54,17 @@ export const useSettingsViewModel = () => {
     }, [servers]);
 
 
+    const connectorsToAdaptersHook = settingsHook.getConnectorsToAdapters();
     useEffect(() => {
-        setOtherPeerMap(settings.getConnectorsToAdapters())
-    }, [settings.getConnectorsToAdapters()]);
+        setOtherPeerMap(connectorsToAdaptersHook)
+    }, [connectorsToAdaptersHook]);
 
+    const connectorHook = settingsHook.getConnector();
     useEffect(() => {
-        if (settings.getConnector() != null) {
-            setRemotePeerId(settings.getConnector().peer)
+        if (connectorHook != null) {
+            setRemotePeerId(connectorHook.peer)
         }
-    }, [settingsHook.getConnector()]);
+    }, [connectorHook]);
 
 
     // Update darkMode
@@ -90,15 +90,23 @@ export const useSettingsViewModel = () => {
     function selectServer(server: string) {
         settings.setServerUrl(server);
         setServerName(server);
+
+        // Toggle synchronisation off and on again to ensure that the new server is connected
+        // directly change settings so the UI doenst change
+        settings.setSynchronization(false)
+        setTimeout(() => {
+            settings.setSynchronization(true);
+        }, 50); // Timeout is needed to ensure that the synchronisation setting is updated before it is toggled on again
     }
 
     function toggleTimeOutActive() {
         setTimeOutActive(!timeOutActive);
     }
+
     //Checks that timeout cant be 0 or less since that causes the whole app to be unusable
     function setTimeOutLengthVM(newLength: string) {
-        const length:number = Number(newLength);
-        if(length >= 1) {
+        const length: number = Number(newLength);
+        if (length >= 1) {
             setTimeoutLength(length);
         }
     }
@@ -110,7 +118,7 @@ export const useSettingsViewModel = () => {
 
     // Decreases timeout length by 1 minute
     function decreaseTimeout() {
-        if(timeoutLength > 1) {
+        if (timeoutLength > 1) {
             setTimeOutLengthVM((timeoutLength - 1).toString());
         }
     }
@@ -135,8 +143,8 @@ export const useSettingsViewModel = () => {
         settings.setP2PActive(!P2P);
     }
 
-    function removePeer(id: string) {
-        settings.removeConnector(id);
+    async function removePeer(id: string) {
+        await settings.removeConnector(id);
     }
 
 

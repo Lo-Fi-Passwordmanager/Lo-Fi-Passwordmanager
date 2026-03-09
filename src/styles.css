@@ -49,6 +49,10 @@
     }
 }
 
+a {
+    color: var(--text);
+}
+
 /* DARK THEME */
 [data-theme="dark"] {
     --bg: rgb(22, 24, 28);
@@ -297,7 +301,11 @@ button:focus-visible {
 .settingsContainer {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    max-width: 400px;
+    width: 100%;
+    align-items: stretch;
+    padding: 5px;
+    box-sizing: border-box;
     gap: 24px;
     height: 100%;
 }
@@ -661,6 +669,7 @@ input[type="number"] {
     flex-direction: column;
     width: 30%;
 }
+
 .passwordViewEntry {
     border: 2px solid var(--panel);
     border-right: 0;
@@ -1108,6 +1117,15 @@ input[type="number"] {
     color: #166534;
 }
 
+.status-move .timeline-label {
+    background: var(--loading-text);
+    color: #da9003;
+}
+
+.folder {
+    text-transform: uppercase;
+}
+
 .status-update .timeline-label {
     background: var(--loading-text);
     color: var(--outline-droppable);
@@ -1320,25 +1338,11 @@ input:checked + .slider:before {
 }
 
 
-
-
-
-
-
-
-
 /* Mobile Phones should render differently*/
 @media (max-width: 768px) {
     .settings-layout {
         flex-direction: column-reverse;
         width: 100%;
-    }
-
-    .settingsContainer {
-        width: 100%;
-        align-items: stretch; /* forces children to fill the width */
-        padding: 5px;
-        box-sizing: border-box;
     }
 
     .settings-sidebar {
@@ -1351,6 +1355,15 @@ input:checked + .slider:before {
     .numberInput, .connection-settings, .server-list, .current-server, input {
         width: 95% !important;
         max-width: 100%;
+    }
+
+    .peer-connection-input {
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 2vh;
+        gap: 10px;
+        justify-content: space-between;
+        width: 100%;
     }
 
     .passwordView {
@@ -1400,6 +1413,7 @@ input:checked + .slider:before {
     .entryViewEntry {
         height: 100%;
     }
+
     .entryDateViewEntry {
         display: none;
         height: 0;

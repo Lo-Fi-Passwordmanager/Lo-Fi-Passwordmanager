@@ -16,7 +16,7 @@ describe('FilteredListViewModel', () => {
     let filterText: string;
 
     function getSortedChildern(folder: Folder): Item[] {
-        return folder.entries;
+        return folder.items;
     }
 
     beforeEach(async () => {
@@ -39,7 +39,7 @@ describe('FilteredListViewModel', () => {
 
     it('should return all Folders when no search filter is applied', async ()=> {
         const {result} = renderHook(() =>
-            useFilteredListViewModel(root, filterText, (folder) => folder.entries));
+            useFilteredListViewModel(root, filterText, (folder) => folder.items));
         let filteredFolders: Item[];
         act(() => {
             filteredFolders = result.current.getFilteredFolders();
@@ -61,7 +61,7 @@ describe('FilteredListViewModel', () => {
         });
     });
 
-    it('should filter out entries that dont contain the search term', async ()=> {
+    it('should filter out items that dont contain the search term', async ()=> {
         filterText = "Name";
         const {result} = renderHook(() =>
             useFilteredListViewModel(root, filterText, getSortedChildern));

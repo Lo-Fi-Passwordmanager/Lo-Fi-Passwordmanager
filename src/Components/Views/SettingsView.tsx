@@ -1,14 +1,14 @@
-import {useSettingsViewModel} from "../ViewModels/SettingsViewModel.ts";
-
 import React from "react";
-import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
-import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
+import {HiTrash} from "react-icons/hi";
 import {HiMiniCog8Tooth, HiMiniMinus, HiMiniPlus} from "react-icons/hi2";
-import AddServerDialog from "./DialogViews/AddServerDialog.tsx";
 
+import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import {useSettingsViewModel} from "../ViewModels/SettingsViewModel.ts";
+import AddServerDialog from "./DialogViews/AddServerDialog.tsx";
+import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
 import Dialog from "./DialogViews/Dialog.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
-import {HiTrash} from "react-icons/hi";
+
 
 /**
  * The View that represents the Settings Dialog and Button to open it
@@ -17,8 +17,9 @@ import {HiTrash} from "react-icons/hi";
  */
 const SettingsView: React.FC<{
     automergeFacade?: AutomergeFacade | null,
-    openedDbName?: string
-}> = ({automergeFacade, openedDbName}) => {
+    openedDbName?: string,
+    closeDatabase?: () => void,
+}> = ({automergeFacade, openedDbName, closeDatabase}) => {
     const viewModel = useSettingsViewModel();
 
     if (!viewModel.settingsOpen) {
@@ -66,7 +67,7 @@ const SettingsView: React.FC<{
                                 <label className="switch">
                                     <input type="checkbox" checked={viewModel.darkMode}
                                            onChange={viewModel.toggleDarkMode}/>
-                                    <span className="slider round"></span>
+                                    <span className="slider round" />
                                 </label>
                                 Dark-Mode
                             </label>
@@ -75,7 +76,7 @@ const SettingsView: React.FC<{
                                 <label className="switch">
                                     <input type="checkbox" checked={viewModel.synchronisation}
                                            onChange={viewModel.toggleSynchronisation}/>
-                                    <span className="slider round"></span>
+                                    <span className="slider round" />
                                 </label>
                                 Server Synchronisation
                             </label>
@@ -84,7 +85,7 @@ const SettingsView: React.FC<{
                                 <label className="switch">
                                     <input type="checkbox" checked={viewModel.P2P}
                                            onChange={viewModel.toggleP2P}/>
-                                    <span className="slider round"></span>
+                                    <span className="slider round" />
                                 </label>
                                 Peer-to-Peer Synchronisation
                             </label>
@@ -93,7 +94,7 @@ const SettingsView: React.FC<{
                                 <label className="switch">
                                     <input type="checkbox" checked={viewModel.timeOutActive}
                                            onChange={viewModel.toggleTimeOutActive}/>
-                                    <span className="slider round"></span>
+                                    <span className="slider round" />
                                 </label>
 
                                 Bei Inaktivität abmelden
@@ -129,7 +130,7 @@ const SettingsView: React.FC<{
 
                                                     {viewModel.serverNames.map((server) => (
                                                         viewModel.serverName !== server ? (
-                                                            <div className="server-item">
+                                                            <div className="server-item" key={server}>
                                                                 <button
                                                                     style={{
                                                                         display: "block",
@@ -176,21 +177,23 @@ const SettingsView: React.FC<{
                                     {!viewModel.P2P ? null :
                                         <div className={"connection-settings"}>
 
-                                            <h4>Peer-To-Peer Verbidung</h4>
+                                            <h4>Peer-To-Peer Verbindung</h4>
                                             <label>Eigene Peer-ID:</label>
                                             <label className={"current-server"}>{viewModel.getPeerId()}</label>
                                             <label>Fremde Peer-ID:</label>
-                                            <input type="text"
-                                                   value={viewModel.remotePeerId}
-                                                   onChange={(e) => viewModel.setRemotePeerId(e.target.value)}
-                                                   style={{marginBottom: "2vh"}}
-                                            />
-                                            <button
-                                                className="squareButton"
-                                                onClick={viewModel.connectToPeer}
-                                            >
-                                                Verbinden
-                                            </button>
+                                            <div className={"peer-connection-input"}
+                                                style={{display: "flex", marginBottom: "2vh", gap: "10px", justifyContent: "space-between", width: "100%"}}> {/* for some reason are the styles from the css not applying */}
+                                                <input type="text"
+                                                       value={viewModel.remotePeerId}
+                                                       onChange={(e) => viewModel.setRemotePeerId(e.target.value)}
+                                                />
+                                                <button
+                                                    className="rectangle-button"
+                                                    onClick={viewModel.connectToPeer}
+                                                >
+                                                    Verbinden
+                                                </button>
+                                            </div>
                                         </div>
                                     }
 
@@ -199,25 +202,25 @@ const SettingsView: React.FC<{
                                             <span>Verbundene Peers:</span>
 
                                             {Array.from(viewModel.otherPeerMap.keys()).map((id) => (
-                                                    <div className="server-item">
-                                                        <button
-                                                            style={{
-                                                                display: "block",
-                                                                whiteSpace: "nowrap",
-                                                                overflow: "hidden",
-                                                                textOverflow: "ellipsis",
-                                                                flex: 1
-                                                            }}
-                                                        >
-                                                            <span>{id}</span>
-                                                        </button>
+                                                <div className="server-item" key={id}>
+                                                    <button
+                                                        style={{
+                                                            display: "block",
+                                                            whiteSpace: "nowrap",
+                                                            overflow: "hidden",
+                                                            textOverflow: "ellipsis",
+                                                            flex: 1
+                                                        }}
+                                                    >
+                                                        <span>{id}</span>
+                                                    </button>
 
-                                                        <button
-                                                            className="squareButton"
-                                                            onClick={() => viewModel.removePeer(id)}>
-                                                            <HiTrash size={24}/>
-                                                        </button>
-                                                    </div>
+                                                    <button
+                                                        className="squareButton"
+                                                        onClick={() => void viewModel.removePeer(id)}>
+                                                        <HiTrash size={24}/>
+                                                    </button>
+                                                </div>
                                             ))}
                                         </div>)}
 
@@ -231,7 +234,8 @@ const SettingsView: React.FC<{
                             <h3>Datenbankeinstellungen</h3>
                             {automergeFacade ? (
                                 <DatabaseSettingsView automergeFacade={automergeFacade}
-                                                      openedDatabaseName={openedDbName}/>
+                                                      openedDatabaseName={openedDbName}
+                                                    closeDatabase={closeDatabase!}/>
                             ) : (
                                 <p>Bitte Datenbank auswählen.</p>
                             )}
@@ -316,8 +320,11 @@ const SettingsView: React.FC<{
                                      style={{fontSize: "0.8em", opacity: 0.7, marginTop: "20px"}}>
                                 <p>Copyright © {new Date().getFullYear()}</p>
                                 <p style={{maxWidth: "500px"}}>
-                                    Die Software wird "wie besehen" bereitgestellt, ohne jegliche ausdrückliche oder
-                                    implizierte Gewährleistung.
+                                    Die Software wird &quot;wie besehen&quot; bereitgestellt, ohne jegliche Haftung.
+                                    <br/>
+                                    <a href={"https://opensource.org/license/mit"}>
+                                        MIT-Lizenz
+                                    </a>
                                 </p>
                             </section>
                         </div>

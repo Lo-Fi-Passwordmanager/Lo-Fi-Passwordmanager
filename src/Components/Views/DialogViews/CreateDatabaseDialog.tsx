@@ -1,9 +1,10 @@
-import React from "react";
-import {useCreateDatabaseViewModel} from "../../ViewModels/Dialog/CreateDatabaseViewModel.ts";
-import Dialog from "./Dialog.tsx";
-import EyeButton from "../ButtonViews/EyeButton.tsx";
 import type {AutomergeUrl} from "@automerge/automerge-repo";
+import React from "react";
+
+import Dialog from "./Dialog.tsx";
 import QRScannerDialog from "./QRScannerDialog.tsx";
+import {useCreateDatabaseViewModel} from "../../ViewModels/Dialog/CreateDatabaseViewModel.ts";
+import EyeButton from "../ButtonViews/EyeButton.tsx";
 
 /**
  * A dialog that allows the user to create a new database or import an existing one.
@@ -51,7 +52,7 @@ const CreateDatabaseDialog: React.FC<{
     toggleHidePassword
 }) => {
 
-    const viewModel = useCreateDatabaseViewModel(isOpen, createDatabase, importDatabaseFromURL, setToastMessage, setShowToast, importDatabaseFromFile);
+    const viewModel = useCreateDatabaseViewModel(createDatabase, importDatabaseFromURL, setToastMessage, setShowToast, importDatabaseFromFile);
 
     if (!isOpen) return null;
 

@@ -1,16 +1,17 @@
+import {useRepo} from "@automerge/automerge-repo-react-hooks";
+import {DndContext, pointerWithin} from "@dnd-kit/core";
 import React from "react";
-import ListView from "./ListView.tsx";
+
 import EntryView from "./EntryView.tsx";
+import ListView from "./ListView.tsx";
 import OrganizeListView from "./OrganizeListView.tsx";
+import type {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {usePasswordViewModel} from "../ViewModels/PasswordViewModel.ts";
-import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import DeleteConfirmationDialog from "./DialogViews/DeleteConfirmationDialog.tsx";
 import ItemCreationDialog from "./DialogViews/ItemCreationDialog.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
 import EditableEntryView from "./EditableEntryView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
-import {DndContext, pointerWithin} from "@dnd-kit/core";
-import {useRepo} from "@automerge/automerge-repo-react-hooks";
-import DeleteConfirmationDialog from "./DialogViews/DeleteConfirmationDialog.tsx";
 
 
 interface PasswordViewProps {
@@ -63,7 +64,6 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                         {viewModel.searchValue.length > 0 && <FilteredListView
                             root={viewModel.getRootFolder()}
                             setCurItem={viewModel.setCurItem}
-                            deleteItem={viewModel.deleteItem}
                             filterText={viewModel.searchValue}
                             goToFolder={viewModel.goToItem}
                             getSortedChildren={viewModel.getSortedChildren}
@@ -130,8 +130,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                 {/*A Toast that may be called at any time with a given message*/}
                 <ToastDialog message={viewModel.toastMessage}
                              isVisible={viewModel.toastVisible}
-                             onClose={() => viewModel.setToastVisible(false)}>
-                </ToastDialog>
+                             onClose={() => viewModel.setToastVisible(false)} />
             </div>
         </div>
     );

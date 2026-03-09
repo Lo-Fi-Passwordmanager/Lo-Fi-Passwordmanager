@@ -1,10 +1,11 @@
 import React from "react";
-import {type Item} from "../../Model/Item.ts";
+
+import EyeButton from "./ButtonViews/EyeButton.tsx";
+import PasswordGenDialog from "./DialogViews/PasswordGenDialog.tsx";
 import Logo from "../../assets/logo_gelb.svg?inline";
+import {type Item} from "../../Model/Item.ts";
 import type {Attribute} from "../../Utility/AutomergeFacade.ts";
 import {useEditablePasswordViewModel} from "../ViewModels/EditablePasswordViewModel.ts";
-import PasswordGenDialog from "./DialogViews/PasswordGenDialog.tsx";
-import EyeButton from "./ButtonViews/EyeButton.tsx";
 
 
 /**
@@ -43,6 +44,11 @@ const EditableEntryView: React.FC<{
             <div className={"entryViewContainer"}>
                 <div className="entryViewEntry">
                     <input className={"title-value"} type={"text"} value={viewmodel.title} autoFocus
+                           onFocus={e => {
+                               if (inCreation) {
+                                   e.target.select();
+                               }
+                           }}
                            onChange={(e) => viewmodel.setTitle(e.target.value)}/>
 
                     <div className={"divider"} style={{background:"transparent"}}/>

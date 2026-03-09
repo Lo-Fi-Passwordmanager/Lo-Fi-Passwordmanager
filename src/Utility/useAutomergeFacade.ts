@@ -1,9 +1,7 @@
 import {useDocument} from "@automerge/react";
-import {AutomergeDoc} from "../Model/Automerge/AutomergeDoc.ts";
-import {DatabaseRoot} from "../Model/DatabaseRoot.ts";
-import type {AutomergeItem} from "../Model/Automerge/AutomergeItem.ts";
-import type {Item} from "../Model/Item.ts";
-import {type Attribute, AutomergeFacade} from "./AutomergeFacade.ts";
+
+import type { AutomergeFacade} from "./AutomergeFacade.ts";
+import {type Attribute} from "./AutomergeFacade.ts";
 import {
     automergeItemFromDatabaseItem,
     buildDatabaseAsTree,
@@ -12,6 +10,10 @@ import {
     isFolder,
     updateValue
 } from "./AutomergeHelper.ts";
+import type {AutomergeDoc} from "../Model/Automerge/AutomergeDoc.ts";
+import type {AutomergeItem} from "../Model/Automerge/AutomergeItem.ts";
+import type {DatabaseRoot} from "../Model/DatabaseRoot.ts";
+import type {Item} from "../Model/Item.ts";
 
 
 /**
@@ -87,7 +89,7 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
         changeDoc(
             (doc) => {
                 changes.forEach(
-                    ([attr, val]) => updateValue(doc, itemId, itemsById, attr, (typeof val == "string" && attr !== "parentId") ? automergeFacade.getSecurityProvider()!.encryptValue(val) : val) //FIXME? parent ids verschlüsseln schlecht anscheinend
+                    ([attr, val]) => updateValue(doc, itemId, itemsById, attr, (typeof val == "string" && attr !== "parentId") ? automergeFacade.getSecurityProvider()!.encryptValue(val) : val)
                 );
                 updateValue(doc, itemId, itemsById, "editedAt", new Date());
             }
@@ -113,7 +115,11 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
         tree,
         insertItem,
         deleteItem,
-        updateItem
+        updateItem,
+        /**
+         * The Map containing a 1 to 1 maping of all active ids to their items
+         */
+        itemsById,
     };
 
 };

@@ -1,14 +1,15 @@
 import {type Doc, getObjectId} from "@automerge/react";
-import {AutomergeDoc} from "../Model/Automerge/AutomergeDoc.ts";
-import {SecurityProvider} from "./Security/SecurityProvider.ts";
-import {DatabaseRoot} from "../Model/DatabaseRoot.ts";
-import type {AutomergeItem} from "../Model/Automerge/AutomergeItem.ts";
-import type {Item} from "../Model/Item.ts";
-import {Entry} from "../Model/Entry.ts";
-import {Folder} from "../Model/Folder.ts";
+
+import type {Attribute} from "./AutomergeFacade.ts";
+import type {SecurityProvider} from "./Security/SecurityProvider.ts";
+import type {AutomergeDoc} from "../Model/Automerge/AutomergeDoc.ts";
 import {AutomergeEntry} from "../Model/Automerge/AutomergeEntry.ts";
 import {AutomergeFolder} from "../Model/Automerge/AutomergeFolder.ts";
-import type {Attribute} from "./AutomergeFacade.ts";
+import type {AutomergeItem} from "../Model/Automerge/AutomergeItem.ts";
+import {DatabaseRoot} from "../Model/DatabaseRoot.ts";
+import {Entry} from "../Model/Entry.ts";
+import {Folder} from "../Model/Folder.ts";
+import type {Item} from "../Model/Item.ts";
 
 
 /**
@@ -84,8 +85,8 @@ export function databaseItemFromAutomergeItem(automergeItem: AutomergeItem, secu
  */
 export function automergeItemFromDatabaseItem(item: Item, parentId: string, securityProvider: SecurityProvider): AutomergeItem {
     const name = securityProvider.encryptValue(item.title);
-    const createdAt = item.createdAt!.getTime() / 1000;
-    const editedAt = item.editedAt!.getTime() / 1000;
+    const createdAt = item.createdAt.getTime() / 1000;
+    const editedAt = item.editedAt.getTime() / 1000;
 
     if (item.isEntry()) {
         const entry = item as Entry;
@@ -131,7 +132,14 @@ function buildPath(item: AutomergeItem, itemsById: Map<string, AutomergeItem>): 
         return [];
     }
 
-    return buildPath(itemsById.get(item.parentId)!, itemsById).concat(item.parentId);
+    const parent = itemsById.get(item.parentId);
+
+    if (parent === undefined) {
+        console.info("Found item with invalid parent id, treating as empty parent id.");
+        return [];
+    }
+
+    return buildPath(parent, itemsById).concat(item.parentId);
 }
 
 /**
@@ -145,7 +153,7 @@ function findNestedValue(databaseRoot: DatabaseRoot, path: string[]): Item {
         return databaseRoot.rootFolder;
     }
 
-    let currentValue: Item | null = databaseRoot.getChildById(path[0]);
+    let currentValue: Item | null = databaseRoot.rootFolder.getChildById(path[0]);
 
     if (currentValue === null) {
         throw Error(`Child with ID ${path[0]} does not exist on DatabaseRoot.`);
@@ -203,17 +211,16 @@ export function deleteValue(d: AutomergeDoc, itemId: string, itemsById: Map<stri
         throw new Error(`Cannot find parent object with ID ${itemId}`);
     }
 
-    const index = d.items.indexOf(item);
-
-    d.items.splice(index, 1);
-
     if (isFolder(item)) {
-        for (const value of d.items) {
-            if (value.parentId === itemId) {
-                deleteValue(d, getObjectId(value)!, itemsById);
+        for (const item of itemsById.values()) {
+            if (item.parentId === itemId) {
+                deleteValue(d, getObjectId(item)!, itemsById);
             }
         }
     }
+
+    const index = d.items.indexOf(item);
+    d.items.splice(index, 1);
 }
 
 export function updateValue(d: AutomergeDoc, itemId: string, itemsById: Map<string, AutomergeItem>, attribute: Attribute, newValue: string | Date) {

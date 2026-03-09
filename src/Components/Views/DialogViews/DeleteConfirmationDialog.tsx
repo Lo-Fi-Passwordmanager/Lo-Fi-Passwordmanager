@@ -1,7 +1,8 @@
 import React from "react";
-import Dialog from "./Dialog.tsx";
-import {Item} from "../../../Model/Item.ts";
 import {HiTrash} from "react-icons/hi";
+
+import Dialog from "./Dialog.tsx";
+import type {Item} from "../../../Model/Item.ts";
 
 /**
  * A dialog that confirms the deletion of either an item or a database.
@@ -27,10 +28,12 @@ const DeleteConfirmationDialog: React.FC<{
             <Dialog title="Löschen bestätigen" onCloseDialog={onClose}>
                 <div className={"confirmDeleteWrapper"}>
             <span>
-                Die Datenbank '<strong>{database}</strong>' wirklich löschen?
+                Die Datenbank &quot;<strong>{database}</strong>&quot; wirklich löschen?
             </span>
                     <div>
-                        <button className={"rectangle-button delete"} onClick={() => onConfirmDb(database)}>
+                        <button className={"rectangle-button delete"}
+                                autoFocus
+                                onClick={() => onConfirmDb(database)}>
                             <HiTrash size={24}/> Löschen
                         </button>
                     </div>
@@ -42,10 +45,12 @@ const DeleteConfirmationDialog: React.FC<{
             <Dialog title="Löschen bestätigen" onCloseDialog={onClose}>
                 <div className={"confirmDeleteWrapper"}>
             <span>
-                Den {item.isEntry() ? "Eintrag" : "Ordner"} '<strong>{item.title}</strong>' wirklich löschen?
+                Den {item.isEntry() ? "Eintrag" : "Ordner"} &quot;<strong>{item.title}</strong>&quot; wirklich löschen?
             </span>
                     <div>
-                        <button className={"rectangle-button delete"} onClick={() => onConfirmItem(item)}>
+                        <button className={"rectangle-button delete"}
+                                autoFocus
+                                onClick={() => onConfirmItem(item)}>
                             <HiTrash size={24}/> Löschen
                     </button>
                 </div>
