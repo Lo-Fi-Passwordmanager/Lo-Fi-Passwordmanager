@@ -10,6 +10,7 @@ import React from "react";
  */
 const useAddServerDialogViewModel = (
     onAddServer: (name: string, url: string) => void,
+    serverNames: string[],
     onClose: () => void,
     setShowToast: (show: boolean) => void,
     setToastMessage: (message: string) => void
@@ -20,6 +21,10 @@ const useAddServerDialogViewModel = (
     const handleAddServer = () => {
         if (name.trim() === "" || url.trim() === "") {
             setToastMessage("Name und URL dürfen nicht leer sein!");
+            setShowToast(true);
+            return;
+        } else if (serverNames.includes(name.trim())) {
+            setToastMessage("Ein Server mit diesem Namen existiert bereits!");
             setShowToast(true);
             return;
         } else if (!validateWsUrl(url.trim())) {
