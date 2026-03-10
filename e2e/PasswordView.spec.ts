@@ -165,7 +165,7 @@ test('swap ascending/descending', async ({ page }) => {
     await page.getByRole('button', { name: 'Eintrag ins Startverzeichnis hinzufügen', exact: true }).click();
     await page.getByRole('button', { name: 'Ordner', exact: true }).click();
     await page.getByRole('button', { name: '▷ Neuer Ordner ⋮' }).getByRole('textbox').fill('B');
-    await page.getByRole('heading', { name: 'LoFi Passwortmanager' }).click();
+    await page.getByText('Bitte Eintrag auswählen').click();
     await expect(page.locator('body')).toMatchAriaSnapshot(`
     - img "Passwortmanager Logo"
     - heading "LoFi Passwortmanager" [level=2]
