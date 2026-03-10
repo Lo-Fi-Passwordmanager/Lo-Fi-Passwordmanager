@@ -97,9 +97,6 @@ export const usePasswordManagerViewModel = () => {
         }
     };
 
-    function getSync(): string | null {
-        return settings.getSynchronization() ? "server" : (settings.getP2P() ? "p2p" : null);
-    }
 
     function getServerName(): string {
         return settings.getActiveServerName();
@@ -125,7 +122,6 @@ export const usePasswordManagerViewModel = () => {
         getAutomergeFacade,
         closeLoggedIn,
         setToastVisible,
-        getSync,
         getServerName
     };
 };

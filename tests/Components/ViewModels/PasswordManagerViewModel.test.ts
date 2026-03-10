@@ -74,21 +74,6 @@ describe("PasswordManagerViewModel", () => {
         expect(result.current.getServerName()).toBe("KIT");
     })
 
-    it("should be able to disable sync correctly", () => {
-        const { result } = renderHook(() => usePasswordManagerViewModel());
-        expect(result.current.loggedIn).toBe(false);
-        const settings = Settings.getSettings();
-        expect(result.current.getSync()).toBe("server");
-        act(()=>{
-            settings.setSynchronization(false)
-        })
-        expect(result.current.getSync()).toBe("p2p");
-        act(()=>{
-            settings.setP2PActive(false)
-        })
-        expect(result.current.getSync()).toBe(null);
-    })
-
     it("should be able to disconnect after idle", () => {
         const { result } = renderHook(() => usePasswordManagerViewModel());
         expect(result.current.loggedIn).toBe(false);
