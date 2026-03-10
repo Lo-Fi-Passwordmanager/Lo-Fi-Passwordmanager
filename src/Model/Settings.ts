@@ -128,7 +128,7 @@ export class Settings {
     }
 
     public removeServer(server: string): void {
-        this._servers = this._servers.delete(server) ? this._servers : this._servers;
+        this._servers.delete(server);
         storeServers(this._servers);
         this.notify();
     }
