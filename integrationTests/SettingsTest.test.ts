@@ -1,7 +1,9 @@
-import {describe, it} from "vitest";
+import {describe, expect, it, vi} from "vitest";
 
-describe("SettingsTest", ()=> {
-    it('should',() => {
 
-    })
-})
+describe("Settings Integration Test ", ()=> {
+
+    it('⟨T 104⟩: Settings Lifecycle', async () => {
+
+    });
+});
