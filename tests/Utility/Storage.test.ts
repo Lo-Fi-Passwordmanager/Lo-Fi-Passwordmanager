@@ -1,4 +1,4 @@
-import {expect, it, describe, beforeEach, afterEach} from "vitest";
+import {expect, it, describe, beforeEach, afterEach, vi} from "vitest";
 
 
 import {AutomergeUrl} from "@automerge/automerge-repo";
@@ -7,7 +7,8 @@ import {
     removeDatabase, renameDatabase,
     saveCurrentSortCriterion,
     saveDatabases, saveIsAscending,
-    storeDatabase, loadServers, loadSelectedServerURL, storeServers, storeSelectedServerURL
+    storeDatabase, loadServers, loadSelectedServerURL, storeServers, storeSelectedServerURL, loadDarkModeSetting,
+    loadTimeoutLength, loadTimeoutSettings, loadP2PSetting
 } from "../../src/Utility/Storage";
 
 const testMap = new Map<string, AutomergeUrl>();
@@ -113,5 +114,46 @@ describe("PasswordManagerViewModel", () => {
     it ('should return the default server URL if no URL is stored', () => {
         expect(loadSelectedServerURL()).toBe("wss://sync.automerge.org");
         expect(localStorage.getItem("server_url")).toBe("wss://sync.automerge.org");
+    });
+
+    it('should log an error and return an empty map if the databases are not stored in the correct format', () => {
+        localStorage.setItem("databases", "not a valid JSON");
+        const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+        const loadedMap = loadAllDatabases();
+        expect(consoleErrorSpy).toHaveBeenCalledWith(expect.any(Error));
+        expect(loadedMap.size).toBe(0);
+        consoleErrorSpy.mockRestore();
+    });
+
+    it('should return the stored option for dark mode', () => {
+        expect(localStorage.getItem("dark_mode")).toBeNull();
+        localStorage.setItem("dark_mode", "true");
+        expect(loadDarkModeSetting()).toBe(true);
+        localStorage.setItem("dark_mode", "false");
+        expect(loadDarkModeSetting()).toBe(false);
+    });
+
+    it('should return the storedoption for timeout active', () => {
+        expect(localStorage.getItem("timeout_active")).toBeNull();
+        localStorage.setItem("timeout_active", "true");
+        expect(loadTimeoutSettings()).toBe(true);
+        localStorage.setItem("timeout_active", "false");
+        expect(loadTimeoutSettings()).toBe(false);
+    });
+
+    it('should return the stored option for timeout length', () => {
+        expect(localStorage.getItem("timeout_length")).toBeNull();
+        localStorage.setItem("timeout_length", "300000");
+        expect(loadTimeoutLength()).toBe(300000);
+        localStorage.setItem("timeout_length", "600000");
+        expect(loadTimeoutLength()).toBe(600000);
+    });
+
+    it('should return the stored option for P2P enabled', () => {
+        expect(localStorage.getItem("p2p_enabled")).toBeNull();
+        localStorage.setItem("p2p", "true");
+        expect(loadP2PSetting()).toBe(true);
+        localStorage.setItem("p2p", "false");
+        expect(loadP2PSetting()).toBe(false);
     });
 })
