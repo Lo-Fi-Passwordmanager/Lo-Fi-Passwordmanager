@@ -33,7 +33,7 @@ integrationTest:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH != 'main'
     - if: $CI_COMMIT_BRANCH == 'main'
-  script: yarn test ./integrationTests
+  script: yarn integration
 
 # Uploads the test report to the server
 test-report:
