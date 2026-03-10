@@ -53,4 +53,16 @@ describe('AddServerDialogViewModel', ()=> {
         expect(onAddServer).toHaveBeenCalled();
         expect(onClose).toHaveBeenCalled();
     })
+
+    it('should recognize duplicate server names', ()=> {
+        const {result} = renderHook(() => useAddServerDialogViewModel(onAddServer, ["name"], onClose, setShowToast, setToastMessage));
+        act(() => {
+            result.current.setName("name");
+            result.current.setUrl("wss://valid.url")
+        })
+        act(() => {
+            result.current.handleAddServer();
+        });
+        expect(setToastMessage).toHaveBeenCalledWith("Ein Server mit diesem Namen existiert bereits!");
+    });
 })
