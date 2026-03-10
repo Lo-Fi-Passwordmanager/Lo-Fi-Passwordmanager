@@ -11,7 +11,7 @@ import { setup } from 'vitest-indexeddb';
 setup();
 
 import {vi} from "vitest";
-
+/*
 vi.mock("peerjs", () => {
     class PeerMock {
         on = vi.fn();
@@ -28,4 +28,4 @@ vi.mock("peerjs", () => {
     return {
         default: PeerMock,
     };
-});
+});*/
