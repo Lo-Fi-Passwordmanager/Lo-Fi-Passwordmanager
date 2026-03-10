@@ -6,6 +6,7 @@ import {
 import {act, renderHook} from "@testing-library/react";
 import {AutomergeFacade} from "../../../src/Utility/AutomergeFacade";
 import {Repo} from "@automerge/react";
+import {Settings} from "../../../src/Model/Settings";
 
 describe("PasswordManagerViewModel", () => {
     beforeEach(() => {
@@ -58,5 +59,34 @@ describe("PasswordManagerViewModel", () => {
         }
         expect(foo).toBe(null);
         expect(result.current.getAutomergeFacade()).toBe(null);
+    })
+
+    it("should be able to switch automergeserver correctly", () => {
+        const { result } = renderHook(() => usePasswordManagerViewModel());
+        expect(result.current.loggedIn).toBe(false);
+        const settings = Settings.getSettings();
+        expect(result.current.getServerName()).toBe("Automerge Sync Server");
+        act(()=>{
+            settings.addServer("KIT", "wss://kit.edu")
+            settings.setServerUrl("KIT")
+        })
+
+        expect(result.current.getServerName()).toBe("KIT");
+    })
+
+    it("should be able to disconnect after idle", () => {
+        const { result } = renderHook(() => usePasswordManagerViewModel());
+        expect(result.current.loggedIn).toBe(false);
+        act(()=>{
+            result.current.setLoggedIn(true);
+        })
+        expect(result.current.loggedIn).toBe(true);
+        const settings = Settings.getSettings();
+        act(()=>{
+            settings.setTimeoutActive(true)
+            settings.setTimeoutLength(0.01)
+        })
+        expect(result.current.loggedIn).toBe(true);
+        setTimeout(() => expect(result.current.loggedIn).toBe(false), 400)
     })
 })

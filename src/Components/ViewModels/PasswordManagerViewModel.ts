@@ -52,7 +52,9 @@ export const usePasswordManagerViewModel = () => {
             }
         }
         for (const adapter of removeArray) {
-            repo.networkSubsystem.removeNetworkAdapter(adapter);
+            if (adapter.peerId) {
+                repo.networkSubsystem.removeNetworkAdapter(adapter);
+            }
         }
 
         if (syncEnabled && !repo.networkSubsystem.adapters.some(a => a instanceof WebSocketClientAdapter)) {
@@ -95,9 +97,6 @@ export const usePasswordManagerViewModel = () => {
         }
     };
 
-    function getSync(): string | null {
-        return settings.getSynchronization() ? "server" : (settings.getP2P() ? "p2p" : null);
-    }
 
     function getServerName(): string {
         return settings.getActiveServerName();
@@ -123,7 +122,6 @@ export const usePasswordManagerViewModel = () => {
         getAutomergeFacade,
         closeLoggedIn,
         setToastVisible,
-        getSync,
         getServerName
     };
 };

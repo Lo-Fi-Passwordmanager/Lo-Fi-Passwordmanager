@@ -82,4 +82,31 @@ describe("SettingsViewModel", () => {
         });
         expect(result.current.timeoutLength).toBe(1);
     })
-});
+
+    it('should add, select and remove a sync server correctly', () => {
+        const {result} = renderHook(() => useSettingsViewModel());
+        expect(result.current.serverNames.length).toBe(1);
+        expect(result.current.serverName).toBe("Automerge Sync Server");
+        act(() => {
+            result.current.addSyncServer("server", "url");
+        });
+        expect(result.current.serverNames.length).toBe(2);
+        act(() => {
+            result.current.selectSyncServer("server");
+        });
+        expect(result.current.serverName).toBe("server");
+        act(() => {
+            result.current.removeSyncServer("server");
+        });
+        expect(result.current.serverNames.length).toBe(2);
+        expect(result.current.serverName).toBe("server");
+        act(() => {
+            result.current.selectSyncServer("Automerge Sync Server");
+        });
+        act(() => {
+            result.current.removeSyncServer("server");
+        });
+        expect(result.current.serverNames.length).toBe(1);
+        expect(result.current.serverName).toBe("Automerge Sync Server");
+    })
+})
