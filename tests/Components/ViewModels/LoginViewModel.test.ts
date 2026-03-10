@@ -212,6 +212,9 @@ describe('UseLoginViewModel', () => {
     it('should change the name of the database', async () => {
         const {result} = renderHook(() =>
             useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, secProv, setOpenedDbName));
+        await waitFor(() => {
+            expect(result.current.databases.size).toBe(0);
+        });
         act(() => {
             result.current.createDatabase("name", "password");
         })
@@ -231,6 +234,9 @@ describe('UseLoginViewModel', () => {
     it('should not change the name of the database if the new name already exists', async () => {
         const {result} = renderHook(() =>
             useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, secProv, setOpenedDbName));
+        await waitFor(() => {
+            expect(result.current.databases.size).toBe(0);
+        });
         act(() => {
             result.current.createDatabase("name", "password");
             result.current.createDatabase("otherName", "password");
