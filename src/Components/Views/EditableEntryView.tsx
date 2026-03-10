@@ -44,6 +44,11 @@ const EditableEntryView: React.FC<{
             <div className={"entryViewContainer"}>
                 <div className="entryViewEntry">
                     <input className={"title-value"} type={"text"} value={viewmodel.title} autoFocus
+                           onFocus={e => {
+                               if (inCreation) {
+                                   e.target.select();
+                               }
+                           }}
                            onChange={(e) => viewmodel.setTitle(e.target.value)}/>
 
                     <div className={"divider"} style={{background:"transparent"}}/>

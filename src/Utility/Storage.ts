@@ -176,13 +176,6 @@ export function storeServers(servers: Map<string, string>): void {
  */
 export function loadSynchronizationSettings(): boolean {
     const synchronisation = localStorage.getItem(SYNCHRONISATION);
-    const editing = localStorage.getItem("was-editing");
-    if (synchronisation && editing) {
-        if (JSON.parse(synchronisation) === false && JSON.parse(editing) === true) {
-            storeSynchronizationSettings(true, false);
-            return true;
-        }
-    }
     if (synchronisation) {
         return JSON.parse(synchronisation) as boolean;
     } else {
@@ -194,11 +187,9 @@ export function loadSynchronizationSettings(): boolean {
 /** stores the boolean for the synchronization setting in localStorage
  *
  * @param value the synchronization setting to store
- * @param editing if the synchronization was turned because the user was editing an entry
  */
-export function storeSynchronizationSettings(value: boolean, editing: boolean): void {
+export function storeSynchronizationSettings(value: boolean): void {
     localStorage.setItem(SYNCHRONISATION, JSON.stringify(value));
-    localStorage.setItem("was-editing", JSON.stringify(editing));
 }
 
 /**
