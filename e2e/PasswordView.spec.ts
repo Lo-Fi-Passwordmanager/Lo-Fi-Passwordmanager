@@ -328,3 +328,73 @@ test('Editing an Entry', async ({ page }) => {
     - button "Löschen"
     `);
 })
+
+test('the pw visibility button', async ({ page }) => {
+    await page.goto('');
+    await page.getByRole('button', { name: 'Neue Datenbank erstellen' }).dblclick();
+    await page.getByRole('textbox', { name: 'Datenbankname' }).click();
+    await page.getByRole('textbox', { name: 'Datenbankname' }).fill('Name');
+    await page.getByRole('textbox', { name: 'Masterpasswort' }).click();
+    await page.getByRole('textbox', { name: 'Masterpasswort' }).fill('PW');
+    await page.getByRole('button', { name: 'Bestätigen' }).dblclick();
+    await page.getByRole('button', { name: 'Eintrag ins Startverzeichnis hinzufügen', exact: true }).click();
+    await page.getByRole('button', { name: 'Eintrag', exact: true }).click();
+    await expect(page.locator('button').nth(5)).toBeVisible();
+    await page.locator('input[type="password"]').click();
+    await page.locator('input[type="password"]').fill('12345');
+    await page.getByRole('button', { name: 'Speichern' }).click();
+    await expect(page.locator('div').filter({ hasText: /^●●●●●●●●$/ })).toBeVisible();
+    await page.getByRole('button').filter({ hasText: /^$/ }).nth(5).click();
+    await expect(page.locator('div').filter({ hasText: /^12345$/ })).toBeVisible();
+});
+
+
+test('layered folders', async ({ page }) => {
+    await page.goto('');
+    await page.getByRole('button', { name: 'Neue Datenbank erstellen' }).click();
+    await page.getByRole('textbox', { name: 'Datenbankname' }).fill('Name');
+    await page.getByRole('textbox', { name: 'Masterpasswort' }).click();
+    await page.getByRole('textbox', { name: 'Masterpasswort' }).fill('PW');
+    await page.getByRole('button', { name: 'Bestätigen' }).click();
+    await page.getByRole('button', { name: 'Eintrag ins Startverzeichnis Hinzufügen', exact: true }).click();
+    await page.getByRole('button', { name: 'Ordner' }).click();
+    await page.getByRole('button', { name: '▷ Neuer Ordner ⋮' }).getByRole('textbox').fill('123');
+    await page.getByRole('button', { name: '▷', exact: true }).click();
+    await page.getByRole('button', { name: '⋮', exact: true }).click();
+    await page.getByRole('button', { name: 'Eintrag hinzufügen' }).click();
+    await page.getByRole('button', { name: 'Ordner', exact: true }).click();
+    await page.getByRole('button', { name: '▷ Neuer Ordner ⋮' }).getByRole('textbox').fill('456');
+    await page.getByRole('button', { name: '▷', exact: true }).click();
+    await page.getByRole('button', { name: '⋮' }).nth(3).click();
+    await page.getByRole('button', { name: 'Eintrag hinzufügen' }).nth(1).click();
+    await page.getByRole('button', { name: 'Ordner', exact: true }).click();
+    await page.getByRole('button', { name: '▷ Neuer Ordner ⋮' }).getByRole('textbox').fill('789');
+    await page.getByText('Name▼123⋮▼456⋮▷⋮ To pick up a').click();
+    await expect(page.locator('#root')).toMatchAriaSnapshot(`
+    - button "Name":
+      - text: ""
+      - button "Eintrag ins Startverzeichnis Hinzufügen"
+    - button /▼ \\d+ ⋮/:
+      - button "▼"
+      - text: ""
+      - button "Eintrag hinzufügen" [disabled]
+      - button "Ordner umbennen" [disabled]
+      - button "Ordner löschen" [disabled]
+      - button "⋮"
+    - button /▼ \\d+ ⋮/:
+      - button "▼"
+      - text: ""
+      - button "Eintrag hinzufügen" [disabled]
+      - button "Ordner umbennen" [disabled]
+      - button "Ordner löschen" [disabled]
+      - button "⋮"
+    - button /▷ \\d+ ⋮/:
+      - button "▷"
+      - text: ""
+      - button "Eintrag hinzufügen" [disabled]
+      - button "Ordner umbennen" [disabled]
+      - button "Ordner löschen" [disabled]
+      - button "⋮"
+    - status
+    `);
+});
