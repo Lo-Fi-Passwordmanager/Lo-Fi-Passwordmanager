@@ -202,6 +202,19 @@ describe("Settings Integration Test ", () => {
             settingsVM.result.current.setTimeOutLengthVM("7");
         });
         expect(settingsVM.result.current.timeoutLength).toBe(7);
+        act(() => {
+            settingsVM.result.current.increaseTimeout();
+        })
+        act(() => {
+            settingsVM.result.current.increaseTimeout();
+        })
+        act(() => {
+            settingsVM.result.current.increaseTimeout();
+        })
+        act(() => {
+            settingsVM.result.current.decreaseTimeout();
+        })
+        expect(settingsVM.result.current.timeoutLength).toBe(9);
         expect(passwordManagerHook.result.current.loggedIn).toBe(true);
 
         act(() => {
