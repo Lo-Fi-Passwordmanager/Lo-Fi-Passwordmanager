@@ -9,6 +9,7 @@ import {Folder} from "../src/Model/Folder";
 import {Item} from "../src/Model/Item";
 import {Entry} from "../src/Model/Entry";
 import {DragEndEvent} from "@dnd-kit/core";
+import {useFilteredListViewModel} from "../src/Components/ViewModels/FilteredListViewModel";
 
 describe("FolderTest", () => {
 
@@ -115,11 +116,11 @@ describe("FolderTest", () => {
             passwordVM.result.current.handleDragEnd(mockDrangEndEvent3);
         })
 
+        let root;
         let folder1;
         let folder2;
         await waitFor(() => {
-            const root = passwordVM.result.current.getRootFolder() as Folder;
-
+            root = passwordVM.result.current.getRootFolder() as Folder;
             expect(root.items.length).toBe(1);
             folder2 = root.items.find(e => e.title === "Renamed Folder 2") as Folder;
             folder1 = folder2.items.find(e => e.title === "Renamed Folder 1") as Folder;
@@ -191,7 +192,7 @@ describe("FolderTest", () => {
 
         const entry3 = passwordVM.result.current.getSortedChildren(passwordVM.result.current.getRootFolder())[1];
         act(() => {
-            passwordVM.result.current.updateItemAttribute(entry3.id, [["username", "updated_user3"]]);
+            passwordVM.result.current.updateItemAttribute(entry3.id, [["username", "updated_user123"]]);
         });
         act(() => {
             passwordVM.result.current.setCurSortCrit(SortCriteria.EditedAt);
@@ -203,6 +204,38 @@ describe("FolderTest", () => {
         expect(passwordVM.result.current.getSortedChildren(passwordVM.result.current.getRootFolder())[2].title).toBe("Renamed Folder 2");
 
         // Test search function
+        const filteredListVM = renderHook(() => useFilteredListViewModel(
+            passwordVM.result.current.getRootFolder(),
+            "2",
+            passwordVM.result.current.getSortedChildren
+        ), {wrapper});
 
+
+        const filteredEntries = filteredListVM.result.current.getFilteredEntries();
+        const filteredFolders = filteredListVM.result.current.getFilteredFolders();
+
+        expect(filteredEntries.length).toBe(2);
+        expect(filteredEntries[0].title).toBe("3Entry"); // username
+        expect(filteredEntries[1].title).toBe("Entry 2");
+        expect(filteredFolders.length).toBe(1);
+        expect(filteredFolders[0].title).toBe("Renamed Folder 2");
+
+        // test deleting folders
+        expect((folder2 as Folder).items.some(e => e.title === "Renamed Folder 1")).toBe(true);
+        await act(async () => {
+            passwordVM.result.current.confirmDeletion(folder1);
+        });
+        await waitFor(() => {
+            folder2 = passwordVM.result.current.getRootFolder().items.find(e => e.title === "Renamed Folder 2") as Folder;
+        })
+        expect(passwordVM.result.current.getSortedChildren(folder2).some(e => e.title === "Renamed Folder 1")).toBe(false);
+        await act(async () => {
+            passwordVM.result.current.confirmDeletion(folder2);
+        })
+        await waitFor(() => {
+            root = passwordVM.result.current.getRootFolder();
+        })
+        expect((root as Folder).items.some(e => e.title === "Renamed Folder 2")).toBe(false);
+        expect((root as Folder).items.length).toBe(2);
     })
 })
