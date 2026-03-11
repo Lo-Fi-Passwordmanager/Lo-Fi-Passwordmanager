@@ -12,12 +12,13 @@ import useAddServerDialogViewModel from "../../ViewModels/Dialog/AddServerDialog
  */
 const AddServerDialog: React.FC<{
     onAddServer: (name: string, url: string) => void,
+    serverNames: string[],
     onClose: () => void,
     setToastMessage: (message: string) => void,
     setShowToast: (show: boolean) => void
-}> = ({onAddServer, onClose, setShowToast, setToastMessage}) => {
+}> = ({onAddServer, serverNames, onClose, setShowToast, setToastMessage}) => {
 
-    const viewModel = useAddServerDialogViewModel(onAddServer, onClose, setShowToast, setToastMessage);
+    const viewModel = useAddServerDialogViewModel(onAddServer, serverNames, onClose, setShowToast, setToastMessage);
 
     return (
         <Dialog title="Server hinzufügen" onCloseDialog={onClose}>

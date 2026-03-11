@@ -45,12 +45,16 @@ const OrganizeListView: React.FC<{
                 {/*Giving each element a specific grid column to align them properly*/}
 
                 {/* Button to close the database and go back to the database selection */}
-                <button className={"squareButton"} title="Datenbank schließen" style={{gridColumn: "span 1", justifySelf: "flex-start"}}
+                <button className={"squareButton"} title="Datenbank schließen"
+                        style={{gridColumn: "span 1", justifySelf: "flex-start"}}
                         onClick={() => closeDatabase()}>
                     ⬅
                 </button>
 
-                <input style={{gridColumn: "span 8"}} type="text" placeholder="Suchen..." value={liveSearchValue}
+                <input style={{gridColumn: "span 8"}}
+                       type="text" placeholder="Suchen..."
+                       value={liveSearchValue}
+                       autoFocus
                        onChange={(event => setLiveSearchValue(event.target.value))}/>
                 {/* Search bar to filter the list of entries and folders */}
                 <button
@@ -77,7 +81,7 @@ const OrganizeListView: React.FC<{
                     style={{gridColumn: "span 1"}} onClick={() => {
                     toggleOrder()
                 }}
-                title={isAscending ? "Absteigend sortieren" : "Aufsteigend sortieren"}>
+                    title={isAscending ? "Absteigend sortieren" : "Aufsteigend sortieren"}>
                     {isAscending ? '🡅' : '🡇'}
                 </button>
             </div>

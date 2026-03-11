@@ -128,8 +128,9 @@ export class Settings {
     }
 
     public removeServer(server: string): void {
-        this._servers = this._servers.delete(server) ? this._servers : this._servers;
+        this._servers.delete(server);
         storeServers(this._servers);
+        this.notify();
     }
 
     public getP2P(): boolean {
@@ -182,6 +183,10 @@ export class Settings {
         return this._timeoutLength;
     }
 
+    /**
+     * The idle timeout in Minutes
+     * @param length
+     */
     public setTimeoutLength(length: number) {
         this._timeoutLength = length;
         storeTimeoutLength(length);
