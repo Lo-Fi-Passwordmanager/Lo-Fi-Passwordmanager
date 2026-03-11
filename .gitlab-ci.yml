@@ -69,6 +69,7 @@ playwright-coverage-report:
     name: "Playwright Coverage Report"
     paths:
       - ./playwright-report
+      - ./playwright-coverage
   script:
     - chmod og= $ID_ED25519
     - yarn e2e:coverage || true
