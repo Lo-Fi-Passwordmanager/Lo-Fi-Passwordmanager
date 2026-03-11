@@ -51,7 +51,7 @@ export default defineConfig({
                 "src/Components/Views",
                 "main.tsx"
             ],
-            reporter: ["text", "html", "lcov"],
+            reporter: ["text", "html", "lcov", "json-summary"],
             reportsDirectory:
                 process.env.INTEGRATION === "true"
                     ? "./coverage/integration"
