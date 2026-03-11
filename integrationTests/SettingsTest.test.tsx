@@ -27,7 +27,49 @@ vi.mock("@automerge/react", async (importOriginal) => {
     };
 });
 
-describe("Settings Integration Test ", ()=> {
+let simulatePeerOpen: (() => void) | null = null;
+vi.mock("peerjs", () => {
+    return {
+        default: class MockPeer {
+            on = vi.fn();
+            connect = vi.fn().mockImplementation((id) => {
+                return {
+                    peer: id,
+                    on: (event: string, callback: any) => {
+                        if (event === "open") {
+                            simulatePeerOpen = callback;
+                        }
+                    },
+                    send: vi.fn(),
+                    close: vi.fn()
+                };
+            });
+        }
+    };
+});
+
+
+vi.mock("../customNetworkAdapter/PeerJsNetworkAdapter.ts", async () => {
+    return {
+        PeerjsNetworkAdapter: class MockPeerjsNetworkAdapter {
+            connection: any;
+            isMockP2P = true;
+
+            constructor(connection: any) {
+                this.connection = connection;
+            }
+
+            getPeerId() {
+                return this.connection.peer;
+            }
+
+            connect = vi.fn(); disconnect = vi.fn();
+            on = vi.fn(); off = vi.fn(); emit = vi.fn();
+        }
+    };
+});
+
+describe("Settings Integration Test ", () => {
 
     it('test the functionality of the settings', async () => {
         const passwordManagerHook = renderHook(() => usePasswordManagerViewModel());
@@ -54,18 +96,21 @@ describe("Settings Integration Test ", ()=> {
 
         const settingsVM = renderHook(() => useSettingsViewModel(), {wrapper});
 
-        // test dark mode
-        //expect(document.documentElement.classList.contains('dark')).toBe(true);
+        // test dark mode toggle
+        expect(settingsVM.result.current.darkMode).toBe(true);
+        expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+
         act(() => {
             settingsVM.result.current.toggleDarkMode();
         });
         expect(settingsVM.result.current.darkMode).toBe(false);
-        expect(document.documentElement.classList.contains('dark')).toBe(false);
+        expect(document.documentElement.getAttribute('data-theme')).not.toBe('dark');
+
         act(() => {
             settingsVM.result.current.toggleDarkMode();
         });
         expect(settingsVM.result.current.darkMode).toBe(true);
-        //expect(document.documentElement.classList.contains('dark')).toBe(true);
+        expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
 
         // test synchronisation
         act(() => {
@@ -87,6 +132,48 @@ describe("Settings Integration Test ", ()=> {
 
             expect(webSocketAdapter).toBeDefined();
             expect(webSocketAdapter.url).toBe("wss://sync.automerge.org");
+        });
+
+
+        // P2P test
+        act(() => {
+            settingsVM.result.current.toggleP2P(); // turn off
+        });
+
+        await waitFor(() => {
+            const adapters = passwordManagerHook.result.current.repo.networkSubsystem.adapters;
+            expect(adapters.some((a: any) => a.isMockP2P)).toBe(false);
+        });
+
+        act(() => {
+            settingsVM.result.current.toggleP2P(); // turn on
+        });
+
+        act(() => {
+            settingsVM.result.current.setConnection("fake-peer-id-123");
+        });
+
+        act(() => {
+            expect(simulatePeerOpen).not.toBeNull();
+
+            simulatePeerOpen!();
+        });
+
+        await waitFor(() => {
+            const adapters = passwordManagerHook.result.current.repo.networkSubsystem.adapters;
+            const p2pAdapter: any = adapters.find((a: any) => a.isMockP2P);
+
+            expect(p2pAdapter).toBeDefined();
+            expect(p2pAdapter.getPeerId()).toBe("fake-peer-id-123");
+        });
+
+        act(() => {
+            settingsVM.result.current.toggleP2P(); // turn off
+        });
+
+        await waitFor(() => {
+            const adapters = passwordManagerHook.result.current.repo.networkSubsystem.adapters;
+            //expect(adapters.some((a: any) => a.isMockP2P)).toBe(false);
         });
     });
 });
