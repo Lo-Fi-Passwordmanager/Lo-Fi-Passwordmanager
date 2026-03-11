@@ -15,7 +15,7 @@
     "test:ci": "vitest run",
     "coverage": "vitest --ui --coverage.enabled=true",
     "integration": "cross-env INTEGRATION=true vitest run",
-    "integration:coverage": "cross-env INTEGRATION=true vitest run --coverage"
+    "integration:coverage": "cross-env INTEGRATION=true vitest run --coverage",
     "e2e": "playwright test",
     "e2e:coverage": "cross-env COVERAGE=true E2E=true nyc playwright test --project=chromium",
     "e2e:report": "nyc report --reporter=html"
