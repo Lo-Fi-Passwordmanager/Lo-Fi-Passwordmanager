@@ -64,9 +64,11 @@ export const usePasswordManagerViewModel = () => {
             );
         }
 
-        for (const adapter of connectorAdapter.values()) {
-            if (!repo.networkSubsystem.adapters.includes(adapter[1])) {
-                repo.networkSubsystem.addNetworkAdapter(adapter[1]);
+        if (p2pEnabled) {
+            for (const adapter of connectorAdapter.values()) {
+                if (!repo.networkSubsystem.adapters.includes(adapter[1])) {
+                    repo.networkSubsystem.addNetworkAdapter(adapter[1]);
+                }
             }
         }
 
