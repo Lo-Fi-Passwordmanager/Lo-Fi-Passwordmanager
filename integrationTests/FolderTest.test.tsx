@@ -49,15 +49,15 @@ describe("FolderTest", () => {
         await act(async () => {
             passwordVM.result.current.addItem(folderData2);
         });
-        expect(passwordVM.result.current.getRootFolder().entries.length).toBe(2);
+        expect(passwordVM.result.current.getRootFolder().items.length).toBe(2);
         let found1: Item;
         let found2: Item;
         await waitFor(() => {
             const root = passwordVM.result.current.getRootFolder() as Folder;
             // Look through the children of the root folder
-            found1 = root.entries.find(e => e.title === "Folder 1");
+            found1 = root.items.find(e => e.title === "Folder 1");
             expect(found1).toBeDefined();
-            found2 = root.entries.find(e => e.title === "Folder 2");
+            found2 = root.items.find(e => e.title === "Folder 2");
             expect(found2).toBeDefined();
         }, {timeout: 2000});
 
@@ -71,9 +71,9 @@ describe("FolderTest", () => {
         await waitFor(() => {
             const root = passwordVM.result.current.getRootFolder() as Folder;
             // Look through the children of the root folder
-            found1 = root.entries.find(e => e.title === "Renamed Folder 1");
+            found1 = root.items.find(e => e.title === "Renamed Folder 1");
             expect(found1).toBeDefined();
-            found2 = root.entries.find(e => e.title === "Renamed Folder 2");
+            found2 = root.items.find(e => e.title === "Renamed Folder 2");
             expect(found2).toBeDefined();
         }, {timeout: 2000});
 
@@ -120,14 +120,14 @@ describe("FolderTest", () => {
         await waitFor(() => {
             const root = passwordVM.result.current.getRootFolder() as Folder;
 
-            expect(root.entries.length).toBe(1);
-            folder2 = root.entries.find(e => e.title === "Renamed Folder 2") as Folder;
-            folder1 = folder2.entries.find(e => e.title === "Renamed Folder 1") as Folder;
+            expect(root.items.length).toBe(1);
+            folder2 = root.items.find(e => e.title === "Renamed Folder 2") as Folder;
+            folder1 = folder2.items.find(e => e.title === "Renamed Folder 1") as Folder;
             expect(folder1).toBeDefined();
             expect(folder2).toBeDefined();
-            expect(folder1.entries.length).toBe(2);
-            expect(folder1.entries.some(e => e.title === "Entry 1")).toBe(true);
-            expect(folder1.entries.some(e => e.title === "Entry 2")).toBe(true);
+            expect(folder1.items.length).toBe(2);
+            expect(folder1.items.some(e => e.title === "Entry 1")).toBe(true);
+            expect(folder1.items.some(e => e.title === "Entry 2")).toBe(true);
         }, {timeout: 2000});
 
         expect(passwordVM.result.current.isFolderExpanded(folder2.id)).toBe(true);

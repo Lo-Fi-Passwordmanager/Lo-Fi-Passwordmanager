@@ -51,7 +51,7 @@ describe("Entry modification Integrationtests", () => {
             await waitFor(() => {
                 const root = passwordVM.result.current.getRootFolder() as Folder;
                 // Look through the children of the root folder
-                const found = root.entries.find(e => e.title === "Amazon");
+                const found = root.items.find(e => e.title === "Amazon");
                 expect(found).toBeDefined();
                 realId = found!.id;
             }, { timeout: 2000 });
