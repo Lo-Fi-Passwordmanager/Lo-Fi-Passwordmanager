@@ -11,12 +11,10 @@
     "lint": "eslint --max-warnings 0",
     "preview": "vite preview",
     "test": "vitest",
-    "test:coverage": "vitest run --coverage",
     "test:ci": "vitest run",
-    "coverage": "vitest --ui --coverage.enabled=true",
+    "test:ui": "vitest --ui",
     "e2e": "playwright test",
-    "e2e:coverage": "cross-env COVERAGE=true E2E=true nyc playwright test --project=chromium",
-    "e2e:report": "nyc report --reporter=html"
+    "e2e:coverage": "cross-env COVERAGE=true E2E=true nyc playwright test --project=chromium && nyc report --reporter=html --report-dir playwright-coverage"
   },
   "dependencies": {
     "@automerge/automerge": "^3.2.2",
