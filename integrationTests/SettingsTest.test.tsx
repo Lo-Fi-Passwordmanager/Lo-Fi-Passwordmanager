@@ -173,7 +173,7 @@ describe("Settings Integration Test ", () => {
 
         await waitFor(() => {
             const adapters = passwordManagerHook.result.current.repo.networkSubsystem.adapters;
-            //expect(adapters.some((a: any) => a.isMockP2P)).toBe(false);
+            expect(adapters.some((a: any) => a.isMockP2P)).toBe(false);
         });
     });
 });
