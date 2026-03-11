@@ -191,15 +191,6 @@ export const useLoginViewModel = (
 
 
     /**
-     * Initiates the deletion of a database
-     *
-     * @param name the name of the database to delete
-     */
-    function deleteDatabase(name: string) {
-        setDatabaseToDelete(name);
-    }
-
-    /**
      * Confirms the deletion of a database
      *
      * @param name the name of the database to delete
@@ -274,20 +265,22 @@ export const useLoginViewModel = (
             return;
         }
 
-        if (name === "") {
-            setToastMessage("Bitte wähle einen Namen");
+        if (name === "" || name == null) {
+            setToastMessage("Bitte wähle einen Namen.");
             setShowToast(true);
             return;
         }
 
-        if (!FileList) {
-            setToastMessage("Bitte wähle eine Datei");
+        if (!targetFiles) {
+            setToastMessage("Bitte wähle eine Datei.");
             setShowToast(true);
             return;
         }
 
         const binary = await uInt8ArrayFromFile(targetFiles);
         if (!binary) {
+            setToastMessage("Datei konnte nicht gelesen werden.");
+            setShowToast(true);
             return;
         }
 
@@ -328,7 +321,6 @@ export const useLoginViewModel = (
         closeEnterPasswordDialog,
         importDatabaseFromURL,
         setToastMessage,
-        deleteDatabase,
         changeDatabaseName,
         confirmDeleteDatabase,
         setDatabaseToDelete,

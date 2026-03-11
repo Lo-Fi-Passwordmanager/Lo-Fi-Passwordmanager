@@ -52,8 +52,8 @@ describe('Folder', ()=> {
         expect(rootFolder.title).toBe("superCoolName");
     })
 
-    it('should be able to return its entries',()=> {
-        expect(rootFolder.entries).toStrictEqual([folder1, folder2, item])
+    it('should be able to return its items',()=> {
+        expect(rootFolder.items).toStrictEqual([folder1, folder2, item])
     })
 
     it('should be able to return a child via the childs id', ()=> {

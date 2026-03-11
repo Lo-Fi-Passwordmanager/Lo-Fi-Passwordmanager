@@ -89,7 +89,7 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
         changeDoc(
             (doc) => {
                 changes.forEach(
-                    ([attr, val]) => updateValue(doc, itemId, itemsById, attr, (typeof val == "string" && attr !== "parentId") ? automergeFacade.getSecurityProvider()!.encryptValue(val) : val) //FIXME? parent ids verschlüsseln schlecht anscheinend
+                    ([attr, val]) => updateValue(doc, itemId, itemsById, attr, (typeof val == "string" && attr !== "parentId") ? automergeFacade.getSecurityProvider()!.encryptValue(val) : val)
                 );
                 updateValue(doc, itemId, itemsById, "editedAt", new Date());
             }
@@ -115,7 +115,11 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
         tree,
         insertItem,
         deleteItem,
-        updateItem
+        updateItem,
+        /**
+         * The Map containing a 1 to 1 maping of all active ids to their items
+         */
+        itemsById,
     };
 
 };

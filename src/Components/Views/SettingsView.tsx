@@ -139,14 +139,14 @@ const SettingsView: React.FC<{
                                                                         textOverflow: "ellipsis",
                                                                         flex: 1
                                                                     }}
-                                                                    onClick={() => viewModel.selectServer(server)}
+                                                                    onClick={() => viewModel.selectSyncServer(server)}
                                                                 >
                                                                     <span>{server}</span>
                                                                 </button>
                                                                 {server !== "Automerge Sync Server" && (
                                                                     <button
                                                                         className="squareButton"
-                                                                        onClick={() => viewModel.removeServer(server)}
+                                                                        onClick={() => viewModel.removeSyncServer(server)}
                                                                     >
                                                                         <HiTrash size={24}/>
                                                                     </button>
@@ -168,6 +168,7 @@ const SettingsView: React.FC<{
                                                     onClose={() => viewModel.setAddServerDialogOpen(false)}
                                                     setShowToast={viewModel.setShowToast}
                                                     setToastMessage={viewModel.setToastMessage}
+                                                    serverNames={viewModel.serverNames}
                                                 />
                                             )}
                                         </>
@@ -320,7 +321,11 @@ const SettingsView: React.FC<{
                                      style={{fontSize: "0.8em", opacity: 0.7, marginTop: "20px"}}>
                                 <p>Copyright © {new Date().getFullYear()}</p>
                                 <p style={{maxWidth: "500px"}}>
-                                    Die Software wird &quot;wie besehen&quot; bereitgestellt, ohne jegliche ausdrückliche oder
+                                    Die Software wird &quot;wie besehen&quot; bereitgestellt, ohne jegliche Haftung.
+                                    <br/>
+                                    <a href={"https://opensource.org/license/mit"}>
+                                        MIT-Lizenz
+                                    </a>
                                 </p>
                             </section>
                         </div>

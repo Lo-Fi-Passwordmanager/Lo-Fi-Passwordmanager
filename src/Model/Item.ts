@@ -61,7 +61,6 @@ export abstract class Item {
         this._editedAt = new Date();
     }
 
-
     public set deleted(deleted: boolean) {
         this._deleted = deleted;
     }

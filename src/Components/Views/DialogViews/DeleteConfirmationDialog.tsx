@@ -31,7 +31,9 @@ const DeleteConfirmationDialog: React.FC<{
                 Die Datenbank &quot;<strong>{database}</strong>&quot; wirklich löschen?
             </span>
                     <div>
-                        <button className={"rectangle-button delete"} onClick={() => onConfirmDb(database)}>
+                        <button className={"rectangle-button delete"}
+                                autoFocus
+                                onClick={() => onConfirmDb(database)}>
                             <HiTrash size={24}/> Löschen
                         </button>
                     </div>
@@ -46,7 +48,9 @@ const DeleteConfirmationDialog: React.FC<{
                 Den {item.isEntry() ? "Eintrag" : "Ordner"} &quot;<strong>{item.title}</strong>&quot; wirklich löschen?
             </span>
                     <div>
-                        <button className={"rectangle-button delete"} onClick={() => onConfirmItem(item)}>
+                        <button className={"rectangle-button delete"}
+                                autoFocus
+                                onClick={() => onConfirmItem(item)}>
                             <HiTrash size={24}/> Löschen
                     </button>
                 </div>

@@ -38,8 +38,6 @@ export const useListViewModel = (
     // reset the state if a folder was just created
     useEffect(() => {
         if (createdFolderID === topItem.id) {
-            //FIXME
-            // eslint-disable-next-line react-hooks/set-state-in-effect
             setItemTitle(topItem.title);
         }
     }, [createdFolderID, topItem.id, topItem.title]);
@@ -83,10 +81,6 @@ export const useListViewModel = (
     function setAndStoreEditName(newValue: boolean): void {
         //set the boolean first so the (slow) automerge Updates happens when the UI is already updated
         setInEditName(newValue);
-        //due to the code executing first, the state update actually triggers after this function so we need to check for the value before
-        if (inEditName) {
-            updateTitleInAutomerge();
-        }
         setCreatedFolderId(null);
     }
 
@@ -94,10 +88,8 @@ export const useListViewModel = (
     const getDescendantIds = (item: Item): string[] => {
         if (item.isEntry()) {
             return [];
-        } else if (!(item as Folder).entries) {
-            return [];
         }
-        return (item as Folder).entries.flatMap((child) => [child.id, ...getDescendantIds(child)]);
+        return (item as Folder).items.flatMap((child) => [child.id, ...getDescendantIds(child)]);
     };
 
     /**
@@ -106,6 +98,7 @@ export const useListViewModel = (
     const descendantIds = useMemo(() => {
         if (!topItem.isFolder()) return [];
         return getDescendantIds(topItem);
+        //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [topItem]);
 
     /**

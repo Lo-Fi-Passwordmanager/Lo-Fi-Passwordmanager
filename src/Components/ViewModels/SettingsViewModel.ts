@@ -1,4 +1,3 @@
-
 import type {DataConnection} from "peerjs";
 import {useEffect, useState} from "react";
 
@@ -31,21 +30,18 @@ export const useSettingsViewModel = () => {
     const [otherPeerMap, setOtherPeerMap] = useState<Map<string, [DataConnection, PeerjsNetworkAdapter]>>(settings.getConnectorsToAdapters())
     document.getElementsByTagName("html")[0]?.setAttribute("data-theme", darkMode ? "dark" : "light");
 
-    // When darkMode is updated, update settings
     useEffect(() => {
         settings.setDarkMode(darkMode);
         settings.setSynchronization(synchronisation);
-        //settings.setAutoConflictResolution(autoConflictRes);
         settings.setTimeoutActive(timeOutActive);
         settings.setTimeoutLength(timeoutLength);
-    }, [darkMode, synchronisation,
-        //autoConflictRes,
-        timeOutActive, settings, timeoutLength]);
+    }, [darkMode, synchronisation, timeOutActive, settings, timeoutLength]);
 
     useEffect(() => {
         const handleUpdate = () => {
-            setServers(settings.getServers());
+            setServers(new Map(settings.getServers()));
         }
+
         const unsubscribe = settings.subscribe(handleUpdate);
         return () => {
             unsubscribe();
@@ -85,23 +81,35 @@ export const useSettingsViewModel = () => {
     }
 
     // Remove a server from the settings
-    function removeServer(server: string) {
+    function removeSyncServer(server: string) {
+        if (server === serverName) {
+            console.error("Cannot remove the currently selected server"); // realisticly this should never happen since the UI shouldnt allow it
+            return;
+        }
         settings.removeServer(server);
     }
 
     // Select a server from the settings
-    function selectServer(server: string) {
+    function selectSyncServer(server: string) {
         settings.setServerUrl(server);
         setServerName(server);
+
+        // Toggle synchronisation off and on again to ensure that the new server is connected
+        // directly change settings so the UI doenst change
+        settings.setSynchronization(false)
+        setTimeout(() => {
+            settings.setSynchronization(true);
+        }, 50); // Timeout is needed to ensure that the synchronisation setting is updated before it is toggled on again
     }
 
     function toggleTimeOutActive() {
         setTimeOutActive(!timeOutActive);
     }
+
     //Checks that timeout cant be 0 or less since that causes the whole app to be unusable
     function setTimeOutLengthVM(newLength: string) {
-        const length:number = Number(newLength);
-        if(length >= 1) {
+        const length: number = Number(newLength);
+        if (length >= 1) {
             setTimeoutLength(length);
         }
     }
@@ -113,7 +121,7 @@ export const useSettingsViewModel = () => {
 
     // Decreases timeout length by 1 minute
     function decreaseTimeout() {
-        if(timeoutLength > 1) {
+        if (timeoutLength > 1) {
             setTimeOutLengthVM((timeoutLength - 1).toString());
         }
     }
@@ -168,9 +176,9 @@ export const useSettingsViewModel = () => {
         decreaseTimeout,
         getPeerId,
         addSyncServer,
-        removeServer,
+        removeSyncServer,
         setAddServerDialogOpen,
-        selectServer,
+        selectSyncServer,
         toggleP2P,
         setToastMessage,
         setShowToast,
