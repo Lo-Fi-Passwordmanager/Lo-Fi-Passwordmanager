@@ -38,12 +38,15 @@ describe("FolderTest", () => {
 
         const passwordVM = renderHook(() => usePasswordViewModel(facade), {wrapper});
 
+        // Create folders and rename them
         const folderData1 = new Folder("Folder 1", "temp-id", new Date(), new Date());
         const folderData2 = new Folder("Folder 2", "temp-id", new Date(), new Date());
 
 
         await act(async () => {
             passwordVM.result.current.addItem(folderData1);
+        });
+        await act(async () => {
             passwordVM.result.current.addItem(folderData2);
         });
         expect(passwordVM.result.current.getRootFolder().entries.length).toBe(2);
@@ -60,6 +63,8 @@ describe("FolderTest", () => {
 
         act(() => {
             passwordVM.result.current.updateItemTitle(found1.id, "Renamed Folder 1");
+        });
+        act(() => {
             passwordVM.result.current.updateItemTitle(found2.id, "Renamed Folder 2");
         });
 
@@ -72,11 +77,14 @@ describe("FolderTest", () => {
             expect(found2).toBeDefined();
         }, {timeout: 2000});
 
-        const entryData1 = new Entry("Entry 1", "temp-id", new Date(), new Date(), "username1", "secret1", "url1", "note1");
+        // Create entries and move them into folders
         const entryData2 = new Entry("Entry 2", "temp-id", new Date(), new Date(), "username2", "secret2", "url2", "note2");
+        const entryData1 = new Entry("Entry 1", "temp-id", new Date(), new Date(), "username1", "secret1", "url1", "note1");
 
         await act(async () => {
             passwordVM.result.current.createEntry(entryData1);
+        });
+        await waitFor(() => {
             passwordVM.result.current.createEntry(entryData2);
         });
 
@@ -97,9 +105,15 @@ describe("FolderTest", () => {
 
         await act(async () => {
             passwordVM.result.current.handleDragEnd(mockDrangEndEvent1);
-            passwordVM.result.current.handleDragEnd(mockDrangEndEvent2);
-            passwordVM.result.current.handleDragEnd(mockDrangEndEvent3);
         });
+
+        await act(async () => {
+            passwordVM.result.current.handleDragEnd(mockDrangEndEvent2);
+        });
+
+        await waitFor(() => {
+            passwordVM.result.current.handleDragEnd(mockDrangEndEvent3);
+        })
 
         let folder1;
         let folder2;
@@ -117,16 +131,43 @@ describe("FolderTest", () => {
         }, {timeout: 2000});
 
         expect(passwordVM.result.current.isFolderExpanded(folder2.id)).toBe(true);
-        
+        expect(passwordVM.result.current.isFolderExpanded(folder1.id)).toBe(true);
+
+        // Navigate through folders
+        act(() => {
+            passwordVM.result.current.collapseFolder(folder2.id);
+        });
+        act(() => {
+            passwordVM.result.current.collapseFolder(folder1.id);
+        });
+        expect(passwordVM.result.current.isFolderExpanded(folder2.id)).toBe(false);
+        expect(passwordVM.result.current.isFolderExpanded(folder1.id)).toBe(false);
+        act(() => {
+            passwordVM.result.current.expandFolder(folder2.id);
+        });
+        act(() => {
+            passwordVM.result.current.expandFolder(folder1.id);
+        });
+        expect(passwordVM.result.current.isFolderExpanded(folder2.id)).toBe(true);
+        expect(passwordVM.result.current.isFolderExpanded(folder1.id)).toBe(true);
         act(() => {
             passwordVM.result.current.collapseFolder(folder2.id);
         });
         expect(passwordVM.result.current.isFolderExpanded(folder2.id)).toBe(false);
-        act(() => {
-            passwordVM.result.current.expandFolder(folder2.id);
-            //passwordVM.result.current.expandFolder(folder1.id);
+        expect(passwordVM.result.current.isFolderExpanded(folder1.id)).toBe(true);
+
+        // Test sorting
+        const entryData3 = new Entry("3Entry", "temp-id", new Date(), new Date(), "username3", "secret3", "url3", "note3");
+        const entryData4 = new Entry("Z-Entry", "temp-id", new Date(), new Date(), "username4", "secret4", "url4", "note4");
+
+        await act(async () => {
+            passwordVM.result.current.createEntry(entryData3);
         });
-        expect(passwordVM.result.current.isFolderExpanded(folder2.id)).toBe(true);
-        //expect(passwordVM.result.current.isFolderExpanded(folder1.id)).toBe(true);
+        await act(async () => {
+            passwordVM.result.current.createEntry(entryData4);
+        });
+
+        const rootItems = passwordVM.result.current.getSortedChildren(passwordVM.result.current.getRootFolder());
+
     })
 })
