@@ -12,8 +12,7 @@ import {Folder} from "../src/Model/Folder";
 
 describe("Entry modification Integrationtests", () => {
 
-        it('⟨T 102⟩: Single Entry Lifecycle', async () => {
-            // --- 1. SETUP & LOGIN ---
+        it('should test the functionality of entries', async () => {
             const passwordManagerHook = renderHook(() => usePasswordManagerViewModel());
             const { repo, securityProvider } = passwordManagerHook.result.current;
 
@@ -40,43 +39,42 @@ describe("Entry modification Integrationtests", () => {
             const passwordVM = renderHook(() => usePasswordViewModel(facade), { wrapper });
 
 
-            const entryData = new Entry("Amazon", "temp-id", new Date(), new Date(), "user123", "secret", "amazon.com", "Note");
+            const entryData = new Entry("entry1", "temp-id", new Date(), new Date(), "user123", "secret", "amazon.com", "Note");
 
             await act(async () => {
                 passwordVM.result.current.createEntry(entryData);
             });
-
-
-            let realId = "";
+            let found1;
             await waitFor(() => {
-                const root = passwordVM.result.current.getRootFolder() as Folder;
-                // Look through the children of the root folder
-                const found = root.items.find(e => e.title === "Amazon");
-                expect(found).toBeDefined();
-                realId = found!.id;
-            }, { timeout: 2000 });
-
+                const root = passwordVM.result.current.getRootFolder();
+                found1 = root.items.find(e => e.title === "entry1");
+                expect(found1).toBeDefined();
+            }, {timeout: 2000});
 
             await act(async () => {
-                // You likely have a method like setCurItem or selectItem
-                const newEntry = passwordVM.result.current.getRootFolder().getChildById(realId);
-                passwordVM.result.current.setCurItem(newEntry);
+                passwordVM.result.current.updateItemTitle(found1.id, "updatedEntry1");
             });
-
+            await waitFor(() => {
+                const root = passwordVM.result.current.getRootFolder();
+                found1 = root.items.find(e => e.title === "updatedEntry1");
+                expect(found1).toBeDefined();
+            });
 
             await act(async () => {
-                passwordVM.result.current.updateItemAttribute(realId, [
-                    ["name", "Amazon Updated"],
-                    ["username", "new_user"]
-                ]);
+                passwordVM.result.current.updateItemAttribute(found1.id, [["username", "updatedUser123"],["password", "secret1"], ["url", "www.abc.de"],["note", "taking notes"]]);
             });
-
-/*
             await waitFor(() => {
-                // Access result.current INSIDE the expect to get the latest render
-                expect(passwordVM.result.current.curItem.title).toBe("Amazon Updated");
-            }, { timeout: 2000 });
-*/
-            //FIXME Hier ist schwierig, ans Item zu kommen und gleichzeitig auf das Automergerepo zu warten
+                const root = passwordVM.result.current.getRootFolder();
+                found1 = root.items.find(e => e.title === "updatedEntry1") as Entry;
+                expect(found1).toBeDefined();
+                expect(found1.username).toBe("updatedUser123");
+                expect(found1.password).toBe("secret1");
+                expect(found1.url).toBe("www.abc.de");
+                expect(found1.note).toBe("taking notes");
+            })
+
+            await act(async () => {
+                passwordVM.result.current.copyToClipboardAndClear(found1.title);
+            });
         });
 })
