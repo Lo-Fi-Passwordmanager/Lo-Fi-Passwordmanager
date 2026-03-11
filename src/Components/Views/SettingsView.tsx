@@ -256,7 +256,7 @@ const SettingsView: React.FC<{
                             </div>
 
                             <section>
-                                <p><strong>Version:</strong> 0.1.0-beta</p>
+                                <p><strong>Version:</strong> 0.6.7-sigma</p>
                                 <p><strong>Lizenz:</strong> MIT License</p>
                             </section>
 
