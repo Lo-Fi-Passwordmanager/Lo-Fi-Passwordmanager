@@ -132,13 +132,13 @@ const CreateDatabaseDialog: React.FC<{
                     placeholder={"Name"}
                     autoFocus
                 />
-                <label>Dokument ID</label>
+                <label>Datenbank ID</label>
                 <div className="urlWrapper">
                     <input
                         type="text"
                         value={viewModel.field2}
                         onChange={(e) => viewModel.setField2(e.target.value)}
-                        placeholder={"Dokument ID"}
+                        placeholder={"Datenbank ID"}
                         onKeyDown={(e) => {
                             if (e.key === "Enter") {
                                 viewModel.handleConfirm();
