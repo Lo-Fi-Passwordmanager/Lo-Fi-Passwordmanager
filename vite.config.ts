@@ -8,6 +8,9 @@ import {viteSingleFile} from "vite-plugin-singlefile";
 import path from "node:path";
 import os from "node:os";
 import process from "node:process";
+import {configDefaults} from "vitest/config";
+//playwright coverage
+import istanbul from 'vite-plugin-istanbul'
 
 export default defineConfig({
     build: {
@@ -16,7 +19,14 @@ export default defineConfig({
         sourcemap: true
     },
 
-    plugins: [wasm(), react(), viteSingleFile()],
+    plugins: [wasm(), react(), viteSingleFile(),
+        process.env.E2E &&
+        istanbul({
+            include: ['src/**/*'],
+            extension: ['.js', '.ts', '.jsx', '.tsx'],
+            requireEnv: true,
+        }),
+    ].filter(Boolean),
 
     worker: {
         format: "es",
@@ -26,32 +36,35 @@ export default defineConfig({
         environment: "jsdom",
         include:
             process.env.INTEGRATION == "true"
-                ? ['./integrationTests/**/*.test.{ts,tsx}']
-                : ['./tests/**/*.test.{ts,tsx}'],
+                ? ["./integrationTests/**/*.test.{ts,tsx}"]
+                : ["./tests/**/*.test.{ts,tsx}"],
+        exclude: [
+            ...configDefaults.exclude,
+            "e2e"
+        ],
         coverage: {
             enabled: true,
             reportOnFailure: true,
-            provider: 'v8',
-            include: ['src/**/*.{ts,tsx}'],
-            exclude: ['scryptConfig.ts', // excluding since the config is used to reduce scrypt-time during tests only and therefore can't be covered
-                'src/Components/Views',
-                'main.tsx'
+            provider: "v8",
+            include: ["src/**/*.{ts,tsx}"],
+            exclude: ["scryptConfig.ts", // excluding since the config is used to reduce scrypt-time during tests only and therefore can't be covered
+                "src/Components/Views",
+                "main.tsx"
             ],
-            reporter: ['text', 'html', 'lcov'],
+            reporter: ["text", "html", "lcov"],
             reportsDirectory:
                 process.env.INTEGRATION === "true"
-                    ? './coverage/integration'
-                    : './coverage/component'
+                    ? "./coverage/integration"
+                    : "./coverage/component"
         },
         setupFiles:
             process.env.INTEGRATION == "true"
-                ? ['./integrationTests/testSetup.ts']
-                : ['./tests/testSetup.ts'],
+                ? ["./integrationTests/testSetup.ts"]
+                : ["./tests/testSetup.ts"],
         globals: true,
         execArgv: [
-            '--localstorage-file',
-            path.resolve(os.tmpdir(), `vitest-${process.pid}.localstorage`),
-        ],
-
-    },
+            "--localstorage-file",
+            path.resolve(os.tmpdir(), `vitest-${process.pid}.localstorage`)
+        ]
+    }
 });
