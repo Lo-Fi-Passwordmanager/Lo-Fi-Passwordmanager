@@ -11,15 +11,10 @@
     "lint": "eslint --max-warnings 0",
     "preview": "vite preview",
     "test": "vitest",
-    "test:coverage": "vitest run --coverage",
     "test:ci": "vitest run",
-    "coverage": "vitest --ui --coverage.enabled=true",
-    "integration": "cross-env INTEGRATION=true vitest run",
-    "integration:coverage": "cross-env INTEGRATION=true vitest run --coverage",
+    "test:ui": "vitest --ui",
     "e2e": "playwright test",
-    "e2e:coverage": "cross-env COVERAGE=true E2E=true nyc playwright test --project=chromium",
-    "e2e:report": "nyc report --reporter=html",
-    "e2e:tablereport": "nyc report --reporter=json-summary"
+    "e2e:coverage": "cross-env COVERAGE=true E2E=true nyc playwright test --project=chromium && nyc report --reporter=html --report-dir playwright-coverage"
   },
   "dependencies": {
     "@automerge/automerge": "^3.2.2",
@@ -32,7 +27,6 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.1",
     "automerge-repo-network-peerjs": "^1.2.3",
-    "cross-env": "^10.1.0",
     "hdd": "^0.0.0",
     "jsdom": "^27.4.0",
     "peerjs": "^1.5.5",

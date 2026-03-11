@@ -17,7 +17,9 @@ const EyeButton: React.FC<{
         return (
             <button className={`eyeButton ${hidePassword ? "" : "selected"}`}
                     onClick={() => toggleHidePassword()}
-                    style={size ? {height: size} : {}}>
+                    style={size ? {height: size} : {}}
+                    title={"Passwort verstecken"}
+            >
                 <HiEye size={24}/>
             </button>
         );
@@ -25,7 +27,9 @@ const EyeButton: React.FC<{
         return (
             <button className={`eyeButton ${hidePassword ? "" : "selected"}`}
                     onClick={() => toggleHidePassword()}
-                    style={size ? {height: size} : {}}>
+                    style={size ? {height: size} : {}}
+                    title={"Passwort anzeigen"}
+            >
                 <HiEyeSlash size={24}/>
             </button>
         );
