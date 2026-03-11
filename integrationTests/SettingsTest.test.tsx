@@ -63,11 +63,30 @@ vi.mock("../customNetworkAdapter/PeerJsNetworkAdapter.ts", async () => {
                 return this.connection.peer;
             }
 
-            connect = vi.fn(); disconnect = vi.fn();
-            on = vi.fn(); off = vi.fn(); emit = vi.fn();
+            connect = vi.fn();
+            disconnect = vi.fn();
+            on = vi.fn();
+            off = vi.fn();
+            emit = vi.fn();
         }
     };
 });
+
+const {idleMock} = vi.hoisted(() => ({
+    idleMock: {
+        triggerOnIdle: () => {
+        }
+    }
+}));
+
+vi.mock("react-idle-timer", () => ({
+    useIdleTimer: (config: any) => {
+
+        idleMock.triggerOnIdle = config.onIdle;
+
+        return {reset: vi.fn()};
+    }
+}));
 
 describe("Settings Integration Test ", () => {
 
@@ -134,6 +153,8 @@ describe("Settings Integration Test ", () => {
             expect(webSocketAdapter.url).toBe("wss://sync.automerge.org");
         });
 
+        //TODO: evt noch server hinzufügen/entfernen testen
+
 
         // P2P test
         act(() => {
@@ -175,5 +196,20 @@ describe("Settings Integration Test ", () => {
             const adapters = passwordManagerHook.result.current.repo.networkSubsystem.adapters;
             expect(adapters.some((a: any) => a.isMockP2P)).toBe(false);
         });
+
+        // test timeout
+        act(() => {
+            settingsVM.result.current.setTimeOutLengthVM("7");
+        });
+        expect(settingsVM.result.current.timeoutLength).toBe(7);
+        expect(passwordManagerHook.result.current.loggedIn).toBe(true);
+
+        act(() => {
+            idleMock.triggerOnIdle();
+        });
+
+        expect(passwordManagerHook.result.current.loggedIn).toBe(false);
+        expect(passwordManagerHook.result.current.getAutomergeFacade()).toBeNull();
+        expect(passwordManagerHook.result.current.toastVisible).toBe(true);
     });
 });
