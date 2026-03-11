@@ -3,7 +3,7 @@ import {act, renderHook, waitFor} from "@testing-library/react";
 import {usePasswordManagerViewModel} from "../src/Components/ViewModels/PasswordManagerViewModel";
 import {useLoginViewModel} from "../src/Components/ViewModels/loginViewModel";
 import {RepoContext} from "@automerge/react";
-import {usePasswordViewModel} from "../src/Components/ViewModels/PasswordViewModel";
+import {SortCriteria, usePasswordViewModel} from "../src/Components/ViewModels/PasswordViewModel";
 import {useListViewModel} from "../src/Components/ViewModels/ListViewModel";
 import {Folder} from "../src/Model/Folder";
 import {Item} from "../src/Model/Item";
@@ -167,7 +167,42 @@ describe("FolderTest", () => {
             passwordVM.result.current.createEntry(entryData4);
         });
 
-        const rootItems = passwordVM.result.current.getSortedChildren(passwordVM.result.current.getRootFolder());
+        let sortedItems = passwordVM.result.current.getSortedChildren(passwordVM.result.current.getRootFolder());
+        expect(sortedItems[0].title).toBe("3Entry");
+        expect(sortedItems[1].title).toBe("Renamed Folder 2");
+        expect(sortedItems[2].title).toBe("Z-Entry");
+
+        act(() => {
+            passwordVM.result.current.setIsAscending(false);
+        });
+        sortedItems = passwordVM.result.current.getSortedChildren(passwordVM.result.current.getRootFolder());
+        expect(sortedItems[0].title).toBe("Z-Entry");
+        expect(sortedItems[1].title).toBe("Renamed Folder 2");
+        expect(sortedItems[2].title).toBe("3Entry");
+
+        act(() => {
+            passwordVM.result.current.setCurSortCrit(SortCriteria.CreatedAt);
+            passwordVM.result.current.setIsAscending(true);
+        });
+        sortedItems = passwordVM.result.current.getSortedChildren(passwordVM.result.current.getRootFolder());
+        expect(passwordVM.result.current.getSortedChildren(passwordVM.result.current.getRootFolder())[0].title).toBe("Renamed Folder 2");
+        expect(passwordVM.result.current.getSortedChildren(passwordVM.result.current.getRootFolder())[1].title).toBe("3Entry");
+        expect(passwordVM.result.current.getSortedChildren(passwordVM.result.current.getRootFolder())[2].title).toBe("Z-Entry");
+
+        const entry3 = passwordVM.result.current.getSortedChildren(passwordVM.result.current.getRootFolder())[1];
+        act(() => {
+            passwordVM.result.current.updateItemAttribute(entry3.id, [["username", "updated_user3"]]);
+        });
+        act(() => {
+            passwordVM.result.current.setCurSortCrit(SortCriteria.EditedAt);
+            passwordVM.result.current.setIsAscending(false);
+        });
+        sortedItems = passwordVM.result.current.getSortedChildren(passwordVM.result.current.getRootFolder());
+        expect(passwordVM.result.current.getSortedChildren(passwordVM.result.current.getRootFolder())[0].title).toBe("3Entry");
+        expect(passwordVM.result.current.getSortedChildren(passwordVM.result.current.getRootFolder())[1].title).toBe("Z-Entry");
+        expect(passwordVM.result.current.getSortedChildren(passwordVM.result.current.getRootFolder())[2].title).toBe("Renamed Folder 2");
+
+        // Test search function
 
     })
 })
