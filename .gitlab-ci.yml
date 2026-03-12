@@ -58,12 +58,12 @@ test-report:
     when: always
     name: "Test Coverage Report"
     paths:
-      - ./coverage
+      - ./coverage/component
   script:
     - yarn test:ci || true
     - chmod og= $ID_ED25519
     - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'cd /home/ubuntu/automerge/reports/coverage/ && rm -rf *'
-    - scp -i $ID_ED25519 -o StrictHostKeyChecking=no -r ./coverage/** $SERVER_USER@$SERVER_IP:/home/ubuntu/automerge/reports/coverage/
+    - scp -i $ID_ED25519 -o StrictHostKeyChecking=no -r ./coverage/component/** $SERVER_USER@$SERVER_IP:/home/ubuntu/automerge/reports/coverage/
     - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'cd /home/ubuntu/automerge/reports/coverage/ && sed -i "s/src=\"/src=\"coverage\//g" index.html && sed -i "s/href=\"/href=\"coverage\//g" index.html && sed -i "s/href=\"coverage\/https:\/\//href=\"https:\/\//g" index.html'
 
 # Uploads the playwright coverage report to the server
