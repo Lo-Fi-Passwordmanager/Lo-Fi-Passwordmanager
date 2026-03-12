@@ -234,6 +234,12 @@ export const useLoginViewModel = (
         return true;
     }
 
+    // close the currently opened database
+    const closeDatabase = () => {
+        setLoggedIn(false);
+        securityProvider.clearKey();
+    };
+
     // Open the dialog to create a new database
     const openAddDialog = () => setIsAddDialogOpen(true);
     // Close the dialog to create a new database
@@ -307,6 +313,7 @@ export const useLoginViewModel = (
         setShowToast,
         createDatabase,
         tryOpenDatabase,
+        closeDatabase,
         openAddDialog,
         closeAddDialog,
         openEnterPasswordDialog,
