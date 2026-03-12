@@ -17,7 +17,7 @@ test('click the + button and check that every menu is correct', async ({ page })
 
     await page.getByRole('button', { name: 'Existierende Datenbank laden' }).click();
     await expect(page.getByRole('textbox', { name: 'Name' })).toBeVisible();
-    await expect(page.getByRole('textbox', { name: 'Automerge Url' })).toBeVisible();
+    await expect(page.getByRole('textbox', { name: 'Datenbank ID' })).toBeVisible();
 
     await page.getByRole('button', { name: 'Datenbank importieren' }).click();
     await expect(page.getByRole('textbox', { name: 'Datenbankname' })).toBeVisible();
