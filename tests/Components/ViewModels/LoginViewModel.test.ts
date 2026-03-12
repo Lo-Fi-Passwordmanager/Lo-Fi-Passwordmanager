@@ -75,8 +75,6 @@ describe('UseLoginViewModel', () => {
         expect(result.current.tryOpenDatabase("password")).rejects.toThrow("No database selected");
     })
 
-
-    /*
     it('should be able to import a database from an url', async () => {
         const {result} = renderHook(() =>
             useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, secProv, setOpenedDbName));
@@ -86,10 +84,11 @@ describe('UseLoginViewModel', () => {
         await waitFor(() => {
             expect(result.current.databases.size).toBe(1);
         });
-        let database: AutomergeUrl;
-        act(() => {
-            database = result.current.databases.get("name");
-        })
+        let database: AutomergeUrl = result.current.databases.get("name");
+
+        const deleteSpy = vi.spyOn(repo, "delete").mockImplementation(() => {
+        });
+
         await waitFor(() => {
             result.current.confirmDeleteDatabase("name");
         });
@@ -102,10 +101,9 @@ describe('UseLoginViewModel', () => {
         await waitFor(() => {
             expect(result.current.databases.size).toBe(1);
         });
+
+        deleteSpy.mockRestore();
     })
-
-     */
-
 
     it('should be able to reject a wrong import from a url', async () => {
         const {result} = renderHook(() =>
@@ -192,6 +190,9 @@ describe('UseLoginViewModel', () => {
         await waitFor(() => {
             result.current.tryOpenDatabase("password");
         })
+        await waitFor(() => {
+            expect(setLoggedIn).toHaveBeenCalledWith(true);
+        })
     });
 
     it("should reject a wrong password", async () => {
@@ -202,10 +203,13 @@ describe('UseLoginViewModel', () => {
             result.current.closeDatabase();
         });
         await waitFor(() => {
-            expect(setLoggedIn).toHaveBeenCalled();
+            expect(setLoggedIn).toHaveBeenCalledTimes(1);
         })
         await waitFor(() => {
             result.current.tryOpenDatabase("WrongPassword", "name");
+        });
+        await waitFor(() => {
+            expect(result.current.toastMessage).toBe("Falsches Masterpasswort!");
         });
     });
 
@@ -254,19 +258,19 @@ describe('UseLoginViewModel', () => {
         });
     });
 
-    // it('should show a toast when an error occurs', async () => {
-    //     const {result} = renderHook(() =>
-    //         useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, secProv, setOpenedDbName));
-    //     act(() => {
-    //         localStorage.setItem("databases", JSON.stringify([["name", "automerge:EmPo3STbfDKx16VXWAeZYzo5p28"]]));
-    //     });
-    //     await act(async () => {
-    //         expect(async () => await result.current.tryOpenDatabase("password", "name")).toThrowError()
-    //     });
-    //     await waitFor(() => {
-    //         expect(result.current.toastMessage).toBe("Automerge konnte die Datenbank nicht laden!");
-    //     });
-    // });
+    it('should show a toast when an error occurs', async () => {
+        const {result} = renderHook(() =>
+            useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, secProv, setOpenedDbName));
+        act(() => {
+            localStorage.setItem("databases", JSON.stringify([["name", "automerge:EmPo3STbfDKx16VXWAeZYzo5p28"]]));
+        });
+        await act(async () => {
+            result.current.tryOpenDatabase("password", "name");
+        });
+        await waitFor(() => {
+            expect(result.current.toastMessage).toBe("Automerge konnte die Datenbank nicht laden!");
+        });
+    });
 
     it('should fail loading a database from file without file', async () => {
         const {result} = renderHook(() => useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, secProv, setOpenedDbName));

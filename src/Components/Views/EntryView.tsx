@@ -53,14 +53,14 @@ const EntryView: React.FC<{
                     <div className={"scrollableContainer entryViewListing"} style={{width: "90%"}}>
                         <div className={"entryViewAttribute"}>
                             <span style={{gridColumn: "span 20"}}>Benutzername:</span>
-                            <span className={"attribute-value"}>{entry.username}</span>
+                            <span className={"attribute-value"} title={"Benutzername"}>{entry.username}</span>
                             <CopyButton copyAndClearClipboard={copyAndClearClipboard} attributeValue={entry.username}/>
                         </div>
 
                         <div className={"entryViewAttribute"}>
                             <span style={{gridColumn: "span 20"}}>Passwort:</span>
                             <div className={"attribute-value"} style={{gridColumnEnd: "19"}}>
-                                <span>{(hidePassword ? "●".repeat(8) : entry.password)}</span>
+                                <span title={"Passwort"}>{(hidePassword ? "●".repeat(8) : entry.password)}</span>
                             </div>
                             <EyeButton hidePassword={hidePassword} toggleHidePassword={toggleHidePassword}/>
                             <CopyButton copyAndClearClipboard={copyAndClearClipboard} attributeValue={entry.password}/>
@@ -72,7 +72,9 @@ const EntryView: React.FC<{
                             <a className={"attribute-value"}
                                href={(entry.url.startsWith("http") ? entry.url : ("https://" + entry.url))}
                                target="_blank" rel="noopener noreferrer"
-                               style={{textDecoration: "underline", color: "inherit"}}>
+                               style={{textDecoration: "underline", color: "inherit"}}
+                               title={"URL"}
+                            >
                                 {entry.url}
                             </a>
                             <CopyButton copyAndClearClipboard={copyAndClearClipboard} attributeValue={entry.url}/>
@@ -85,7 +87,9 @@ const EntryView: React.FC<{
                                 paddingLeft: "10px",
                                 whiteSpace: "normal",
                                 gridColumnEnd: "21"
-                            }}>{entry.note}</span>
+                            }}
+                                  title={"Notiz"}
+                            >{entry.note}</span>
                         </div>
                     </div>
                     <div className={"entryViewFooterButtons"}>

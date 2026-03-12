@@ -34,6 +34,10 @@ export default defineConfig({
     },
     test: {
         environment: "jsdom",
+        include:
+            process.env.INTEGRATION == "true"
+                ? ["./integrationTests/**/*.test.{ts,tsx}"]
+                : ["./tests/**/*.test.{ts,tsx}"],
         exclude: [
             ...configDefaults.exclude,
             "e2e"
@@ -47,10 +51,16 @@ export default defineConfig({
                 "src/Components/Views",
                 "main.tsx"
             ],
-            reporter: ["text", "html", "lcov"],
-            reportsDirectory: "./coverage"
+            reporter: ["text", "html", "lcov", "json-summary"],
+            reportsDirectory:
+                process.env.INTEGRATION === "true"
+                    ? "./coverage/integration"
+                    : "./coverage/component"
         },
-        setupFiles: ["./tests/testSetup.ts"],
+        setupFiles:
+            process.env.INTEGRATION == "true"
+                ? ["./integrationTests/testSetup.ts"]
+                : ["./tests/testSetup.ts"],
         globals: true,
         execArgv: [
             "--localstorage-file",

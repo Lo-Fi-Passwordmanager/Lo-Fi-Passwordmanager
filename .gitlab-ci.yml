@@ -10,10 +10,14 @@ stages:
 
 lint:
   stage: lint
+  rules:
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH != 'main'
+    - if: $CI_COMMIT_BRANCH == 'main'
   script:
     - yarn eslint
 
-tests:
+unitTest:
   stage: test
   rules:
     - if: $CI_COMMIT_TAG
@@ -21,6 +25,15 @@ tests:
     - if: $CI_COMMIT_BRANCH == 'main'
   script:
     - yarn test:ci
+
+
+integrationTest:
+  stage: test
+  rules:
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH != 'main'
+    - if: $CI_COMMIT_BRANCH == 'main'
+  script: yarn integration
 
 playwright:
   stage: test
@@ -45,12 +58,12 @@ test-report:
     when: always
     name: "Test Coverage Report"
     paths:
-      - ./coverage
+      - ./coverage/component
   script:
     - yarn test:ci || true
     - chmod og= $ID_ED25519
     - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'cd /home/ubuntu/automerge/reports/coverage/ && rm -rf *'
-    - scp -i $ID_ED25519 -o StrictHostKeyChecking=no -r ./coverage/** $SERVER_USER@$SERVER_IP:/home/ubuntu/automerge/reports/coverage/
+    - scp -i $ID_ED25519 -o StrictHostKeyChecking=no -r ./coverage/component/** $SERVER_USER@$SERVER_IP:/home/ubuntu/automerge/reports/coverage/
     - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'cd /home/ubuntu/automerge/reports/coverage/ && sed -i "s/src=\"/src=\"coverage\//g" index.html && sed -i "s/href=\"/href=\"coverage\//g" index.html && sed -i "s/href=\"coverage\/https:\/\//href=\"https:\/\//g" index.html'
 
 # Uploads the playwright coverage report to the server
@@ -101,8 +114,6 @@ playwright-report:
     - scp -i $ID_ED25519 -o StrictHostKeyChecking=no -r ./playwright-report/** $SERVER_USER@$SERVER_IP:/home/ubuntu/automerge/reports/playwright/
 
 test-build:
-  dependencies:
-    - tests
   stage: build
   rules:
     - if: $CI_COMMIT_TAG
@@ -117,8 +128,6 @@ test-build:
 
 build:
   stage: build
-  dependencies:
-    - tests
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH == 'main'

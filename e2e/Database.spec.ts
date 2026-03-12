@@ -44,7 +44,7 @@ test("create a new DB, delete it and add it again via URL", async ({page}) => {
     await page.getByRole("button", {name: "Datenbankeinstellungen"}).dblclick();
     await expect(page.getByRole("heading", {name: "Datenbankeinstellungen"})).toBeVisible();
     //automerge url kopieren und DB exportieren
-    await page.getByRole("button", {name: "URL kopieren"}).click();
+    await page.getByRole("button", {name:"Datenbank ID kopieren"}).click();
     const copiedText = await page.evaluate(() => {
         return navigator.clipboard.readText();
     });
@@ -54,7 +54,7 @@ test("create a new DB, delete it and add it again via URL", async ({page}) => {
     //abmelden
     await page.getByRole('img').nth(1).click();
     await page.getByRole("button", {name: "⬅"}).click();
-    await expect(page.getByRole("button", {name: "URL kopieren"})).toBeVisible();
+    await expect(page.getByRole("button", {name: "Datenbank ID kopieren"})).toBeVisible();
     //Db löschen
     await page.getByRole('button').filter({ hasText: 'Datenbank entfernen' }).click();
     await expect(page.getByRole("heading", {name: "Löschen bestätigen"})).toBeVisible();
@@ -65,8 +65,8 @@ test("create a new DB, delete it and add it again via URL", async ({page}) => {
     await page.getByRole("button", {name: "Existierende Datenbank laden"}).click();
     await expect(page.getByRole("textbox", {name: "Name"})).toBeVisible();
     //Db Daten eingeben und anmelden
-    await page.getByRole("textbox", {name: "Automerge Url"}).click();
-    await page.getByRole("textbox", {name: "Automerge Url"}).fill(copiedText);
+    await page.getByRole("textbox", {name: "Datenbank ID"}).click();
+    await page.getByRole("textbox", {name: "Datenbank ID"}).fill(copiedText);
     await page.getByRole("textbox", {name: "Name"}).click();
     await page.getByRole("textbox", {name: "Name"}).fill("Datenbankname");
     await page.getByRole("button", {name: "Bestätigen"}).click();
@@ -115,11 +115,11 @@ test("add a database with a link", async ({page}) => {
     await page.getByRole("button", {name: "Neue Datenbank erstellen"}).click();
     await expect(page.getByRole("heading", {name: "Neue Datenbank erstellen"})).toBeVisible();
     await page.getByRole("button", {name: "Existierende Datenbank laden"}).click();
-    await expect(page.getByRole("textbox", {name: "Automerge Url"})).toBeVisible();
+    await expect(page.getByRole("textbox", {name: "Datenbank ID"})).toBeVisible();
 
     //Db Daten eingeben und anmelden
-    await page.getByRole("textbox", {name: "Automerge Url"}).click();
-    await page.getByRole("textbox", {name: "Automerge Url"}).fill("3SLSyunA52oN1V9LN7Eq6RZQnqFA");
+    await page.getByRole("textbox", {name: "Datenbank ID"}).click();
+    await page.getByRole("textbox", {name: "Datenbank ID"}).fill("3SLSyunA52oN1V9LN7Eq6RZQnqFA");
     await page.getByRole("textbox", {name: "Name"}).click();
     await page.getByRole("textbox", {name: "Name"}).fill("Datenbankname");
     await page.getByRole("button", {name: "Bestätigen"}).click();
