@@ -190,6 +190,9 @@ describe('UseLoginViewModel', () => {
         await waitFor(() => {
             result.current.tryOpenDatabase("password");
         })
+        await waitFor(() => {
+            expect(setLoggedIn).toHaveBeenCalledWith(true);
+        })
     });
 
     it("should reject a wrong password", async () => {
@@ -200,10 +203,13 @@ describe('UseLoginViewModel', () => {
             result.current.closeDatabase();
         });
         await waitFor(() => {
-            expect(setLoggedIn).toHaveBeenCalled();
+            expect(setLoggedIn).toHaveBeenCalledTimes(1);
         })
         await waitFor(() => {
             result.current.tryOpenDatabase("WrongPassword", "name");
+        });
+        await waitFor(() => {
+            expect(result.current.toastMessage).toBe("Falsches Masterpasswort!");
         });
     });
 

@@ -178,7 +178,6 @@ export const useLoginViewModel = (
         closeAddDialog();
 
         storeDatabase(name, url);
-        //FIXME Sollte hier loadAllDatabases ( ) also mit klammern stehen?
         setDatabases(loadAllDatabases());
         setSelectedDatabase(name);
 
