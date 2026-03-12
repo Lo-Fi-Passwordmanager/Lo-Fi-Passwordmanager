@@ -12,8 +12,8 @@ test('Creating a new Entry', async ({ page }) => {
     - heading "LoFi Passwortmanager" [level=2]
     - button "Einstellungen öffnen"
     - button "⬅"
-    - textbox "Suchen..."
-    - button "Eintrag ins Startverzeichnis hinzufügen"
+    - textbox "Nach Einträgen und Ordnern suchen"
+    - button "Eintrag ins zuletzt geöffnete Verzeichnis hinzufügen"
     - combobox:
       - option "Alphabetisch" [selected]
       - option "Erstellungsdatum"
@@ -25,7 +25,7 @@ test('Creating a new Entry', async ({ page }) => {
     - text: Bitte Eintrag auswählen
     - img "Logo"
     `);
-    await page.getByRole('button', {name: 'Eintrag ins Startverzeichnis hinzufügen', exact: true}).click();
+    await page.getByRole('button', {name: 'Eintrag ins zuletzt geöffnete Verzeichnis hinzufügen', exact: true}).click();
     await page.getByRole('button', {name: 'Eintrag', exact: true}).click();
     await expect(page.locator('#root')).toMatchAriaSnapshot(`
     - textbox: Neuer Eintrag
@@ -105,8 +105,8 @@ test('creating a new folder', async ({ page })=> {
     - heading "LoFi Passwortmanager" [level=2]
     - button "Einstellungen öffnen"
     - button "⬅"
-    - textbox "Suchen..."
-    - button "Eintrag ins Startverzeichnis hinzufügen"
+    - textbox "Nach Einträgen und Ordnern suchen"
+    - button "Eintrag ins zuletzt geöffnete Verzeichnis hinzufügen"
     - combobox:
       - option "Alphabetisch" [selected]
       - option "Erstellungsdatum"
@@ -119,7 +119,7 @@ test('creating a new folder', async ({ page })=> {
     - text: Bitte Eintrag auswählen
     - img "Logo"
     `);
-    await page.getByRole('button', { name: 'Eintrag ins Startverzeichnis hinzufügen', exact: true }).click();
+    await page.getByRole('button', { name: 'Eintrag ins zuletzt geöffnete Verzeichnis hinzufügen', exact: true }).click();
     await page.getByRole('button', { name: 'Ordner' }).click();
     await page.getByRole('button', { name: '▷ Neuer Ordner ⋮' }).getByRole('textbox').fill('Folder');
     await page.locator('div').filter({ hasText: 'Bitte Eintrag auswählen' }).nth(4).dblclick();
@@ -128,8 +128,8 @@ test('creating a new folder', async ({ page })=> {
     - heading "LoFi Passwortmanager" [level=2]
     - button "Einstellungen öffnen"
     - button "⬅"
-    - textbox "Suchen..."
-    - button "Eintrag ins Startverzeichnis hinzufügen"
+    - textbox "Nach Einträgen und Ordnern suchen"
+    - button "Eintrag ins zuletzt geöffnete Verzeichnis hinzufügen"
     - combobox:
       - option "Alphabetisch" [selected]
       - option "Erstellungsdatum"
@@ -159,25 +159,14 @@ test('swap ascending/descending', async ({ page }) => {
     await page.getByRole('textbox', { name: 'Masterpasswort' }).click();
     await page.getByRole('textbox', { name: 'Masterpasswort' }).fill('PW');
     await page.getByRole('button', { name: 'Bestätigen' }).click();
-    await page.getByRole('button', { name: 'Eintrag ins Startverzeichnis Hinzufügen', exact: true }).click();
+    await page.getByRole('button', { name: 'Eintrag ins Startverzeichnis' }).click();
     await page.getByRole('button', { name: 'Ordner' }).click();
     await page.getByRole('button', { name: '▷ Neuer Ordner ⋮' }).getByRole('textbox').fill('A');
-    await page.getByRole('button', { name: 'Eintrag ins Startverzeichnis hinzufügen', exact: true }).click();
+    await page.getByRole('button', { name: 'Eintrag ins Startverzeichnis' }).click();
     await page.getByRole('button', { name: 'Ordner', exact: true }).click();
     await page.getByRole('button', { name: '▷ Neuer Ordner ⋮' }).getByRole('textbox').fill('B');
     await page.getByText('Bitte Eintrag auswählen').click();
-    await expect(page.locator('body')).toMatchAriaSnapshot(`
-    - img "Passwortmanager Logo"
-    - heading "LoFi Passwortmanager" [level=2]
-    - button "Einstellungen öffnen"
-    - button "⬅"
-    - textbox "Suchen..."
-    - button "Eintrag ins Startverzeichnis hinzufügen"
-    - combobox:
-      - option "Alphabetisch" [selected]
-      - option "Erstellungsdatum"
-      - option "Bearbeitungsdatum"
-    - button "🡅"
+    await expect(page.locator('#root')).toMatchAriaSnapshot(`
     - button "Name":
       - text: ""
       - button "Eintrag ins Startverzeichnis Hinzufügen"
@@ -196,22 +185,9 @@ test('swap ascending/descending', async ({ page }) => {
       - button "Ordner löschen" [disabled]
       - button "⋮"
     - status
-    - text: Bitte Eintrag auswählen
-    - img "Logo"
     `);
     await page.getByRole('button', { name: '🡅' }).click();
     await expect(page.locator('#root')).toMatchAriaSnapshot(`
-    - img "Passwortmanager Logo"
-    - heading "LoFi Passwortmanager" [level=2]
-    - button "Einstellungen öffnen"
-    - button "⬅"
-    - textbox "Suchen..."
-    - button "Eintrag ins Startverzeichnis hinzufügen"
-    - combobox:
-      - option "Alphabetisch" [selected]
-      - option "Erstellungsdatum"
-      - option "Bearbeitungsdatum"
-    - button "🡇"
     - button "Name":
       - text: ""
       - button "Eintrag ins Startverzeichnis Hinzufügen"
@@ -230,9 +206,8 @@ test('swap ascending/descending', async ({ page }) => {
       - button "Ordner löschen" [disabled]
       - button "⋮"
     - status
-    - text: Bitte Eintrag auswählen
-    - img "Logo"
     `);
+    await expect(page.getByRole('button', { name: '🡇' })).toBeVisible();
 });
 
 test('passwort Generator', async ({ page }) => {
@@ -242,7 +217,7 @@ test('passwort Generator', async ({ page }) => {
     await page.getByRole('textbox', { name: 'Masterpasswort' }).click();
     await page.getByRole('textbox', { name: 'Masterpasswort' }).fill('PW');
     await page.getByRole('button', { name: 'Bestätigen' }).click();
-    await page.getByRole('button', { name: 'Eintrag ins Startverzeichnis hinzufügen', exact: true }).click();
+    await page.getByRole('button', { name: 'Eintrag ins zuletzt geöffnete Verzeichnis hinzufügen', exact: true }).click();
     await page.getByRole('button', { name: 'Eintrag', exact: true }).click();
     await page.getByRole('button').filter({ hasText: /^$/ }).nth(4).click();
     await expect(page.locator('#root')).toMatchAriaSnapshot(`
@@ -337,7 +312,7 @@ test('the pw visibility button', async ({ page }) => {
     await page.getByRole('textbox', { name: 'Masterpasswort' }).click();
     await page.getByRole('textbox', { name: 'Masterpasswort' }).fill('PW');
     await page.getByRole('button', { name: 'Bestätigen' }).dblclick();
-    await page.getByRole('button', { name: 'Eintrag ins Startverzeichnis hinzufügen', exact: true }).click();
+    await page.getByRole('button', { name: 'Eintrag ins zuletzt geöffnete Verzeichnis hinzufügen', exact: true }).click();
     await page.getByRole('button', { name: 'Eintrag', exact: true }).click();
     await expect(page.locator('button').nth(5)).toBeVisible();
     await page.locator('input[type="password"]').click();
