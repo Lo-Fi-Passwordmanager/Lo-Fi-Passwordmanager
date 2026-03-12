@@ -31,7 +31,7 @@ const DatabaseSettingsView: React.FC<{
                             () => {
                                 void navigator.clipboard.writeText(
                                     (automergeFacade.automergeURL as string).replace("automerge:", ""));
-                                setToast("Datenbank ID in die Zwischenablage kopiert")
+                                viewModel.setToast("Datenbank ID in die Zwischenablage kopiert")
                             }
                         }>
                         Datenbank ID kopieren
