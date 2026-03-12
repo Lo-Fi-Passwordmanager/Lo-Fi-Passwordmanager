@@ -73,6 +73,7 @@ playwright-coverage-report:
   script:
     - chmod og= $ID_ED25519
     - yarn e2e:coverage || true
+    - yarn e2e:report || true
     - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'cd /home/ubuntu/automerge/reports/playwright-coverage/ && rm -rf *'
     - scp -i $ID_ED25519 -o StrictHostKeyChecking=no -r ./playwright-coverage/** $SERVER_USER@$SERVER_IP:/home/ubuntu/automerge/reports/playwright-coverage/
     - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'cd /home/ubuntu/automerge/reports/playwright-coverage/ && sed -i "s/src=\"/src=\"ecov\//g" index.html && sed -i "s/href=\"/href=\"ecov\//g" index.html && sed -i "s/href=\"ecov\/https:\/\//href=\"https:\/\//g" index.html'
