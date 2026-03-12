@@ -8,6 +8,7 @@ import AddServerDialog from "./DialogViews/AddServerDialog.tsx";
 import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
 import Dialog from "./DialogViews/Dialog.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
+import SliderCheckBox from "./ButtonViews/SliderCheckBox.tsx";
 
 
 /**
@@ -64,39 +65,22 @@ const SettingsView: React.FC<{
 
 
                             <label className="checkboxRow">
-                                <label className="switch">
-                                    <input type="checkbox" checked={viewModel.darkMode}
-                                           onChange={viewModel.toggleDarkMode}/>
-                                    <span className="slider round" />
-                                </label>
+                                <SliderCheckBox checked={viewModel.darkMode} toggleChecked={viewModel.toggleDarkMode}/>
                                 Dark-Mode
                             </label>
 
                             <label className="checkboxRow">
-                                <label className="switch">
-                                    <input type="checkbox" checked={viewModel.synchronisation}
-                                           onChange={viewModel.toggleSynchronisation}/>
-                                    <span className="slider round" />
-                                </label>
+                                <SliderCheckBox checked={viewModel.synchronisation} toggleChecked={viewModel.toggleSynchronisation}/>
                                 Server Synchronisation
                             </label>
 
                             <label className="checkboxRow">
-                                <label className="switch">
-                                    <input type="checkbox" checked={viewModel.P2P}
-                                           onChange={viewModel.toggleP2P}/>
-                                    <span className="slider round" />
-                                </label>
+                                <SliderCheckBox checked={viewModel.P2P} toggleChecked={viewModel.toggleP2P}/>
                                 Peer-to-Peer Synchronisation
                             </label>
 
                             <label className="checkboxRow">
-                                <label className="switch">
-                                    <input type="checkbox" checked={viewModel.timeOutActive}
-                                           onChange={viewModel.toggleTimeOutActive}/>
-                                    <span className="slider round" />
-                                </label>
-
+                                <SliderCheckBox checked={viewModel.timeOutActive} toggleChecked={viewModel.toggleTimeOutActive}/>
                                 Bei Inaktivität abmelden
                             </label>
 
@@ -109,10 +93,10 @@ const SettingsView: React.FC<{
                                                onChange={(e) => viewModel.setTimeOutLengthVM(e.target.value)}
                                                min="1"/>
                                         <button className={"squareButton"} style={{boxShadow: "none"}}
-                                                onClick={viewModel.decreaseTimeout}><HiMiniMinus size={24}/>
+                                                onClick={viewModel.decreaseTimeout} title={"Zeit bis Abmeldung verringern"}><HiMiniMinus size={24}/>
                                         </button>
                                         <button className={"squareButton"} style={{boxShadow: "none"}}
-                                                onClick={viewModel.increaseTimeout}><HiMiniPlus size={24}/></button>
+                                                onClick={viewModel.increaseTimeout} title={"Zeit bis Abmeldung erhöhen"}><HiMiniPlus size={24}/></button>
                                     </div>
                                 </div>
                             )}
@@ -147,6 +131,7 @@ const SettingsView: React.FC<{
                                                                     <button
                                                                         className="squareButton"
                                                                         onClick={() => viewModel.removeSyncServer(server)}
+                                                                        title={"Server entfernen"}
                                                                     >
                                                                         <HiTrash size={24}/>
                                                                     </button>
@@ -160,7 +145,7 @@ const SettingsView: React.FC<{
                                                 onClick={() => viewModel.setAddServerDialogOpen(true)}
                                                 style={{alignSelf: "center"}}
                                             >
-                                                <HiMiniPlus size={24}/>
+                                                <HiMiniPlus size={24} title={"Sync Server hinzufügen"}/>
                                             </button>
                                             {viewModel.addServerDialogOpen && (
                                                 <AddServerDialog
@@ -191,6 +176,7 @@ const SettingsView: React.FC<{
                                                 <button
                                                     className="rectangle-button"
                                                     onClick={viewModel.connectToPeer}
+                                                    title={"Mit Peer verbinden"}
                                                 >
                                                     Verbinden
                                                 </button>
@@ -218,7 +204,9 @@ const SettingsView: React.FC<{
 
                                                     <button
                                                         className="squareButton"
-                                                        onClick={() => void viewModel.removePeer(id)}>
+                                                        onClick={() => void viewModel.removePeer(id)}
+                                                        title={"Peer entfernen"}
+                                                    >
                                                         <HiTrash size={24}/>
                                                     </button>
                                                 </div>

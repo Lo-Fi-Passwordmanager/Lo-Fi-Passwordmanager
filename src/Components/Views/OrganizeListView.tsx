@@ -55,7 +55,7 @@ const OrganizeListView: React.FC<{
                        type="text" placeholder="Suchen..."
                        value={liveSearchValue}
                        autoFocus
-                       onChange={(event => setLiveSearchValue(event.target.value))}/>
+                       onChange={(event => setLiveSearchValue(event.target.value))} title={"Nach Einträgen und Ordnern suchen"} />
                 {/* Search bar to filter the list of entries and folders */}
                 <button
                     className={"squareButton"}
@@ -64,13 +64,13 @@ const OrganizeListView: React.FC<{
                     onClick={() => {
                         setItemCreationDialog();
                     }}
-                    title="Eintrag ins Startverzeichnis hinzufügen"
+                    title="Eintrag ins zuletzt geöffnete Verzeichnis hinzufügen"
                 >
                     <HiMiniPlus size={24}/>
                 </button>
 
                 <select style={{gridColumn: "span 9", width: "100%"}} value={curSortCriterion}
-                        onChange={(e) => setCurSortCriterion(e.target.value as SortCriteria)}>
+                        onChange={(e) => setCurSortCriterion(e.target.value as SortCriteria)} title={"Einträge und Ordner sortieren"}>
                     <option value="NAME">Alphabetisch</option>
                     <option value="CREATED">Erstellungsdatum</option>
                     <option value="EDITED">Bearbeitungsdatum</option>

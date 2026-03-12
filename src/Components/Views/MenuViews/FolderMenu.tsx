@@ -20,8 +20,8 @@ const FolderMenu: React.FC<{
     const menuRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const handleClickOutside = () => {
-            if (menuRef.current && !menuRef.current.contains(document.activeElement)) {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
                 setIsOpen(false);
             }
         };
@@ -42,7 +42,7 @@ const FolderMenu: React.FC<{
 
             <div className={`action-items ${isOpen ? "open" : ""}`}>
                 <button
-                    className="listViewTitleHeader button"
+                    className="listViewTitleHeader menu button"
                     disabled={!isOpen}
                     title="Eintrag hinzufügen"
                     onClick={() => {
@@ -53,7 +53,7 @@ const FolderMenu: React.FC<{
                 </button>
                 <button
                     disabled={!isOpen}
-                    className="listViewTitleHeader button"
+                    className="listViewTitleHeader menu button"
                     title="Ordner umbennen"
                     onClick={() => {
                         onRename();
@@ -62,7 +62,7 @@ const FolderMenu: React.FC<{
                     <HiPencil size={24}/>
                 </button>
                 <button
-                    className="listViewTitleHeader button"
+                    className="listViewTitleHeader menu button"
                     title="Ordner löschen"
                     disabled={!isOpen}
                     onClick={onDelete}>

@@ -47,10 +47,10 @@ const DatabaseSettingsView: React.FC<{
 
                 <button
                     className={"delete"}
-                    style={{gap: "0.2rem"}}
+                    style={{gap:"0.2rem"}}
                     onClick={() => {
                         viewModel.setInDeletion(true)
-                    }}>Datenbank lokal löschen   <HiTrash size={24}/>
+                    }}><HiTrash size={24}/> Datenbank lokal löschen
                 </button>
 
                 {viewModel.inDeletion && (<DeleteConfirmationDialog

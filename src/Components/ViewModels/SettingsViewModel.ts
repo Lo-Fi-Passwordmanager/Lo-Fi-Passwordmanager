@@ -87,6 +87,7 @@ export const useSettingsViewModel = () => {
             return;
         }
         settings.removeServer(server);
+        setServers(settings.getServers());
     }
 
     // Select a server from the settings

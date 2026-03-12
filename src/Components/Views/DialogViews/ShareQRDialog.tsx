@@ -4,6 +4,7 @@ import QRCode from "react-qr-code";
 
 import Dialog from "./Dialog.tsx";
 import {useShareQRViewModel} from "../../ViewModels/Dialog/ShareQRViewModel.ts";
+import SliderCheckBox from "../ButtonViews/SliderCheckBox.tsx";
 
 // QRCode Generator https://github.com/rosskhanas/react-qr-code
 
@@ -26,7 +27,8 @@ const ShareQRDialog: React.FC<ShareQRDialogProps> = ({name, url}: ShareQRDialogP
             <>
                 <button
                     className="squareButton"
-                    onClick={() => viewModel.setShareQRCodeOpen(true)}>
+                    onClick={() => viewModel.setShareQRCodeOpen(true)}
+                >
                     <HiOutlineQrcode size={24}/>
                 </button>
                 <Dialog title={"Datenbank teilen"} onCloseDialog={() => viewModel.setShareQRCodeOpen(false)}
@@ -36,12 +38,7 @@ const ShareQRDialog: React.FC<ShareQRDialogProps> = ({name, url}: ShareQRDialogP
                        dort
                        hinzuzufügen.</p>
                     <label className="checkboxRow">
-                        <label className="switch">
-                            <input type="checkbox" checked={viewModel.shareName}
-                                   onChange={viewModel.toggleShareName}/>
-                            <span className="slider round" />
-                        </label>
-
+                        <SliderCheckBox checked={viewModel.shareName} toggleChecked={viewModel.toggleShareName}/>
                         Name der Datenbank auch teilen
                     </label>
 
