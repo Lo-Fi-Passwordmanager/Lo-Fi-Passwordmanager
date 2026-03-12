@@ -84,10 +84,10 @@ describe('UseLoginViewModel', () => {
         await waitFor(() => {
             expect(result.current.databases.size).toBe(1);
         });
-        let database: AutomergeUrl;
-        act(() => {
-            database = result.current.databases.get("name");
-        })
+        let database: AutomergeUrl = result.current.databases.get("name");
+
+        const deleteSpy = vi.spyOn(repo, "delete").mockImplementation(() => {});
+
         await waitFor(() => {
             result.current.confirmDeleteDatabase("name");
         });
@@ -100,6 +100,8 @@ describe('UseLoginViewModel', () => {
         await waitFor(() => {
             expect(result.current.databases.size).toBe(1);
         });
+
+        deleteSpy.mockRestore();
     })
 
     it('should be able to reject a wrong import from a url', async () => {
