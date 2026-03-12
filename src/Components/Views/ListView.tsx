@@ -79,6 +79,7 @@ const ListView: React.FC<{
         function addButtonPressed() {
             setItemCreationDialog();
             setCurrentParent!(item);
+            expandFolderId(item.id)
         }
 
         // makes the dragged item follow the cursor
