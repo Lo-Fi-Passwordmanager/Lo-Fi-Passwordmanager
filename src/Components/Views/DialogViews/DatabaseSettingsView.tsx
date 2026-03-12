@@ -1,12 +1,13 @@
-import React, {useState} from "react";
+import React from "react";
 import {HiTrash} from "react-icons/hi";
 
 import DeleteConfirmationDialog from "./DeleteConfirmationDialog.tsx";
 import {HistoryDialog} from "./HistoryDialog.tsx";
 import ShareQRDialog from "./ShareQRDialog.tsx";
+import ToastDialog from "./ToastDialog.tsx";
 import {type AutomergeFacade} from "../../../Utility/AutomergeFacade.ts";
-import {saveFile} from "../../../Utility/InputOutputUtil.ts";
 import {removeDatabase} from "../../../Utility/Storage.ts";
+import useDatabaseSettingsViewModel from "../../ViewModels/Dialog/DatabaseSettingsViewModel.ts";
 
 /**
  * The view that links to the {@link Settings} singleton and toggles its values.
@@ -16,48 +17,45 @@ const DatabaseSettingsView: React.FC<{
     openedDatabaseName?: string,
     closeDatabase: () => void,
 }> = ({automergeFacade, openedDatabaseName, closeDatabase}) => {
-    const [inDeletion, setInDeletion] = useState(false);
+
+    const viewModel = useDatabaseSettingsViewModel(automergeFacade);
 
     return (
         <>
+            <ToastDialog message={viewModel.message} isVisible={viewModel.toastVisible} onClose={() => viewModel.setToastVisible(false)}/>
             <div className="dbSettingsContainer">
-                {/* TODO Toast */}
                 <div style={{display: "flex", justifyContent: "space-between", gap: "12px"}}>
                     <button
                         style={{width: "100%"}}
-                        onClick={
-                            () => void navigator.clipboard.writeText(
-                                (automergeFacade.automergeURL as string).replace("automerge:", "")
-                            )
-                        }>
+                        onClick={viewModel.copyURLToClipboard}
+                    >
                         URL kopieren
                     </button>
                     <ShareQRDialog name={openedDatabaseName!}
                                    url={(automergeFacade.automergeURL as string).replace("automerge:", "")}/>
                 </div>
-                <button onClick={() => void saveFile(automergeFacade.exportAutomergeToBinary())}>Verschlüsselt Exportieren
+                <button onClick={viewModel.exportDatabase}>
+                    Verschlüsselt Exportieren
                 </button>
+
                 <HistoryDialog automergeFacade={automergeFacade}/>
+
                 <button
                     className={"delete"}
                     style={{gap:"0.2rem"}}
                     onClick={() => {
-                        setInDeletion(true)
+                        viewModel.setInDeletion(true)
                     }}><HiTrash size={24}/> Datenbank lokal löschen
                 </button>
-                {/*
-                TODO Hier export (Datei)
-                <button>Unverschlüsselt Exportieren</button>
 
-                */}
-                {inDeletion && (<DeleteConfirmationDialog
+                {viewModel.inDeletion && (<DeleteConfirmationDialog
                     database={openedDatabaseName}
                     onConfirmDb={(db) => {
                         closeDatabase();
                         removeDatabase(db);
-                        setInDeletion(false);
+                        viewModel.setInDeletion(false);
                     }}
-                    onClose={() => setInDeletion(false)}
+                    onClose={() => viewModel.setInDeletion(false)}
                 />)}
 
             </div>

@@ -123,14 +123,14 @@ const SettingsView: React.FC<{
                                                                         textOverflow: "ellipsis",
                                                                         flex: 1
                                                                     }}
-                                                                    onClick={() => viewModel.selectServer(server)}
+                                                                    onClick={() => viewModel.selectSyncServer(server)}
                                                                 >
                                                                     <span>{server}</span>
                                                                 </button>
                                                                 {server !== "Automerge Sync Server" && (
                                                                     <button
                                                                         className="squareButton"
-                                                                        onClick={() => viewModel.removeServer(server)}
+                                                                        onClick={() => viewModel.removeSyncServer(server)}
                                                                         title={"Server entfernen"}
                                                                     >
                                                                         <HiTrash size={24}/>
@@ -153,6 +153,7 @@ const SettingsView: React.FC<{
                                                     onClose={() => viewModel.setAddServerDialogOpen(false)}
                                                     setShowToast={viewModel.setShowToast}
                                                     setToastMessage={viewModel.setToastMessage}
+                                                    serverNames={viewModel.serverNames}
                                                 />
                                             )}
                                         </>
@@ -243,7 +244,7 @@ const SettingsView: React.FC<{
                             </div>
 
                             <section>
-                                <p><strong>Version:</strong> 0.1.0-beta</p>
+                                <p><strong>Version:</strong> 0.6.7-sigma</p>
                                 <p><strong>Lizenz:</strong> MIT License</p>
                             </section>
 

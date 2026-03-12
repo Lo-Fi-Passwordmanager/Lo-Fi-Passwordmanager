@@ -5,6 +5,8 @@ import {renderHook, act} from "@testing-library/react";
 import {usePasswordViewModel} from "../../../src/Components/ViewModels/PasswordViewModel";
 import {Entry} from "../../../src/Model/Entry";
 import {Folder} from "../../../src/Model/Folder";
+import {SecurityProvider} from "../../../src/Utility/Security/SecurityProvider";
+import * as AutomergeFacadeHook from "../../../src/Utility/useAutomergeFacade";
 
 describe('PasswordViewModel', () => {
     let automergeFacade;
@@ -15,6 +17,7 @@ describe('PasswordViewModel', () => {
     let entry3;
     let subFolder1;
     let rootFolder;
+    let testFolder;
 
     vi.mock("@automerge/react", async (importOriginal) => {
         const actual = await importOriginal<typeof import("@automerge/react")>()
@@ -36,8 +39,12 @@ describe('PasswordViewModel', () => {
 
     beforeEach(() => {
         repo = new Repo();
-        automergeFacade = new AutomergeFacade(repo);
-        automergeFacade.createDatabase("salt", "validation", "Database");
+        const secProv = new SecurityProvider();
+        const salt = secProv.getNewSalt();
+        const validation = secProv.getNewValidation("1234", salt);
+        secProv.verifyMasterPassword("1234", salt, validation)
+        automergeFacade = new AutomergeFacade(repo, null, secProv);
+        automergeFacade.createDatabase(salt, validation);
 
         topFolder = new Folder("TopFolder", "123", new Date(1), new Date(2));
         subFolder1 = new Folder("subFolder 1", "123", new Date(4), new Date(8));
@@ -45,6 +52,7 @@ describe('PasswordViewModel', () => {
         entry3 = new Entry("Name3", "id123", new Date(2), new Date(12), "benutzer1", "password", "url", "note");
         entry2 = new Entry("Name2", "id234", new Date(5), new Date(10), "name2", "password", "url", "note");
         rootFolder = new Folder("root", "", new Date(), new Date());
+        testFolder = new Folder("Test Folder", "1");
 
         topFolder.addItem(subFolder1);
         topFolder.addItem(entry);
@@ -103,12 +111,21 @@ describe('PasswordViewModel', () => {
         expect(result.current.isAscending).toBe(true);
     });
 
-    it('should be able to add an entry', () => {
+    it('should be able to add an entry in temp editable state', () => {
         const {result} = renderHook(() => usePasswordViewModel(automergeFacade));
         act(() => {
             result.current.addItem(entry);
         });
         expect(result.current.curItem).toStrictEqual(entry);
+    });
+
+
+    it('should be able to add a folder', () => {
+        const {result} = renderHook(() => usePasswordViewModel(automergeFacade));
+        act(() => {
+            result.current.addItem(testFolder);
+        });
+        expect(result.current.curItem).toStrictEqual(testFolder);
     });
 
 
@@ -154,7 +171,7 @@ describe('PasswordViewModel', () => {
         expect(result.current.itemToDelete).not.toStrictEqual(rootFolder);
     });
 
-    it('copy to clipboard works as expected', async () => {
+    it('copy to clipboard works', async () => {
         const {result} = renderHook(() => usePasswordViewModel(automergeFacade));
         const writeTextMock = vi.fn();
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -169,6 +186,96 @@ describe('PasswordViewModel', () => {
 
         expect(writeTextMock).toHaveBeenCalledWith("sample text");
     });
+
+
+    it('deleting clipboard works', () => {
+        vi.useFakeTimers()
+        vi.spyOn(document, 'hasFocus').mockReturnValue(true)
+
+        const {result} = renderHook(() => usePasswordViewModel(automergeFacade))
+
+        const writeTextMock = vi.fn();
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        navigator.clipboard = {
+            writeText: writeTextMock,
+        };
+
+        act(() => {
+            result.current.copyToClipboardAndClear('sample text', 10000)
+        })
+        expect(writeTextMock).toHaveBeenLastCalledWith('sample text')
+
+        vi.advanceTimersByTime(10000)
+        expect(writeTextMock).toHaveBeenLastCalledWith('');
+    })
+
+
+    it('deleting clipboard after copying again works', () => {
+        vi.useFakeTimers()
+        vi.spyOn(document, 'hasFocus').mockReturnValue(true)
+
+        const {result} = renderHook(() => usePasswordViewModel(automergeFacade))
+
+        const writeTextMock = vi.fn();
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        navigator.clipboard = {
+            writeText: writeTextMock,
+        };
+
+        act(() => {
+            result.current.copyToClipboardAndClear('sample text', 10000)
+        })
+        expect(writeTextMock).toHaveBeenLastCalledWith('sample text')
+
+
+        vi.advanceTimersByTime(5000)
+
+
+        act(() => {
+            result.current.copyToClipboardAndClear('sample text2', 10000)
+        })
+        expect(writeTextMock).toHaveBeenLastCalledWith('sample text2')
+
+        vi.advanceTimersByTime(5000)
+
+        expect(writeTextMock).toHaveBeenLastCalledWith('sample text2');
+
+        vi.advanceTimersByTime(5000)
+        expect(writeTextMock).toHaveBeenLastCalledWith('');
+    })
+
+
+    it('deleting clipboard works even when out of focus', () => {
+        vi.useFakeTimers()
+        vi.spyOn(document, 'hasFocus').mockReturnValue(false)
+
+        const {result} = renderHook(() => usePasswordViewModel(automergeFacade))
+
+        const writeTextMock = vi.fn();
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        navigator.clipboard = {
+            writeText: writeTextMock,
+        };
+
+        act(() => {
+            result.current.copyToClipboardAndClear('sample text', 10000)
+        })
+        expect(writeTextMock).toHaveBeenLastCalledWith('sample text')
+
+        vi.advanceTimersByTime(10000)
+        expect(writeTextMock).toHaveBeenLastCalledWith('sample text');
+
+        //simulates focusing back into tab
+        vi.spyOn(document, 'hasFocus').mockReturnValue(true);
+        act(() => {
+            window.dispatchEvent(new Event('focus'))
+        })
+        expect(writeTextMock).toHaveBeenLastCalledWith('');
+    })
+
 
     it('should be able to sort according to criteria', () => {
         let {result} = renderHook(() =>
@@ -217,4 +324,123 @@ describe('PasswordViewModel', () => {
         expect(result.current.getSortedChildren(topFolder)).toStrictEqual([entry3, entry2, subFolder1, entry]);
     })
 
+    it('should create a temporary entry within the automerge doc with the current parent and set it to be the current item', () => {
+        const {result} = renderHook(() => usePasswordViewModel(automergeFacade));
+        act(() => {
+            result.current.createEntry(topFolder);
+        });
+        act(() => {
+            result.current.createEntry(entry);
+        });
+        expect(result.current.curItem).toStrictEqual(entry);
+        expect(result.current.curParent.id).toBe(topFolder.id);
+    });
+
+    it('should update attributes of an item', () => {
+        const {result} = renderHook(() => usePasswordViewModel(automergeFacade));
+        act(() => {
+            result.current.setCurItem(entry);
+        });
+        act(() => {
+            result.current.updateItemAttribute(entry.id, [["password", "newPassword"]]);
+        });
+        expect(result.current.curItem.id).toBe("");
+        expect(result.current.dirtyItemId).toBe(entry.id);
+    });
+
+    it('should update the title of an item', () => {
+        const {result} = renderHook(() => usePasswordViewModel(automergeFacade));
+        act(() => {
+            result.current.setCurItem(entry);
+        });
+        act(() => {
+            result.current.updateItemTitle(entry.id, "newTitle");
+        });
+        expect(result.current.curItem.id).toBe(entry.id);
+    });
+
+    it('should go to an item and expand all parent folders', () => {
+        const {result} = renderHook(() => usePasswordViewModel(automergeFacade));
+        const root = result.current.getRootFolder();
+        act(() => {
+            root.addItem(topFolder);
+            topFolder.addItem(subFolder1);
+            subFolder1.addItem(entry);
+        });
+        act(() => {
+            result.current.goToItem(entry);
+        });
+        expect(result.current.searchValue).toBe("");
+        expect(result.current.selectedItemId).toBe(entry.id);
+        expect(result.current.isFolderExpanded(topFolder.id)).toBe(true);
+        expect(result.current.isFolderExpanded(subFolder1.id)).toBe(true);
+    });
+
+    it('should expand a single folder and collaps it', () => {
+        const {result} = renderHook(() => usePasswordViewModel(automergeFacade));
+        expect(result.current.isFolderExpanded(topFolder.id)).toBe(false);
+        act(() => {
+            result.current.expandFolder(topFolder.id);
+        });
+        expect(result.current.isFolderExpanded(topFolder.id)).toBe(true);
+        act(() => {
+            result.current.collapseFolder(topFolder.id);
+        });
+        expect(result.current.isFolderExpanded(topFolder.id)).toBe(false);
+    });
+
+    it('should do nothing if an item is dropped on nothing', () => {
+        const facadeSpy = vi.spyOn(AutomergeFacadeHook, 'useAutomergeFacade');
+        const { result } = renderHook(() => usePasswordViewModel(automergeFacade));
+
+        const reactiveFacade = facadeSpy.mock.results[facadeSpy.mock.results.length - 1].value;
+        const updateItemSpy = vi.spyOn(reactiveFacade, 'updateItem');
+
+        act(() => {
+            result.current.handleDragEnd({ active: { id: entry.id }, over: null } as any);
+        });
+        expect(updateItemSpy).not.toHaveBeenCalled();
+        facadeSpy.mockRestore();
+    });
+
+    it('should do nothing if the item is dropped onto itself', () => {
+        const facadeSpy = vi.spyOn(AutomergeFacadeHook, 'useAutomergeFacade');
+        const { result } = renderHook(() => usePasswordViewModel(automergeFacade));
+
+        const reactiveFacade = facadeSpy.mock.results[facadeSpy.mock.results.length - 1].value;
+        const updateItemSpy = vi.spyOn(reactiveFacade, 'updateItem');
+
+        act(() => {
+            result.current.handleDragEnd({
+                active: { id: entry.id },
+                over: { id: entry.id }
+            } as any);
+        });
+
+        expect(updateItemSpy).not.toHaveBeenCalled();
+    });
+
+    it('should update the parentId and expand the new folder if valid drop', () => {
+        const facadeSpy = vi.spyOn(AutomergeFacadeHook, 'useAutomergeFacade');
+        const { result } = renderHook(() => usePasswordViewModel(automergeFacade));
+
+        const reactiveFacade = facadeSpy.mock.results[facadeSpy.mock.results.length - 1].value;
+        const updateItemSpy = vi.spyOn(reactiveFacade, 'updateItem');
+
+        act(() => {
+            result.current.handleDragEnd({
+                active: { id: entry.id },
+                over: { id: subFolder1.id }
+            } as any);
+        });
+
+        // Hier beweisen wir beides: Das Update in der DB UND den visuellen Effekt (aufklappen)
+        expect(updateItemSpy).toHaveBeenCalledTimes(1);
+        expect(updateItemSpy).toHaveBeenCalledWith(entry.id, [["parentId", subFolder1.id]]);
+        expect(result.current.isFolderExpanded(subFolder1.id)).toBe(true);
+
+        facadeSpy.mockRestore();
+    });
 });
+
+

@@ -1,4 +1,4 @@
-import {expect, it, describe, beforeEach, afterEach} from "vitest";
+import {expect, it, describe, beforeEach, afterEach, vi} from "vitest";
 
 
 import {AutomergeUrl} from "@automerge/automerge-repo";
@@ -7,7 +7,8 @@ import {
     removeDatabase, renameDatabase,
     saveCurrentSortCriterion,
     saveDatabases, saveIsAscending,
-    storeDatabase
+    storeDatabase, loadServers, loadSelectedServerURL, storeServers, storeSelectedServerURL, loadDarkModeSetting,
+    loadTimeoutLength, loadTimeoutSettings, loadP2PSetting
 } from "../../src/Utility/Storage";
 
 const testMap = new Map<string, AutomergeUrl>();
@@ -87,4 +88,72 @@ describe("PasswordManagerViewModel", () => {
     it('Should throw if attempting to rename a database that doesnt exist', ()=> {
         expect(() => renameDatabase("oldName", "newName")).toThrow("Database with name oldName does not exist.");
     })
+
+    it('should be able to load and save servers', () => {
+        localStorage.setItem("servers_list", JSON.stringify([["server", "wss://server1.com"]]));
+        const servers = loadServers();
+        expect(servers).toEqual(new Map<string, string>([["server", "wss://server1.com"]]));
+        servers.set("server2", "wss://server2.com");
+        storeServers(servers);
+        const storedServers = localStorage.getItem("servers_list");
+        expect(storedServers).toBe(JSON.stringify([["server", "wss://server1.com"], ["server2", "wss://server2.com"]]));
+    });
+
+    it('should return the default server list if no servers are stored', () => {
+        const servers = loadServers();
+        expect(servers).toEqual(new Map<string, string>([["Automerge Sync Server", "wss://sync.automerge.org"]]));
+    });
+
+    it('should be able to load and save the selected server URL', () => {
+        localStorage.setItem("server_url", "wss://server1.com");
+        expect(loadSelectedServerURL()).toBe("wss://server1.com");
+        storeSelectedServerURL("wss://server2.com");
+        expect(localStorage.getItem("server_url")).toBe("wss://server2.com");
+    });
+
+    it ('should return the default server URL if no URL is stored', () => {
+        expect(loadSelectedServerURL()).toBe("wss://sync.automerge.org");
+        expect(localStorage.getItem("server_url")).toBe("wss://sync.automerge.org");
+    });
+
+    it('should log an error and return an empty map if the databases are not stored in the correct format', () => {
+        localStorage.setItem("databases", "not a valid JSON");
+        const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+        const loadedMap = loadAllDatabases();
+        expect(consoleErrorSpy).toHaveBeenCalledWith(expect.any(Error));
+        expect(loadedMap.size).toBe(0);
+        consoleErrorSpy.mockRestore();
+    });
+
+    it('should return the stored option for dark mode', () => {
+        expect(localStorage.getItem("dark_mode")).toBeNull();
+        localStorage.setItem("dark_mode", "true");
+        expect(loadDarkModeSetting()).toBe(true);
+        localStorage.setItem("dark_mode", "false");
+        expect(loadDarkModeSetting()).toBe(false);
+    });
+
+    it('should return the storedoption for timeout active', () => {
+        expect(localStorage.getItem("timeout_active")).toBeNull();
+        localStorage.setItem("timeout_active", "true");
+        expect(loadTimeoutSettings()).toBe(true);
+        localStorage.setItem("timeout_active", "false");
+        expect(loadTimeoutSettings()).toBe(false);
+    });
+
+    it('should return the stored option for timeout length', () => {
+        expect(localStorage.getItem("timeout_length")).toBeNull();
+        localStorage.setItem("timeout_length", "300000");
+        expect(loadTimeoutLength()).toBe(300000);
+        localStorage.setItem("timeout_length", "600000");
+        expect(loadTimeoutLength()).toBe(600000);
+    });
+
+    it('should return the stored option for P2P enabled', () => {
+        expect(localStorage.getItem("p2p_enabled")).toBeNull();
+        localStorage.setItem("p2p", "true");
+        expect(loadP2PSetting()).toBe(true);
+        localStorage.setItem("p2p", "false");
+        expect(loadP2PSetting()).toBe(false);
+    });
 })

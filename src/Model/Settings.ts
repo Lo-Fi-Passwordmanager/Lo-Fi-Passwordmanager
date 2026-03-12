@@ -74,7 +74,7 @@ export class Settings {
 
         //When someone is connecting to this peer, establish the direction in the other way
         this.peer.on('connection', incomingConn => {
-            incomingConn.on('open',  () => {
+            incomingConn.on('open', () => {
                 this.setupConnection(incomingConn);
             })
         })
@@ -128,8 +128,9 @@ export class Settings {
     }
 
     public removeServer(server: string): void {
-        this._servers = this._servers.delete(server) ? this._servers : this._servers;
+        this._servers.delete(server);
         storeServers(this._servers);
+        this.notify();
     }
 
     public getP2P(): boolean {
@@ -147,13 +148,15 @@ export class Settings {
     }
 
     /**
-     * Sets the value of synchronisation to the given value. If the second parameter is set to false, this will not persist on restart
-     * @param value
-     * @param editing
+     * Sets the value of synchronisation to the given value. If the its deactivated due to editing, the setting will not be stored in localStorage, so that it is only active for the current session
+     * @param value the new value for the synchronisation setting
+     * @param editing if true, the synchronisation setting will not be stored in localStorage
      */
     public setSynchronization(value: boolean, editing?: boolean) {
         this._synchronization = value;
-        storeSynchronizationSettings(value, editing ? editing : false);
+        if (!editing) {
+            storeSynchronizationSettings(value);
+        }
         this.notify();
     }
 
@@ -180,6 +183,10 @@ export class Settings {
         return this._timeoutLength;
     }
 
+    /**
+     * The idle timeout in Minutes
+     * @param length
+     */
     public setTimeoutLength(length: number) {
         this._timeoutLength = length;
         storeTimeoutLength(length);

@@ -95,7 +95,11 @@ const ListView: React.FC<{
             return (
                 <div
                     className={`listViewEntry ${curItem.id !== entry.id ? "" : "selected"} ${listViewModel.isDragging ? "dragged" : ""} ${selectedItemId === item.id ? "highlighted entry" : ""}`}
-                    onClick={() => setCurItem(entry)}
+                    onClick={() => {
+                        if (!inEditable) {
+                            setCurItem(entry)
+                        }
+                    }}
                     style={dragStyle}
                     ref={listViewModel.setDraggableRef}
                     {...listViewModel.attributes}
