@@ -115,7 +115,7 @@ playwright-report:
 
 test-build:
   dependencies:
-    - tests
+    - test
   stage: build
   rules:
     - if: $CI_COMMIT_TAG
