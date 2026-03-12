@@ -3,15 +3,13 @@ import {act, render, renderHook, waitFor, screen} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import {usePasswordManagerViewModel} from "../src/Components/ViewModels/PasswordManagerViewModel";
 import {useLoginViewModel} from "../src/Components/ViewModels/loginViewModel";
-import {useHistoryViewModel} from "../src/Components/ViewModels/Dialog/HistoryViewModel";
 import {RepoContext} from "@automerge/react";
 import {Entry} from "../src/Model/Entry";
-import {AutomergeFacade} from "../src/Utility/AutomergeFacade";
 import {usePasswordViewModel} from "../src/Components/ViewModels/PasswordViewModel";
-import {useHistoryItemViewModel} from "../src/Components/ViewModels/Dialog/HistoryItemViewModel";
-import {Folder} from "../src/Model/Folder";
 // @ts-ignore
 import EntryView from "../src/Components/Views/EntryView";
+import {usePasswordGenViewModel} from "../src/Components/ViewModels/Dialog/PasswordGenViewModel";
+import {useEditablePasswordViewModel} from "../src/Components/ViewModels/EditablePasswordViewModel";
 
 describe("Entry modification Integrationtests", () => {
 
@@ -115,8 +113,10 @@ describe("Entry modification Integrationtests", () => {
         expect(navigator.clipboard.writeText).toHaveBeenCalledWith("taking notes");
 
         //test hide password
+
+        // create entry view to test if the password is shon correctly
         // @ts-ignore
-        render(<EntryView item={found1}
+        const {rerender} = render(<EntryView item={found1}
                           deleteItem={passwordVM.result.current.deleteItem}
                           copyAndClearClipboard={passwordVM.result.current.copyToClipboardAndClear}
                           setEditableView={passwordVM.result.current.setInEditable}
@@ -128,15 +128,102 @@ describe("Entry modification Integrationtests", () => {
 
         let eyeButton = screen.getByTitle("Passwort anzeigen");
         expect(eyeButton).toBeDefined();
-        await userEvent.click(eyeButton);
-        expect(screen.queryByTitle("Passwort anzeigen")).toBeNull();
+
+        await act(async () => {
+            await userEvent.click(eyeButton);
+        });
+
+        // @ts-ignore
+        rerender(<EntryView item={found1}
+                       deleteItem={passwordVM.result.current.deleteItem}
+                       copyAndClearClipboard={passwordVM.result.current.copyToClipboardAndClear}
+                       setEditableView={passwordVM.result.current.setInEditable}
+                       hidePassword={passwordVM.result.current.hidePassword}
+                       toggleHidePassword={passwordVM.result.current.toggleHidePassword}
+            />);
+
+        expect(await screen.findByText("secret1")).toBeDefined();
         expect(screen.queryByText("●●●●●●●●")).toBeNull();
-        expect(screen.getByText("secret1")).toBeDefined();
 
         eyeButton = screen.getByTitle("Passwort verstecken");
         expect(eyeButton).toBeDefined();
-        await userEvent.click(eyeButton);
+
+        await act(async () => {
+            await userEvent.click(eyeButton);
+        });
+
+        // @ts-ignore
+        rerender(<EntryView item={found1}
+                            deleteItem={passwordVM.result.current.deleteItem}
+                            copyAndClearClipboard={passwordVM.result.current.copyToClipboardAndClear}
+                            setEditableView={passwordVM.result.current.setInEditable}
+                            hidePassword={passwordVM.result.current.hidePassword}
+                            toggleHidePassword={passwordVM.result.current.toggleHidePassword}
+        />);
+
         expect(screen.getByText("●●●●●●●●")).toBeDefined();
         expect(screen.queryByText("secret1")).toBeNull();
+
+
+        // generate password
+        const editableEntryViewVM = renderHook(() => useEditablePasswordViewModel(
+            found1, passwordVM.result.current.updateItemAttribute, vi.fn(),false, vi.fn(),vi.fn()
+        ), {wrapper});
+        const generatorVM = renderHook(() => usePasswordGenViewModel(editableEntryViewVM.result.current.setPassword), {wrapper});
+
+        await act(async () => {
+            generatorVM.result.current.setLength("37");
+        })
+        await act(async () => {
+            generatorVM.result.current.handleConfirm();
+        })
+
+        expect(editableEntryViewVM.result.current.password).toHaveLength(37);
+        expect(editableEntryViewVM.result.current.password).not.toBe("secret1");
+
+        await act(async () => {
+            editableEntryViewVM.result.current.saveEntry();
+        })
+
+        await waitFor(() => {
+            const root = passwordVM.result.current.getRootFolder();
+            found1 = root.items.find(e => e.title === "updatedEntry1");
+            expect(found1).toBeDefined();
+        });
+
+        // @ts-ignore
+        rerender(<EntryView item={found1}
+                            deleteItem={passwordVM.result.current.deleteItem}
+                            copyAndClearClipboard={passwordVM.result.current.copyToClipboardAndClear}
+                            setEditableView={passwordVM.result.current.setInEditable}
+                            hidePassword={passwordVM.result.current.hidePassword}
+                            toggleHidePassword={passwordVM.result.current.toggleHidePassword}
+        />);
+
+        eyeButton = screen.getByTitle("Passwort anzeigen");
+        expect(eyeButton).toBeDefined();
+
+        await act(async () => {
+            await userEvent.click(eyeButton);
+        });
+
+        // @ts-ignore
+        rerender(<EntryView item={found1}
+                            deleteItem={passwordVM.result.current.deleteItem}
+                            copyAndClearClipboard={passwordVM.result.current.copyToClipboardAndClear}
+                            setEditableView={passwordVM.result.current.setInEditable}
+                            hidePassword={passwordVM.result.current.hidePassword}
+                            toggleHidePassword={passwordVM.result.current.toggleHidePassword}
+        />);
+
+        expect(screen.queryByText("secret1")).toBeNull();
+        expect(screen.getByText(editableEntryViewVM.result.current.password)).toBeDefined();
+
+
+        // delete entry
+        await act(async () => {
+            passwordVM.result.current.confirmDeletion(found1);
+        })
+        expect(passwordVM.result.current.getRootFolder().items.find(e => e.title === "updatedEntry1")).toBeUndefined();
     });
 })
