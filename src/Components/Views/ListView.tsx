@@ -96,7 +96,7 @@ const ListView: React.FC<{
                 <div
                     className={`listViewEntry ${curItem.id !== entry.id ? "" : "selected"} ${listViewModel.isDragging ? "dragged" : ""} ${selectedItemId === item.id ? "highlighted entry" : ""}`}
                     onClick={() => {
-                        if (!inEditable) {
+                        if (!inEditable){
                             setCurItem(entry)
                         }
                     }}

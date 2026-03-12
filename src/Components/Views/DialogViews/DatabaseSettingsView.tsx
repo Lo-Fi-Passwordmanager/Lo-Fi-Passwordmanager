@@ -27,9 +27,14 @@ const DatabaseSettingsView: React.FC<{
                 <div style={{display: "flex", justifyContent: "space-between", gap: "12px"}}>
                     <button
                         style={{width: "100%"}}
-                        onClick={viewModel.copyURLToClipboard}
-                    >
-                        URL kopieren
+                        onClick={
+                            () => {
+                                void navigator.clipboard.writeText(
+                                    (automergeFacade.automergeURL as string).replace("automerge:", ""));
+                                viewModel.setToast("Datenbank ID in die Zwischenablage kopiert")
+                            }
+                        }>
+                        Datenbank ID kopieren
                     </button>
                     <ShareQRDialog name={openedDatabaseName!}
                                    url={(automergeFacade.automergeURL as string).replace("automerge:", "")}/>
