@@ -18,7 +18,7 @@ import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
  */
 export const usePasswordManagerViewModel = () => {
     const settings = useSettings();
-    const [loggedIn, setLoggedIn] = useState<boolean>(false);
+    const [loggedIn, setLogedIn] = useState<boolean>(false);
     const [automergeFacade, setAutomergeFacade] = useState<AutomergeFacade | null>(null);
     const [securityProvider] = useState(() => new SecurityProvider());
     const timeout = Settings.getSettings().getTimeoutLength() * 60000;
@@ -26,6 +26,9 @@ export const usePasswordManagerViewModel = () => {
     const [toastVisible, setToastVisible] = useState(false);
     const [openedDatabaseName, setOpenedDatabaseName] = useState<string>("");
 
+    function setLoggedIn(value: boolean) {
+        setLogedIn(value);
+    }
 
     const [repo] = useState(new Repo({
         network: [new BroadcastChannelNetworkAdapter()],
@@ -52,9 +55,7 @@ export const usePasswordManagerViewModel = () => {
             }
         }
         for (const adapter of removeArray) {
-            if (adapter.peerId) {
-                repo.networkSubsystem.removeNetworkAdapter(adapter);
-            }
+            repo.networkSubsystem.removeNetworkAdapter(adapter);
         }
 
         if (syncEnabled && !repo.networkSubsystem.adapters.some(a => a instanceof WebSocketClientAdapter)) {
@@ -70,6 +71,7 @@ export const usePasswordManagerViewModel = () => {
                 }
             }
         }
+
     }, [syncEnabled, p2pEnabled, connectorsSize, connectorAdapter, repo.networkSubsystem, serverUrl]);
 
     function getAutomergeFacade(): AutomergeFacade | null {
@@ -99,6 +101,9 @@ export const usePasswordManagerViewModel = () => {
         }
     };
 
+    function getSync(): string | null {
+        return settings.getSynchronization() ? "server" : (settings.getP2P() ? "p2p" : null);
+    }
 
     function getServerName(): string {
         return settings.getActiveServerName();
@@ -124,6 +129,7 @@ export const usePasswordManagerViewModel = () => {
         getAutomergeFacade,
         closeLoggedIn,
         setToastVisible,
+        getSync,
         getServerName
     };
 };

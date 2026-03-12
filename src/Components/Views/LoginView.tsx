@@ -22,7 +22,7 @@ import  {type SecurityProvider} from "../../Utility/Security/SecurityProvider.ts
  */
 const LoginView: React.FC<{
     repo: Repo,
-    setLoggedIn: (value: (((prevState: boolean) => boolean) | boolean)) => void,
+    setLoggedIn: (value: boolean) => void,
     setAutomergeFacade: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void,
     securityProvider: SecurityProvider,
     setOpenedDbName: (value: (((prevState: string) => string) | string)) => void
