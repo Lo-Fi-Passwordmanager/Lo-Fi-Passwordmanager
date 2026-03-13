@@ -49,6 +49,9 @@ const PasswordManagerView: React.FC = () => {
                     <PasswordView automergeFacade={viewModel.getAutomergeFacade()}
                                   closeDatabase={() => viewModel.closeLoggedIn()}
                                   openedDbName={viewModel.openedDatabaseName}/>
+                    <ToastDialog message={viewModel.toastMessage}
+                                 isVisible={viewModel.toastVisible}
+                                 onClose={() => viewModel}/>
                 </RepoContext.Provider>
             </Suspense>
         );

@@ -25,6 +25,7 @@ export const usePasswordManagerViewModel = () => {
     const [toastMessage, setToastMessage] = useState("");
     const [toastVisible, setToastVisible] = useState(false);
     const [openedDatabaseName, setOpenedDatabaseName] = useState<string>("");
+    const [oldP2PSize, setOldP2PSize] = useState<number>(settings.getConnectorsToAdapters().size);
 
     function setLoggedIn(value: boolean) {
         setLogedIn(value);
@@ -73,6 +74,18 @@ export const usePasswordManagerViewModel = () => {
         }
 
     }, [syncEnabled, p2pEnabled, connectorsSize, connectorAdapter, repo.networkSubsystem, serverUrl]);
+
+
+    useEffect(() => {
+        if (connectorsSize > oldP2PSize) {
+            setToastMessage("Neue PeerToPeer Verbindung aufgebaut.");
+            setToastVisible(true);
+            setTimeout(() => {
+                setToastVisible(false);
+            }, 3000);
+        }
+        setOldP2PSize(connectorsSize);
+    }, [connectorsSize]);
 
     function getAutomergeFacade(): AutomergeFacade | null {
         return automergeFacade;
