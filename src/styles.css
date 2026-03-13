@@ -1370,10 +1370,22 @@ input:checked + .slider:before {
         width: 100%;
     }
 
+    .passwordView {
+        flex-direction: column-reverse;
+    }
+
     .passwordViewList {
         width: 100%;
         border: none;
         max-height: 40%;
+    }
+
+    .passwordViewEntry {
+        width: 100%;
+        border: none;
+        min-height: 50%;
+        height: fit-content;
+        overflow-y: scroll;
     }
 
     .entryViewAttribute {
