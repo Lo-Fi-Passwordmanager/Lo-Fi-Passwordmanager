@@ -1,5 +1,4 @@
 import React from 'react';
-import {HiMiniPlus} from "react-icons/hi2";
 
 import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
 
@@ -34,8 +33,6 @@ const OrganizeListView: React.FC<{
           setLiveSearchValue,
           liveSearchValue,
           closeDatabase,
-          setItemCreationDialog,
-          inEditable
       }) => {
 
     return (
@@ -51,13 +48,13 @@ const OrganizeListView: React.FC<{
                     ⬅
                 </button>
 
-                <input style={{gridColumn: "span 8"}}
+                <input style={{gridColumn: "span 9"}}
                        type="text" placeholder="Suchen..."
                        value={liveSearchValue}
                        autoFocus
                        onChange={(event => setLiveSearchValue(event.target.value))} title={"Nach Einträgen und Ordnern suchen"} />
                 {/* Search bar to filter the list of entries and folders */}
-                <button
+                {/*<button
                     className={"squareButton"}
                     disabled={inEditable}
                     style={{gridColumn: "span 1"}}
@@ -67,7 +64,7 @@ const OrganizeListView: React.FC<{
                     title="Eintrag ins zuletzt geöffnete Verzeichnis hinzufügen"
                 >
                     <HiMiniPlus size={24}/>
-                </button>
+                </button> */}
 
                 <select style={{gridColumn: "span 9", width: "100%"}} value={curSortCriterion}
                         onChange={(e) => setCurSortCriterion(e.target.value as SortCriteria)} title={"Einträge und Ordner sortieren"}>

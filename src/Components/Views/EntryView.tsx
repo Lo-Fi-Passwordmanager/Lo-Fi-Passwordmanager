@@ -1,11 +1,11 @@
 import React from "react";
 import {HiPencil, HiTrash} from "react-icons/hi";
 
+import CopyButton from "./ButtonViews/CopyButton.tsx";
 import EyeButton from "./ButtonViews/EyeButton.tsx";
 import Logo from "../../assets/logo_gelb.svg?inline";
 import {type Entry} from "../../Model/Entry.ts";
 import {type Item} from "../../Model/Item.ts";
-import CopyButton from "./ButtonViews/CopyButton.tsx";
 
 
 /**

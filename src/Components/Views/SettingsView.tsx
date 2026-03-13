@@ -4,11 +4,11 @@ import {HiMiniCog8Tooth, HiMiniMinus, HiMiniPlus} from "react-icons/hi2";
 
 import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {useSettingsViewModel} from "../ViewModels/SettingsViewModel.ts";
+import SliderCheckBox from "./ButtonViews/SliderCheckBox.tsx";
 import AddServerDialog from "./DialogViews/AddServerDialog.tsx";
 import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
 import Dialog from "./DialogViews/Dialog.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
-import SliderCheckBox from "./ButtonViews/SliderCheckBox.tsx";
 
 
 /**
@@ -24,12 +24,15 @@ const SettingsView: React.FC<{
     const viewModel = useSettingsViewModel();
 
     if (!viewModel.settingsOpen) {
-        return (
+        return (<>
             <button className="settingsButton" onClick={() => viewModel.setSettingsOpen(true)}
                     title="Einstellungen öffnen">
                 <HiMiniCog8Tooth size={24}/>
             </button>
-        );
+            <ToastDialog message={viewModel.toastMessage}
+                         isVisible={viewModel.showToast}
+                         onClose={() => viewModel.setShowToast(false)}/>
+        </>);
     }
 
     return (
@@ -70,7 +73,8 @@ const SettingsView: React.FC<{
                             </label>
 
                             <label className="checkboxRow">
-                                <SliderCheckBox checked={viewModel.synchronisation} toggleChecked={viewModel.toggleSynchronisation}/>
+                                <SliderCheckBox checked={viewModel.synchronisation}
+                                                toggleChecked={viewModel.toggleSynchronisation}/>
                                 Server Synchronisation
                             </label>
 
@@ -80,7 +84,8 @@ const SettingsView: React.FC<{
                             </label>
 
                             <label className="checkboxRow">
-                                <SliderCheckBox checked={viewModel.timeOutActive} toggleChecked={viewModel.toggleTimeOutActive}/>
+                                <SliderCheckBox checked={viewModel.timeOutActive}
+                                                toggleChecked={viewModel.toggleTimeOutActive}/>
                                 Bei Inaktivität abmelden
                             </label>
 
@@ -93,10 +98,12 @@ const SettingsView: React.FC<{
                                                onChange={(e) => viewModel.setTimeOutLengthVM(e.target.value)}
                                                min="1"/>
                                         <button className={"squareButton"} style={{boxShadow: "none"}}
-                                                onClick={viewModel.decreaseTimeout} title={"Zeit bis Abmeldung verringern"}><HiMiniMinus size={24}/>
+                                                onClick={viewModel.decreaseTimeout}
+                                                title={"Zeit bis Abmeldung verringern"}><HiMiniMinus size={24}/>
                                         </button>
                                         <button className={"squareButton"} style={{boxShadow: "none"}}
-                                                onClick={viewModel.increaseTimeout} title={"Zeit bis Abmeldung erhöhen"}><HiMiniPlus size={24}/></button>
+                                                onClick={viewModel.increaseTimeout}
+                                                title={"Zeit bis Abmeldung erhöhen"}><HiMiniPlus size={24}/></button>
                                     </div>
                                 </div>
                             )}
@@ -168,7 +175,13 @@ const SettingsView: React.FC<{
                                             <label className={"current-server"}>{viewModel.getPeerId()}</label>
                                             <label>Fremde Peer-ID:</label>
                                             <div className={"peer-connection-input"}
-                                                style={{display: "flex", marginBottom: "2vh", gap: "10px", justifyContent: "space-between", width: "100%"}}> {/* for some reason are the styles from the css not applying */}
+                                                 style={{
+                                                     display: "flex",
+                                                     marginBottom: "2vh",
+                                                     gap: "10px",
+                                                     justifyContent: "space-between",
+                                                     width: "100%"
+                                                 }}> {/* for some reason are the styles from the css not applying */}
                                                 <input type="text"
                                                        value={viewModel.remotePeerId}
                                                        onChange={(e) => viewModel.setRemotePeerId(e.target.value)}
@@ -224,7 +237,7 @@ const SettingsView: React.FC<{
                             {automergeFacade ? (
                                 <DatabaseSettingsView automergeFacade={automergeFacade}
                                                       openedDatabaseName={openedDbName}
-                                                    closeDatabase={closeDatabase!}/>
+                                                      closeDatabase={closeDatabase!}/>
                             ) : (
                                 <p>Bitte Datenbank auswählen.</p>
                             )}

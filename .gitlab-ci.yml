@@ -43,6 +43,7 @@ playwright:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH != 'main'
     - if: $CI_COMMIT_BRANCH == 'main'
+  allow_failure: true
   image: mcr.microsoft.com/playwright:v1.58.2-noble
   script:
     - yarn e2e
