@@ -77,7 +77,7 @@ const OrganizeListView: React.FC<{
 
             <button
                 className={"squareButton"}
-                style={{gridColumn: "span 1"}} onClick={() => {
+                style={{gridColumn: "span 1", justifySelf: "flex-end"}} onClick={() => {
                 toggleOrder()
             }}
                 title={isAscending ? "Absteigend sortieren" : "Aufsteigend sortieren"}>
