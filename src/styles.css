@@ -687,11 +687,16 @@ input[type="number"] {
 .organizeListView {
     border: 2px solid var(--primary);
     border-radius: var(--big-radius) 0 0 var(--big-radius);
-    display: flex;
-    flex-direction: column;
     border-left: 0;
     border-right: 0;
     border-top: 0;
+
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(2, 2.5rem);
+    gap: 1vh;
+    padding: 1.5vh 1.5vh;
+    justify-items: center;
 }
 
 .entryViewContainer {
@@ -864,12 +869,7 @@ input[type="number"] {
 }
 
 .OrganizedListView {
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    grid-template-rows: repeat(2, 2.5rem);
-    gap: 1vh;
-    padding: 1.5vh 1.5vh;
-    justify-items: center;
+
 }
 
 .FilteredListView__header {
@@ -1420,13 +1420,6 @@ input:checked + .slider:before {
     .entryDateViewEntry {
         display: none;
         height: 0;
-    }
-
-    .organizeListView {
-        border-radius: 0;
-        border: 1px solid var(--primary);
-        border-right: none;
-        border-left: none;
     }
 
     .dialog {

@@ -1,4 +1,5 @@
 import React from 'react';
+import {HiLockClosed} from "react-icons/hi2";
 
 import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
 
@@ -38,23 +39,23 @@ const OrganizeListView: React.FC<{
     return (
         <div className={"organizeListView"}>
             {/*Container for every related to the search/Sort features plus log out button*/}
-            <div className={"OrganizedListView"}>
-                {/*Giving each element a specific grid column to align them properly*/}
+            {/*Giving each element a specific grid column to align them properly*/}
 
-                {/* Button to close the database and go back to the database selection */}
-                <button className={"squareButton"} title="Datenbank schließen"
-                        style={{gridColumn: "span 1", justifySelf: "flex-start"}}
-                        onClick={() => closeDatabase()}>
-                    ⬅
-                </button>
+            {/* Button to close the database and go back to the database selection */}
+            <button className={"squareButton"} title="Datenbank schließen"
+                    style={{gridColumn: "span 1", justifySelf: "flex-start"}}
+                    onClick={() => closeDatabase()}>
+                <HiLockClosed size={18}/>
+            </button>
 
-                <input style={{gridColumn: "span 9"}}
-                       type="text" placeholder="Suchen..."
-                       value={liveSearchValue}
-                       autoFocus
-                       onChange={(event => setLiveSearchValue(event.target.value))} title={"Nach Einträgen und Ordnern suchen"} />
-                {/* Search bar to filter the list of entries and folders */}
-                {/*<button
+            <input style={{gridColumn: "span 9"}}
+                   type="text" placeholder="Suchen..."
+                   value={liveSearchValue}
+                   autoFocus
+                   onChange={(event => setLiveSearchValue(event.target.value))}
+                   title={"Nach Einträgen und Ordnern suchen"}/>
+            {/* Search bar to filter the list of entries and folders */}
+            {/*<button
                     className={"squareButton"}
                     disabled={inEditable}
                     style={{gridColumn: "span 1"}}
@@ -66,22 +67,22 @@ const OrganizeListView: React.FC<{
                     <HiMiniPlus size={24}/>
                 </button> */}
 
-                <select style={{gridColumn: "span 9", width: "100%"}} value={curSortCriterion}
-                        onChange={(e) => setCurSortCriterion(e.target.value as SortCriteria)} title={"Einträge und Ordner sortieren"}>
-                    <option value="NAME">Alphabetisch</option>
-                    <option value="CREATED">Erstellungsdatum</option>
-                    <option value="EDITED">Bearbeitungsdatum</option>
-                </select>
+            <select style={{gridColumn: "span 9", width: "100%"}} value={curSortCriterion}
+                    onChange={(e) => setCurSortCriterion(e.target.value as SortCriteria)}
+                    title={"Einträge und Ordner sortieren"}>
+                <option value="NAME">Alphabetisch</option>
+                <option value="CREATED">Erstellungsdatum</option>
+                <option value="EDITED">Bearbeitungsdatum</option>
+            </select>
 
-                <button
-                    className={"squareButton"}
-                    style={{gridColumn: "span 1"}} onClick={() => {
-                    toggleOrder()
-                }}
-                    title={isAscending ? "Absteigend sortieren" : "Aufsteigend sortieren"}>
-                    {isAscending ? '🡅' : '🡇'}
-                </button>
-            </div>
+            <button
+                className={"squareButton"}
+                style={{gridColumn: "span 1"}} onClick={() => {
+                toggleOrder()
+            }}
+                title={isAscending ? "Absteigend sortieren" : "Aufsteigend sortieren"}>
+                {isAscending ? '🡅' : '🡇'}
+            </button>
         </div>
     );
 }
