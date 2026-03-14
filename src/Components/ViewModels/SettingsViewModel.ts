@@ -128,6 +128,15 @@ export const useSettingsViewModel = () => {
     }
 
     /**
+     * Copy the given text to the clipboard and show a toast message
+     */
+    function copyToClipboard(text: string) {
+        setToastMessage("In die Zwischenablage kopiert");
+        setShowToast(true);
+        void navigator.clipboard.writeText(text);
+    }
+
+    /**
      * Get own peer id
      */
     function getPeerId() {
@@ -188,6 +197,6 @@ export const useSettingsViewModel = () => {
         connectToPeer: () => Settings.getSettings().addConnector(remotePeerId),
         otherPeerMap,
         removePeer,
-
+        copyToClipboard,
     };
 };

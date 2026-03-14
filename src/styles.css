@@ -383,7 +383,6 @@ input[type="number"] {
 .current-server {
     box-sizing: border-box;
     font-weight: 700;
-    text-decoration: underline;
     width: 100%;
     border: 2px solid var(--primary);
     border-radius: var(--standard-radius);

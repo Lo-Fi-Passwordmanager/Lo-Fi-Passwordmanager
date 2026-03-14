@@ -9,6 +9,7 @@ import AddServerDialog from "./DialogViews/AddServerDialog.tsx";
 import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
 import Dialog from "./DialogViews/Dialog.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
+import CopyButton from "./ButtonViews/CopyButton.tsx";
 
 
 /**
@@ -172,7 +173,20 @@ const SettingsView: React.FC<{
 
                                             <h4>Peer-To-Peer Verbindung</h4>
                                             <label>Eigene Peer-ID:</label>
-                                            <label className={"current-server"}>{viewModel.getPeerId()}</label>
+
+                                            <div style={{
+                                                display: "flex",
+                                                marginBottom: "2vh",
+                                                gap: "10px",
+                                                justifyContent: "space-between",
+                                                width: "100%",
+                                            }}> {/* for some reason are the styles from the css not applying */}
+                                                <label className={"current-server"}>{viewModel.getPeerId()}</label>
+                                                <CopyButton copyAndClearClipboard={viewModel.copyToClipboard}
+                                                            attributeValue={viewModel.getPeerId()}
+                                                            style={{marginLeft: "0"}}
+                                                />
+                                            </div>
                                             <label>Fremde Peer-ID:</label>
                                             <div className={"peer-connection-input"}
                                                  style={{

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {type CSSProperties, useState} from "react";
 import {HiMiniClipboardDocumentList, HiMiniClipboardDocumentCheck} from "react-icons/hi2";
 
 /**
@@ -9,7 +9,8 @@ import {HiMiniClipboardDocumentList, HiMiniClipboardDocumentCheck} from "react-i
 const CopyButton: React.FC<{
     copyAndClearClipboard: (text: string, timeout?: number) => void,
     attributeValue: string;
-}> = ({copyAndClearClipboard, attributeValue}) => {
+    style?: CSSProperties;
+}> = ({copyAndClearClipboard, attributeValue, style}) => {
 
     const [clicked, setClicked] = useState(false);
 
@@ -21,13 +22,14 @@ const CopyButton: React.FC<{
                 copyAndClearClipboard(attributeValue)
             }}
                     title={"In Zwischenablage kopieren"}
+                    style={style}
             >
                 <HiMiniClipboardDocumentList size={24}/>
             </button>
         );
     } else {
         return (
-            <button className={"copyButton selected"} disabled>
+            <button className={"copyButton selected"} disabled style={style}>
                 <HiMiniClipboardDocumentCheck size={24}/>
             </button>
         );
