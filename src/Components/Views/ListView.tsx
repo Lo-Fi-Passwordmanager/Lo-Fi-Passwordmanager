@@ -131,7 +131,7 @@ const ListView: React.FC<{
                     <div
                         className={`listViewTitleHeader ${listViewModel.isDragging ? "dragged" : ""} ${listViewModel.isOver && !listViewModel.isDragging ? "over" : ""} ${selectedItemId === item.id ? "highlighted folder" : ""}`}
                         ref={listViewModel.setFolderRef}
-                        style={dragStyle}
+                        style={item.id !== "" ? dragStyle : undefined}
                         {...listViewModel.attributes}
                         {...listViewModel.listeners}
                         aria-selected={selectedItemId === item.id}>
