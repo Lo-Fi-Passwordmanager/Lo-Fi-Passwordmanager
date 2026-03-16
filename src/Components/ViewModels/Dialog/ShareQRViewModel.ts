@@ -1,4 +1,5 @@
 import {useState} from "react";
+import {Settings} from "../../../Model/Settings.ts";
 
 /**
  * The Viewmodel for {@link ShareQRDialog}
@@ -14,7 +15,7 @@ export const useShareQRViewModel = (name: string, url: string) => {
         setShareName(!shareName);
     }
 
-    const qrValue = url.replaceAll("automerge:", "") + (shareName ? "|" + name : "");
+    const qrValue = url.replaceAll("automerge:", "") + (shareName ? "|" + name : "") + "|" +  Settings.getSettings().getServerUrl();
 
     return {
         shareQRCodeOpen,
