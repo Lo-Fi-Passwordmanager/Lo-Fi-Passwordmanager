@@ -4,12 +4,12 @@ import {HiMiniCog8Tooth, HiMiniMinus, HiMiniPlus} from "react-icons/hi2";
 
 import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {useSettingsViewModel} from "../ViewModels/SettingsViewModel.ts";
+import CopyButton from "./ButtonViews/CopyButton.tsx";
 import SliderCheckBox from "./ButtonViews/SliderCheckBox.tsx";
 import AddServerDialog from "./DialogViews/AddServerDialog.tsx";
 import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
 import Dialog from "./DialogViews/Dialog.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
-import CopyButton from "./ButtonViews/CopyButton.tsx";
 
 
 /**
