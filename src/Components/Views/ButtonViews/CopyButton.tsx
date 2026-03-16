@@ -3,14 +3,16 @@ import {HiMiniClipboardDocumentList, HiMiniClipboardDocumentCheck} from "react-i
 
 /**
  * A button that copies a given text to the clipboard and shows a checkmark for a short time after being clicked
- * @param copyAndClearClipboard function to copy a string to the clipboard and clear it afterwards
+ * @param copyToClipboard function to copy a string to the clipboard and clear it afterwards
  * @param attributeValue the string that should be copied to the clipboard when the button is clicked
  */
 const CopyButton: React.FC<{
-    copyAndClearClipboard: (text: string, timeout?: number) => void,
+    copyToClipboard: (text: string, timeout?: number) => void,
     attributeValue: string;
     style?: CSSProperties;
-}> = ({copyAndClearClipboard, attributeValue, style}) => {
+    title?: string;
+    content?: string;
+}> = ({copyToClipboard, attributeValue, style, title, content}) => {
 
     const [clicked, setClicked] = useState(false);
 
@@ -19,18 +21,19 @@ const CopyButton: React.FC<{
             <button className={"copyButton"} onClick={() => {
                 setClicked(true)
                 setTimeout(() => setClicked(false), 2000);
-                copyAndClearClipboard(attributeValue)
+                copyToClipboard(attributeValue)
             }}
-                    title={"In Zwischenablage kopieren"}
+                    title={title ? title : "In Zwischenablage kopieren"}
                     style={style}
             >
-                <HiMiniClipboardDocumentList size={24}/>
+                {content ? <><HiMiniClipboardDocumentList size={24}/>&nbsp;{content} </> : <HiMiniClipboardDocumentList size={24}/>}
             </button>
         );
     } else {
         return (
             <button className={"copyButton selected"} disabled style={style}>
-                <HiMiniClipboardDocumentCheck size={24}/>
+                {content ? <><HiMiniClipboardDocumentCheck size={24}/>&nbsp;{content} </> :
+                    <HiMiniClipboardDocumentCheck size={24}/>}
             </button>
         );
     }

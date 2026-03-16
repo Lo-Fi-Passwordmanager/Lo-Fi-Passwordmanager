@@ -1,9 +1,9 @@
 import type {AutomergeUrl} from "@automerge/automerge-repo";
 import React from "react";
 import {HiTrash} from "react-icons/hi";
-import {HiMiniLink} from "react-icons/hi2";
 
 import DatabaseListingViewModel from "../../ViewModels/Listing/DatabaseListingViewModel.ts";
+import CopyButton from "../ButtonViews/CopyButton.tsx";
 import RenameDatabaseDialog from "../DialogViews/RenameDatabaseDialog.tsx";
 import ShareQRDialog from "../DialogViews/ShareQRDialog.tsx";
 import ToastDialog from "../DialogViews/ToastDialog.tsx";
@@ -42,12 +42,12 @@ const DatabaseListingView: React.FC<{
                         title="Datenbank öffnen">
                             {dbName}
                         </button>
-                        <button
-                            className={"squareButton"}
-                            onClick={() => void viewModel.copyToClipboard(url)}
-                            title="Datenbank ID kopieren">
-                            <HiMiniLink size={24}/>
-                        </button>
+                        <CopyButton
+                            copyToClipboard={viewModel.copyToClipboard}
+                            attributeValue={url}
+                            title="Datenbank ID in die Zwischenablage kopieren"
+                            style={{marginLeft: "0"}}
+                            />
                         <ShareQRDialog name={dbName} url={url}/>
                         <RenameDatabaseDialog oldName={dbName} renameDatabase={renameDatabase}/>
                         <button

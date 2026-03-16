@@ -182,9 +182,10 @@ const SettingsView: React.FC<{
                                                 width: "100%",
                                             }}> {/* for some reason are the styles from the css not applying */}
                                                 <label className={"current-server"}>{viewModel.getPeerId()}</label>
-                                                <CopyButton copyAndClearClipboard={viewModel.copyToClipboard}
-                                                            attributeValue={viewModel.getPeerId()}
-                                                            style={{marginLeft: "0"}}
+                                                <CopyButton
+                                                    copyToClipboard={viewModel.copyToClipboard}
+                                                    attributeValue={viewModel.getPeerId()}
+                                                    style={{marginLeft: "0"}}
                                                 />
                                             </div>
                                             <label>Fremde Peer-ID:</label>

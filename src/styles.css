@@ -453,12 +453,6 @@ input[type="number"] {
     padding: 0 2vh;
 }
 
-.squareButton, .settingsButton, .copyButton, .eyeButton, .passwordGenButton {
-    height: 2.5rem;
-    aspect-ratio: 1;
-    padding: 0.5rem;
-}
-
 .entryViewFooterButtons {
     display: flex;
     gap: 1vh;
@@ -481,11 +475,18 @@ input[type="number"] {
     background-color: var(--cancel-button);
 }
 
+.squareButton, .settingsButton, .copyButton, .eyeButton, .passwordGenButton {
+    height: 2.5rem;
+    width: 2.5rem;
+    padding: 0.5rem;
+}
+
 .copyButton, .eyeButton, .passwordGenButton {
     margin-left: 15px;
-    box-shadow: none;
     grid-column-start: 20;
     grid-column: span 1;
+    border: 1px solid var(--primary);
+    box-sizing: border-box;
 }
 
 .copyButton.selected {
@@ -500,7 +501,6 @@ input[type="number"] {
     padding: 0.5rem;
     background-color: transparent;
     color: var(--primary);
-    border: 1px solid var(--primary);
     grid-column-start: 19 !important;
 }
 
@@ -508,7 +508,6 @@ input[type="number"] {
     padding: 0.5rem;
     background-color: var(--primary);
     color: var(--text);
-    border: 1px solid var(--primary);
 }
 
 .qrButton, .eyeButton.selected {
