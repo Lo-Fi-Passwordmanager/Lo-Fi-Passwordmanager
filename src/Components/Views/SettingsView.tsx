@@ -127,12 +127,13 @@ const SettingsView: React.FC<{
                                                 marginBottom: "2vh",
                                                 gap: "10px",
                                                 justifyContent: "space-between",
-                                                width: "100%",
+                                                width: "100%"
                                             }}> {/* for some reason are the styles from the css not applying */}
                                                 <label className={"current-server"}>{viewModel.getPeerId()}</label>
-                                                <CopyButton copyAndClearClipboard={viewModel.copyToClipboard}
-                                                            attributeValue={viewModel.getPeerId()}
-                                                            style={{marginLeft: "0"}}
+                                                <CopyButton
+                                                    copyAndClearClipboard={(text) => void viewModel.copyToClipboard(text)}
+                                                    attributeValue={viewModel.getPeerId()}
+                                                    style={{marginLeft: "0"}}
                                                 />
                                             </div>
                                             <label>Fremde Peer-ID:</label>

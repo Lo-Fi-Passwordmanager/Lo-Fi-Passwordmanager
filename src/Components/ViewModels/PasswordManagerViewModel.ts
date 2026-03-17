@@ -88,7 +88,7 @@ export const usePasswordManagerViewModel = () => {
             }, 3000);
         }
         setOldP2PSize(connectorsSize);
-    }, [connectorsSize]);
+    }, [connectorsSize, oldP2PSize]);
 
     function getAutomergeFacade(): AutomergeFacade | null {
         return automergeFacade;

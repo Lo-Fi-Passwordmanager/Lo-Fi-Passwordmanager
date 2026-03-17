@@ -24,9 +24,7 @@ type SettingsListener = () => void;
 
 export function useSettings() {
     //This mess below changes the version number of the settings, so that useEffect/observers trigger correctly
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    const [version, setVersion] = useState(0);
+    const [_, setVersion] = useState(0);
 
     useEffect(() => {
         const unsubscribe = Settings.getSettings().subscribe(() => {
