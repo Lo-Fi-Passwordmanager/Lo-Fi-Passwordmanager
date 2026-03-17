@@ -90,7 +90,7 @@ vi.mock("react-idle-timer", () => ({
 
 describe("Settings Integration Test ", () => {
 
-    it('test the functionality of the settings', async () => {
+    it("test the functionality of the settings", async () => {
         const passwordManagerHook = renderHook(() => usePasswordManagerViewModel());
         const {repo, securityProvider} = passwordManagerHook.result.current;
 
@@ -117,19 +117,19 @@ describe("Settings Integration Test ", () => {
 
         // test dark mode toggle
         expect(settingsVM.result.current.darkMode).toBe(true);
-        expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+        expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
 
         act(() => {
             settingsVM.result.current.toggleDarkMode();
         });
         expect(settingsVM.result.current.darkMode).toBe(false);
-        expect(document.documentElement.getAttribute('data-theme')).not.toBe('dark');
+        expect(document.documentElement.getAttribute("data-theme")).not.toBe("dark");
 
         act(() => {
             settingsVM.result.current.toggleDarkMode();
         });
         expect(settingsVM.result.current.darkMode).toBe(true);
-        expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+        expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
 
         // test synchronisation
         act(() => {
@@ -150,7 +150,8 @@ describe("Settings Integration Test ", () => {
             const webSocketAdapter: any = adapters.find((a: any) => a.isMockWebSocket);
 
             expect(webSocketAdapter).toBeDefined();
-            expect(webSocketAdapter.url).toBe("wss://sync.automerge.org");
+            //@ts-ignore
+            expect(webSocketAdapter.url).toBe(import.meta.env.VITE_DEFAULT_SYNC_SERVER_URL);
         });
 
         //TODO: evt noch server hinzufügen/entfernen testen
@@ -204,16 +205,16 @@ describe("Settings Integration Test ", () => {
         expect(settingsVM.result.current.timeoutLength).toBe(7);
         act(() => {
             settingsVM.result.current.increaseTimeout();
-        })
+        });
         act(() => {
             settingsVM.result.current.increaseTimeout();
-        })
+        });
         act(() => {
             settingsVM.result.current.increaseTimeout();
-        })
+        });
         act(() => {
             settingsVM.result.current.decreaseTimeout();
-        })
+        });
         expect(settingsVM.result.current.timeoutLength).toBe(9);
         expect(passwordManagerHook.result.current.loggedIn).toBe(true);
 

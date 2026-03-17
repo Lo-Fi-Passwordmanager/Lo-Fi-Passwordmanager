@@ -1,5 +1,5 @@
 import type {AutomergeUrl} from "@automerge/automerge-repo";
-import type { Repo} from "@automerge/react";
+import type {Repo} from "@automerge/react";
 import {type DocHandle, getObjectId, isValidAutomergeUrl} from "@automerge/react";
 
 import type {SecurityProvider} from "./Security/SecurityProvider.ts";
@@ -7,9 +7,6 @@ import {AutomergeDoc} from "../Model/Automerge/AutomergeDoc.ts";
 import type {HistoryEntry} from "../Model/Automerge/HistoryEntry.ts";
 
 export type Attribute = "name" | "createdAt" | "editedAt" | "parentId" | "username" | "password" | "url" | "note"
-// FIXME Hier waren im entwurf überflüssige funktionen??
-// FIXME Schwierigkeit: traditionelle viewmodel mit react hooks vereinen
-// TODO Doku
 
 /**
  * Eine Klasse zum Erstellen und verifizieren von Automerge Dokumenten.
