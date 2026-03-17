@@ -2,6 +2,7 @@ import React from "react";
 
 import Dialog from "./Dialog.tsx";
 import useAddServerDialogViewModel from "../../ViewModels/Dialog/AddServerDialogViewModel.ts";
+
 /**
  * A dialog that allows the user to add a new server by specifying its name and URL.
  *
@@ -12,13 +13,13 @@ import useAddServerDialogViewModel from "../../ViewModels/Dialog/AddServerDialog
  */
 const AddServerDialog: React.FC<{
     onAddServer: (name: string, url: string) => void,
-    serverNames: string[],
+    servers: Map<string, string>,
     onClose: () => void,
     setToastMessage: (message: string) => void,
     setShowToast: (show: boolean) => void
-}> = ({onAddServer, serverNames, onClose, setShowToast, setToastMessage}) => {
+}> = ({onAddServer, servers, onClose, setShowToast, setToastMessage}) => {
 
-    const viewModel = useAddServerDialogViewModel(onAddServer, serverNames, onClose, setShowToast, setToastMessage);
+    const viewModel = useAddServerDialogViewModel(onAddServer, servers, onClose, setShowToast, setToastMessage);
 
     return (
         <Dialog title="Server hinzufügen" onCloseDialog={onClose}>
@@ -48,5 +49,5 @@ const AddServerDialog: React.FC<{
             </div>
         </Dialog>
     );
-}
+};
 export default AddServerDialog;

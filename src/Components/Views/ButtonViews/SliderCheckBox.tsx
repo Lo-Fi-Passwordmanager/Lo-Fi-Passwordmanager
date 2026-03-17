@@ -8,15 +8,16 @@ import React from "react";
  */
 const SliderCheckBox: React.FC<{
     checked: boolean;
+    disabled?: boolean;
     toggleChecked: () => void;
-}> = ({checked, toggleChecked}) => {
+}> = ({checked, disabled, toggleChecked}) => {
 
     return (
-        <label className="switch">
-            <input type="checkbox" checked={checked}
+        <label className={`switch ${disabled ? "disabled" : ""}`}>
+            <input type="checkbox" checked={checked} disabled={disabled ?? false}
                    onChange={toggleChecked}/>
             <span className="slider round"/>
         </label>
-    )
-}
+    );
+};
 export default SliderCheckBox;
