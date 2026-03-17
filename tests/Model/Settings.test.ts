@@ -1,7 +1,5 @@
-import {afterEach, beforeEach, describe, it, expect, vi} from "vitest";
+import {afterEach, beforeEach, describe, expect, it, vi} from "vitest";
 import {Settings} from "../../src/Model/Settings";
-import {PeerjsNetworkAdapter} from "../../customNetworkAdapter/PeerJsNetworkAdapter";
-
 
 
 class MockDataConnection {
@@ -9,8 +7,11 @@ class MockDataConnection {
     listeners: Record<string, Function> = {};
     send = vi.fn();
     close = vi.fn();
+
     constructor(peerId: string) { this.peer = peerId; }
+
     on = vi.fn((ev, cb) => { this.listeners[ev] = cb; });
+
     _trigger(ev: string, data?: any) { this.listeners[ev]?.(data); }
 }
 
@@ -22,6 +23,7 @@ vi.mock("peerjs", () => {
             on = vi.fn((ev, cb) => { this.listeners[ev] = cb; });
             connect = vi.fn((id) => new MockDataConnection(id));
             _trigger = (ev: string, data?: any) => { this.listeners[ev]?.(data); };
+
             constructor() { activeMockPeer = this; }
         }
     };
@@ -31,79 +33,76 @@ const MockAdapterSpy = vi.fn();
 vi.mock("../../customNetworkAdapter/PeerJsNetworkAdapter.ts", () => ({
     PeerjsNetworkAdapter: class {
         disconnect = vi.fn();
+
         constructor(conn: any) { MockAdapterSpy(conn); }
     }
 }));
 
 
-describe('Settings', () => {
+describe("Settings", () => {
     let settings: Settings;
     //TODO settings vom local storage testen
-    beforeEach(()=> {
+    beforeEach(() => {
         settings = Settings.getSettings();
-    })
+    });
 
-    afterEach(()=> {
+    afterEach(() => {
         settings = null;
-    })
+    });
 
-    it('should be able to get Settings', () => {
+    it("should be able to get Settings", () => {
         expect(settings).toBeInstanceOf(Settings);
-    })
+    });
 
-    it('should be a Singleton', () => {
+    it("should be a Singleton", () => {
         const settings2 = Settings.getSettings();
         expect(settings2).toBe(settings);
-    })
+    });
 
 
-    it('should be able to set and get dark mode', () => {
+    it("should be able to set and get dark mode", () => {
         settings.setDarkMode(true);
         expect(settings.getDarkMode()).toBe(true);
         settings.setDarkMode(false);
         expect(settings.getDarkMode()).toBe(false);
-    })
+    });
 
-    it('should be able to set and get the Synchronisation', () => {
+    it("should be able to set and get the Synchronisation", () => {
         settings.setSynchronization(true);
         expect(settings.getSynchronization()).toBe(true);
         settings.setSynchronization(false);
         expect(settings.getSynchronization()).toBe(false);
-    })
+    });
 
 
-    it('should be able to set and get auto timeout', () => {
+    it("should be able to set and get auto timeout", () => {
         settings.setTimeoutActive(true);
         expect(settings.getTimeoutActive()).toBe(true);
         settings.setTimeoutActive(false);
         expect(settings.getTimeoutActive()).toBe(false);
     });
 
-    it('should be able to add a new server', ()=> {
+    it("should be able to add a new server", () => {
         settings.addServer("name", "url");
-        expect(settings.getServers().size).toBe(2);
+        expect(settings.getServerStates().size).toBe(2);
     });
 
-    it('should be able to set a new server', ()=> {
+    it("should be able to activate a new server", () => {
         settings.addServer("name", "url");
-        expect(settings.getServers().size).toBe(2);
-        settings.setServerUrl("name");
-        expect(settings.getActiveServerName()).toBe("name");
+        expect(settings.getServerStates().size).toBe(2);
+        settings.activateServer("name");
+        // @ts-ignore
+        expect(settings.getActiveServerUrls()).toStrictEqual([import.meta.env.VITE_DEFAULT_SYNC_SERVER_URL, "url"]);
     });
 
-    it('should be able to remove a server', ()=> {
+    it("should be able to remove a server", () => {
         settings.addServer("name", "url");
-        expect(settings.getServers().size).toBe(2);
+        expect(settings.getServerStates().size).toBe(2);
         settings.removeServer("name");
-        expect(settings.getServers().size).toBe(1);
+        expect(settings.getServerStates().size).toBe(1);
     });
 
-    it('should return no server url if no server is set', ()=> {
-        settings.setServerUrl("invalid server name");
-        expect(settings.getActiveServerName()).toBe("Unknown Server");
-    });
-
-    it('should activate P2P Synchronisation', ()=> {
+    it("should activate P2P Synchronisation", () => {
         settings.setP2PActive(true);
         expect(settings.getP2P()).toBe(true);
         settings.setP2PActive(false);
@@ -153,7 +152,7 @@ describe('Settings', () => {
         const [, adapter] = settings.getConnectorsToAdapters().get("peer-to-remove")!;
         await settings.removeConnector("peer-to-remove");
 
-        expect(mockConn.send).toHaveBeenCalledWith({ type: "disconnect" });
+        expect(mockConn.send).toHaveBeenCalledWith({type: "disconnect"});
         expect(settings.getConnectorsToAdapters().has("peer-to-remove")).toBe(false);
         expect(adapter.disconnect).toHaveBeenCalled();
         expect(mockConn.close).toHaveBeenCalled();
@@ -168,7 +167,7 @@ describe('Settings', () => {
         const [, adapter] = settings.getConnectorsToAdapters().get("myPeer")!;
 
         // Simulate receiving a disconnect message from the remote peer
-        mockConn._trigger("data", { type: "disconnect" });
+        mockConn._trigger("data", {type: "disconnect"});
 
 
         expect(settings.getConnectorsToAdapters().has("myPeer")).toBe(false);
@@ -193,4 +192,4 @@ describe('Settings', () => {
         expect(mockConn.close).toHaveBeenCalled();
     });
 
-})
+});

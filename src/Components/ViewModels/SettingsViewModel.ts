@@ -19,8 +19,8 @@ export type SettingsViewModel = {
     P2P: boolean;
     toastMessage: string;
     showToast: boolean;
-    serverUrls: Map<string, string>
-    serverStates: Map<string, boolean>
+    serverUrls: Map<string, string>;
+    serverStates: Map<string, boolean>;
     setActiveTab: (value: (((prevState: ("general" | "database" | "about")) => ("general" | "database" | "about")) | "general" | "database" | "about")) => void;
     setConnection: (id: string) => void;
     toggleDarkMode: () => void;
@@ -45,7 +45,7 @@ export type SettingsViewModel = {
     removePeer: (id: string) => Promise<void>;
     isLastServer: () => boolean;
     isLastActiveServer: (serverName: string) => boolean;
-    copyToClipboard: (text: string) => Promise<void>;
+    copyToClipboard: (text: string) => void
 }
 
 /**
