@@ -65,11 +65,19 @@ export class Settings {
         this._darkMode = loadDarkModeSetting();
         this._timeoutActive = loadTimeoutSettings();
         this._timeoutLength = loadTimeoutLength();
-        this._activeServerURLs = loadSelectedServerURLs();
         this._servers = loadServers();
+        this._activeServerURLs = loadSelectedServerURLs();
         this._p2p = loadP2PSetting();
         this.peer = new Peer();
         this.connector = null as unknown as DataConnection;
+
+        // Purge server URLs that are in active list, but not in server list
+        const urlsInList = new Set(this._servers.values());
+        this._activeServerURLs = this._activeServerURLs.filter((url => urlsInList.has(url)));
+        storeSelectedServers(this._activeServerURLs);
+        if (this._activeServerURLs.length == 0) {
+            this._activeServerURLs = loadSelectedServerURLs();
+        }
 
 
         //When someone is connecting to this peer, establish the direction in the other way
@@ -99,6 +107,7 @@ export class Settings {
         }
         this._activeServerURLs.push(server);
         storeSelectedServers(this._activeServerURLs);
+        this.notify();
     }
 
     public deactivateServer(serverName: string) {
@@ -111,6 +120,7 @@ export class Settings {
         this._activeServerURLs.splice(index, 1);
 
         storeSelectedServers(this._activeServerURLs);
+        this.notify();
     }
 
     public getServerUrls(): Map<string, string> {
@@ -141,6 +151,7 @@ export class Settings {
     }
 
     public removeServer(server: string): void {
+        this.deactivateServer(server);
         this._servers.delete(server);
         storeServers(this._servers);
         this.notify();

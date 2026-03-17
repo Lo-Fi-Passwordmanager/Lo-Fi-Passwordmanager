@@ -37,7 +37,9 @@ const useAddServerDialogViewModel = (
             return;
         }
 
-        onAddServer(name.trim(), url.trim());
+        const trimTrailingBackslash = RegExp("/$", "g");
+
+        onAddServer(name.trim(), url.trim().replaceAll(trimTrailingBackslash, ""));
         onClose();
     };
 

@@ -131,8 +131,8 @@ export function loadSelectedServerURLs(): string[] {
     if (urls) {
         return JSON.parse(urls) as string[];
     } else {
-        localStorage.setItem(SELECTED_SERVER_URLS, JSON.stringify(["wss://sync.automerge.org"]));
-        return ["wss://sync.automerge.org"];
+        localStorage.setItem(SELECTED_SERVER_URLS, JSON.stringify([import.meta.env.VITE_DEFAULT_SYNC_SERVER_URL]));
+        return [import.meta.env.VITE_DEFAULT_SYNC_SERVER_URL];
     }
 }
 
@@ -151,7 +151,7 @@ export function loadServers(): Map<string, string> {
         return servers;
     } else {
         const defaultServers = new Map<string, string>([
-            ["Automerge Sync Server", "wss://sync.automerge.org"]
+            [import.meta.env.VITE_DEFAULT_SYNC_SERVER_NAME, import.meta.env.VITE_DEFAULT_SYNC_SERVER_URL]
         ]);
         storeServers(defaultServers);
         return defaultServers;

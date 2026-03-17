@@ -45,7 +45,7 @@ export type SettingsViewModel = {
     removePeer: (id: string) => Promise<void>;
     isLastServer: () => boolean;
     isLastActiveServer: (serverName: string) => boolean;
-    copyToClipboard: (text: string) => void;
+    copyToClipboard: (text: string) => Promise<void>;
 }
 
 /**
