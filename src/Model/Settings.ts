@@ -5,18 +5,18 @@ import {PeerjsNetworkAdapter} from "../../customNetworkAdapter/PeerJsNetworkAdap
 import {
     loadDarkModeSetting,
     loadP2PSetting,
-    loadSelectedServerURL,
+    loadSelectedServerURLs,
     loadServers,
     loadSynchronizationSettings,
     loadTimeoutLength,
     loadTimeoutSettings,
     storeDarkModeSetting,
     storeP2PSetting,
-    storeSelectedServerURL,
+    storeSelectedServers,
     storeServers,
     storeSynchronizationSettings,
     storeTimeoutLength,
-    storeTimeoutSettings,
+    storeTimeoutSettings
 } from "../Utility/Storage.ts";
 
 
@@ -52,7 +52,7 @@ export class Settings {
     private _timeoutLength: number;
     private peer: Peer;
     private connector: DataConnection;
-    private _activeServerUrl: string;
+    private _activeServerURLs: string[];
     private _servers: Map<string, string>;
     private _p2p: boolean;
 
@@ -65,7 +65,7 @@ export class Settings {
         this._darkMode = loadDarkModeSetting();
         this._timeoutActive = loadTimeoutSettings();
         this._timeoutLength = loadTimeoutLength();
-        this._activeServerUrl = loadSelectedServerURL();
+        this._activeServerURLs = loadSelectedServerURLs();
         this._servers = loadServers();
         this._p2p = loadP2PSetting();
         this.peer = new Peer();
@@ -73,11 +73,11 @@ export class Settings {
 
 
         //When someone is connecting to this peer, establish the direction in the other way
-        this.peer.on('connection', incomingConn => {
-            incomingConn.on('open', () => {
+        this.peer.on("connection", incomingConn => {
+            incomingConn.on("open", () => {
                 this.setupConnection(incomingConn);
-            })
-        })
+            });
+        });
     }
 
     public static getSettings(): Settings {
@@ -87,31 +87,44 @@ export class Settings {
         return this.instance;
     }
 
-    public getServerUrl(): string {
-        return this._activeServerUrl;
+    public getActiveServerUrls(): string[] {
+        return this._activeServerURLs;
     }
 
-
-    /**
-     * Returns the name of the active Server
-     */
-    public getActiveServerName(): string {
-        for (const [name, url] of this._servers) {
-            if (url === this._activeServerUrl) {
-                return name;
-            }
+    public activateServer(serverName: string) {
+        const server = this._servers.get(serverName);
+        if (!server) {
+            console.error(`Cannot find server ${serverName} in server list`);
+            return;
         }
-        return "Unknown Server";
+        this._activeServerURLs.push(server);
+        storeSelectedServers(this._activeServerURLs);
     }
 
-    public setServerUrl(name: string) {
-        this._activeServerUrl = this._servers.get(name) || "";
-        storeSelectedServerURL(this._activeServerUrl);
-        this.notify();
+    public deactivateServer(serverName: string) {
+        const server = this._servers.get(serverName);
+        if (!server) {
+            console.error(`Cannot find server ${serverName} in server list`);
+            return;
+        }
+        const index = this._activeServerURLs.indexOf(server);
+        this._activeServerURLs.splice(index, 1);
+
+        storeSelectedServers(this._activeServerURLs);
     }
 
-    public getServers(): Map<string, string> {
-        return new Map(this._servers);
+    public getServerUrls(): Map<string, string> {
+        return this._servers;
+    }
+
+    public getServerStates(): Map<string, boolean> {
+        const servers = new Map<string, boolean>();
+
+        for (const [server, url] of this._servers.entries()) {
+            servers.set(server, this._activeServerURLs.includes(url));
+        }
+
+        return servers;
     }
 
     /**
@@ -288,13 +301,13 @@ export class Settings {
         try {
             adapter.disconnect();
         } catch {
-            console.error("unable to disconnect")
+            console.error("unable to disconnect");
         }
 
         try {
             conn.close();
         } catch {
-            console.error("unable to close")
+            console.error("unable to close");
         }
     }
 }
