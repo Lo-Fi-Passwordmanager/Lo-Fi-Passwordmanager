@@ -404,6 +404,23 @@ input[type="number"] {
     gap: 12px;
 }
 
+.server-name {
+    background-color: var(--input-field);
+    color: var(--text);
+    border: 2px solid transparent; /* Keeps layout stable */
+    border-radius: var(--standard-radius);
+    padding: 6px 16px;
+    padding: 6px 16px;
+    width: 100%;
+    box-sizing: border-box;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    cursor: copy;
+}
+
 .flexContainer {
     display: flex;
     flex-direction: column;
@@ -451,6 +468,22 @@ input[type="number"] {
     align-items: center;
     gap: 2rem;
     padding: 0 2vh;
+}
+
+.squareButton, .settingsButton, .copyButton, .eyeButton, .passwordGenButton {
+    height: 2.5rem;
+    aspect-ratio: 1;
+    padding: 0.5rem;
+
+    &.disabled {
+        filter: grayscale(50%);
+        opacity: 80%;
+
+        &:hover {
+        }
+
+        transition: opacity .4s, filter .4s;
+    }
 }
 
 .entryViewFooterButtons {
@@ -1256,47 +1289,58 @@ input[type="number"] {
     display: inline-block;
     width: 50px;
     height: 28px;
-}
 
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
+    &.disabled {
+        filter: grayscale(50%);
+        opacity: 80%;
 
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: var(--cancel-button);
-    transition: .4s;
-    border-radius: var(--standard-radius);
-}
+        transition: opacity .4s, filter .4s;
 
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 20px;
-    width: 20px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: .4s;
-    border-radius: var(--small-radius);
-}
+        .slider {
+            cursor: not-allowed !important;
+        }
+    }
 
-input:checked + .slider {
-    background-color: var(--primary);
-}
+    & > input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
 
-input:checked + .slider:before {
-    transform: translateX(22px);
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--cancel-button);
+        transition: .4s;
+        border-radius: var(--standard-radius);
+    }
 
-    input:focus + .slider {
-        box-shadow: 0 0 1px #1a3b3b;
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 20px;
+        width: 20px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+        border-radius: var(--small-radius);
+    }
+
+    input:checked + .slider {
+        background-color: var(--primary);
+    }
+
+    input:checked + .slider:before {
+        transform: translateX(22px);
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #1a3b3b;
+        }
     }
 }
 

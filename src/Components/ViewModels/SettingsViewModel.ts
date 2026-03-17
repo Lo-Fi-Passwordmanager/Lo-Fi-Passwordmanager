@@ -4,14 +4,58 @@ import {useEffect, useState} from "react";
 import type {PeerjsNetworkAdapter} from "../../../customNetworkAdapter/PeerJsNetworkAdapter.ts";
 import {Settings, useSettings} from "../../Model/Settings";
 
+
+/**
+ * The type of the Setting Viewmodel
+ */
+export type SettingsViewModel = {
+    darkMode: boolean;
+    synchronisation: boolean;
+    timeOutActive: boolean;
+    settingsOpen: boolean;
+    timeoutLength: number;
+    activeTab: "general" | "database" | "about";
+    addServerDialogOpen: boolean;
+    P2P: boolean;
+    toastMessage: string;
+    showToast: boolean;
+    serverUrls: Map<string, string>;
+    serverStates: Map<string, boolean>;
+    setActiveTab: (value: (((prevState: ("general" | "database" | "about")) => ("general" | "database" | "about")) | "general" | "database" | "about")) => void;
+    setConnection: (id: string) => void;
+    toggleDarkMode: () => void;
+    toggleSynchronisation: () => void;
+    toggleTimeOutActive: () => void;
+    setSettingsOpen: (value: (((prevState: boolean) => boolean) | boolean)) => void;
+    setTimeOutLengthVM: (newLength: string) => void;
+    increaseTimeout: () => void;
+    decreaseTimeout: () => void;
+    getPeerId: () => string;
+    addSyncServer: (name: string, url: string) => void;
+    removeSyncServer: (serverName: string) => void;
+    setAddServerDialogOpen: (value: (((prevState: boolean) => boolean) | boolean)) => void;
+    toggleSyncServer: (serverName: string) => void;
+    toggleP2P: () => void;
+    setToastMessage: (value: (((prevState: string) => string) | string)) => void;
+    setShowToast: (value: (((prevState: boolean) => boolean) | boolean)) => void;
+    remotePeerId: string;
+    setRemotePeerId: (value: (((prevState: string) => string) | string)) => void;
+    connectToPeer: () => void;
+    otherPeerMap: Map<string, [DataConnection, PeerjsNetworkAdapter]>;
+    removePeer: (id: string) => Promise<void>;
+    isLastServer: () => boolean;
+    isLastActiveServer: (serverName: string) => boolean;
+    copyToClipboard: (text: string) => void
+}
+
 /**
  * The ViewModel that is used for interfacing the {@link Settings} singleton.
  * It uses states to reload react when changing settings, so that they get applied
  */
-export const useSettingsViewModel = () => {
+export const useSettingsViewModel: () => SettingsViewModel = () => {
 
     const settings = Settings.getSettings();
-    const settingsHook = useSettings()
+    const settingsHook = useSettings();
     // Reactive state to store values during runtime
     const [darkMode, setDarkMode] = useState(settings.getDarkMode());
     const [synchronisation, setSynchronisation] = useState(settings.getSynchronization());
@@ -19,15 +63,14 @@ export const useSettingsViewModel = () => {
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [timeoutLength, setTimeoutLength] = useState(settings.getTimeoutLength());
     const [activeTab, setActiveTab] = useState<"general" | "database" | "about">("general");
-    const [serverName, setServerName] = useState<string>(settings.getActiveServerName());
-    const [servers, setServers] = useState<Map<string, string>>(settings.getServers());
-    const [serverNames, setServerNames] = useState<string[]>(Array.from(servers.keys()));
+    const [serverUrls, setServerUrls] = useState<Map<string, string>>(settings.getServerUrls());
+    const [serverStates, setServerStates] = useState<Map<string, boolean>>(settings.getServerStates());
     const [addServerDialogOpen, setAddServerDialogOpen] = useState<boolean>(false);
     const [P2P, setP2P] = useState<boolean>(settings.getP2P());
     const [showToast, setShowToast] = useState<boolean>(false);
     const [toastMessage, setToastMessage] = useState<string>("");
     const [remotePeerId, setRemotePeerId] = useState("");
-    const [otherPeerMap, setOtherPeerMap] = useState<Map<string, [DataConnection, PeerjsNetworkAdapter]>>(settings.getConnectorsToAdapters())
+    const [otherPeerMap, setOtherPeerMap] = useState<Map<string, [DataConnection, PeerjsNetworkAdapter]>>(settings.getConnectorsToAdapters());
     document.getElementsByTagName("html")[0]?.setAttribute("data-theme", darkMode ? "dark" : "light");
 
     useEffect(() => {
@@ -39,8 +82,9 @@ export const useSettingsViewModel = () => {
 
     useEffect(() => {
         const handleUpdate = () => {
-            setServers(new Map(settings.getServers()));
-        }
+            setServerUrls(new Map(settings.getServerUrls()));
+            setServerStates(new Map(settings.getServerStates()));
+        };
 
         const unsubscribe = settings.subscribe(handleUpdate);
         return () => {
@@ -48,20 +92,15 @@ export const useSettingsViewModel = () => {
         };
     }, [settings]);
 
-    useEffect(() => {
-        setServerNames(Array.from(servers.keys()));
-    }, [servers]);
-
-
     const connectorsToAdaptersHook = settingsHook.getConnectorsToAdapters();
     useEffect(() => {
-        setOtherPeerMap(connectorsToAdaptersHook)
+        setOtherPeerMap(connectorsToAdaptersHook);
     }, [connectorsToAdaptersHook]);
 
     const connectorHook = settingsHook.getConnector();
     useEffect(() => {
         if (connectorHook != null) {
-            setRemotePeerId(connectorHook.peer)
+            setRemotePeerId(connectorHook.peer);
         }
     }, [connectorHook]);
 
@@ -80,24 +119,43 @@ export const useSettingsViewModel = () => {
         settings.addServer(name, url);
     }
 
-    // Remove a server from the settings
-    function removeSyncServer(server: string) {
-        if (server === serverName) {
-            console.error("Cannot remove the currently selected server"); // realisticly this should never happen since the UI shouldnt allow it
-            return;
-        }
-        settings.removeServer(server);
-        setServers(settings.getServers());
+    function refreshServers() {
+        setServerUrls(new Map(settings.getServerUrls()));
+        setServerStates(new Map(settings.getServerStates()));
     }
 
-    // Select a server from the settings
-    function selectSyncServer(server: string) {
-        settings.setServerUrl(server);
-        setServerName(server);
+    function isLastServer(): boolean {
+        return serverStates.size == 1;
+    }
+
+    function isLastActiveServer(serverName: string): boolean {
+        const server = serverStates.get(serverName);
+        return settings.getActiveServerUrls().length == 1 && !!server;
+    }
+
+    // Remove a server from the settings
+    function removeSyncServer(serverName: string) {
+        const server = serverStates.get(serverName);
+        if (settings.getActiveServerUrls().length == 1 && server) {
+            console.error("Cannot remove the only active server"); // realisticly this should never happen since the UI shouldnt allow it
+            return;
+        }
+        settings.removeServer(serverName);
+        refreshServers();
+    }
+
+    function toggleSyncServer(serverName: string) {
+        if (serverStates.get(serverName)) {
+            settings.deactivateServer(serverName);
+        } else {
+            settings.activateServer(serverName);
+        }
+
+        refreshServers();
 
         // Toggle synchronisation off and on again to ensure that the new server is connected
         // directly change settings so the UI doenst change
-        settings.setSynchronization(false)
+        settings.setSynchronization(false);
         setTimeout(() => {
             settings.setSynchronization(true);
         }, 50); // Timeout is needed to ensure that the synchronisation setting is updated before it is toggled on again
@@ -168,12 +226,12 @@ export const useSettingsViewModel = () => {
         settingsOpen,
         timeoutLength,
         activeTab,
-        serverName,
         addServerDialogOpen,
-        serverNames,
         P2P,
         toastMessage,
         showToast,
+        serverUrls,
+        serverStates,
 
         setActiveTab,
         setConnection,
@@ -188,7 +246,7 @@ export const useSettingsViewModel = () => {
         addSyncServer,
         removeSyncServer,
         setAddServerDialogOpen,
-        selectSyncServer,
+        toggleSyncServer,
         toggleP2P,
         setToastMessage,
         setShowToast,
@@ -197,6 +255,8 @@ export const useSettingsViewModel = () => {
         connectToPeer: () => Settings.getSettings().addConnector(remotePeerId),
         otherPeerMap,
         removePeer,
-        copyToClipboard,
+        isLastServer,
+        isLastActiveServer,
+        copyToClipboard
     };
 };

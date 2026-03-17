@@ -5,18 +5,18 @@ import {PeerjsNetworkAdapter} from "../../customNetworkAdapter/PeerJsNetworkAdap
 import {
     loadDarkModeSetting,
     loadP2PSetting,
-    loadSelectedServerURL,
+    loadSelectedServerURLs,
     loadServers,
     loadSynchronizationSettings,
     loadTimeoutLength,
     loadTimeoutSettings,
     storeDarkModeSetting,
     storeP2PSetting,
-    storeSelectedServerURL,
+    storeSelectedServers,
     storeServers,
     storeSynchronizationSettings,
     storeTimeoutLength,
-    storeTimeoutSettings,
+    storeTimeoutSettings
 } from "../Utility/Storage.ts";
 
 
@@ -24,9 +24,7 @@ type SettingsListener = () => void;
 
 export function useSettings() {
     //This mess below changes the version number of the settings, so that useEffect/observers trigger correctly
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    const [version, setVersion] = useState(0);
+    const [_, setVersion] = useState(0);
 
     useEffect(() => {
         const unsubscribe = Settings.getSettings().subscribe(() => {
@@ -52,7 +50,7 @@ export class Settings {
     private _timeoutLength: number;
     private peer: Peer;
     private connector: DataConnection;
-    private _activeServerUrl: string;
+    private _activeServerURLs: string[];
     private _servers: Map<string, string>;
     private _p2p: boolean;
 
@@ -65,19 +63,27 @@ export class Settings {
         this._darkMode = loadDarkModeSetting();
         this._timeoutActive = loadTimeoutSettings();
         this._timeoutLength = loadTimeoutLength();
-        this._activeServerUrl = loadSelectedServerURL();
         this._servers = loadServers();
+        this._activeServerURLs = loadSelectedServerURLs();
         this._p2p = loadP2PSetting();
         this.peer = new Peer();
         this.connector = null as unknown as DataConnection;
 
+        // Purge server URLs that are in active list, but not in server list
+        const urlsInList = new Set(this._servers.values());
+        this._activeServerURLs = this._activeServerURLs.filter((url => urlsInList.has(url)));
+        storeSelectedServers(this._activeServerURLs);
+        if (this._activeServerURLs.length == 0) {
+            this._activeServerURLs = loadSelectedServerURLs();
+        }
+
 
         //When someone is connecting to this peer, establish the direction in the other way
-        this.peer.on('connection', incomingConn => {
-            incomingConn.on('open', () => {
+        this.peer.on("connection", incomingConn => {
+            incomingConn.on("open", () => {
                 this.setupConnection(incomingConn);
-            })
-        })
+            });
+        });
     }
 
     public static getSettings(): Settings {
@@ -87,31 +93,46 @@ export class Settings {
         return this.instance;
     }
 
-    public getServerUrl(): string {
-        return this._activeServerUrl;
+    public getActiveServerUrls(): string[] {
+        return this._activeServerURLs;
     }
 
-
-    /**
-     * Returns the name of the active Server
-     */
-    public getActiveServerName(): string {
-        for (const [name, url] of this._servers) {
-            if (url === this._activeServerUrl) {
-                return name;
-            }
+    public activateServer(serverName: string) {
+        const server = this._servers.get(serverName);
+        if (!server) {
+            console.error(`Cannot find server ${serverName} in server list`);
+            return;
         }
-        return "Unknown Server";
-    }
-
-    public setServerUrl(name: string) {
-        this._activeServerUrl = this._servers.get(name) || "";
-        storeSelectedServerURL(this._activeServerUrl);
+        this._activeServerURLs.push(server);
+        storeSelectedServers(this._activeServerURLs);
         this.notify();
     }
 
-    public getServers(): Map<string, string> {
-        return new Map(this._servers);
+    public deactivateServer(serverName: string) {
+        const server = this._servers.get(serverName);
+        if (!server) {
+            console.error(`Cannot find server ${serverName} in server list`);
+            return;
+        }
+        const index = this._activeServerURLs.indexOf(server);
+        this._activeServerURLs.splice(index, 1);
+
+        storeSelectedServers(this._activeServerURLs);
+        this.notify();
+    }
+
+    public getServerUrls(): Map<string, string> {
+        return this._servers;
+    }
+
+    public getServerStates(): Map<string, boolean> {
+        const servers = new Map<string, boolean>();
+
+        for (const [server, url] of this._servers.entries()) {
+            servers.set(server, this._activeServerURLs.includes(url));
+        }
+
+        return servers;
     }
 
     /**
@@ -128,6 +149,7 @@ export class Settings {
     }
 
     public removeServer(server: string): void {
+        this.deactivateServer(server);
         this._servers.delete(server);
         storeServers(this._servers);
         this.notify();
@@ -288,13 +310,13 @@ export class Settings {
         try {
             adapter.disconnect();
         } catch {
-            console.error("unable to disconnect")
+            console.error("unable to disconnect");
         }
 
         try {
             conn.close();
         } catch {
-            console.error("unable to close")
+            console.error("unable to close");
         }
     }
 }

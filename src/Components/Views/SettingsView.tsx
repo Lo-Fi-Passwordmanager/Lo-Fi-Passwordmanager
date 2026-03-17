@@ -6,10 +6,10 @@ import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {useSettingsViewModel} from "../ViewModels/SettingsViewModel.ts";
 import CopyButton from "./ButtonViews/CopyButton.tsx";
 import SliderCheckBox from "./ButtonViews/SliderCheckBox.tsx";
-import AddServerDialog from "./DialogViews/AddServerDialog.tsx";
 import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
 import Dialog from "./DialogViews/Dialog.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
+import ServerList from "./ListingViews/ServerList.tsx";
 
 
 /**
@@ -112,59 +112,7 @@ const SettingsView: React.FC<{
                             {automergeFacade ? null : (
                                 <div className="connection-settings">
                                     {!viewModel.synchronisation ? null : (
-                                        <>
-                                            <h4>Synchronisationsserver</h4>
-                                            <span>Aktueller Server:</span>
-                                            <div className="current-server">{viewModel.serverName}</div>
-                                            {viewModel.serverNames.length > 1 && (
-                                                <div className="scrollableContainer server-list">
-                                                    <span>Verfügbare Server:</span>
-
-                                                    {viewModel.serverNames.map((server) => (
-                                                        viewModel.serverName !== server ? (
-                                                            <div className="server-item" key={server}>
-                                                                <button
-                                                                    style={{
-                                                                        display: "block",
-                                                                        whiteSpace: "nowrap",
-                                                                        overflow: "hidden",
-                                                                        textOverflow: "ellipsis",
-                                                                        flex: 1
-                                                                    }}
-                                                                    onClick={() => viewModel.selectSyncServer(server)}
-                                                                >
-                                                                    <span>{server}</span>
-                                                                </button>
-                                                                {server !== "Automerge Sync Server" && (
-                                                                    <button
-                                                                        className="squareButton"
-                                                                        onClick={() => viewModel.removeSyncServer(server)}
-                                                                        title={"Server entfernen"}
-                                                                    >
-                                                                        <HiTrash size={24}/>
-                                                                    </button>
-                                                                )}
-                                                            </div>
-                                                        ) : null
-                                                    ))}
-                                                </div>)}
-                                            <button
-                                                className="squareButton"
-                                                onClick={() => viewModel.setAddServerDialogOpen(true)}
-                                                style={{alignSelf: "center"}}
-                                            >
-                                                <HiMiniPlus size={24} title={"Sync Server hinzufügen"}/>
-                                            </button>
-                                            {viewModel.addServerDialogOpen && (
-                                                <AddServerDialog
-                                                    onAddServer={(name, url) => viewModel.addSyncServer(name, url)}
-                                                    onClose={() => viewModel.setAddServerDialogOpen(false)}
-                                                    setShowToast={viewModel.setShowToast}
-                                                    setToastMessage={viewModel.setToastMessage}
-                                                    serverNames={viewModel.serverNames}
-                                                />
-                                            )}
-                                        </>
+                                        <ServerList settingsViewModel={viewModel}/>
                                     )}
 
 
@@ -179,11 +127,11 @@ const SettingsView: React.FC<{
                                                 marginBottom: "2vh",
                                                 gap: "10px",
                                                 justifyContent: "space-between",
-                                                width: "100%",
+                                                width: "100%"
                                             }}> {/* for some reason are the styles from the css not applying */}
                                                 <label className={"current-server"}>{viewModel.getPeerId()}</label>
                                                 <CopyButton
-                                                    copyToClipboard={viewModel.copyToClipboard}
+                                                    copyToClipboard={(text) => void viewModel.copyToClipboard(text)}
                                                     attributeValue={viewModel.getPeerId()}
                                                     style={{marginLeft: "0"}}
                                                 />

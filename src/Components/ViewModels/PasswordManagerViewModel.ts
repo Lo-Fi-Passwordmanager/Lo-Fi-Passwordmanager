@@ -40,7 +40,7 @@ export const usePasswordManagerViewModel = () => {
     const p2pEnabled = settings.getP2P();
     const connectorsSize = settings.getConnectorsToAdapters().size;
     const connectorAdapter = settings.getConnectorsToAdapters();
-    const serverUrl = settings.getServerUrl();
+    const servers = settings.getActiveServerUrls();
     //Whenever something about the synchronisation happens, the old adapters get removed and new ones get added.
     //This enables the repo the be kept as state while still changing the adapters
     useEffect(() => {
@@ -60,9 +60,11 @@ export const usePasswordManagerViewModel = () => {
         }
 
         if (syncEnabled && !repo.networkSubsystem.adapters.some(a => a instanceof WebSocketClientAdapter)) {
-            repo.networkSubsystem.addNetworkAdapter(
-                new WebSocketClientAdapter(serverUrl)
-            );
+            for (const url of servers) {
+                repo.networkSubsystem.addNetworkAdapter(
+                    new WebSocketClientAdapter(url)
+                );
+            }
         }
 
         if (p2pEnabled) {
@@ -73,7 +75,7 @@ export const usePasswordManagerViewModel = () => {
             }
         }
 
-    }, [syncEnabled, p2pEnabled, connectorsSize, connectorAdapter, repo.networkSubsystem, serverUrl]);
+    }, [syncEnabled, p2pEnabled, connectorsSize, connectorAdapter, repo.networkSubsystem, servers]);
 
 
     useEffect(() => {
@@ -115,14 +117,6 @@ export const usePasswordManagerViewModel = () => {
         }
     };
 
-    function getSync(): string | null {
-        return settings.getSynchronization() ? "server" : (settings.getP2P() ? "p2p" : null);
-    }
-
-    function getServerName(): string {
-        return settings.getActiveServerName();
-    }
-
     const idleTimer = useIdleTimer({timeout, onIdle, onActive, debounce: 100});
 
 
@@ -142,8 +136,6 @@ export const usePasswordManagerViewModel = () => {
         setAutomergeFacade,
         getAutomergeFacade,
         closeLoggedIn,
-        setToastVisible,
-        getSync,
-        getServerName
+        setToastVisible
     };
 };
