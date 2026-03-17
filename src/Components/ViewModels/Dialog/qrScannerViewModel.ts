@@ -1,6 +1,7 @@
 import {isValidAutomergeUrl} from "@automerge/react";
 import QrScanner from "qr-scanner";
 import {useEffect, useRef, useState} from "react";
+
 import {Settings} from "../../../Model/Settings.ts";
 
 // QRScanner https://github.com/nimiq/qr-scanner
@@ -39,17 +40,17 @@ const useQRScannerViewModel = (setInputFields: (name: string, url: string) => vo
                             const settings = Settings.getSettings();
 
                             let existingServerName : string | undefined;
-                            for (const [sName, sUrl] of settings.getServers()) {
+                            for (const [sName, sUrl] of settings.getServerUrls()) {
                                 if (sUrl === syncUrl) {
                                     existingServerName = sName;
                                     break;
                                 }
                             }
                             if (existingServerName) {
-                                settings.setServerUrl(existingServerName);
+                                settings.activateServer(existingServerName);
                             } else {
                                 settings.addServer(syncUrl, syncUrl);
-                                settings.setServerUrl(syncUrl);
+                                settings.activateServer(syncUrl);
                             }
                             setInputFields(name, url);
                             setQRScannerOpen_real(false);
