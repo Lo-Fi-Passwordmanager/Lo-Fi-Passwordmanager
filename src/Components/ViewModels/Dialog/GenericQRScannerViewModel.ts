@@ -14,32 +14,12 @@ export type GenericQRScannerViewModel = {
  * The Viewmodel for {@link QRScannerDialog}
  * @param setInputFields sets the arguments (name and url) for the given Database to the values of the scanned QR Code
  */
-const useGenericQRScannerViewModel = (callback: GenericQRScannerCallback): GenericQRScannerViewModel => {
+const useGenericQRScannerViewModel = (callback: GenericQRScannerCallback, closeScannerOnSuccess?: boolean): GenericQRScannerViewModel => {
 
     const [qrScannerOpen, setQRScannerOpen_real] = useState(false);
     const [scanError, setScanError] = useState(false);
 
     const qrScanner = useRef<QrScanner | null>(null);
-
-    useEffect(() => {
-        if (qrScannerOpen) {
-            const videoStream = document.getElementById("qrVideo")! as HTMLVideoElement;
-
-            qrScanner.current = new QrScanner(videoStream, result => {
-                if (result) {
-                    callback(result.data, setScanError, setQRScannerOpen_real);
-                } else {
-                    setScanError(true);
-                }
-            }, {
-                highlightScanRegion: true,
-                highlightCodeOutline: true,
-                preferredCamera: "environment",
-                returnDetailedScanResult: true
-            });
-            void qrScanner.current.start();
-        }
-    }, [qrScannerOpen, callback]);
 
     function setQRScannerOpen(open: boolean) {
         if (open) {
@@ -55,6 +35,30 @@ const useGenericQRScannerViewModel = (callback: GenericQRScannerCallback): Gener
             setQRScannerOpen_real(open);
         }
     }
+
+    useEffect(() => {
+        if (qrScannerOpen) {
+            const videoStream = document.getElementById("qrVideo")! as HTMLVideoElement;
+
+            qrScanner.current = new QrScanner(videoStream, result => {
+                if (result) {
+                    callback(result.data, setScanError, setQRScannerOpen);
+                    setScanError(false);
+                    if (closeScannerOnSuccess) {
+                        setQRScannerOpen(false);
+                    }
+                } else {
+                    setScanError(true);
+                }
+            }, {
+                highlightScanRegion: true,
+                highlightCodeOutline: true,
+                preferredCamera: "environment",
+                returnDetailedScanResult: true
+            });
+            void qrScanner.current.start();
+        }
+    }, [qrScannerOpen, callback]);
 
     return {
         qrScannerOpen,

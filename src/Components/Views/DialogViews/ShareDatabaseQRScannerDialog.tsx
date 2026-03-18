@@ -9,7 +9,9 @@ import useDatabaseQRScannerViewModel from "../../ViewModels/Dialog/DatabaseQRSca
  *
  * @param setInputFields Function to set the input fields based on the scanned QR code.
  */
-const QRScannerDialog: React.FC<{ setInputFields: (name: string, url: string) => void }> = ({setInputFields}) => {
+const ShareDatabaseQRScannerDialog: React.FC<{
+    setInputFields: (name: string, url: string) => void
+}> = ({setInputFields}) => {
     const viewModel = useDatabaseQRScannerViewModel(setInputFields);
 
     if (viewModel.qrScannerOpen) {
@@ -17,10 +19,11 @@ const QRScannerDialog: React.FC<{ setInputFields: (name: string, url: string) =>
             <>
                 <button
                     className="qrButton"
+                    style={{marginLeft: "1rem"}}
                     onClick={() => viewModel.setQRScannerOpen(true)}>
                     <HiOutlineQrcode size={24}/>
                 </button>
-                <Dialog title={"QR Code Scanner"} onCloseDialog={() => viewModel.setQRScannerOpen(false)}
+                <Dialog title={"Datenbank importieren"} onCloseDialog={() => viewModel.setQRScannerOpen(false)}
                         className="qrDialog">
                     <video id="qrVideo"/>
                     {viewModel.scanError && <p id="error">Ungültiger QR Code</p>}
@@ -31,10 +34,11 @@ const QRScannerDialog: React.FC<{ setInputFields: (name: string, url: string) =>
         return (
             <button
                 className="qrButton"
+                style={{marginLeft: "1rem"}}
                 onClick={() => viewModel.setQRScannerOpen(true)}>
                 <HiOutlineQrcode size={24}/>
             </button>
         );
     }
 };
-export default QRScannerDialog;
+export default ShareDatabaseQRScannerDialog;

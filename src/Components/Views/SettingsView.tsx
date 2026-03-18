@@ -8,6 +8,8 @@ import CopyButton from "./ButtonViews/CopyButton.tsx";
 import SliderCheckBox from "./ButtonViews/SliderCheckBox.tsx";
 import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
 import Dialog from "./DialogViews/Dialog.tsx";
+import GenericQRDialog from "./DialogViews/GenericQRDialog.tsx";
+import GenericQRScannerDialog from "./DialogViews/GenericQRScannerDialog.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
 import ServerList from "./ListingViews/ServerList.tsx";
 
@@ -135,7 +137,12 @@ const SettingsView: React.FC<{
                                                     attributeValue={viewModel.getPeerId()}
                                                     style={{marginLeft: "0"}}
                                                 />
-                                                <ShareQRDialog/>
+                                                <GenericQRDialog title={"Peer-ID teilen"}
+                                                                 qrValue={viewModel.getPeerId()}>
+                                                    <p>Scanne den QR-Code auf einem anderen Gerät in den Einstellungen
+                                                       unter &quot;Allgemeine Einstellungen &rarr; Peer-To-Peer
+                                                       Verbindung&quot;</p>
+                                                </GenericQRDialog>
                                             </div>
                                         </div>
                                     }
@@ -180,6 +187,13 @@ const SettingsView: React.FC<{
                                                     attributeValue={viewModel.getPeerId()}
                                                     style={{marginLeft: "0"}}
                                                 />
+                                                <GenericQRDialog title={"Peer-ID teilen"}
+                                                                 qrValue={viewModel.getPeerId()}>
+                                                    <p>Scanne den QR-Code auf einem anderen Gerät in den Einstellungen
+                                                       unter &quot;Allgemeine
+                                                       Einstellungen&quot; &rarr; &quot;Peer-To-Peer
+                                                       Verbindung&quot;</p>
+                                                </GenericQRDialog>
                                             </div>
                                             <label>Fremde Peer-ID:</label>
                                             <div className={"peer-connection-input"}
@@ -196,11 +210,14 @@ const SettingsView: React.FC<{
                                                 />
                                                 <button
                                                     className="rectangle-button"
-                                                    onClick={viewModel.connectToPeer}
+                                                    onClick={() => viewModel.connectToPeer}
                                                     title={"Mit Peer verbinden"}
                                                 >
                                                     Verbinden
                                                 </button>
+                                                <GenericQRScannerDialog title={"Peer verbinden"}
+                                                                        callback={(id: string) => viewModel.connectToPeer(id)}
+                                                                        closeScannerOnSuccess/>
                                             </div>
                                         </div>
                                     }

@@ -40,7 +40,7 @@ export type SettingsViewModel = {
     setShowToast: (value: (((prevState: boolean) => boolean) | boolean)) => void;
     remotePeerId: string;
     setRemotePeerId: (value: (((prevState: string) => string) | string)) => void;
-    connectToPeer: () => void;
+    connectToPeer: (id?: string) => void;
     otherPeerMap: Map<string, [DataConnection, PeerjsNetworkAdapter]>;
     removePeer: (id: string) => Promise<void>;
     isLastServer: () => boolean;
@@ -218,6 +218,10 @@ export const useSettingsViewModel: () => SettingsViewModel = () => {
         await settings.removeConnector(id);
     }
 
+    function connectToPeer(id?: string) {
+        Settings.getSettings().addConnector(id ?? remotePeerId);
+    }
+
 
     return {
         darkMode,
@@ -252,7 +256,7 @@ export const useSettingsViewModel: () => SettingsViewModel = () => {
         setShowToast,
         remotePeerId,
         setRemotePeerId,
-        connectToPeer: () => Settings.getSettings().addConnector(remotePeerId),
+        connectToPeer,
         otherPeerMap,
         removePeer,
         isLastServer,
