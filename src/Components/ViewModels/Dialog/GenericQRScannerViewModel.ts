@@ -58,7 +58,7 @@ const useGenericQRScannerViewModel = (callback: GenericQRScannerCallback, closeS
             });
             void qrScanner.current.start();
         }
-    }, [qrScannerOpen, callback]);
+    }, [qrScannerOpen, callback, closeScannerOnSuccess]);
 
     return {
         qrScannerOpen,
