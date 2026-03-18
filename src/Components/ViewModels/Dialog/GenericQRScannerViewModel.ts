@@ -42,8 +42,8 @@ const useGenericQRScannerViewModel = (callback: GenericQRScannerCallback, closeS
 
             qrScanner.current = new QrScanner(videoStream, result => {
                 if (result) {
-                    callback(result.data, setScanError, setQRScannerOpen);
                     setScanError(false);
+                    callback(result.data, setScanError, setQRScannerOpen);
                     if (closeScannerOnSuccess) {
                         setQRScannerOpen(false);
                     }
