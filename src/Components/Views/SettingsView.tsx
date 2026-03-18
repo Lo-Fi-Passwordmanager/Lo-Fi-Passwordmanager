@@ -109,7 +109,52 @@ const SettingsView: React.FC<{
                                 </div>
                             )}
 
-                            {automergeFacade ? null : (
+                            {automergeFacade ? (
+                                <div className="connection-settings">
+                                    {!viewModel.synchronisation ? null : (
+                                        <ServerList settingsViewModel={viewModel} disabled/>
+                                    )}
+
+
+                                    {!viewModel.P2P ? null :
+                                        <div className={"connection-settings"}>
+
+                                            <h4>Peer-To-Peer Verbindung</h4>
+                                            <label>Eigene Peer-ID:</label>
+
+                                            <div style={{
+                                                display: "flex",
+                                                marginBottom: "2vh",
+                                                gap: "10px",
+                                                justifyContent: "space-between",
+                                                width: "100%"
+                                            }}> {/* for some reason are the styles from the css not applying */}
+                                                <label className={"current-server"}>{viewModel.getPeerId()}</label>
+                                                <CopyButton
+                                                    copyAndClearClipboard={(text) => void viewModel.copyToClipboard(text)}
+                                                    attributeValue={viewModel.getPeerId()}
+                                                    style={{marginLeft: "0"}}
+                                                />
+                                                <ShareQRDialog/>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    {viewModel.otherPeerMap.size > 0 && viewModel.P2P && (
+                                        <div className="scrollableContainer server-list">
+                                            <span>Verbundene Peers:</span>
+
+                                            {Array.from(viewModel.otherPeerMap.keys()).map((id) => (
+                                                <div className="server-item" key={id}>
+                                                    <div className={"server-name"}>
+                                                        <span>{id}</span>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>)}
+
+                                </div>
+                            ) : (
                                 <div className="connection-settings">
                                     {!viewModel.synchronisation ? null : (
                                         <ServerList settingsViewModel={viewModel}/>

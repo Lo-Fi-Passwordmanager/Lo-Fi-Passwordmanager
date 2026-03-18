@@ -14,40 +14,42 @@ import AddServerDialog from "../DialogViews/AddServerDialog.tsx";
  */
 const ServerList: React.FC<{
     settingsViewModel: SettingsViewModel
-}> = ({settingsViewModel}) => {
+    disabled?: boolean
+}> = ({settingsViewModel, disabled}) => {
 
+    const disabledClass = disabled ? "disabled" : "";
     return (
         <>
             <h4>Synchronisationsserver</h4>
-            <div className="scrollableContainer server-list">
+            <div className={`scrollableContainer server-list ${disabledClass}`}>
                 {Array.from(settingsViewModel.serverStates.keys()).map((server) => (
                     <div className="server-item" key={server}>
-                        <SliderCheckBox checked={settingsViewModel.serverStates.get(server)!}
-                                        disabled={settingsViewModel.isLastActiveServer(server)}
-                                        toggleChecked={() => settingsViewModel.toggleSyncServer(server)}/>
+                        {!disabled && <SliderCheckBox checked={settingsViewModel.serverStates.get(server)!}
+                                                      disabled={settingsViewModel.isLastActiveServer(server)}
+                                                      toggleChecked={() => settingsViewModel.toggleSyncServer(server)}/>}
                         <div className="server-name"
                              title={settingsViewModel.serverUrls.get(server) + " | Zum kopieren klicken"}
                              onClick={() => void settingsViewModel.copyToClipboard(settingsViewModel.serverUrls.get(server) ?? "")}>
                             <span>{server}</span>
                         </div>
-                        <button
+                        {!disabled && <button
                             className={`squareButton ${settingsViewModel.isLastServer() || settingsViewModel.isLastActiveServer(server) ? "disabled" : ""}`}
                             disabled={settingsViewModel.isLastServer() || settingsViewModel.isLastActiveServer(server)}
                             onClick={() => settingsViewModel.removeSyncServer(server)}
                             title={"Server entfernen"}
                         >
                             <HiTrash size={24}/>
-                        </button>
+                        </button>}
                     </div>
                 ))}
             </div>
-            <button
+            {!disabled && <button
                 className="squareButton"
                 onClick={() => settingsViewModel.setAddServerDialogOpen(true)}
                 style={{alignSelf: "center"}}
             >
                 <HiMiniPlus size={24} title={"Sync Server hinzufügen"}/>
-            </button>
+            </button>}
             {settingsViewModel.addServerDialogOpen && (
                 <AddServerDialog
                     onAddServer={(name, url) => settingsViewModel.addSyncServer(name, url)}
