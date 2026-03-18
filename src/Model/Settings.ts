@@ -91,7 +91,11 @@ export class Settings {
         //When someone is connecting to this peer, establish the direction in the other way
         this.peer.on("connection", incomingConn => {
             incomingConn.on("open", () => {
-                this.setupConnection(incomingConn);
+                if (this._p2p) {
+                    this.setupConnection(incomingConn);
+                } else {
+                    void incomingConn.send({type: "disconnect"});
+                }
             });
         });
     }
