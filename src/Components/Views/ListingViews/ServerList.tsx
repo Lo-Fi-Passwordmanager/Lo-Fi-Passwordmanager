@@ -1,5 +1,7 @@
+import {useRepo} from "@automerge/automerge-repo-react-hooks";
+import {WebSocketClientAdapter} from "@automerge/react";
 import React from "react";
-import {HiTrash} from "react-icons/hi";
+import {HiCheckCircle, HiDotsCircleHorizontal, HiTrash} from "react-icons/hi";
 import {HiMiniPlus} from "react-icons/hi2";
 
 import type {SettingsViewModel} from "../../ViewModels/SettingsViewModel.ts";
@@ -16,6 +18,7 @@ const ServerList: React.FC<{
     settingsViewModel: SettingsViewModel
 }> = ({settingsViewModel}) => {
 
+    const repo = useRepo();
     return (
         <>
             <h4>Synchronisationsserver</h4>
@@ -30,6 +33,12 @@ const ServerList: React.FC<{
                              onClick={() => void settingsViewModel.copyToClipboard(settingsViewModel.serverUrls.get(server) ?? "")}>
                             <span>{server}</span>
                         </div>
+                        {repo.networkSubsystem.adapters.find((adapter) => {
+                            // Check if it's actually a WebSocket adapter and has the URL
+                            return adapter instanceof WebSocketClientAdapter &&
+                                adapter.url === settingsViewModel.serverUrls.get(server);
+                        })?.isReady() ? <HiCheckCircle/> : <HiDotsCircleHorizontal/>}
+                        
                         <button
                             className={`squareButton ${settingsViewModel.isLastServer() || settingsViewModel.isLastActiveServer(server) ? "disabled" : ""}`}
                             disabled={settingsViewModel.isLastServer() || settingsViewModel.isLastActiveServer(server)}
