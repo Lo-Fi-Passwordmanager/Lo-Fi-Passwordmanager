@@ -72,7 +72,7 @@ describe("UseLoginViewModel", () => {
     it("should an error if a database is attempted to be opened but there is not database given", async () => {
         const {result} = renderHook(() =>
             useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, secProv, setOpenedDbName));
-        expect(await result.current.tryOpenDatabase("password")).rejects.toThrow("No database selected");
+        expect(result.current.tryOpenDatabase("password")).rejects.toThrow("No database selected");
     });
 
     it("should be able to import a database from an url", async () => {
@@ -171,7 +171,7 @@ describe("UseLoginViewModel", () => {
     it("should throw when the database doesnt exist", async () => {
         const {result} = renderHook(() =>
             useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, secProv, setOpenedDbName));
-        expect(await result.current.tryOpenDatabase("password", "name")).rejects.toThrow("Database doesn't exist");
+        expect(result.current.tryOpenDatabase("password", "name")).rejects.toThrow("Database doesn't exist");
     });
 
     it("should be able to open the selcted database", async () => {
