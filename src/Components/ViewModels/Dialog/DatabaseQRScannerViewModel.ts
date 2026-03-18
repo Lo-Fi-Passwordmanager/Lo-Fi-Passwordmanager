@@ -14,7 +14,7 @@ import {Settings} from "../../../Model/Settings.ts";
  */
 const useDatabaseQRScannerViewModel = (setInputFields: (name: string, url: string) => void): GenericQRScannerViewModel => {
 
-    const callback: GenericQRScannerCallback = (data: string, setScanError: (error: boolean) => void, setScannerOpen: (open: boolean) => void) => {
+    const callback: GenericQRScannerCallback = (data, setScanError) => {
 
         const regex = new RegExp("^(?<url>[^|]+)(\\|(?<name>[^|]*))?\\|(?<syncUrl>wss://.+)$");
         const match = data.match(regex);
@@ -45,14 +45,12 @@ const useDatabaseQRScannerViewModel = (setInputFields: (name: string, url: strin
                     settings.activateServer(syncUrl);
                 }
                 setInputFields(name, url);
-                setScannerOpen(false);
-                setScanError(false);
             } else {
                 setScanError(true);
             }
         }
     };
 
-    return useGenericQRScannerViewModel(callback);
+    return useGenericQRScannerViewModel(callback, true);
 };
 export default useDatabaseQRScannerViewModel;

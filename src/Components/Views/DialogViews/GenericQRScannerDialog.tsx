@@ -2,10 +2,14 @@ import React from "react";
 import {HiOutlineQrcode} from "react-icons/hi";
 
 import Dialog from "./Dialog.tsx";
-import useDatabaseQRScannerViewModel from "../../ViewModels/Dialog/DatabaseQRScannerViewModel.ts";
+import useGenericQRScannerViewModel, {
+    type GenericQRScannerCallback
+} from "../../ViewModels/Dialog/GenericQRScannerViewModel.ts";
 
 export type GenericQRScannerDialogProps = {
-    callback: (qrValue: string) => void;
+    title?: string
+    callback: GenericQRScannerCallback,
+    closeScannerOnSuccess?: boolean
 }
 
 /**
@@ -13,18 +17,22 @@ export type GenericQRScannerDialogProps = {
  *
  * @param setInputFields Function to set the input fields based on the scanned QR code.
  */
-const GenericQRScannerDialog: React.FC<GenericQRScannerDialogProps> = ({callback}) => {
-    const viewModel = useDatabaseQRScannerViewModel(callback);
+const GenericQRScannerDialog: React.FC<GenericQRScannerDialogProps> = ({
+    title,
+    callback,
+    closeScannerOnSuccess
+}: GenericQRScannerDialogProps) => {
+    const viewModel = useGenericQRScannerViewModel(callback, closeScannerOnSuccess);
 
     if (viewModel.qrScannerOpen) {
         return (
             <>
                 <button
-                    className="copyButton"
+                    className="qrButton"
                     onClick={() => viewModel.setQRScannerOpen(true)}>
                     <HiOutlineQrcode size={24}/>
                 </button>
-                <Dialog title={"QR Code Scanner"} onCloseDialog={() => viewModel.setQRScannerOpen(false)}
+                <Dialog title={title ?? "QR Code Scanner"} onCloseDialog={() => viewModel.setQRScannerOpen(false)}
                         className="qrDialog">
                     <video id="qrVideo"/>
                     {viewModel.scanError && <p id="error">Ungültiger QR Code</p>}
