@@ -4,19 +4,23 @@ import {HiOutlineQrcode} from "react-icons/hi";
 import Dialog from "./Dialog.tsx";
 import useDatabaseQRScannerViewModel from "../../ViewModels/Dialog/DatabaseQRScannerViewModel.ts";
 
+export type GenericQRScannerDialogProps = {
+    callback: (qrValue: string) => void;
+}
+
 /**
  * A dialog that allows the user to scan a QR code of a shared database.
  *
  * @param setInputFields Function to set the input fields based on the scanned QR code.
  */
-const QRScannerDialog: React.FC<{ setInputFields: (name: string, url: string) => void }> = ({setInputFields}) => {
-    const viewModel = useDatabaseQRScannerViewModel(setInputFields);
+const GenericQRScannerDialog: React.FC<GenericQRScannerDialogProps> = ({callback}) => {
+    const viewModel = useDatabaseQRScannerViewModel(callback);
 
     if (viewModel.qrScannerOpen) {
         return (
             <>
                 <button
-                    className="qrButton"
+                    className="copyButton"
                     onClick={() => viewModel.setQRScannerOpen(true)}>
                     <HiOutlineQrcode size={24}/>
                 </button>
@@ -37,4 +41,4 @@ const QRScannerDialog: React.FC<{ setInputFields: (name: string, url: string) =>
         );
     }
 };
-export default QRScannerDialog;
+export default GenericQRScannerDialog;

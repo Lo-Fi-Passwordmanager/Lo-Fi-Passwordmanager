@@ -5,7 +5,7 @@ import {HiMiniLink} from "react-icons/hi2";
 
 import DatabaseListingViewModel from "../../ViewModels/Listing/DatabaseListingViewModel.ts";
 import RenameDatabaseDialog from "../DialogViews/RenameDatabaseDialog.tsx";
-import ShareQRDialog from "../DialogViews/ShareQRDialog.tsx";
+import ShareDatabaseQRDialog from "../DialogViews/ShareDatabaseQRDialog.tsx";
 import ToastDialog from "../DialogViews/ToastDialog.tsx";
 
 /**
@@ -39,7 +39,7 @@ const DatabaseListingView: React.FC<{
                     <div className={"DatabaseAndOptions"} key={dbName}>
                         <button
                             onClick={() => openDatabase(dbName)}
-                        title="Datenbank öffnen">
+                            title="Datenbank öffnen">
                             {dbName}
                         </button>
                         <button
@@ -48,13 +48,13 @@ const DatabaseListingView: React.FC<{
                             title="Datenbank ID kopieren">
                             <HiMiniLink size={24}/>
                         </button>
-                        <ShareQRDialog name={dbName} url={url}/>
+                        <ShareDatabaseQRDialog name={dbName} url={url}/>
                         <RenameDatabaseDialog oldName={dbName} renameDatabase={renameDatabase}/>
                         <button
                             className={"squareButton"}
                             onClick={() => removeDatabase(dbName)}>
                             <HiTrash size={24}
-                            title="Datenbank entfernen"/>
+                                     title="Datenbank entfernen"/>
                         </button>
                     </div>
                 ))}
