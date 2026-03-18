@@ -24,7 +24,7 @@ const useQRScannerViewModel = (setInputFields: (name: string, url: string) => vo
             qrScanner.current = new QrScanner(videoStream, result => {
                 if (result) {
 
-                    const regex = new RegExp("^(?<url>[^|]+)\\|(?<name>[^|]*)\\|(?<syncUrl>wss://.+)$");
+                    const regex = new RegExp("^(?<url>[^|]+)(\\|(?<name>[^|]*))?\\|(?<syncUrl>wss://.+)$");
                     const match = result.data.match(regex);
 
                     if (match === null) {
@@ -39,7 +39,7 @@ const useQRScannerViewModel = (setInputFields: (name: string, url: string) => vo
                         if (isValidAutomergeUrl("automerge:" + url)) {
                             const settings = Settings.getSettings();
 
-                            let existingServerName : string | undefined;
+                            let existingServerName: string | undefined;
                             for (const [sName, sUrl] of settings.getServerUrls()) {
                                 if (sUrl === syncUrl) {
                                     existingServerName = sName;
