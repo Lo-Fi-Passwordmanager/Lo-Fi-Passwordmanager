@@ -2,6 +2,8 @@ import {isValidAutomergeUrl} from "@automerge/react";
 import QrScanner from "qr-scanner";
 import {useEffect, useRef, useState} from "react";
 
+import {Settings} from "../../../Model/Settings.ts";
+
 // QRScanner https://github.com/nimiq/qr-scanner
 
 /**
@@ -22,7 +24,7 @@ const useQRScannerViewModel = (setInputFields: (name: string, url: string) => vo
             qrScanner.current = new QrScanner(videoStream, result => {
                 if (result) {
 
-                    const regex = new RegExp(`^(?<url>\\w+)(?:\\|(?<name>.*?))?$`);
+                    const regex = new RegExp("^(?<url>[^|]+)(\\|(?<name>[^|]*))?\\|(?<syncUrl>wss://.+)$");
                     const match = result.data.match(regex);
 
                     if (match === null) {
@@ -33,7 +35,23 @@ const useQRScannerViewModel = (setInputFields: (name: string, url: string) => vo
                     if (match.groups) {
                         const url = match.groups["url"];
                         const name = match.groups["name"] ?? "";
+                        const syncUrl = match.groups["syncUrl"];
                         if (isValidAutomergeUrl("automerge:" + url)) {
+                            const settings = Settings.getSettings();
+
+                            let existingServerName: string | undefined;
+                            for (const [sName, sUrl] of settings.getServerUrls()) {
+                                if (sUrl === syncUrl) {
+                                    existingServerName = sName;
+                                    break;
+                                }
+                            }
+                            if (existingServerName) {
+                                settings.activateServer(existingServerName);
+                            } else {
+                                settings.addServer(syncUrl, syncUrl);
+                                settings.activateServer(syncUrl);
+                            }
                             setInputFields(name, url);
                             setQRScannerOpen_real(false);
                             setScanError(false);

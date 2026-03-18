@@ -2,6 +2,7 @@ import {CSS} from "@dnd-kit/utilities";
 import React from "react";
 import {HiTrash} from "react-icons/hi";
 import {HiMiniPlus} from "react-icons/hi2";
+import {ImKey} from "react-icons/im";
 
 import FolderMenu from "./MenuViews/FolderMenu.tsx";
 import type {Entry} from "../../Model/Entry.ts";
@@ -79,6 +80,7 @@ const ListView: React.FC<{
         function addButtonPressed() {
             setItemCreationDialog();
             setCurrentParent!(item);
+            expandFolderId(item.id)
         }
 
         // makes the dragged item follow the cursor
@@ -94,12 +96,17 @@ const ListView: React.FC<{
             return (
                 <div
                     className={`listViewEntry ${curItem.id !== entry.id ? "" : "selected"} ${listViewModel.isDragging ? "dragged" : ""} ${selectedItemId === item.id ? "highlighted entry" : ""}`}
-                    onClick={() => setCurItem(entry)}
+                    onClick={() => {
+                        if (!inEditable){
+                            setCurItem(entry)
+                        }
+                    }}
                     style={dragStyle}
                     ref={listViewModel.setDraggableRef}
                     {...listViewModel.attributes}
                     {...listViewModel.listeners}
                     aria-selected={selectedItemId === item.id}>
+                    <button style={{background:"none", boxShadow:"none"}}> <ImKey size={18}/> </button>
                     <span className={"item-title"}>{entry.title}</span>
                     <div className={"btnWrapper"}>
                         <button className="listViewEntry button"
@@ -124,7 +131,7 @@ const ListView: React.FC<{
                     <div
                         className={`listViewTitleHeader ${listViewModel.isDragging ? "dragged" : ""} ${listViewModel.isOver && !listViewModel.isDragging ? "over" : ""} ${selectedItemId === item.id ? "highlighted folder" : ""}`}
                         ref={listViewModel.setFolderRef}
-                        style={dragStyle}
+                        style={item.id !== "" ? dragStyle : undefined}
                         {...listViewModel.attributes}
                         {...listViewModel.listeners}
                         aria-selected={selectedItemId === item.id}>

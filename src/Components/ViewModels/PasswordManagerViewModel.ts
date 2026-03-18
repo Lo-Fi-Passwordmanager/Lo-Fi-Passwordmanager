@@ -18,14 +18,18 @@ import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
  */
 export const usePasswordManagerViewModel = () => {
     const settings = useSettings();
-    const [loggedIn, setLoggedIn] = useState<boolean>(false);
+    const [loggedIn, setLogedIn] = useState<boolean>(false);
     const [automergeFacade, setAutomergeFacade] = useState<AutomergeFacade | null>(null);
     const [securityProvider] = useState(() => new SecurityProvider());
     const timeout = Settings.getSettings().getTimeoutLength() * 60000;
     const [toastMessage, setToastMessage] = useState("");
     const [toastVisible, setToastVisible] = useState(false);
     const [openedDatabaseName, setOpenedDatabaseName] = useState<string>("");
+    const [oldP2PSize, setOldP2PSize] = useState<number>(settings.getConnectorsToAdapters().size);
 
+    function setLoggedIn(value: boolean) {
+        setLogedIn(value);
+    }
 
     const [repo] = useState(new Repo({
         network: [new BroadcastChannelNetworkAdapter()],
@@ -36,7 +40,7 @@ export const usePasswordManagerViewModel = () => {
     const p2pEnabled = settings.getP2P();
     const connectorsSize = settings.getConnectorsToAdapters().size;
     const connectorAdapter = settings.getConnectorsToAdapters();
-    const serverUrl = settings.getServerUrl();
+    const servers = settings.getActiveServerUrls();
     //Whenever something about the synchronisation happens, the old adapters get removed and new ones get added.
     //This enables the repo the be kept as state while still changing the adapters
     useEffect(() => {
@@ -56,20 +60,35 @@ export const usePasswordManagerViewModel = () => {
         }
 
         if (syncEnabled && !repo.networkSubsystem.adapters.some(a => a instanceof WebSocketClientAdapter)) {
-            repo.networkSubsystem.addNetworkAdapter(
-                new WebSocketClientAdapter(serverUrl)
-            );
-        }
-
-        for (const adapter of connectorAdapter.values()) {
-            if (!repo.networkSubsystem.adapters.includes(adapter[1])) {
-                repo.networkSubsystem.addNetworkAdapter(adapter[1]);
+            for (const url of servers) {
+                repo.networkSubsystem.addNetworkAdapter(
+                    new WebSocketClientAdapter(url)
+                );
             }
         }
 
-        console.log(repo.networkSubsystem.adapters);
+        if (p2pEnabled) {
+            for (const adapter of connectorAdapter.values()) {
+                if (!repo.networkSubsystem.adapters.includes(adapter[1])) {
+                    repo.networkSubsystem.addNetworkAdapter(adapter[1]);
+                }
+            }
+        }
 
-    }, [syncEnabled, p2pEnabled, connectorsSize, connectorAdapter, repo.networkSubsystem, serverUrl]);
+    }, [syncEnabled, p2pEnabled, connectorsSize, connectorAdapter, repo.networkSubsystem, servers]);
+
+
+    useEffect(() => {
+        if (connectorsSize > oldP2PSize) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setToastMessage("Neue PeerToPeer Verbindung aufgebaut.");
+            setToastVisible(true);
+            setTimeout(() => {
+                setToastVisible(false);
+            }, 3000);
+        }
+        setOldP2PSize(connectorsSize);
+    }, [connectorsSize, oldP2PSize]);
 
     function getAutomergeFacade(): AutomergeFacade | null {
         return automergeFacade;
@@ -98,14 +117,6 @@ export const usePasswordManagerViewModel = () => {
         }
     };
 
-    function getSync(): string | null {
-        return settings.getSynchronization() ? "server" : (settings.getP2P() ? "p2p" : null);
-    }
-
-    function getServerName(): string {
-        return settings.getActiveServerName();
-    }
-
     const idleTimer = useIdleTimer({timeout, onIdle, onActive, debounce: 100});
 
 
@@ -125,8 +136,6 @@ export const usePasswordManagerViewModel = () => {
         setAutomergeFacade,
         getAutomergeFacade,
         closeLoggedIn,
-        setToastVisible,
-        getSync,
-        getServerName
+        setToastVisible
     };
 };

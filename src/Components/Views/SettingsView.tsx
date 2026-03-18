@@ -4,10 +4,12 @@ import {HiMiniCog8Tooth, HiMiniMinus, HiMiniPlus} from "react-icons/hi2";
 
 import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {useSettingsViewModel} from "../ViewModels/SettingsViewModel.ts";
-import AddServerDialog from "./DialogViews/AddServerDialog.tsx";
+import CopyButton from "./ButtonViews/CopyButton.tsx";
+import SliderCheckBox from "./ButtonViews/SliderCheckBox.tsx";
 import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
 import Dialog from "./DialogViews/Dialog.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
+import ServerList from "./ListingViews/ServerList.tsx";
 
 
 /**
@@ -23,12 +25,15 @@ const SettingsView: React.FC<{
     const viewModel = useSettingsViewModel();
 
     if (!viewModel.settingsOpen) {
-        return (
+        return (<>
             <button className="settingsButton" onClick={() => viewModel.setSettingsOpen(true)}
                     title="Einstellungen öffnen">
                 <HiMiniCog8Tooth size={24}/>
             </button>
-        );
+            <ToastDialog message={viewModel.toastMessage}
+                         isVisible={viewModel.showToast}
+                         onClose={() => viewModel.setShowToast(false)}/>
+        </>);
     }
 
     return (
@@ -64,39 +69,24 @@ const SettingsView: React.FC<{
 
 
                             <label className="checkboxRow">
-                                <label className="switch">
-                                    <input type="checkbox" checked={viewModel.darkMode}
-                                           onChange={viewModel.toggleDarkMode}/>
-                                    <span className="slider round" />
-                                </label>
+                                <SliderCheckBox checked={viewModel.darkMode} toggleChecked={viewModel.toggleDarkMode}/>
                                 Dark-Mode
                             </label>
 
                             <label className="checkboxRow">
-                                <label className="switch">
-                                    <input type="checkbox" checked={viewModel.synchronisation}
-                                           onChange={viewModel.toggleSynchronisation}/>
-                                    <span className="slider round" />
-                                </label>
+                                <SliderCheckBox checked={viewModel.synchronisation}
+                                                toggleChecked={viewModel.toggleSynchronisation}/>
                                 Server Synchronisation
                             </label>
 
                             <label className="checkboxRow">
-                                <label className="switch">
-                                    <input type="checkbox" checked={viewModel.P2P}
-                                           onChange={viewModel.toggleP2P}/>
-                                    <span className="slider round" />
-                                </label>
+                                <SliderCheckBox checked={viewModel.P2P} toggleChecked={viewModel.toggleP2P}/>
                                 Peer-to-Peer Synchronisation
                             </label>
 
                             <label className="checkboxRow">
-                                <label className="switch">
-                                    <input type="checkbox" checked={viewModel.timeOutActive}
-                                           onChange={viewModel.toggleTimeOutActive}/>
-                                    <span className="slider round" />
-                                </label>
-
+                                <SliderCheckBox checked={viewModel.timeOutActive}
+                                                toggleChecked={viewModel.toggleTimeOutActive}/>
                                 Bei Inaktivität abmelden
                             </label>
 
@@ -109,10 +99,12 @@ const SettingsView: React.FC<{
                                                onChange={(e) => viewModel.setTimeOutLengthVM(e.target.value)}
                                                min="1"/>
                                         <button className={"squareButton"} style={{boxShadow: "none"}}
-                                                onClick={viewModel.decreaseTimeout}><HiMiniMinus size={24}/>
+                                                onClick={viewModel.decreaseTimeout}
+                                                title={"Zeit bis Abmeldung verringern"}><HiMiniMinus size={24}/>
                                         </button>
                                         <button className={"squareButton"} style={{boxShadow: "none"}}
-                                                onClick={viewModel.increaseTimeout}><HiMiniPlus size={24}/></button>
+                                                onClick={viewModel.increaseTimeout}
+                                                title={"Zeit bis Abmeldung erhöhen"}><HiMiniPlus size={24}/></button>
                                     </div>
                                 </div>
                             )}
@@ -120,57 +112,7 @@ const SettingsView: React.FC<{
                             {automergeFacade ? null : (
                                 <div className="connection-settings">
                                     {!viewModel.synchronisation ? null : (
-                                        <>
-                                            <h4>Synchronisationsserver</h4>
-                                            <span>Aktueller Server:</span>
-                                            <div className="current-server">{viewModel.serverName}</div>
-                                            {viewModel.serverNames.length > 1 && (
-                                                <div className="scrollableContainer server-list">
-                                                    <span>Verfügbare Server:</span>
-
-                                                    {viewModel.serverNames.map((server) => (
-                                                        viewModel.serverName !== server ? (
-                                                            <div className="server-item" key={server}>
-                                                                <button
-                                                                    style={{
-                                                                        display: "block",
-                                                                        whiteSpace: "nowrap",
-                                                                        overflow: "hidden",
-                                                                        textOverflow: "ellipsis",
-                                                                        flex: 1
-                                                                    }}
-                                                                    onClick={() => viewModel.selectServer(server)}
-                                                                >
-                                                                    <span>{server}</span>
-                                                                </button>
-                                                                {server !== "Automerge Sync Server" && (
-                                                                    <button
-                                                                        className="squareButton"
-                                                                        onClick={() => viewModel.removeServer(server)}
-                                                                    >
-                                                                        <HiTrash size={24}/>
-                                                                    </button>
-                                                                )}
-                                                            </div>
-                                                        ) : null
-                                                    ))}
-                                                </div>)}
-                                            <button
-                                                className="squareButton"
-                                                onClick={() => viewModel.setAddServerDialogOpen(true)}
-                                                style={{alignSelf: "center"}}
-                                            >
-                                                <HiMiniPlus size={24}/>
-                                            </button>
-                                            {viewModel.addServerDialogOpen && (
-                                                <AddServerDialog
-                                                    onAddServer={(name, url) => viewModel.addSyncServer(name, url)}
-                                                    onClose={() => viewModel.setAddServerDialogOpen(false)}
-                                                    setShowToast={viewModel.setShowToast}
-                                                    setToastMessage={viewModel.setToastMessage}
-                                                />
-                                            )}
-                                        </>
+                                        <ServerList settingsViewModel={viewModel}/>
                                     )}
 
 
@@ -179,10 +121,30 @@ const SettingsView: React.FC<{
 
                                             <h4>Peer-To-Peer Verbindung</h4>
                                             <label>Eigene Peer-ID:</label>
-                                            <label className={"current-server"}>{viewModel.getPeerId()}</label>
+
+                                            <div style={{
+                                                display: "flex",
+                                                marginBottom: "2vh",
+                                                gap: "10px",
+                                                justifyContent: "space-between",
+                                                width: "100%"
+                                            }}> {/* for some reason are the styles from the css not applying */}
+                                                <label className={"current-server"}>{viewModel.getPeerId()}</label>
+                                                <CopyButton
+                                                    copyAndClearClipboard={(text) => void viewModel.copyToClipboard(text)}
+                                                    attributeValue={viewModel.getPeerId()}
+                                                    style={{marginLeft: "0"}}
+                                                />
+                                            </div>
                                             <label>Fremde Peer-ID:</label>
                                             <div className={"peer-connection-input"}
-                                                style={{display: "flex", marginBottom: "2vh", gap: "10px", justifyContent: "space-between", width: "100%"}}> {/* for some reason are the styles from the css not applying */}
+                                                 style={{
+                                                     display: "flex",
+                                                     marginBottom: "2vh",
+                                                     gap: "10px",
+                                                     justifyContent: "space-between",
+                                                     width: "100%"
+                                                 }}> {/* for some reason are the styles from the css not applying */}
                                                 <input type="text"
                                                        value={viewModel.remotePeerId}
                                                        onChange={(e) => viewModel.setRemotePeerId(e.target.value)}
@@ -190,6 +152,7 @@ const SettingsView: React.FC<{
                                                 <button
                                                     className="rectangle-button"
                                                     onClick={viewModel.connectToPeer}
+                                                    title={"Mit Peer verbinden"}
                                                 >
                                                     Verbinden
                                                 </button>
@@ -221,7 +184,9 @@ const SettingsView: React.FC<{
 
                                                     <button
                                                         className="squareButton"
-                                                        onClick={() => void viewModel.removePeer(id)}>
+                                                        onClick={() => void viewModel.removePeer(id)}
+                                                        title={"Peer entfernen"}
+                                                    >
                                                         <HiTrash size={24}/>
                                                     </button>
                                                 </div>
@@ -239,7 +204,7 @@ const SettingsView: React.FC<{
                             {automergeFacade ? (
                                 <DatabaseSettingsView automergeFacade={automergeFacade}
                                                       openedDatabaseName={openedDbName}
-                                                    closeDatabase={closeDatabase!}/>
+                                                      closeDatabase={closeDatabase!}/>
                             ) : (
                                 <p>Bitte Datenbank auswählen.</p>
                             )}
@@ -259,7 +224,7 @@ const SettingsView: React.FC<{
                             </div>
 
                             <section>
-                                <p><strong>Version:</strong> 0.1.0-beta</p>
+                                <p><strong>Version:</strong> 0.6.7-sigma</p>
                                 <p><strong>Lizenz:</strong> MIT License</p>
                             </section>
 

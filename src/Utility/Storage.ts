@@ -1,9 +1,13 @@
 import type {AutomergeUrl} from "@automerge/automerge-repo";
 
 const SYNCHRONISATION = "synchronisation";
-const DARK_MODE = "dark_mode"
-const TIMEOUT_ACTIVE = "timeout_active"
-const TIMEOUT_LENGTH = "timeout_length"
+const DARK_MODE = "dark_mode";
+const TIMEOUT_ACTIVE = "timeout_active";
+const TIMEOUT_LENGTH = "timeout_length";
+const SERVER_LIST = "servers_list";
+const SELECTED_SERVER_URLS = "selected_server_urls";
+const CURRENT_SORT_CRITERIA = "currentSortCriterion";
+const SORT_IS_ASCENDING = "isAscending";
 
 /**
  * Loads all database names with their automerge url from localStorage
@@ -11,7 +15,7 @@ const TIMEOUT_LENGTH = "timeout_length"
  * @returns map of database names to automerge urls
  */
 export function loadAllDatabases(): Map<string, AutomergeUrl> {
-    const rawDatabases = localStorage.getItem('databases');
+    const rawDatabases = localStorage.getItem("databases");
     if (!rawDatabases) {
         return new Map();
     }
@@ -31,7 +35,7 @@ export function loadAllDatabases(): Map<string, AutomergeUrl> {
  */
 export function saveDatabases(databases: Map<string, AutomergeUrl>): void {
     const toStore = JSON.stringify(Array.from(databases.entries()));
-    localStorage.setItem('databases', toStore);
+    localStorage.setItem("databases", toStore);
 }
 
 /**
@@ -82,7 +86,7 @@ export function removeDatabase(name: string): void {
  * @returns the current sort criterion or null if not set
  */
 export function loadCurrentSortCriterion(): string | null {
-    return localStorage.getItem('currentSortCriterion');
+    return localStorage.getItem(CURRENT_SORT_CRITERIA);
 }
 
 /**
@@ -91,8 +95,9 @@ export function loadCurrentSortCriterion(): string | null {
  * @param criterion the current sort criterion
  */
 export function saveCurrentSortCriterion(criterion: string): void {
-    localStorage.setItem('currentSortCriterion', criterion);
+    localStorage.setItem(CURRENT_SORT_CRITERIA, criterion);
 }
+
 
 /**
  * Loads the isAscending flag from localStorage
@@ -100,11 +105,11 @@ export function saveCurrentSortCriterion(criterion: string): void {
  * @returns the isAscending flag or null if not set
  */
 export function loadIsAscending(): boolean | null {
-    const value = localStorage.getItem('isAscending');
+    const value = localStorage.getItem(SORT_IS_ASCENDING);
     if (value === null) {
         return null;
     }
-    return value === 'true';
+    return value === "true";
 }
 
 /**
@@ -113,7 +118,7 @@ export function loadIsAscending(): boolean | null {
  * @param isAscending the isAscending flag
  */
 export function saveIsAscending(isAscending: boolean): void {
-    localStorage.setItem('isAscending', isAscending.toString());
+    localStorage.setItem(SORT_IS_ASCENDING, isAscending.toString());
 }
 
 /**
@@ -121,13 +126,13 @@ export function saveIsAscending(isAscending: boolean): void {
  *
  * @returns the selected server URL
  */
-export function loadSelectedServerURL(): string {
-    const url = localStorage.getItem("server_url");
-    if (url) {
-        return url;
+export function loadSelectedServerURLs(): string[] {
+    const urls = localStorage.getItem(SELECTED_SERVER_URLS);
+    if (urls) {
+        return JSON.parse(urls) as string[];
     } else {
-        localStorage.setItem("server_url", "wss://sync.automerge.org")
-        return "wss://sync.automerge.org";
+        localStorage.setItem(SELECTED_SERVER_URLS, JSON.stringify([import.meta.env.VITE_DEFAULT_SYNC_SERVER_URL]));
+        return [import.meta.env.VITE_DEFAULT_SYNC_SERVER_URL];
     }
 }
 
@@ -137,7 +142,7 @@ export function loadSelectedServerURL(): string {
  * @returns a map of server names to URLs
  */
 export function loadServers(): Map<string, string> {
-    const serverList = localStorage.getItem("servers_list");
+    const serverList = localStorage.getItem(SERVER_LIST);
     if (serverList) {
         const servers = new Map<string, string>();
         (JSON.parse(serverList) as [[name: string, url: string]]).forEach(([name, url]: [string, string]) => {
@@ -146,19 +151,19 @@ export function loadServers(): Map<string, string> {
         return servers;
     } else {
         const defaultServers = new Map<string, string>([
-            ["Automerge Sync Server", "wss://sync.automerge.org"]
+            [import.meta.env.VITE_DEFAULT_SYNC_SERVER_NAME, import.meta.env.VITE_DEFAULT_SYNC_SERVER_URL]
         ]);
-        localStorage.setItem("servers_list", JSON.stringify(Array.from(defaultServers.entries())));
+        storeServers(defaultServers);
         return defaultServers;
     }
 }
 
-/** stores the selected server URL in localStorage
+/** Stores the selected servers urls in localStorage
  *
- * @param url the server URL to store
+ * @param serverURLs the server URLs to store
  */
-export function storeSelectedServerURL(url: string): void {
-    localStorage.setItem("server_url", url);
+export function storeSelectedServers(serverURLs: string[]): void {
+    localStorage.setItem(SELECTED_SERVER_URLS, JSON.stringify(serverURLs));
 }
 
 /** stores the list of servers in localStorage
@@ -166,7 +171,7 @@ export function storeSelectedServerURL(url: string): void {
  * @param servers a map of server names to URLs
  */
 export function storeServers(servers: Map<string, string>): void {
-    localStorage.setItem("servers_list", JSON.stringify(Array.from(servers.entries())));
+    localStorage.setItem(SERVER_LIST, JSON.stringify(Array.from(servers.entries())));
 }
 
 /**
@@ -179,7 +184,7 @@ export function loadSynchronizationSettings(): boolean {
     if (synchronisation) {
         return JSON.parse(synchronisation) as boolean;
     } else {
-        localStorage.setItem(SYNCHRONISATION, JSON.stringify(true))
+        localStorage.setItem(SYNCHRONISATION, JSON.stringify(true));
         return true;
     }
 }
@@ -202,8 +207,8 @@ export function loadDarkModeSetting(): boolean {
     if (darkMode) {
         return JSON.parse(darkMode) as boolean;
     } else {
-        localStorage.setItem(DARK_MODE, JSON.stringify(true))
-        return true
+        localStorage.setItem(DARK_MODE, JSON.stringify(true));
+        return true;
     }
 }
 
@@ -226,8 +231,8 @@ export function loadTimeoutSettings(): boolean {
     if (timeoutActive) {
         return JSON.parse(timeoutActive) as boolean;
     } else {
-        localStorage.setItem(TIMEOUT_ACTIVE, JSON.stringify(true))
-        return true
+        localStorage.setItem(TIMEOUT_ACTIVE, JSON.stringify(true));
+        return true;
     }
 }
 
@@ -250,7 +255,7 @@ export function loadTimeoutLength(): number {
     if (timeoutLength != null) {
         return JSON.parse(timeoutLength) as number;
     } else {
-        localStorage.setItem(TIMEOUT_LENGTH, JSON.stringify(10))
+        localStorage.setItem(TIMEOUT_LENGTH, JSON.stringify(10));
         return 10;
     }
 }
@@ -274,7 +279,7 @@ export function loadP2PSetting(): boolean {
     if (p2p != null) {
         return JSON.parse(p2p) as boolean;
     } else {
-        localStorage.setItem("p2p", JSON.stringify(true))
+        localStorage.setItem("p2p", JSON.stringify(true));
         return true;
     }
 }

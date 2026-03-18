@@ -1,7 +1,7 @@
 import React from "react";
 import {HiPencil, HiTrash} from "react-icons/hi";
-import {HiMiniLink} from "react-icons/hi2";
 
+import CopyButton from "./ButtonViews/CopyButton.tsx";
 import EyeButton from "./ButtonViews/EyeButton.tsx";
 import Logo from "../../assets/logo_gelb.svg?inline";
 import {type Entry} from "../../Model/Entry.ts";
@@ -53,23 +53,17 @@ const EntryView: React.FC<{
                     <div className={"scrollableContainer entryViewListing"} style={{width: "90%"}}>
                         <div className={"entryViewAttribute"}>
                             <span style={{gridColumn: "span 20"}}>Benutzername:</span>
-                            <span className={"attribute-value"}>{entry.username}</span>
-                            <button className={"copyButton"}
-                                    onClick={() => copyAndClearClipboard(entry.username)}>
-                                <HiMiniLink size={24}/>
-                            </button>
+                            <span className={"attribute-value"} title={"Benutzername"}>{entry.username}</span>
+                            <CopyButton copyAndClearClipboard={copyAndClearClipboard} attributeValue={entry.username}/>
                         </div>
 
                         <div className={"entryViewAttribute"}>
                             <span style={{gridColumn: "span 20"}}>Passwort:</span>
                             <div className={"attribute-value"} style={{gridColumnEnd: "19"}}>
-                                <span>{(hidePassword ? "●".repeat(8) : entry.password)}</span>
+                                <span title={"Passwort"}>{(hidePassword ? "●".repeat(8) : entry.password)}</span>
                             </div>
                             <EyeButton hidePassword={hidePassword} toggleHidePassword={toggleHidePassword}/>
-                            <button className={"copyButton"}
-                                    onClick={() => copyAndClearClipboard(entry.password)}>
-                                <HiMiniLink size={24}/>
-                            </button>
+                            <CopyButton copyAndClearClipboard={copyAndClearClipboard} attributeValue={entry.password}/>
                         </div>
 
                         <div className={"entryViewAttribute"}>
@@ -78,12 +72,12 @@ const EntryView: React.FC<{
                             <a className={"attribute-value"}
                                href={(entry.url.startsWith("http") ? entry.url : ("https://" + entry.url))}
                                target="_blank" rel="noopener noreferrer"
-                               style={{textDecoration: "underline", color: "inherit"}}>
+                               style={{textDecoration: "underline", color: "inherit"}}
+                               title={"URL"}
+                            >
                                 {entry.url}
                             </a>
-                            <button className={"copyButton"} onClick={() => copyAndClearClipboard(entry.url)}>
-                                <HiMiniLink size={24}/>
-                            </button>
+                            <CopyButton copyAndClearClipboard={copyAndClearClipboard} attributeValue={entry.url}/>
                         </div>
 
                         <div className={"entryViewAttribute"}>
@@ -93,17 +87,23 @@ const EntryView: React.FC<{
                                 paddingLeft: "10px",
                                 whiteSpace: "normal",
                                 gridColumnEnd: "21"
-                            }}>{entry.note}</span>
+                            }}
+                                  title={"Notiz"}
+                            >{entry.note}</span>
                         </div>
                     </div>
                     <div className={"entryViewFooterButtons"}>
                         <button className={"rectangle-button"} onClick={() => {
                             setEditableView();
-                        }} style={{boxShadow: "none"}}>
+                        }} style={{boxShadow: "none"}}
+                                title={"Eintrag bearbeiten"}
+                        >
                             <HiPencil size={24}/> Bearbeiten
                         </button>
                         <button className={"rectangle-button delete"} onClick={() => deleteItem(item)}
-                                style={{boxShadow: "none"}}>
+                                style={{boxShadow: "none"}}
+                                title={"Eintrag löschen"}
+                        >
                             <HiTrash size={24}/>Löschen
                         </button>
                     </div>

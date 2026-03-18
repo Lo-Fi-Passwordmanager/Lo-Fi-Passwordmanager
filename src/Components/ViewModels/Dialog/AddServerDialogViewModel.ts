@@ -10,6 +10,7 @@ import React from "react";
  */
 const useAddServerDialogViewModel = (
     onAddServer: (name: string, url: string) => void,
+    servers: Map<string, string>,
     onClose: () => void,
     setShowToast: (show: boolean) => void,
     setToastMessage: (message: string) => void
@@ -19,16 +20,26 @@ const useAddServerDialogViewModel = (
 
     const handleAddServer = () => {
         if (name.trim() === "" || url.trim() === "") {
-            setToastMessage("Name und URL dürfen nicht leer sein!");
+            setToastMessage("Name und URL dürfen nicht leer sein.");
+            setShowToast(true);
+            return;
+        } else if (servers.get(name.trim())) {
+            setToastMessage("Ein Server mit diesem Namen existiert bereits.");
+            setShowToast(true);
+            return;
+        } else if ((new Set(servers.values())).has(url.trim())) {
+            setToastMessage(`Ein Server mit dieser URL existiert bereits.`);
             setShowToast(true);
             return;
         } else if (!validateWsUrl(url.trim())) {
-            setToastMessage("Invalide URL! Bitte gültige Websocket URL eingeben.");
+            setToastMessage("Invalide URL. Bitte gültige Websocket URL eingeben.");
             setShowToast(true);
             return;
         }
 
-        onAddServer(name.trim(), url.trim());
+        const trimTrailingBackslash = RegExp("/$", "g");
+
+        onAddServer(name.trim(), url.trim().replaceAll(trimTrailingBackslash, ""));
         onClose();
     };
 
@@ -39,7 +50,7 @@ const useAddServerDialogViewModel = (
     function validateWsUrl(urlString: string): boolean {
         try {
             const url = new URL(urlString);
-            return url.protocol === 'ws:' || url.protocol === 'wss:';
+            return url.protocol === "ws:" || url.protocol === "wss:";
         } catch {
             return false;
         }
@@ -52,5 +63,5 @@ const useAddServerDialogViewModel = (
         setUrl,
         handleAddServer
     };
-}
+};
 export default useAddServerDialogViewModel;

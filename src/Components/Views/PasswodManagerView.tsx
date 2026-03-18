@@ -27,7 +27,7 @@ const PasswordManagerView: React.FC = () => {
                            setOpenedDbName={viewModel.setOpenedDatabaseName}/>
                 <ToastDialog message={viewModel.toastMessage}
                              isVisible={viewModel.toastVisible}
-                             onClose={() => viewModel} />
+                             onClose={() => viewModel}/>
             </RepoContext.Provider>
 
         );
@@ -36,8 +36,10 @@ const PasswordManagerView: React.FC = () => {
             <Suspense fallback={<LoadingScreen/>}>
                 <RepoContext.Provider value={viewModel.repo}>
                     <div className={"password-manager-header"}>
-                        <img src={PWMLogo} className="logo header" alt="Passwortmanager Logo"/>
-                        <h2>LoFi Passwortmanager</h2>
+                        <img src={PWMLogo} style={{cursor: "pointer"}} onClick={() => viewModel.closeLoggedIn()}
+                             className="logo header" alt="Passwortmanager Logo"/>
+                        <h2 onClick={() => viewModel.closeLoggedIn()} style={{cursor: "pointer"}}>LoFi
+                            Passwortmanager</h2>
                         <SettingsView automergeFacade={viewModel.getAutomergeFacade()}
                                       openedDbName={viewModel.openedDatabaseName}
                                       closeDatabase={() => viewModel.closeLoggedIn()}
@@ -47,6 +49,9 @@ const PasswordManagerView: React.FC = () => {
                     <PasswordView automergeFacade={viewModel.getAutomergeFacade()}
                                   closeDatabase={() => viewModel.closeLoggedIn()}
                                   openedDbName={viewModel.openedDatabaseName}/>
+                    <ToastDialog message={viewModel.toastMessage}
+                                 isVisible={viewModel.toastVisible}
+                                 onClose={() => viewModel}/>
                 </RepoContext.Provider>
             </Suspense>
         );

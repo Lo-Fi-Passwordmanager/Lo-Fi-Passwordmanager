@@ -15,7 +15,7 @@ export const useFilteredListViewModel = (
 ) => {
 
     /**
-     * Gets the entries that match the filter text from the given start folder recursively
+     * Gets the items that match the filter text from the given start folder recursively
      */
     function getFilteredEntries(startFolder: Folder = root): Item[] {
         const filtered: Folder = new Folder("filteredEntries", "filteredEntriesId");
@@ -45,7 +45,7 @@ export const useFilteredListViewModel = (
      */
     function getFilteredFolders(startFolder: Folder = root): Item[] {
         const filtered = new Folder("filteredFolders", "filteredFoldersId");
-        for (const item of startFolder.entries) {
+        for (const item of startFolder.items) {
             if (item.isFolder()) {
                 const folder = item as Folder;
                 if (folder.title.toLowerCase().includes(filterText.toLowerCase())) {
