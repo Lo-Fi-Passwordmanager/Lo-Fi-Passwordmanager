@@ -76,7 +76,7 @@ export const usePasswordManagerViewModel = () => {
 
     useEffect(() => {
         if (connectorsSize > oldP2PSize) {
-
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setToastMessage("Neue PeerToPeer Verbindung aufgebaut.");
             setToastVisible(true);
             setTimeout(() => {
