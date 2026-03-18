@@ -73,7 +73,16 @@ export class Settings {
         // Purge server URLs that are in active list, but not in server list
         const urlsInList = new Set(this._servers.values());
         this._activeServerURLs = this._activeServerURLs.filter((url => urlsInList.has(url)));
+
+        // If the user has servers in the serverlist and none is selected, select the first
+        if (this._activeServerURLs.length == 0 && this._servers.size > 0) {
+            // Value cannot be undefined
+            const first = this._servers.values().next().value!;
+            this._activeServerURLs.push(first);
+        }
+
         storeSelectedServers(this._activeServerURLs);
+
         if (this._activeServerURLs.length == 0) {
             this._activeServerURLs = loadSelectedServerURLs();
         }
