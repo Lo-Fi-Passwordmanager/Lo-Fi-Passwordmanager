@@ -51,6 +51,7 @@ export class Settings {
     private peer: Peer;
     private connector: DataConnection;
     private _activeServerURLs: string[];
+    //name -- url
     private _servers: Map<string, string>;
     private _p2p: boolean;
 
