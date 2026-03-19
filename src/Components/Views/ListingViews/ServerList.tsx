@@ -37,7 +37,8 @@ const ServerList: React.FC<{
                             // Check if it's actually a WebSocket adapter and has the URL
                             return adapter instanceof WebSocketClientAdapter &&
                                 adapter.url === settingsViewModel.serverUrls.get(server);
-                        })?.isReady() ? <HiCheckCircle/> : <HiDotsCircleHorizontal/>}
+                             //@ts-expect-error     this call works by checking if the remotePeerId is set
+                        })?.remotePeerId ? <HiCheckCircle/> : <HiDotsCircleHorizontal/>}
                         
                         <button
                             className={`squareButton ${settingsViewModel.isLastServer() || settingsViewModel.isLastActiveServer(server) ? "disabled" : ""}`}
