@@ -855,6 +855,13 @@ input[type="number"] {
     z-index: 102;
 }
 
+.loadingSpinner.header {
+    height: 20px;
+    width: 20px;
+    animation: 1s linear infinite spinner-rotation;
+    margin: 5px 0;
+}
+
 .loadingText {
     width: 88.7px;
     text-align: start;
@@ -893,6 +900,12 @@ input[type="number"] {
     to {
         transform: rotate(360deg);
     }
+}
+
+.just-synced {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .passwordGen {

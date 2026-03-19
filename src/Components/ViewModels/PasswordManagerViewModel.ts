@@ -41,12 +41,8 @@ export const usePasswordManagerViewModel = () => {
         storage: new IndexedDBStorageAdapter()
     }));
 
-    function setLoggedIn(value: boolean) {
-        setLogedIn(value); //FIXME: was bezwekt diese Funktion?
-    }
-
     //Whenever something about the synchronisation happens, the old adapters get removed and new ones get added.
-    //This enables the repo the be kept as state while still changing the adapters
+    //This enables the repo to be kept as state while still changing the adapters
     useEffect(() => {
         const removeArray: NetworkAdapterInterface[] = [];
 
@@ -104,7 +100,7 @@ export const usePasswordManagerViewModel = () => {
         const handleRemoteChange = (payload: DocHandleChangePayload<unknown>) => {
             const localActorId = getActorId(payload.doc);
 
-            const newChanges = getChanges(payload.patchInfo.after, payload.patchInfo.before)
+            const newChanges = getChanges(payload.patchInfo.before, payload.patchInfo.after)
 
             const changesFromRemote = newChanges.some(change => {
                 const decoded = decodeChange(change);

@@ -1,7 +1,11 @@
-const LoadingSpinner = () => {
+import React from "react";
+
+const LoadingSpinner: React.FC<{
+    header?: boolean
+}> = (header) => {
     return (
         <svg
-            className="loadingSpinner"
+            className={`loadingSpinner ${header? "header" : ""}`}
             viewBox="0 0 78.711998 78.711998"
             version="1.1"
             id="spinner"
