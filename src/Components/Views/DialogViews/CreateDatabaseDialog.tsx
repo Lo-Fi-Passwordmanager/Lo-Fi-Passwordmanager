@@ -134,6 +134,8 @@ const CreateDatabaseDialog: React.FC<{
                 />
                 <label>Datenbank ID</label>
                 <div className="urlWrapper">
+                    <div className={"input-with-qr-container"} style={{position:"relative", width: "100%"}}> {/*FIXME: warum werden css styles nich übernommen?*/}
+
                     <input
                         type="text"
                         value={viewModel.field2}
@@ -152,6 +154,7 @@ const CreateDatabaseDialog: React.FC<{
                         viewModel.setField1(name);
                         viewModel.setField2(url);
                     }}/>
+                    </div>
                 </div>
                 <div className="confirm-cancel-buttons">
                     <button className={"rectangle-button"} onClick={viewModel.handleConfirm}>Bestätigen</button>

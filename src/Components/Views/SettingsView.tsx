@@ -152,10 +152,17 @@ const SettingsView: React.FC<{
                                                  justifyContent: "space-between",
                                                  width: "100%"
                                              }}> {/* for some reason are the styles from the css not applying */}
-                                            <input type="text"
+                                            <div className={"input-with-qr-container"} style={{position:"relative", width: "100%"}}>
+                                                <input type="text"
                                                    value={viewModel.remotePeerId}
                                                    onChange={(e) => viewModel.setRemotePeerId(e.target.value)}
-                                            />
+                                                />
+                                                <GenericQRScannerDialog title={"Peer verbinden"}
+                                                                        callback={(id: string) => viewModel.connectToPeer(id)}
+                                                                        closeScannerOnSuccess
+                                                                        style={{position: "absolute", right: 0, backgroundColor: "transparent", border: "none"}}
+                                                />
+                                            </div>
                                             <button
                                                 className="rectangle-button"
                                                 onClick={() => viewModel.connectToPeer}
@@ -163,9 +170,6 @@ const SettingsView: React.FC<{
                                             >
                                                 Verbinden
                                             </button>
-                                            <GenericQRScannerDialog title={"Peer verbinden"}
-                                                                    callback={(id: string) => viewModel.connectToPeer(id)}
-                                                                    closeScannerOnSuccess/>
                                         </div>
                                     </div>
                                 }

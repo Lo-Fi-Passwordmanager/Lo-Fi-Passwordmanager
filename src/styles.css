@@ -946,6 +946,11 @@ input[type="number"] {
     padding: 0.5rem;
     height: 49px;
     box-shadow: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: transparent;
+    border: none;
 }
 
 .dialogButtonContainer button {
@@ -1411,6 +1416,11 @@ input[type="number"] {
         margin-bottom: 2vh;
         gap: 10px;
         justify-content: space-between;
+        width: 100%;
+    }
+    
+    .input-with-qr-container {
+        position: relative;
         width: 100%;
     }
 
