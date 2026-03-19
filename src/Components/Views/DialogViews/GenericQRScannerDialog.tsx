@@ -1,4 +1,4 @@
-import React from "react";
+import React, {type HTMLAttributes} from "react";
 import {HiOutlineQrcode} from "react-icons/hi";
 
 import Dialog from "./Dialog.tsx";
@@ -17,10 +17,11 @@ export type GenericQRScannerDialogProps = {
  *
  * @param setInputFields Function to set the input fields based on the scanned QR code.
  */
-const GenericQRScannerDialog: React.FC<GenericQRScannerDialogProps> = ({
+const GenericQRScannerDialog: React.FC<GenericQRScannerDialogProps & HTMLAttributes<HTMLButtonElement>> = ({
     title,
     callback,
-    closeScannerOnSuccess
+    closeScannerOnSuccess,
+    ...props
 }: GenericQRScannerDialogProps) => {
     const viewModel = useGenericQRScannerViewModel(callback, closeScannerOnSuccess);
 
@@ -30,7 +31,7 @@ const GenericQRScannerDialog: React.FC<GenericQRScannerDialogProps> = ({
                 <button
                     className="qrButton"
                     onClick={() => viewModel.setQRScannerOpen(true)}>
-                    <HiOutlineQrcode size={24}/>
+                    <HiOutlineQrcode size={24} {...props}/>
                 </button>
                 <Dialog title={title ?? "QR Code Scanner"} onCloseDialog={() => viewModel.setQRScannerOpen(false)}
                         className="qrDialog">
