@@ -152,7 +152,7 @@ describe("AutomergeFacade unmocked Repo", () => {
 
     it("should identify parent changes as item move and resolve folder names", async () => {
         automergeFacade.createDatabase("move-salt", "move-validation");
-        const handle = await repo.find<any>(automergeFacade.automergeURL!);
+        const handle = await repo.find<AutomergeDoc>(automergeFacade.automergeURL!);
         await handle.whenReady();
 
         handle.change((doc: any) => {
