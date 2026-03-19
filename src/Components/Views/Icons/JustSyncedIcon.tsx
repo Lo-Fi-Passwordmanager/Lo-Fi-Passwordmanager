@@ -19,7 +19,7 @@ useEffect(() => {
         setTimeout(() => {
             setShowCheckmark(false);
         }, 3000);
-    }, 1000);
+    }, 750);
 }, [justSynced]);
 
 return (
