@@ -20,7 +20,7 @@ import {decodeChange, getActorId} from "@automerge/automerge";
 export const usePasswordManagerViewModel = () => {
     const settings = useSettings();
 
-    const [loggedIn, setLogedIn] = useState<boolean>(false);
+    const [loggedIn, setLoggedIn] = useState<boolean>(false);
     const [automergeFacade, setAutomergeFacade] = useState<AutomergeFacade | null>(null);
     const [securityProvider] = useState(() => new SecurityProvider());
     const timeout = Settings.getSettings().getTimeoutLength() * 60000;

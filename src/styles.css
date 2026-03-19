@@ -470,7 +470,7 @@ input[type="number"] {
     padding: 0 2vh;
 }
 
-.squareButton, .settingsButton, .copyButton, .eyeButton, .passwordGenButton {
+.squareButton, .settingsButton, .copyButton, .eyeButton, .passwordGenButton, .histroyButton {
     height: 2.5rem;
     aspect-ratio: 1;
     padding: 0.5rem;
@@ -547,6 +547,14 @@ input[type="number"] {
     margin-left: auto;
     position: absolute;
     right: 2vh;
+    top: 1.5vh
+}
+
+.histroyButton {
+    margin-left: auto;
+    position: absolute;
+    /* settingsButton-right + settingsButton width + padding */
+    right: calc(2vh + 40px + 10px);
     top: 1.5vh
 }
 

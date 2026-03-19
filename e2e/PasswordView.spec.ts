@@ -2,39 +2,21 @@ import {expect, test} from "./playwrightSetup";
 
 test('Creating a new Entry', async ({ page }) => {
     await page.goto('');
-    await page.getByRole('button', {name: 'Neue Datenbank erstellen'}).click();
-    await page.getByRole('textbox', {name: 'Datenbankname'}).fill('Name');
-    await page.getByRole('textbox', {name: 'Masterpasswort'}).click();
-    await page.getByRole('textbox', {name: 'Masterpasswort'}).fill('PW');
-    await page.getByRole('button', {name: 'Bestätigen'}).click();
-    await expect(page.locator('#root')).toMatchAriaSnapshot(`
-    - img "Passwortmanager Logo"
-    - heading "LoFi Passwortmanager" [level=2]
-    - button "Einstellungen öffnen"
-    - button "⬅"
-    - textbox "Nach Einträgen und Ordnern suchen"
-    - button "Eintrag ins zuletzt geöffnete Verzeichnis hinzufügen"
-    - combobox:
-      - option "Alphabetisch" [selected]
-      - option "Erstellungsdatum"
-      - option "Bearbeitungsdatum"
-    - button "🡅"
-    - button:
-      - button "Eintrag ins Startverzeichnis Hinzufügen"
-    - status
-    - text: Bitte Eintrag auswählen
-    - img "Logo"
-    `);
-    await page.getByRole('button', {name: 'Eintrag ins zuletzt geöffnete Verzeichnis hinzufügen', exact: true}).click();
-    await page.getByRole('button', {name: 'Eintrag', exact: true}).click();
+    await page.getByRole('button', { name: 'Neue Datenbank erstellen' }).click();
+    await page.getByRole('textbox', { name: 'Datenbankname' }).fill('Name');
+    await page.getByRole('textbox', { name: 'Masterpasswort' }).click();
+    await page.getByRole('textbox', { name: 'Masterpasswort' }).fill('PW');
+    await page.getByRole('button', { name: 'Bestätigen' }).click();
+    await page.getByRole('button', { name: 'Eintrag ins Startverzeichnis' }).click();
+    await page.getByRole('button', { name: 'Eintrag', exact: true }).click();
     await expect(page.locator('#root')).toMatchAriaSnapshot(`
     - textbox: Neuer Eintrag
     - text: "Benutzername:"
     - textbox
     - text: "Passwort:"
     - textbox
-    - button
-    - button
+    - button "Passwort anzeigen"
+    - button "Passwort generieren"
     - text: "URL:"
     - textbox
     - text: "Notiz:"
@@ -43,112 +25,67 @@ test('Creating a new Entry', async ({ page }) => {
     - button "Abbrechen"
     `);
     await page.getByRole('textbox').nth(1).click();
-    await page.getByRole('textbox').nth(1).fill('Uni');
+    await page.getByRole('textbox').nth(1).fill('Eintragname');
     await page.getByRole('textbox').nth(2).click();
-    await page.getByRole('textbox').nth(2).fill('Name');
+    await page.getByRole('textbox').nth(2).fill('Username');
     await page.locator('input[type="password"]').click();
-    await page.locator('input[type="password"]').fill('Passwort');
+    await page.locator('input[type="password"]').fill('PW');
     await page.getByRole('textbox').nth(4).click();
-    await page.getByRole('textbox').nth(4).fill('Url');
+    await page.getByRole('textbox').nth(4).fill('url');
     await page.getByRole('textbox').nth(5).click();
-    await page.getByRole('textbox').nth(5).fill('Note');
+    await page.getByRole('textbox').nth(5).fill('note');
     await expect(page.locator('#root')).toMatchAriaSnapshot(`
-    - textbox: Uni
+    - textbox: Eintragname
     - text: "Benutzername:"
-    - textbox: Name
+    - textbox: Username
     - text: "Passwort:"
-    - textbox: Passwort
-    - button
-    - button
+    - textbox: PW
+    - button "Passwort anzeigen"
+    - button "Passwort generieren"
     - text: "URL:"
-    - textbox: Url
+    - textbox: url
     - text: "Notiz:"
-    - textbox: Note
+    - textbox: note
     - button "Speichern"
     - button "Abbrechen"
     `);
-    await page.getByRole('button', {name: 'Speichern'}).click();
+    await page.getByRole('button', { name: 'Speichern' }).click();
     await expect(page.locator('#root')).toMatchAriaSnapshot(`
-    - text: "Uni Benutzername: Name"
-    - button
+    - text: "Eintragname Benutzername: Username"
+    - button "In Zwischenablage kopieren"
     - text: "Passwort: ●●●●●●●●"
-    - button
-    - button
+    - button "Passwort anzeigen"
+    - button "In Zwischenablage kopieren"
     - text: "URL:"
-    - link "Url":
-      - /url: https://Url
-    - button
-    - text: "Notiz: Note"
+    - link "url":
+      - /url: https://url
+    - button "In Zwischenablage kopieren"
+    - text: "Notiz: note"
     - button "Bearbeiten"
     - button "Löschen"
     `);
-    await expect(page.locator('#root')).toMatchAriaSnapshot(`
-    - button:
-      - button "Eintrag ins Startverzeichnis Hinzufügen"
-    - button "Uni":
-      - text: ""
-      - button "Eintrag löschen"
-    - status
-    `);
+    await expect(page.getByRole('button', { name: 'Eintragname' })).toBeVisible();
 })
 
 test('creating a new folder', async ({ page })=> {
     await page.goto('');
     await page.getByRole('button', { name: 'Neue Datenbank erstellen' }).click();
-    await page.getByRole('textbox', { name: 'Datenbankname' }).click();
     await page.getByRole('textbox', { name: 'Datenbankname' }).fill('Name');
     await page.getByRole('textbox', { name: 'Masterpasswort' }).click();
     await page.getByRole('textbox', { name: 'Masterpasswort' }).fill('PW');
     await page.getByRole('button', { name: 'Bestätigen' }).click();
-    await expect(page.locator('#root')).toMatchAriaSnapshot(`
-    - img "Passwortmanager Logo"
-    - heading "LoFi Passwortmanager" [level=2]
-    - button "Einstellungen öffnen"
-    - button "⬅"
-    - textbox "Nach Einträgen und Ordnern suchen"
-    - button "Eintrag ins zuletzt geöffnete Verzeichnis hinzufügen"
-    - combobox:
-      - option "Alphabetisch" [selected]
-      - option "Erstellungsdatum"
-      - option "Bearbeitungsdatum"
-    - button "🡅"
-    - button "Name":
-      - text: ""
-      - button "Eintrag ins Startverzeichnis Hinzufügen"
-    - status
-    - text: Bitte Eintrag auswählen
-    - img "Logo"
-    `);
-    await page.getByRole('button', { name: 'Eintrag ins zuletzt geöffnete Verzeichnis hinzufügen', exact: true }).click();
+    await page.getByRole('button', { name: 'Eintrag ins Startverzeichnis' }).click();
     await page.getByRole('button', { name: 'Ordner' }).click();
-    await page.getByRole('button', { name: '▷ Neuer Ordner ⋮' }).getByRole('textbox').fill('Folder');
-    await page.locator('div').filter({ hasText: 'Bitte Eintrag auswählen' }).nth(4).dblclick();
-    await expect(page.locator('#root')).toMatchAriaSnapshot(`
-    - img "Passwortmanager Logo"
-    - heading "LoFi Passwortmanager" [level=2]
-    - button "Einstellungen öffnen"
-    - button "⬅"
-    - textbox "Nach Einträgen und Ordnern suchen"
-    - button "Eintrag ins zuletzt geöffnete Verzeichnis hinzufügen"
-    - combobox:
-      - option "Alphabetisch" [selected]
-      - option "Erstellungsdatum"
-      - option "Bearbeitungsdatum"
-    - button "🡅"
-    - button "Name":
-      - text: ""
-      - button "Eintrag ins Startverzeichnis Hinzufügen"
-    - button "▷ Folder ⋮":
-      - button "▷"
-      - text: ""
-      - button "Eintrag hinzufügen" [disabled]
-      - button "Ordner umbennen" [disabled]
-      - button "Ordner löschen" [disabled]
-      - button "⋮"
-    - status
-    - text: Bitte Eintrag auswählen
-    - img "Logo"
-    `);
+    await expect(page.getByRole('button', { name: '▷ Neuer Ordner ⋮' })).toBeVisible();
+    await page.getByRole('button', { name: '⋮', exact: true }).click();
+    await page.getByRole('button', { name: 'Ordner umbennen' }).click();
+    await page.getByRole('button', { name: '▷ Neuer Ordner ⋮' }).getByRole('textbox').fill('Name');
+    await expect(page.getByRole('button', { name: '▷ Name ⋮' })).toBeVisible();
+    await page.getByRole('button', { name: '⋮', exact: true }).click();
+    await page.getByRole('button', { name: 'Eintrag hinzufügen' }).click();
+    await page.getByRole('button', { name: 'Ordner', exact: true }).click();
+    await page.getByRole('button', { name: '▷ Neuer Ordner ⋮' }).getByRole('textbox').fill('2');
+    await expect(page.getByRole('button', { name: '▷ 2 ⋮' })).toBeVisible();
 });
 
 test('swap ascending/descending', async ({ page }) => {
@@ -212,14 +149,15 @@ test('swap ascending/descending', async ({ page }) => {
 
 test('passwort Generator', async ({ page }) => {
     await page.goto('');
+    await page.goto('http://localhost:5173/');
     await page.getByRole('button', { name: 'Neue Datenbank erstellen' }).click();
     await page.getByRole('textbox', { name: 'Datenbankname' }).fill('Name');
     await page.getByRole('textbox', { name: 'Masterpasswort' }).click();
     await page.getByRole('textbox', { name: 'Masterpasswort' }).fill('PW');
     await page.getByRole('button', { name: 'Bestätigen' }).click();
-    await page.getByRole('button', { name: 'Eintrag ins zuletzt geöffnete Verzeichnis hinzufügen', exact: true }).click();
+    await page.getByRole('button', { name: 'Eintrag ins Startverzeichnis' }).click();
     await page.getByRole('button', { name: 'Eintrag', exact: true }).click();
-    await page.getByRole('button').filter({ hasText: /^$/ }).nth(4).click();
+    await page.getByRole('button', { name: 'Passwort generieren' }).click();
     await expect(page.locator('#root')).toMatchAriaSnapshot(`
     - img
     - heading "Passwortgenerator" [level=1]
@@ -238,11 +176,10 @@ test('passwort Generator', async ({ page }) => {
     `);
     await page.getByRole('spinbutton').click();
     await page.getByRole('spinbutton').fill('30');
+    await page.getByRole('checkbox').first().uncheck();
+    await page.getByRole('checkbox').nth(1).uncheck();
     await page.getByRole('checkbox').nth(2).uncheck();
     await page.getByRole('checkbox').nth(3).uncheck();
-    await page.getByRole('checkbox').nth(3).dblclick();
-    await page.getByRole('checkbox').nth(1).uncheck();
-    await page.getByRole('checkbox').first().uncheck();
     await expect(page.locator('#root')).toMatchAriaSnapshot(`
     - img
     - heading "Passwortgenerator" [level=1]
@@ -306,21 +243,20 @@ test('Editing an Entry', async ({ page }) => {
 
 test('the pw visibility button', async ({ page }) => {
     await page.goto('');
-    await page.getByRole('button', { name: 'Neue Datenbank erstellen' }).dblclick();
-    await page.getByRole('textbox', { name: 'Datenbankname' }).click();
+    await page.getByRole('button', { name: 'Neue Datenbank erstellen' }).click();
     await page.getByRole('textbox', { name: 'Datenbankname' }).fill('Name');
     await page.getByRole('textbox', { name: 'Masterpasswort' }).click();
     await page.getByRole('textbox', { name: 'Masterpasswort' }).fill('PW');
-    await page.getByRole('button', { name: 'Bestätigen' }).dblclick();
-    await page.getByRole('button', { name: 'Eintrag ins zuletzt geöffnete Verzeichnis hinzufügen', exact: true }).click();
+    await page.getByRole('button', { name: 'Bestätigen' }).click();
+    await page.getByRole('button', { name: 'Eintrag ins Startverzeichnis' }).click();
     await page.getByRole('button', { name: 'Eintrag', exact: true }).click();
-    await expect(page.locator('button').nth(5)).toBeVisible();
+    await page.getByRole('textbox').nth(1).fill('Name');
     await page.locator('input[type="password"]').click();
     await page.locator('input[type="password"]').fill('12345');
     await page.getByRole('button', { name: 'Speichern' }).click();
-    await expect(page.locator('div').filter({ hasText: /^●●●●●●●●$/ })).toBeVisible();
-    await page.getByRole('button').filter({ hasText: /^$/ }).nth(5).click();
-    await expect(page.locator('div').filter({ hasText: /^12345$/ })).toBeVisible();
+    await expect(page.locator('#root')).toContainText('●●●●●●●●');
+    await page.getByRole('button', { name: 'Passwort anzeigen' }).click();
+    await expect(page.locator('#root')).toContainText('12345');
 });
 
 

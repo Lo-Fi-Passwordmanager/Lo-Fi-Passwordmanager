@@ -121,15 +121,18 @@ test("auto logout input field", async ({ page }) => {
 
 test("add server field", async ({ page }) => {
     await page.goto('');
-    await page.getByRole('button', {name: 'Einstellungen öffnen'}).click();
-
-    await page.getByRole('button').nth(5).click();
+    await page.getByRole('button', { name: 'Einstellungen öffnen' }).click();
+    await page.getByRole('button').filter({ hasText: 'Sync Server hinzufügen' }).click();
     await page.getByRole('textbox', { name: 'Server Name: Server URL:' }).fill('Name');
     await page.getByRole('textbox', { name: 'wss://my.sync-server.org' }).click();
     await page.getByRole('textbox', { name: 'wss://my.sync-server.org' }).fill('wss://mein-server.org');
     await page.getByRole('button', { name: 'Hinzufügen' }).click();
-    await expect(page.getByText('Verfügbare Server:')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Name' })).toBeVisible();
-    await expect(page.getByRole('button').filter({ hasText: /^$/ }).nth(2)).toBeVisible();
-    await page.getByRole('button').filter({ hasText: /^$/ }).nth(2).click();
+    await expect(page.locator('#root')).toMatchAriaSnapshot(`
+    - checkbox [checked] [disabled]
+    - text: PSE Dev Server
+    - button "Server entfernen" [disabled]
+    - checkbox
+    - text: Name
+    - button "Server entfernen"
+    `);
 });

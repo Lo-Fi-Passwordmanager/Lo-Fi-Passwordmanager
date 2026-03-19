@@ -1,4 +1,4 @@
-import React from "react";
+import React, {type HTMLAttributes, type PropsWithChildren} from "react";
 
 import Dialog from "./Dialog.tsx";
 import {HistoryItem} from "./HistoryItem.tsx";
@@ -10,18 +10,28 @@ import {useHistoryViewModel} from "../../ViewModels/Dialog/HistoryViewModel.ts";
  * A dialog that shows the history of changes made to the document.
  *
  * @param automergeFacade The automerge facade used to access the document history.
+ * @param children Optionally pass children that will be the contents of the button to open this dialog.
  */
-export const HistoryDialog: React.FC<{ automergeFacade: AutomergeFacade }> = ({automergeFacade}) => {
+export const HistoryDialog: React.FC<{
+    automergeFacade: AutomergeFacade
+} & PropsWithChildren & HTMLAttributes<HTMLButtonElement>> = ({
+    automergeFacade,
+    children,
+    ...buttonProps
+}) => {
 
     const viewModel = useHistoryViewModel(automergeFacade);
 
     return (
         <>
             <button
-                onClick={() => {viewModel.setHistoryOpen(true);
-                    void viewModel.loadHistory();}}
+                onClick={() => {
+                    viewModel.setHistoryOpen(true);
+                    void viewModel.loadHistory();
+                }}
+                {...buttonProps}
             >
-                Änderungsverlauf
+                {children ?? "Änderungsverlauf"}
             </button>
             {
                 viewModel.historyOpen &&
