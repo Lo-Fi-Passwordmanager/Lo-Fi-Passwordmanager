@@ -859,7 +859,6 @@ input[type="number"] {
     height: 20px;
     width: 20px;
     animation: 1s linear infinite spinner-rotation;
-    margin: 5px 0;
 }
 
 .loadingText {
@@ -904,7 +903,7 @@ input[type="number"] {
 
 .just-synced {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     height: 100%;
 }
 

@@ -1,0 +1,31 @@
+import React, {useEffect, useState} from 'react';
+import {HiCheckCircle} from "react-icons/hi2";
+
+import LoadingSpinner from "./LoadingSpinner.tsx";
+
+/**
+ * Icon that indicates that a merge just came in from another device
+ * @param justSynced - Whether a merge just came in from another device
+ */
+const JustSyncedIcon: React.FC<{
+    justSynced?: boolean;
+}> = ({justSynced}) => {
+
+    const [showCheckmark, setShowCheckmark] = useState<boolean>(false);
+
+useEffect(() => {
+    setTimeout(() => {
+        setShowCheckmark(true);
+    }, 1000);
+    setTimeout(() => {
+        setShowCheckmark(false);
+    }, 3000);
+}, [justSynced]);
+
+return (
+    justSynced && <div className={"just-synced"}>
+        {!showCheckmark? <LoadingSpinner header/> : <HiCheckCircle size={20}/>}
+        Synchronisiert
+    </div>
+)};
+export default JustSyncedIcon;
