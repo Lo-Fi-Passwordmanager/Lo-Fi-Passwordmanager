@@ -511,6 +511,7 @@ input[type="number"] {
 .squareButton, .settingsButton, .copyButton, .eyeButton, .passwordGenButton {
     height: 2.5rem;
     width: 2.5rem;
+    aspect-ratio: 1;
     padding: 0.5rem;
 }
 
