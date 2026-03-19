@@ -1,5 +1,5 @@
 import {
-    BroadcastChannelNetworkAdapter,
+    BroadcastChannelNetworkAdapter, type DocHandle,
     IndexedDBStorageAdapter,
     type NetworkAdapterInterface,
     Repo,
@@ -18,6 +18,7 @@ import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
  */
 export const usePasswordManagerViewModel = () => {
     const settings = useSettings();
+
     const [loggedIn, setLogedIn] = useState<boolean>(false);
     const [automergeFacade, setAutomergeFacade] = useState<AutomergeFacade | null>(null);
     const [securityProvider] = useState(() => new SecurityProvider());
@@ -26,21 +27,23 @@ export const usePasswordManagerViewModel = () => {
     const [toastVisible, setToastVisible] = useState(false);
     const [openedDatabaseName, setOpenedDatabaseName] = useState<string>("");
     const [oldP2PSize, setOldP2PSize] = useState<number>(settings.getConnectorsToAdapters().size);
-
-    function setLoggedIn(value: boolean) {
-        setLogedIn(value);
-    }
-
-    const [repo] = useState(new Repo({
-        network: [new BroadcastChannelNetworkAdapter()],
-        storage: new IndexedDBStorageAdapter()
-    }));
+    const [justSynced, setJustSynced] = useState<boolean>(false);
 
     const syncEnabled = settings.getSynchronization();
     const p2pEnabled = settings.getP2P();
     const connectorsSize = settings.getConnectorsToAdapters().size;
     const connectorAdapter = settings.getConnectorsToAdapters();
     const servers = settings.getActiveServerUrls();
+
+    const [repo] = useState(new Repo({
+        network: [new BroadcastChannelNetworkAdapter()],
+        storage: new IndexedDBStorageAdapter()
+    }));
+
+    function setLoggedIn(value: boolean) {
+        setLogedIn(value); //FIXME: was bezwekt diese Funktion?
+    }
+
     //Whenever something about the synchronisation happens, the old adapters get removed and new ones get added.
     //This enables the repo the be kept as state while still changing the adapters
     useEffect(() => {
@@ -90,6 +93,40 @@ export const usePasswordManagerViewModel = () => {
         setOldP2PSize(connectorsSize);
     }, [connectorsSize, oldP2PSize]);
 
+    // recognize changes from remote
+    useEffect(() => {
+        if(!automergeFacade) return;
+        if(!automergeFacade.automergeURL) return;
+
+        let handle: DocHandle<unknown> | null = null;
+
+        const handleRemoteChange = () => {
+            setJustSynced(true);
+            setTimeout(() => {
+                setJustSynced(false);
+            }, 3000);
+        };
+        
+        const setupListener = async () => {
+            try {
+                handle = await repo.find(automergeFacade.automergeURL!);
+
+                handle.on("remote-heads", handleRemoteChange);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        
+        void setupListener();
+        
+        return () => {
+            if (handle && typeof handleRemoteChange === "function") {
+                handle.off("remote-heads", handleRemoteChange);
+            }
+        }
+    }, [automergeFacade, repo]);
+
+
     function getAutomergeFacade(): AutomergeFacade | null {
         return automergeFacade;
     }
@@ -131,6 +168,7 @@ export const usePasswordManagerViewModel = () => {
         toastVisible,
         openedDatabaseName,
         loggedIn,
+        justSynced,
         setOpenedDatabaseName,
         setLoggedIn,
         setAutomergeFacade,

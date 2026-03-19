@@ -40,6 +40,7 @@ const PasswordManagerView: React.FC = () => {
                              className="logo header" alt="Passwortmanager Logo"/>
                         <h2 onClick={() => viewModel.closeLoggedIn()} style={{cursor: "pointer"}}>LoFi
                             Passwortmanager</h2>
+                        {viewModel.justSynced && <span style={{color: "green", marginLeft: "1em"}}>Synchronisiert</span>}
                         <SettingsView automergeFacade={viewModel.getAutomergeFacade()}
                                       openedDbName={viewModel.openedDatabaseName}
                                       closeDatabase={() => viewModel.closeLoggedIn()}
