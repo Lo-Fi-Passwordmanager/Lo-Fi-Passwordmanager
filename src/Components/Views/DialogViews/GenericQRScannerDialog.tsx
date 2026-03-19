@@ -30,8 +30,8 @@ const GenericQRScannerDialog: React.FC<GenericQRScannerDialogProps & HTMLAttribu
             <>
                 <button
                     className="qrButton"
-                    onClick={() => viewModel.setQRScannerOpen(true)}>
-                    <HiOutlineQrcode size={24} {...props}/>
+                    onClick={() => viewModel.setQRScannerOpen(true)} {...props}>
+                    <HiOutlineQrcode size={24}/>
                 </button>
                 <Dialog title={title ?? "QR Code Scanner"} onCloseDialog={() => viewModel.setQRScannerOpen(false)}
                         className="qrDialog">
