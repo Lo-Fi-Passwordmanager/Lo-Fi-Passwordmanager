@@ -3,12 +3,12 @@ import {HiOutlineQrcode} from "react-icons/hi";
 import QRCode from "react-qr-code";
 
 import Dialog from "./Dialog.tsx";
-import {useShareQRViewModel} from "../../ViewModels/Dialog/ShareQRViewModel.ts";
+import {useShareDatabaseQRViewModel} from "../../ViewModels/Dialog/ShareDatabaseQRViewModel.ts";
 import SliderCheckBox from "../ButtonViews/SliderCheckBox.tsx";
 
 // QRCode Generator https://github.com/rosskhanas/react-qr-code
 
-interface ShareQRDialogProps {
+interface ShareDatabaseQRDialogProps {
     name: string,
     url: string
 }
@@ -19,8 +19,8 @@ interface ShareQRDialogProps {
  * @param name The name of the database to share.
  * @param url The URL of the database to share.
  */
-const ShareQRDialog: React.FC<ShareQRDialogProps> = ({name, url}: ShareQRDialogProps) => {
-    const viewModel = useShareQRViewModel(name, url);
+const ShareDatabaseQRDialog: React.FC<ShareDatabaseQRDialogProps> = ({name, url}: ShareDatabaseQRDialogProps) => {
+    const viewModel = useShareDatabaseQRViewModel(name, url);
 
     if (viewModel.shareQRCodeOpen) {
         return (
@@ -33,7 +33,8 @@ const ShareQRDialog: React.FC<ShareQRDialogProps> = ({name, url}: ShareQRDialogP
                 </button>
                 <Dialog title={"Datenbank teilen"} onCloseDialog={() => viewModel.setShareQRCodeOpen(false)}
                         className="qrDialog">
-                    <p>Scanne den QR-Code auf einem anderen Gerät im &quot;Datenbank hinzufügen&quot; Dialog, um die Datenbank mit
+                    <p>Scanne den QR-Code auf einem anderen Gerät im &quot;Datenbank hinzufügen&quot; Dialog, um die
+                       Datenbank mit
                        dem Namen &quot;{name}&quot;
                        dort
                        hinzuzufügen.</p>
@@ -57,4 +58,4 @@ const ShareQRDialog: React.FC<ShareQRDialogProps> = ({name, url}: ShareQRDialogP
         );
     }
 };
-export default ShareQRDialog;
+export default ShareDatabaseQRDialog;

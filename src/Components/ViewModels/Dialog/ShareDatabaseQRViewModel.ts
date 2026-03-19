@@ -7,7 +7,7 @@ import {Settings} from "../../../Model/Settings.ts";
  * @param name the name that should be displayed in the QR Code
  * @param url the url that should be displayed in the QR Code
  */
-export const useShareQRViewModel = (name: string, url: string) => {
+export const useShareDatabaseQRViewModel = (name: string, url: string) => {
 
     const [shareQRCodeOpen, setShareQRCodeOpen] = useState(false);
     const [shareName, setShareName] = useState(false);

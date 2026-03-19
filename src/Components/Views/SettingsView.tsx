@@ -8,6 +8,8 @@ import CopyButton from "./ButtonViews/CopyButton.tsx";
 import SliderCheckBox from "./ButtonViews/SliderCheckBox.tsx";
 import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
 import Dialog from "./DialogViews/Dialog.tsx";
+import GenericQRDialog from "./DialogViews/GenericQRDialog.tsx";
+import GenericQRScannerDialog from "./DialogViews/GenericQRScannerDialog.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
 import ServerList from "./ListingViews/ServerList.tsx";
 
@@ -108,93 +110,103 @@ const SettingsView: React.FC<{
                                     </div>
                                 </div>
                             )}
-
-                            {automergeFacade ? null : (
-                                <div className="connection-settings">
-                                    {!viewModel.synchronisation ? null : (
-                                        <ServerList settingsViewModel={viewModel}/>
-                                    )}
+                            <div className="connection-settings">
+                                {!viewModel.synchronisation ? null : (
+                                    <ServerList settingsViewModel={viewModel}/>
+                                )}
 
 
-                                    {!viewModel.P2P ? null :
-                                        <div className={"connection-settings"}>
+                                {!viewModel.P2P ? null :
+                                    <div className={"connection-settings"}>
 
-                                            <h4>Peer-To-Peer Verbindung</h4>
-                                            <label>Eigene Peer-ID:</label>
+                                        <h4>Peer-To-Peer Verbindung</h4>
+                                        <label>Eigene Peer-ID:</label>
 
-                                            <div style={{
-                                                display: "flex",
-                                                marginBottom: "2vh",
-                                                gap: "10px",
-                                                justifyContent: "space-between",
-                                                width: "100%"
-                                            }}> {/* for some reason are the styles from the css not applying */}
-                                                <label className={"current-server"}>{viewModel.getPeerId()}</label>
-                                                <CopyButton
-                                                    copyAndClearClipboard={(text) => void viewModel.copyToClipboard(text)}
-                                                    attributeValue={viewModel.getPeerId()}
-                                                    style={{marginLeft: "0"}}
-                                                />
-                                            </div>
-                                            <label>Fremde Peer-ID:</label>
-                                            <div className={"peer-connection-input"}
-                                                 style={{
-                                                     display: "flex",
-                                                     marginBottom: "2vh",
-                                                     gap: "10px",
-                                                     justifyContent: "space-between",
-                                                     width: "100%"
-                                                 }}> {/* for some reason are the styles from the css not applying */}
-                                                <input type="text"
-                                                       value={viewModel.remotePeerId}
-                                                       onChange={(e) => viewModel.setRemotePeerId(e.target.value)}
-                                                />
-                                                <button
-                                                    className="rectangle-button"
-                                                    onClick={viewModel.connectToPeer}
-                                                    title={"Mit Peer verbinden"}
-                                                >
-                                                    Verbinden
-                                                </button>
-                                            </div>
+                                        <div style={{
+                                            display: "flex",
+                                            marginBottom: "2vh",
+                                            gap: "10px",
+                                            justifyContent: "space-between",
+                                            width: "100%"
+                                        }}> {/* for some reason are the styles from the css not applying */}
+                                            <label className={"current-server"}>{viewModel.getPeerId()}</label>
+                                            <CopyButton
+                                                copyAndClearClipboard={(text) => void viewModel.copyToClipboard(text)}
+                                                attributeValue={viewModel.getPeerId()}
+                                                style={{marginLeft: "0"}}
+                                            />
+                                            <GenericQRDialog title={"Peer-ID teilen"}
+                                                             qrValue={viewModel.getPeerId()}>
+                                                <p>Scanne den QR-Code auf einem anderen Gerät in den Einstellungen
+                                                   unter &quot;Allgemeine
+                                                   Einstellungen&quot; &rarr; &quot;Peer-To-Peer
+                                                   Verbindung&quot;</p>
+                                            </GenericQRDialog>
                                         </div>
-                                    }
+                                        <label>Fremde Peer-ID:</label>
+                                        <div className={"peer-connection-input"}
+                                             style={{
+                                                 display: "flex",
+                                                 marginBottom: "2vh",
+                                                 gap: "10px",
+                                                 justifyContent: "space-between",
+                                                 width: "100%"
+                                             }}> {/* for some reason are the styles from the css not applying */}
+                                            <div className={"input-with-qr-container"} style={{position:"relative", width: "100%"}}>
+                                                <input type="text"
+                                                   value={viewModel.remotePeerId}
+                                                   onChange={(e) => viewModel.setRemotePeerId(e.target.value)}
+                                                />
+                                                <GenericQRScannerDialog title={"Peer verbinden"}
+                                                                        callback={(id: string) => viewModel.connectToPeer(id)}
+                                                                        closeScannerOnSuccess
+                                                                        style={{position: "absolute", right: 0, backgroundColor: "transparent", border: "none"}}
+                                                />
+                                            </div>
+                                            <button
+                                                className="rectangle-button"
+                                                onClick={() => viewModel.connectToPeer}
+                                                title={"Mit Peer verbinden"}
+                                            >
+                                                Verbinden
+                                            </button>
+                                        </div>
+                                    </div>
+                                }
 
-                                    {viewModel.otherPeerMap.size > 0 && viewModel.P2P && (
-                                        <div className="scrollableContainer server-list">
-                                            <span>Verbundene Peers:</span>
+                                {viewModel.otherPeerMap.size > 0 && viewModel.P2P && (
+                                    <div className="scrollableContainer server-list">
+                                        <span>Verbundene Peers:</span>
 
-                                            {Array.from(viewModel.otherPeerMap.keys()).map((id) => (
-                                                <div className="server-item" key={id}>
-                                                    <button
-                                                        style={{
-                                                            display: "block",
-                                                            whiteSpace: "nowrap",
-                                                            overflow: "hidden",
-                                                            textOverflow: "ellipsis",
-                                                            flex: 1
-                                                        }}
-                                                    >
-                                                        <span>{id}</span>
-                                                    </button>
+                                        {Array.from(viewModel.otherPeerMap.keys()).map((id) => (
+                                            <div className="server-item" key={id}>
+                                                <button
+                                                    style={{
+                                                        display: "block",
+                                                        whiteSpace: "nowrap",
+                                                        overflow: "hidden",
+                                                        textOverflow: "ellipsis",
+                                                        flex: 1
+                                                    }}
+                                                >
+                                                    <span>{id}</span>
+                                                </button>
 
                                                     <span>
                                                         {viewModel.otherPeerMap.get(id)![1].isReady() ? <HiCheckCircle/> : <HiDotsCircleHorizontal/>}
                                                     </span>
 
-                                                    <button
-                                                        className="squareButton"
-                                                        onClick={() => void viewModel.removePeer(id)}
-                                                        title={"Peer entfernen"}
-                                                    >
-                                                        <HiTrash size={24}/>
-                                                    </button>
+                                                <button
+                                                    className="squareButton"
+                                                    onClick={() => void viewModel.removePeer(id)}
+                                                    title={"Peer entfernen"}
+                                                >
+                                                    <HiTrash size={24}/>
+                                                </button>
                                                 </div>
                                             ))}
                                         </div>)}
-
-                                </div>
-                            )}
+                            </div>
                         </div>
                     )}
 

@@ -1,26 +1,39 @@
-import React from "react";
+import React, {type HTMLAttributes} from "react";
 import {HiOutlineQrcode} from "react-icons/hi";
 
 import Dialog from "./Dialog.tsx";
-import useQRScannerViewModel from "../../ViewModels/Dialog/qrScannerViewModel.ts";
+import useGenericQRScannerViewModel, {
+    type GenericQRScannerCallback
+} from "../../ViewModels/Dialog/GenericQRScannerViewModel.ts";
+
+export type GenericQRScannerDialogProps = {
+    title?: string
+    callback: GenericQRScannerCallback,
+    closeScannerOnSuccess?: boolean
+}
 
 /**
  * A dialog that allows the user to scan a QR code of a shared database.
  *
  * @param setInputFields Function to set the input fields based on the scanned QR code.
  */
-const QRScannerDialog: React.FC<{ setInputFields: (name: string, url: string) => void }> = ({setInputFields}) => {
-    const viewModel = useQRScannerViewModel(setInputFields);
+const GenericQRScannerDialog: React.FC<GenericQRScannerDialogProps & HTMLAttributes<HTMLButtonElement>> = ({
+    title,
+    callback,
+    closeScannerOnSuccess,
+    ...props
+}: GenericQRScannerDialogProps) => {
+    const viewModel = useGenericQRScannerViewModel(callback, closeScannerOnSuccess);
 
     if (viewModel.qrScannerOpen) {
         return (
             <>
                 <button
                     className="qrButton"
-                    onClick={() => viewModel.setQRScannerOpen(true)}>
+                    onClick={() => viewModel.setQRScannerOpen(true)} {...props}>
                     <HiOutlineQrcode size={24}/>
                 </button>
-                <Dialog title={"QR Code Scanner"} onCloseDialog={() => viewModel.setQRScannerOpen(false)}
+                <Dialog title={title ?? "QR Code Scanner"} onCloseDialog={() => viewModel.setQRScannerOpen(false)}
                         className="qrDialog">
                     <video id="qrVideo"/>
                     {viewModel.scanError && <p id="error">Ungültiger QR Code</p>}
@@ -37,4 +50,4 @@ const QRScannerDialog: React.FC<{ setInputFields: (name: string, url: string) =>
         );
     }
 };
-export default QRScannerDialog;
+export default GenericQRScannerDialog;
