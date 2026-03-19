@@ -107,13 +107,13 @@ export const usePasswordManagerViewModel = () => {
         }
     };
 
-    const onActive = () => {
+    const onAction = () => {
         if (toastVisible) {
             setToastVisible(false);
         }
     };
 
-    const idleTimer = useIdleTimer({timeout, onIdle, onActive, debounce: 100});
+    const idleTimer = useIdleTimer({timeout, onIdle, onAction, debounce: 100});
 
 
     useEffect(() => {
