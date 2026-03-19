@@ -904,7 +904,9 @@ input[type="number"] {
 .just-synced {
     display: flex;
     flex-direction: row;
+    align-items: center;
     height: 100%;
+    gap: 8px;
 }
 
 .passwordGen {

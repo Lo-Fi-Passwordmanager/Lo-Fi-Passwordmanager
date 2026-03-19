@@ -16,10 +16,10 @@ const JustSyncedIcon: React.FC<{
 useEffect(() => {
     setTimeout(() => {
         setShowCheckmark(true);
+        setTimeout(() => {
+            setShowCheckmark(false);
+        }, 3000);
     }, 1000);
-    setTimeout(() => {
-        setShowCheckmark(false);
-    }, 3000);
 }, [justSynced]);
 
 return (
