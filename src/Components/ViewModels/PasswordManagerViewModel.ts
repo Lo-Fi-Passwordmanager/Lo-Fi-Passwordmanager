@@ -1,5 +1,5 @@
 import {
-    BroadcastChannelNetworkAdapter, type DocHandle,
+    BroadcastChannelNetworkAdapter, type DocHandle, type DocHandleChangePayload, getChanges,
     IndexedDBStorageAdapter,
     type NetworkAdapterInterface,
     Repo,
@@ -12,6 +12,7 @@ import {PeerjsNetworkAdapter} from "../../../customNetworkAdapter/PeerJsNetworkA
 import {Settings, useSettings} from "../../Model/Settings.ts";
 import type {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
+import {decodeChange, getActorId} from "@automerge/automerge";
 
 /**
  * The view model used by the PasswordManagerView. Manages the state and logic for the password manager.
@@ -95,33 +96,46 @@ export const usePasswordManagerViewModel = () => {
 
     // recognize changes from remote
     useEffect(() => {
-        if(!automergeFacade) return;
-        if(!automergeFacade.automergeURL) return;
+        if (!automergeFacade) return;
+        if (!automergeFacade.automergeURL) return;
 
         let handle: DocHandle<unknown> | null = null;
 
-        const handleRemoteChange = () => {
+        const handleRemoteChange = (payload: DocHandleChangePayload<unknown>) => {
+            const localActorId = getActorId(payload.doc);
+
+            const newChanges = getChanges(payload.patchInfo.after, payload.patchInfo.before)
+
+            const changesFromRemote = newChanges.some(change => {
+                const decoded = decodeChange(change);
+                return decoded.actor !== localActorId;
+            })
+
+            if (!changesFromRemote) {
+                return;
+            }
+
             setJustSynced(true);
             setTimeout(() => {
                 setJustSynced(false);
             }, 3000);
         };
-        
+
         const setupListener = async () => {
             try {
                 handle = await repo.find(automergeFacade.automergeURL!);
 
-                handle.on("remote-heads", handleRemoteChange);
+                handle.on("change", handleRemoteChange);
             } catch (error) {
                 console.error(error);
             }
         };
-        
+
         void setupListener();
-        
+
         return () => {
             if (handle && typeof handleRemoteChange === "function") {
-                handle.off("remote-heads", handleRemoteChange);
+                handle.off("change", handleRemoteChange);
             }
         }
     }, [automergeFacade, repo]);
