@@ -2,7 +2,7 @@ import type {AutomergeUrl} from "@automerge/automerge-repo";
 import React from "react";
 
 import Dialog from "./Dialog.tsx";
-import QRScannerDialog from "./QRScannerDialog.tsx";
+import ShareDatabaseQRScannerDialog from "./ShareDatabaseQRScannerDialog.tsx";
 import {useCreateDatabaseViewModel} from "../../ViewModels/Dialog/CreateDatabaseViewModel.ts";
 import EyeButton from "../ButtonViews/EyeButton.tsx";
 
@@ -134,6 +134,8 @@ const CreateDatabaseDialog: React.FC<{
                 />
                 <label>Datenbank ID</label>
                 <div className="urlWrapper">
+                    <div className={"input-with-qr-container"} style={{position:"relative", width: "100%"}}> {/*FIXME: warum werden css styles nich übernommen?*/}
+
                     <input
                         type="text"
                         value={viewModel.field2}
@@ -148,10 +150,11 @@ const CreateDatabaseDialog: React.FC<{
                             }
                         }}
                     />
-                    <QRScannerDialog setInputFields={(name, url) => {
+                    <ShareDatabaseQRScannerDialog setInputFields={(name, url) => {
                         viewModel.setField1(name);
                         viewModel.setField2(url);
                     }}/>
+                    </div>
                 </div>
                 <div className="confirm-cancel-buttons">
                     <button className={"rectangle-button"} onClick={viewModel.handleConfirm}>Bestätigen</button>

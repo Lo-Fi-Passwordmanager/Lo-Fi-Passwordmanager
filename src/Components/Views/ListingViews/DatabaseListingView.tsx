@@ -5,7 +5,7 @@ import {HiTrash} from "react-icons/hi";
 import DatabaseListingViewModel from "../../ViewModels/Listing/DatabaseListingViewModel.ts";
 import CopyButton from "../ButtonViews/CopyButton.tsx";
 import RenameDatabaseDialog from "../DialogViews/RenameDatabaseDialog.tsx";
-import ShareQRDialog from "../DialogViews/ShareQRDialog.tsx";
+import ShareDatabaseQRDialog from "../DialogViews/ShareDatabaseQRDialog.tsx";
 import ToastDialog from "../DialogViews/ToastDialog.tsx";
 
 /**
@@ -21,11 +21,11 @@ const DatabaseListingView: React.FC<{
     removeDatabase: (db: string) => void;
     renameDatabase: (oldName: string, newName: string) => void;
 }> = ({
-    databases,
-    openDatabase,
-    removeDatabase,
-    renameDatabase
-}) => {
+          databases,
+          openDatabase,
+          removeDatabase,
+          renameDatabase
+      }) => {
 
     const viewModel = DatabaseListingViewModel();
 
@@ -39,7 +39,7 @@ const DatabaseListingView: React.FC<{
                     <div className={"DatabaseAndOptions"} key={dbName}>
                         <button
                             onClick={() => openDatabase(dbName)}
-                        title="Datenbank öffnen">
+                            title="Datenbank öffnen">
                             {dbName}
                         </button>
                         <CopyButton
@@ -47,14 +47,14 @@ const DatabaseListingView: React.FC<{
                             attributeValue={url}
                             title="Datenbank ID in die Zwischenablage kopieren"
                             style={{marginLeft: "0"}}
-                            />
-                        <ShareQRDialog name={dbName} url={url}/>
+                        />
+                        <ShareDatabaseQRDialog name={dbName} url={url}/>
                         <RenameDatabaseDialog oldName={dbName} renameDatabase={renameDatabase}/>
                         <button
                             className={"squareButton"}
-                            onClick={() => removeDatabase(dbName)}>
-                            <HiTrash size={24}
-                            title="Datenbank entfernen"/>
+                            onClick={() => removeDatabase(dbName)}
+                            title="Datenbank entfernen">
+                            <HiTrash size={24}/>
                         </button>
                     </div>
                 ))}

@@ -7,20 +7,17 @@ test('if the history displays the creation of an item', async ({ page }) => {
     await page.getByRole('textbox', { name: 'Masterpasswort' }).click();
     await page.getByRole('textbox', { name: 'Masterpasswort' }).fill('PW');
     await page.getByRole('button', { name: 'Bestätigen' }).click();
-    await page.getByRole('button', { name: 'Einstellungen öffnen' }).click();
-    await page.getByRole('button', { name: 'Datenbankeinstellungen' }).dblclick();
-    await page.getByRole('button', { name: 'Änderungsverlauf' }).dblclick();
-    await expect(page.getByRole('main')).toMatchAriaSnapshot(`
+    await page.getByRole('button').first().click();
+    await expect(page.locator('#root')).toMatchAriaSnapshot(`
     - img
     - heading "Änderungsverlauf" [level=1]
     `);
-    await page.getByRole('img').nth(1).click();
-    await page.getByRole('button', { name: 'Eintrag ins Startverzeichnis Hinzufügen', exact: true }).click();
+    await page.getByRole('img').nth(2).click();
+    await page.getByRole('button', { name: 'Eintrag ins Startverzeichnis' }).click();
     await page.getByRole('button', { name: 'Eintrag', exact: true }).click();
-    await page.getByRole('textbox').nth(1).fill('1');
+    await page.getByRole('textbox').nth(1).fill('Neu');
     await page.getByRole('button', { name: 'Speichern' }).click();
-    await page.getByRole('button', { name: 'Einstellungen öffnen' }).click();
-    await page.getByRole('button', { name: 'Änderungsverlauf' }).click();
+    await page.getByRole('button').first().click();
     await expect(page.getByText('Eintrag erstellt')).toBeVisible();
-    await expect(page.getByRole('heading', { name: '1' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Neu' })).toBeVisible();
 });

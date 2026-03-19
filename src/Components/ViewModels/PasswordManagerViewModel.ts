@@ -18,7 +18,7 @@ import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
  */
 export const usePasswordManagerViewModel = () => {
     const settings = useSettings();
-    const [loggedIn, setLogedIn] = useState<boolean>(false);
+    const [loggedIn, setLoggedIn] = useState<boolean>(false);
     const [automergeFacade, setAutomergeFacade] = useState<AutomergeFacade | null>(null);
     const [securityProvider] = useState(() => new SecurityProvider());
     const timeout = Settings.getSettings().getTimeoutLength() * 60000;
@@ -26,10 +26,6 @@ export const usePasswordManagerViewModel = () => {
     const [toastVisible, setToastVisible] = useState(false);
     const [openedDatabaseName, setOpenedDatabaseName] = useState<string>("");
     const [oldP2PSize, setOldP2PSize] = useState<number>(settings.getConnectorsToAdapters().size);
-
-    function setLoggedIn(value: boolean) {
-        setLogedIn(value);
-    }
 
     const [repo] = useState(new Repo({
         network: [new BroadcastChannelNetworkAdapter()],
@@ -111,13 +107,13 @@ export const usePasswordManagerViewModel = () => {
         }
     };
 
-    const onActive = () => {
+    const onAction = () => {
         if (toastVisible) {
             setToastVisible(false);
         }
     };
 
-    const idleTimer = useIdleTimer({timeout, onIdle, onActive, debounce: 100});
+    const idleTimer = useIdleTimer({timeout, onIdle, onAction, debounce: 100});
 
 
     useEffect(() => {

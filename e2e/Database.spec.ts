@@ -18,10 +18,11 @@ test("create a new DB, delete it and add it again via URL", async ({page}) => {
     await page.getByRole("textbox", {name: "Masterpasswort"}).fill("Masterpasswort");
     await page.getByRole("button", {name: "Bestätigen"}).click();
     //überprüft, ob wir angemeldet sind
-    await expect(page.getByRole("textbox", {name: "Nach Einträgen und Ordnern suchen"})).toBeVisible();
-    await expect(page.getByRole("button", {name: "⬅"})).toBeVisible();
+    await expect(page.getByRole('textbox', { name: 'Nach Einträgen und Ordnern' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Datenbank schließen' })).toBeVisible();
+
     //meldet sich ab
-    await page.getByRole("button", {name: "⬅"}).click();
+    await page.getByRole("button", {name: 'Datenbank schließen'}).click();
     await expect(page.getByRole("button", {name: "Datenbankname"})).toBeVisible();
     //klickt auf den umbenennen button
     await page.getByRole("button").nth(4).click();
@@ -36,12 +37,12 @@ test("create a new DB, delete it and add it again via URL", async ({page}) => {
     await page.getByRole("button", {name: "Bestätigen"}).click();
     //überprüft das wir angemeldet sind
     await expect(page.getByRole("textbox", {name: "Nach Einträgen und Ordnern suchen"})).toBeVisible();
-    await expect(page.getByRole("button", {name: "⬅"})).toBeVisible();
+    await expect(page.getByRole("button", {name: 'Datenbank schließen'})).toBeVisible();
     //Einstellungen öffnen
-    await page.getByRole("button").first().click();
-    await expect(page.getByRole("heading", { name: "Allgemeine Einstellungen" })).toBeVisible();
+    await page.getByRole('button', { name: 'Einstellungen öffnen' }).click();
+    await expect(page.getByRole('heading', { name: 'Allgemeine Einstellungen' })).toBeVisible();
     //DB Einstellung öffnen
-    await page.getByRole("button", {name: "Datenbankeinstellungen"}).dblclick();
+    await page.getByRole("button", {name: "Datenbankeinstellungen"}).click();
     await expect(page.getByRole("heading", {name: "Datenbankeinstellungen"})).toBeVisible();
     //automerge url kopieren und DB exportieren
     await page.getByRole("button", {name:"Datenbank ID kopieren"}).click();
@@ -52,8 +53,8 @@ test("create a new DB, delete it and add it again via URL", async ({page}) => {
     await page.getByRole("button", {name: "Verschlüsselt Exportieren"}).dblclick();
     const download1 = await download1Promise;
     //abmelden
-    await page.getByRole('img').nth(1).click();
-    await page.getByRole("button", {name: "⬅"}).click();
+    await page.getByRole('img').nth(2).click();
+    await page.getByRole("button", {name: 'Datenbank schließen'}).click();
     await expect(page.getByRole("button", {name: "Datenbank ID kopieren"})).toBeVisible();
     //Db löschen
     await page.getByRole('button').filter({ hasText: 'Datenbank entfernen' }).click();
@@ -74,8 +75,9 @@ test("create a new DB, delete it and add it again via URL", async ({page}) => {
     await page.getByRole("textbox", {name: "Masterpasswort"}).fill("Masterpasswort");
     await page.getByRole("button", {name: "Bestätigen"}).click();
     //überprüft, ob wir angemeldet sind
-    await expect(page.getByRole("textbox", {name: "Nach Einträgen und Ordnern suchen"})).toBeVisible();
-    await expect(page.getByRole("button", {name: "⬅"})).toBeVisible();
+    await expect(page.getByRole('textbox', { name: 'Nach Einträgen und Ordnern' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Datenbank schließen' })).toBeVisible();
+
 });
 
 test("create a Database and rename it", async ({page}) => {
@@ -91,10 +93,10 @@ test("create a Database and rename it", async ({page}) => {
     await page.getByRole("textbox", {name: "Masterpasswort"}).fill("Masterpasswort");
     await page.getByRole("button", {name: "Bestätigen"}).click();
     //überprüft, ob wir angemeldet sind
-    await expect(page.getByRole("textbox", {name: "Nach Einträgen und Ordnern suchen"})).toBeVisible();
-    await expect(page.getByRole("button", {name: "⬅"})).toBeVisible();
+    await expect(page.getByRole('textbox', { name: 'Nach Einträgen und Ordnern' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Datenbank schließen' })).toBeVisible();
 
-    await page.getByRole("button", {name: "⬅"}).click();
+    await page.getByRole("button", {name: 'Datenbank schließen'}).click();
     await expect(page.getByRole("button", {name: "Datenbankname"})).toBeVisible();
 
     await page.getByRole("button").nth(4).click();
@@ -128,7 +130,8 @@ test("add a database with a link", async ({page}) => {
     await page.getByRole("textbox", {name: "Masterpasswort"}).fill("Masterpasswort");
     await page.getByRole("button", {name: "Bestätigen"}).click();
     //überprüft, ob wir angemeldet sind
-    await expect(page.getByRole("textbox", {name: "Nach Einträgen und Ordnern suchen"})).toBeVisible();
-    await expect(page.getByRole("button", {name: "⬅"})).toBeVisible();
-    await page.getByRole("button", {name: "⬅"}).click();
+    await expect(page.getByRole('textbox', { name: 'Nach Einträgen und Ordnern' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Datenbank schließen' })).toBeVisible();
+
+    await page.getByRole("button", {name: 'Datenbank schließen'}).click();
 });
