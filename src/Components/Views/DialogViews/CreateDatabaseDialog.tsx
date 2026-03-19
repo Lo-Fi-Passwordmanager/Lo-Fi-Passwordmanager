@@ -2,7 +2,7 @@ import type {AutomergeUrl} from "@automerge/automerge-repo";
 import React from "react";
 
 import Dialog from "./Dialog.tsx";
-import QRScannerDialog from "./QRScannerDialog.tsx";
+import ShareDatabaseQRScannerDialog from "./ShareDatabaseQRScannerDialog.tsx";
 import {useCreateDatabaseViewModel} from "../../ViewModels/Dialog/CreateDatabaseViewModel.ts";
 import EyeButton from "../ButtonViews/EyeButton.tsx";
 
@@ -148,7 +148,7 @@ const CreateDatabaseDialog: React.FC<{
                             }
                         }}
                     />
-                    <QRScannerDialog setInputFields={(name, url) => {
+                    <ShareDatabaseQRScannerDialog setInputFields={(name, url) => {
                         viewModel.setField1(name);
                         viewModel.setField2(url);
                     }}/>

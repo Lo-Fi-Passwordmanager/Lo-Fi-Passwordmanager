@@ -1,6 +1,6 @@
 import {afterEach, beforeEach, describe, expect, it, vi} from "vitest";
 import {act, renderHook} from "@testing-library/react";
-import useQRScannerViewModel from "../../../../src/Components/ViewModels/Dialog/qrScannerViewModel";
+import useDatabaseQRScannerViewModel from "../../../../src/Components/ViewModels/Dialog/DatabaseQRScannerViewModel";
 import {isValidAutomergeUrl} from "@automerge/react";
 import {Settings} from "../../../../src/Model/Settings";
 
@@ -14,7 +14,7 @@ describe("qrScannerViewModel", () => {
         };
     });
     const setupAndOpenScanner = () => {
-        const {result} = renderHook(() => useQRScannerViewModel(setInputFields));
+        const {result} = renderHook(() => useDatabaseQRScannerViewModel(setInputFields));
         act(() => {
             result.current.setQRScannerOpen(true);
         });
@@ -54,7 +54,7 @@ describe("qrScannerViewModel", () => {
     });
 
     it("should react to open change", async () => {
-        const {result} = renderHook(() => useQRScannerViewModel(setInputFields));
+        const {result} = renderHook(() => useDatabaseQRScannerViewModel(setInputFields));
         expect(result.current.qrScannerOpen).toBe(false);
         act(() => {
             result.current.setQRScannerOpen(true);

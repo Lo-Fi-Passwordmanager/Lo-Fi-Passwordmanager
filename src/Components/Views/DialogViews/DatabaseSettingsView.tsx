@@ -3,7 +3,7 @@ import {HiTrash} from "react-icons/hi";
 
 import DeleteConfirmationDialog from "./DeleteConfirmationDialog.tsx";
 import {HistoryDialog} from "./HistoryDialog.tsx";
-import ShareQRDialog from "./ShareQRDialog.tsx";
+import ShareDatabaseQRDialog from "./ShareDatabaseQRDialog.tsx";
 import ToastDialog from "./ToastDialog.tsx";
 import {type AutomergeFacade} from "../../../Utility/AutomergeFacade.ts";
 import {removeDatabase} from "../../../Utility/Storage.ts";
@@ -22,7 +22,8 @@ const DatabaseSettingsView: React.FC<{
 
     return (
         <>
-            <ToastDialog message={viewModel.message} isVisible={viewModel.toastVisible} onClose={() => viewModel.setToastVisible(false)}/>
+            <ToastDialog message={viewModel.message} isVisible={viewModel.toastVisible}
+                         onClose={() => viewModel.setToastVisible(false)}/>
             <div className="dbSettingsContainer">
                 <div style={{display: "flex", justifyContent: "space-between", gap: "12px"}}>
                     <button
@@ -31,13 +32,13 @@ const DatabaseSettingsView: React.FC<{
                             () => {
                                 void navigator.clipboard.writeText(
                                     (automergeFacade.automergeURL as string).replace("automerge:", ""));
-                                viewModel.setToast("Datenbank ID in die Zwischenablage kopiert")
+                                viewModel.setToast("Datenbank ID in die Zwischenablage kopiert");
                             }
                         }>
                         Datenbank ID kopieren
                     </button>
-                    <ShareQRDialog name={openedDatabaseName!}
-                                   url={(automergeFacade.automergeURL as string).replace("automerge:", "")}/>
+                    <ShareDatabaseQRDialog name={openedDatabaseName!}
+                                           url={(automergeFacade.automergeURL as string).replace("automerge:", "")}/>
                 </div>
                 <button onClick={viewModel.exportDatabase}>
                     Verschlüsselt Exportieren
@@ -47,9 +48,9 @@ const DatabaseSettingsView: React.FC<{
 
                 <button
                     className={"delete"}
-                    style={{gap:"0.2rem"}}
+                    style={{gap: "0.2rem"}}
                     onClick={() => {
-                        viewModel.setInDeletion(true)
+                        viewModel.setInDeletion(true);
                     }}><HiTrash size={24}/> Datenbank lokal löschen
                 </button>
 
