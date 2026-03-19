@@ -24,7 +24,7 @@ useEffect(() => {
 
 return (
     justSynced && <div className={"just-synced"}>
-        {!showCheckmark? <LoadingSpinner header/> : <HiCheckCircle size={20}/>}
+        {!showCheckmark? <LoadingSpinner header/> : <HiCheckCircle size={20} className={"check-mark"}/>}
         Synchronisiert
     </div>
 )};

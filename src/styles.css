@@ -410,7 +410,6 @@ input[type="number"] {
     border: 2px solid transparent; /* Keeps layout stable */
     border-radius: var(--standard-radius);
     padding: 6px 16px;
-    padding: 6px 16px;
     width: 100%;
     box-sizing: border-box;
     display: block;
@@ -909,6 +908,10 @@ input[type="number"] {
     gap: 8px;
 }
 
+.check-mark {
+    color: var(--primary);
+}
+
 .passwordGen {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -924,7 +927,7 @@ input[type="number"] {
     width: calc(100% - 12px);
     display: flex;
     justify-content: space-between;
-    margin: 8px 0px 8px 12px;
+    margin: 8px 0 8px 12px;
     color: var(--outline);
 }
 
