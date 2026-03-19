@@ -2,10 +2,10 @@ import React from "react";
 
 const LoadingSpinner: React.FC<{
     header?: boolean
-}> = (header) => {
+}> = ({header}) => {
     return (
         <svg
-            className={`loadingSpinner ${header? "header" : ""}`}
+            className={`loadingSpinner ${header ? "header" : ""}`}
             viewBox="0 0 78.711998 78.711998"
             version="1.1"
             id="spinner"
