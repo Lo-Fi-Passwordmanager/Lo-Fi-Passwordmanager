@@ -72,13 +72,14 @@ export class Settings {
 
         const peerId = loadPeerId();
 
-        let newPeerId = false;
-
         if (peerId) {
             this.peer = new Peer(peerId);
         } else {
             this.peer = new Peer();
-            newPeerId = true;
+            
+            this.peer.on("open", (id) => {
+                storePeerId(id);
+            });
         }
 
         this.connector = null as unknown as DataConnection;
@@ -109,14 +110,6 @@ export class Settings {
                 this.peer = new Peer();
             }
         });
-
-        // When this device never had a peerId, save the first one that is assigned from the server
-        if (newPeerId) {
-            this.peer.on("open", (id) => {
-                storePeerId(id);
-            });
-        }
-
 
         //When someone is connecting to this peer, establish the direction in the other way
         this.peer.on("connection", incomingConn => {
