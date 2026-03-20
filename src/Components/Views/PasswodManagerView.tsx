@@ -10,6 +10,7 @@ import SettingsView from "./SettingsView.tsx";
 import PWMLogo from "../../assets/logo_gelb.svg?inline";
 import {usePasswordManagerViewModel} from "../ViewModels/PasswordManagerViewModel.ts";
 import {HistoryDialog} from "./DialogViews/HistoryDialog.tsx";
+import JustSyncedIcon from "./Icons/JustSyncedIcon.tsx";
 
 /**
  * The main view of the password manager application. It handles the login state and displays either the login view or the password view.
@@ -40,8 +41,8 @@ const PasswordManagerView: React.FC = () => {
                     <div className={"password-manager-header"}>
                         <img src={PWMLogo} style={{cursor: "pointer"}} onClick={() => viewModel.closeLoggedIn()}
                              className="logo header" alt="Passwortmanager Logo"/>
-                        <h2 onClick={() => viewModel.closeLoggedIn()} style={{cursor: "pointer"}}>LoFi
-                                                                                                  Passwortmanager</h2>
+                        <h2 onClick={() => viewModel.closeLoggedIn()} style={{cursor: "pointer"}}>LoFi Passwortmanager</h2>
+                        <JustSyncedIcon justSynced={viewModel.justSynced}/>
                         <HistoryDialog automergeFacade={viewModel.getAutomergeFacade()!} className={"histroyButton"}>
                             <RiHistoryLine size={24}/>
                         </HistoryDialog>

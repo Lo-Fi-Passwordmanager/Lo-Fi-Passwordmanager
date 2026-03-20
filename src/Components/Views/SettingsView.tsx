@@ -1,5 +1,5 @@
 import React from "react";
-import {HiTrash} from "react-icons/hi";
+import {HiTrash, HiCheckCircle, HiDotsCircleHorizontal} from "react-icons/hi";
 import {HiMiniCog8Tooth, HiMiniMinus, HiMiniPlus} from "react-icons/hi2";
 
 import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
@@ -194,6 +194,10 @@ const SettingsView: React.FC<{
                                                     <span>{id}</span>
                                                 </button>
 
+                                                    <span>
+                                                        {viewModel.otherPeerMap.get(id)![1].isReady() ? <HiCheckCircle/> : <HiDotsCircleHorizontal/>}
+                                                    </span>
+
                                                 <button
                                                     className="squareButton"
                                                     onClick={() => void viewModel.removePeer(id)}
@@ -201,11 +205,9 @@ const SettingsView: React.FC<{
                                                 >
                                                     <HiTrash size={24}/>
                                                 </button>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    </>)}
-
+                                                </div>
+                                            ))}
+                                        </div></>)}
                             </div>
                         </div>
                     )}

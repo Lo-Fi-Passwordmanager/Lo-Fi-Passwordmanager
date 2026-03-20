@@ -1,5 +1,5 @@
 import {
-    BroadcastChannelNetworkAdapter,
+    BroadcastChannelNetworkAdapter, type DocHandle, type DocHandleChangePayload, getChanges,
     IndexedDBStorageAdapter,
     type NetworkAdapterInterface,
     Repo,
@@ -12,12 +12,14 @@ import {PeerjsNetworkAdapter} from "../../../customNetworkAdapter/PeerJsNetworkA
 import {Settings, useSettings} from "../../Model/Settings.ts";
 import type {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
+import {decodeChange, getActorId} from "@automerge/automerge";
 
 /**
  * The view model used by the PasswordManagerView. Manages the state and logic for the password manager.
  */
 export const usePasswordManagerViewModel = () => {
     const settings = useSettings();
+
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
     const [automergeFacade, setAutomergeFacade] = useState<AutomergeFacade | null>(null);
     const [securityProvider] = useState(() => new SecurityProvider());
@@ -26,26 +28,22 @@ export const usePasswordManagerViewModel = () => {
     const [toastVisible, setToastVisible] = useState(false);
     const [openedDatabaseName, setOpenedDatabaseName] = useState<string>("");
     const [oldP2PSize, setOldP2PSize] = useState<number>(settings.getConnectorsToAdapters().size);
+    const [justSynced, setJustSynced] = useState<boolean>(false);
 
-    const [repo] = useState(new Repo({
-        network: [new BroadcastChannelNetworkAdapter()],
-        storage: new IndexedDBStorageAdapter()
-    }));
-
-    // Fügt das Repo als zu global hinzu, sodass man im Browser einfach auf das Repo zugreifen kann, zum debuggen.
-    // Nur während 'yarn dev' verfügbar, nach dem build nicht mehr
-    if (import.meta.env.DEV) {
-        // eslint-disable-next-line react-hooks/immutability
-        window.repo = repo;
-    }
 
     const syncEnabled = settings.getSynchronization();
     const p2pEnabled = settings.getP2P();
     const connectorsSize = settings.getConnectorsToAdapters().size;
     const connectorAdapter = settings.getConnectorsToAdapters();
     const servers = settings.getActiveServerUrls();
+
+    const [repo] = useState(new Repo({
+        network: [new BroadcastChannelNetworkAdapter()],
+        storage: new IndexedDBStorageAdapter()
+    }));
+
     //Whenever something about the synchronisation happens, the old adapters get removed and new ones get added.
-    //This enables the repo the be kept as state while still changing the adapters
+    //This enables the repo to be kept as state while still changing the adapters
     useEffect(() => {
         const removeArray: NetworkAdapterInterface[] = [];
 
@@ -93,6 +91,53 @@ export const usePasswordManagerViewModel = () => {
         setOldP2PSize(connectorsSize);
     }, [connectorsSize, oldP2PSize]);
 
+    // recognize changes from remote
+    useEffect(() => {
+        if (!automergeFacade) return;
+        if (!automergeFacade.automergeURL) return;
+
+        let handle: DocHandle<unknown> | null = null;
+
+        const handleRemoteChange = (payload: DocHandleChangePayload<unknown>) => {
+            const localActorId = getActorId(payload.doc);
+
+            const newChanges = getChanges(payload.patchInfo.before, payload.patchInfo.after)
+
+            const changesFromRemote = newChanges.some(change => {
+                const decoded = decodeChange(change);
+                return decoded.actor !== localActorId;
+            })
+
+            if (!changesFromRemote) {
+                return;
+            }
+
+            setJustSynced(true);
+            setTimeout(() => {
+                setJustSynced(false);
+            }, 3000);
+        };
+
+        const setupListener = async () => {
+            try {
+                handle = await repo.find(automergeFacade.automergeURL!);
+
+                handle.on("change", handleRemoteChange);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        void setupListener();
+
+        return () => {
+            if (handle && typeof handleRemoteChange === "function") {
+                handle.off("change", handleRemoteChange);
+            }
+        }
+    }, [automergeFacade, repo]);
+
+
     function getAutomergeFacade(): AutomergeFacade | null {
         return automergeFacade;
     }
@@ -134,6 +179,7 @@ export const usePasswordManagerViewModel = () => {
         toastVisible,
         openedDatabaseName,
         loggedIn,
+        justSynced,
         setOpenedDatabaseName,
         setLoggedIn,
         setAutomergeFacade,

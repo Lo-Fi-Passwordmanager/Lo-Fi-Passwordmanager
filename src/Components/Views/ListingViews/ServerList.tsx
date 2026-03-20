@@ -1,5 +1,7 @@
-import React from "react";
-import {HiTrash} from "react-icons/hi";
+import {useRepo} from "@automerge/automerge-repo-react-hooks";
+import {WebSocketClientAdapter} from "@automerge/react";
+import React, {useEffect, useState} from "react";
+import {HiCheckCircle, HiDotsCircleHorizontal, HiTrash} from "react-icons/hi";
 import {HiMiniPlus} from "react-icons/hi2";
 
 import type {SettingsViewModel} from "../../ViewModels/SettingsViewModel.ts";
@@ -8,16 +10,41 @@ import AddServerDialog from "../DialogViews/AddServerDialog.tsx";
 
 
 /**
- * The View that represents the Settings Dialog and Button to open it
- * @param automergeFacade the current AutomergeFacade instance
- * @param openedDbName the name of the currently opened database
+ * The View for the list of synchronization servers in the settings. It allows the user to add, remove and toggle synchronization servers.
  */
 const ServerList: React.FC<{
     settingsViewModel: SettingsViewModel
     disabled?: boolean
 }> = ({settingsViewModel, disabled}) => {
 
+    const repo = useRepo();
     const disabledClass = disabled ? "disabled" : "";
+    const [connected, setConnected] = useState<string[]>([]);
+
+    // check if serves are connected
+    useEffect(() => {
+        const updateConnected = () => {
+            const newConnected: string[] = [];
+
+            for (const adapter of repo.networkSubsystem.adapters) {
+                if (adapter instanceof WebSocketClientAdapter && adapter.remotePeerId) {
+                    newConnected.push(adapter.url);
+                }
+            }
+
+            setConnected(newConnected);
+        };
+
+        updateConnected();
+
+        repo.networkSubsystem.on("peer", updateConnected);
+        repo.networkSubsystem.on("peer-disconnected", updateConnected);
+        return () => {
+            repo.networkSubsystem.off("peer", updateConnected);
+            repo.networkSubsystem.off("peer-disconnected", updateConnected);
+        };
+
+        }, [repo.networkSubsystem, settingsViewModel.serverStates, settingsViewModel.serverUrls]);
     return (
         <>
             <h4>Synchronisationsserver</h4>
@@ -32,6 +59,8 @@ const ServerList: React.FC<{
                              onClick={() => void settingsViewModel.copyToClipboard(settingsViewModel.serverUrls.get(server) ?? "")}>
                             <span>{server}</span>
                         </div>
+                        {connected.includes(settingsViewModel.serverUrls.get(server)!) ? <HiCheckCircle/> : <HiDotsCircleHorizontal/>}
+
                         {!disabled && <button
                             className={`squareButton ${settingsViewModel.isLastServer() || settingsViewModel.isLastActiveServer(server) ? "disabled" : ""}`}
                             disabled={settingsViewModel.isLastServer() || settingsViewModel.isLastActiveServer(server)}

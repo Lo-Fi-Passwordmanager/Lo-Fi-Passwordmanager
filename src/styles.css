@@ -870,8 +870,14 @@ input[type="number"] {
     z-index: 102;
 }
 
+.loadingSpinner.header {
+    height: 20px;
+    width: 20px;
+    animation: 1s linear infinite spinner-rotation;
+}
+
 .loadingText {
-    width: 88.7px;
+    width: 90.93px;
     text-align: start;
     z-index: 102;
     font-weight: 600;
@@ -910,6 +916,18 @@ input[type="number"] {
     }
 }
 
+.just-synced {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 100%;
+    gap: 8px;
+}
+
+.check-mark {
+    color: var(--primary);
+}
+
 .passwordGen {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -925,7 +943,7 @@ input[type="number"] {
     width: calc(100% - 12px);
     display: flex;
     justify-content: space-between;
-    margin: 8px 0px 8px 12px;
+    margin: 8px 0 8px 12px;
     color: var(--outline);
 }
 
