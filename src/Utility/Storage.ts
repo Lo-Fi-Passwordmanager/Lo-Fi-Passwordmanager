@@ -8,6 +8,8 @@ const SERVER_LIST = "servers_list";
 const SELECTED_SERVER_URLS = "selected_server_urls";
 const CURRENT_SORT_CRITERIA = "currentSortCriterion";
 const SORT_IS_ASCENDING = "isAscending";
+const P2P_SETTING = "p2p";
+const PEER_ID = "peer_id";
 
 /**
  * Loads all database names with their automerge url from localStorage
@@ -269,17 +271,18 @@ export function storeTimeoutLength(length: number): void {
     localStorage.setItem(TIMEOUT_LENGTH, JSON.stringify(length));
 }
 
+
 /**
  * Loads the boolean for the P2P setting from localStorage
  *
  * @returns the P2P setting
  */
 export function loadP2PSetting(): boolean {
-    const p2p = localStorage.getItem("p2p");
+    const p2p = localStorage.getItem(P2P_SETTING);
     if (p2p != null) {
         return JSON.parse(p2p) as boolean;
     } else {
-        localStorage.setItem("p2p", JSON.stringify(true));
+        localStorage.setItem(P2P_SETTING, JSON.stringify(true));
         return true;
     }
 }
@@ -290,5 +293,13 @@ export function loadP2PSetting(): boolean {
  * @param isP2P the P2P boolean to store
  */
 export function storeP2PSetting(isP2P: boolean): void {
-    localStorage.setItem("p2p", JSON.stringify(isP2P));
+    localStorage.setItem(P2P_SETTING, JSON.stringify(isP2P));
+}
+
+export function loadPeerId(): string | null {
+    return localStorage.getItem(PEER_ID);
+}
+
+export function storePeerId(id: string): void {
+    localStorage.setItem(PEER_ID, id);
 }

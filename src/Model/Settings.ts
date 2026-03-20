@@ -5,6 +5,7 @@ import {PeerjsNetworkAdapter} from "../../customNetworkAdapter/PeerJsNetworkAdap
 import {
     loadDarkModeSetting,
     loadP2PSetting,
+    loadPeerId,
     loadSelectedServerURLs,
     loadServers,
     loadSynchronizationSettings,
@@ -12,6 +13,7 @@ import {
     loadTimeoutSettings,
     storeDarkModeSetting,
     storeP2PSetting,
+    storePeerId,
     storeSelectedServers,
     storeServers,
     storeSynchronizationSettings,
@@ -67,7 +69,16 @@ export class Settings {
         this._servers = loadServers();
         this._activeServerURLs = loadSelectedServerURLs();
         this._p2p = loadP2PSetting();
-        this.peer = new Peer();
+
+        const peerId = loadPeerId();
+
+        if (peerId) {
+            this.peer = new Peer(peerId);
+        } else {
+            this.peer = new Peer();
+            storePeerId(this.peer.id);
+        }
+
         this.connector = null as unknown as DataConnection;
 
         // Purge server URLs that are in active list, but not in server list
@@ -86,6 +97,15 @@ export class Settings {
         if (this._activeServerURLs.length == 0) {
             this._activeServerURLs = loadSelectedServerURLs();
         }
+
+        this.peer.on("error", (err) => {
+            if (err.type === "unavailable-id") {
+                console.warn("PeerID is already taken, temporarily using a different one.");
+
+                this.peer.destroy();
+                this.peer = new Peer();
+            }
+        });
 
 
         //When someone is connecting to this peer, establish the direction in the other way
