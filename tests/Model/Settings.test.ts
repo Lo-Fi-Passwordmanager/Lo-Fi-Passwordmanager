@@ -44,6 +44,7 @@ describe("Settings", () => {
     //TODO settings vom local storage testen
     beforeEach(() => {
         settings = Settings.getSettings();
+        settings.setP2PActive(true);
     });
 
     afterEach(() => {
