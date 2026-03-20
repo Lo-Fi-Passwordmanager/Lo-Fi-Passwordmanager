@@ -72,11 +72,13 @@ export class Settings {
 
         const peerId = loadPeerId();
 
+        let newPeerId = false;
+
         if (peerId) {
             this.peer = new Peer(peerId);
         } else {
             this.peer = new Peer();
-            storePeerId(this.peer.id);
+            newPeerId = true;
         }
 
         this.connector = null as unknown as DataConnection;
@@ -98,12 +100,20 @@ export class Settings {
             this._activeServerURLs = loadSelectedServerURLs();
         }
 
+        // If someone is using the saved peerId (e.g. another tab), temporarily assign a new one
         this.peer.on("error", (err) => {
             if (err.type === "unavailable-id") {
                 console.warn("PeerID is already taken, temporarily using a different one.");
 
                 this.peer.destroy();
                 this.peer = new Peer();
+            }
+        });
+
+        // When this device never had a peerId, save the first one that is assigned from the server
+        this.peer.on("open", (id) => {
+            if (newPeerId) {
+                storePeerId(id);
             }
         });
 
