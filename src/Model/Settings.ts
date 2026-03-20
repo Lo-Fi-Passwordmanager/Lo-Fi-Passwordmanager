@@ -111,11 +111,11 @@ export class Settings {
         });
 
         // When this device never had a peerId, save the first one that is assigned from the server
-        this.peer.on("open", (id) => {
-            if (newPeerId) {
+        if (newPeerId) {
+            this.peer.on("open", (id) => {
                 storePeerId(id);
-            }
-        });
+            });
+        }
 
 
         //When someone is connecting to this peer, establish the direction in the other way
