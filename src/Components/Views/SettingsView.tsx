@@ -131,7 +131,7 @@ const SettingsView: React.FC<{
                                         }}> {/* for some reason are the styles from the css not applying */}
                                             <label className={"current-server"}>{viewModel.getPeerId()}</label>
                                             <CopyButton
-                                                copyAndClearClipboard={(text) => void viewModel.copyToClipboard(text)}
+                                                copyToClipboard={viewModel.copyToClipboard}
                                                 attributeValue={viewModel.getPeerId()}
                                                 style={{marginLeft: "0"}}
                                             />
@@ -166,7 +166,7 @@ const SettingsView: React.FC<{
                                             </div>
                                             <button
                                                 className="rectangle-button"
-                                                onClick={() => viewModel.connectToPeer}
+                                                onClick={() => viewModel.connectToPeer()}
                                                 title={"Mit Peer verbinden"}
                                             >
                                                 Verbinden
@@ -176,8 +176,9 @@ const SettingsView: React.FC<{
                                 }
 
                                 {viewModel.otherPeerMap.size > 0 && viewModel.P2P && (
+                                    <>
+                                    <span>Verbundene Peers:</span>
                                     <div className="scrollableContainer server-list">
-                                        <span>Verbundene Peers:</span>
 
                                         {Array.from(viewModel.otherPeerMap.keys()).map((id) => (
                                             <div className="server-item" key={id}>
@@ -206,7 +207,7 @@ const SettingsView: React.FC<{
                                                 </button>
                                                 </div>
                                             ))}
-                                        </div>)}
+                                        </div></>)}
                             </div>
                         </div>
                     )}

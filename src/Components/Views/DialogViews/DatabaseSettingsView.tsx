@@ -8,6 +8,7 @@ import ToastDialog from "./ToastDialog.tsx";
 import {type AutomergeFacade} from "../../../Utility/AutomergeFacade.ts";
 import {removeDatabase} from "../../../Utility/Storage.ts";
 import useDatabaseSettingsViewModel from "../../ViewModels/Dialog/DatabaseSettingsViewModel.ts";
+import CopyButton from "../ButtonViews/CopyButton.tsx";
 
 /**
  * The view that links to the {@link Settings} singleton and toggles its values.
@@ -26,17 +27,13 @@ const DatabaseSettingsView: React.FC<{
                          onClose={() => viewModel.setToastVisible(false)}/>
             <div className="dbSettingsContainer">
                 <div style={{display: "flex", justifyContent: "space-between", gap: "12px"}}>
-                    <button
-                        style={{width: "100%"}}
-                        onClick={
-                            () => {
-                                void navigator.clipboard.writeText(
-                                    (automergeFacade.automergeURL as string).replace("automerge:", ""));
-                                viewModel.setToast("Datenbank ID in die Zwischenablage kopiert");
-                            }
-                        }>
-                        Datenbank ID kopieren
-                    </button>
+                    <CopyButton
+                        copyToClipboard={viewModel.copyURLToClipboard}
+                        attributeValue={""}
+                        title="Datenbank ID in die Zwischenablage kopieren"
+                        style={{marginLeft: "0", width: "100%"}}
+                        content={"Datenbank ID kopieren"}
+                    />
                     <ShareDatabaseQRDialog name={openedDatabaseName!}
                                            url={(automergeFacade.automergeURL as string).replace("automerge:", "")}/>
                 </div>

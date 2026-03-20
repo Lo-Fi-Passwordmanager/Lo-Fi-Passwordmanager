@@ -11,8 +11,6 @@ import {type Item} from "../../Model/Item.ts";
 import {useListViewModel} from "../ViewModels/ListViewModel.ts";
 
 
-
-
 /* eslint-disable react-hooks/refs */ //react and the eslint do not like each other: https://github.com/facebook/react/issues/34775
 /**
  * The View that represents the whole database, which is represented by {@link Entry}/{@link Folder} Class Instances
@@ -56,36 +54,36 @@ const ListView: React.FC<{
         isFolderExpanded: (folderId: string) => boolean;
         getSortedChildren: (folder: Folder) => Item[],
     }> = ({
-              item,
-              setCurItem,
-              curItem,
-              setItemCreationDialog,
-              setCurrentParent,
-              deleteItem,
-              dirtyItemId,
-              openedDbName,
-              selectedItemId,
-              createdFolderId,
-              updateItemTitle,
-              setCreatedFolderId,
-              inEditable,
-              level,
-              expandFolderId,
-              collapseFolderId,
-              isFolderExpanded,
-              getSortedChildren,
-          }) => {
+        item,
+        setCurItem,
+        curItem,
+        setItemCreationDialog,
+        setCurrentParent,
+        deleteItem,
+        dirtyItemId,
+        openedDbName,
+        selectedItemId,
+        createdFolderId,
+        updateItemTitle,
+        setCreatedFolderId,
+        inEditable,
+        level,
+        expandFolderId,
+        collapseFolderId,
+        isFolderExpanded,
+        getSortedChildren
+    }) => {
         const listViewModel = useListViewModel(item, dirtyItemId, setCurItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded);
 
         function addButtonPressed() {
             setItemCreationDialog();
             setCurrentParent!(item);
-            expandFolderId(item.id)
+            expandFolderId(item.id);
         }
 
         // makes the dragged item follow the cursor
         const dragStyle = {
-            transform: CSS.Translate.toString(listViewModel.transform),
+            transform: CSS.Translate.toString(listViewModel.transform)
         };
 
         /**
@@ -97,8 +95,8 @@ const ListView: React.FC<{
                 <div
                     className={`listViewEntry ${curItem.id !== entry.id ? "" : "selected"} ${listViewModel.isDragging ? "dragged" : ""} ${selectedItemId === item.id ? "highlighted entry" : ""}`}
                     onClick={() => {
-                        if (!inEditable){
-                            setCurItem(entry)
+                        if (!inEditable) {
+                            setCurItem(entry);
                         }
                     }}
                     style={dragStyle}
@@ -106,7 +104,7 @@ const ListView: React.FC<{
                     {...listViewModel.attributes}
                     {...listViewModel.listeners}
                     aria-selected={selectedItemId === item.id}>
-                    <button style={{background:"none", boxShadow:"none"}}> <ImKey size={18}/> </button>
+                    <button style={{background: "none", boxShadow: "none"}}><ImKey size={18}/></button>
                     <span className={"item-title"}>{entry.title}</span>
                     <div className={"btnWrapper"}>
                         <button className="listViewEntry button"
@@ -129,7 +127,7 @@ const ListView: React.FC<{
                 <>
                     {/* Name and Buttons */}
                     <div
-                        className={`listViewTitleHeader ${listViewModel.isDragging ? "dragged" : ""} ${listViewModel.isOver && !listViewModel.isDragging ? "over" : ""} ${selectedItemId === item.id ? "highlighted folder" : ""}`}
+                        className={`listViewTitleHeader ${item.id == "" ? "database_title" : ""} ${listViewModel.isDragging ? "dragged" : ""} ${listViewModel.isOver && !listViewModel.isDragging ? "over" : ""} ${selectedItemId === item.id ? "highlighted folder" : ""}`}
                         ref={listViewModel.setFolderRef}
                         style={item.id !== "" ? dragStyle : {minHeight : "2.5rem"}}
                         {...listViewModel.attributes}
@@ -159,10 +157,10 @@ const ListView: React.FC<{
                                    onChange={(e) => listViewModel.setItemTitle(e.target.value)}
                                    onBlur={() => {
                                        listViewModel.setAndStoreEditName(false);
-                                       listViewModel.updateTitleInAutomerge()
+                                       listViewModel.updateTitleInAutomerge();
                                    }}
                                    onKeyDown={(e) => {
-                                       if (e.key === 'Enter') {
+                                       if (e.key === "Enter") {
                                            (e.target as HTMLInputElement).blur();
                                        }
                                    }}
@@ -185,39 +183,40 @@ const ListView: React.FC<{
                         </div>
                     </div>
 
-                {/* Recursive call of children with indent to visualizes depth in the tree */}
-                <div className="listViewEntryWrapper"
-                     style={{
-                         display: (isFolderExpanded(item.id) ? "block" : "none"),
-                         marginLeft: level <= 8 ? "15px" : "0px"
-                     }}>
-                    {getSortedChildren(item as Folder) &&
-                        getSortedChildren(item as Folder).map((item: Item, index: number) => {
-                            return <ListView
-                                key={index}
-                                item={item}
-                                setCurItem={setCurItem}
-                                curItem={curItem}
-                                setItemCreationDialog={setItemCreationDialog}
-                                setCurrentParent={setCurrentParent}
-                                deleteItem={deleteItem}
-                                getSortedChildren={getSortedChildren}
-                                dirtyItemId={dirtyItemId} openedDbName={""}
-                                updateItemTitle={updateItemTitle}
-                                selectedItemId={selectedItemId}
-                                createdFolderId={createdFolderId}
-                                setCreatedFolderId={setCreatedFolderId}
-                                inEditable={inEditable}
-                                level={level + 1}
-                                expandFolderId={expandFolderId}
-                                collapseFolderId={collapseFolderId}
-                                isFolderExpanded={isFolderExpanded}
-                            />;
-                        })}
-                </div>
-            </>
-        );
-    }}
+                    {/* Recursive call of children with indent to visualizes depth in the tree */}
+                    <div className="listViewEntryWrapper"
+                         style={{
+                             display: (isFolderExpanded(item.id) ? "block" : "none"),
+                             marginLeft: level <= 8 ? "15px" : "0px"
+                         }}>
+                        {getSortedChildren(item as Folder) &&
+                            getSortedChildren(item as Folder).map((item: Item, index: number) => {
+                                return <ListView
+                                    key={index}
+                                    item={item}
+                                    setCurItem={setCurItem}
+                                    curItem={curItem}
+                                    setItemCreationDialog={setItemCreationDialog}
+                                    setCurrentParent={setCurrentParent}
+                                    deleteItem={deleteItem}
+                                    getSortedChildren={getSortedChildren}
+                                    dirtyItemId={dirtyItemId} openedDbName={""}
+                                    updateItemTitle={updateItemTitle}
+                                    selectedItemId={selectedItemId}
+                                    createdFolderId={createdFolderId}
+                                    setCreatedFolderId={setCreatedFolderId}
+                                    inEditable={inEditable}
+                                    level={level + 1}
+                                    expandFolderId={expandFolderId}
+                                    collapseFolderId={collapseFolderId}
+                                    isFolderExpanded={isFolderExpanded}
+                                />;
+                            })}
+                    </div>
+                </>
+            );
+        }
+    }
 ;
 
 export default ListView;

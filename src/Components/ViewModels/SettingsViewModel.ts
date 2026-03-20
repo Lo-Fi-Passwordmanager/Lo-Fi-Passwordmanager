@@ -168,9 +168,7 @@ export const useSettingsViewModel: () => SettingsViewModel = () => {
     //Checks that timeout cant be 0 or less since that causes the whole app to be unusable
     function setTimeOutLengthVM(newLength: string) {
         const length: number = Number(newLength);
-        if (length >= 1) {
-            setTimeoutLength(length);
-        }
+        setTimeoutLength(Math.min(1000, Math.max(length, 1)));
     }
 
     //Increases timeout length by 1 minute

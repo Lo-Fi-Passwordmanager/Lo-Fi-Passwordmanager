@@ -1,9 +1,9 @@
 import type {AutomergeUrl} from "@automerge/automerge-repo";
 import React from "react";
 import {HiTrash} from "react-icons/hi";
-import {HiMiniLink} from "react-icons/hi2";
 
 import DatabaseListingViewModel from "../../ViewModels/Listing/DatabaseListingViewModel.ts";
+import CopyButton from "../ButtonViews/CopyButton.tsx";
 import RenameDatabaseDialog from "../DialogViews/RenameDatabaseDialog.tsx";
 import ShareDatabaseQRDialog from "../DialogViews/ShareDatabaseQRDialog.tsx";
 import ToastDialog from "../DialogViews/ToastDialog.tsx";
@@ -21,11 +21,11 @@ const DatabaseListingView: React.FC<{
     removeDatabase: (db: string) => void;
     renameDatabase: (oldName: string, newName: string) => void;
 }> = ({
-    databases,
-    openDatabase,
-    removeDatabase,
-    renameDatabase
-}) => {
+          databases,
+          openDatabase,
+          removeDatabase,
+          renameDatabase
+      }) => {
 
     const viewModel = DatabaseListingViewModel();
 
@@ -42,19 +42,19 @@ const DatabaseListingView: React.FC<{
                             title="Datenbank öffnen">
                             {dbName}
                         </button>
-                        <button
-                            className={"squareButton"}
-                            onClick={() => void viewModel.copyToClipboard(url)}
-                            title="Datenbank ID kopieren">
-                            <HiMiniLink size={24}/>
-                        </button>
+                        <CopyButton
+                            copyToClipboard={viewModel.copyToClipboard}
+                            attributeValue={url}
+                            title="Datenbank ID in die Zwischenablage kopieren"
+                            style={{marginLeft: "0"}}
+                        />
                         <ShareDatabaseQRDialog name={dbName} url={url}/>
                         <RenameDatabaseDialog oldName={dbName} renameDatabase={renameDatabase}/>
                         <button
                             className={"squareButton"}
-                            onClick={() => removeDatabase(dbName)}>
-                            <HiTrash size={24}
-                                     title="Datenbank entfernen"/>
+                            onClick={() => removeDatabase(dbName)}
+                            title="Datenbank entfernen">
+                            <HiTrash size={24}/>
                         </button>
                     </div>
                 ))}

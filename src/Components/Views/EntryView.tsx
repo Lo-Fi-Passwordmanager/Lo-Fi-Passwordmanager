@@ -54,7 +54,7 @@ const EntryView: React.FC<{
                         <div className={"entryViewAttribute"}>
                             <span style={{gridColumn: "span 20"}}>Benutzername:</span>
                             <span className={"attribute-value"} title={"Benutzername"}>{entry.username}</span>
-                            <CopyButton copyAndClearClipboard={copyAndClearClipboard} attributeValue={entry.username}/>
+                            <CopyButton copyToClipboard={copyAndClearClipboard} attributeValue={entry.username}/>
                         </div>
 
                         <div className={"entryViewAttribute"}>
@@ -63,7 +63,7 @@ const EntryView: React.FC<{
                                 <span title={"Passwort"}>{(hidePassword ? "●".repeat(8) : entry.password)}</span>
                             </div>
                             <EyeButton hidePassword={hidePassword} toggleHidePassword={toggleHidePassword}/>
-                            <CopyButton copyAndClearClipboard={copyAndClearClipboard} attributeValue={entry.password}/>
+                            <CopyButton copyToClipboard={copyAndClearClipboard} attributeValue={entry.password}/>
                         </div>
 
                         <div className={"entryViewAttribute"}>
@@ -77,7 +77,7 @@ const EntryView: React.FC<{
                             >
                                 {entry.url}
                             </a>
-                            <CopyButton copyAndClearClipboard={copyAndClearClipboard} attributeValue={entry.url}/>
+                            <CopyButton copyToClipboard={copyAndClearClipboard} attributeValue={entry.url}/>
                         </div>
 
                         <div className={"entryViewAttribute"}>
