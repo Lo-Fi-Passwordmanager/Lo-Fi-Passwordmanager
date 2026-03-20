@@ -166,7 +166,7 @@ const SettingsView: React.FC<{
                                             </div>
                                             <button
                                                 className="rectangle-button"
-                                                onClick={() => viewModel.connectToPeer}
+                                                onClick={() => viewModel.connectToPeer()}
                                                 title={"Mit Peer verbinden"}
                                             >
                                                 Verbinden
