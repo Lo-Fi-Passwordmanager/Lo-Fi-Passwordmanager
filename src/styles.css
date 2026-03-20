@@ -377,7 +377,7 @@ input[type="number"] {
     border-radius: var(--standard-radius);
     width: 100%;
     max-width: 300px;
-    max-height: 200px;
+    max-height: 260px;
     box-sizing: border-box;
     flex: none !important;
 }
