@@ -1,6 +1,6 @@
 import {useRepo} from "@automerge/automerge-repo-react-hooks";
 import {WebSocketClientAdapter} from "@automerge/react";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {HiCheckCircle, HiDotsCircleHorizontal, HiTrash} from "react-icons/hi";
 import {HiMiniPlus} from "react-icons/hi2";
 
@@ -10,9 +10,7 @@ import AddServerDialog from "../DialogViews/AddServerDialog.tsx";
 
 
 /**
- * The View that represents the Settings Dialog and Button to open it
- * @param automergeFacade the current AutomergeFacade instance
- * @param openedDbName the name of the currently opened database
+ * The View for the list of synchronization servers in the settings. It allows the user to add, remove and toggle synchronization servers.
  */
 const ServerList: React.FC<{
     settingsViewModel: SettingsViewModel
@@ -21,6 +19,32 @@ const ServerList: React.FC<{
 
     const repo = useRepo();
     const disabledClass = disabled ? "disabled" : "";
+    const [connected, setConnected] = useState<string[]>([]);
+
+    // check if serves are connected
+    useEffect(() => {
+        const updateConnected = () => {
+            const newConnected: string[] = [];
+
+            for (const adapter of repo.networkSubsystem.adapters) {
+                if (adapter instanceof WebSocketClientAdapter && adapter.remotePeerId) {
+                    newConnected.push(adapter.url);
+                }
+            }
+
+            setConnected(newConnected);
+        };
+
+        updateConnected();
+
+        repo.networkSubsystem.on("peer", updateConnected);
+        repo.networkSubsystem.on("peer-disconnected", updateConnected);
+        return () => {
+            repo.networkSubsystem.off("peer", updateConnected);
+            repo.networkSubsystem.off("peer-disconnected", updateConnected);
+        };
+
+        }, [repo.networkSubsystem, settingsViewModel.serverStates, settingsViewModel.serverUrls]);
     return (
         <>
             <h4>Synchronisationsserver</h4>
@@ -35,12 +59,7 @@ const ServerList: React.FC<{
                              onClick={() => void settingsViewModel.copyToClipboard(settingsViewModel.serverUrls.get(server) ?? "")}>
                             <span>{server}</span>
                         </div>
-                        {repo.networkSubsystem.adapters.find((adapter) => {
-                            // Check if it's actually a WebSocket adapter and has the URL
-                            return adapter instanceof WebSocketClientAdapter &&
-                                adapter.url === settingsViewModel.serverUrls.get(server);
-                             //@ts-expect-error     this call works by checking if the remotePeerId is set
-                        })?.remotePeerId ? <HiCheckCircle/> : <HiDotsCircleHorizontal/>}
+                        {connected.includes(settingsViewModel.serverUrls.get(server)!) ? <HiCheckCircle/> : <HiDotsCircleHorizontal/>}
 
                         {!disabled && <button
                             className={`squareButton ${settingsViewModel.isLastServer() || settingsViewModel.isLastActiveServer(server) ? "disabled" : ""}`}
