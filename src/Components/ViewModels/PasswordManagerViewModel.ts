@@ -32,6 +32,13 @@ export const usePasswordManagerViewModel = () => {
         storage: new IndexedDBStorageAdapter()
     }));
 
+    // Fügt das Repo als zu global hinzu, sodass man im Browser einfach auf das Repo zugreifen kann, zum debuggen.
+    // Nur während 'yarn dev' verfügbar, nach dem build nicht mehr
+    if (import.meta.env.DEV) {
+        // eslint-disable-next-line react-hooks/immutability
+        window.repo = repo;
+    }
+
     const syncEnabled = settings.getSynchronization();
     const p2pEnabled = settings.getP2P();
     const connectorsSize = settings.getConnectorsToAdapters().size;
