@@ -156,6 +156,7 @@ const SettingsView: React.FC<{
                                                 <input type="text"
                                                    value={viewModel.remotePeerId}
                                                    onChange={(e) => viewModel.setRemotePeerId(e.target.value)}
+                                                       style={{paddingRight: "40px", textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap"}}
                                                 />
                                                 <GenericQRScannerDialog title={"Peer verbinden"}
                                                                         callback={(id: string) => viewModel.connectToPeer(id)}
