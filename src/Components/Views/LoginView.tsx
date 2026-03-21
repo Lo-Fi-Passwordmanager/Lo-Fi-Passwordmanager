@@ -34,8 +34,8 @@ const LoginView: React.FC<{
         <div className="loginView">
 
             <img src={PWMLogo} className="logo" alt="Passwortmanager Logo"/>
-            <header>Lo-Fi Passwort&shy;manager</header>
-            <main className="flexContainer">
+            <header>Lo-Fi Passwortmanager</header>
+            <main className="flexContainer login">
 
                 <div className="databaseSelection">
                     {/* Show a list of all available Documents */}

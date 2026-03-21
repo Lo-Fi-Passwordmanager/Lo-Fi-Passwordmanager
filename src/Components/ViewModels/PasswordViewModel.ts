@@ -1,4 +1,4 @@
-import {type DragEndEvent, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
+import {type DragEndEvent, PointerSensor, TouchSensor, useSensor, useSensors} from "@dnd-kit/core";
 import {useRef, useState} from "react";
 
 import type {Folder} from "../../Model/Folder.ts";
@@ -279,6 +279,12 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade) => {
             activationConstraint: {
                 distance: allowDragging() ? 5 : Infinity,
             },
+        }),
+        useSensor(TouchSensor, {
+            activationConstraint: {
+                delay: allowDragging() ? 250 : Infinity,
+                tolerance: 20,
+            }
         })
     );
 

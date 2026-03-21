@@ -54,25 +54,25 @@ const ListView: React.FC<{
         isFolderExpanded: (folderId: string) => boolean;
         getSortedChildren: (folder: Folder) => Item[],
     }> = ({
-        item,
-        setCurItem,
-        curItem,
-        setItemCreationDialog,
-        setCurrentParent,
-        deleteItem,
-        dirtyItemId,
-        openedDbName,
-        selectedItemId,
-        createdFolderId,
-        updateItemTitle,
-        setCreatedFolderId,
-        inEditable,
-        level,
-        expandFolderId,
-        collapseFolderId,
-        isFolderExpanded,
-        getSortedChildren
-    }) => {
+              item,
+              setCurItem,
+              curItem,
+              setItemCreationDialog,
+              setCurrentParent,
+              deleteItem,
+              dirtyItemId,
+              openedDbName,
+              selectedItemId,
+              createdFolderId,
+              updateItemTitle,
+              setCreatedFolderId,
+              inEditable,
+              level,
+              expandFolderId,
+              collapseFolderId,
+              isFolderExpanded,
+              getSortedChildren
+          }) => {
         const listViewModel = useListViewModel(item, dirtyItemId, setCurItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded);
 
         function addButtonPressed() {
@@ -129,7 +129,7 @@ const ListView: React.FC<{
                     <div
                         className={`listViewTitleHeader ${item.id == "" ? "database_title" : ""} ${listViewModel.isDragging ? "dragged" : ""} ${listViewModel.isOver && !listViewModel.isDragging ? "over" : ""} ${selectedItemId === item.id ? "highlighted folder" : ""}`}
                         ref={listViewModel.setFolderRef}
-                        style={item.id !== "" ? dragStyle : {minHeight : "2.5rem"}}
+                        style={item.id !== "" ? dragStyle : {minHeight: "2.5rem"}}
                         {...listViewModel.attributes}
                         {...listViewModel.listeners}
                         aria-selected={selectedItemId === item.id}>
