@@ -1,5 +1,5 @@
 import React from 'react';
-import {HiLockClosed} from "react-icons/hi2";
+import {HiBarsArrowDown, HiBarsArrowUp, HiLockClosed} from "react-icons/hi2";
 
 import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
 
@@ -81,7 +81,7 @@ const OrganizeListView: React.FC<{
                 toggleOrder()
             }}
                 title={isAscending ? "Absteigend sortieren" : "Aufsteigend sortieren"}>
-                {isAscending ? '🡅' : '🡇'}
+                {isAscending ? <HiBarsArrowDown size={24}/> : <HiBarsArrowUp size={24}/>}
             </button>
         </div>
     );

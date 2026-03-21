@@ -12,6 +12,7 @@ import ItemCreationDialog from "./DialogViews/ItemCreationDialog.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
 import EditableEntryView from "./EditableEntryView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
+import {HiArrowLeftCircle} from "react-icons/hi2";
 
 
 interface PasswordViewProps {
@@ -43,7 +44,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                     cancelItemCreation={() => viewModel.setInItemCreation(false)}
                 />}
 
-            <div className={"passwordView"}>
+            <div className={`passwordView ${viewModel.curItem.isEntry() ? 'mobile-detail-open' : ''}`}>
                 <div className="passwordViewList">
                     {/*Container for everything related to the search/Sort features */}
                     <OrganizeListView
@@ -119,6 +120,11 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                                            toggleHidePassword={viewModel.toggleHidePassword}
                         />
                     }
+
+                    <button className="mobile-back" onClick={() => viewModel.setCurItem(viewModel.getRootFolder())}>
+                        <HiArrowLeftCircle size={24} style={{ marginRight: '8px' }}/> Eintrag schließen
+                    </button>
+
                 </div>
 
                 {viewModel.itemToDelete && <DeleteConfirmationDialog
@@ -126,6 +132,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                     onConfirmItem={viewModel.confirmDeletion}
                     onClose={() => viewModel.setItemToDelete(null)}
                 />}
+
 
                 {/*A Toast that may be called at any time with a given message*/}
                 <ToastDialog message={viewModel.toastMessage}

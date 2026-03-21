@@ -377,8 +377,9 @@ input[type="number"] {
     border-radius: var(--standard-radius);
     width: 100%;
     max-width: 300px;
-    max-height: 192px; {/* up to 3 1/2 servers visible */}
-    box-sizing: border-box;
+    max-height: 192px;
+{ /* up to 3 1/2 servers visible */
+} box-sizing: border-box;
     flex: none !important;
 }
 
@@ -461,6 +462,7 @@ input[type="number"] {
     margin: 0.1rem 0.1rem 0.1rem 0;
     height: 100%;
     width: auto;
+    cursor: pointer;
 }
 
 .password-manager-header {
@@ -471,7 +473,7 @@ input[type="number"] {
     padding: 0 2vh;
 }
 
-.squareButton, .settingsButton, .copyButton, .eyeButton, .passwordGenButton, .histroyButton {
+.squareButton, .settingsButton, .copyButton, .eyeButton, .passwordGenButton, .historyButton {
     height: 2.5rem;
     aspect-ratio: 1;
     padding: 0.5rem;
@@ -557,7 +559,7 @@ input[type="number"] {
     top: 1.5vh
 }
 
-.histroyButton {
+.historyButton {
     margin-left: auto;
     position: absolute;
     /* settingsButton-right + settingsButton width + padding */
@@ -1423,6 +1425,13 @@ input[type="number"] {
     flex-direction: column;
 }
 
+.mobile-back {
+    display: none;
+}
+
+.mobile-dates {
+    display: none;
+}
 
 /* Mobile Phones should render differently*/
 @media (max-width: 768px) {
@@ -1457,36 +1466,84 @@ input[type="number"] {
         width: 100%;
     }
 
+    .password-manager-header {
+        height: 5vh;
+        display: grid;
+        grid-template-columns: 40px 1fr 40px 40px;
+        grid-template-rows: 40px;
+        gap: 10px;
+        padding: 10px 10px 5px 10px;
+        justify-items: center;
+    }
+
+    .logo.header {
+        height: 100%;
+        width: auto;
+        grid-column: span 1;
+    }
+
+    .historyButton {
+        grid-column-end: 4;
+        position: static;
+        justify-self: auto;
+    }
+
+    .settingsButton {
+        grid-column-end: 5;
+        position: static;
+        justify-self: auto;
+    }
+
     .passwordView {
-        flex-direction: column-reverse;
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+
+    .passwordView.mobile-detail-open .passwordViewList {
+        display: none;
+    }
+
+    .passwordView:not(.mobile-detail-open) .passwordViewEntry {
+        display: none;
     }
 
     .passwordViewList {
         width: 100%;
         border: none;
-        max-height: 40%;
+        max-height: 100%; /* Vorher 40% */
+        overflow-y: auto;
     }
 
     .passwordViewEntry {
         width: 100%;
         border: none;
-        min-height: 50%;
-        height: fit-content;
+        height: 100%; /* Vorher 50% */
         overflow-y: scroll;
     }
 
-    .entryViewAttribute {
+    .entryViewEntry {
+        padding: 0 10px 0 10px;
+    }
+
+    .mobile-back {
         display: flex;
+        height: 80px;
+        width: 100%;
+        border-radius: 0 !important;
     }
 
-    /* First child (Label) */
-    .entryViewAttribute *:nth-child(1) {
-        width: 30%;
+    .entryViewFooterButtons {
+
     }
 
-    /* Second child (Input/Value) */
-    .entryViewAttribute *:nth-child(2) {
-        width: 70%;
+    .entryViewListing {
+        margin-top: 2vh;
+        gap: 4vh;
+    }
+
+    .entryViewAttribute {
+        grid-row-gap: 2vh;
     }
 
     .entryViewAttribute button svg {
@@ -1504,9 +1561,26 @@ input[type="number"] {
         height: 100%;
     }
 
+    .attribute-value.editing {
+        grid-column-end: 21;
+        width: 100% !important;
+    }
+
     .entryDateViewEntry {
         display: none;
-        height: 0;
+    }
+
+    .mobile-dates {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        justify-items: center;
+        grid-row-gap: 15px;
+        margin-bottom: 1vh;
+        width: 100%;
+    }
+    .mobile-date-item {
+        color: var(--outline);
+        font-weight: 100;
     }
 
     .dialog {
