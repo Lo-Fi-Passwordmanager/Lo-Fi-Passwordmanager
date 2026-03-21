@@ -41,7 +41,9 @@ const PasswordManagerView: React.FC = () => {
                     <div className={"password-manager-header"}>
                         <img src={PWMLogo} onClick={() => viewModel.closeLoggedIn()}
                              className="logo header" alt="Passwortmanager Logo"/>
-                        <h2 onClick={() => viewModel.closeLoggedIn()} style={{cursor: "pointer", gridColumn: "span 1"}}>LoFi Passwortmanager</h2>
+
+                        {/* switch between synced icon and header on mobile */}
+                        <h2 onClick={() => viewModel.closeLoggedIn()} className={`app-title ${viewModel.justSynced ? 'synced' : ''}`}>LoFi Passwortmanager</h2>
                         <JustSyncedIcon justSynced={viewModel.justSynced}/>
                         <HistoryDialog automergeFacade={viewModel.getAutomergeFacade()!} className={"historyButton"}>
                             <RiHistoryLine size={24}/>

@@ -458,6 +458,11 @@ input[type="number"] {
     transition: filter 0.3s ease;
 }
 
+.app-title {
+    grid-column: span 1;
+    cursor: pointer;
+}
+
 .logo.header {
     margin: 0.1rem 0.1rem 0.1rem 0;
     height: 100%;
@@ -1515,6 +1520,10 @@ input[type="number"] {
         height: 100%;
         width: auto;
         grid-column: span 1;
+    }
+
+    .app-title.synced {
+        display: none;
     }
 
     .historyButton {
