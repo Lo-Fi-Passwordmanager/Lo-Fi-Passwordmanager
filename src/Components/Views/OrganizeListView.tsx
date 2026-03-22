@@ -51,7 +51,6 @@ const OrganizeListView: React.FC<{
             <input style={{gridColumn: "span 2", height: "2.5rem"}}
                    type="text" placeholder="Suchen..."
                    value={liveSearchValue}
-                   autoFocus
                    onChange={(event => setLiveSearchValue(event.target.value))}
                    title={"Nach Einträgen und Ordnern suchen"}/>
             {/* Search bar to filter the list of entries and folders */}
