@@ -1430,6 +1430,10 @@ input[type="number"] {
     flex-direction: column;
 }
 
+.editFolder {
+    border: none;
+}
+
 .mobile-back {
     display: none;
 }
@@ -1441,7 +1445,11 @@ input[type="number"] {
 /* Mobile Phones should render differently*/
 @media (max-width: 768px) {
     body {
+        margin: 0;
+        box-sizing: border-box;
         padding: 10px;
+        height: 100dvh;
+        overflow: hidden;
     }
 
     header {
@@ -1488,7 +1496,7 @@ input[type="number"] {
 
     /* Reset fixed widths that cause overflow */
     .numberInput, .connection-settings, .server-list, .current-server, input {
-        width: 95% !important;
+        /* width: 95% !important; */
         max-width: 100%;
     }
 
@@ -1542,6 +1550,16 @@ input[type="number"] {
         display: block;
         width: 100%;
         height: 100%;
+
+        overflow: hidden;
+
+        border-radius: var(--big-radius);
+        border: 2px solid var(--primary);
+
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
     }
 
     .passwordView.mobile-detail-open .passwordViewList {
@@ -1555,7 +1573,7 @@ input[type="number"] {
     .passwordViewList {
         width: 100%;
         border: none;
-        max-height: 100%; /* Vorher 40% */
+        max-height: 100%;
         overflow-y: auto;
     }
 
@@ -1573,7 +1591,7 @@ input[type="number"] {
     .passwordViewEntry {
         width: 100%;
         border: none;
-        height: 100%; /* Vorher 50% */
+        height: 100%;
         overflow-y: scroll;
     }
 
@@ -1585,11 +1603,11 @@ input[type="number"] {
         display: flex;
         height: 80px;
         width: 100%;
-        border-radius: 0 !important;
+        border-radius: 0;
     }
 
-    .entryViewFooterButtons {
-
+    .editFolder.mobile {
+        width: 95%;
     }
 
     .entryViewListing {

@@ -152,7 +152,8 @@ const ListView: React.FC<{
                                        e.target.select();
                                        listViewModel.setItemTitle(item.title);
                                    }}
-                                   style={{marginLeft: ((item.id != "") ? "" : "10px"), border: "none"}}
+                                   className={"editFolder mobile"}
+                                   style={{marginLeft: ((item.id != "") ? "" : "10px")}}
                                    value={listViewModel.newTitle}
                                    onChange={(e) => listViewModel.setItemTitle(e.target.value)}
                                    onBlur={() => {
