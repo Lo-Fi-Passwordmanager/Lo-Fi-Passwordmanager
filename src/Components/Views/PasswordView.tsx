@@ -36,78 +36,76 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
     }
 
     return (
-        <div style={{margin: "10px", height: "90vh"}}>
+        <div className={`passwordView ${viewModel.curItem.isEntry() ? 'mobile-detail-open' : ''}`}>
             {/*Dialog for creating a new Entry*/}
             {viewModel.inItemCreation &&
                 <ItemCreationDialog
                     addItem={viewModel.addItem}
                     cancelItemCreation={() => viewModel.setInItemCreation(false)}
                 />}
+            <div className="passwordViewList">
+                {/*Container for everything related to the search/Sort features */}
+                <OrganizeListView
+                    curSortCriterion={viewModel.curSortCrit}
+                    setCurSortCriterion={viewModel.setAndStoreSortCriterion}
+                    toggleOrder={viewModel.toggleOrder}
+                    isAscending={viewModel.isAscending}
+                    setLiveSearchValue={viewModel.setSearchValue}
+                    liveSearchValue={viewModel.searchValue}
+                    closeDatabase={closeDatabase}
+                    setItemCreationDialog={() => viewModel.setInItemCreation(true)}
+                    inEditable={viewModel.inEditable}
+                />
 
-            <div className={`passwordView ${viewModel.curItem.isEntry() ? 'mobile-detail-open' : ''}`}>
-                <div className="passwordViewList">
-                    {/*Container for everything related to the search/Sort features */}
-                    <OrganizeListView
-                        curSortCriterion={viewModel.curSortCrit}
-                        setCurSortCriterion={viewModel.setAndStoreSortCriterion}
-                        toggleOrder={viewModel.toggleOrder}
-                        isAscending={viewModel.isAscending}
-                        setLiveSearchValue={viewModel.setSearchValue}
-                        liveSearchValue={viewModel.searchValue}
-                        closeDatabase={closeDatabase}
-                        setItemCreationDialog={() => viewModel.setInItemCreation(true)}
-                        inEditable={viewModel.inEditable}
-                    />
+                <div className="scrollableContainer">
 
-                    <div className="scrollableContainer">
+                    {/*Shows only the Views, that match the given search input*/}
+                    {viewModel.searchValue.length > 0 && <FilteredListView
+                        root={viewModel.getRootFolder()}
+                        setCurItem={viewModel.setCurItem}
+                        filterText={viewModel.searchValue}
+                        goToFolder={viewModel.goToItem}
+                        getSortedChildren={viewModel.getSortedChildren}
+                    />}
+                    <DndContext collisionDetection={pointerWithin}
+                                onDragEnd={viewModel.handleDragEnd}
+                                sensors={viewModel.sensors}
+                                autoScroll={false}>
 
-                        {/*Shows only the Views, that match the given search input*/}
-                        {viewModel.searchValue.length > 0 && <FilteredListView
-                            root={viewModel.getRootFolder()}
+                        {/*The basic ListView which shows all Items and Folders in their hierarchy*/}
+                        {viewModel.searchValue.length === 0 && <ListView
+                            item={viewModel.getRootFolder()}
                             setCurItem={viewModel.setCurItem}
-                            filterText={viewModel.searchValue}
-                            goToFolder={viewModel.goToItem}
+                            setItemCreationDialog={() => viewModel.setInItemCreation(true)}
+                            setCurrentParent={viewModel.setCurParent}
+                            deleteItem={viewModel.deleteItem}
+                            dirtyItemId={viewModel.dirtyItemId}
+                            curItem={viewModel.curItem}
+                            openedDbName={openedDbName}
+                            updateItemTitle={viewModel.updateItemTitle}
+                            selectedItemId={viewModel.selectedItemId}
+                            createdFolderId={viewModel.createdFolderId}
+                            setCreatedFolderId={viewModel.setCreatedFolderId}
+                            inEditable={viewModel.inEditable}
+                            expandFolderId={viewModel.expandFolder}
+                            collapseFolderId={viewModel.collapseFolder}
+                            isFolderExpanded={viewModel.isFolderExpanded}
                             getSortedChildren={viewModel.getSortedChildren}
+                            level={0}
                         />}
-                        <DndContext collisionDetection={pointerWithin}
-                                    onDragEnd={viewModel.handleDragEnd}
-                                    sensors={viewModel.sensors}
-                                    autoScroll={false}>
-
-                            {/*The basic ListView which shows all Items and Folders in their hierarchy*/}
-                            {viewModel.searchValue.length === 0 && <ListView
-                                item={viewModel.getRootFolder()}
-                                setCurItem={viewModel.setCurItem}
-                                setItemCreationDialog={() => viewModel.setInItemCreation(true)}
-                                setCurrentParent={viewModel.setCurParent}
-                                deleteItem={viewModel.deleteItem}
-                                dirtyItemId={viewModel.dirtyItemId}
-                                curItem={viewModel.curItem}
-                                openedDbName={openedDbName}
-                                updateItemTitle={viewModel.updateItemTitle}
-                                selectedItemId={viewModel.selectedItemId}
-                                createdFolderId={viewModel.createdFolderId}
-                                setCreatedFolderId={viewModel.setCreatedFolderId}
-                                inEditable={viewModel.inEditable}
-                                expandFolderId={viewModel.expandFolder}
-                                collapseFolderId={viewModel.collapseFolder}
-                                isFolderExpanded={viewModel.isFolderExpanded}
-                                getSortedChildren={viewModel.getSortedChildren}
-                                level={0}
-                            />}
-                        </DndContext>
-                    </div>
+                    </DndContext>
                 </div>
+            </div>
 
-                <div className="passwordViewEntry">
-                    {/*Depending on the state, either shows the editable or the normal/noneditable passwordView*/}
-                    {!viewModel.inEditable &&
-                        <EntryView item={viewModel.curItem}
-                                   deleteItem={viewModel.deleteItem}
-                                   copyAndClearClipboard={viewModel.copyToClipboardAndClear}
-                                   setEditableView={() => viewModel.toggleInEdit()}
-                                   hidePassword={viewModel.hidePassword}
-                                   toggleHidePassword={viewModel.toggleHidePassword}/>}
+            <div className="passwordViewEntry">
+                {/*Depending on the state, either shows the editable or the normal/noneditable passwordView*/}
+                {!viewModel.inEditable &&
+                    <EntryView item={viewModel.curItem}
+                               deleteItem={viewModel.deleteItem}
+                               copyAndClearClipboard={viewModel.copyToClipboardAndClear}
+                               setEditableView={() => viewModel.toggleInEdit()}
+                               hidePassword={viewModel.hidePassword}
+                               toggleHidePassword={viewModel.toggleHidePassword}/>}
 
                     {viewModel.inEditable &&
                         <EditableEntryView item={viewModel.curItem}
@@ -127,18 +125,18 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
 
                 </div>
 
-                {viewModel.itemToDelete && <DeleteConfirmationDialog
-                    item={viewModel.itemToDelete}
-                    onConfirmItem={viewModel.confirmDeletion}
-                    onClose={() => viewModel.setItemToDelete(null)}
-                />}
+            {viewModel.itemToDelete && <DeleteConfirmationDialog
+                item={viewModel.itemToDelete}
+                onConfirmItem={viewModel.confirmDeletion}
+                onClose={() => viewModel.setItemToDelete(null)}
+            />}
 
 
                 {/*A Toast that may be called at any time with a given message*/}
                 <ToastDialog message={viewModel.toastMessage}
                              isVisible={viewModel.toastVisible}
                              onClose={() => viewModel.setToastVisible(false)} />
-            </div>
+
         </div>
     );
 
