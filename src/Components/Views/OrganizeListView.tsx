@@ -48,7 +48,7 @@ const OrganizeListView: React.FC<{
                 <HiLockClosed size={18}/>
             </button>
 
-            <input style={{gridColumn: "span 9", height: "2.5rem"}}
+            <input style={{gridColumn: "span 2", height: "2.5rem"}}
                    type="text" placeholder="Suchen..."
                    value={liveSearchValue}
                    autoFocus
@@ -67,7 +67,7 @@ const OrganizeListView: React.FC<{
                     <HiMiniPlus size={24}/>
                 </button> */}
 
-            <select style={{gridColumn: "span 9", width: "100%"}} value={curSortCriterion}
+            <select style={{gridColumn: "span 2", width: "100%"}} value={curSortCriterion}
                     onChange={(e) => setCurSortCriterion(e.target.value as SortCriteria)}
                     title={"Einträge und Ordner sortieren"}>
                 <option value="NAME">Alphabetisch</option>
