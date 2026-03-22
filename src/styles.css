@@ -1444,6 +1444,7 @@ input[type="number"] {
         margin: 0;
         box-sizing: border-box;
         height: 100dvh;
+        overflow: hidden;
     }
 
     #root {
