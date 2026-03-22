@@ -24,28 +24,24 @@ const AddServerDialog: React.FC<{
     return (
         <Dialog title="Server hinzufügen" onCloseDialog={onClose}>
             <div className="addServerWrapper">
-                <label>
-                    Server Name:
-                    <input
-                        autoFocus
-                        type="text"
-                        value={viewModel.name}
-                        onChange={(e) => viewModel.setName(e.target.value)}
-                        placeholder="Mein Server"
-                    />
-                    Server URL:
-                    <input
-                        type="text"
-                        value={viewModel.url}
-                        onChange={(e) => viewModel.setUrl(e.target.value)}
-                        placeholder="wss://my.sync-server.org"
-                    />
-                </label>
-                <div className="dialogActions">
-                    <button className={"rectangle-button"} onClick={viewModel.handleAddServer}>
-                        Hinzufügen
-                    </button>
-                </div>
+                <label>Server Name:</label>
+                <input
+                    autoFocus
+                    type="text"
+                    value={viewModel.name}
+                    onChange={(e) => viewModel.setName(e.target.value)}
+                    placeholder="Mein Server"
+                />
+                <label>Server URL:</label>
+                <input
+                    type="text"
+                    value={viewModel.url}
+                    onChange={(e) => viewModel.setUrl(e.target.value)}
+                    placeholder="wss://my.sync-server.org"
+                />
+                <button className={"rectangle-button dialog-confirm"} onClick={viewModel.handleAddServer}>
+                    Hinzufügen
+                </button>
             </div>
         </Dialog>
     );

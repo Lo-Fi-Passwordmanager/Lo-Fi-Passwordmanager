@@ -119,7 +119,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                         />
                     }
 
-                    <button className="mobile-back" onClick={() => viewModel.setCurItem(viewModel.getRootFolder())}>
+                    <button className={`mobile-back ${viewModel.inEditable ? 'disabled' : ''}`} onClick={viewModel.closeEntryOnMobile}>
                         <HiArrowLeftCircle size={24} style={{ marginRight: '8px' }}/> Eintrag schließen
                     </button>
 

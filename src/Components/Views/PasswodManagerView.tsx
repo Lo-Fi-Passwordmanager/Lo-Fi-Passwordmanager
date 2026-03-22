@@ -23,7 +23,9 @@ const PasswordManagerView: React.FC = () => {
     if (!viewModel.loggedIn) {
         return (
             <RepoContext.Provider value={viewModel.repo}>
-                <SettingsView/>
+                <div className={"mobile-login-settings"}>
+                    <SettingsView/>
+                </div>
                 <LoginView repo={viewModel.repo} setLoggedIn={viewModel.setLoggedIn}
                            setAutomergeFacade={viewModel.setAutomergeFacade}
                            securityProvider={viewModel.securityProvider}
@@ -43,7 +45,8 @@ const PasswordManagerView: React.FC = () => {
                              className="logo header" alt="Passwortmanager Logo"/>
 
                         {/* switch between synced icon and header on mobile */}
-                        <h2 onClick={() => viewModel.closeLoggedIn()} className={`app-title ${viewModel.justSynced ? 'synced' : ''}`}>LoFi Passwortmanager</h2>
+                        <h2 onClick={() => viewModel.closeLoggedIn()}
+                            className={`app-title ${viewModel.justSynced ? 'synced' : ''}`}>LoFi Passwortmanager</h2>
                         <JustSyncedIcon justSynced={viewModel.justSynced}/>
                         <HistoryDialog automergeFacade={viewModel.getAutomergeFacade()!} className={"historyButton"}>
                             <RiHistoryLine size={24}/>

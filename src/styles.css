@@ -168,6 +168,16 @@ button, select {
     /* Modern Interaction Style */
     box-shadow: var(--shadow);
     transition: transform 0.1s, active, filter 0.2s ease, box-shadow 0.2s ease;
+
+    &.disabled {
+        filter: grayscale(50%);
+        opacity: 80%;
+
+        &:hover {
+        }
+
+        transition: opacity .4s, filter .4s;
+    }
 }
 
 button:disabled {
@@ -482,16 +492,6 @@ input[type="number"] {
     height: 2.5rem;
     aspect-ratio: 1;
     padding: 0.5rem;
-
-    &.disabled {
-        filter: grayscale(50%);
-        opacity: 80%;
-
-        &:hover {
-        }
-
-        transition: opacity .4s, filter .4s;
-    }
 }
 
 .entryViewFooterButtons {
@@ -506,6 +506,10 @@ input[type="number"] {
     width: 10rem;
     height: 3rem;
     gap: 0.5rem;
+}
+
+.rectangle-button.dialog-confirm {
+    margin: 1rem 0 0.5rem 0;
 }
 
 .delete {
@@ -1293,17 +1297,8 @@ input[type="number"] {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 2rem;
     text-align: center;
-}
-
-.confirmDeleteWrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2rem;
-    text-align: center;
+    gap: 10px;
 }
 
 .password-container {
@@ -1448,8 +1443,10 @@ input[type="number"] {
     body {
         margin: 0;
         box-sizing: border-box;
-        padding: 10px;
         height: 100dvh;
+    }
+
+    #root {
         overflow: hidden;
     }
 
@@ -1459,6 +1456,16 @@ input[type="number"] {
 
     .logo {
         width: 6rem;
+    }
+
+    .scrollableContainer.settings-content {
+        padding: 0;
+        scrollbar-width: none;
+    }
+
+    .settings-dialog {
+        width: 100%;
+        height: 95%;
     }
 
     .settings-layout {
@@ -1521,8 +1528,9 @@ input[type="number"] {
         grid-template-columns: 40px 1fr 40px 40px;
         grid-template-rows: 40px;
         gap: 10px;
-        padding: 10px 10px 5px 10px;
+        padding: 10px 10px 10px 10px;
         justify-items: center;
+        margin: 5px;
     }
 
     .logo.header {
@@ -1545,22 +1553,29 @@ input[type="number"] {
         grid-column-end: 5;
         position: static;
         justify-self: auto;
+        margin: 10px 10px 10px auto;
     }
 
     .passwordView {
         display: block;
-        width: 100%;
-        height: 100%;
+        height: 90dvh;
+        width: 95vw;
+        margin: 2.5vw;
 
         overflow: hidden;
 
         border-radius: var(--big-radius);
         border: 2px solid var(--primary);
+        box-sizing: border-box;
 
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
         -webkit-backface-visibility: hidden;
         backface-visibility: hidden;
+    }
+    .organizeListView {
+        border-radius: var(--big-radius);
+
     }
 
     .passwordView.mobile-detail-open .passwordViewList {
@@ -1592,6 +1607,7 @@ input[type="number"] {
     .passwordViewEntry {
         width: 100%;
         border: none;
+        border-radius: 0;
         height: 100%;
         overflow-y: scroll;
     }
@@ -1654,15 +1670,15 @@ input[type="number"] {
     }
 
     .mobile-date-item {
-        color: var(--outline);
+        color: var(--pale-color);
         font-weight: 100;
     }
 
     .dialog {
-        min-width: 60%;
-        padding: 10px;
+        min-width: 80vw;
         margin-top: auto;
         margin-left: 0;
         margin-right: 0;
     }
+
 }

@@ -406,6 +406,15 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade) => {
         return [];
     }
 
+    function closeEntryOnMobile() {
+        if (!inEditable) {
+            setCurItem(getRootFolder());
+        } else {
+            setToastMessage("Bitte zuerst die Bearbeitungsansicht verlassen");
+            setToastVisible(true);
+        }
+    }
+
     return {
         dirtyItemId,
         isAscending,
@@ -454,5 +463,6 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade) => {
         getSortedChildren,
         setCurSortCrit,
         setIsAscending,
+        closeEntryOnMobile,
     };
 };
