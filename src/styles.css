@@ -748,7 +748,7 @@ input[type="number"] {
     border-top: 0;
 
     display: grid;
-    grid-template-columns: repeat(10, 1fr);
+    grid-template-columns: auto 1fr auto;
     grid-template-rows: repeat(2, 2.5rem);
     gap: 1vh;
     padding: 1.5vh 1.5vh;
