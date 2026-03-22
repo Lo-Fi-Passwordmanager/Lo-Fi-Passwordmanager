@@ -48,7 +48,7 @@ const OrganizeListView: React.FC<{
                 <HiLockClosed size={18}/>
             </button>
 
-            <input style={{gridColumn: "span 2", height: "2.5rem"}}
+            <input style={{gridColumn: "span 2", height: "2.5rem", minWidth: "100%"}}
                    type="text" placeholder="Suchen..."
                    value={liveSearchValue}
                    autoFocus
