@@ -10,10 +10,11 @@ const SliderCheckBox: React.FC<{
     checked: boolean;
     disabled?: boolean;
     toggleChecked: () => void;
-}> = ({checked, disabled, toggleChecked}) => {
+    style?: React.CSSProperties;
+}> = ({checked, disabled, toggleChecked, ...style}) => {
 
     return (
-        <label className={`switch ${disabled ? "disabled" : ""}`}>
+        <label className={`switch ${disabled ? "disabled" : ""}`} {...style}>
             <input type="checkbox" checked={checked} disabled={disabled ?? false}
                    onChange={toggleChecked}/>
             <span className="slider round"/>

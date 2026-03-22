@@ -933,7 +933,8 @@ input[type="number"] {
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-content: start;
-    grid-row-gap: 1.5%;
+    grid-row-gap: 10px;
+    align-items: center;
 }
 
 .OrganizedListView {

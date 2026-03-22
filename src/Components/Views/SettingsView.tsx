@@ -161,7 +161,6 @@ const SettingsView: React.FC<{
                                                 <GenericQRScannerDialog title={"Peer verbinden"}
                                                                         callback={(id: string) => viewModel.connectToPeer(id)}
                                                                         closeScannerOnSuccess
-                                                                        style={{position: "absolute", right: 0, backgroundColor: "transparent", border: "none"}}
                                                 />
                                             </div>
                                             <button

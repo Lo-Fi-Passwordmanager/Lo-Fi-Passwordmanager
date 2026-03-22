@@ -4,6 +4,7 @@ import {HiMiniPlus} from "react-icons/hi2";
 import Dialog from "./Dialog.tsx";
 import ToastDialog from "./ToastDialog.tsx";
 import {type PasswordGenDialogProps, usePasswordGenViewModel} from "../../ViewModels/Dialog/PasswordGenViewModel.ts";
+import SliderCheckBox from "../ButtonViews/SliderCheckBox.tsx";
 
 /**
  * A dialog that allows the user to generate a new password with specified criteria.
@@ -18,7 +19,6 @@ const PasswordGenDialog: React.FC<PasswordGenDialogProps> = ({setNewPassword}: P
                 <div className={"passwordGen"}>
                     <label>Passwort-Länge:</label>
                     <input
-
                         type="number"
                         value={viewModel.length}
                         onChange={(e) => viewModel.setLength(e.target.value)}
@@ -28,33 +28,33 @@ const PasswordGenDialog: React.FC<PasswordGenDialogProps> = ({setNewPassword}: P
                         autoFocus
                     />
                     <label>Großbuchstaben:</label>
-                    <input
-                        type="checkbox"
+                    <SliderCheckBox
                         checked={viewModel.uppercase}
-                        onChange={viewModel.toggleUppercase}
-                    />
+                        toggleChecked={viewModel.toggleUppercase}
+                        style={{justifySelf: "center"}}
+                        />
                     <label>Kleinbuchstaben:</label>
-                    <input
-                        type="checkbox"
+                    <SliderCheckBox
                         checked={viewModel.lowercase}
-                        onChange={viewModel.toggleLowercase}
+                        toggleChecked={viewModel.toggleLowercase}
+                        style={{justifySelf: "center"}}
                     />
                     <label>Zahlen:</label>
-                    <input
-                        type="checkbox"
+                    <SliderCheckBox
                         checked={viewModel.numbers}
-                        onChange={viewModel.toggleNumbers}
+                        toggleChecked={viewModel.toggleNumbers}
+                        style={{justifySelf: "center"}}
                     />
                     <label>Sonderzeichen:</label>
-                    <input
-                        type="checkbox"
+                    <SliderCheckBox
                         checked={viewModel.special}
-                        onChange={viewModel.toggleSpecial}
+                        toggleChecked={viewModel.toggleSpecial}
+                        style={{justifySelf: "center"}}
                     />
                 </div>
                 <div className="confirm-cancel-buttons">
-                    <button onClick={viewModel.handleConfirm}>Bestätigen</button>
-                    <button onClick={() => viewModel.setPasswordGenOpen(false)}>Abbrechen</button>
+                    <button className={"rectangle-button"} onClick={viewModel.handleConfirm}>Bestätigen</button>
+                    <button className={"rectangle-button"} onClick={() => viewModel.setPasswordGenOpen(false)}>Abbrechen</button>
                 </div>
                 <ToastDialog message={viewModel.toastMessage}
                              isVisible={viewModel.toastVisible}
