@@ -1125,6 +1125,7 @@ input[type="number"] {
     overflow-y: scroll;
     overflow-x: hidden !important;
     max-width: 100%;
+    scroll-behavior: smooth;
 }
 
 /* Timeline Structure */

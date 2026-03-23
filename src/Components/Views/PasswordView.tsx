@@ -70,7 +70,13 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                     <DndContext collisionDetection={pointerWithin}
                                 onDragEnd={viewModel.handleDragEnd}
                                 sensors={viewModel.sensors}
-                                autoScroll={false}>
+                                autoScroll={{
+                                    threshold: {
+                                        x: 0,
+                                        y: 1,
+                                    },
+                                    acceleration: 1,
+                                }}>
 
                         {/*The basic ListView which shows all Items and Folders in their hierarchy*/}
                         {viewModel.searchValue.length === 0 && <ListView
@@ -107,23 +113,24 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                                hidePassword={viewModel.hidePassword}
                                toggleHidePassword={viewModel.toggleHidePassword}/>}
 
-                    {viewModel.inEditable &&
-                        <EditableEntryView item={viewModel.curItem}
-                                           updateItemAttribute={viewModel.updateItemAttribute}
-                                           setEditableView={() => viewModel.toggleInEdit()}
-                                           createItem={viewModel.createEntry}
-                                           inCreation={viewModel.inEntryCreation}
-                                           setInCreation={viewModel.setInEntryCreation}
-                                           hidePassword={viewModel.hidePassword}
-                                           toggleHidePassword={viewModel.toggleHidePassword}
-                        />
-                    }
+                {viewModel.inEditable &&
+                    <EditableEntryView item={viewModel.curItem}
+                                       updateItemAttribute={viewModel.updateItemAttribute}
+                                       setEditableView={() => viewModel.toggleInEdit()}
+                                       createItem={viewModel.createEntry}
+                                       inCreation={viewModel.inEntryCreation}
+                                       setInCreation={viewModel.setInEntryCreation}
+                                       hidePassword={viewModel.hidePassword}
+                                       toggleHidePassword={viewModel.toggleHidePassword}
+                    />
+                }
 
-                    <button className={`mobile-back ${viewModel.inEditable ? 'disabled' : ''}`} onClick={viewModel.closeEntryOnMobile}>
-                        <HiArrowLeftCircle size={24} style={{ marginRight: '8px' }}/> Eintrag schließen
-                    </button>
+                <button className={`mobile-back ${viewModel.inEditable ? 'disabled' : ''}`}
+                        onClick={viewModel.closeEntryOnMobile}>
+                    <HiArrowLeftCircle size={24} style={{marginRight: '8px'}}/> Eintrag schließen
+                </button>
 
-                </div>
+            </div>
 
             {viewModel.itemToDelete && <DeleteConfirmationDialog
                 item={viewModel.itemToDelete}
@@ -132,10 +139,10 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
             />}
 
 
-                {/*A Toast that may be called at any time with a given message*/}
-                <ToastDialog message={viewModel.toastMessage}
-                             isVisible={viewModel.toastVisible}
-                             onClose={() => viewModel.setToastVisible(false)} />
+            {/*A Toast that may be called at any time with a given message*/}
+            <ToastDialog message={viewModel.toastMessage}
+                         isVisible={viewModel.toastVisible}
+                         onClose={() => viewModel.setToastVisible(false)}/>
 
         </div>
     );
