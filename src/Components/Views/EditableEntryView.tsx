@@ -43,7 +43,8 @@ const EditableEntryView: React.FC<{
         return (
             <div className={"entryViewContainer"}>
                 <div className="entryViewEntry">
-                    <input className={"title-value"} type={"text"} value={viewmodel.title} autoFocus
+                    <input className={"title-value"} type={"text"} value={viewmodel.title}
+                           autoFocus={inCreation}
                            onFocus={e => {
                                if (inCreation) {
                                    e.target.select();
