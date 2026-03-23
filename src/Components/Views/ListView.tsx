@@ -36,7 +36,7 @@ import {useListViewModel} from "../ViewModels/ListViewModel.ts";
  */
 const ListView: React.FC<{
         item: Item,
-        setCurItem: (entry: Entry) => void,
+        setCurItem: (entry: Item) => void,
         curItem: Item;
         setItemCreationDialog: () => void,
         setCurrentParent?: (item: Item) => void,

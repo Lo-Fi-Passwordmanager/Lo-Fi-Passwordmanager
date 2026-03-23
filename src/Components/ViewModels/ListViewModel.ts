@@ -22,7 +22,7 @@ import type {Item} from "../../Model/Item.ts";
 export const useListViewModel = (
     topItem: Item,
     dirtyItemId: string | null,
-    setCurrItem: (entry: Entry) => void,
+    setCurrItem: (entry: Item) => void,
     updateItemTitle: (itemId: string, newTitle: string) => void,
     setCreatedFolderId: (folderId: string | null) => void,
     createdFolderID: string | null,
@@ -82,6 +82,7 @@ export const useListViewModel = (
         //set the boolean first so the (slow) automerge Updates happens when the UI is already updated
         setInEditName(newValue);
         setCreatedFolderId(null);
+        setCurrItem(topItem);
     }
 
 

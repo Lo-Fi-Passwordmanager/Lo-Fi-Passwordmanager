@@ -175,8 +175,6 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade) => {
         const id = curItem.id;
         setCurItem(getRootFolder());
         setDirtyItemId(id);
-
-
     }
 
     /**
@@ -185,6 +183,9 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade) => {
      * @param newTitle the new title of the item
      */
     function updateItemTitle(itemId: string, newTitle: string) {
+        if (curItem.title === newTitle) {
+            return;
+        }
         reactiveFacade.updateItem(itemId, [["name", newTitle]]);
     }
 
