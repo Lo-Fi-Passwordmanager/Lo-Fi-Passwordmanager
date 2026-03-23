@@ -1,7 +1,7 @@
 import {CSS} from "@dnd-kit/utilities";
 import React from "react";
 import {HiTrash} from "react-icons/hi";
-import {HiMiniPlus} from "react-icons/hi2";
+import {HiBars3, HiMiniPlus} from "react-icons/hi2";
 import {ImKey} from "react-icons/im";
 
 import FolderMenu from "./MenuViews/FolderMenu.tsx";
@@ -104,6 +104,7 @@ const ListView: React.FC<{
                     {...listViewModel.attributes}
                     {...listViewModel.listeners}
                     aria-selected={selectedItemId === item.id}>
+
                     <button style={{background: "none", boxShadow: "none"}}><ImKey size={18}/></button>
                     <span className={"item-title"}>{entry.title}</span>
                     <div className={"btnWrapper"}>
@@ -116,6 +117,11 @@ const ListView: React.FC<{
                             <HiTrash size={24}/>
                         </button>
                     </div>
+
+                    <div className={"mobile-drag"}>
+                        <HiBars3 size={24}/>
+                    </div>
+
                 </div>
             )
                 ;
@@ -134,6 +140,7 @@ const ListView: React.FC<{
                         {...listViewModel.listeners}
                         aria-selected={selectedItemId === item.id}>
                         {/* ^^^^^^^^^ using aria-selected for scrolling to the clicked folder from filtered list view */}
+
                         {(item.id != "") &&
                             <button style={{boxShadow: "none"}}
                                     onClick={() => listViewModel.toggleExpanded()}
@@ -182,6 +189,11 @@ const ListView: React.FC<{
                                 <HiMiniPlus size={24}/>
                             </button>}
                         </div>
+
+                        {item.id === "" ? null : <div className={"mobile-drag folder"}>
+                            <HiBars3 size={24}/>
+                        </div>}
+
                     </div>
 
                     {/* Recursive call of children with indent to visualizes depth in the tree */}
