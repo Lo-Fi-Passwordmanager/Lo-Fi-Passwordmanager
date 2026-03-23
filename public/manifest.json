@@ -3,12 +3,12 @@
   "name": "Local First Passwordmanager",
   "icons": [
     {
-      "src": "logo_gelb.svg",
+      "src": "/logo_gelb.svg",
       "type": "image/svg+xml",
       "sizes": "any"
     },
     {
-      "src": "logo_gelb.png",
+      "src": "/logo_gelb.png",
       "type": "image/png",
       "sizes": "192x192"
     }
