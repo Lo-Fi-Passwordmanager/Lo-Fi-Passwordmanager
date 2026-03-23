@@ -18,11 +18,11 @@ test("create a new DB, delete it and add it again via URL", async ({page}) => {
     await page.getByRole("textbox", {name: "Masterpasswort"}).fill("Masterpasswort");
     await page.getByRole("button", {name: "Bestätigen"}).click();
     //überprüft, ob wir angemeldet sind
-    await expect(page.getByRole('textbox', { name: 'Nach Einträgen und Ordnern' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Datenbank schließen' })).toBeVisible();
+    await expect(page.getByRole("textbox", {name: "Nach Einträgen und Ordnern"})).toBeVisible();
+    await expect(page.getByRole("button", {name: "Datenbank schließen"})).toBeVisible();
 
     //meldet sich ab
-    await page.getByRole("button", {name: 'Datenbank schließen'}).click();
+    await page.getByRole("button", {name: "Datenbank schließen"}).click();
     await expect(page.getByRole("button", {name: "Datenbankname"})).toBeVisible();
     //klickt auf den umbenennen button
     await page.getByRole("button").nth(4).click();
@@ -37,15 +37,15 @@ test("create a new DB, delete it and add it again via URL", async ({page}) => {
     await page.getByRole("button", {name: "Bestätigen"}).click();
     //überprüft das wir angemeldet sind
     await expect(page.getByRole("textbox", {name: "Nach Einträgen und Ordnern suchen"})).toBeVisible();
-    await expect(page.getByRole("button", {name: 'Datenbank schließen'})).toBeVisible();
+    await expect(page.getByRole("button", {name: "Datenbank schließen"})).toBeVisible();
     //Einstellungen öffnen
-    await page.getByRole('button', { name: 'Einstellungen öffnen' }).click();
-    await expect(page.getByRole('heading', { name: 'Allgemeine Einstellungen' })).toBeVisible();
+    await page.getByRole("button", {name: "Einstellungen öffnen"}).click();
+    await expect(page.getByRole("heading", {name: "Allgemeine Einstellungen"})).toBeVisible();
     //DB Einstellung öffnen
     await page.getByRole("button", {name: "Datenbankeinstellungen"}).click();
     await expect(page.getByRole("heading", {name: "Datenbankeinstellungen"})).toBeVisible();
     //automerge url kopieren und DB exportieren
-    await page.getByRole("button", {name:"Datenbank ID kopieren"}).click();
+    await page.getByRole("button", {name: "Datenbank ID kopieren"}).click();
     const copiedText = await page.evaluate(() => {
         return navigator.clipboard.readText();
     });
@@ -53,11 +53,11 @@ test("create a new DB, delete it and add it again via URL", async ({page}) => {
     await page.getByRole("button", {name: "Verschlüsselt Exportieren"}).dblclick();
     const download1 = await download1Promise;
     //abmelden
-    await page.getByRole('img').nth(2).click();
-    await page.getByRole("button", {name: 'Datenbank schließen'}).click();
-    await expect(page.getByRole("button", {name: "Datenbank ID kopieren"})).toBeVisible();
+    await page.getByRole("img").nth(2).click();
+    await page.getByRole("button", {name: "Datenbank schließen"}).click();
+    await expect(page.getByRole("button", {name: "Datenbank ID in die Zwischenablage kopieren"})).toBeVisible();
     //Db löschen
-    await page.getByRole('button').filter({ hasText: 'Datenbank entfernen' }).click();
+    await page.getByRole("button", {name: "Datenbank entfernen"}).first().click();
     await expect(page.getByRole("heading", {name: "Löschen bestätigen"})).toBeVisible();
     await page.getByRole("button", {name: "Löschen"}).dblclick();
     //Menu für Db mit url laden öffnen
@@ -75,8 +75,8 @@ test("create a new DB, delete it and add it again via URL", async ({page}) => {
     await page.getByRole("textbox", {name: "Masterpasswort"}).fill("Masterpasswort");
     await page.getByRole("button", {name: "Bestätigen"}).click();
     //überprüft, ob wir angemeldet sind
-    await expect(page.getByRole('textbox', { name: 'Nach Einträgen und Ordnern' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Datenbank schließen' })).toBeVisible();
+    await expect(page.getByRole("textbox", {name: "Nach Einträgen und Ordnern"})).toBeVisible();
+    await expect(page.getByRole("button", {name: "Datenbank schließen"})).toBeVisible();
 
 });
 
@@ -93,10 +93,10 @@ test("create a Database and rename it", async ({page}) => {
     await page.getByRole("textbox", {name: "Masterpasswort"}).fill("Masterpasswort");
     await page.getByRole("button", {name: "Bestätigen"}).click();
     //überprüft, ob wir angemeldet sind
-    await expect(page.getByRole('textbox', { name: 'Nach Einträgen und Ordnern' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Datenbank schließen' })).toBeVisible();
+    await expect(page.getByRole("textbox", {name: "Nach Einträgen und Ordnern"})).toBeVisible();
+    await expect(page.getByRole("button", {name: "Datenbank schließen"})).toBeVisible();
 
-    await page.getByRole("button", {name: 'Datenbank schließen'}).click();
+    await page.getByRole("button", {name: "Datenbank schließen"}).click();
     await expect(page.getByRole("button", {name: "Datenbankname"})).toBeVisible();
 
     await page.getByRole("button").nth(4).click();
@@ -112,6 +112,7 @@ test("create a Database and rename it", async ({page}) => {
 
 test("add a database with a link", async ({page}) => {
     await page.goto("");
+    await page.routeFromHAR("./e2e/har/findDatabase.har", {update: false});
     await expect(page.getByRole("img", {name: "Passwortmanager Logo"})).toBeVisible();
 
     await page.getByRole("button", {name: "Neue Datenbank erstellen"}).click();
@@ -130,8 +131,8 @@ test("add a database with a link", async ({page}) => {
     await page.getByRole("textbox", {name: "Masterpasswort"}).fill("Masterpasswort");
     await page.getByRole("button", {name: "Bestätigen"}).click();
     //überprüft, ob wir angemeldet sind
-    await expect(page.getByRole('textbox', { name: 'Nach Einträgen und Ordnern' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Datenbank schließen' })).toBeVisible();
+    await expect(page.getByRole("textbox", {name: "Nach Einträgen und Ordnern"})).toBeVisible();
+    await expect(page.getByRole("button", {name: "Datenbank schließen"})).toBeVisible();
 
-    await page.getByRole("button", {name: 'Datenbank schließen'}).click();
+    await page.getByRole("button", {name: "Datenbank schließen"}).click();
 });
