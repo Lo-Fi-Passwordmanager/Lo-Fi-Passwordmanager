@@ -160,6 +160,6 @@ export const useListViewModel = (
         toggleExpanded,
         setFolderRef,
         setDraggableRef,
-        expandFolder
+        expandFolder,
     };
 };

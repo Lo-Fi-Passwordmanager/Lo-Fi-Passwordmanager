@@ -12,6 +12,7 @@ import ItemCreationDialog from "./DialogViews/ItemCreationDialog.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
 import EditableEntryView from "./EditableEntryView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
+import {HiArrowLeftCircle} from "react-icons/hi2";
 
 
 interface PasswordViewProps {
@@ -35,7 +36,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
     }
 
     return (
-        <div className={"passwordView"}>
+        <div className={`passwordView ${viewModel.curItem.isEntry() ? 'mobile-detail-open' : ''}`}>
             {/*Dialog for creating a new Entry*/}
             {viewModel.inItemCreation &&
                 <ItemCreationDialog
@@ -106,18 +107,23 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                                hidePassword={viewModel.hidePassword}
                                toggleHidePassword={viewModel.toggleHidePassword}/>}
 
-                {viewModel.inEditable &&
-                    <EditableEntryView item={viewModel.curItem}
-                                       updateItemAttribute={viewModel.updateItemAttribute}
-                                       setEditableView={() => viewModel.toggleInEdit()}
-                                       createItem={viewModel.createEntry}
-                                       inCreation={viewModel.inEntryCreation}
-                                       setInCreation={viewModel.setInEntryCreation}
-                                       hidePassword={viewModel.hidePassword}
-                                       toggleHidePassword={viewModel.toggleHidePassword}
-                    />
-                }
-            </div>
+                    {viewModel.inEditable &&
+                        <EditableEntryView item={viewModel.curItem}
+                                           updateItemAttribute={viewModel.updateItemAttribute}
+                                           setEditableView={() => viewModel.toggleInEdit()}
+                                           createItem={viewModel.createEntry}
+                                           inCreation={viewModel.inEntryCreation}
+                                           setInCreation={viewModel.setInEntryCreation}
+                                           hidePassword={viewModel.hidePassword}
+                                           toggleHidePassword={viewModel.toggleHidePassword}
+                        />
+                    }
+
+                    <button className={`mobile-back ${viewModel.inEditable ? 'disabled' : ''}`} onClick={viewModel.closeEntryOnMobile}>
+                        <HiArrowLeftCircle size={24} style={{ marginRight: '8px' }}/> Eintrag schließen
+                    </button>
+
+                </div>
 
             {viewModel.itemToDelete && <DeleteConfirmationDialog
                 item={viewModel.itemToDelete}
@@ -125,10 +131,12 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                 onClose={() => viewModel.setItemToDelete(null)}
             />}
 
-            {/*A Toast that may be called at any time with a given message*/}
-            <ToastDialog message={viewModel.toastMessage}
-                         isVisible={viewModel.toastVisible}
-                         onClose={() => viewModel.setToastVisible(false)}/>
+
+                {/*A Toast that may be called at any time with a given message*/}
+                <ToastDialog message={viewModel.toastMessage}
+                             isVisible={viewModel.toastVisible}
+                             onClose={() => viewModel.setToastVisible(false)} />
+
         </div>
     );
 

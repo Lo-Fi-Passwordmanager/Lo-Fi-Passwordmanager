@@ -1,5 +1,5 @@
 import React from 'react';
-import {HiLockClosed} from "react-icons/hi2";
+import {HiBarsArrowDown, HiBarsArrowUp, HiLockClosed} from "react-icons/hi2";
 
 import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
 
@@ -48,7 +48,7 @@ const OrganizeListView: React.FC<{
                 <HiLockClosed size={18}/>
             </button>
 
-            <input style={{gridColumn: "span 2", height: "2.5rem"}}
+            <input style={{gridColumn: "span 2", height: "2.5rem", minWidth: "100%"}}
                    type="text" placeholder="Suchen..."
                    value={liveSearchValue}
                    onChange={(event => setLiveSearchValue(event.target.value))}
@@ -80,7 +80,7 @@ const OrganizeListView: React.FC<{
                 toggleOrder()
             }}
                 title={isAscending ? "Absteigend sortieren" : "Aufsteigend sortieren"}>
-                {isAscending ? '🡅' : '🡇'}
+                {isAscending ? <HiBarsArrowDown size={24}/> : <HiBarsArrowUp size={24}/>}
             </button>
         </div>
     );

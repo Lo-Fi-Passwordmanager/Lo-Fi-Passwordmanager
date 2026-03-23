@@ -168,6 +168,16 @@ button, select {
     /* Modern Interaction Style */
     box-shadow: var(--shadow);
     transition: transform 0.1s, active, filter 0.2s ease, box-shadow 0.2s ease;
+
+    &.disabled {
+        filter: grayscale(50%);
+        opacity: 80%;
+
+        &:hover {
+        }
+
+        transition: opacity .4s, filter .4s;
+    }
 }
 
 button:disabled {
@@ -377,8 +387,9 @@ input[type="number"] {
     border-radius: var(--standard-radius);
     width: 100%;
     max-width: 300px;
-    max-height: 192px; {/* up to 3 1/2 servers visible */}
-    box-sizing: border-box;
+    max-height: 192px;
+{ /* up to 3 1/2 servers visible */
+} box-sizing: border-box;
     flex: none !important;
 }
 
@@ -457,10 +468,16 @@ input[type="number"] {
     transition: filter 0.3s ease;
 }
 
+.app-title {
+    grid-column: span 1;
+    cursor: pointer;
+}
+
 .logo.header {
     margin: 0.1rem 0.1rem 0.1rem 0;
     height: 100%;
     width: auto;
+    cursor: pointer;
 }
 
 .password-manager-header {
@@ -471,20 +488,10 @@ input[type="number"] {
     padding: 0 2vh;
 }
 
-.squareButton, .settingsButton, .copyButton, .eyeButton, .passwordGenButton, .histroyButton {
+.squareButton, .settingsButton, .copyButton, .eyeButton, .passwordGenButton, .historyButton {
     height: 2.5rem;
     aspect-ratio: 1;
     padding: 0.5rem;
-
-    &.disabled {
-        filter: grayscale(50%);
-        opacity: 80%;
-
-        &:hover {
-        }
-
-        transition: opacity .4s, filter .4s;
-    }
 }
 
 .entryViewFooterButtons {
@@ -499,6 +506,10 @@ input[type="number"] {
     width: 10rem;
     height: 3rem;
     gap: 0.5rem;
+}
+
+.rectangle-button.dialog-confirm {
+    margin: 1rem 0 0.5rem 0;
 }
 
 .delete {
@@ -557,7 +568,7 @@ input[type="number"] {
     top: 1.5vh
 }
 
-.histroyButton {
+.historyButton {
     margin-left: auto;
     position: absolute;
     /* settingsButton-right + settingsButton width + padding */
@@ -1286,17 +1297,8 @@ input[type="number"] {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 2rem;
     text-align: center;
-}
-
-.confirmDeleteWrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2rem;
-    text-align: center;
+    gap: 10px;
 }
 
 .password-container {
@@ -1424,9 +1426,54 @@ input[type="number"] {
     flex-direction: column;
 }
 
+.editFolder {
+    border: none;
+}
+
+.mobile-back {
+    display: none;
+}
+
+.mobile-dates {
+    display: none;
+}
+
+.mobile-drag {
+    display: none;
+}
 
 /* Mobile Phones should render differently*/
 @media (max-width: 768px) {
+    body {
+        margin: 0;
+        box-sizing: border-box;
+        height: 100dvh;
+        overflow: hidden;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    #root {
+        overflow: hidden;
+    }
+
+    header {
+        font-size: 2.5em;
+    }
+
+    .logo {
+        width: 6rem;
+    }
+
+    .scrollableContainer.settings-content {
+        padding: 0;
+        scrollbar-width: none;
+    }
+
+    .settings-dialog {
+        width: 100%;
+        height: 95%;
+    }
+
     .settings-layout {
         flex-direction: column-reverse;
         width: 100%;
@@ -1437,10 +1484,33 @@ input[type="number"] {
         border-top: 1px solid var(--primary);
     }
 
+    .flexContainer.login {
+        margin: 0;
+        width: 90vw;
+    }
+
+    .DatabaseListing {
+        gap: 24px;
+        margin-bottom: 2vh;
+    }
+
+    .DatabaseAndOptions {
+        display: grid;
+        grid-template-columns: 1fr repeat(4, auto) 1fr;
+        grid-template-rows: auto auto;
+    }
+
+    .DatabaseAndOptions > :first-child {
+        grid-column: 1/-1;
+    }
+
+    .DatabaseAndOptions > :nth-child(2) {
+        grid-column-start: 2;
+    }
 
     /* Reset fixed widths that cause overflow */
     .numberInput, .connection-settings, .server-list, .current-server, input {
-        width: 95% !important;
+        /* width: 95% !important; */
         max-width: 100%;
     }
 
@@ -1458,36 +1528,138 @@ input[type="number"] {
         width: 100%;
     }
 
+    .password-manager-header {
+        height: 5vh;
+        display: grid;
+        grid-template-columns: 40px 1fr 40px 40px;
+        grid-template-rows: 40px;
+        gap: 10px;
+        padding: 10px 10px 10px 10px;
+        justify-items: center;
+        margin: 5px;
+    }
+
+    .logo.header {
+        height: 100%;
+        width: auto;
+        grid-column: span 1;
+    }
+
+    .app-title.synced {
+        display: none;
+    }
+
+    .historyButton {
+        grid-column-end: 4;
+        position: static;
+        justify-self: auto;
+    }
+
+    .settingsButton {
+        grid-column-end: 5;
+        position: static;
+        justify-self: auto;
+        margin: 10px 10px 10px auto;
+    }
+
     .passwordView {
-        flex-direction: column-reverse;
+        display: block;
+        height: 90dvh;
+        width: 95vw;
+        margin: 0 2.5vw 2.5vw 2.5vw;
+
+        overflow: hidden;
+
+        border-radius: var(--big-radius);
+        border: 2px solid var(--primary);
+        box-sizing: border-box;
+
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+    }
+    .organizeListView {
+        border-radius: var(--big-radius);
+
+    }
+
+    .passwordView.mobile-detail-open .passwordViewList {
+        display: none;
+    }
+
+    .passwordView:not(.mobile-detail-open) .passwordViewEntry {
+        display: none;
     }
 
     .passwordViewList {
         width: 100%;
         border: none;
-        max-height: 40%;
+        max-height: 100%;
+        overflow-y: auto;
+    }
+
+    .listViewEntry, .listViewTitleHeader {
+        height: 3rem;
     }
 
     .passwordViewEntry {
         width: 100%;
         border: none;
-        min-height: 50%;
-        height: fit-content;
+        border-radius: 0;
+        height: 100%;
         overflow-y: scroll;
     }
 
-    .entryViewAttribute {
+    .entryViewEntry {
+        padding: 0 10px 0 10px;
+    }
+
+    .mobile-back {
         display: flex;
+        height: 80px;
+        width: 100%;
+        border-radius: 0;
     }
 
-    /* First child (Label) */
-    .entryViewAttribute *:nth-child(1) {
-        width: 30%;
+    .mobile-drag {
+        display: flex;
+        place-content: center;
+        align-items: center;
+        height: 1.7rem;
+        aspect-ratio: 1;
+        color: var(--primary);
+        filter: grayscale(30%);
+        margin-right: 5px;
+        border-radius: var(--small-radius);
+
+        -webkit-user-select: none;
+        user-select: none;
+        -webkit-touch-callout: none;
+        touch-action: none;
+        -webkit-user-drag: none;
+        user-drag: none;
+
+        &.folder {
+            color: var(--secondary);
+        }
+
+        &:active {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
     }
 
-    /* Second child (Input/Value) */
-    .entryViewAttribute *:nth-child(2) {
-        width: 70%;
+    .editFolder.mobile {
+        width: 95%;
+    }
+
+    .entryViewListing {
+        margin-top: 2vh;
+        gap: 4vh;
+    }
+
+    .entryViewAttribute {
+        grid-row-gap: 2vh;
     }
 
     .entryViewAttribute button svg {
@@ -1505,16 +1677,34 @@ input[type="number"] {
         height: 100%;
     }
 
+    .attribute-value.editing {
+        grid-column-end: 21;
+        width: 100% !important;
+    }
+
     .entryDateViewEntry {
         display: none;
-        height: 0;
+    }
+
+    .mobile-dates {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        justify-items: center;
+        grid-row-gap: 15px;
+        margin-bottom: 1vh;
+        width: 100%;
+    }
+
+    .mobile-date-item {
+        color: var(--pale-color);
+        font-weight: 100;
     }
 
     .dialog {
-        min-width: 60%;
-        padding: 10px;
+        min-width: 80vw;
         margin-top: auto;
         margin-left: 0;
         margin-right: 0;
     }
+
 }

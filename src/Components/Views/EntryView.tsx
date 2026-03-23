@@ -1,5 +1,5 @@
 import React from "react";
-import {HiPencil, HiTrash} from "react-icons/hi";
+import {HiPencil, HiTrash, HiPlus} from "react-icons/hi";
 
 import CopyButton from "./ButtonViews/CopyButton.tsx";
 import EyeButton from "./ButtonViews/EyeButton.tsx";
@@ -92,6 +92,13 @@ const EntryView: React.FC<{
                             >{entry.note}</span>
                         </div>
                     </div>
+
+                    <div className="mobile-dates">
+                        <HiPlus size={24}/><HiPencil size={24}/>
+                        <div className="mobile-date-item">{item.createdAt.toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short' })}</div>
+                        <div className="mobile-date-item">{item.editedAt.toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short' })}</div>
+                    </div>
+                    
                     <div className={"entryViewFooterButtons"}>
                         <button className={"rectangle-button"} onClick={() => {
                             setEditableView();

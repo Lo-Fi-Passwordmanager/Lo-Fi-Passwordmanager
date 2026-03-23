@@ -1,4 +1,4 @@
-import {type DragEndEvent, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
+import {type DragEndEvent, PointerSensor, TouchSensor, useSensor, useSensors} from "@dnd-kit/core";
 import {useRef, useState} from "react";
 
 import type {Folder} from "../../Model/Folder.ts";
@@ -279,6 +279,12 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade) => {
             activationConstraint: {
                 distance: allowDragging() ? 5 : Infinity,
             },
+        }),
+        useSensor(TouchSensor, {
+            activationConstraint: {
+                delay: allowDragging() ? 250 : Infinity,
+                tolerance: 20,
+            }
         })
     );
 
@@ -400,6 +406,15 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade) => {
         return [];
     }
 
+    function closeEntryOnMobile() {
+        if (!inEditable) {
+            setCurItem(getRootFolder());
+        } else {
+            setToastMessage("Bitte zuerst die Bearbeitungsansicht verlassen");
+            setToastVisible(true);
+        }
+    }
+
     return {
         dirtyItemId,
         isAscending,
@@ -448,5 +463,6 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade) => {
         getSortedChildren,
         setCurSortCrit,
         setIsAscending,
+        closeEntryOnMobile,
     };
 };

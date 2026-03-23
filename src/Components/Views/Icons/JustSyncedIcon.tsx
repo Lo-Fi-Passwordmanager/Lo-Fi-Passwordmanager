@@ -18,7 +18,7 @@ useEffect(() => {
         setShowCheckmark(true);
         setTimeout(() => {
             setShowCheckmark(false);
-        }, 3000);
+        }, 3500);
     }, 500);
 }, [justSynced]);
 

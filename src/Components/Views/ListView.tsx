@@ -1,7 +1,7 @@
 import {CSS} from "@dnd-kit/utilities";
 import React from "react";
 import {HiTrash} from "react-icons/hi";
-import {HiMiniPlus} from "react-icons/hi2";
+import {HiBars3, HiMiniPlus} from "react-icons/hi2";
 import {ImKey} from "react-icons/im";
 
 import FolderMenu from "./MenuViews/FolderMenu.tsx";
@@ -54,25 +54,25 @@ const ListView: React.FC<{
         isFolderExpanded: (folderId: string) => boolean;
         getSortedChildren: (folder: Folder) => Item[],
     }> = ({
-        item,
-        setCurItem,
-        curItem,
-        setItemCreationDialog,
-        setCurrentParent,
-        deleteItem,
-        dirtyItemId,
-        openedDbName,
-        selectedItemId,
-        createdFolderId,
-        updateItemTitle,
-        setCreatedFolderId,
-        inEditable,
-        level,
-        expandFolderId,
-        collapseFolderId,
-        isFolderExpanded,
-        getSortedChildren
-    }) => {
+              item,
+              setCurItem,
+              curItem,
+              setItemCreationDialog,
+              setCurrentParent,
+              deleteItem,
+              dirtyItemId,
+              openedDbName,
+              selectedItemId,
+              createdFolderId,
+              updateItemTitle,
+              setCreatedFolderId,
+              inEditable,
+              level,
+              expandFolderId,
+              collapseFolderId,
+              isFolderExpanded,
+              getSortedChildren
+          }) => {
         const listViewModel = useListViewModel(item, dirtyItemId, setCurItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded);
 
         function addButtonPressed() {
@@ -104,6 +104,7 @@ const ListView: React.FC<{
                     {...listViewModel.attributes}
                     {...listViewModel.listeners}
                     aria-selected={selectedItemId === item.id}>
+
                     <button style={{background: "none", boxShadow: "none"}}><ImKey size={18}/></button>
                     <span className={"item-title"}>{entry.title}</span>
                     <div className={"btnWrapper"}>
@@ -116,6 +117,11 @@ const ListView: React.FC<{
                             <HiTrash size={24}/>
                         </button>
                     </div>
+
+                    <div className={"mobile-drag"}>
+                        <HiBars3 size={24}/>
+                    </div>
+
                 </div>
             )
                 ;
@@ -129,11 +135,12 @@ const ListView: React.FC<{
                     <div
                         className={`listViewTitleHeader ${item.id == "" ? "database_title" : ""} ${listViewModel.isDragging ? "dragged" : ""} ${listViewModel.isOver && !listViewModel.isDragging ? "over" : ""} ${selectedItemId === item.id ? "highlighted folder" : ""}`}
                         ref={listViewModel.setFolderRef}
-                        style={item.id !== "" ? dragStyle : {minHeight : "2.5rem"}}
+                        style={item.id !== "" ? dragStyle : {minHeight: "2.5rem"}}
                         {...listViewModel.attributes}
                         {...listViewModel.listeners}
                         aria-selected={selectedItemId === item.id}>
                         {/* ^^^^^^^^^ using aria-selected for scrolling to the clicked folder from filtered list view */}
+
                         {(item.id != "") &&
                             <button style={{boxShadow: "none"}}
                                     onClick={() => listViewModel.toggleExpanded()}
@@ -152,7 +159,8 @@ const ListView: React.FC<{
                                        e.target.select();
                                        listViewModel.setItemTitle(item.title);
                                    }}
-                                   style={{marginLeft: ((item.id != "") ? "" : "10px"), border: "none"}}
+                                   className={"editFolder mobile"}
+                                   style={{marginLeft: ((item.id != "") ? "" : "10px")}}
                                    value={listViewModel.newTitle}
                                    onChange={(e) => listViewModel.setItemTitle(e.target.value)}
                                    onBlur={() => {
@@ -181,6 +189,11 @@ const ListView: React.FC<{
                                 <HiMiniPlus size={24}/>
                             </button>}
                         </div>
+
+                        {item.id === "" ? null : <div className={"mobile-drag folder"}>
+                            <HiBars3 size={24}/>
+                        </div>}
+
                     </div>
 
                     {/* Recursive call of children with indent to visualizes depth in the tree */}
