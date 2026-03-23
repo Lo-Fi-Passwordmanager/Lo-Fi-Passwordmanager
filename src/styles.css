@@ -6,6 +6,38 @@
     height: max-content;
 }
 
+[data-shadow="both"] {
+    position: relative;
+
+    &::before {
+        opacity: 1;
+    }
+
+}
+
+[data-shadow] {
+    &::before {
+        content: "";
+        position: sticky;
+        top: 0;
+        display: block;
+        height: 0;
+        padding-bottom: 15px;
+        margin-bottom: -15px;
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), transparent);
+        z-index: 10;
+        pointer-events: none;
+
+        /* Start hidden */
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+}
+
+:has(>[data-shadow]) {
+    position: relative;
+}
+
 /* LIGHT THEME (default) */
 :root {
     min-height: 100%;
@@ -1493,6 +1525,8 @@ input[type="number"] {
     .DatabaseListing {
         gap: 24px;
         margin-bottom: 2vh;
+        height: 45vh;
+        overflow-y: scroll;
     }
 
     .DatabaseAndOptions {
@@ -1580,6 +1614,7 @@ input[type="number"] {
         -webkit-backface-visibility: hidden;
         backface-visibility: hidden;
     }
+
     .organizeListView {
         border-radius: var(--big-radius);
 
