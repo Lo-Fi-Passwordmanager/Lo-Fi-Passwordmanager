@@ -13,6 +13,19 @@
       "type": "image/png"
     }
   ],
+  "screenshots": [
+    {
+      "src": "screenshot-mobile.png",
+      "sizes": "402x874",
+      "type": "image/png"
+    },
+    {
+      "src": "screenshot-desktop.png",
+      "sizes": "1920x919",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
