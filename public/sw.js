@@ -1,0 +1,1 @@
+seld.addEventListener("fetch", event => {})

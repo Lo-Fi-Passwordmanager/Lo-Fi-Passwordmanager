@@ -6,10 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Local-First Passwortmanager</title>
     <link rel="manifest" href="/manifest.json" />
-    <link rel="apple-touch-icon" href="/logo_gelb.png" />>
+    <link rel="apple-touch-icon" href="/logo_gelb.png" />
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+                  .then(reg => console.log('registered service worker', reg))
+                  .catch(err => console.error('error registering service worker', err));
+        });
+      }
+    </script>
   </body>
 </html>
