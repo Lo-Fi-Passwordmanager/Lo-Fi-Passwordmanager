@@ -30,13 +30,9 @@ const EntryView: React.FC<{
     if (item.isFolder() || item.deleted) {
         return (
             <>
-                <div style={{
-                    display: "flex", flexDirection: "column", justifyContent: "center",
-                    alignItems: "center", width: "100%", height: "100%",
-                    fontSize: "2em", color: "gray"
-                }}>
-                    <span>Bitte Eintrag auswählen</span>
-                    <img className="logo" style={{width: "30vmin", marginTop: "2em"}} src={Logo} alt={"Logo"}/>
+                <div className={"entryViewNoSelection"}>
+                    <span>Noch kein Eintrag ausgewählt</span>
+                    <img className="logo" style={{width: "40vmin", marginTop: "2em"}} src={Logo} alt={"Logo"}/>
                 </div>
             </>
         );
@@ -44,21 +40,21 @@ const EntryView: React.FC<{
         const entry = item as Entry;
         return (<div className="entryViewContainer">
                 <div className="entryViewEntry">
-                    <div className={"title-value"}>
+                    <div className={"title-value"} title={"Titel"}>
                         {entry.title}
                     </div>
 
                     <div className={"divider"} style={{width: "50%"}}/>
 
-                    <div className={"scrollableContainer entryViewListing"} style={{width: "90%"}}>
+                    <div className={"scrollableContainer entryViewListing"}>
                         <div className={"entryViewAttribute"}>
-                            <span style={{gridColumn: "span 20"}}>Benutzername:</span>
+                            <span className={"attribute-title"}>Benutzername:</span>
                             <span className={"attribute-value"} title={"Benutzername"}>{entry.username}</span>
                             <CopyButton copyToClipboard={copyAndClearClipboard} attributeValue={entry.username}/>
                         </div>
 
                         <div className={"entryViewAttribute"}>
-                            <span style={{gridColumn: "span 20"}}>Passwort:</span>
+                            <span className={"attribute-title"}>Passwort:</span>
                             <div className={"attribute-value"} style={{gridColumnEnd: "19"}}>
                                 <span title={"Passwort"}>{(hidePassword ? "●".repeat(8) : entry.password)}</span>
                             </div>
@@ -68,7 +64,7 @@ const EntryView: React.FC<{
 
                         <div className={"entryViewAttribute"}>
                             {/* adds https://www. to the start of the link*/}
-                            <span style={{gridColumn: "span 20"}}>URL:</span>
+                            <span className={"attribute-title"}>URL:</span>
                             <a className={"attribute-value"}
                                href={(entry.url.startsWith("http") ? entry.url : ("https://" + entry.url))}
                                target="_blank" rel="noopener noreferrer"
@@ -81,10 +77,9 @@ const EntryView: React.FC<{
                         </div>
 
                         <div className={"entryViewAttribute"}>
-                            <span style={{gridColumn: "span 20"}}>Notiz:</span>
+                            <span className={"attribute-title"}>Notiz:</span>
                             <span className={"attribute-value"} style={{
                                 height: "fit-content",
-                                paddingLeft: "10px",
                                 whiteSpace: "normal",
                                 gridColumnEnd: "21"
                             }}
@@ -95,20 +90,26 @@ const EntryView: React.FC<{
 
                     <div className="mobile-dates">
                         <HiPlus size={24}/><HiPencil size={24}/>
-                        <div className="mobile-date-item">{item.createdAt.toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short' })}</div>
-                        <div className="mobile-date-item">{item.editedAt.toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short' })}</div>
+                        <div className="mobile-date-item">{item.createdAt.toLocaleString(undefined, {
+                            dateStyle: 'short',
+                            timeStyle: 'short'
+                        })}</div>
+                        <div className="mobile-date-item">{item.editedAt.toLocaleString(undefined, {
+                            dateStyle: 'short',
+                            timeStyle: 'short'
+                        })}</div>
                     </div>
-                    
+
                     <div className={"entryViewFooterButtons"}>
-                        <button className={"rectangle-button"} onClick={() => {
-                            setEditableView();
-                        }} style={{boxShadow: "none"}}
-                                title={"Eintrag bearbeiten"}
+                        <button
+                            className={"rectangle-button"}
+                            onClick={setEditableView}
+                            title={"Eintrag bearbeiten"}
                         >
                             <HiPencil size={24}/> Bearbeiten
                         </button>
-                        <button className={"rectangle-button delete"} onClick={() => deleteItem(item)}
-                                style={{boxShadow: "none"}}
+                        <button className={"rectangle-button delete"}
+                                onClick={() => deleteItem(item)}
                                 title={"Eintrag löschen"}
                         >
                             <HiTrash size={24}/>Löschen
@@ -116,8 +117,8 @@ const EntryView: React.FC<{
                     </div>
                 </div>
                 <div className="entryDateViewEntry">
-                    <span>Erstellt am: {item.createdAt.toLocaleString()}</span>
-                    <span>Bearbeitet am: {item.editedAt.toLocaleString()}</span>
+                    <span>Erstellt am: {item.createdAt.toLocaleString(undefined, {dateStyle: 'long', timeStyle: 'medium'})}</span>
+                    <span>Bearbeitet am: {item.editedAt.toLocaleString(undefined, {dateStyle: 'long', timeStyle: 'medium'})}</span>
                 </div>
             </div>
         );

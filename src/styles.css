@@ -791,6 +791,18 @@ input[type="number"] {
     justify-items: center;
 }
 
+
+.entryViewNoSelection {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    font-size: 2em;
+    color: var(--outline);
+}
+
 .entryViewContainer {
     display: flex;
     flex-direction: column;
@@ -822,7 +834,8 @@ input[type="number"] {
 .entryViewListing {
     display: flex;
     flex-direction: column;
-    height: max-content;
+    height: 90%;
+    width: 90%;
     gap: 2vh;
     scrollbar-width: none !important;
 }
@@ -833,6 +846,11 @@ input[type="number"] {
     align-items: center; /* Better than 'start' for row alignment */
     gap: 8px;
     width: 100%;
+    grid-row-gap: 2vh;
+}
+
+.attribute-title {
+    grid-column: span 20;
 }
 
 .attribute-value, .title-value {
@@ -854,6 +872,7 @@ input[type="number"] {
 
 .attribute-value.editing {
     grid-column-end: 21;
+    white-space: normal;
 }
 
 .title-value {
@@ -1493,10 +1512,6 @@ input[type="number"] {
         font-size: 2.5em;
     }
 
-    .logo {
-        width: 6rem;
-    }
-
     .scrollableContainer.settings-content {
         padding: 0;
         scrollbar-width: none;
@@ -1572,6 +1587,10 @@ input[type="number"] {
         padding: 10px 10px 10px 10px;
         justify-items: center;
         margin: 5px;
+    }
+
+    .logo {
+        width: 20vw;
     }
 
     .logo.header {
@@ -1692,10 +1711,6 @@ input[type="number"] {
     .entryViewListing {
         margin-top: 2vh;
         gap: 4vh;
-    }
-
-    .entryViewAttribute {
-        grid-row-gap: 2vh;
     }
 
     .entryViewAttribute button svg {

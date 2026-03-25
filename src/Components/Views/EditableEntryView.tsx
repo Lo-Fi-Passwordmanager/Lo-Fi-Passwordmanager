@@ -30,14 +30,12 @@ const EditableEntryView: React.FC<{
 
     if (item.isFolder() || item.deleted) {
         return (
-            <div style={{
-                display: "flex", flexDirection: "column", justifyContent: "center",
-                alignItems: "center", width: "100%", height: "100%",
-                fontSize: "2em", color: "gray"
-            }}>
-                <input>Bitte Eintrag auswählen</input>
-                <img className="logo" style={{width: "30vmin", marginTop: "2em"}} src={Logo} alt={"Logo"}/>
-            </div>
+            <>
+                <div className={"entryViewNoSelection"}>
+                    <span>Noch kein Eintrag ausgewählt</span>
+                    <img className="logo" style={{width: "40vmin", marginTop: "2em"}} src={Logo} alt={"Logo"}/>
+                </div>
+            </>
         );
     } else if (item.isEntry()) {
         return (
@@ -55,16 +53,15 @@ const EditableEntryView: React.FC<{
                     <div className={"divider"} style={{background:"transparent"}}/>
 
                     <div
-                        className={"scrollableContainer entryViewListing"}
-                        style={{height: '90%', width: '90%'}}>
+                        className={"scrollableContainer entryViewListing"}>
                             <div className={"entryViewAttribute"}>
-                                <span style={{gridColumn: "span 20"}}>Benutzername:</span>
+                                <span className={"attribute-title"}>Benutzername:</span>
                                 <input className={"attribute-value editing"}
                                        type={"text"} value={viewmodel.username}
                                        onChange={(e) => viewmodel.setUsername(e.target.value)}/>
                             </div>
                             <div className={"entryViewAttribute"}>
-                                <span style={{gridColumn: "span 20"}}>Passwort:</span>
+                                <span className={"attribute-title"}>Passwort:</span>
                                 <input className={"attribute-value editing"} style={{gridColumnEnd: "19"}}
                                        type={hidePassword ? "password" : "text"}
                                        value={viewmodel.password}
@@ -74,18 +71,14 @@ const EditableEntryView: React.FC<{
                                     setNewPassword={(password: string) => viewmodel.setPassword(password)}/>
                             </div>
                             <div className={"entryViewAttribute"}>
-                                <span style={{gridColumn: "span 20"}}>URL:</span>
+                                <span className={"attribute-title"}>URL:</span>
                                 <input className={"attribute-value editing"} type={"text"} value={viewmodel.url}
                                        onChange={(e) => viewmodel.setUrl(e.target.value)}/>
                             </div>
                             <div className={"entryViewAttribute"}>
-                                <span style={{gridColumn: "span 20"}}>Notiz:</span>
+                                <span className={"attribute-title"}>Notiz:</span>
                                 <input className={"attribute-value editing"} type={"text"} value={viewmodel.note}
-                                       onChange={(e) => viewmodel.setNote(e.target.value)}
-                                       style={{
-                                           padding: "10px",
-                                           whiteSpace: "normal",
-                                       }}/>
+                                       onChange={(e) => viewmodel.setNote(e.target.value)}/>
                             </div>
                         </div>
                         <div className={"entryViewFooterButtons"}>
@@ -101,8 +94,8 @@ const EditableEntryView: React.FC<{
                     </div>
                 </div>
                 <div className="entryDateViewEntry">
-                    <span>Erstellt am: {item.createdAt.toLocaleString()}</span>
-                    <span>Bearbeitet am: {item.editedAt.toLocaleString()}</span>
+                    <span>Erstellt am: {item.createdAt.toLocaleString(undefined, {dateStyle: 'long', timeStyle: 'medium'})}</span>
+                    <span>Bearbeitet am: {item.editedAt.toLocaleString(undefined, {dateStyle: 'long', timeStyle: 'medium'})}</span>
                 </div>
             </div>
         );
