@@ -1540,7 +1540,7 @@ input[type="number"] {
     .DatabaseListing {
         gap: 24px;
         margin-bottom: 2vh;
-        height: 45vh;
+        height: 45%;
         overflow-y: scroll;
     }
 
