@@ -1512,6 +1512,10 @@ input[type="number"] {
         font-size: 2.5em;
     }
 
+    .databaseSelection {
+        height: 45dvh;
+    }
+
     .scrollableContainer.settings-content {
         padding: 0;
         scrollbar-width: none;
@@ -1540,8 +1544,8 @@ input[type="number"] {
     .DatabaseListing {
         gap: 24px;
         margin-bottom: 2vh;
-        height: 45dvh;
         overflow-y: scroll;
+        justify-content: unset !important;
     }
 
     .DatabaseAndOptions {
