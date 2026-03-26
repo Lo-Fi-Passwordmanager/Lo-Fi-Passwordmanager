@@ -1,9 +1,9 @@
-import {decodeChange, diff, getActorId} from "@automerge/automerge";
+import {decodeChange, getActorId} from "@automerge/automerge";
 import {
     BroadcastChannelNetworkAdapter, type DocHandle, type DocHandleChangePayload, getChanges, getObjectId,
     IndexedDBStorageAdapter,
     type NetworkAdapterInterface,
-    Repo, type UrlHeads,
+    Repo,
     WebSocketClientAdapter
 } from "@automerge/react";
 import {useEffect, useState} from "react";
@@ -14,7 +14,6 @@ import type {AutomergeDoc} from "../../Model/Automerge/AutomergeDoc.ts";
 import {Settings, useSettings} from "../../Model/Settings.ts";
 import type {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
-
 
 
 /**
@@ -101,36 +100,34 @@ export const usePasswordManagerViewModel = () => {
 
         let handle: DocHandle<AutomergeDoc> | null = null;
 
-        const handleRemoteChange = (payload: DocHandleChangePayload<unknown>) => {
+        const handleRemoteChange = (payload: DocHandleChangePayload<AutomergeDoc>) => {
             const localActorId = getActorId(payload.doc);
+            const remoteDeleted: string[] = [];
 
             const newChanges = getChanges(payload.patchInfo.before, payload.patchInfo.after)
 
             const changesFromRemote = newChanges.some(change => {
                 const decoded = decodeChange(change);
-
-                const fromRemote = decoded.actor !== localActorId;
-                if (fromRemote) {
-                    // check if an item was deleted from remote
-                    const patches = diff(handle!.doc(), decoded.deps, [decoded.hash]);
-                    const prevHandle = handle!.view(decoded.deps as UrlHeads);
-                    const remoteDeleted: string[] = [];
-                    patches.map(patch => {
-                        if(patch.action === 'del') {
-                            const prevItem = prevHandle.doc().items[patch.path[1] as number];
-                            remoteDeleted.push(getObjectId(prevItem)!);
-                        }
-                    })
-
-                    setItemsDeleted(remoteDeleted);
-                    
-                    return true;
-                }
-            })
+                return decoded.actor !== localActorId;
+            });
 
             if (!changesFromRemote) {
                 return;
             }
+
+            // check if remote change was a deletion so if the cur item was deleted it can be unselected
+            const prevDoc = payload.patchInfo.before;
+
+            for (const patch of payload.patches) {
+                if (patch.action === "del") {
+                    const index = patch.path[1] as number;
+                    const prevItem = prevDoc.items[index];
+                    if (prevItem && typeof prevItem === "object") {
+                        remoteDeleted.push(getObjectId(prevItem)!);
+                    }
+                }
+            }
+            setItemsDeleted(remoteDeleted);
 
             setJustSynced(true);
             setTimeout(() => {
