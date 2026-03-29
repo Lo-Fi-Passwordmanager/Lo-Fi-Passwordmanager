@@ -20,13 +20,14 @@ interface PasswordViewProps {
     openedDbName: string,
     closeDatabase: () => void
     itemsDeleted: string[];
+    justSynced: boolean;
 }
 
 /**
  * The view that should be shown, when the user opened a database successfully and shows the whole structure and one selected entry
  */
-const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbName, closeDatabase, itemsDeleted}) => {
-    const viewModel = usePasswordViewModel(automergeFacade as AutomergeFacade, itemsDeleted);
+const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbName, closeDatabase, itemsDeleted, justSynced}) => {
+    const viewModel = usePasswordViewModel(automergeFacade as AutomergeFacade, itemsDeleted, justSynced);
 
     // Fügt das Repo als zu global hinzu, sodass man im Browser einfach auf das Repo zugreifen kann, zum debuggen.
     // Nur während 'yarn dev' verfügbar, nach dem build nicht mehr

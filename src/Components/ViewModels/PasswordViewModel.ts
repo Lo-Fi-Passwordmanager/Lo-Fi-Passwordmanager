@@ -30,7 +30,7 @@ export type SortCriteria = typeof SortCriteria[keyof typeof SortCriteria];
  * @param automergeFacade the Automergefacade that contains the database to be used
  * @param itemsDeleted items that were deleted from remote
  */
-export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDeleted: string[]) => {
+export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDeleted: string[], justSynced: boolean) => {
 
     const settings = useSettings();
     const [inItemCreation, setInItemCreation] = useState(false);
@@ -54,13 +54,24 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
     const [expandedFolders, setExpandedFolders] = useState<string[]>([getRootFolder().id]);
     const [itemToDelete, setItemToDelete] = useState<Item | null>(null);
 
+    // check if cur item got deleted from remote
     useEffect(() => {
         for (const id of itemsDeleted) {
-            if (curItem.id === id) {
-                setCurItem(getRootFolder());
+            if (curItem.id === id && curItem.isEntry()) {
+                curItem.deleted = true;
+                setToastMessage("Der aktuell ausgewählte Eintrag wurde gelöscht");
+                setToastVisible(true);
+                break;
             }
         }
-    }, [curItem, getRootFolder, itemsDeleted]);
+    }, [curItem, itemsDeleted]);
+
+    // if doc got changes from remote make sure the entry view is up to date
+    useEffect(() => {
+        if (justSynced) {
+            setDirtyItemId(curItem.id);
+        }
+    }, [curItem.id, justSynced]);
 
 
     /**

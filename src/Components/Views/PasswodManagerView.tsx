@@ -61,6 +61,7 @@ const PasswordManagerView: React.FC = () => {
                                   closeDatabase={() => viewModel.closeLoggedIn()}
                                   openedDbName={viewModel.openedDatabaseName}
                                   itemsDeleted={viewModel.itemsDeleted}
+                                  justSynced={viewModel.justSynced}
                     />
                     <ToastDialog message={viewModel.toastMessage}
                                  isVisible={viewModel.toastVisible}
