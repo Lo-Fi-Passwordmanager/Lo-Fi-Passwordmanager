@@ -102,7 +102,7 @@ test("swap ascending/descending", async ({page}) => {
     await page.getByRole("button", {name: "Eintrag ins Startverzeichnis"}).click();
     await page.getByRole("button", {name: "Ordner", exact: true}).click();
     await page.getByRole("button", {name: "▷ Neuer Ordner ⋮"}).getByRole("textbox").fill("B");
-    await page.getByText("Bitte Eintrag auswählen").click();
+    await page.getByText("Noch kein Eintrag ausgewählt").click();
     await expect(page.locator("#root")).toMatchAriaSnapshot(`
     - button "Name":
       - text: ""
