@@ -54,13 +54,13 @@
     --small-radius: 8px;
     --big-radius: 24px;
 
-    --color1: #f2acbd;
-    --color2: #ffe1e1;
+    --color: #000000;
+    --test: color-mix(in srgb, var(--color), black 20%);
 
     --bg: #ffffff;
     --text: #000000;
-    --primary: color-mix(in srgb, var(--color1), white 30%);
-    --secondary: color-mix(in srgb, var(--color1), white 60%);
+    --primary: color-mix(in srgb, var(--color), white 20%);
+    --secondary: color-mix(in srgb, var(--color), white 60%);
     --overlay: rgba(0, 0, 0, 0.2);
     --outline: #b3b3b3;
     --outline-droppable: #0a5ab4;
@@ -92,8 +92,8 @@ a {
 [data-theme="dark"] {
     --bg: rgb(22, 24, 28);
     --text: #ffffff;
-    --primary: var(--color1);
-    --secondary: var(--color2);
+    --primary: var(--color);
+    --secondary: color-mix(in srgb, var(--color), black 50%);
     --overlay: rgba(14, 14, 14, 0.5);
     --outline: #818181;
     --delete-button: #e74c3c;

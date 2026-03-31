@@ -29,12 +29,16 @@ export const useSettingsViewModel = () => {
     const [toastMessage, setToastMessage] = useState<string>("");
     const [remotePeerId, setRemotePeerId] = useState("");
     const [otherPeerMap, setOtherPeerMap] = useState<Map<string, [DataConnection, PeerjsNetworkAdapter]>>(settings.getConnectorsToAdapters())
-    const colorSchemes = new Map<string, string[]>([["Lo-Fi Green", ["306844", "182c25"]], ["Dusk Blue",["5C80BC", "2F4874"]], ["Cherry Rose",["B80053", "5C0029"]]]);
+    const colorSchemes = new Map<string, string>([["Lo-Fi Green", "#306844"],
+        ["Fern", "#519930"],
+        ["Dusk","#5C80BC"],
+        ["Cherry","#B80053"],
+        ["Sakura", "#e86a89"],
+        ["Sunflower", "#F1B42F"],
+        ["Granite", "#848482"]]);
     const [activeColorIndex, setActiveColorIndex] = useState<number>(loadActiveColorIndex());
     document.documentElement.setAttribute("data-theme", darkMode ? "dark" : "light");
-    document.documentElement.style.setProperty("--color1", `#${Array.from(colorSchemes.values())[activeColorIndex][0]}`);
-    document.documentElement.style.setProperty("--color2", `#${Array.from(colorSchemes.values())[activeColorIndex][1]}`);
-
+    document.documentElement.style.setProperty("--color", Array.from(colorSchemes.values())[activeColorIndex]);
 
     useEffect(() => {
         settings.setDarkMode(darkMode);

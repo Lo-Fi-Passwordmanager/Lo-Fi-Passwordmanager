@@ -232,11 +232,11 @@ const SettingsView: React.FC<{
                             <div className={"sub-settings"}>
                                 <h4>Farbschema</h4>
                                 <div className={"color-list"}>
-                                    {Array.from(viewModel.colorSchemes.entries()).map(([key, colors], index) => (
+                                    {Array.from(viewModel.colorSchemes.entries()).map(([key, color], index) => (
                                         <button key={index}
                                                 className={`color-scheme-button ${viewModel.activeColorIndex === index ? "selected" : ""}`}
                                                 style={{
-                                                    backgroundColor: `#${colors[0]}`,
+                                                    backgroundColor: color,
                                                 }}
                                                 onClick={() => viewModel.changeColorScheme(index)}
                                                 title={`${key} auswählen`} />
