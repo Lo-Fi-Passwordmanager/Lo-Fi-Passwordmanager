@@ -18,6 +18,7 @@ import ServerList from "./ListingViews/ServerList.tsx";
  * The View that represents the Settings Dialog and Button to open it
  * @param automergeFacade the current AutomergeFacade instance
  * @param openedDbName the name of the currently opened database
+ * @param closeDatabase a function to close the currently opened database
  */
 const SettingsView: React.FC<{
     automergeFacade?: AutomergeFacade | null,
@@ -50,11 +51,15 @@ const SettingsView: React.FC<{
                     <h2 style={{alignSelf: "flex-start"}}>Einstellungen</h2>
                     <button className={`settings-tab ${viewModel.activeTab === "general" ? "active" : ""}`}
                             onClick={() => viewModel.setActiveTab("general")}>
-                        Allgemeine Einstellungen
+                        Allgemein
+                    </button>
+                    <button className={`settings-tab ${viewModel.activeTab === "appearance" ? "active" : ""}`}
+                            onClick={() => viewModel.setActiveTab("appearance")}>
+                        Erscheinungsbild
                     </button>
                     <button className={`settings-tab ${viewModel.activeTab === "database" ? "active" : ""}`}
                             onClick={() => viewModel.setActiveTab("database")}>
-                        Datenbankeinstellungen
+                        Datenbank
                     </button>
                     <button className={`settings-tab ${viewModel.activeTab === "about" ? "active" : ""}`}
                             onClick={() => viewModel.setActiveTab("about")}>
@@ -68,12 +73,6 @@ const SettingsView: React.FC<{
                     {viewModel.activeTab === "general" && (
                         <div className="settingsContainer">
                             <h3>Allgemeine Einstellungen</h3>
-
-
-                            <label className="checkboxRow">
-                                <SliderCheckBox checked={viewModel.darkMode} toggleChecked={viewModel.toggleDarkMode}/>
-                                Dark-Mode
-                            </label>
 
                             <label className="checkboxRow">
                                 <SliderCheckBox checked={viewModel.synchronisation}
@@ -110,14 +109,14 @@ const SettingsView: React.FC<{
                                     </div>
                                 </div>
                             )}
-                            <div className="connection-settings">
+                            <div className="sub-settings">
                                 {!viewModel.synchronisation ? null : (
                                     <ServerList settingsViewModel={viewModel}/>
                                 )}
 
 
                                 {!viewModel.P2P ? null :
-                                    <div className={"connection-settings"}>
+                                    <div className={"sub-settings"}>
 
                                         <h4>Peer-To-Peer Verbindung</h4>
                                         <label>Eigene Peer-ID:</label>
@@ -138,9 +137,9 @@ const SettingsView: React.FC<{
                                             <GenericQRDialog title={"Peer-ID teilen"}
                                                              qrValue={viewModel.getPeerId()}>
                                                 <p>Scanne den QR-Code auf einem anderen Gerät in den Einstellungen
-                                                   unter &quot;Allgemeine
-                                                   Einstellungen&quot; &rarr; &quot;Peer-To-Peer
-                                                   Verbindung&quot;</p>
+                                                    unter &quot;Allgemeine
+                                                    Einstellungen&quot; &rarr; &quot;Peer-To-Peer
+                                                    Verbindung&quot;</p>
                                             </GenericQRDialog>
                                         </div>
                                         <label>Fremde Peer-ID:</label>
@@ -152,11 +151,17 @@ const SettingsView: React.FC<{
                                                  justifyContent: "space-between",
                                                  width: "100%"
                                              }}> {/* for some reason are the styles from the css not applying */}
-                                            <div className={"input-with-qr-container"} style={{position:"relative", width: "100%"}}>
+                                            <div className={"input-with-qr-container"}
+                                                 style={{position: "relative", width: "100%"}}>
                                                 <input type="text"
-                                                   value={viewModel.remotePeerId}
-                                                   onChange={(e) => viewModel.setRemotePeerId(e.target.value)}
-                                                       style={{paddingRight: "40px", textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap"}}
+                                                       value={viewModel.remotePeerId}
+                                                       onChange={(e) => viewModel.setRemotePeerId(e.target.value)}
+                                                       style={{
+                                                           paddingRight: "40px",
+                                                           textOverflow: "ellipsis",
+                                                           overflow: "hidden",
+                                                           whiteSpace: "nowrap"
+                                                       }}
                                                 />
                                                 <GenericQRScannerDialog title={"Peer verbinden"}
                                                                         callback={(id: string) => viewModel.connectToPeer(id)}
@@ -176,37 +181,67 @@ const SettingsView: React.FC<{
 
                                 {viewModel.otherPeerMap.size > 0 && viewModel.P2P && (
                                     <>
-                                    <span>Verbundene Peers:</span>
-                                    <div className="scrollableContainer server-list">
+                                        <span>Verbundene Peers:</span>
+                                        <div className="scrollableContainer server-list">
 
-                                        {Array.from(viewModel.otherPeerMap.keys()).map((id) => (
-                                            <div className="server-item" key={id}>
-                                                <button
-                                                    style={{
-                                                        display: "block",
-                                                        whiteSpace: "nowrap",
-                                                        overflow: "hidden",
-                                                        textOverflow: "ellipsis",
-                                                        flex: 1
-                                                    }}
-                                                >
-                                                    <span>{id}</span>
-                                                </button>
+                                            {Array.from(viewModel.otherPeerMap.keys()).map((id) => (
+                                                <div className="server-item" key={id}>
+                                                    <button
+                                                        style={{
+                                                            display: "block",
+                                                            whiteSpace: "nowrap",
+                                                            overflow: "hidden",
+                                                            textOverflow: "ellipsis",
+                                                            flex: 1
+                                                        }}
+                                                    >
+                                                        <span>{id}</span>
+                                                    </button>
 
                                                     <span>
-                                                        {viewModel.otherPeerMap.get(id)![1].isReady() ? <HiCheckCircle/> : <HiDotsCircleHorizontal/>}
+                                                        {viewModel.otherPeerMap.get(id)![1].isReady() ?
+                                                            <HiCheckCircle/> : <HiDotsCircleHorizontal/>}
                                                     </span>
 
-                                                <button
-                                                    className="squareButton"
-                                                    onClick={() => void viewModel.removePeer(id)}
-                                                    title={"Peer entfernen"}
-                                                >
-                                                    <HiTrash size={24}/>
-                                                </button>
+                                                    <button
+                                                        className="squareButton"
+                                                        onClick={() => void viewModel.removePeer(id)}
+                                                        title={"Peer entfernen"}
+                                                    >
+                                                        <HiTrash size={24}/>
+                                                    </button>
                                                 </div>
                                             ))}
-                                        </div></>)}
+                                        </div>
+                                    </>)}
+                            </div>
+                        </div>
+                    )}
+
+                    {viewModel.activeTab === "appearance" && (
+                        <div className="settingsContainer">
+                            <h3>Erscheinungsbildeinstellungen</h3>
+                            <div className={"sub-settings"}>
+                                <h4>Theme</h4>
+                                <label className="checkboxRow">
+                                    <SliderCheckBox checked={viewModel.darkMode}
+                                                    toggleChecked={viewModel.toggleDarkMode}/>
+                                    Dark-Mode
+                                </label>
+                            </div>
+                            <div className={"sub-settings"}>
+                                <h4>Farbschema</h4>
+                                <div className={"color-list"}>
+                                    {Array.from(viewModel.colorSchemes.entries()).map(([key, colors], index) => (
+                                        <button key={index}
+                                                className={`color-scheme-button ${viewModel.activeColorIndex === index ? "selected" : ""}`}
+                                                style={{
+                                                    backgroundColor: `#${colors[0]}`,
+                                                }}
+                                                onClick={() => viewModel.changeColorScheme(index)}
+                                                title={`${key} auswählen`} />
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     )}

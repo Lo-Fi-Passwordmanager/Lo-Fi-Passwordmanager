@@ -292,3 +292,17 @@ export function loadP2PSetting(): boolean {
 export function storeP2PSetting(isP2P: boolean): void {
     localStorage.setItem("p2p", JSON.stringify(isP2P));
 }
+
+export function storeActiveColorIndex(activeColorIndex: number): void {
+    localStorage.setItem("active_color_index", JSON.stringify(activeColorIndex));
+}
+
+export function loadActiveColorIndex(): number {
+    const activeColorIndex = localStorage.getItem("active_color_index");
+    if (activeColorIndex != null) {
+        return JSON.parse(activeColorIndex) as number;
+    } else {
+        localStorage.setItem("active_color_index", "0");
+        return 0;
+    }
+}

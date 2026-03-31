@@ -3,56 +3,14 @@ import {useEffect, useState} from "react";
 
 import type {PeerjsNetworkAdapter} from "../../../customNetworkAdapter/PeerJsNetworkAdapter.ts";
 import {Settings, useSettings} from "../../Model/Settings";
+import {loadActiveColorIndex, storeActiveColorIndex} from "../../Utility/Storage.ts";
 
-
-/**
- * The type of the Setting Viewmodel
- */
-export type SettingsViewModel = {
-    darkMode: boolean;
-    synchronisation: boolean;
-    timeOutActive: boolean;
-    settingsOpen: boolean;
-    timeoutLength: number;
-    activeTab: "general" | "database" | "about";
-    addServerDialogOpen: boolean;
-    P2P: boolean;
-    toastMessage: string;
-    showToast: boolean;
-    serverUrls: Map<string, string>;
-    serverStates: Map<string, boolean>;
-    setActiveTab: (value: (((prevState: ("general" | "database" | "about")) => ("general" | "database" | "about")) | "general" | "database" | "about")) => void;
-    setConnection: (id: string) => void;
-    toggleDarkMode: () => void;
-    toggleSynchronisation: () => void;
-    toggleTimeOutActive: () => void;
-    setSettingsOpen: (value: (((prevState: boolean) => boolean) | boolean)) => void;
-    setTimeOutLengthVM: (newLength: string) => void;
-    increaseTimeout: () => void;
-    decreaseTimeout: () => void;
-    getPeerId: () => string;
-    addSyncServer: (name: string, url: string) => void;
-    removeSyncServer: (serverName: string) => void;
-    setAddServerDialogOpen: (value: (((prevState: boolean) => boolean) | boolean)) => void;
-    toggleSyncServer: (serverName: string) => void;
-    toggleP2P: () => void;
-    setToastMessage: (value: (((prevState: string) => string) | string)) => void;
-    setShowToast: (value: (((prevState: boolean) => boolean) | boolean)) => void;
-    remotePeerId: string;
-    setRemotePeerId: (value: (((prevState: string) => string) | string)) => void;
-    connectToPeer: (id?: string) => void;
-    otherPeerMap: Map<string, [DataConnection, PeerjsNetworkAdapter]>;
-    removePeer: (id: string) => Promise<void>;
-    isLastServer: () => boolean;
-    isLastActiveServer: (serverName: string) => boolean;
-    copyToClipboard: (text: string) => void
-}
 
 /**
  * The ViewModel that is used for interfacing the {@link Settings} singleton.
  * It uses states to reload react when changing settings, so that they get applied
  */
-export const useSettingsViewModel: () => SettingsViewModel = () => {
+export const useSettingsViewModel = () => {
 
     const settings = Settings.getSettings();
     const settingsHook = useSettings();
@@ -62,7 +20,7 @@ export const useSettingsViewModel: () => SettingsViewModel = () => {
     const [timeOutActive, setTimeOutActive] = useState(settings.getTimeoutActive());
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [timeoutLength, setTimeoutLength] = useState(settings.getTimeoutLength());
-    const [activeTab, setActiveTab] = useState<"general" | "database" | "about">("general");
+    const [activeTab, setActiveTab] = useState<"general" | "appearance" | "database" | "about">("general");
     const [serverUrls, setServerUrls] = useState<Map<string, string>>(settings.getServerUrls());
     const [serverStates, setServerStates] = useState<Map<string, boolean>>(settings.getServerStates());
     const [addServerDialogOpen, setAddServerDialogOpen] = useState<boolean>(false);
@@ -70,8 +28,13 @@ export const useSettingsViewModel: () => SettingsViewModel = () => {
     const [showToast, setShowToast] = useState<boolean>(false);
     const [toastMessage, setToastMessage] = useState<string>("");
     const [remotePeerId, setRemotePeerId] = useState("");
-    const [otherPeerMap, setOtherPeerMap] = useState<Map<string, [DataConnection, PeerjsNetworkAdapter]>>(settings.getConnectorsToAdapters());
-    document.getElementsByTagName("html")[0]?.setAttribute("data-theme", darkMode ? "dark" : "light");
+    const [otherPeerMap, setOtherPeerMap] = useState<Map<string, [DataConnection, PeerjsNetworkAdapter]>>(settings.getConnectorsToAdapters())
+    const colorSchemes = new Map<string, string[]>([["Lo-Fi Green", ["306844", "182c25"]], ["Dusk Blue",["5C80BC", "2F4874"]], ["Cherry Rose",["B80053", "5C0029"]]]);
+    const [activeColorIndex, setActiveColorIndex] = useState<number>(loadActiveColorIndex());
+    document.documentElement.setAttribute("data-theme", darkMode ? "dark" : "light");
+    document.documentElement.style.setProperty("--color1", `#${Array.from(colorSchemes.values())[activeColorIndex][0]}`);
+    document.documentElement.style.setProperty("--color2", `#${Array.from(colorSchemes.values())[activeColorIndex][1]}`);
+
 
     useEffect(() => {
         settings.setDarkMode(darkMode);
@@ -161,6 +124,11 @@ export const useSettingsViewModel: () => SettingsViewModel = () => {
         }, 50); // Timeout is needed to ensure that the synchronisation setting is updated before it is toggled on again
     }
 
+    function changeColorScheme(index: number) {
+        setActiveColorIndex(index);
+        storeActiveColorIndex(index);
+    }
+
     function toggleTimeOutActive() {
         setTimeOutActive(!timeOutActive);
     }
@@ -234,6 +202,8 @@ export const useSettingsViewModel: () => SettingsViewModel = () => {
         showToast,
         serverUrls,
         serverStates,
+        activeColorIndex,
+        colorSchemes,
 
         setActiveTab,
         setConnection,
@@ -259,6 +229,7 @@ export const useSettingsViewModel: () => SettingsViewModel = () => {
         removePeer,
         isLastServer,
         isLastActiveServer,
-        copyToClipboard
+        copyToClipboard,
+        changeColorScheme
     };
 };
