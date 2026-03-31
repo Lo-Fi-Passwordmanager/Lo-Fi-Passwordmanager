@@ -65,7 +65,7 @@
     --outline: #b3b3b3;
     --outline-droppable: #0a5ab4;
     --input-field: color-mix(in srgb, var(--secondary), var(--primary) 50%);
-    --grey-tone: color-mix(in srgb, grey 50%, var(--primary) 30%);
+    --grey-tone: color-mix(in srgb, grey 50%, var(--primary) 10%);
     --delete-button: #ff5a50;
     --loading-overlay: rgba(0, 0, 0, 0.8);
     --loading-text: #FFFFFF;
