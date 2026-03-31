@@ -1,3 +1,4 @@
+import {decodeChange, getActorId} from "@automerge/automerge";
 import {
     BroadcastChannelNetworkAdapter, type DocHandle, type DocHandleChangePayload, getChanges,
     IndexedDBStorageAdapter,
@@ -12,7 +13,6 @@ import {PeerjsNetworkAdapter} from "../../../customNetworkAdapter/PeerJsNetworkA
 import {Settings, useSettings} from "../../Model/Settings.ts";
 import type {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
-import {decodeChange, getActorId} from "@automerge/automerge";
 
 /**
  * The view model used by the PasswordManagerView. Manages the state and logic for the password manager.
