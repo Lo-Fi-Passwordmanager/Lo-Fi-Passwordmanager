@@ -4,6 +4,7 @@
   "version": "0.1.0-beta",
   "type": "module",
   "license": "MIT",
+  "homepage": "https://lo-fi-passwordmanager.github.io/Lo-Fi-Passwordmanager/",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -18,7 +19,9 @@
     "e2e:report": "nyc report --reporter=html --report-dir playwright-coverage",
     "e2e:table": "nyc report --reporter=json-summary",
     "integration": "cross-env INTEGRATION=true vitest run",
-    "integration:coverage": "cross-env INTEGRATION=true vitest run --coverage"
+    "integration:coverage": "cross-env INTEGRATION=true vitest run --coverage",
+    "predeploy": "yarn run build",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "@automerge/automerge": "^3.2.2",
@@ -60,6 +63,7 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
+    "gh-pages": "^6.3.0",
     "globals": "^16.5.0",
     "nyc": "^17.1.0",
     "typescript": "~5.9.3",
