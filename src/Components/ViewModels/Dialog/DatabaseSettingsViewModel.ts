@@ -1,9 +1,10 @@
 import {useState} from "react";
 
 import type {AutomergeFacade} from "../../../Utility/AutomergeFacade.ts";
-import {saveFile} from "../../../Utility/InputOutputUtil.ts";
+import {saveFile, saveToCsv} from "../../../Utility/InputOutputUtil.ts";
+import type {AutomergeFacadeHook} from "../../../Utility/useAutomergeFacade.ts";
 
-const useDatabaseSettingsViewModel = (automergeFacade: AutomergeFacade) => {
+const useDatabaseSettingsViewModel = (automergeFacade: AutomergeFacade, reactiveFacade: AutomergeFacadeHook) => {
     const [inDeletion, setInDeletion] = useState(false);
     const [message, setMessage] = useState<string>("");
     const [toastVisible, setToastVisible] = useState<boolean>(false);
@@ -23,7 +24,13 @@ const useDatabaseSettingsViewModel = (automergeFacade: AutomergeFacade) => {
         setToast("Erfolgreich exportiert")
     }
 
+    function exportToCsvFile() {
+        const lines = reactiveFacade.exportToCsvArray();
+        saveToCsv(lines);
+    }
+
     return {
+        exportToCsvFile,
         inDeletion,
         setInDeletion,
         message,

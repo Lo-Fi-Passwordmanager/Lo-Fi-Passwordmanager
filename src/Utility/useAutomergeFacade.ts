@@ -13,6 +13,8 @@ import {
 import type {AutomergeDoc} from "../Model/Automerge/AutomergeDoc.ts";
 import type {AutomergeItem} from "../Model/Automerge/AutomergeItem.ts";
 import type {DatabaseRoot} from "../Model/DatabaseRoot.ts";
+import type {Entry} from "../Model/Entry.ts";
+import type {Folder} from "../Model/Folder.ts";
 import type {Item} from "../Model/Item.ts";
 
 
@@ -96,6 +98,31 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
         );
     }
 
+    /**
+     * Exports the current file structure in a csv like string array, which could be saved in such.
+     */
+    function exportToCsvArray() : string[] {
+        const entryArray : Entry[] = dfsSearchExport(tree.rootFolder);
+        const returnArray : string[] = [];
+        returnArray[0] = "\"Account\",\"Login Name\",\"Password\",\"Web Site\",\"Comments\"";
+        for (const entry of entryArray) {
+            returnArray.push(`"${entry.title}","${entry.username}","${entry.password}","${entry.url}","${entry.note}"`);
+        }
+        return returnArray;
+    }
+    
+    function dfsSearchExport(folder : Folder) : Entry[]{
+        let entryArray : Entry[] = [];
+        for (const item of folder.items) {
+            if (item.isFolder()) {
+                entryArray = entryArray.concat(dfsSearchExport(item as Folder));
+            } else {
+                entryArray.push(item as Entry);
+            }
+        }
+        return entryArray;
+    }
+
     return {
         /**
          * Die {@link AutomergeUrl} der gerade geöffneten Datenbank.
@@ -120,6 +147,7 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
          * The Map containing a 1 to 1 maping of all active ids to their items
          */
         itemsById,
+        exportToCsvArray
     };
-
 };
+export type AutomergeFacadeHook = ReturnType<typeof useAutomergeFacade>;
