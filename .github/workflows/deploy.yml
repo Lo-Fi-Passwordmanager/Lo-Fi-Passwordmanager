@@ -18,13 +18,13 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 24
-          cache: npm
+          cache: yarn
 
       - name: Install dependencies
-        run: npm ci
+        run: yarn ci
 
       - name: Build project
-        run: npm run build:deploy
+        run: yarn build:deploy
 
       - name: Upload production-ready build files
         uses: actions/upload-artifact@v7
