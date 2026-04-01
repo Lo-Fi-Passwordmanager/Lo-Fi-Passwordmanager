@@ -69,4 +69,25 @@ export function saveToCsv(lines : string[]) {
             console.error('An unknown error occurred during download');
         }
     }
+};
+
+export async function loadFromCsv(file: File): Promise<string[]> {
+    try {
+        const content = await file.text();
+
+        // 2. Split by newline and filter out empty lines
+        const lines = content
+            .split(/\r?\n/)
+            .filter(line => line.trim() !== "");
+
+        console.log(`Successfully parsed ${lines.length} lines.`);
+        return lines;
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error('Upload failed:', error.message);
+        } else {
+            console.error('An unknown error occurred during upload');
+        }
+        return [];
+    }
 }

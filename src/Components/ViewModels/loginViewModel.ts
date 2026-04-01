@@ -291,6 +291,11 @@ export const useLoginViewModel = (
         await addDatabase(dbName, handle.url);
     }
 
+    function importUnencryptedDatabaseFromFile(targetFiles: FileList | null, name: string, password: string) {
+        console.error("FIXME")
+        //FIXME hier implementieren, wie nach öffnen Einträge eingesetzt werden
+    }
+
     /**
      * Toggles the password from ****** to the string and back
      */
@@ -325,5 +330,6 @@ export const useLoginViewModel = (
         setDatabaseToDelete,
         toggleHidePassword,
         addDatabase,
+        importUnencryptedDatabaseFromFile
     };
 };
