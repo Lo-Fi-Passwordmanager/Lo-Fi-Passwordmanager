@@ -21,7 +21,7 @@
     "integration": "cross-env INTEGRATION=true vitest run",
     "integration:coverage": "cross-env INTEGRATION=true vitest run --coverage",
     "predeploy": "yarn run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@automerge/automerge": "^3.2.2",
