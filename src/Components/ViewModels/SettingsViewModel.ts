@@ -30,7 +30,7 @@ export const useSettingsViewModel = () => {
     const [remotePeerId, setRemotePeerId] = useState("");
     const [otherPeerMap, setOtherPeerMap] = useState<Map<string, [DataConnection, PeerjsNetworkAdapter]>>(settings.getConnectorsToAdapters())
     const colorSchemes = new Map<string, string>([["Lo-Fi Green", "#306844"],
-        ["Fern", "#519930"],
+        ["Fern", "#477831"],
         ["Dusk","#5C80BC"],
         ["Cherry","#B80053"],
         ["Sakura", "#e86a89"],
