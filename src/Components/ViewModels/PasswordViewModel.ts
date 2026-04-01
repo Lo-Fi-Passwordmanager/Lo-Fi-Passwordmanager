@@ -1,5 +1,5 @@
 import {type DragEndEvent, PointerSensor, TouchSensor, useSensor, useSensors} from "@dnd-kit/core";
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 
 import type {Folder} from "../../Model/Folder.ts";
 import type {Item} from "../../Model/Item.ts";
@@ -28,8 +28,9 @@ export type SortCriteria = typeof SortCriteria[keyof typeof SortCriteria];
  * The view model used by the PasswordView. Contains all the logic and states needed for the child components.
  *
  * @param automergeFacade the Automergefacade that contains the database to be used
+ * @param itemsDeleted items that were deleted from remote
  */
-export const usePasswordViewModel = (automergeFacade: AutomergeFacade) => {
+export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDeleted: string[], justSynced: boolean) => {
 
     const settings = useSettings();
     const [inItemCreation, setInItemCreation] = useState(false);
@@ -51,9 +52,27 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade) => {
     const [isAscending, setIsAscending] = useState<boolean>(initIsAscending);
     const [searchValue, setSearchValue] = useState<string>("");
     const [expandedFolders, setExpandedFolders] = useState<string[]>([getRootFolder().id]);
-
-
     const [itemToDelete, setItemToDelete] = useState<Item | null>(null);
+
+    // check if cur item got deleted from remote
+    useEffect(() => {
+        for (const id of itemsDeleted) {
+            if (curItem.id === id && curItem.isEntry()) {
+                curItem.deleted = true;
+                setToastMessage("Der aktuell ausgewählte Eintrag wurde gelöscht");
+                setToastVisible(true);
+                break;
+            }
+        }
+    }, [curItem, itemsDeleted]);
+
+    // if doc got changes from remote make sure the entry view is up to date
+    useEffect(() => {
+        if (justSynced) {
+            setDirtyItemId(curItem.id);
+        }
+    }, [curItem.id, justSynced]);
+
 
     /**
      * sets the current item and clears the dirty item id

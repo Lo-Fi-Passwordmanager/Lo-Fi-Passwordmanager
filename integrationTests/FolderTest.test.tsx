@@ -37,7 +37,7 @@ describe("FolderTest", () => {
             <RepoContext.Provider value={repo}>{children}</RepoContext.Provider>
         );
 
-        const passwordVM = renderHook(() => usePasswordViewModel(facade), {wrapper});
+        const passwordVM = renderHook(() => usePasswordViewModel(facade, [], false), {wrapper});
 
         // Create folders and rename them
         const folderData1 = new Folder("Folder 1", "temp-id", new Date(), new Date());
