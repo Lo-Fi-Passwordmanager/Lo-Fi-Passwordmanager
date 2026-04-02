@@ -71,23 +71,31 @@ export function saveToCsv(lines : string[]) {
     }
 };
 
-export async function loadFromCsv(file: File): Promise<string[]> {
+export async function loadFromCsv(fileList: FileList): Promise<string[] | undefined> {
     try {
+        const file = fileList[0];
+        if (!file) {
+            console.warn("No file found in FileList.");
+            return undefined;
+        }
+
         const content = await file.text();
 
-        // 2. Split by newline and filter out empty lines
+
         const lines = content
+            //Regex for windows and linux
             .split(/\r?\n/)
             .filter(line => line.trim() !== "");
 
-        console.log(`Successfully parsed ${lines.length} lines.`);
+        console.log(`Parsed ${lines.length} lines from: ${file.name}`);
         return lines;
+
     } catch (error: unknown) {
         if (error instanceof Error) {
-            console.error('Upload failed:', error.message);
+            console.error('Load failed:', error.message);
         } else {
-            console.error('An unknown error occurred during upload');
+            console.error('An unknown error occurred during file load');
         }
-        return [];
+        return undefined;
     }
 }

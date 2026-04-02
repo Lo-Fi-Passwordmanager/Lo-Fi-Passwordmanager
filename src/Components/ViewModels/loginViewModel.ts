@@ -296,6 +296,29 @@ export const useLoginViewModel = (
         //FIXME hier implementieren, wie nach öffnen Einträge eingesetzt werden
     }
 
+    function parseCsvLineToItem(line: string): Item | undefined {
+        // This regex matches everything inside double quotes
+        // The 'g' flag finds all occurrences (all 5 columns)
+        const regex = /"(.*?)"/g;
+        const matches = [...line.matchAll(regex)].map(m => m[1]);
+
+        // Ensure we have all 5 expected fields
+        if (matches.length >= 5) {
+            return new Entry(
+                matches[0], // title
+                "",
+                new Date(),
+                new Date(),
+                matches[1], // username
+                matches[2], // password
+                matches[3], // url
+                matches[4]  // note
+            );
+        }
+
+        return undefined;
+    }
+
     /**
      * Toggles the password from ****** to the string and back
      */
