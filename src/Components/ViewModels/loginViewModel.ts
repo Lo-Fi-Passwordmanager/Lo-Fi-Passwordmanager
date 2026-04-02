@@ -291,8 +291,25 @@ export const useLoginViewModel = (
         await addDatabase(dbName, handle.url);
     }
 
-    function importUnencryptedDatabaseFromFile(targetFiles: FileList | null, name: string, password: string) {
+    async function importUnencryptedDatabaseFromFile(targetFiles: FileList | null, name: string, password: string) {
         console.error("FIXME")
+        if (!targetFiles) {
+            return;
+        }
+        const newItems: Item[] = [];
+        const parse: string[] | undefined = await loadFromCsv(targetFiles)
+        if (!parse || parse.length === 0 || parse[0] != "\"Account\",\"Login Name\",\"Password\",\"Web Site\",\"Comments\"") {
+            return;
+        }
+        for (let i = 1; i < parse.length; i++) {
+            const parseItem = parseCsvLineToItem(parse[i]);
+            if (!parseItem) {
+                return;
+            }
+            newItems.push(parseItem);
+
+        }
+        createDatabase(name, password, newItems);
         //FIXME hier implementieren, wie nach öffnen Einträge eingesetzt werden
     }
 
