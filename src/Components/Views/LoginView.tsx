@@ -9,6 +9,7 @@ import LoginDatabaseDialog from "./DialogViews/LoginDatabaseDialog.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
 import DatabaseListingView from "./ListingViews/DatabaseListingView.tsx";
 import PWMLogo from "../../assets/logo_gelb.svg?inline";
+import type {Item} from "../../Model/Item.ts";
 import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {type SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 
@@ -25,10 +26,11 @@ const LoginView: React.FC<{
     setLoggedIn: (value: boolean) => void,
     setAutomergeFacade: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void,
     securityProvider: SecurityProvider,
-    setOpenedDbName: (value: (((prevState: string) => string) | string)) => void
-}> = ({repo, setLoggedIn, setAutomergeFacade, securityProvider, setOpenedDbName}) => {
+    setOpenedDbName: (value: (((prevState: string) => string) | string)) => void,
+    setToImportItems: (value: (((prevState: Item[]) => Item[]) | Item[])) => void
+}> = ({repo, setLoggedIn, setAutomergeFacade, securityProvider, setOpenedDbName, setToImportItems}) => {
 
-    const viewModel = useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, securityProvider, setOpenedDbName);
+    const viewModel = useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, securityProvider, setOpenedDbName, setToImportItems);
 
     return (
         <div className="loginView">

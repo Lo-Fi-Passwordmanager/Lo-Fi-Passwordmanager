@@ -3,8 +3,10 @@ import type {Repo} from "@automerge/react";
 import {useEffect, useState} from "react";
 
 import {useLoadingScreen} from "./LoadingScreenProviderViewModel.ts";
+import {Entry} from "../../Model/Entry.ts";
+import type {Item} from "../../Model/Item.ts";
 import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
-import {uInt8ArrayFromFile} from "../../Utility/InputOutputUtil.ts";
+import {loadFromCsv, uInt8ArrayFromFile} from "../../Utility/InputOutputUtil.ts";
 import type {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import {loadAllDatabases, removeDatabase, renameDatabase, storeDatabase} from "../../Utility/Storage.ts";
 
@@ -24,7 +26,8 @@ export const useLoginViewModel = (
     setLoggedIn: (value: boolean) => void,
     setAutomergeFacade: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void,
     securityProvider: SecurityProvider,
-    setOpenedDbName: ((value: (((prevState: string) => string) | string)) => void)
+    setOpenedDbName: ((value: (((prevState: string) => string) | string)) => void),
+    setToImportItems: (value: (((prevState: Item[]) => Item[]) | Item[])) => void
 ) => {
     // map of database names to their automerge urls
     const [databases, setDatabases] = useState(loadAllDatabases());
@@ -309,7 +312,8 @@ export const useLoginViewModel = (
             newItems.push(parseItem);
 
         }
-        createDatabase(name, password, newItems);
+        createDatabase(name, password);
+        setToImportItems(newItems);
         //FIXME hier implementieren, wie nach öffnen Einträge eingesetzt werden
     }
 

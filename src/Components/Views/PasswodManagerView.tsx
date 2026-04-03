@@ -29,7 +29,8 @@ const PasswordManagerView: React.FC = () => {
                 <LoginView repo={viewModel.repo} setLoggedIn={viewModel.setLoggedIn}
                            setAutomergeFacade={viewModel.setAutomergeFacade}
                            securityProvider={viewModel.securityProvider}
-                           setOpenedDbName={viewModel.setOpenedDatabaseName}/>
+                           setOpenedDbName={viewModel.setOpenedDatabaseName}
+                           setToImportItems={viewModel.setToImportItems}/>
                 <ToastDialog message={viewModel.toastMessage}
                              isVisible={viewModel.toastVisible}
                              onClose={() => viewModel}/>
@@ -62,6 +63,7 @@ const PasswordManagerView: React.FC = () => {
                                   openedDbName={viewModel.openedDatabaseName}
                                   itemsDeleted={viewModel.itemsDeleted}
                                   justSynced={viewModel.justSynced}
+                                  itemsToImport={viewModel.toImportItems}
                     />
                     <ToastDialog message={viewModel.toastMessage}
                                  isVisible={viewModel.toastVisible}

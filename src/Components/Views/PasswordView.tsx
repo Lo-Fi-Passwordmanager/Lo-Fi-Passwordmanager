@@ -1,6 +1,7 @@
 import {useRepo} from "@automerge/automerge-repo-react-hooks";
 import {DndContext, pointerWithin} from "@dnd-kit/core";
 import React from "react";
+import {HiArrowLeftCircle} from "react-icons/hi2";
 
 import EntryView from "./EntryView.tsx";
 import ListView from "./ListView.tsx";
@@ -12,7 +13,7 @@ import ItemCreationDialog from "./DialogViews/ItemCreationDialog.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
 import EditableEntryView from "./EditableEntryView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
-import {HiArrowLeftCircle} from "react-icons/hi2";
+import type {Item} from "../../Model/Item.ts";
 
 
 interface PasswordViewProps {
@@ -21,20 +22,30 @@ interface PasswordViewProps {
     closeDatabase: () => void
     itemsDeleted: string[];
     justSynced: boolean;
+    itemsToImport: Item[];
 }
 
 /**
  * The view that should be shown, when the user opened a database successfully and shows the whole structure and one selected entry
  */
-const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbName, closeDatabase, itemsDeleted, justSynced}) => {
+const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbName, closeDatabase, itemsDeleted, justSynced, itemsToImport}) => {
     const viewModel = usePasswordViewModel(automergeFacade as AutomergeFacade, itemsDeleted, justSynced);
-
     // Fügt das Repo als zu global hinzu, sodass man im Browser einfach auf das Repo zugreifen kann, zum debuggen.
     // Nur während 'yarn dev' verfügbar, nach dem build nicht mehr
     if (import.meta.env.DEV) {
         // @ts-expect-error no error
         // eslint-disable-next-line react-hooks/rules-of-hooks
         window.handle = useRepo().find(automergeFacade!.automergeURL!);
+    }
+
+
+    if (itemsToImport.length > 0 && viewModel.reactiveFacade.tree.rootFolder.items.length === 0) {
+        for (const item of itemsToImport) {
+            viewModel.reactiveFacade.insertItem(item, viewModel.reactiveFacade.tree.rootFolder.id);
+        }
+        for (let i = 0; i < itemsToImport.length; i++) {
+            itemsToImport.pop();
+        }
     }
 
     return (
