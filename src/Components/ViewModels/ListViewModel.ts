@@ -5,7 +5,6 @@ import type {Entry} from "../../Model/Entry.ts";
 import type {Folder} from "../../Model/Folder.ts";
 import type {Item} from "../../Model/Item.ts";
 
-
 /**
  * The view model used by the ListView. It has the utility needed for correctly deciding and differentiating {@link Entry} and {@link Folder}
  *
@@ -28,7 +27,7 @@ export const useListViewModel = (
     createdFolderID: string | null,
     expandFolderId: (folderId: string) => void,
     collapseFolderId: (folderId: string) => void,
-    isFolderExpanded: (folderId: string) => boolean
+    isFolderExpanded: (folderId: string) => boolean,
 ) => {
 
     const [inEditName, setInEditName] = useState(false);
@@ -111,8 +110,6 @@ export const useListViewModel = (
         return activeDescendants.includes(topItem.id);
     }, [active, topItem.id]);
 
-
-    // DnD Kit Draggable and Droppable setup
     const {
         attributes,
         listeners,

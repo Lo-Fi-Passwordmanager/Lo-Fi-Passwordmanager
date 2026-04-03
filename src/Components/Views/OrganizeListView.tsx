@@ -72,6 +72,8 @@ const OrganizeListView: React.FC<{
                 <option value="NAME">Alphabetisch</option>
                 <option value="CREATED">Erstellungsdatum</option>
                 <option value="EDITED">Bearbeitungsdatum</option>
+                <option value="RELEVANCE">Relevanz</option>
+                <option value="INDIVIDUAL">Individuell</option>
             </select>
 
             <button

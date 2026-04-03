@@ -10,7 +10,6 @@ import type {Folder} from "../../Model/Folder.ts";
 import {type Item} from "../../Model/Item.ts";
 import {useListViewModel} from "../ViewModels/ListViewModel.ts";
 
-
 /* eslint-disable react-hooks/refs */ //react and the eslint do not like each other: https://github.com/facebook/react/issues/34775
 /**
  * The View that represents the whole database, which is represented by {@link Entry}/{@link Folder} Class Instances
@@ -83,7 +82,7 @@ const ListView: React.FC<{
 
         // makes the dragged item follow the cursor
         const dragStyle = {
-            transform: CSS.Translate.toString(listViewModel.transform)
+            transform: CSS.Translate.toString(listViewModel.transform),
         };
 
         /**
@@ -195,37 +194,36 @@ const ListView: React.FC<{
                         </div>}
 
                     </div>
-
-                    {/* Recursive call of children with indent to visualizes depth in the tree */}
-                    <div className="listViewEntryWrapper"
-                         style={{
-                             display: (isFolderExpanded(item.id) ? "block" : "none"),
-                             marginLeft: level <= 8 ? "15px" : "0px"
-                         }}>
-                        {getSortedChildren(item as Folder) &&
-                            getSortedChildren(item as Folder).map((item: Item, index: number) => {
-                                return <ListView
-                                    key={index}
-                                    item={item}
-                                    setCurItem={setCurItem}
-                                    curItem={curItem}
-                                    setItemCreationDialog={setItemCreationDialog}
-                                    setCurrentParent={setCurrentParent}
-                                    deleteItem={deleteItem}
-                                    getSortedChildren={getSortedChildren}
-                                    dirtyItemId={dirtyItemId} openedDbName={""}
-                                    updateItemTitle={updateItemTitle}
-                                    selectedItemId={selectedItemId}
-                                    createdFolderId={createdFolderId}
-                                    setCreatedFolderId={setCreatedFolderId}
-                                    inEditable={inEditable}
-                                    level={level + 1}
-                                    expandFolderId={expandFolderId}
-                                    collapseFolderId={collapseFolderId}
-                                    isFolderExpanded={isFolderExpanded}
-                                />;
-                            })}
-                    </div>
+                        {/* Recursive call of children with indent to visualizes depth in the tree */}
+                        <div className="listViewEntryWrapper"
+                             style={{
+                                 display: (isFolderExpanded(item.id) ? "block" : "none"),
+                                 marginLeft: level <= 8 ? "15px" : "0px"
+                             }}>
+                            {getSortedChildren(item as Folder) &&
+                                getSortedChildren(item as Folder).map((item: Item, index: number) => {
+                                    return <ListView
+                                        key={index}
+                                        item={item}
+                                        setCurItem={setCurItem}
+                                        curItem={curItem}
+                                        setItemCreationDialog={setItemCreationDialog}
+                                        setCurrentParent={setCurrentParent}
+                                        deleteItem={deleteItem}
+                                        getSortedChildren={getSortedChildren}
+                                        dirtyItemId={dirtyItemId} openedDbName={""}
+                                        updateItemTitle={updateItemTitle}
+                                        selectedItemId={selectedItemId}
+                                        createdFolderId={createdFolderId}
+                                        setCreatedFolderId={setCreatedFolderId}
+                                        inEditable={inEditable}
+                                        level={level + 1}
+                                        expandFolderId={expandFolderId}
+                                        collapseFolderId={collapseFolderId}
+                                        isFolderExpanded={isFolderExpanded}
+                                    />;
+                                })}
+                        </div>
                 </>
             );
         }

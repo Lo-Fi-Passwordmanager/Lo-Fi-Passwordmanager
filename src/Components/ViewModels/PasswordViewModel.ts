@@ -7,8 +7,9 @@ import {useSettings} from "../../Model/Settings.ts";
 import type { AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {type Attribute} from "../../Utility/AutomergeFacade.ts";
 import {
-    loadCurrentSortCriterion,
-    loadIsAscending, loadSynchronizationSettings,
+    addRelevance,
+    loadCurrentSortCriterion, loadIndividualSorting,
+    loadIsAscending, loadRelevanceSorting, loadSynchronizationSettings,
     saveCurrentSortCriterion,
     saveIsAscending
 } from "../../Utility/Storage.ts";
@@ -21,6 +22,8 @@ export const SortCriteria = {
     Name: "NAME",
     CreatedAt: "CREATED",
     EditedAt: "EDITED",
+    Relevance: "RELEVANCE",
+    Individual: "INDIVIDUAL",
 } as const;
 export type SortCriteria = typeof SortCriteria[keyof typeof SortCriteria];
 
@@ -194,6 +197,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
         const id = curItem.id;
         setCurItem(getRootFolder());
         setDirtyItemId(id);
+        addRelevance(itemId);
     }
 
     /**
@@ -206,6 +210,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
             return;
         }
         reactiveFacade.updateItem(itemId, [["name", newTitle]]);
+        addRelevance(itemId);
     }
 
     /**
@@ -279,16 +284,21 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
      * Handles the drag end event from dnd kit and updates the parentId of the dragged item
      */
     const handleDragEnd = (event: DragEndEvent) => {
-        const {active, over} = event;
-        if (!over) {
+        const { active, over } = event;
+
+        if (!over || active.id === over.id) {
             return;
         }
-        if (active.id !== over.id
-                && reactiveFacade.itemsById.get(active.id as string)?.parentId !== over.id) {
+
+        if (reactiveFacade.itemsById.get(active.id as string)?.parentId !== over.id) {
             reactiveFacade.updateItem(active.id as string, [["parentId", over.id as string]]);
             expandFolder(over.id as string);
+            addRelevance(active.id as string);
+            addRelevance(over.id as string);
+            return;
         }
     };
+
 
     /**
      * Sensor for dnd kit to start dragging after moving 5 pixels
@@ -404,6 +414,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
      * Gets the children of the given folder, sorted by the current sort criterion and order
      */
     function getSortedChildren(folder: Folder): Item[] {
+        const relevance = loadRelevanceSorting();
         switch (`${curSortCrit}-${isAscending}`) {
             case `${SortCriteria.Name}-true`:
                 return (folder).items.slice().sort((a, b) => a.title.localeCompare(b.title));
@@ -422,6 +433,58 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
 
             case `${SortCriteria.EditedAt}-false`:
                 return (folder).items.slice().sort((a, b) => b.editedAt.getTime() - a.editedAt.getTime());
+
+            case `${SortCriteria.Relevance}-true`:
+                return (folder).items.slice().sort((a, b) => {
+                    const relevanceA = relevance.get(a.id) ?? 0;
+                    const relevanceB = relevance.get(b.id) ?? 0;
+                    if (relevanceA !== relevanceB) {
+                        return relevanceB - relevanceA; // higher relevance first
+                    } else {
+                        return a.title.localeCompare(b.title); // if equal relevance, sort by name
+                    }
+                });
+
+            case `${SortCriteria.Relevance}-false`:
+                return (folder).items.slice().sort((a, b) => {
+                    const relevanceA = relevance.get(a.id) ?? 0;
+                    const relevanceB = relevance.get(b.id) ?? 0;
+                    if (relevanceA !== relevanceB) {
+                        return relevanceA - relevanceB; // lower relevance first
+                    } else {
+                        return b.title.localeCompare(a.title); // if equal relevance, sort by name descending
+                    }
+                });
+
+            case `${SortCriteria.Individual}-true`:
+                return (folder).items.slice().sort((a, b) => {
+                    const indexA = loadIndividualSorting(automergeFacade.automergeURL!.toString()).get(a.id);
+                    const indexB = loadIndividualSorting(automergeFacade.automergeURL!.toString()).get(b.id);
+                    if (indexA !== undefined && indexB !== undefined) {
+                        return indexA - indexB;
+                    } else if (indexA !== undefined) {
+                        return -1;
+                    } else if (indexB !== undefined) {
+                        return 1;
+                    } else {
+                        return a.title.localeCompare(b.title);
+                    }
+                });
+
+            case `${SortCriteria.Individual}-false`:
+                return (folder).items.slice().sort((a, b) => {
+                    const indexA = loadIndividualSorting(automergeFacade.automergeURL!.toString()).get(a.id);
+                    const indexB = loadIndividualSorting(automergeFacade.automergeURL!.toString()).get(b.id);
+                    if (indexA !== undefined && indexB !== undefined) {
+                        return indexB - indexA;
+                    } else if (indexA !== undefined) {
+                        return 1;
+                    } else if (indexB !== undefined) {
+                        return -1;
+                    } else {
+                        return b.title.localeCompare(a.title);
+                    }
+                });
         }
         return [];
     }

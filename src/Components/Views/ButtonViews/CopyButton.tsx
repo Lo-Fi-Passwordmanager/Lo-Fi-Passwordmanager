@@ -1,10 +1,16 @@
 import React, {type CSSProperties, useState} from "react";
 import {HiMiniClipboardDocumentCheck, HiMiniClipboardDocumentList} from "react-icons/hi2";
 
+import {addRelevance} from "../../../Utility/Storage.ts";
+
 /**
  * A button that copies a given text to the clipboard and shows a checkmark for a short time after being clicked
  * @param copyToClipboard function to copy a string to the clipboard and clear it afterwards, if timeout given
  * @param attributeValue the string that should be copied to the clipboard when the button is clicked
+ * @param style optional style options
+ * @param title optional title
+ * @param content optional extra content to be shown next to the button, e.g. "Copy Password"
+ * @param id optional item id for tracking relevance
  */
 const CopyButton: React.FC<{
     copyToClipboard: (text: string, timeout?: number) => void,
@@ -12,7 +18,8 @@ const CopyButton: React.FC<{
     style?: CSSProperties;
     title?: string;
     content?: string;
-}> = ({copyToClipboard, attributeValue, style, title, content}) => {
+    id?: string;
+}> = ({copyToClipboard, attributeValue, style, title, content, id}) => {
 
     const [clicked, setClicked] = useState(false);
 
@@ -22,6 +29,7 @@ const CopyButton: React.FC<{
                 setClicked(true);
                 setTimeout(() => setClicked(false), 2000);
                 void copyToClipboard(attributeValue)
+                if (id) addRelevance(id);
             }}
                     title={title ? title : "In Zwischenablage kopieren"}
                     style={style}

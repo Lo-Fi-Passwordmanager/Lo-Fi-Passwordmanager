@@ -1,6 +1,7 @@
 import {useRepo} from "@automerge/automerge-repo-react-hooks";
 import {DndContext, pointerWithin} from "@dnd-kit/core";
 import React from "react";
+import {HiArrowLeftCircle} from "react-icons/hi2";
 
 import EntryView from "./EntryView.tsx";
 import ListView from "./ListView.tsx";
@@ -12,7 +13,7 @@ import ItemCreationDialog from "./DialogViews/ItemCreationDialog.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
 import EditableEntryView from "./EditableEntryView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
-import {HiArrowLeftCircle} from "react-icons/hi2";
+
 
 
 interface PasswordViewProps {

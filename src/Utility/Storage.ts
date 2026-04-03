@@ -292,3 +292,66 @@ export function loadP2PSetting(): boolean {
 export function storeP2PSetting(isP2P: boolean): void {
     localStorage.setItem("p2p", JSON.stringify(isP2P));
 }
+
+/**
+ * loads a map with item ids to their relevance
+ */
+export function loadRelevanceSorting(): Map<string, number> {
+    const rawRelevance = localStorage.getItem("relevance");
+    if (!rawRelevance) {
+        return new Map();
+    }
+    try {
+        const parsedRelevance = new Map(JSON.parse(rawRelevance) as [string, number][]);
+        return new Map(parsedRelevance);
+    } catch (e) {
+        console.error(e);
+        return new Map();
+    }
+}
+
+/**
+ * increases the relevance of an item by 1
+ * @param itemId the id of  the item
+ */
+export function addRelevance(itemId: string): void {
+    const relevance = loadRelevanceSorting();
+    const currentRelevance = relevance.get(itemId) ?? 0;
+    relevance.set(itemId, currentRelevance + 1);
+    localStorage.setItem("relevance", JSON.stringify(Array.from(relevance.entries())));
+}
+
+export function loadIndividualSorting(automergeURL: string): Map<string, number> {
+    const rawIndividuals = localStorage.getItem("individual");
+    if (!rawIndividuals) {
+        return new Map();
+    }
+    try {
+        const individuals = new Map(JSON.parse(rawIndividuals) as [string, Map<string, number>][]);
+        const dbIndividual = individuals.get(automergeURL);
+        if (!dbIndividual) {
+            return new Map();
+        }
+        return dbIndividual;
+    } catch (e) {
+        console.error(e);
+        return new Map();
+    }
+}
+
+export function storeIndividualSorting(automergeURL: string, newSorting: Map<string, number>): void {
+    const rawIndividuals = localStorage.getItem("individual");
+    let individual: Map<string, Map<string, number>>;
+    if (rawIndividuals) {
+        try {
+            individual = new Map(JSON.parse(rawIndividuals) as [string, Map<string, number>][]);
+        } catch (e) {
+            console.error(e);
+            individual = new Map();
+        }
+    } else {
+        individual = new Map();
+    }
+    individual.set(automergeURL, newSorting);
+    localStorage.setItem("individual", JSON.stringify(Array.from(individual.entries())));
+}
