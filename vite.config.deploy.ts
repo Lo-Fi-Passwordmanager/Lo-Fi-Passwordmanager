@@ -2,7 +2,6 @@
 
 // vite.config.ts
 import {defineConfig} from "vite";
-// @ts-ignore
 import react from "@vitejs/plugin-react";
 import wasm from "vite-plugin-wasm";
 
