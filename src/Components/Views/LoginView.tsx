@@ -9,8 +9,9 @@ import LoginDatabaseDialog from "./DialogViews/LoginDatabaseDialog.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
 import DatabaseListingView from "./ListingViews/DatabaseListingView.tsx";
 import PWMLogo from "../../assets/logo_gelb.svg?inline";
+import type {Item} from "../../Model/Item.ts";
 import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
-import  {type SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
+import {type SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 
 /**
  * The view that should be shown, when the user is not logged in yet and can select/create a database to open plus other related actions
@@ -25,10 +26,11 @@ const LoginView: React.FC<{
     setLoggedIn: (value: boolean) => void,
     setAutomergeFacade: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void,
     securityProvider: SecurityProvider,
-    setOpenedDbName: (value: (((prevState: string) => string) | string)) => void
-}> = ({repo, setLoggedIn, setAutomergeFacade, securityProvider, setOpenedDbName}) => {
+    setOpenedDbName: (value: (((prevState: string) => string) | string)) => void,
+    setToImportItems: (value: (((prevState: Item[]) => Item[]) | Item[])) => void
+}> = ({repo, setLoggedIn, setAutomergeFacade, securityProvider, setOpenedDbName, setToImportItems}) => {
 
-    const viewModel = useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, securityProvider, setOpenedDbName);
+    const viewModel = useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, securityProvider, setOpenedDbName, setToImportItems);
 
     return (
         <div className="loginView">
@@ -60,7 +62,9 @@ const LoginView: React.FC<{
                     isOpen={viewModel.isEnterPasswordDialogOpen}
                     title="Datenbank öffnen"
                     label1="Masterpasswort"
-                    tryOpenDatabase={(password, name?:string) => {void viewModel.tryOpenDatabase(password, name)}}
+                    tryOpenDatabase={(password, name?: string) => {
+                        void viewModel.tryOpenDatabase(password, name)
+                    }}
                     onCancel={viewModel.closeEnterPasswordDialog}
                     setToastMessage={viewModel.setToastMessage}
                     setShowToast={viewModel.setShowToast}
@@ -76,13 +80,19 @@ const LoginView: React.FC<{
                     label2="Masterpasswort"
                     createDatabase={viewModel.createDatabase}
                     onCancel={viewModel.closeAddDialog}
-                    importDatabaseFromURL={(name, url) => {void viewModel.importDatabaseFromURL(name, url);}}
+                    importDatabaseFromURL={(name, url) => {
+                        void viewModel.importDatabaseFromURL(name, url);
+                    }}
                     setToastMessage={viewModel.setToastMessage}
                     setShowToast={viewModel.setShowToast}
                     importDatabaseFromFile={(files, name) => {
-                    void viewModel.importDatabaseFromFile(files, name);}}
+                        void viewModel.importDatabaseFromFile(files, name);
+                    }}
                     hidePassword={viewModel.hidePassword}
                     toggleHidePassword={viewModel.toggleHidePassword}
+                    importUnencryptedDatabaseFromFile={(files: FileList | null, name: string, password: string) => {
+                        void viewModel.importUnencryptedDatabaseFromFile(files, name, password);
+                    }}
                 />
 
                 <DeleteConfirmationDialog

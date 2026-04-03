@@ -452,6 +452,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
         curItem,
         curParent,
         inItemCreation,
+        reactiveFacade,
 
         setInEntryCreation,
         toggleHidePassword,

@@ -11,6 +11,7 @@ import {useIdleTimer} from "react-idle-timer";
 
 import {PeerjsNetworkAdapter} from "../../../customNetworkAdapter/PeerJsNetworkAdapter.ts";
 import type {AutomergeDoc} from "../../Model/Automerge/AutomergeDoc.ts";
+import type {Item} from "../../Model/Item.ts";
 import {Settings, useSettings} from "../../Model/Settings.ts";
 import type {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
@@ -32,6 +33,7 @@ export const usePasswordManagerViewModel = () => {
     const [oldP2PSize, setOldP2PSize] = useState<number>(settings.getConnectorsToAdapters().size);
     const [justSynced, setJustSynced] = useState<boolean>(false);
     const [itemsDeleted, setItemsDeleted] = useState<string[]>([]);
+    const [toImportItems, setToImportItems] = useState<Item[]>([]);
 
     const syncEnabled = settings.getSynchronization();
     const p2pEnabled = settings.getP2P();
@@ -198,6 +200,8 @@ export const usePasswordManagerViewModel = () => {
         loggedIn,
         justSynced,
         itemsDeleted,
+        toImportItems,
+        setToImportItems,
         setOpenedDatabaseName,
         setLoggedIn,
         setAutomergeFacade,
