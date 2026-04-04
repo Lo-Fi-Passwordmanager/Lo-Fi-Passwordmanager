@@ -1,4 +1,11 @@
-import {type DragEndEvent, PointerSensor, TouchSensor, useSensor, useSensors} from "@dnd-kit/core";
+import {
+    type DragEndEvent,
+    type DragStartEvent,
+    PointerSensor,
+    TouchSensor,
+    useSensor,
+    useSensors
+} from "@dnd-kit/core";
 import {useEffect, useRef, useState} from "react";
 
 import type {Folder} from "../../Model/Folder.ts";
@@ -56,6 +63,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
     const [searchValue, setSearchValue] = useState<string>("");
     const [expandedFolders, setExpandedFolders] = useState<string[]>([getRootFolder().id]);
     const [itemToDelete, setItemToDelete] = useState<Item | null>(null);
+    const [draggedItem, setDraggedItem] = useState<Item | null>(null);
 
     // check if cur item got deleted from remote
     useEffect(() => {
@@ -294,34 +302,31 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
             if (reactiveFacade.itemsById.get(active.id as string)?.parentId === over.id as string) {
                 return;
             }
+            if (reactiveFacade.itemsById.get(over.id as string)?.parentId === active.id as string) {
+                return;
+            }
             reactiveFacade.updateItem(active.id as string, [["parentId", over.id as string]]);
             expandFolder(over.id as string);
             //addRelevance(active.id as string);
             //addRelevance(folderId);
             return;
         } else {
-            const ids = loadIndividualSorting();
-            const overIndex = ids.get(over.id as string) ?? 0;
-            const activeIndex = ids.get(active.id as string) ?? 0;
-            if(activeIndex <= overIndex) {
-                for (const item of (curParent as Folder).items) {
-                    const itemIndex = ids.get(item.id) ?? 0;
-                    if (itemIndex < overIndex) {
-                        ids.set(item.id, itemIndex - 1)
-                    }
-                    ids.set(active.id as string, overIndex + 1);
-                }
-            } else {
-                for (const item of (curParent as Folder).items) {
-                    const itemIndex = ids.get(item.id) ?? 0;
-                    if (itemIndex >= overIndex) {
-                        ids.set(item.id, itemIndex + 1)
-                    }
-                }
-                ids.set(active.id as string, overIndex);
+            const items = getSortedChildren(curParent as Folder).map(item => item.id);
+            const individual = loadIndividualSorting();
+            const overIndex = items.indexOf(over.id as string);
+            const activeIndex = items.indexOf(active.id as string);
+            items.splice(activeIndex, 1);
+            const spliced = items.splice(overIndex, Infinity);
+            items.push(active.id as string, ...spliced);
+            if (!isAscending) {
+                items.reverse();
             }
-            storeIndividualSorting(ids);
+            for (const item of items) {
+                individual.set(item, items.indexOf(item));
+            }
+            storeIndividualSorting(individual);
         }
+        setDraggedItem(null);
     };
 
 
@@ -349,6 +354,15 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
     function allowDragging() {
         return !inEditable && !inItemCreation && createdFolderId === null;
     }
+
+    /**
+     * Sets draggedItem to the currently dragged item
+     * @param event dragging event
+     */
+    const onDragStart = (event: DragStartEvent) => {
+        const {active} = event;
+        setDraggedItem(active.data.current?.item as Item)
+    };
 
     /**
      * Recursively searches for the path to the given target item starting from the given folder. Returns an array of item ids representing the path.
@@ -541,6 +555,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
         curItem,
         curParent,
         inItemCreation,
+        draggedItem,
 
         setInEntryCreation,
         toggleHidePassword,
@@ -573,5 +588,6 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
         setCurSortCrit,
         setIsAscending,
         closeEntryOnMobile,
+        onDragStart,
     };
 };

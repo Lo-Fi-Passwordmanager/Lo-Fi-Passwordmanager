@@ -127,8 +127,10 @@ export const useListViewModel = (
         data: {
             type: "Item",
             isFolder: isItemFolder(),
-            descendantIds: descendantIds
-        }
+            descendantIds: descendantIds,
+            item: topItem,
+        },
+        disabled: topItem.id === "",
     });
 
     function isIndividualSorting(): boolean {

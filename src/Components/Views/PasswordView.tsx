@@ -1,5 +1,5 @@
 import {useRepo} from "@automerge/automerge-repo-react-hooks";
-import {DndContext, pointerWithin} from "@dnd-kit/core";
+import {DndContext, DragOverlay, pointerWithin} from "@dnd-kit/core";
 import React from "react";
 import {HiArrowLeftCircle} from "react-icons/hi2";
 
@@ -13,7 +13,9 @@ import ItemCreationDialog from "./DialogViews/ItemCreationDialog.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
 import EditableEntryView from "./EditableEntryView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
-
+import {ImKey} from "react-icons/im";
+import {HiTrash} from "react-icons/hi";
+import FolderMenu from "./MenuViews/FolderMenu.tsx";
 
 
 interface PasswordViewProps {
@@ -27,7 +29,13 @@ interface PasswordViewProps {
 /**
  * The view that should be shown, when the user opened a database successfully and shows the whole structure and one selected entry
  */
-const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbName, closeDatabase, itemsDeleted, justSynced}) => {
+const PasswordView: React.FC<PasswordViewProps> = ({
+                                                       automergeFacade,
+                                                       openedDbName,
+                                                       closeDatabase,
+                                                       itemsDeleted,
+                                                       justSynced
+                                                   }) => {
     const viewModel = usePasswordViewModel(automergeFacade as AutomergeFacade, itemsDeleted, justSynced);
 
     // Fügt das Repo als zu global hinzu, sodass man im Browser einfach auf das Repo zugreifen kann, zum debuggen.
@@ -72,6 +80,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                     />}
                     <DndContext collisionDetection={pointerWithin}
                                 onDragEnd={viewModel.handleDragEnd}
+                                onDragStart={viewModel.onDragStart}
                                 sensors={viewModel.sensors}
                                 autoScroll={{
                                     threshold: {
@@ -102,6 +111,14 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                             getSortedChildren={viewModel.getSortedChildren}
                             level={0}
                         />}
+                        <DragOverlay>
+                            {viewModel.draggedItem &&
+                                <div className={`listView${viewModel.draggedItem.isEntry() ? 'Entry' : 'TitleHeader'}`}>
+                                    <button style={viewModel.draggedItem.isEntry() ? {background: "transparent", boxShadow: "none"} : {}}>{viewModel.draggedItem.isEntry() ? <ImKey size={18}/> : viewModel.isFolderExpanded(viewModel.draggedItem.id) ? "▼" : "▷"}</button>
+                                    <span className={"item-title"}>{viewModel.draggedItem.title}</span>
+                                    <div className={"btnWrapper"}>{viewModel.draggedItem.isEntry() ? <HiTrash size={24}/> : <FolderMenu disabled onAdd={() => null} onRename={() => null} onDelete={() => null}/>}</div>
+                                    </div>}
+                        </DragOverlay>
                     </DndContext>
                 </div>
             </div>

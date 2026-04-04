@@ -83,10 +83,8 @@ const ListView: React.FC<{
 
         // makes the dragged item follow the cursor
         const dragStyle = {
-            transform: CSS.Transform.toString(viewModel.transform),
+            transform: CSS.Translate.toString(viewModel.transform),
             transition: viewModel.transform ? viewModel.transition : 'none',
-            zIndex: viewModel.isDragging ? 99 : 'auto',
-            opacity: viewModel.isDragging ? 0.5 : 1,
         };
 
         /**
@@ -96,7 +94,7 @@ const ListView: React.FC<{
             const entry = viewModel.getItem() as Entry;
             return (
                 <div
-                    className={`listViewEntry ${curItem.id !== entry.id ? "" : "selected"} ${viewModel.isDragging ? "dragged" : ""} ${selectedItemId === item.id ? "highlighted entry" : ""}`}
+                    className={`listViewEntry ${curItem.id !== entry.id ? "" : "selected"} ${selectedItemId === item.id ? "highlighted entry" : ""}`}
                     onClick={() => {
                         if (!inEditable) {
                             setCurItem(entry);
@@ -139,8 +137,8 @@ const ListView: React.FC<{
                         className={`listViewTitleHeader ${item.id == "" ? "database_title" : ""} ${viewModel.isDragging ? "dragged" : ""} ${viewModel.isOver && !viewModel.isDragging && !viewModel.isIndividualSorting() ? "over" : ""} ${selectedItemId === item.id ? "highlighted folder" : ""}`}
                         ref={viewModel.setNodeRef}
                         style={item.id !== "" ? dragStyle : {minHeight: "2.5rem"}}
-                        {...viewModel.attributes}
-                        {...viewModel.listeners}
+                        {...(item.id !== "" ? viewModel.listeners : {})}
+                        {...(item.id !== "" ? viewModel.attributes : {})}
                         aria-selected={selectedItemId === item.id}>
                         {/* ^^^^^^^^^ using aria-selected for scrolling to the clicked folder from filtered list view */}
 
