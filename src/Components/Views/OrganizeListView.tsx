@@ -1,7 +1,9 @@
 import React from 'react';
 import {HiBarsArrowDown, HiBarsArrowUp, HiLockClosed} from "react-icons/hi2";
 
-import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
+import {loadCurrentSortCriterion} from "../../Utility/Storage.ts";
+import {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
+import CheckBoxButton from "./ButtonViews/CheckBoxButton.tsx";
 
 /**
  * The View that contains the search bar, sorting options and buttons to close the database and add new items
@@ -13,8 +15,6 @@ import type {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
  * @param setLiveSearchValue method to set the current typed search value
  * @param liveSearchValue the current typed search value
  * @param closeDatabase method to close the currently opened database
- * @param setItemCreationDialog method to open a dialog to create a new item
- * @param inEditable whether the view is currently in editable mode to disable certain actions
  */
 const OrganizeListView: React.FC<{
     curSortCriterion: SortCriteria;
@@ -24,8 +24,8 @@ const OrganizeListView: React.FC<{
     setLiveSearchValue: (value: string) => void,
     liveSearchValue: string,
     closeDatabase: () => void,
-    setItemCreationDialog: () => void,
-    inEditable: boolean
+    isIndividualSorting: boolean,
+    toggleIndividualSorting: () => void,
 }> = ({
           curSortCriterion,
           setCurSortCriterion,
@@ -34,7 +34,9 @@ const OrganizeListView: React.FC<{
           setLiveSearchValue,
           liveSearchValue,
           closeDatabase,
-      }) => {
+    isIndividualSorting,
+toggleIndividualSorting
+}) => {
 
     return (
         <div className={"organizeListView"}>
@@ -76,14 +78,14 @@ const OrganizeListView: React.FC<{
                 <option value="INDIVIDUAL">Individuell</option>
             </select>
 
-            <button
+            {loadCurrentSortCriterion() !== SortCriteria.Individual ? <button
                 className={"squareButton"}
                 style={{gridColumn: "span 1", justifySelf: "flex-end"}} onClick={() => {
                 toggleOrder()
             }}
                 title={isAscending ? "Absteigend sortieren" : "Aufsteigend sortieren"}>
                 {isAscending ? <HiBarsArrowDown size={24}/> : <HiBarsArrowUp size={24}/>}
-            </button>
+            </button> : <CheckBoxButton sorting={isIndividualSorting} toggleSorting={toggleIndividualSorting}/>}
         </div>
     );
 }

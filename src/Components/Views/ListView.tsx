@@ -53,6 +53,7 @@ const ListView: React.FC<{
         collapseFolderId: (folderId: string) => void;
         isFolderExpanded: (folderId: string) => boolean;
         getSortedChildren: (folder: Folder) => Item[],
+    individualSorting: boolean,
     }> = ({
               item,
               setCurItem,
@@ -71,7 +72,8 @@ const ListView: React.FC<{
               expandFolderId,
               collapseFolderId,
               isFolderExpanded,
-              getSortedChildren
+              getSortedChildren,
+    individualSorting
           }) => {
         const viewModel = useListViewModel(item, dirtyItemId, setCurItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded);
 
@@ -134,7 +136,7 @@ const ListView: React.FC<{
                 <>
                     {/* Name and Buttons */}
                     <div
-                        className={`listViewTitleHeader ${item.id == "" ? "database_title" : ""} ${viewModel.isDragging ? "dragged" : ""} ${viewModel.isOver && !viewModel.isDragging && !viewModel.isIndividualSorting() ? "over" : ""} ${selectedItemId === item.id ? "highlighted folder" : ""}`}
+                        className={`listViewTitleHeader ${item.id == "" ? "database_title" : ""} ${viewModel.isDragging ? "dragged" : ""} ${viewModel.isOver && !viewModel.isDragging && !individualSorting ? "over" : ""} ${selectedItemId === item.id ? "highlighted folder" : ""}`}
                         ref={viewModel.setNodeRef}
                         style={item.id !== "" ? dragStyle : {minHeight: "2.5rem"}}
                         {...(item.id !== "" ? viewModel.listeners : {})}
@@ -202,7 +204,7 @@ const ListView: React.FC<{
                                  display: (isFolderExpanded(item.id) ? "block" : "none"),
                                  marginLeft: level <= 8 ? "15px" : "0px"
                              }}>
-                            <SortableContext items={getSortedChildren(item as Folder).map(child => child.id)} strategy={viewModel.isIndividualSorting() ? verticalListSortingStrategy : viewModel.doNothingStrategy}>
+                            <SortableContext items={getSortedChildren(item as Folder).map(child => child.id)} strategy={viewModel.isIndividualSorting() && individualSorting ? verticalListSortingStrategy : viewModel.doNothingStrategy}>
                             {getSortedChildren(item as Folder) &&
                                 getSortedChildren(item as Folder).map((item: Item, index: number) => {
                                     return <ListView
@@ -224,6 +226,7 @@ const ListView: React.FC<{
                                         expandFolderId={expandFolderId}
                                         collapseFolderId={collapseFolderId}
                                         isFolderExpanded={isFolderExpanded}
+                                        individualSorting={individualSorting}
                                     />;
                                 })}
                             </SortableContext>

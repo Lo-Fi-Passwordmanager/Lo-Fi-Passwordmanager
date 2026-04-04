@@ -64,8 +64,8 @@ const PasswordView: React.FC<PasswordViewProps> = ({
                     setLiveSearchValue={viewModel.setSearchValue}
                     liveSearchValue={viewModel.searchValue}
                     closeDatabase={closeDatabase}
-                    setItemCreationDialog={() => viewModel.setInItemCreation(true)}
-                    inEditable={viewModel.inEditable}
+                    isIndividualSorting={viewModel.individualSorting}
+                    toggleIndividualSorting={viewModel.toggleIndividualSorting}
                 />
 
                 <div className="scrollableContainer">
@@ -110,6 +110,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({
                             isFolderExpanded={viewModel.isFolderExpanded}
                             getSortedChildren={viewModel.getSortedChildren}
                             level={0}
+                            individualSorting={viewModel.individualSorting}
                         />}
                         <DragOverlay>
                             {viewModel.draggedItem &&

@@ -64,6 +64,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
     const [expandedFolders, setExpandedFolders] = useState<string[]>([getRootFolder().id]);
     const [itemToDelete, setItemToDelete] = useState<Item | null>(null);
     const [draggedItem, setDraggedItem] = useState<Item | null>(null);
+    const [individualSorting, setIndividualSorting] = useState<boolean>(false);
 
     // check if cur item got deleted from remote
     useEffect(() => {
@@ -182,7 +183,23 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
         expandFolder(item.id);
         expandFolder(curParent.id);
         setCurItem(item);
-        goToItem(item)
+        goToItem(item);
+    }
+
+    function getParentFolder(id: string, folder: Folder = getRootFolder()): Folder | null {
+        const parentId = reactiveFacade.itemsById.get(id)?.parentId;
+        if (parentId === folder.id) return folder;
+        for (const item of folder.items) {
+            if (item.id === parentId) {
+                return item as Folder;
+            } else if (item.isFolder()) {
+                const result = getParentFolder(id, item as Folder);
+                if (result) {
+                    return result;
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -298,7 +315,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
             return;
         }
 
-        if (SortCriteria.Individual !== curSortCrit && over.data.current?.isFolder) {
+        if (!individualSorting && over.data.current?.isFolder) {
             if (reactiveFacade.itemsById.get(active.id as string)?.parentId === over.id as string) {
                 return;
             }
@@ -311,7 +328,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
             //addRelevance(folderId);
             return;
         } else {
-            const items = getSortedChildren(curParent as Folder).map(item => item.id);
+            const items = getSortedChildren(getParentFolder(active.id as string)!).map(item => item.id);
             const individual = loadIndividualSorting();
             const overIndex = items.indexOf(over.id as string);
             const activeIndex = items.indexOf(active.id as string);
@@ -361,7 +378,8 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
      */
     const onDragStart = (event: DragStartEvent) => {
         const {active} = event;
-        setDraggedItem(active.data.current?.item as Item)
+        const item = active.data.current?.item as Item
+        setDraggedItem(item);
     };
 
     /**
@@ -538,6 +556,11 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
         }
     }
 
+    function toggleIndividualSorting() {
+        setIndividualSorting(!individualSorting);
+        // storage
+    }
+
     return {
         dirtyItemId,
         isAscending,
@@ -556,6 +579,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
         curParent,
         inItemCreation,
         draggedItem,
+        individualSorting,
 
         setInEntryCreation,
         toggleHidePassword,
@@ -589,5 +613,6 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
         setIsAscending,
         closeEntryOnMobile,
         onDragStart,
+        toggleIndividualSorting,
     };
 };
