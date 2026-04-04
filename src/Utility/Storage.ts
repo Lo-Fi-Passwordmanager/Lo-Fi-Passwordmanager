@@ -321,37 +321,20 @@ export function addRelevance(itemId: string): void {
     localStorage.setItem("relevance", JSON.stringify(Array.from(relevance.entries())));
 }
 
-export function loadIndividualSorting(automergeURL: string): Map<string, number> {
+export function loadIndividualSorting(): Map<string, number> {
     const rawIndividuals = localStorage.getItem("individual");
     if (!rawIndividuals) {
         return new Map();
     }
     try {
-        const individuals = new Map(JSON.parse(rawIndividuals) as [string, Map<string, number>][]);
-        const dbIndividual = individuals.get(automergeURL);
-        if (!dbIndividual) {
-            return new Map();
-        }
-        return dbIndividual;
+        const parsedIndividuals = new Map(JSON.parse(rawIndividuals) as [string, number][]);
+        return new Map(parsedIndividuals);
     } catch (e) {
         console.error(e);
         return new Map();
     }
 }
 
-export function storeIndividualSorting(automergeURL: string, newSorting: Map<string, number>): void {
-    const rawIndividuals = localStorage.getItem("individual");
-    let individual: Map<string, Map<string, number>>;
-    if (rawIndividuals) {
-        try {
-            individual = new Map(JSON.parse(rawIndividuals) as [string, Map<string, number>][]);
-        } catch (e) {
-            console.error(e);
-            individual = new Map();
-        }
-    } else {
-        individual = new Map();
-    }
-    individual.set(automergeURL, newSorting);
-    localStorage.setItem("individual", JSON.stringify(Array.from(individual.entries())));
+export function storeIndividualSorting(newSorting: Map<string, number>): void {
+    localStorage.setItem("individual", JSON.stringify(Array.from(newSorting.entries())));
 }

@@ -1,9 +1,13 @@
-import {useDndContext, useDraggable, useDroppable} from "@dnd-kit/core";
+import {useDndContext} from "@dnd-kit/core";
+import {useSortable} from "@dnd-kit/sortable";
 import {useEffect, useMemo, useState} from "react";
 
+import {SortCriteria} from "./PasswordViewModel.ts";
 import type {Entry} from "../../Model/Entry.ts";
 import type {Folder} from "../../Model/Folder.ts";
 import type {Item} from "../../Model/Item.ts";
+import {loadCurrentSortCriterion} from "../../Utility/Storage.ts";
+
 
 /**
  * The view model used by the ListView. It has the utility needed for correctly deciding and differentiating {@link Entry} and {@link Folder}
@@ -113,30 +117,25 @@ export const useListViewModel = (
     const {
         attributes,
         listeners,
-        setNodeRef: setDraggableRef,
+        setNodeRef,
         transform,
-        isDragging
-    } = useDraggable({
+        transition,
+        isDragging,
+        isOver,
+    } = useSortable({
         id: topItem.id,
         data: {
-            type: isItemFolder() ? "folder" : "entry",
+            type: "Item",
+            isFolder: isItemFolder(),
             descendantIds: descendantIds
         }
     });
 
-    const {
-        setNodeRef: setDroppableRef,
-        isOver
-    } = useDroppable({
-        id: topItem.id,
-        disabled: !isItemFolder() || isInvalidDropTarget
-    });
+    function isIndividualSorting(): boolean {
+        return loadCurrentSortCriterion() === SortCriteria.Individual;
+    }
 
-    const setFolderRef = (node: HTMLDivElement | null) => {
-        if (!node) return;
-        setDraggableRef(node);
-        setDroppableRef(node);
-    };
+    const doNothingStrategy = () => null;
 
     return {
         newTitle,
@@ -147,8 +146,9 @@ export const useListViewModel = (
         listeners,
         isDragging,
         transform,
+        transition,
         isOver,
-
+        doNothingStrategy,
         setItemTitle,
         updateTitleInAutomerge,
         setAndStoreEditName,
@@ -156,8 +156,8 @@ export const useListViewModel = (
         isItemEntry,
         getItem,
         toggleExpanded,
-        setFolderRef,
-        setDraggableRef,
+        setNodeRef,
         expandFolder,
+        isIndividualSorting,
     };
 };

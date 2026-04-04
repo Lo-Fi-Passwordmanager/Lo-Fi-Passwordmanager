@@ -79,8 +79,8 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                                         y: 1,
                                     },
                                     acceleration: 1,
-                                }}>
-
+                                }}
+                    >
                         {/*The basic ListView which shows all Items and Folders in their hierarchy*/}
                         {viewModel.searchValue.length === 0 && <ListView
                             item={viewModel.getRootFolder()}

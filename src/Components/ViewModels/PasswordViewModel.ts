@@ -11,7 +11,7 @@ import {
     loadCurrentSortCriterion, loadIndividualSorting,
     loadIsAscending, loadRelevanceSorting, loadSynchronizationSettings,
     saveCurrentSortCriterion,
-    saveIsAscending
+    saveIsAscending, storeIndividualSorting
 } from "../../Utility/Storage.ts";
 import {useAutomergeFacade} from "../../Utility/useAutomergeFacade.ts";
 
@@ -290,12 +290,37 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
             return;
         }
 
-        if (reactiveFacade.itemsById.get(active.id as string)?.parentId !== over.id) {
+        if (SortCriteria.Individual !== curSortCrit && over.data.current?.isFolder) {
+            if (reactiveFacade.itemsById.get(active.id as string)?.parentId === over.id as string) {
+                return;
+            }
             reactiveFacade.updateItem(active.id as string, [["parentId", over.id as string]]);
             expandFolder(over.id as string);
-            addRelevance(active.id as string);
-            addRelevance(over.id as string);
+            //addRelevance(active.id as string);
+            //addRelevance(folderId);
             return;
+        } else {
+            const ids = loadIndividualSorting();
+            const overIndex = ids.get(over.id as string) ?? 0;
+            const activeIndex = ids.get(active.id as string) ?? 0;
+            if(activeIndex <= overIndex) {
+                for (const item of (curParent as Folder).items) {
+                    const itemIndex = ids.get(item.id) ?? 0;
+                    if (itemIndex < overIndex) {
+                        ids.set(item.id, itemIndex - 1)
+                    }
+                    ids.set(active.id as string, overIndex + 1);
+                }
+            } else {
+                for (const item of (curParent as Folder).items) {
+                    const itemIndex = ids.get(item.id) ?? 0;
+                    if (itemIndex >= overIndex) {
+                        ids.set(item.id, itemIndex + 1)
+                    }
+                }
+                ids.set(active.id as string, overIndex);
+            }
+            storeIndividualSorting(ids);
         }
     };
 
@@ -415,6 +440,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
      */
     function getSortedChildren(folder: Folder): Item[] {
         const relevance = loadRelevanceSorting();
+        const individual = loadIndividualSorting();
         switch (`${curSortCrit}-${isAscending}`) {
             case `${SortCriteria.Name}-true`:
                 return (folder).items.slice().sort((a, b) => a.title.localeCompare(b.title));
@@ -458,8 +484,8 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
 
             case `${SortCriteria.Individual}-true`:
                 return (folder).items.slice().sort((a, b) => {
-                    const indexA = loadIndividualSorting(automergeFacade.automergeURL!.toString()).get(a.id);
-                    const indexB = loadIndividualSorting(automergeFacade.automergeURL!.toString()).get(b.id);
+                    const indexA = individual.get(a.id);
+                    const indexB = individual.get(b.id);
                     if (indexA !== undefined && indexB !== undefined) {
                         return indexA - indexB;
                     } else if (indexA !== undefined) {
@@ -473,8 +499,8 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
 
             case `${SortCriteria.Individual}-false`:
                 return (folder).items.slice().sort((a, b) => {
-                    const indexA = loadIndividualSorting(automergeFacade.automergeURL!.toString()).get(a.id);
-                    const indexB = loadIndividualSorting(automergeFacade.automergeURL!.toString()).get(b.id);
+                    const indexA = individual.get(a.id);
+                    const indexB = individual.get(b.id);
                     if (indexA !== undefined && indexB !== undefined) {
                         return indexB - indexA;
                     } else if (indexA !== undefined) {
