@@ -11,7 +11,7 @@ import {useEffect, useRef, useState} from "react";
 import type {Folder} from "../../Model/Folder.ts";
 import type {Item} from "../../Model/Item.ts";
 import {useSettings} from "../../Model/Settings.ts";
-import type { AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import type {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {type Attribute} from "../../Utility/AutomergeFacade.ts";
 import {
     addRecentlyUsed,
@@ -612,6 +612,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
         inItemCreation,
         draggedItem,
         individualSorting,
+        reactiveFacade,
 
         setInEntryCreation,
         toggleHidePassword,

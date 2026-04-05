@@ -101,18 +101,18 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
     /**
      * Exports the current file structure in a csv like string array, which could be saved in such.
      */
-    function exportToCsvArray() : string[] {
-        const entryArray : Entry[] = dfsSearchExport(tree.rootFolder);
-        const returnArray : string[] = [];
+    function exportToCsvArray(): string[] {
+        const entryArray: Entry[] = dfsSearchExport(tree.rootFolder);
+        const returnArray: string[] = [];
         returnArray[0] = "\"Account\",\"Login Name\",\"Password\",\"Web Site\",\"Comments\"";
         for (const entry of entryArray) {
             returnArray.push(`"${entry.title}","${entry.username}","${entry.password}","${entry.url}","${entry.note}"`);
         }
         return returnArray;
     }
-    
-    function dfsSearchExport(folder : Folder) : Entry[]{
-        let entryArray : Entry[] = [];
+
+    function dfsSearchExport(folder: Folder): Entry[] {
+        let entryArray: Entry[] = [];
         for (const item of folder.items) {
             if (item.isFolder()) {
                 entryArray = entryArray.concat(dfsSearchExport(item as Folder));

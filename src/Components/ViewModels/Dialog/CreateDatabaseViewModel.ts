@@ -6,20 +6,22 @@ import {useState} from "react";
 /**
  * The Viewmodel for handling the {@link CreateDatabaseDialog} from the Login/Home Screen
  * @param isOpen a boolean that should be true, if the dialog should be shown. Changing this, triggers the fields to reset their values.
- * @param createDatabase the function to create the database with the given name and pasword
- * @param storeDatabase the function to store a database by its automergeurl
- * @param setToastMessage the functino to set the toast message
- * @param setShowToast the function to actually display the toast
- * @param importDatabase the function to import a database from a file
+ * @param createDatabase the function to create the database with the given name and pasword.
+ * @param storeDatabase the function to store a database by its automergeurl.
+ * @param setToastMessage the functino to set the toast message.
+ * @param setShowToast the function to actually display the toast.
+ * @param importDatabase the function to import a database from a decrypted file.
+ * @param importDatabaseUncrypted the function to import a database from a unencrypted file.
  */
 export const useCreateDatabaseViewModel = (
     createDatabase: (name: string, password: string) => void,
     storeDatabase: (name: string, autoMergeUrl: AutomergeUrl) => void,
     setToastMessage: (message: string) => void,
     setShowToast: (show: boolean) => void,
-    importDatabase: (targetFiles: (FileList | null), name: string) => void) => {
+    importDatabase: (targetFiles: (FileList | null), name: string) => void,
+    importUnencryptedDatabaseFromFile: (targetFiles: (FileList | null), name: string, password: string) => void) => {
 
-    //Valid states beeing, "new", "file" and "url"
+    //Valid states beeing, "new", "file", "filedecrypt" and "url"
     const [selectedImportType, setSelectedImportType] = useState("new");
     const [field1, setField1] = useState("");
     const [field2, setField2] = useState("");
@@ -35,6 +37,8 @@ export const useCreateDatabaseViewModel = (
     function handleConfirm() {
         if (selectedImportType === "file") {
             importDatabase(targetFiles, field1);
+        } else if (selectedImportType === "filedecrypt") {
+            importUnencryptedDatabaseFromFile(targetFiles, field1, field2);
         } else {
             if (!field1 || !field2) {
                 setToastMessage("Bitte alle Felder ausfüllen.");
