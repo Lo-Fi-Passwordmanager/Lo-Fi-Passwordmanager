@@ -77,6 +77,7 @@ toggleIndividualSorting
                 <option value="CREATED">Erstellungsdatum</option>
                 <option value="EDITED">Bearbeitungsdatum</option>
                 <option value="RELEVANCE">Relevanz</option>
+                <option value="RECENTLY">Zuletzt verwendet</option>
                 <option value="INDIVIDUAL">Individuell</option>
             </select>
 

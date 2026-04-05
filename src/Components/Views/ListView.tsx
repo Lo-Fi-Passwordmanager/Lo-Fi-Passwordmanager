@@ -10,6 +10,7 @@ import type {Entry} from "../../Model/Entry.ts";
 import type {Folder} from "../../Model/Folder.ts";
 import {type Item} from "../../Model/Item.ts";
 import {useListViewModel} from "../ViewModels/ListViewModel.ts";
+import {addRecentlyUsed} from "../../Utility/Storage.ts";
 
 /* eslint-disable react-hooks/refs */ //react and the eslint do not like each other: https://github.com/facebook/react/issues/34775
 /**
@@ -101,6 +102,7 @@ const ListView: React.FC<{
                     onClick={() => {
                         if (!inEditable) {
                             setCurItem(entry);
+                            addRecentlyUsed(entry.id);
                         }
                     }}
                     style={dragStyle}

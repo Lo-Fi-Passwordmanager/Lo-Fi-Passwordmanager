@@ -372,3 +372,33 @@ export function loadIndividualSortingSetting(): boolean {
 export function storeIndividualSortingSetting(isIndividual: boolean): void {
     localStorage.setItem("is-individual-sorting", JSON.stringify(isIndividual));
 }
+
+/**
+ * Loads the recently used map with item ids to their date last used
+ */
+export function loadRecentlyUsedSorting(): Map<string, Date> {
+    const rawRecentlyUsed = localStorage.getItem("recentlyUsed");
+    if (!rawRecentlyUsed) {
+        return new Map();
+    }
+    try {
+        const parsedRecentlyUsed = JSON.parse(rawRecentlyUsed) as [string, string][];
+        return new Map<string, Date>(
+            parsedRecentlyUsed.map(([key, dateString]) => {
+                return [key, new Date(dateString)];
+            }));
+    } catch (e) {
+        console.error(e);
+        return new Map();
+    }
+}
+
+/**
+ * Updates the date last used of an item to the current date
+ * @param id the id of the item to be updated
+ */
+export function addRecentlyUsed(id: string): void {
+    const recently = loadRecentlyUsedSorting();
+    recently.set(id, new Date());
+    localStorage.setItem("recentlyUsed", JSON.stringify(Array.from(recently.entries())));
+}

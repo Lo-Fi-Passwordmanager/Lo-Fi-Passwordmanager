@@ -14,9 +14,10 @@ import {useSettings} from "../../Model/Settings.ts";
 import type { AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {type Attribute} from "../../Utility/AutomergeFacade.ts";
 import {
+    addRecentlyUsed,
     addRelevance,
     loadCurrentSortCriterion, loadIndividualSorting, loadIndividualSortingSetting,
-    loadIsAscending, loadRelevanceSorting, loadSynchronizationSettings,
+    loadIsAscending, loadRecentlyUsedSorting, loadRelevanceSorting, loadSynchronizationSettings,
     saveCurrentSortCriterion,
     saveIsAscending, storeIndividualSorting, storeIndividualSortingSetting
 } from "../../Utility/Storage.ts";
@@ -30,6 +31,7 @@ export const SortCriteria = {
     CreatedAt: "CREATED",
     EditedAt: "EDITED",
     Relevance: "RELEVANCE",
+    RecentlyUsed: "RECENTLY",
     Individual: "INDIVIDUAL",
 } as const;
 export type SortCriteria = typeof SortCriteria[keyof typeof SortCriteria];
@@ -223,6 +225,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
         setCurItem(getRootFolder());
         setDirtyItemId(id);
         addRelevance(itemId);
+        addRecentlyUsed(itemId);
     }
 
     /**
@@ -236,6 +239,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
         }
         reactiveFacade.updateItem(itemId, [["name", newTitle]]);
         addRelevance(itemId);
+        addRecentlyUsed(itemId);
     }
 
     /**
@@ -326,6 +330,8 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
             expandFolder(over.id as string);
             //addRelevance(active.id as string);
             //addRelevance(folderId);
+            addRecentlyUsed(active.id as string);
+            addRecentlyUsed(over.id as string);
             return;
         } else {
             const items = getSortedChildren(getParentFolder(active.id as string)!).map(item => item.id);
@@ -472,6 +478,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
      */
     function getSortedChildren(folder: Folder): Item[] {
         const relevance = loadRelevanceSorting();
+        const recently = loadRecentlyUsedSorting();
         const individual = loadIndividualSorting();
         switch (`${curSortCrit}-${isAscending}`) {
             case `${SortCriteria.Name}-true`:
@@ -491,6 +498,28 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
 
             case `${SortCriteria.EditedAt}-false`:
                 return (folder).items.slice().sort((a, b) => b.editedAt.getTime() - a.editedAt.getTime());
+
+            case `${SortCriteria.RecentlyUsed}-true`:
+                return (folder).items.slice().sort((a, b) => {
+                    const recentlyA = recently.get(a.id) ?? new Date(0)
+                    const recentlyB = recently.get(b.id) ?? new Date(0)
+                    if (recentlyA.getTime() !== recentlyB.getTime()) {
+                        return recentlyB.getTime() - recentlyA.getTime(); // more recent first
+                    } else {
+                        return a.title.localeCompare(b.title); // if equal recently used, sort by name
+                    }
+                })
+
+            case `${SortCriteria.RecentlyUsed}-false`:
+                return (folder).items.slice().sort((a, b) => {
+                    const recentlyA = recently.get(a.id) ?? new Date(0)
+                    const recentlyB = recently.get(b.id) ?? new Date(0)
+                    if (recentlyA.getTime() !== recentlyB.getTime()) {
+                        return recentlyA.getTime() - recentlyB.getTime(); // less recent first
+                    } else {
+                        return b.title.localeCompare(a.title); // if equal recently used, sort by name descending
+                    }
+                })
 
             case `${SortCriteria.Relevance}-true`:
                 return (folder).items.slice().sort((a, b) => {
