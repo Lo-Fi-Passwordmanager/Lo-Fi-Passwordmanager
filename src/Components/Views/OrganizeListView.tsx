@@ -3,7 +3,7 @@ import {HiBarsArrowDown, HiBarsArrowUp, HiLockClosed} from "react-icons/hi2";
 
 import {loadCurrentSortCriterion} from "../../Utility/Storage.ts";
 import {SortCriteria} from "../ViewModels/PasswordViewModel.ts";
-import CheckBoxButton from "./ButtonViews/CheckBoxButton.tsx";
+import IndividualSortingToggleButton from "./ButtonViews/IndividualSortingToggleButton.tsx";
 
 /**
  * The View that contains the search bar, sorting options and buttons to close the database and add new items
@@ -15,6 +15,8 @@ import CheckBoxButton from "./ButtonViews/CheckBoxButton.tsx";
  * @param setLiveSearchValue method to set the current typed search value
  * @param liveSearchValue the current typed search value
  * @param closeDatabase method to close the currently opened database
+ * @param isIndividualSorting boolean if sorting is enabled
+ * @param toggleIndividualSorting method to toggle sorting boolean
  */
 const OrganizeListView: React.FC<{
     curSortCriterion: SortCriteria;
@@ -85,7 +87,7 @@ toggleIndividualSorting
             }}
                 title={isAscending ? "Absteigend sortieren" : "Aufsteigend sortieren"}>
                 {isAscending ? <HiBarsArrowDown size={24}/> : <HiBarsArrowUp size={24}/>}
-            </button> : <CheckBoxButton sorting={isIndividualSorting} toggleSorting={toggleIndividualSorting}/>}
+            </button> : <IndividualSortingToggleButton sorting={isIndividualSorting} toggleSorting={toggleIndividualSorting}/>}
         </div>
     );
 }

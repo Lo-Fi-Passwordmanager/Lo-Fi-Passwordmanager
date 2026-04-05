@@ -15,10 +15,10 @@ import type { AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {type Attribute} from "../../Utility/AutomergeFacade.ts";
 import {
     addRelevance,
-    loadCurrentSortCriterion, loadIndividualSorting,
+    loadCurrentSortCriterion, loadIndividualSorting, loadIndividualSortingSetting,
     loadIsAscending, loadRelevanceSorting, loadSynchronizationSettings,
     saveCurrentSortCriterion,
-    saveIsAscending, storeIndividualSorting
+    saveIsAscending, storeIndividualSorting, storeIndividualSortingSetting
 } from "../../Utility/Storage.ts";
 import {useAutomergeFacade} from "../../Utility/useAutomergeFacade.ts";
 
@@ -64,7 +64,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
     const [expandedFolders, setExpandedFolders] = useState<string[]>([getRootFolder().id]);
     const [itemToDelete, setItemToDelete] = useState<Item | null>(null);
     const [draggedItem, setDraggedItem] = useState<Item | null>(null);
-    const [individualSorting, setIndividualSorting] = useState<boolean>(false);
+    const [individualSorting, setIndividualSorting] = useState<boolean>(loadIndividualSortingSetting);
 
     // check if cur item got deleted from remote
     useEffect(() => {
@@ -556,9 +556,12 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
         }
     }
 
+    /**
+     * Toggles the individual sorting mode. When false, items can be moved while sorted individually
+     */
     function toggleIndividualSorting() {
         setIndividualSorting(!individualSorting);
-        // storage
+        storeIndividualSortingSetting(!individualSorting);
     }
 
     return {

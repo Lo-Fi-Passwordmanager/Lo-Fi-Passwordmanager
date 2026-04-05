@@ -33,6 +33,7 @@ import {useListViewModel} from "../ViewModels/ListViewModel.ts";
  * @param collapseFolderId method to collapse a folder by its id
  * @param isFolderExpanded method to check whether a folder is expanded by its id
  * @param getSortedChildren method to get the sorted children of a folder
+ * @param individualSorting boolean if sorting is enabled
  */
 const ListView: React.FC<{
         item: Item,
@@ -53,7 +54,7 @@ const ListView: React.FC<{
         collapseFolderId: (folderId: string) => void;
         isFolderExpanded: (folderId: string) => boolean;
         getSortedChildren: (folder: Folder) => Item[],
-    individualSorting: boolean,
+        individualSorting: boolean,
     }> = ({
               item,
               setCurItem,
@@ -73,7 +74,7 @@ const ListView: React.FC<{
               collapseFolderId,
               isFolderExpanded,
               getSortedChildren,
-    individualSorting
+              individualSorting,
           }) => {
         const viewModel = useListViewModel(item, dirtyItemId, setCurItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded);
 
@@ -198,13 +199,14 @@ const ListView: React.FC<{
                         </div>}
 
                     </div>
-                        {/* Recursive call of children with indent to visualizes depth in the tree */}
-                        <div className="listViewEntryWrapper"
-                             style={{
-                                 display: (isFolderExpanded(item.id) ? "block" : "none"),
-                                 marginLeft: level <= 8 ? "15px" : "0px"
-                             }}>
-                            <SortableContext items={getSortedChildren(item as Folder).map(child => child.id)} strategy={viewModel.isIndividualSorting() && individualSorting ? verticalListSortingStrategy : viewModel.doNothingStrategy}>
+                    {/* Recursive call of children with indent to visualizes depth in the tree */}
+                    <div className="listViewEntryWrapper"
+                         style={{
+                             display: (isFolderExpanded(item.id) ? "block" : "none"),
+                             marginLeft: level <= 8 ? "15px" : "0px"
+                         }}>
+                        <SortableContext items={getSortedChildren(item as Folder).map(child => child.id)}
+                                         strategy={viewModel.isCurSortCritIndividual() && individualSorting ? verticalListSortingStrategy : viewModel.doNothingStrategy}>
                             {getSortedChildren(item as Folder) &&
                                 getSortedChildren(item as Folder).map((item: Item, index: number) => {
                                     return <ListView
@@ -229,8 +231,8 @@ const ListView: React.FC<{
                                         individualSorting={individualSorting}
                                     />;
                                 })}
-                            </SortableContext>
-                        </div>
+                        </SortableContext>
+                    </div>
                 </>
             );
         }

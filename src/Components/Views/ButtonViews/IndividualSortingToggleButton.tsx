@@ -2,9 +2,11 @@ import React from "react";
 import {HiMiniArrowsPointingIn, HiMiniArrowsPointingOut} from "react-icons/hi2";
 
 /**
- * A button that is a checkbox for the individual sorting
+ * A button that toggles if you sort or move items while individual sorting is selected
+ * @param sorting boolean if sorting is enabled
+ * @param toggleSorting function that toggles the boolean
  */
-const CheckBoxButton: React.FC<{
+const IndividualSortingToggleButton: React.FC<{
     sorting: boolean,
     toggleSorting: () => void,
 }> = ({sorting, toggleSorting}) => {
@@ -29,4 +31,4 @@ const CheckBoxButton: React.FC<{
         );
     }
 }
-export default CheckBoxButton;
+export default IndividualSortingToggleButton;

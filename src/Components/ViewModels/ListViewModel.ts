@@ -114,14 +114,17 @@ export const useListViewModel = (
         return activeDescendants.includes(topItem.id);
     }, [active, topItem.id]);
 
+    /**
+     * Initializes the dnd-kit sortable and draggable functionality for the current item, providing the necessary data and configuration. Disables sorting if the item is the root.
+     */
     const {
         attributes,
         listeners,
-        setNodeRef,
         transform,
         transition,
         isDragging,
         isOver,
+        setNodeRef,
     } = useSortable({
         id: topItem.id,
         data: {
@@ -133,10 +136,16 @@ export const useListViewModel = (
         disabled: topItem.id === "",
     });
 
-    function isIndividualSorting(): boolean {
+    /**
+     * Returns if the current sort criterion is individual
+     */
+    function isCurSortCritIndividual(): boolean {
         return loadCurrentSortCriterion() === SortCriteria.Individual;
     }
 
+    /**
+     * Disables sorting with doing nothing
+     */
     const doNothingStrategy = () => null;
 
     return {
@@ -160,6 +169,6 @@ export const useListViewModel = (
         toggleExpanded,
         setNodeRef,
         expandFolder,
-        isIndividualSorting,
+        isCurSortCritIndividual,
     };
 };

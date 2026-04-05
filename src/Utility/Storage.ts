@@ -294,7 +294,7 @@ export function storeP2PSetting(isP2P: boolean): void {
 }
 
 /**
- * loads a map with item ids to their relevance
+ * Loads a map with item ids to their relevance
  */
 export function loadRelevanceSorting(): Map<string, number> {
     const rawRelevance = localStorage.getItem("relevance");
@@ -311,7 +311,7 @@ export function loadRelevanceSorting(): Map<string, number> {
 }
 
 /**
- * increases the relevance of an item by 1
+ * Increases the relevance of an item by 1
  * @param itemId the id of  the item
  */
 export function addRelevance(itemId: string): void {
@@ -321,6 +321,9 @@ export function addRelevance(itemId: string): void {
     localStorage.setItem("relevance", JSON.stringify(Array.from(relevance.entries())));
 }
 
+/**
+ * Loads a map with ids to their sorting index
+ */
 export function loadIndividualSorting(): Map<string, number> {
     const rawIndividuals = localStorage.getItem("individual");
     if (!rawIndividuals) {
@@ -335,6 +338,37 @@ export function loadIndividualSorting(): Map<string, number> {
     }
 }
 
+/**
+ * Stores the individual sorting map in localStorage
+ *
+ * @param newSorting the map with ids to their sorting index to store
+ */
 export function storeIndividualSorting(newSorting: Map<string, number>): void {
     localStorage.setItem("individual", JSON.stringify(Array.from(newSorting.entries())));
+}
+
+/**
+ * Loads the setting for individual sorting from localStorage or stores and returns the default if not present
+ */
+export function loadIndividualSortingSetting(): boolean {
+    const rawIndividual  = localStorage.getItem("is-individual-sorting");
+    if (!rawIndividual) {
+        storeIndividualSortingSetting(true);
+        return true;
+    }
+    try {
+        return JSON.parse(rawIndividual) as boolean;
+    } catch (e) {
+        console.error(e);
+        storeIndividualSortingSetting(true);
+        return true;
+    }
+}
+
+/**
+ * Stores the new setting for individual sorting to the localstorage
+ * @param isIndividual the new setting
+ */
+export function storeIndividualSortingSetting(isIndividual: boolean): void {
+    localStorage.setItem("is-individual-sorting", JSON.stringify(isIndividual));
 }

@@ -1,7 +1,9 @@
 import {useRepo} from "@automerge/automerge-repo-react-hooks";
 import {DndContext, DragOverlay, pointerWithin} from "@dnd-kit/core";
 import React from "react";
+import {HiTrash} from "react-icons/hi";
 import {HiArrowLeftCircle} from "react-icons/hi2";
+import {ImKey} from "react-icons/im";
 
 import EntryView from "./EntryView.tsx";
 import ListView from "./ListView.tsx";
@@ -13,8 +15,6 @@ import ItemCreationDialog from "./DialogViews/ItemCreationDialog.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
 import EditableEntryView from "./EditableEntryView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
-import {ImKey} from "react-icons/im";
-import {HiTrash} from "react-icons/hi";
 import FolderMenu from "./MenuViews/FolderMenu.tsx";
 
 
