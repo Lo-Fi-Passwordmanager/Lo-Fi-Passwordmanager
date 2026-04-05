@@ -139,7 +139,7 @@ const ListView: React.FC<{
                 <>
                     {/* Name and Buttons */}
                     <div
-                        className={`listViewTitleHeader ${item.id == "" ? "database_title" : ""} ${viewModel.isOver && !viewModel.isDragging && (!individualSorting || !viewModel.isCurSortCritIndividual()) ? "over" : ""} ${selectedItemId === item.id ? "highlighted folder" : ""}`}
+                        className={`listViewTitleHeader ${item.id == "" ? "database_title" : ""} ${viewModel.isOver && !viewModel.isDragging && (!individualSorting || !viewModel.isCurSortCritIndividual()) && !viewModel.isInvalidDropTarget ? "over" : ""} ${selectedItemId === item.id ? "highlighted folder" : ""}`}
                         ref={viewModel.setNodeRef}
                         style={item.id !== "" ? dragStyle : {minHeight: "2.5rem"}}
                         {...(item.id !== "" ? viewModel.listeners : {})}

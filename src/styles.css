@@ -616,7 +616,7 @@ input[type="number"] {
 
 .over {
     border: 2px dashed var(--outline-droppable) !important;
-    background-color: var(--bg) !important;
+    background-color: transparent !important;
 }
 
 .item-title {

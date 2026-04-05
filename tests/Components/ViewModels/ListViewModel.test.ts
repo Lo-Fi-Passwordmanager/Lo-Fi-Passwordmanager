@@ -3,7 +3,7 @@ import {Folder} from "../../../src/Model/Folder";
 import {Entry} from "../../../src/Model/Entry";
 import {act, renderHook, waitFor} from "@testing-library/react";
 import {useListViewModel} from "../../../src/Components/ViewModels/ListViewModel";
-import * as dndKit from '@dnd-kit/core';
+import * as dndKitSortable from '@dnd-kit/sortable';
 
 describe("ListViewModel", () => {
 
@@ -16,8 +16,7 @@ describe("ListViewModel", () => {
     const isFolderExpanded = vi.fn();
     const expandFolderId = vi.fn();
     const collapseFolderId = vi.fn();
-    const setDraggableRef = vi.fn();
-    const setDroppableRef = vi.fn();
+    const mockSetNodeRef = vi.fn();
 
     const subFolder1 = new Folder("subFolder 1", "123", new Date(4), new Date(8));
     const entry = new Entry("Name1", "id123", new Date(3), new Date(6), "benutzer1", "password", "url", "note");
@@ -28,34 +27,27 @@ describe("ListViewModel", () => {
     topItem.addItem(entry2);
     topItem.addItem(entry3);
 
-    vi.mock('@dnd-kit/core', () => ({
-        useDndContext: vi.fn(),
-        useDraggable: vi.fn(),
-        useDroppable: vi.fn(),
+    vi.mock('@dnd-kit/sortable', () => ({
+        useSortable: vi.fn(),
     }));
 
 
     beforeEach(() => {
         vi.clearAllMocks();
 
-        vi.mocked(dndKit.useDndContext).mockReturnValue({active: null} as any);
-
-        vi.mocked(dndKit.useDraggable).mockReturnValue({
-            setNodeRef: setDraggableRef,
+        vi.mocked(dndKitSortable.useSortable).mockReturnValue({
+            setNodeRef: mockSetNodeRef,
             attributes: {},
             listeners: {},
             transform: null,
+            transition: undefined,
             isDragging: false,
-        } as any);
-
-        vi.mocked(dndKit.useDroppable).mockReturnValue({
-            setNodeRef: setDroppableRef,
             isOver: false,
         } as any);
     });
 
     afterEach(() => {
-
+        vi.clearAllMocks();
     });
 
     it("should be able to tell when its a folder", () => {
@@ -183,26 +175,23 @@ describe("ListViewModel", () => {
 
         const mockNode = document.createElement('div');
 
-        result.current.setFolderRef(mockNode);
+        result.current.setNodeRef(mockNode);
 
-        expect(setDraggableRef).toHaveBeenCalledWith(mockNode);
-        expect(setDroppableRef).toHaveBeenCalledWith(mockNode);
-        expect(setDraggableRef).toHaveBeenCalledTimes(1);
-        expect(setDroppableRef).toHaveBeenCalledTimes(1);
+        expect(mockSetNodeRef).toHaveBeenCalledWith(mockNode);
+        expect(mockSetNodeRef).toHaveBeenCalledTimes(1);
     });
 
     it('should do nothing when the ref setter is called with null', () => {
         const {result} = renderHook(() => useListViewModel(entry, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded));
 
-        result.current.setFolderRef(null);
+        result.current.setNodeRef(null);
 
-        expect(setDraggableRef).not.toHaveBeenCalled();
-        expect(setDroppableRef).not.toHaveBeenCalled();
+        expect(mockSetNodeRef).not.toHaveBeenCalled();
     });
 
     it('should return if the item is an invalid drop target', () => {
         // mock the dnd context to simulate that some item is being dragged and one of its descendant is the top item
-        vi.mocked(dndKit.useDndContext).mockReturnValue({
+        vi.mocked(dndKitSortable.useSortable).mockReturnValue({
             active: {
                 id: 'id123',
                 data: {
@@ -213,7 +202,7 @@ describe("ListViewModel", () => {
             }
         } as any);
 
-        const { result } = renderHook(() => useListViewModel(
+        const {result} = renderHook(() => useListViewModel(
             topItem, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded
         ));
         expect(result.current.isInvalidDropTarget).toBe(true);

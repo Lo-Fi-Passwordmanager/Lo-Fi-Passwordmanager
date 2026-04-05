@@ -109,10 +109,11 @@ export const useListViewModel = (
      * Determines if the current item is an invalid drop target for the active draggable item
      */
     const isInvalidDropTarget = useMemo(() => {
-        if (!active) return false;
-        const activeDescendants = active.data.current?.descendantIds as string[];
-        return activeDescendants.includes(topItem.id);
-    }, [active, topItem.id]);
+            if (!active) return false;
+            if (active.id === topItem.id) return true;
+            const activeDescendants = (active.data.current?.descendantIds as string[]) || [];
+            return activeDescendants.includes(topItem.id);
+        }, [active, topItem.id]);
 
     /**
      * Initializes the dnd-kit sortable and draggable functionality for the current item, providing the necessary data and configuration. Disables sorting if the item is the root.
@@ -133,7 +134,6 @@ export const useListViewModel = (
             descendantIds: descendantIds,
             item: topItem,
         },
-        disabled: topItem.id === "",
     });
 
     /**
