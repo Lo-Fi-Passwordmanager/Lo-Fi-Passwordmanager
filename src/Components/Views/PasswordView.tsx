@@ -31,7 +31,14 @@ interface PasswordViewProps {
 /**
  * The view that should be shown, when the user opened a database successfully and shows the whole structure and one selected entry
  */
-const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbName, closeDatabase, itemsDeleted, justSynced, itemsToImport}) => {
+const PasswordView: React.FC<PasswordViewProps> = ({
+                                                       automergeFacade,
+                                                       openedDbName,
+                                                       closeDatabase,
+                                                       itemsDeleted,
+                                                       justSynced,
+                                                       itemsToImport
+                                                   }) => {
     const viewModel = usePasswordViewModel(automergeFacade as AutomergeFacade, itemsDeleted, justSynced);
     // Fügt das Repo als zu global hinzu, sodass man im Browser einfach auf das Repo zugreifen kann, zum debuggen.
     // Nur während 'yarn dev' verfügbar, nach dem build nicht mehr
@@ -119,11 +126,19 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                         />}
                         <DragOverlay>
                             {viewModel.draggedItem &&
-                                <div className={`listView${viewModel.draggedItem.isEntry() ? 'Entry' : 'TitleHeader'}`}>
-                                    <button style={viewModel.draggedItem.isEntry() ? {background: "transparent", boxShadow: "none"} : {}}>{viewModel.draggedItem.isEntry() ? <ImKey size={18}/> : viewModel.isFolderExpanded(viewModel.draggedItem.id) ? "▼" : "▷"}</button>
+                                <div
+                                    className={`listView${viewModel.draggedItem.isEntry() ? 'Entry' : 'TitleHeader'} dragged`}>
+                                    <button style={viewModel.draggedItem.isEntry() ? {
+                                        background: "transparent",
+                                        boxShadow: "none"
+                                    } : {}}>{viewModel.draggedItem.isEntry() ? <ImKey
+                                        size={18}/> : viewModel.isFolderExpanded(viewModel.draggedItem.id) ? "▼" : "▷"}</button>
                                     <span className={"item-title"}>{viewModel.draggedItem.title}</span>
-                                    <div className={"btnWrapper"}>{viewModel.draggedItem.isEntry() ? <HiTrash size={24}/> : <FolderMenu disabled onAdd={() => null} onRename={() => null} onDelete={() => null}/>}</div>
-                                    </div>}
+                                    <div className={"btnWrapper"}>{viewModel.draggedItem.isEntry() ?
+                                        <button className={"listViewEntry button"}><HiTrash size={24}/></button> :
+                                        <FolderMenu disabled onAdd={() => null} onRename={() => null}
+                                                    onDelete={() => null}/>}</div>
+                                </div>}
                         </DragOverlay>
                     </DndContext>
                 </div>

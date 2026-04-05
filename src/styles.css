@@ -609,8 +609,9 @@ input[type="number"] {
 }
 
 .dragged {
-    opacity: 0.5;
+    opacity: 0.6;
     cursor: grabbing;
+    border: 2px solid var(--primary) !important;
 }
 
 .over {

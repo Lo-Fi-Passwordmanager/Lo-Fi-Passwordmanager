@@ -9,8 +9,8 @@ import FolderMenu from "./MenuViews/FolderMenu.tsx";
 import type {Entry} from "../../Model/Entry.ts";
 import type {Folder} from "../../Model/Folder.ts";
 import {type Item} from "../../Model/Item.ts";
-import {useListViewModel} from "../ViewModels/ListViewModel.ts";
 import {addRecentlyUsed} from "../../Utility/Storage.ts";
+import {useListViewModel} from "../ViewModels/ListViewModel.ts";
 
 /* eslint-disable react-hooks/refs */ //react and the eslint do not like each other: https://github.com/facebook/react/issues/34775
 /**
@@ -139,7 +139,7 @@ const ListView: React.FC<{
                 <>
                     {/* Name and Buttons */}
                     <div
-                        className={`listViewTitleHeader ${item.id == "" ? "database_title" : ""} ${viewModel.isDragging ? "dragged" : ""} ${viewModel.isOver && !viewModel.isDragging && !individualSorting ? "over" : ""} ${selectedItemId === item.id ? "highlighted folder" : ""}`}
+                        className={`listViewTitleHeader ${item.id == "" ? "database_title" : ""} ${viewModel.isOver && !viewModel.isDragging && (!individualSorting || !viewModel.isCurSortCritIndividual()) ? "over" : ""} ${selectedItemId === item.id ? "highlighted folder" : ""}`}
                         ref={viewModel.setNodeRef}
                         style={item.id !== "" ? dragStyle : {minHeight: "2.5rem"}}
                         {...(item.id !== "" ? viewModel.listeners : {})}

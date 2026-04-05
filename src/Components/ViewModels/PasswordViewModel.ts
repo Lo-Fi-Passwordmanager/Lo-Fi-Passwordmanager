@@ -319,7 +319,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
             return;
         }
 
-        if (!individualSorting && over.data.current?.isFolder) {
+        if ((!individualSorting || curSortCrit !== SortCriteria.Individual) && over.data.current?.isFolder) {
             if (reactiveFacade.itemsById.get(active.id as string)?.parentId === over.id as string) {
                 return;
             }
@@ -543,7 +543,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
                     }
                 });
 
-            case `${SortCriteria.Individual}-true`:
+            case `${SortCriteria.Individual}-${isAscending}`:
                 return (folder).items.slice().sort((a, b) => {
                     const indexA = individual.get(a.id);
                     const indexB = individual.get(b.id);
@@ -555,21 +555,6 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
                         return 1;
                     } else {
                         return a.title.localeCompare(b.title);
-                    }
-                });
-
-            case `${SortCriteria.Individual}-false`:
-                return (folder).items.slice().sort((a, b) => {
-                    const indexA = individual.get(a.id);
-                    const indexB = individual.get(b.id);
-                    if (indexA !== undefined && indexB !== undefined) {
-                        return indexB - indexA;
-                    } else if (indexA !== undefined) {
-                        return 1;
-                    } else if (indexB !== undefined) {
-                        return -1;
-                    } else {
-                        return b.title.localeCompare(a.title);
                     }
                 });
         }
