@@ -224,8 +224,10 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
         const id = curItem.id;
         setCurItem(getRootFolder());
         setDirtyItemId(id);
-        addRelevance(itemId);
-        addRecentlyUsed(itemId);
+        if (changes.length === 1 && changes[0][0] !== "parentId") {
+            addRecentlyUsed(itemId);
+            addRelevance(itemId);
+        }
     }
 
     /**
