@@ -68,7 +68,7 @@ describe('PasswordViewModel', () => {
 
     })
 
-    it('should be able toset the current item', () => {
+    it('should be able to set the current item', () => {
         const {result} = renderHook(() => usePasswordViewModel(automergeFacade, itemsDeleted, justSynced));
         act(() => {
             result.current.setCurItem(entry);
@@ -433,8 +433,22 @@ describe('PasswordViewModel', () => {
 
         act(() => {
             result.current.handleDragEnd({
-                active: { id: entry.id },
-                over: { id: subFolder1.id }
+                active: {
+                    id: entry.id,
+                    data: {
+                        current: {
+                            descendantIds: []
+                        }
+                    }
+                },
+                over: {
+                    id: subFolder1.id,
+                    data: {
+                        current: {
+                            isFolder: true
+                        }
+                    }
+                }
             } as any);
         });
 

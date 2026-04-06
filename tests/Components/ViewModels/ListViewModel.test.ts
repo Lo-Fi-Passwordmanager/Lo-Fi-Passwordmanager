@@ -4,6 +4,7 @@ import {Entry} from "../../../src/Model/Entry";
 import {act, renderHook, waitFor} from "@testing-library/react";
 import {useListViewModel} from "../../../src/Components/ViewModels/ListViewModel";
 import * as dndKitSortable from '@dnd-kit/sortable';
+import * as dndKitCore from '@dnd-kit/core';
 
 describe("ListViewModel", () => {
 
@@ -31,10 +32,11 @@ describe("ListViewModel", () => {
         useSortable: vi.fn(),
     }));
 
+    vi.mock('@dnd-kit/core', () => ({
+        useDndContext: vi.fn(),
+    }));
 
     beforeEach(() => {
-        vi.clearAllMocks();
-
         vi.mocked(dndKitSortable.useSortable).mockReturnValue({
             setNodeRef: mockSetNodeRef,
             attributes: {},
@@ -43,6 +45,10 @@ describe("ListViewModel", () => {
             transition: undefined,
             isDragging: false,
             isOver: false,
+        } as any);
+
+        vi.mocked(dndKitCore.useDndContext).mockReturnValue({
+                active: null,
         } as any);
     });
 
@@ -83,7 +89,7 @@ describe("ListViewModel", () => {
         expect(result.current.descendantIds.length).toBe(0);
     });
 
-    it("should return nothing as childern when the item is an entry", () => {
+    it("should return nothing as children when the item is an entry", () => {
         const {result} = renderHook(() =>
             useListViewModel(entry, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded));
         expect(result.current.descendantIds.length).toBe(0);
@@ -186,12 +192,29 @@ describe("ListViewModel", () => {
 
         result.current.setNodeRef(null);
 
-        expect(mockSetNodeRef).not.toHaveBeenCalled();
+        expect(mockSetNodeRef).toHaveBeenCalledWith(null);
     });
 
     it('should return if the item is an invalid drop target', () => {
+
+        const newItem = new Folder("parent", "123", new Date(), new Date());
+
         // mock the dnd context to simulate that some item is being dragged and one of its descendant is the top item
         vi.mocked(dndKitSortable.useSortable).mockReturnValue({
+            isOver: true,
+            isDragging: true,
+            active: {
+                id: 'id123',
+                data: {
+                    current: {
+                        descendantIds: ['123', 'id234']
+                    }
+                }
+            },
+            over: {id: '123'}
+        } as any);
+
+        vi.mocked(dndKitCore.useDndContext).mockReturnValue({
             active: {
                 id: 'id123',
                 data: {
@@ -203,7 +226,7 @@ describe("ListViewModel", () => {
         } as any);
 
         const {result} = renderHook(() => useListViewModel(
-            topItem, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded
+            newItem, dirtyItemID, setCurrItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded
         ));
         expect(result.current.isInvalidDropTarget).toBe(true);
     });
