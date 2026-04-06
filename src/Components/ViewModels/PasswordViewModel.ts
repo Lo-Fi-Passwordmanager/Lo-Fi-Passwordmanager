@@ -313,7 +313,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
      * Handles the drag end event from dnd kit and updates the parentId of the dragged item
      */
     const handleDragEnd = (event: DragEndEvent) => {
-        const { active, over } = event;
+        const {active, over} = event;
 
         if (!over || active.id === over.id) {
             return;
@@ -471,6 +471,40 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
     }
 
     /**
+     * Compares given values and returns the sorting order based on the current sort criterion. If the values are equal, it sorts by name as a tiebreaker.
+     * @param valueA the value of the first item based on the current sort criterion
+     * @param valueB the value of the second item based on the current sort criterion
+     * @param a the first item
+     * @param b the second item
+     */
+    function sortingLogic(valueA: number, valueB: number, a: Item, b: Item) {
+        if (valueA !== valueB) {
+            return valueB - valueA;
+        } else {
+            return a.title.localeCompare(b.title);
+        }
+    }
+
+    /**
+     * Compares given indices and returns the sorting order for individual sorting. If both items have an index, it sorts by the index. If only one item has an index, it sorts that one first. If neither item has an index, it sorts by name.
+     * @param indexA the index of the first item in the individual sorting
+     * @param indexB the index of the second item in the individual sorting
+     * @param a the first item
+     * @param b the second item
+     */
+    function individualSortingLogic(indexA: number | undefined, indexB: number | undefined, a: Item, b: Item) {
+        if (indexA !== undefined && indexB !== undefined) {
+            return indexA - indexB;
+        } else if (indexA !== undefined) {
+            return -1;
+        } else if (indexB !== undefined) {
+            return 1;
+        } else {
+            return a.title.localeCompare(b.title);
+        }
+    }
+
+    /**
      * Gets the children of the given folder, sorted by the current sort criterion and order
      */
     function getSortedChildren(folder: Folder): Item[] {
@@ -498,61 +532,37 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
 
             case `${SortCriteria.RecentlyUsed}-true`:
                 return (folder).items.slice().sort((a, b) => {
-                    const recentlyA = recently.get(a.id) ?? new Date(0)
-                    const recentlyB = recently.get(b.id) ?? new Date(0)
-                    if (recentlyA.getTime() !== recentlyB.getTime()) {
-                        return recentlyB.getTime() - recentlyA.getTime(); // more recent first
-                    } else {
-                        return a.title.localeCompare(b.title); // if equal recently used, sort by name
-                    }
+                    const recentlyA = (recently.get(a.id) ?? new Date(0)).getTime();
+                    const recentlyB = (recently.get(b.id) ?? new Date(0)).getTime();
+                    return sortingLogic(recentlyA, recentlyB, a, b);
                 })
 
             case `${SortCriteria.RecentlyUsed}-false`:
                 return (folder).items.slice().sort((a, b) => {
-                    const recentlyA = recently.get(a.id) ?? new Date(0)
-                    const recentlyB = recently.get(b.id) ?? new Date(0)
-                    if (recentlyA.getTime() !== recentlyB.getTime()) {
-                        return recentlyA.getTime() - recentlyB.getTime(); // less recent first
-                    } else {
-                        return b.title.localeCompare(a.title); // if equal recently used, sort by name descending
-                    }
+                    const recentlyA = (recently.get(a.id) ?? new Date(0)).getTime();
+                    const recentlyB = (recently.get(b.id) ?? new Date(0)).getTime();
+                    return sortingLogic(recentlyB, recentlyA, b, a);
                 })
 
             case `${SortCriteria.Relevance}-true`:
                 return (folder).items.slice().sort((a, b) => {
                     const relevanceA = relevance.get(a.id) ?? 0;
                     const relevanceB = relevance.get(b.id) ?? 0;
-                    if (relevanceA !== relevanceB) {
-                        return relevanceB - relevanceA; // higher relevance first
-                    } else {
-                        return a.title.localeCompare(b.title); // if equal relevance, sort by name
-                    }
+                    return sortingLogic(relevanceA, relevanceB, a, b);
                 });
 
             case `${SortCriteria.Relevance}-false`:
                 return (folder).items.slice().sort((a, b) => {
                     const relevanceA = relevance.get(a.id) ?? 0;
                     const relevanceB = relevance.get(b.id) ?? 0;
-                    if (relevanceA !== relevanceB) {
-                        return relevanceA - relevanceB; // lower relevance first
-                    } else {
-                        return b.title.localeCompare(a.title); // if equal relevance, sort by name descending
-                    }
+                    return sortingLogic(relevanceB, relevanceA, b, a);
                 });
 
             case `${SortCriteria.Individual}-${isAscending}`:
                 return (folder).items.slice().sort((a, b) => {
                     const indexA = individual.get(a.id);
                     const indexB = individual.get(b.id);
-                    if (indexA !== undefined && indexB !== undefined) {
-                        return indexA - indexB;
-                    } else if (indexA !== undefined) {
-                        return -1;
-                    } else if (indexB !== undefined) {
-                        return 1;
-                    } else {
-                        return a.title.localeCompare(b.title);
-                    }
+                    return individualSortingLogic(indexA, indexB, a, b);
                 });
         }
         return [];
