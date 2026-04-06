@@ -1,3 +1,4 @@
+import {SortableContext, verticalListSortingStrategy} from "@dnd-kit/sortable";
 import {CSS} from "@dnd-kit/utilities";
 import React from "react";
 import {HiTrash} from "react-icons/hi";
@@ -8,8 +9,8 @@ import FolderMenu from "./MenuViews/FolderMenu.tsx";
 import type {Entry} from "../../Model/Entry.ts";
 import type {Folder} from "../../Model/Folder.ts";
 import {type Item} from "../../Model/Item.ts";
+import {addRecentlyUsed} from "../../Utility/Storage.ts";
 import {useListViewModel} from "../ViewModels/ListViewModel.ts";
-
 
 /* eslint-disable react-hooks/refs */ //react and the eslint do not like each other: https://github.com/facebook/react/issues/34775
 /**
@@ -33,6 +34,7 @@ import {useListViewModel} from "../ViewModels/ListViewModel.ts";
  * @param collapseFolderId method to collapse a folder by its id
  * @param isFolderExpanded method to check whether a folder is expanded by its id
  * @param getSortedChildren method to get the sorted children of a folder
+ * @param individualSorting boolean if sorting is enabled
  */
 const ListView: React.FC<{
         item: Item,
@@ -53,6 +55,7 @@ const ListView: React.FC<{
         collapseFolderId: (folderId: string) => void;
         isFolderExpanded: (folderId: string) => boolean;
         getSortedChildren: (folder: Folder) => Item[],
+        individualSorting: boolean,
     }> = ({
               item,
               setCurItem,
@@ -71,9 +74,10 @@ const ListView: React.FC<{
               expandFolderId,
               collapseFolderId,
               isFolderExpanded,
-              getSortedChildren
+              getSortedChildren,
+              individualSorting,
           }) => {
-        const listViewModel = useListViewModel(item, dirtyItemId, setCurItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded);
+        const viewModel = useListViewModel(item, dirtyItemId, setCurItem, updateItemTitle, setCreatedFolderId, createdFolderId, expandFolderId, collapseFolderId, isFolderExpanded);
 
         function addButtonPressed() {
             setItemCreationDialog();
@@ -83,26 +87,28 @@ const ListView: React.FC<{
 
         // makes the dragged item follow the cursor
         const dragStyle = {
-            transform: CSS.Translate.toString(listViewModel.transform)
+            transform: CSS.Translate.toString(viewModel.transform),
+            transition: viewModel.transform ? viewModel.transition : 'none',
         };
 
         /**
          * If the item to be shown is of type entry, than only its name will be shown
          */
-        if (listViewModel.isItemEntry()) {
-            const entry = listViewModel.getItem() as Entry;
+        if (viewModel.isItemEntry()) {
+            const entry = viewModel.getItem() as Entry;
             return (
                 <div
-                    className={`listViewEntry ${curItem.id !== entry.id ? "" : "selected"} ${listViewModel.isDragging ? "dragged" : ""} ${selectedItemId === item.id ? "highlighted entry" : ""}`}
+                    className={`listViewEntry ${curItem.id !== entry.id ? "" : "selected"} ${selectedItemId === item.id ? "highlighted entry" : ""}`}
                     onClick={() => {
                         if (!inEditable) {
                             setCurItem(entry);
+                            addRecentlyUsed(entry.id);
                         }
                     }}
                     style={dragStyle}
-                    ref={listViewModel.setDraggableRef}
-                    {...listViewModel.attributes}
-                    {...listViewModel.listeners}
+                    ref={viewModel.setNodeRef}
+                    {...viewModel.attributes}
+                    {...viewModel.listeners}
                     aria-selected={selectedItemId === item.id}>
 
                     <button style={{background: "none", boxShadow: "none"}}><ImKey size={18}/></button>
@@ -128,44 +134,44 @@ const ListView: React.FC<{
 
             //If the item is a folder, than all of its children get shown recursivley by creating a {@link ListView} of all of its children.
             //Furthermore a button that extends/collapses the folder and a Button to add a new Element are shown next to the title
-        } else if (listViewModel.isItemFolder()) {
+        } else if (viewModel.isItemFolder()) {
             return (
                 <>
                     {/* Name and Buttons */}
                     <div
-                        className={`listViewTitleHeader ${item.id == "" ? "database_title" : ""} ${listViewModel.isDragging ? "dragged" : ""} ${listViewModel.isOver && !listViewModel.isDragging ? "over" : ""} ${selectedItemId === item.id ? "highlighted folder" : ""}`}
-                        ref={listViewModel.setFolderRef}
+                        className={`listViewTitleHeader ${item.id == "" ? "database_title" : ""} ${viewModel.isOver && !viewModel.isDragging && (!individualSorting || !viewModel.isCurSortCritIndividual()) && !viewModel.isInvalidDropTarget ? "over" : ""} ${selectedItemId === item.id ? "highlighted folder" : ""}`}
+                        ref={viewModel.setNodeRef}
                         style={item.id !== "" ? dragStyle : {minHeight: "2.5rem"}}
-                        {...listViewModel.attributes}
-                        {...listViewModel.listeners}
+                        {...(item.id !== "" ? viewModel.listeners : {})}
+                        {...(item.id !== "" ? viewModel.attributes : {})}
                         aria-selected={selectedItemId === item.id}>
                         {/* ^^^^^^^^^ using aria-selected for scrolling to the clicked folder from filtered list view */}
 
                         {(item.id != "") &&
                             <button style={{boxShadow: "none"}}
-                                    onClick={() => listViewModel.toggleExpanded()}
+                                    onClick={() => viewModel.toggleExpanded()}
                                     onPointerDown={(e) => e.stopPropagation()}
                                     title={isFolderExpanded(item.id) ? "Ordner einklappen" : "Ordner ausklappen"}
                             >
                                 {isFolderExpanded(item.id) ? "▼" : "▷"}</button>}
 
-                        {(!listViewModel.inEditName && item.id !== createdFolderId) &&
+                        {(!viewModel.inEditName && item.id !== createdFolderId) &&
                             <span className={"item-title"}>{(item.id != "") ? item.title : openedDbName}</span>
                         }
-                        {(listViewModel.inEditName || item.id === createdFolderId) &&
+                        {(viewModel.inEditName || item.id === createdFolderId) &&
                             <input type="text"
                                    autoFocus
                                    onFocus={e => {
                                        e.target.select();
-                                       listViewModel.setItemTitle(item.title);
+                                       viewModel.setItemTitle(item.title);
                                    }}
                                    className={"editFolder mobile"}
                                    style={{marginLeft: ((item.id != "") ? "" : "10px")}}
-                                   value={listViewModel.newTitle}
-                                   onChange={(e) => listViewModel.setItemTitle(e.target.value)}
+                                   value={viewModel.newTitle}
+                                   onChange={(e) => viewModel.setItemTitle(e.target.value)}
                                    onBlur={() => {
-                                       listViewModel.setAndStoreEditName(false);
-                                       listViewModel.updateTitleInAutomerge();
+                                       viewModel.setAndStoreEditName(false);
+                                       viewModel.updateTitleInAutomerge();
                                    }}
                                    onKeyDown={(e) => {
                                        if (e.key === "Enter") {
@@ -180,7 +186,7 @@ const ListView: React.FC<{
                                 onAdd={() => addButtonPressed()}
                                 onDelete={() => deleteItem(item)}
                                 onRename={() => {
-                                    listViewModel.setAndStoreEditName(true);
+                                    viewModel.setAndStoreEditName(true);
                                 }}
                             /> : <button className="listViewTitleHeader button"
                                          title="Eintrag ins Startverzeichnis Hinzufügen"
@@ -195,36 +201,39 @@ const ListView: React.FC<{
                         </div>}
 
                     </div>
-
                     {/* Recursive call of children with indent to visualizes depth in the tree */}
                     <div className="listViewEntryWrapper"
                          style={{
                              display: (isFolderExpanded(item.id) ? "block" : "none"),
                              marginLeft: level <= 8 ? "15px" : "0px"
                          }}>
-                        {getSortedChildren(item as Folder) &&
-                            getSortedChildren(item as Folder).map((item: Item, index: number) => {
-                                return <ListView
-                                    key={index}
-                                    item={item}
-                                    setCurItem={setCurItem}
-                                    curItem={curItem}
-                                    setItemCreationDialog={setItemCreationDialog}
-                                    setCurrentParent={setCurrentParent}
-                                    deleteItem={deleteItem}
-                                    getSortedChildren={getSortedChildren}
-                                    dirtyItemId={dirtyItemId} openedDbName={""}
-                                    updateItemTitle={updateItemTitle}
-                                    selectedItemId={selectedItemId}
-                                    createdFolderId={createdFolderId}
-                                    setCreatedFolderId={setCreatedFolderId}
-                                    inEditable={inEditable}
-                                    level={level + 1}
-                                    expandFolderId={expandFolderId}
-                                    collapseFolderId={collapseFolderId}
-                                    isFolderExpanded={isFolderExpanded}
-                                />;
-                            })}
+                        <SortableContext items={getSortedChildren(item as Folder).map(child => child.id)}
+                                         strategy={viewModel.isCurSortCritIndividual() && individualSorting ? verticalListSortingStrategy : viewModel.doNothingStrategy}>
+                            {getSortedChildren(item as Folder) &&
+                                getSortedChildren(item as Folder).map((item: Item, index: number) => {
+                                    return <ListView
+                                        key={index}
+                                        item={item}
+                                        setCurItem={setCurItem}
+                                        curItem={curItem}
+                                        setItemCreationDialog={setItemCreationDialog}
+                                        setCurrentParent={setCurrentParent}
+                                        deleteItem={deleteItem}
+                                        getSortedChildren={getSortedChildren}
+                                        dirtyItemId={dirtyItemId} openedDbName={""}
+                                        updateItemTitle={updateItemTitle}
+                                        selectedItemId={selectedItemId}
+                                        createdFolderId={createdFolderId}
+                                        setCreatedFolderId={setCreatedFolderId}
+                                        inEditable={inEditable}
+                                        level={level + 1}
+                                        expandFolderId={expandFolderId}
+                                        collapseFolderId={collapseFolderId}
+                                        isFolderExpanded={isFolderExpanded}
+                                        individualSorting={individualSorting}
+                                    />;
+                                })}
+                        </SortableContext>
                     </div>
                 </>
             );

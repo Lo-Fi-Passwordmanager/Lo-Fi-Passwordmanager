@@ -609,13 +609,14 @@ input[type="number"] {
 }
 
 .dragged {
-    opacity: 0.5;
+    opacity: 0.6;
     cursor: grabbing;
+    border: 2px solid var(--primary) !important;
 }
 
 .over {
     border: 2px dashed var(--outline-droppable) !important;
-    background-color: var(--bg) !important;
+    background-color: transparent !important;
 }
 
 .item-title {

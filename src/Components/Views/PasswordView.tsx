@@ -1,7 +1,9 @@
 import {useRepo} from "@automerge/automerge-repo-react-hooks";
-import {DndContext, pointerWithin} from "@dnd-kit/core";
+import {DndContext, DragOverlay, pointerWithin} from "@dnd-kit/core";
 import React from "react";
+import {HiTrash} from "react-icons/hi";
 import {HiArrowLeftCircle} from "react-icons/hi2";
+import {ImKey} from "react-icons/im";
 
 import EntryView from "./EntryView.tsx";
 import ListView from "./ListView.tsx";
@@ -13,6 +15,7 @@ import ItemCreationDialog from "./DialogViews/ItemCreationDialog.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
 import EditableEntryView from "./EditableEntryView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
+import FolderMenu from "./MenuViews/FolderMenu.tsx";
 import type {Item} from "../../Model/Item.ts";
 
 
@@ -28,7 +31,14 @@ interface PasswordViewProps {
 /**
  * The view that should be shown, when the user opened a database successfully and shows the whole structure and one selected entry
  */
-const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbName, closeDatabase, itemsDeleted, justSynced, itemsToImport}) => {
+const PasswordView: React.FC<PasswordViewProps> = ({
+                                                       automergeFacade,
+                                                       openedDbName,
+                                                       closeDatabase,
+                                                       itemsDeleted,
+                                                       justSynced,
+                                                       itemsToImport
+                                                   }) => {
     const viewModel = usePasswordViewModel(automergeFacade as AutomergeFacade, itemsDeleted, justSynced);
     // Fügt das Repo als zu global hinzu, sodass man im Browser einfach auf das Repo zugreifen kann, zum debuggen.
     // Nur während 'yarn dev' verfügbar, nach dem build nicht mehr
@@ -66,8 +76,8 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                     setLiveSearchValue={viewModel.setSearchValue}
                     liveSearchValue={viewModel.searchValue}
                     closeDatabase={closeDatabase}
-                    setItemCreationDialog={() => viewModel.setInItemCreation(true)}
-                    inEditable={viewModel.inEditable}
+                    isIndividualSorting={viewModel.individualSorting}
+                    toggleIndividualSorting={viewModel.toggleIndividualSorting}
                 />
 
                 <div className="scrollableContainer">
@@ -82,6 +92,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                     />}
                     <DndContext collisionDetection={pointerWithin}
                                 onDragEnd={viewModel.handleDragEnd}
+                                onDragStart={viewModel.onDragStart}
                                 sensors={viewModel.sensors}
                                 autoScroll={{
                                     threshold: {
@@ -89,8 +100,8 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                                         y: 1,
                                     },
                                     acceleration: 1,
-                                }}>
-
+                                }}
+                    >
                         {/*The basic ListView which shows all Items and Folders in their hierarchy*/}
                         {viewModel.searchValue.length === 0 && <ListView
                             item={viewModel.getRootFolder()}
@@ -111,7 +122,24 @@ const PasswordView: React.FC<PasswordViewProps> = ({automergeFacade, openedDbNam
                             isFolderExpanded={viewModel.isFolderExpanded}
                             getSortedChildren={viewModel.getSortedChildren}
                             level={0}
+                            individualSorting={viewModel.individualSorting}
                         />}
+                        <DragOverlay>
+                            {viewModel.draggedItem &&
+                                <div
+                                    className={`listView${viewModel.draggedItem.isEntry() ? 'Entry' : 'TitleHeader'} dragged`}>
+                                    <button style={viewModel.draggedItem.isEntry() ? {
+                                        background: "transparent",
+                                        boxShadow: "none"
+                                    } : {}}>{viewModel.draggedItem.isEntry() ? <ImKey
+                                        size={18}/> : viewModel.isFolderExpanded(viewModel.draggedItem.id) ? "▼" : "▷"}</button>
+                                    <span className={"item-title"}>{viewModel.draggedItem.title}</span>
+                                    <div className={"btnWrapper"}>{viewModel.draggedItem.isEntry() ?
+                                        <button className={"listViewEntry button"}><HiTrash size={24}/></button> :
+                                        <FolderMenu disabled onAdd={() => null} onRename={() => null}
+                                                    onDelete={() => null}/>}</div>
+                                </div>}
+                        </DragOverlay>
                     </DndContext>
                 </div>
             </div>

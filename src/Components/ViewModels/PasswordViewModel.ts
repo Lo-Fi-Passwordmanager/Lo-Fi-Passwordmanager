@@ -1,16 +1,25 @@
-import {type DragEndEvent, PointerSensor, TouchSensor, useSensor, useSensors} from "@dnd-kit/core";
+import {
+    type DragEndEvent,
+    type DragStartEvent,
+    PointerSensor,
+    TouchSensor,
+    useSensor,
+    useSensors
+} from "@dnd-kit/core";
 import {useEffect, useRef, useState} from "react";
 
 import type {Folder} from "../../Model/Folder.ts";
 import type {Item} from "../../Model/Item.ts";
 import {useSettings} from "../../Model/Settings.ts";
-import type { AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
+import type {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {type Attribute} from "../../Utility/AutomergeFacade.ts";
 import {
-    loadCurrentSortCriterion,
-    loadIsAscending, loadSynchronizationSettings,
+    addRecentlyUsed,
+    addRelevance,
+    loadCurrentSortCriterion, loadIndividualSorting, loadIndividualSortingSetting,
+    loadIsAscending, loadRecentlyUsedSorting, loadRelevanceSorting, loadSynchronizationSettings,
     saveCurrentSortCriterion,
-    saveIsAscending
+    saveIsAscending, storeIndividualSorting, storeIndividualSortingSetting
 } from "../../Utility/Storage.ts";
 import {useAutomergeFacade} from "../../Utility/useAutomergeFacade.ts";
 
@@ -21,6 +30,9 @@ export const SortCriteria = {
     Name: "NAME",
     CreatedAt: "CREATED",
     EditedAt: "EDITED",
+    Relevance: "RELEVANCE",
+    RecentlyUsed: "RECENTLY",
+    Individual: "INDIVIDUAL",
 } as const;
 export type SortCriteria = typeof SortCriteria[keyof typeof SortCriteria];
 
@@ -53,6 +65,8 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
     const [searchValue, setSearchValue] = useState<string>("");
     const [expandedFolders, setExpandedFolders] = useState<string[]>([getRootFolder().id]);
     const [itemToDelete, setItemToDelete] = useState<Item | null>(null);
+    const [draggedItem, setDraggedItem] = useState<Item | null>(null);
+    const [individualSorting, setIndividualSorting] = useState<boolean>(loadIndividualSortingSetting);
 
     // check if cur item got deleted from remote
     useEffect(() => {
@@ -171,7 +185,23 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
         expandFolder(item.id);
         expandFolder(curParent.id);
         setCurItem(item);
-        goToItem(item)
+        goToItem(item);
+    }
+
+    function getParentFolder(id: string, folder: Folder = getRootFolder()): Folder | null {
+        const parentId = reactiveFacade.itemsById.get(id)?.parentId;
+        if (parentId === folder.id) return folder;
+        for (const item of folder.items) {
+            if (item.id === parentId) {
+                return item as Folder;
+            } else if (item.isFolder()) {
+                const result = getParentFolder(id, item as Folder);
+                if (result) {
+                    return result;
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -194,6 +224,8 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
         const id = curItem.id;
         setCurItem(getRootFolder());
         setDirtyItemId(id);
+        addRelevance(itemId);
+        addRecentlyUsed(itemId);
     }
 
     /**
@@ -206,6 +238,8 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
             return;
         }
         reactiveFacade.updateItem(itemId, [["name", newTitle]]);
+        addRelevance(itemId);
+        addRecentlyUsed(itemId);
     }
 
     /**
@@ -280,15 +314,41 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
      */
     const handleDragEnd = (event: DragEndEvent) => {
         const {active, over} = event;
-        if (!over) {
+
+        if (!over || active.id === over.id) {
             return;
         }
-        if (active.id !== over.id
-                && reactiveFacade.itemsById.get(active.id as string)?.parentId !== over.id) {
+
+        if ((!individualSorting || curSortCrit !== SortCriteria.Individual) && over.data.current?.isFolder) {
+            if (active.data.current?.(descendantIds).includes(over.id as string)) {
+                return;
+            }
             reactiveFacade.updateItem(active.id as string, [["parentId", over.id as string]]);
             expandFolder(over.id as string);
+            //addRelevance(active.id as string);
+            //addRelevance(folderId);
+            addRecentlyUsed(active.id as string);
+            addRecentlyUsed(over.id as string);
+            return;
+        } else if (individualSorting && curSortCrit === SortCriteria.Individual) {
+            const items = getSortedChildren(getParentFolder(active.id as string)!).map(item => item.id);
+            const individual = loadIndividualSorting();
+            const overIndex = items.indexOf(over.id as string);
+            const activeIndex = items.indexOf(active.id as string);
+            items.splice(activeIndex, 1);
+            const spliced = items.splice(overIndex, Infinity);
+            items.push(active.id as string, ...spliced);
+            if (!isAscending) {
+                items.reverse();
+            }
+            for (const item of items) {
+                individual.set(item, items.indexOf(item));
+            }
+            storeIndividualSorting(individual);
         }
+        setDraggedItem(null);
     };
+
 
     /**
      * Sensor for dnd kit to start dragging after moving 5 pixels
@@ -314,6 +374,16 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
     function allowDragging() {
         return !inEditable && !inItemCreation && createdFolderId === null;
     }
+
+    /**
+     * Sets draggedItem to the currently dragged item
+     * @param event dragging event
+     */
+    const onDragStart = (event: DragStartEvent) => {
+        const {active} = event;
+        const item = active.data.current?.item as Item
+        setDraggedItem(item);
+    };
 
     /**
      * Recursively searches for the path to the given target item starting from the given folder. Returns an array of item ids representing the path.
@@ -401,9 +471,46 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
     }
 
     /**
+     * Compares given values and returns the sorting order based on the current sort criterion. If the values are equal, it sorts by name as a tiebreaker.
+     * @param valueA the value of the first item based on the current sort criterion
+     * @param valueB the value of the second item based on the current sort criterion
+     * @param a the first item
+     * @param b the second item
+     */
+    function sortingLogic(valueA: number, valueB: number, a: Item, b: Item) {
+        if (valueA !== valueB) {
+            return valueB - valueA;
+        } else {
+            return a.title.localeCompare(b.title);
+        }
+    }
+
+    /**
+     * Compares given indices and returns the sorting order for individual sorting. If both items have an index, it sorts by the index. If only one item has an index, it sorts that one first. If neither item has an index, it sorts by name.
+     * @param indexA the index of the first item in the individual sorting
+     * @param indexB the index of the second item in the individual sorting
+     * @param a the first item
+     * @param b the second item
+     */
+    function individualSortingLogic(indexA: number | undefined, indexB: number | undefined, a: Item, b: Item) {
+        if (indexA !== undefined && indexB !== undefined) {
+            return indexA - indexB;
+        } else if (indexA !== undefined) {
+            return -1;
+        } else if (indexB !== undefined) {
+            return 1;
+        } else {
+            return a.title.localeCompare(b.title);
+        }
+    }
+
+    /**
      * Gets the children of the given folder, sorted by the current sort criterion and order
      */
     function getSortedChildren(folder: Folder): Item[] {
+        const relevance = loadRelevanceSorting();
+        const recently = loadRecentlyUsedSorting();
+        const individual = loadIndividualSorting();
         switch (`${curSortCrit}-${isAscending}`) {
             case `${SortCriteria.Name}-true`:
                 return (folder).items.slice().sort((a, b) => a.title.localeCompare(b.title));
@@ -422,6 +529,41 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
 
             case `${SortCriteria.EditedAt}-false`:
                 return (folder).items.slice().sort((a, b) => b.editedAt.getTime() - a.editedAt.getTime());
+
+            case `${SortCriteria.RecentlyUsed}-true`:
+                return (folder).items.slice().sort((a, b) => {
+                    const recentlyA = (recently.get(a.id) ?? new Date(0)).getTime();
+                    const recentlyB = (recently.get(b.id) ?? new Date(0)).getTime();
+                    return sortingLogic(recentlyA, recentlyB, a, b);
+                })
+
+            case `${SortCriteria.RecentlyUsed}-false`:
+                return (folder).items.slice().sort((a, b) => {
+                    const recentlyA = (recently.get(a.id) ?? new Date(0)).getTime();
+                    const recentlyB = (recently.get(b.id) ?? new Date(0)).getTime();
+                    return sortingLogic(recentlyB, recentlyA, b, a);
+                })
+
+            case `${SortCriteria.Relevance}-true`:
+                return (folder).items.slice().sort((a, b) => {
+                    const relevanceA = relevance.get(a.id) ?? 0;
+                    const relevanceB = relevance.get(b.id) ?? 0;
+                    return sortingLogic(relevanceA, relevanceB, a, b);
+                });
+
+            case `${SortCriteria.Relevance}-false`:
+                return (folder).items.slice().sort((a, b) => {
+                    const relevanceA = relevance.get(a.id) ?? 0;
+                    const relevanceB = relevance.get(b.id) ?? 0;
+                    return sortingLogic(relevanceB, relevanceA, b, a);
+                });
+
+            case `${SortCriteria.Individual}-${isAscending}`:
+                return (folder).items.slice().sort((a, b) => {
+                    const indexA = individual.get(a.id);
+                    const indexB = individual.get(b.id);
+                    return individualSortingLogic(indexA, indexB, a, b);
+                });
         }
         return [];
     }
@@ -433,6 +575,14 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
             setToastMessage("Bitte zuerst die Bearbeitungsansicht verlassen");
             setToastVisible(true);
         }
+    }
+
+    /**
+     * Toggles the individual sorting mode. When false, items can be moved while sorted individually
+     */
+    function toggleIndividualSorting() {
+        setIndividualSorting(!individualSorting);
+        storeIndividualSortingSetting(!individualSorting);
     }
 
     return {
@@ -452,6 +602,8 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
         curItem,
         curParent,
         inItemCreation,
+        draggedItem,
+        individualSorting,
         reactiveFacade,
 
         setInEntryCreation,
@@ -485,5 +637,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
         setCurSortCrit,
         setIsAscending,
         closeEntryOnMobile,
+        onDragStart,
+        toggleIndividualSorting,
     };
 };
