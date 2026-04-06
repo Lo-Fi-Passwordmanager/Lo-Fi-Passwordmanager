@@ -320,7 +320,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
         }
 
         if ((!individualSorting || curSortCrit !== SortCriteria.Individual) && over.data.current?.isFolder) {
-            if (active.data.current?.(descendantIds).includes(over.id as string)) {
+            if (active.data.current!.descendantIds.includes(over.id as string)) {
                 return;
             }
             reactiveFacade.updateItem(active.id as string, [["parentId", over.id as string]]);
