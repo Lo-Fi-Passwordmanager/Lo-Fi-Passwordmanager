@@ -90,6 +90,7 @@ const ListView: React.FC<{
             transform: CSS.Translate.toString(viewModel.transform),
             transition: viewModel.transform ? viewModel.transition : 'none',
             opacity: viewModel.isDragging && viewModel.isCurSortCritIndividual() && individualSorting ? 0 : viewModel.isDragging ? 0.4 : 1,
+            willChange: "transform",
         };
 
         /**

@@ -1,5 +1,5 @@
 import {useRepo} from "@automerge/automerge-repo-react-hooks";
-import {DndContext, DragOverlay, pointerWithin} from "@dnd-kit/core";
+import {closestCorners, DndContext, DragOverlay} from "@dnd-kit/core";
 import React from "react";
 import {HiTrash} from "react-icons/hi";
 import {HiArrowLeftCircle} from "react-icons/hi2";
@@ -90,7 +90,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({
                         goToFolder={viewModel.goToItem}
                         getSortedChildren={viewModel.getSortedChildren}
                     />}
-                    <DndContext collisionDetection={pointerWithin}
+                    <DndContext collisionDetection={closestCorners}
                                 onDragEnd={viewModel.handleDragEnd}
                                 onDragStart={viewModel.onDragStart}
                                 sensors={viewModel.sensors}

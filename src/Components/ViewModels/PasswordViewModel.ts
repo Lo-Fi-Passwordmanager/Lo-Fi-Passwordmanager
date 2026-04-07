@@ -330,6 +330,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
         }
 
         if ((!individualSorting || curSortCrit !== SortCriteria.Individual) && over.data.current?.isFolder) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
             if (active.data.current!.descendantIds.includes(over.id as string)) {
                 return;
             }
@@ -348,9 +349,6 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
             items.splice(activeIndex, 1);
             const spliced = items.splice(overIndex, Infinity);
             items.push(active.id as string, ...spliced);
-            if (!isAscending) {
-                items.reverse();
-            }
             for (const item of items) {
                 individual.set(item, items.indexOf(item));
             }
