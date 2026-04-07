@@ -41,6 +41,7 @@ export type SortCriteria = typeof SortCriteria[keyof typeof SortCriteria];
  *
  * @param automergeFacade the Automergefacade that contains the database to be used
  * @param itemsDeleted items that were deleted from remote
+ * @param justSynced true if just remote synced
  */
 export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDeleted: string[], justSynced: boolean) => {
 
@@ -67,6 +68,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
     const [itemToDelete, setItemToDelete] = useState<Item | null>(null);
     const [draggedItem, setDraggedItem] = useState<Item | null>(null);
     const [individualSorting, setIndividualSorting] = useState<boolean>(loadIndividualSortingSetting);
+    const [activeCollapsed, setActiveCollapsed] = useState<boolean>(false);
 
     // check if cur item got deleted from remote
     useEffect(() => {
@@ -224,10 +226,11 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
         const id = curItem.id;
         setCurItem(getRootFolder());
         setDirtyItemId(id);
-        if (changes.length === 1 && changes[0][0] !== "parentId") {
-            addRecentlyUsed(itemId);
-            addRelevance(itemId);
+        if (changes.length === 1 && changes[0][0] === "parentId") {
+            return;
         }
+        addRecentlyUsed(itemId);
+        addRelevance(itemId);
     }
 
     /**
@@ -317,6 +320,11 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
     const handleDragEnd = (event: DragEndEvent) => {
         const {active, over} = event;
 
+        if (activeCollapsed) {
+            expandFolder(active.id as string);
+            setActiveCollapsed(false);
+        }
+
         if (!over || active.id === over.id) {
             return;
         }
@@ -385,6 +393,10 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
         const {active} = event;
         const item = active.data.current?.item as Item
         setDraggedItem(item);
+        if (isFolderExpanded(active.id as string)) {
+            collapseFolder(active.id as string);
+            setActiveCollapsed(true);
+        }
     };
 
     /**

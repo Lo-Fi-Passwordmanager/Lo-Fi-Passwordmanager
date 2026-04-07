@@ -89,6 +89,7 @@ const ListView: React.FC<{
         const dragStyle = {
             transform: CSS.Translate.toString(viewModel.transform),
             transition: viewModel.transform ? viewModel.transition : 'none',
+            opacity: viewModel.isDragging && viewModel.isCurSortCritIndividual() && individualSorting ? 0 : 1,
         };
 
         /**
