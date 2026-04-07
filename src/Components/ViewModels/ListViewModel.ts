@@ -1,9 +1,12 @@
-import {useDndContext, useDraggable, useDroppable} from "@dnd-kit/core";
+import {useDndContext} from "@dnd-kit/core";
+import {useSortable} from "@dnd-kit/sortable";
 import {useEffect, useMemo, useState} from "react";
 
+import {SortCriteria} from "./PasswordViewModel.ts";
 import type {Entry} from "../../Model/Entry.ts";
 import type {Folder} from "../../Model/Folder.ts";
 import type {Item} from "../../Model/Item.ts";
+import {loadCurrentSortCriterion} from "../../Utility/Storage.ts";
 
 
 /**
@@ -28,7 +31,7 @@ export const useListViewModel = (
     createdFolderID: string | null,
     expandFolderId: (folderId: string) => void,
     collapseFolderId: (folderId: string) => void,
-    isFolderExpanded: (folderId: string) => boolean
+    isFolderExpanded: (folderId: string) => boolean,
 ) => {
 
     const [inEditName, setInEditName] = useState(false);
@@ -106,40 +109,44 @@ export const useListViewModel = (
      * Determines if the current item is an invalid drop target for the active draggable item
      */
     const isInvalidDropTarget = useMemo(() => {
-        if (!active) return false;
-        const activeDescendants = active.data.current?.descendantIds as string[];
-        return activeDescendants.includes(topItem.id);
-    }, [active, topItem.id]);
+            if (!active) return false;
+            if (active.id === topItem.id) return true;
+            const activeDescendants = (active.data.current?.descendantIds as string[]) || [];
+            return activeDescendants.includes(topItem.id);
+        }, [active, topItem.id]);
 
-
-    // DnD Kit Draggable and Droppable setup
+    /**
+     * Initializes the dnd-kit sortable and draggable functionality for the current item, providing the necessary data and configuration. Disables sorting if the item is the root.
+     */
     const {
         attributes,
         listeners,
-        setNodeRef: setDraggableRef,
         transform,
-        isDragging
-    } = useDraggable({
+        transition,
+        isDragging,
+        isOver,
+        setNodeRef,
+    } = useSortable({
         id: topItem.id,
         data: {
-            type: isItemFolder() ? "folder" : "entry",
-            descendantIds: descendantIds
-        }
+            type: "Item",
+            isFolder: isItemFolder(),
+            descendantIds: descendantIds,
+            item: topItem,
+        },
     });
 
-    const {
-        setNodeRef: setDroppableRef,
-        isOver
-    } = useDroppable({
-        id: topItem.id,
-        disabled: !isItemFolder() || isInvalidDropTarget
-    });
+    /**
+     * Returns if the current sort criterion is individual
+     */
+    function isCurSortCritIndividual(): boolean {
+        return loadCurrentSortCriterion() === SortCriteria.Individual;
+    }
 
-    const setFolderRef = (node: HTMLDivElement | null) => {
-        if (!node) return;
-        setDraggableRef(node);
-        setDroppableRef(node);
-    };
+    /**
+     * Disables sorting with doing nothing
+     */
+    const doNothingStrategy = () => null;
 
     return {
         newTitle,
@@ -150,8 +157,9 @@ export const useListViewModel = (
         listeners,
         isDragging,
         transform,
+        transition,
         isOver,
-
+        doNothingStrategy,
         setItemTitle,
         updateTitleInAutomerge,
         setAndStoreEditName,
@@ -159,8 +167,8 @@ export const useListViewModel = (
         isItemEntry,
         getItem,
         toggleExpanded,
-        setFolderRef,
-        setDraggableRef,
+        setNodeRef,
         expandFolder,
+        isCurSortCritIndividual,
     };
 };

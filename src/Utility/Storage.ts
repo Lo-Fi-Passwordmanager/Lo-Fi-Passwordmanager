@@ -293,6 +293,116 @@ export function storeP2PSetting(isP2P: boolean): void {
     localStorage.setItem("p2p", JSON.stringify(isP2P));
 }
 
+/**
+ * Loads a map with item ids to their relevance
+ */
+export function loadRelevanceSorting(): Map<string, number> {
+    const rawRelevance = localStorage.getItem("relevance");
+    if (!rawRelevance) {
+        return new Map();
+    }
+    try {
+        const parsedRelevance = new Map(JSON.parse(rawRelevance) as [string, number][]);
+        return new Map(parsedRelevance);
+    } catch (e) {
+        console.error(e);
+        return new Map();
+    }
+}
+
+/**
+ * Increases the relevance of an item by 1
+ * @param itemId the id of  the item
+ */
+export function addRelevance(itemId: string): void {
+    const relevance = loadRelevanceSorting();
+    const currentRelevance = relevance.get(itemId) ?? 0;
+    relevance.set(itemId, currentRelevance + 1);
+    localStorage.setItem("relevance", JSON.stringify(Array.from(relevance.entries())));
+}
+
+/**
+ * Loads a map with ids to their sorting index
+ */
+export function loadIndividualSorting(): Map<string, number> {
+    const rawIndividuals = localStorage.getItem("individual");
+    if (!rawIndividuals) {
+        return new Map();
+    }
+    try {
+        const parsedIndividuals = new Map(JSON.parse(rawIndividuals) as [string, number][]);
+        return new Map(parsedIndividuals);
+    } catch (e) {
+        console.error(e);
+        return new Map();
+    }
+}
+
+/**
+ * Stores the individual sorting map in localStorage
+ *
+ * @param newSorting the map with ids to their sorting index to store
+ */
+export function storeIndividualSorting(newSorting: Map<string, number>): void {
+    localStorage.setItem("individual", JSON.stringify(Array.from(newSorting.entries())));
+}
+
+/**
+ * Loads the setting for individual sorting from localStorage or stores and returns the default if not present
+ */
+export function loadIndividualSortingSetting(): boolean {
+    const rawIndividual  = localStorage.getItem("is-individual-sorting");
+    if (!rawIndividual) {
+        storeIndividualSortingSetting(true);
+        return true;
+    }
+    try {
+        return JSON.parse(rawIndividual) as boolean;
+    } catch (e) {
+        console.error(e);
+        storeIndividualSortingSetting(true);
+        return true;
+    }
+}
+
+/**
+ * Stores the new setting for individual sorting to the localstorage
+ * @param isIndividual the new setting
+ */
+export function storeIndividualSortingSetting(isIndividual: boolean): void {
+    localStorage.setItem("is-individual-sorting", JSON.stringify(isIndividual));
+}
+
+/**
+ * Loads the recently used map with item ids to their date last used
+ */
+export function loadRecentlyUsedSorting(): Map<string, Date> {
+    const rawRecentlyUsed = localStorage.getItem("recentlyUsed");
+    if (!rawRecentlyUsed) {
+        return new Map();
+    }
+    try {
+        const parsedRecentlyUsed = JSON.parse(rawRecentlyUsed) as [string, string][];
+        return new Map<string, Date>(
+            parsedRecentlyUsed.map(([key, dateString]) => {
+                return [key, new Date(dateString)];
+            }));
+    } catch (e) {
+        console.error(e);
+        return new Map();
+    }
+}
+
+/**
+ * Updates the date last used of an item to the current date
+ * @param id the id of the item to be updated
+ */
+export function addRecentlyUsed(id: string): void {
+    const recently = loadRecentlyUsedSorting();
+    recently.set(id, new Date());
+    localStorage.setItem("recentlyUsed", JSON.stringify(Array.from(recently.entries())));
+}
+
 export function storeActiveColorIndex(activeColorIndex: number): void {
     localStorage.setItem("active_color_index", JSON.stringify(activeColorIndex));
 }

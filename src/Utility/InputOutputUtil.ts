@@ -39,4 +39,63 @@ export async function uInt8ArrayFromFile(fileList: FileList | null): Promise<Uin
     } catch (error) {
         console.error("Error reading file:", error);
     }
+};
+
+export function saveToCsv(lines : string[]) {
+    try {
+        const fullContent = lines.join('\n');
+
+        // Create a Blob with the CSV content and correct MIME type
+        const blob = new Blob([fullContent], { type: 'text/csv;charset=utf-8;' });
+
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', "Database.csv");
+
+
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        URL.revokeObjectURL(url);
+
+        console.log(`Download triggered for: "Database.csv"`);
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error('Download failed:', error.message);
+        } else {
+            console.error('An unknown error occurred during download');
+        }
+    }
+};
+
+export async function loadFromCsv(fileList: FileList): Promise<string[] | undefined> {
+    try {
+        const file = fileList[0];
+        if (!file) {
+            console.warn("No file found in FileList.");
+            return undefined;
+        }
+
+        const content = await file.text();
+
+
+        const lines = content
+            //Regex for windows and linux
+            .split(/\r?\n/)
+            .filter(line => line.trim() !== "");
+
+        console.log(`Parsed ${lines.length} lines from: ${file.name}`);
+        return lines;
+
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error('Load failed:', error.message);
+        } else {
+            console.error('An unknown error occurred during file load');
+        }
+        return undefined;
+    }
 }

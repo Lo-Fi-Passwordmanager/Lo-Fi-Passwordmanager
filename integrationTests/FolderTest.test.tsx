@@ -4,7 +4,6 @@ import {usePasswordManagerViewModel} from "../src/Components/ViewModels/Password
 import {useLoginViewModel} from "../src/Components/ViewModels/loginViewModel";
 import {RepoContext} from "@automerge/react";
 import {SortCriteria, usePasswordViewModel} from "../src/Components/ViewModels/PasswordViewModel";
-import {useListViewModel} from "../src/Components/ViewModels/ListViewModel";
 import {Folder} from "../src/Model/Folder";
 import {Item} from "../src/Model/Item";
 import {Entry} from "../src/Model/Entry";
@@ -13,7 +12,7 @@ import {useFilteredListViewModel} from "../src/Components/ViewModels/FilteredLis
 
 describe("FolderTest", () => {
 
-    it('should test the funcionality of folders', async () => {
+    it('should test the functionality of folders', async () => {
         const passwordManagerHook = renderHook(() => usePasswordManagerViewModel());
         const {repo, securityProvider} = passwordManagerHook.result.current;
 
@@ -37,7 +36,7 @@ describe("FolderTest", () => {
             <RepoContext.Provider value={repo}>{children}</RepoContext.Provider>
         );
 
-        const passwordVM = renderHook(() => usePasswordViewModel(facade), {wrapper});
+        const passwordVM = renderHook(() => usePasswordViewModel(facade, [], false), {wrapper});
 
         // Create folders and rename them
         const folderData1 = new Folder("Folder 1", "temp-id", new Date(), new Date());
@@ -56,9 +55,9 @@ describe("FolderTest", () => {
         await waitFor(() => {
             const root = passwordVM.result.current.getRootFolder() as Folder;
             // Look through the children of the root folder
-            found1 = root.items.find(e => e.title === "Folder 1");
+            found1 = root.items.find(e => e.title === "Folder 1")!;
             expect(found1).toBeDefined();
-            found2 = root.items.find(e => e.title === "Folder 2");
+            found2 = root.items.find(e => e.title === "Folder 2")!;
             expect(found2).toBeDefined();
         }, {timeout: 2000});
 
@@ -72,9 +71,9 @@ describe("FolderTest", () => {
         await waitFor(() => {
             const root = passwordVM.result.current.getRootFolder() as Folder;
             // Look through the children of the root folder
-            found1 = root.items.find(e => e.title === "Renamed Folder 1");
+            found1 = root.items.find(e => e.title === "Renamed Folder 1")!;
             expect(found1).toBeDefined();
-            found2 = root.items.find(e => e.title === "Renamed Folder 2");
+            found2 = root.items.find(e => e.title === "Renamed Folder 2")!;
             expect(found2).toBeDefined();
         }, {timeout: 2000});
 
@@ -90,18 +89,78 @@ describe("FolderTest", () => {
         });
 
         const mockDrangEndEvent1 = {
-            over: {id: found1.id},
-            active: {id: entryData1.id}
+            active: {
+                id: entryData1.id,
+                data: {
+                    current: {
+                        type: "Item",
+                        isFolder: false,
+                        item: entryData1,
+                        descendantIds: []
+                    }
+                }
+            },
+            over: {
+                id: found1.id,
+                data: {
+                    current: {
+                        type: "Item",
+                        isFolder: true,
+                        item: found1,
+                        descendantIds: []
+                    }
+                }
+            }
         } as unknown as DragEndEvent;
 
         const mockDrangEndEvent2 = {
-            over: {id: found1.id},
-            active: {id: entryData2.id}
+            active: {
+                id: entryData2.id,
+                data: {
+                    current: {
+                        type: "Item",
+                        isFolder: false,
+                        item: entryData2,
+                        descendantIds: []
+                    }
+                }
+            },
+            over: {
+                id: found1.id,
+                data: {
+                    current: {
+                        type: "Item",
+                        isFolder: true,
+                        item: found1,
+                        descendantIds: []
+                    }
+                }
+            }
         } as unknown as DragEndEvent;
 
         const mockDrangEndEvent3 = {
-            over: {id: found2.id},
-            active: {id: found1.id}
+            active: {
+                id: found1.id,
+                data: {
+                    current: {
+                        type: "Item",
+                        isFolder: true,
+                        item: found1,
+                        descendantIds: [entryData1.id, entryData2.id]
+                    }
+                }
+            },
+            over: {
+                id: found2.id,
+                data: {
+                    current: {
+                        type: "Item",
+                        isFolder: true,
+                        item: found2,
+                        descendantIds: []
+                    }
+                }
+            }
         } as unknown as DragEndEvent;
 
         await act(async () => {
@@ -117,8 +176,8 @@ describe("FolderTest", () => {
         })
 
         let root;
-        let folder1;
-        let folder2;
+        let folder1: Folder;
+        let folder2: Folder;
         await waitFor(() => {
             root = passwordVM.result.current.getRootFolder() as Folder;
             expect(root.items.length).toBe(1);
@@ -233,9 +292,9 @@ describe("FolderTest", () => {
             passwordVM.result.current.confirmDeletion(folder2);
         })
         await waitFor(() => {
-            root = passwordVM.result.current.getRootFolder();
+            root = passwordVM.result.current.getRootFolder()!;
         })
-        expect((root as Folder).items.some(e => e.title === "Renamed Folder 2")).toBe(false);
-        expect((root as Folder).items.length).toBe(2);
+        expect((root).items.some(e => e.title === "Renamed Folder 2")).toBe(false);
+        expect((root).items.length).toBe(2);
     })
 })

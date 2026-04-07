@@ -13,6 +13,7 @@ export default defineConfig({
     },
 
     plugins: [wasm(), react()],
+    base: '/Lo-Fi-Passwordmanager/',
 
     worker: {
         format: "es",

@@ -1,6 +1,6 @@
 import {decodeChange, getActorId} from "@automerge/automerge";
 import {
-    BroadcastChannelNetworkAdapter, type DocHandle, type DocHandleChangePayload, getChanges,
+    BroadcastChannelNetworkAdapter, type DocHandle, type DocHandleChangePayload, getChanges, getObjectId,
     IndexedDBStorageAdapter,
     type NetworkAdapterInterface,
     Repo,
@@ -10,9 +10,12 @@ import {useEffect, useState} from "react";
 import {useIdleTimer} from "react-idle-timer";
 
 import {PeerjsNetworkAdapter} from "../../../customNetworkAdapter/PeerJsNetworkAdapter.ts";
+import type {AutomergeDoc} from "../../Model/Automerge/AutomergeDoc.ts";
+import type {Item} from "../../Model/Item.ts";
 import {Settings, useSettings} from "../../Model/Settings.ts";
 import type {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
+
 
 /**
  * The view model used by the PasswordManagerView. Manages the state and logic for the password manager.
@@ -29,7 +32,8 @@ export const usePasswordManagerViewModel = () => {
     const [openedDatabaseName, setOpenedDatabaseName] = useState<string>("");
     const [oldP2PSize, setOldP2PSize] = useState<number>(settings.getConnectorsToAdapters().size);
     const [justSynced, setJustSynced] = useState<boolean>(false);
-
+    const [itemsDeleted, setItemsDeleted] = useState<string[]>([]);
+    const [toImportItems, setToImportItems] = useState<Item[]>([]);
 
     const syncEnabled = settings.getSynchronization();
     const p2pEnabled = settings.getP2P();
@@ -96,21 +100,36 @@ export const usePasswordManagerViewModel = () => {
         if (!automergeFacade) return;
         if (!automergeFacade.automergeURL) return;
 
-        let handle: DocHandle<unknown> | null = null;
+        let handle: DocHandle<AutomergeDoc> | null = null;
 
-        const handleRemoteChange = (payload: DocHandleChangePayload<unknown>) => {
+        const handleRemoteChange = (payload: DocHandleChangePayload<AutomergeDoc>) => {
             const localActorId = getActorId(payload.doc);
+            const remoteDeleted: string[] = [];
 
             const newChanges = getChanges(payload.patchInfo.before, payload.patchInfo.after)
 
             const changesFromRemote = newChanges.some(change => {
                 const decoded = decodeChange(change);
                 return decoded.actor !== localActorId;
-            })
+            });
 
             if (!changesFromRemote) {
                 return;
             }
+
+            // check if remote change was a deletion so if the cur item was deleted it can be unselected
+            const prevDoc = payload.patchInfo.before;
+
+            for (const patch of payload.patches) {
+                if (patch.action === "del") {
+                    const index = patch.path[1] as number;
+                    const prevItem = prevDoc.items[index];
+                    if (prevItem && typeof prevItem === "object") {
+                        remoteDeleted.push(getObjectId(prevItem)!);
+                    }
+                }
+            }
+            setItemsDeleted(remoteDeleted);
 
             setJustSynced(true);
             setTimeout(() => {
@@ -135,7 +154,7 @@ export const usePasswordManagerViewModel = () => {
                 handle.off("change", handleRemoteChange);
             }
         }
-    }, [automergeFacade, repo]);
+    }, [automergeFacade, itemsDeleted, repo]);
 
 
     function getAutomergeFacade(): AutomergeFacade | null {
@@ -180,11 +199,14 @@ export const usePasswordManagerViewModel = () => {
         openedDatabaseName,
         loggedIn,
         justSynced,
+        itemsDeleted,
+        toImportItems,
+        setToImportItems,
         setOpenedDatabaseName,
         setLoggedIn,
         setAutomergeFacade,
         getAutomergeFacade,
         closeLoggedIn,
-        setToastVisible
+        setToastVisible,
     };
 };

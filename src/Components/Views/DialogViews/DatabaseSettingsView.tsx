@@ -7,6 +7,7 @@ import ShareDatabaseQRDialog from "./ShareDatabaseQRDialog.tsx";
 import ToastDialog from "./ToastDialog.tsx";
 import {type AutomergeFacade} from "../../../Utility/AutomergeFacade.ts";
 import {removeDatabase} from "../../../Utility/Storage.ts";
+import {useAutomergeFacade} from "../../../Utility/useAutomergeFacade.ts";
 import useDatabaseSettingsViewModel from "../../ViewModels/Dialog/DatabaseSettingsViewModel.ts";
 import CopyButton from "../ButtonViews/CopyButton.tsx";
 
@@ -19,7 +20,8 @@ const DatabaseSettingsView: React.FC<{
     closeDatabase: () => void,
 }> = ({automergeFacade, openedDatabaseName, closeDatabase}) => {
 
-    const viewModel = useDatabaseSettingsViewModel(automergeFacade);
+    const reactiveFacade = useAutomergeFacade(automergeFacade);
+    const viewModel = useDatabaseSettingsViewModel(automergeFacade, reactiveFacade);
 
     return (
         <>
@@ -40,6 +42,11 @@ const DatabaseSettingsView: React.FC<{
                 <button onClick={viewModel.exportDatabase}>
                     Verschlüsselt Exportieren
                 </button>
+
+                <button onClick={viewModel.exportToCsvFile}>
+                    Unverschlüsselt Exportieren
+                </button>
+
 
                 <HistoryDialog automergeFacade={automergeFacade}/>
 

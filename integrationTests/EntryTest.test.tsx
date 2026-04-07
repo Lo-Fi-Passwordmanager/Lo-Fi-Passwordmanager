@@ -51,7 +51,7 @@ describe("Entry modification Integrationtests", () => {
             <RepoContext.Provider value={repo}>{children}</RepoContext.Provider>
         );
 
-        const passwordVM = renderHook(() => usePasswordViewModel(facade), {wrapper});
+        const passwordVM = renderHook(() => usePasswordViewModel(facade, [], false), {wrapper});
 
 
         const entryData = new Entry("entry1", "temp-id", new Date(), new Date(), "user123", "secret", "amazon.com", "Note");

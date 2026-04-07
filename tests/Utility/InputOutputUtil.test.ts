@@ -35,6 +35,16 @@ describe('InputOutputUtil', ()=> {
     });
 
     it('should throw when the file is unable to be read correctly', async ()=> {
+        const errorFile = new File(["error"], "error")
+        // Nach dem Updaten der Dependencies (commit 5a1d1d53) hat das Lesen des errorFile aus Gründen funktioniert, desshalb hier ein mock
+        vi.spyOn(errorFile, 'arrayBuffer').mockRejectedValue(new Error('Simulated read failure'));
+
+        const errorFileList = {
+            0: errorFile,
+            length: 1,
+            item: (i: number) => errorFile,
+        } as unknown as FileList;
+
         console.error = vi.fn();
         const array = await uInt8ArrayFromFile(errorFileList);
         expect(array).toBeUndefined();
@@ -46,7 +56,6 @@ describe('InputOutputUtil', ()=> {
             new TextEncoder().encode("salt: 123 validation: 123").buffer
         ),
     };
-    const errorFile = new File(["error"], "error")
 
     const emptyFileList = {
         length: 0,
@@ -56,11 +65,5 @@ describe('InputOutputUtil', ()=> {
         0: mockFile,
         length: 1,
         item: (i: number) => mockFile,
-    } as unknown as FileList;
-
-    const errorFileList = {
-        0: errorFile,
-        length: 1,
-        item: (i: number) => errorFile,
     } as unknown as FileList;
 })

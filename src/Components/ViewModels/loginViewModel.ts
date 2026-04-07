@@ -3,8 +3,10 @@ import type {Repo} from "@automerge/react";
 import {useEffect, useState} from "react";
 
 import {useLoadingScreen} from "./LoadingScreenProviderViewModel.ts";
+import {Entry} from "../../Model/Entry.ts";
+import type {Item} from "../../Model/Item.ts";
 import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
-import {uInt8ArrayFromFile} from "../../Utility/InputOutputUtil.ts";
+import {loadFromCsv, uInt8ArrayFromFile} from "../../Utility/InputOutputUtil.ts";
 import type {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import {loadAllDatabases, removeDatabase, renameDatabase, storeDatabase} from "../../Utility/Storage.ts";
 
@@ -24,7 +26,8 @@ export const useLoginViewModel = (
     setLoggedIn: (value: boolean) => void,
     setAutomergeFacade: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void,
     securityProvider: SecurityProvider,
-    setOpenedDbName: ((value: (((prevState: string) => string) | string)) => void)
+    setOpenedDbName: ((value: (((prevState: string) => string) | string)) => void),
+    setToImportItems: (value: (((prevState: Item[]) => Item[]) | Item[])) => void
 ) => {
     // map of database names to their automerge urls
     const [databases, setDatabases] = useState(loadAllDatabases());
@@ -291,6 +294,52 @@ export const useLoginViewModel = (
         await addDatabase(dbName, handle.url);
     }
 
+    async function importUnencryptedDatabaseFromFile(targetFiles: FileList | null, name: string, password: string) {
+        console.error("FIXME")
+        if (!targetFiles) {
+            return;
+        }
+        const newItems: Item[] = [];
+        const parse: string[] | undefined = await loadFromCsv(targetFiles)
+        if (!parse || parse.length === 0 || parse[0] != "\"Account\",\"Login Name\",\"Password\",\"Web Site\",\"Comments\"") {
+            return;
+        }
+        for (let i = 1; i < parse.length; i++) {
+            const parseItem = parseCsvLineToItem(parse[i]);
+            if (!parseItem) {
+                return;
+            }
+            newItems.push(parseItem);
+
+        }
+        createDatabase(name, password);
+        setToImportItems(newItems);
+        //FIXME hier implementieren, wie nach öffnen Einträge eingesetzt werden
+    }
+
+    function parseCsvLineToItem(line: string): Item | undefined {
+        // This regex matches everything inside double quotes
+        // The 'g' flag finds all occurrences (all 5 columns)
+        const regex = /"(.*?)"/g;
+        const matches = [...line.matchAll(regex)].map(m => m[1]);
+
+        // Ensure we have all 5 expected fields
+        if (matches.length >= 5) {
+            return new Entry(
+                matches[0], // title
+                "",
+                new Date(),
+                new Date(),
+                matches[1], // username
+                matches[2], // password
+                matches[3], // url
+                matches[4]  // note
+            );
+        }
+
+        return undefined;
+    }
+
     /**
      * Toggles the password from ****** to the string and back
      */
@@ -325,5 +374,6 @@ export const useLoginViewModel = (
         setDatabaseToDelete,
         toggleHidePassword,
         addDatabase,
+        importUnencryptedDatabaseFromFile
     };
 };

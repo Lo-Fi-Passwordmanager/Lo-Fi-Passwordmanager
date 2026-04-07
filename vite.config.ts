@@ -27,6 +27,7 @@ export default defineConfig({
             requireEnv: true,
         }),
     ].filter(Boolean),
+    base: '/Lo-Fi-Passwordmanager/',
 
     worker: {
         format: "es",
