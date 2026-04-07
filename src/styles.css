@@ -609,7 +609,7 @@ input[type="number"] {
 }
 
 .dragged {
-    opacity: 0.6;
+    opacity: 1;
     cursor: grabbing;
     border: 2px solid var(--primary) !important;
 }
