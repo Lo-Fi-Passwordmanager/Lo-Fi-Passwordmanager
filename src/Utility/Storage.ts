@@ -4,6 +4,7 @@ const SYNCHRONISATION = "synchronisation";
 const DARK_MODE = "dark_mode";
 const TIMEOUT_ACTIVE = "timeout_active";
 const TIMEOUT_LENGTH = "timeout_length";
+const RECURSIVE_DELETE = "rm_rf";
 const SERVER_LIST = "servers_list";
 const SELECTED_SERVER_URLS = "selected_server_urls";
 const CURRENT_SORT_CRITERIA = "currentSortCriterion";
@@ -291,6 +292,31 @@ export function loadP2PSetting(): boolean {
  */
 export function storeP2PSetting(isP2P: boolean): void {
     localStorage.setItem("p2p", JSON.stringify(isP2P));
+}
+
+
+/**
+ * Loads the boolean for the recursive deletion setting from localStorage
+ *
+ * @returns the rf delete setting
+ */
+export function loadRmRfSetting(): boolean {
+    const recursiveDelete = localStorage.getItem(RECURSIVE_DELETE);
+    if (recursiveDelete != null) {
+        return JSON.parse(recursiveDelete) as boolean;
+    } else {
+        localStorage.setItem(RECURSIVE_DELETE, JSON.stringify(true));
+        return true;
+    }
+}
+
+/**
+ * stores the recursive deletion value in localStorage
+ *
+ * @param value the value to store
+ */
+export function storeRmRfSetting(value: boolean): void {
+    localStorage.setItem(RECURSIVE_DELETE, JSON.stringify(value));
 }
 
 /**

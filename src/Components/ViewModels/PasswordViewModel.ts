@@ -10,7 +10,7 @@ import {useEffect, useRef, useState} from "react";
 
 import type {Folder} from "../../Model/Folder.ts";
 import type {Item} from "../../Model/Item.ts";
-import {useSettings} from "../../Model/Settings.ts";
+import {Settings, useSettings} from "../../Model/Settings.ts";
 import type {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {type Attribute} from "../../Utility/AutomergeFacade.ts";
 import {
@@ -263,7 +263,15 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
      */
     function confirmDeletion(item: Item) {
         setItemToDelete(null);
+
+        if (!Settings.getSettings().getRecursiveDelete() && item.isFolder()) {
+            const folder = item as Folder;
+            for (const item of folder.items) {
+                reactiveFacade.moveUpInTree(item.id);
+            }
+        }
         reactiveFacade.deleteItem(item.id);
+
         item.deleted = true;
         setCurItem(curParent);
         setCurParent(curParent);

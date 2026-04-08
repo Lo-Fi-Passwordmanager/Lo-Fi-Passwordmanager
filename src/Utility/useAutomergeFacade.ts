@@ -72,6 +72,27 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
     }
 
     /**
+     * Moves the item up by one level in its hirachy. This is usually done due to not wanting to recursive delete
+     * @param id the id of the item that wants to get moved up. Therefore it s parent should not be the root
+     */
+    function moveUpInTree(id: string) {
+        const item = itemsById.get(id);
+        if (!item) {
+            return;
+        }
+
+        const itemId: string|undefined = item.parentId;
+        if (itemId && tree.rootFolder.id == itemId) {
+            return;
+        }
+        const newParent = itemsById.get(item.parentId);
+        if (newParent) {
+            updateItem(id, [["parentId", newParent.parentId]])
+            itemsById.set(id, newParent);
+        }
+    }
+
+    /**
      * Löscht das angegebene Item und alle Children rekursiv.
      *
      * @param itemId die ID des Items
@@ -147,7 +168,8 @@ export const useAutomergeFacade = (automergeFacade: AutomergeFacade) => {
          * The Map containing a 1 to 1 maping of all active ids to their items
          */
         itemsById,
-        exportToCsvArray
+        exportToCsvArray,
+        moveUpInTree
     };
 };
 export type AutomergeFacadeHook = ReturnType<typeof useAutomergeFacade>;
