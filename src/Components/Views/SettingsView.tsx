@@ -92,6 +92,12 @@ const SettingsView: React.FC<{
                                 Bei Inaktivität abmelden
                             </label>
 
+                            <label className="checkboxRow">
+                                <SliderCheckBox checked={viewModel.recursiveDelete}
+                                                toggleChecked={() => viewModel.toggleRecursiveDelete()}/>
+                                Rekursives löschen von Ordnereinträgen
+                            </label>
+
                             {viewModel.timeOutActive && (
                                 <div className={"timeout-setting"}>
                                     <label>Minuten bis Abmeldung: </label>

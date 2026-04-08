@@ -45,7 +45,10 @@ export type SettingsViewModel = {
     removePeer: (id: string) => Promise<void>;
     isLastServer: () => boolean;
     isLastActiveServer: (serverName: string) => boolean;
-    copyToClipboard: (text: string) => void
+    copyToClipboard: (text: string) => void;
+    toggleRecursiveDelete: () => void;
+    recursiveDelete: boolean;
+
 }
 
 /**
@@ -67,8 +70,10 @@ export const useSettingsViewModel: () => SettingsViewModel = () => {
     const [serverStates, setServerStates] = useState<Map<string, boolean>>(settings.getServerStates());
     const [addServerDialogOpen, setAddServerDialogOpen] = useState<boolean>(false);
     const [P2P, setP2P] = useState<boolean>(settings.getP2P());
+    const [recursiveDelete, setRecursiveDelete] = useState<boolean>(settings.getRecursiveDelete());
     const [showToast, setShowToast] = useState<boolean>(false);
     const [toastMessage, setToastMessage] = useState<string>("");
+    //On connecting to a remote peer, this is the id that will be used, if no other argument is given
     const [remotePeerId, setRemotePeerId] = useState("");
     const [otherPeerMap, setOtherPeerMap] = useState<Map<string, [DataConnection, PeerjsNetworkAdapter]>>(settings.getConnectorsToAdapters());
     document.getElementsByTagName("html")[0]?.setAttribute("data-theme", darkMode ? "dark" : "light");
@@ -78,7 +83,8 @@ export const useSettingsViewModel: () => SettingsViewModel = () => {
         settings.setSynchronization(synchronisation);
         settings.setTimeoutActive(timeOutActive);
         settings.setTimeoutLength(timeoutLength);
-    }, [darkMode, synchronisation, timeOutActive, settings, timeoutLength]);
+        settings.setRecursiveDelete(recursiveDelete);
+    }, [darkMode, synchronisation, timeOutActive, settings, timeoutLength, recursiveDelete]);
 
     useEffect(() => {
         const handleUpdate = () => {
@@ -113,6 +119,10 @@ export const useSettingsViewModel: () => SettingsViewModel = () => {
 
     function toggleSynchronisation() {
         setSynchronisation(!synchronisation);
+    }
+
+    function toggleRecursiveDelete() {
+        setRecursiveDelete(!recursiveDelete);
     }
 
     function addSyncServer(name: string, url: string) {
@@ -259,6 +269,8 @@ export const useSettingsViewModel: () => SettingsViewModel = () => {
         removePeer,
         isLastServer,
         isLastActiveServer,
-        copyToClipboard
+        copyToClipboard,
+        toggleRecursiveDelete,
+        recursiveDelete
     };
 };
