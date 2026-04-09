@@ -1,5 +1,5 @@
 import type {Repo} from "@automerge/react";
-import React from "react";
+import React, {useEffect, useRef} from "react";
 import {HiMiniPlus} from "react-icons/hi2";
 
 import {useLoginViewModel} from "../ViewModels/loginViewModel.ts";
@@ -12,6 +12,7 @@ import PWMLogo from "../../assets/logo_gelb.svg?inline";
 import type {Item} from "../../Model/Item.ts";
 import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {type SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
+import {useParams} from "react-router";
 
 /**
  * The view that should be shown, when the user is not logged in yet and can select/create a database to open plus other related actions
@@ -30,7 +31,18 @@ const LoginView: React.FC<{
     setToImportItems: (value: (((prevState: Item[]) => Item[]) | Item[])) => void
 }> = ({repo, setLoggedIn, setAutomergeFacade, securityProvider, setOpenedDbName, setToImportItems}) => {
 
-    const viewModel = useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, securityProvider, setOpenedDbName, setToImportItems);
+    const {param} = useParams();
+    const viewModel = useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, securityProvider, setOpenedDbName, setToImportItems, param);
+
+    const hasExecuted = useRef(false);
+    useEffect(() => {
+        //FIXME hier importieren und syntax der URL anpassen
+        //Check if we have the param and if we've already done this (to prevent double-execution in Strict Mode)
+        if (param && !hasExecuted.current) {
+            viewModel.importDatabaseFromURL()
+            hasExecuted.current = true;
+        }
+    }, [param]); //
 
     return (
         <div className="loginView">

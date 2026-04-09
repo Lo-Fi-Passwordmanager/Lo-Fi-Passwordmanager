@@ -1,6 +1,7 @@
 import {RepoContext} from "@automerge/react";
 import React, {Suspense} from "react";
 import {RiHistoryLine} from "react-icons/ri";
+import {Route, Routes} from "react-router";
 
 import LoadingScreen from "./DialogViews/LoadingScreen.tsx";
 import ToastDialog from "./DialogViews/ToastDialog.tsx";
@@ -26,11 +27,19 @@ const PasswordManagerView: React.FC = () => {
                 <div className={"mobile-login-settings"}>
                     <SettingsView/>
                 </div>
-                <LoginView repo={viewModel.repo} setLoggedIn={viewModel.setLoggedIn}
-                           setAutomergeFacade={viewModel.setAutomergeFacade}
-                           securityProvider={viewModel.securityProvider}
-                           setOpenedDbName={viewModel.setOpenedDatabaseName}
-                           setToImportItems={viewModel.setToImportItems}/>
+                <Routes>
+                    <Route path="/:param" element={<LoginView repo={viewModel.repo} setLoggedIn={viewModel.setLoggedIn}
+                                                              setAutomergeFacade={viewModel.setAutomergeFacade}
+                                                              securityProvider={viewModel.securityProvider}
+                                                              setOpenedDbName={viewModel.setOpenedDatabaseName}
+                                                              setToImportItems={viewModel.setToImportItems}/>}/>
+
+                    <Route path="/" element={<LoginView repo={viewModel.repo} setLoggedIn={viewModel.setLoggedIn}
+                                                              setAutomergeFacade={viewModel.setAutomergeFacade}
+                                                              securityProvider={viewModel.securityProvider}
+                                                              setOpenedDbName={viewModel.setOpenedDatabaseName}
+                                                              setToImportItems={viewModel.setToImportItems}/>}/>
+                </Routes>
                 <ToastDialog message={viewModel.toastMessage}
                              isVisible={viewModel.toastVisible}
                              onClose={() => viewModel}/>

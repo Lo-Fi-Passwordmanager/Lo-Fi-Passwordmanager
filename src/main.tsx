@@ -5,6 +5,7 @@ import {createRoot} from "react-dom/client";
 import {LoadingScreenProvider} from "./Components/Views/LoadingScreenProvider.tsx";
 import PasswordManagerView from "./Components/Views/PasswodManagerView.tsx";
 import "./styles.css";
+import {BrowserRouter} from "react-router";
 
 
 // Fügt das Repo als zu global hinzu, sodass man im Browser einfach auf das Repo zugreifen kann, zum debuggen.
@@ -17,8 +18,10 @@ declare global {
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
-        <LoadingScreenProvider>
-            <PasswordManagerView/>
-        </LoadingScreenProvider>
+        <BrowserRouter>
+            <LoadingScreenProvider>
+                <PasswordManagerView/>
+            </LoadingScreenProvider>
+        </BrowserRouter>
     </StrictMode>
 );
