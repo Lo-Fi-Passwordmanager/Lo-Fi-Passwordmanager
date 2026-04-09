@@ -1,6 +1,7 @@
 import type {AutomergeUrl} from "@automerge/automerge-repo";
 import {isValidAutomergeUrl} from "@automerge/react";
 import {useState} from "react";
+import {useToast} from "../Provider/ToastProviderViewModel.ts";
 
 
 /**
@@ -16,8 +17,6 @@ import {useState} from "react";
 export const useCreateDatabaseViewModel = (
     createDatabase: (name: string, password: string) => void,
     storeDatabase: (name: string, autoMergeUrl: AutomergeUrl) => void,
-    setToastMessage: (message: string) => void,
-    setShowToast: (show: boolean) => void,
     importDatabase: (targetFiles: (FileList | null), name: string) => void,
     importUnencryptedDatabaseFromFile: (targetFiles: (FileList | null), name: string, password: string) => void) => {
 
@@ -26,6 +25,8 @@ export const useCreateDatabaseViewModel = (
     const [field1, setField1] = useState("");
     const [field2, setField2] = useState("");
     const [targetFiles, setTargetFiles] = useState<FileList | null>(null);
+
+    const [showToast, _] = useToast();
 
 
     /**
@@ -41,16 +42,14 @@ export const useCreateDatabaseViewModel = (
             importUnencryptedDatabaseFromFile(targetFiles, field1, field2);
         } else {
             if (!field1 || !field2) {
-                setToastMessage("Bitte alle Felder ausfüllen.");
-                setShowToast(true);
+                showToast("Bitte alle Felder ausfüllen.");
                 return;
             }
             if (selectedImportType === "new") {
                 createDatabase(field1, field2);
             } else if (selectedImportType === "url") {
                 if (!isValidAutomergeUrl(("automerge:" + field2) as AutomergeUrl)) {
-                    setToastMessage("Keine valide AutomergeUrl.");
-                    setShowToast(true);
+                    showToast("Keine valide AutomergeUrl.");
                     return;
                 }
                 storeDatabase(field1, ("automerge:" + field2) as AutomergeUrl);

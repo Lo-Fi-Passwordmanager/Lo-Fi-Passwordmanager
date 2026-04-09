@@ -15,11 +15,9 @@ const AddServerDialog: React.FC<{
     onAddServer: (name: string, url: string) => void,
     servers: Map<string, string>,
     onClose: () => void,
-    setToastMessage: (message: string) => void,
-    setShowToast: (show: boolean) => void
-}> = ({onAddServer, servers, onClose, setShowToast, setToastMessage}) => {
+}> = ({onAddServer, servers, onClose}) => {
 
-    const viewModel = useAddServerDialogViewModel(onAddServer, servers, onClose, setShowToast, setToastMessage);
+    const viewModel = useAddServerDialogViewModel(onAddServer, servers, onClose);
 
     return (
         <Dialog title="Server hinzufügen" onCloseDialog={onClose}>

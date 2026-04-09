@@ -14,8 +14,6 @@ const CreateDatabaseDialog: React.FC<{
     createDatabase: (field1: string, field2: string) => void,
     onCancel: () => void,
     importDatabaseFromURL: (name: string, autoMergeUrl: AutomergeUrl) => void,
-    setToastMessage: (message: string) => void,
-    setShowToast: (show: boolean) => void,
     importDatabaseFromFile: (targetFiles: (FileList | null), name: string) => void
     hidePassword: boolean,
     toggleHidePassword: () => void,
@@ -28,8 +26,6 @@ const CreateDatabaseDialog: React.FC<{
           createDatabase,
           onCancel,
           importDatabaseFromURL,
-          setToastMessage,
-          setShowToast,
           importDatabaseFromFile,
           hidePassword,
           toggleHidePassword,
@@ -38,8 +34,6 @@ const CreateDatabaseDialog: React.FC<{
     const viewModel = useCreateDatabaseViewModel(
         createDatabase,
         importDatabaseFromURL,
-        setToastMessage,
-        setShowToast,
         importDatabaseFromFile,
         importUnencryptedDatabaseFromFile
     );

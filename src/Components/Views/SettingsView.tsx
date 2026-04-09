@@ -10,7 +10,6 @@ import DatabaseSettingsView from "./DialogViews/DatabaseSettingsView.tsx";
 import Dialog from "./DialogViews/Dialog.tsx";
 import GenericQRDialog from "./DialogViews/GenericQRDialog.tsx";
 import GenericQRScannerDialog from "./DialogViews/GenericQRScannerDialog.tsx";
-import ToastDialog from "./DialogViews/ToastDialog.tsx";
 import ServerList from "./ListingViews/ServerList.tsx";
 
 
@@ -32,9 +31,6 @@ const SettingsView: React.FC<{
                     title="Einstellungen öffnen">
                 <HiMiniCog8Tooth size={24}/>
             </button>
-            <ToastDialog message={viewModel.toastMessage}
-                         isVisible={viewModel.showToast}
-                         onClose={() => viewModel.setShowToast(false)}/>
         </>);
     }
 
@@ -319,9 +315,6 @@ const SettingsView: React.FC<{
                     )}
                 </main>
             </div>
-            <ToastDialog message={viewModel.toastMessage}
-                         isVisible={viewModel.showToast}
-                         onClose={() => viewModel.setShowToast(false)}/>
         </Dialog>
     );
 };

@@ -3,59 +3,19 @@ import {useEffect, useState} from "react";
 
 import type {PeerjsNetworkAdapter} from "../../../customNetworkAdapter/PeerJsNetworkAdapter.ts";
 import {Settings, useSettings} from "../../Model/Settings";
+import {useToast} from "./Provider/ToastProviderViewModel.ts";
 
 
 /**
  * The type of the Setting Viewmodel
  */
-export type SettingsViewModel = {
-    darkMode: boolean;
-    synchronisation: boolean;
-    timeOutActive: boolean;
-    settingsOpen: boolean;
-    timeoutLength: number;
-    activeTab: "general" | "database" | "about";
-    addServerDialogOpen: boolean;
-    P2P: boolean;
-    toastMessage: string;
-    showToast: boolean;
-    serverUrls: Map<string, string>;
-    serverStates: Map<string, boolean>;
-    setActiveTab: (value: (((prevState: ("general" | "database" | "about")) => ("general" | "database" | "about")) | "general" | "database" | "about")) => void;
-    setConnection: (id: string) => void;
-    toggleDarkMode: () => void;
-    toggleSynchronisation: () => void;
-    toggleTimeOutActive: () => void;
-    setSettingsOpen: (value: (((prevState: boolean) => boolean) | boolean)) => void;
-    setTimeOutLengthVM: (newLength: string) => void;
-    increaseTimeout: () => void;
-    decreaseTimeout: () => void;
-    getPeerId: () => string;
-    addSyncServer: (name: string, url: string) => void;
-    removeSyncServer: (serverName: string) => void;
-    setAddServerDialogOpen: (value: (((prevState: boolean) => boolean) | boolean)) => void;
-    toggleSyncServer: (serverName: string) => void;
-    toggleP2P: () => void;
-    setToastMessage: (value: (((prevState: string) => string) | string)) => void;
-    setShowToast: (value: (((prevState: boolean) => boolean) | boolean)) => void;
-    remotePeerId: string;
-    setRemotePeerId: (value: (((prevState: string) => string) | string)) => void;
-    connectToPeer: (id?: string) => void;
-    otherPeerMap: Map<string, [DataConnection, PeerjsNetworkAdapter]>;
-    removePeer: (id: string) => Promise<void>;
-    isLastServer: () => boolean;
-    isLastActiveServer: (serverName: string) => boolean;
-    copyToClipboard: (text: string) => void;
-    toggleRecursiveDelete: () => void;
-    recursiveDelete: boolean;
-
-}
+export type SettingsViewModel = ReturnType<typeof useSettingsViewModel>
 
 /**
  * The ViewModel that is used for interfacing the {@link Settings} singleton.
  * It uses states to reload react when changing settings, so that they get applied
  */
-export const useSettingsViewModel: () => SettingsViewModel = () => {
+export const useSettingsViewModel = () => {
 
     const settings = Settings.getSettings();
     const settingsHook = useSettings();
@@ -71,12 +31,12 @@ export const useSettingsViewModel: () => SettingsViewModel = () => {
     const [addServerDialogOpen, setAddServerDialogOpen] = useState<boolean>(false);
     const [P2P, setP2P] = useState<boolean>(settings.getP2P());
     const [recursiveDelete, setRecursiveDelete] = useState<boolean>(settings.getRecursiveDelete());
-    const [showToast, setShowToast] = useState<boolean>(false);
-    const [toastMessage, setToastMessage] = useState<string>("");
     //On connecting to a remote peer, this is the id that will be used, if no other argument is given
     const [remotePeerId, setRemotePeerId] = useState("");
     const [otherPeerMap, setOtherPeerMap] = useState<Map<string, [DataConnection, PeerjsNetworkAdapter]>>(settings.getConnectorsToAdapters());
     document.getElementsByTagName("html")[0]?.setAttribute("data-theme", darkMode ? "dark" : "light");
+
+    const [showToast, _] = useToast();
 
     useEffect(() => {
         settings.setDarkMode(darkMode);
@@ -197,8 +157,7 @@ export const useSettingsViewModel: () => SettingsViewModel = () => {
      * Copy the given text to the clipboard and show a toast message
      */
     function copyToClipboard(text: string) {
-        setToastMessage("In die Zwischenablage kopiert");
-        setShowToast(true);
+        showToast("In die Zwischenablage kopiert");
         void navigator.clipboard.writeText(text);
     }
 
@@ -240,7 +199,6 @@ export const useSettingsViewModel: () => SettingsViewModel = () => {
         activeTab,
         addServerDialogOpen,
         P2P,
-        toastMessage,
         showToast,
         serverUrls,
         serverStates,
@@ -260,8 +218,6 @@ export const useSettingsViewModel: () => SettingsViewModel = () => {
         setAddServerDialogOpen,
         toggleSyncServer,
         toggleP2P,
-        setToastMessage,
-        setShowToast,
         remotePeerId,
         setRemotePeerId,
         connectToPeer,

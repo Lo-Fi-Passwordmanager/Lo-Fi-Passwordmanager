@@ -22,6 +22,7 @@ import {
     saveIsAscending, storeIndividualSorting, storeIndividualSortingSetting
 } from "../../Utility/Storage.ts";
 import {useAutomergeFacade} from "../../Utility/useAutomergeFacade.ts";
+import {useToast} from "./Provider/ToastProviderViewModel.ts";
 
 /**
  * Criteria as enum by which items are sorted
@@ -50,8 +51,6 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
     const reactiveFacade = useAutomergeFacade(automergeFacade);
     const [curItem, _setCurItem] = useState<Item>(reactiveFacade.tree.rootFolder);
     const [curParent, setCurParent] = useState<Item>(reactiveFacade.tree.rootFolder);
-    const [toastMessage, setToastMessage] = useState("");
-    const [toastVisible, setToastVisible] = useState(false);
     const clipboardTimerRef = useRef<number | null>(null);
     const [inEditable, setInEditable] = useState(false);
     const [dirtyItemId, setDirtyItemId] = useState<string | null>(null);
@@ -70,13 +69,14 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
     const [individualSorting, setIndividualSorting] = useState<boolean>(loadIndividualSortingSetting);
     const [activeCollapsed, setActiveCollapsed] = useState<boolean>(false);
 
+    const [showToast, _] = useToast();
+
     // check if cur item got deleted from remote
     useEffect(() => {
         for (const id of itemsDeleted) {
             if (curItem.id === id && curItem.isEntry()) {
                 curItem.deleted = true;
-                setToastMessage("Der aktuell ausgewählte Eintrag wurde gelöscht");
-                setToastVisible(true);
+                showToast("Der aktuell ausgewählte Eintrag wurde gelöscht");
                 break;
             }
         }
@@ -287,8 +287,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
             window.clearTimeout(clipboardTimerRef.current);
         }
 
-        setToastMessage("In die Zwischenablage kopiert");
-        setToastVisible(true);
+        showToast("In die Zwischenablage kopiert");
         void navigator.clipboard.writeText(text);
 
 
@@ -296,17 +295,15 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
         clipboardTimerRef.current = window.setTimeout(() => {
             if (document.hasFocus()) {
                 void navigator.clipboard.writeText("");
-                setToastMessage("Zwischenablage gelöscht");
-                setToastVisible(true);
+                showToast("Zwischenablage gelöscht");
                 clipboardTimerRef.current = null;
             } else {
                 // If user is away, wait until they come back
-                setToastMessage("Löschen ausstehend (bitte Tab fokussieren)");
+                showToast("Löschen ausstehend (bitte Tab fokussieren)");
                 window.addEventListener("focus",
                     () => {
                         void navigator.clipboard.writeText("");
-                        setToastMessage("Zwischenablage gelöscht");
-                        setToastVisible(true);
+                        showToast("Zwischenablage gelöscht");
                     },
                     {once: true});
                 clipboardTimerRef.current = null;
@@ -592,8 +589,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
         if (!inEditable) {
             setCurItem(getRootFolder());
         } else {
-            setToastMessage("Bitte zuerst die Bearbeitungsansicht verlassen");
-            setToastVisible(true);
+            showToast("Bitte zuerst die Bearbeitungsansicht verlassen");
         }
     }
 
@@ -609,8 +605,6 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
         dirtyItemId,
         isAscending,
         searchValue,
-        toastMessage,
-        toastVisible,
         inEditable,
         hidePassword,
         selectedItemId,
@@ -633,8 +627,6 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
         setCurItem,
         getRootFolder,
         addItem,
-        setToastMessage,
-        setToastVisible,
         setInEditable,
         updateItemAttribute,
         toggleInEdit,

@@ -12,8 +12,6 @@ import EyeButton from "../ButtonViews/EyeButton.tsx";
  * @param label1 The label for the first input field.
  * @param tryOpenDatabase Function to attempt to open the database with the provided credentials.
  * @param onCancel Function to call when the dialog is canceled.
- * @param setToastMessage Function to set the toast message.
- * @param setShowToast Function to show or hide the toast message.
  * @param hidePassword Whether to hide the password input.
  * @param toggleHidePassword Function to toggle the visibility of the password input.
  */
@@ -23,8 +21,6 @@ const LoginDatabaseDialog: React.FC<{
     label1: string,
     tryOpenDatabase: (field1: string) => void,
     onCancel: () => void,
-    setToastMessage: (message: string) => void,
-    setShowToast: (message: boolean) => void,
     hidePassword: boolean,
     toggleHidePassword: () => void,
 }> = ({
@@ -33,13 +29,11 @@ const LoginDatabaseDialog: React.FC<{
           label1,
           tryOpenDatabase,
           onCancel,
-          setToastMessage,
-          setShowToast,
           hidePassword,
           toggleHidePassword
       }) => {
 
-    const viewModel = useLoginDatabaseViewModel(isOpen, tryOpenDatabase, setToastMessage, setShowToast);
+    const viewModel = useLoginDatabaseViewModel(isOpen, tryOpenDatabase);
 
     if (!isOpen) return null;
 
