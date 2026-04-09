@@ -2,7 +2,6 @@ import React from "react";
 import {HiMiniPlus} from "react-icons/hi2";
 
 import Dialog from "./Dialog.tsx";
-import ToastDialog from "./ToastDialog.tsx";
 import {type PasswordGenDialogProps, usePasswordGenViewModel} from "../../ViewModels/Dialog/PasswordGenViewModel.ts";
 import SliderCheckBox from "../ButtonViews/SliderCheckBox.tsx";
 
@@ -56,9 +55,6 @@ const PasswordGenDialog: React.FC<PasswordGenDialogProps> = ({setNewPassword}: P
                     <button className={"rectangle-button"} onClick={viewModel.handleConfirm}>Bestätigen</button>
                     <button className={"rectangle-button"} onClick={() => viewModel.setPasswordGenOpen(false)}>Abbrechen</button>
                 </div>
-                <ToastDialog message={viewModel.toastMessage}
-                             isVisible={viewModel.toastVisible}
-                             onClose={() => viewModel.setToastVisible(false)} />
             </Dialog>
         );
     } else {

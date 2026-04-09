@@ -4,7 +4,6 @@ import {HiTrash} from "react-icons/hi";
 import DeleteConfirmationDialog from "./DeleteConfirmationDialog.tsx";
 import {HistoryDialog} from "./HistoryDialog.tsx";
 import ShareDatabaseQRDialog from "./ShareDatabaseQRDialog.tsx";
-import ToastDialog from "./ToastDialog.tsx";
 import {type AutomergeFacade} from "../../../Utility/AutomergeFacade.ts";
 import {removeDatabase} from "../../../Utility/Storage.ts";
 import {useAutomergeFacade} from "../../../Utility/useAutomergeFacade.ts";
@@ -25,8 +24,6 @@ const DatabaseSettingsView: React.FC<{
 
     return (
         <>
-            <ToastDialog message={viewModel.message} isVisible={viewModel.toastVisible}
-                         onClose={() => viewModel.setToastVisible(false)}/>
             <div className="dbSettingsContainer">
                 <div style={{display: "flex", justifyContent: "space-between", gap: "12px"}}>
                     <CopyButton

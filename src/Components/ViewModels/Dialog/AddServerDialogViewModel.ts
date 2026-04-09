@@ -1,4 +1,5 @@
 import React from "react";
+import {useToast} from "../Provider/ToastProviderViewModel.ts";
 
 /**
  * The view model for the AddServerDialog component. It manages the state and logic for adding a new server.
@@ -12,28 +13,23 @@ const useAddServerDialogViewModel = (
     onAddServer: (name: string, url: string) => void,
     servers: Map<string, string>,
     onClose: () => void,
-    setShowToast: (show: boolean) => void,
-    setToastMessage: (message: string) => void
 ) => {
     const [name, setName] = React.useState("");
     const [url, setUrl] = React.useState("");
+    const [showToast, _] = useToast()
 
     const handleAddServer = () => {
         if (name.trim() === "" || url.trim() === "") {
-            setToastMessage("Name und URL dürfen nicht leer sein.");
-            setShowToast(true);
+            showToast("Name und URL dürfen nicht leer sein.");
             return;
         } else if (servers.get(name.trim())) {
-            setToastMessage("Ein Server mit diesem Namen existiert bereits.");
-            setShowToast(true);
+            showToast("Ein Server mit diesem Namen existiert bereits.");
             return;
         } else if ((new Set(servers.values())).has(url.trim())) {
-            setToastMessage(`Ein Server mit dieser URL existiert bereits.`);
-            setShowToast(true);
+            showToast(`Ein Server mit dieser URL existiert bereits.`);
             return;
         } else if (!validateWsUrl(url.trim())) {
-            setToastMessage("Invalide URL. Bitte gültige Websocket URL eingeben.");
-            setShowToast(true);
+            showToast("Invalide URL. Bitte gültige Websocket URL eingeben.");
             return;
         }
 

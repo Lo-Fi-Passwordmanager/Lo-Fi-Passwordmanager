@@ -895,21 +895,31 @@ input[type="number"] {
     left: 0.5%;
 }
 
+.toastContainer {
+    position: absolute;
+    width: 100%;
+    bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+    gap: 8px
+}
+
 /* The snackbar */
 .floatingToast {
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%);
     background-color: var(--primary);
     color: var(--text);
     padding: 12px 24px;
     /* Pill Shape */
     border-radius: var(--big-radius);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.7);
     z-index: 200;
     font-size: 1.2rem;
     font-weight: 600;
+    pointer-events: none;
+    user-select: none;
+    z-index: 10000;
 }
 
 .loadingOverlay {

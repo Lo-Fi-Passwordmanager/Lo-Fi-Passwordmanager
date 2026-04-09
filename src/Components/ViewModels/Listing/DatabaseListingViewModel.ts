@@ -1,20 +1,18 @@
-import {useState} from "react";
+import {useToast} from "../Provider/ToastProviderViewModel.ts";
 
 const useDatabaseListingViewModel = () => {
-    const [showToast, setShowToast] = useState(false);
 
+    const [showToast, _] = useToast()
     /**
      * Copies the given URL to the clipboard, removing the "automerge:" prefix and shows a toast notification
      */
     function copyToClipboard(url: string) {
-        setShowToast(true);
+        showToast("Datenbank ID in die Zwischenablage kopiert!")
         void navigator.clipboard.writeText(url.replace("automerge:", ""));
     }
 
     return {
-        copyToClipboard,
-        showToast,
-        setShowToast
+        copyToClipboard
     }
 }
 export default useDatabaseListingViewModel;

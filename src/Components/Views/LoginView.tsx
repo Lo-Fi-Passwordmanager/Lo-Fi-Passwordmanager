@@ -6,7 +6,6 @@ import {useLoginViewModel} from "../ViewModels/loginViewModel.ts";
 import CreateDatabaseDialog from "./DialogViews/CreateDatabaseDialog.tsx";
 import DeleteConfirmationDialog from "./DialogViews/DeleteConfirmationDialog.tsx";
 import LoginDatabaseDialog from "./DialogViews/LoginDatabaseDialog.tsx";
-import ToastDialog from "./DialogViews/ToastDialog.tsx";
 import DatabaseListingView from "./ListingViews/DatabaseListingView.tsx";
 import PWMLogo from "../../assets/logo_gelb.svg?inline";
 import type {Item} from "../../Model/Item.ts";
@@ -66,8 +65,6 @@ const LoginView: React.FC<{
                         void viewModel.tryOpenDatabase(password, name)
                     }}
                     onCancel={viewModel.closeEnterPasswordDialog}
-                    setToastMessage={viewModel.setToastMessage}
-                    setShowToast={viewModel.setShowToast}
                     hidePassword={viewModel.hidePassword}
                     toggleHidePassword={viewModel.toggleHidePassword}
                 />
@@ -83,8 +80,6 @@ const LoginView: React.FC<{
                     importDatabaseFromURL={(name, url) => {
                         void viewModel.importDatabaseFromURL(name, url);
                     }}
-                    setToastMessage={viewModel.setToastMessage}
-                    setShowToast={viewModel.setShowToast}
                     importDatabaseFromFile={(files, name) => {
                         void viewModel.importDatabaseFromFile(files, name);
                     }}
@@ -102,9 +97,6 @@ const LoginView: React.FC<{
                 />
 
             </main>
-            <ToastDialog message={viewModel.toastMessage}
-                         isVisible={viewModel.showToast}
-                         onClose={() => viewModel.setShowToast(false)}/>
         </div>
     );
 }

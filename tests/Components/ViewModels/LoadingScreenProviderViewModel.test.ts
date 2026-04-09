@@ -2,7 +2,7 @@ import {beforeEach, describe, it, expect} from "vitest";
 import {
     useLoadingScreen,
     useLoadingScreenProviderViewModel
-} from "../../../src/Components/ViewModels/LoadingScreenProviderViewModel";
+} from "../../../src/Components/ViewModels/Provider/LoadingScreenProviderViewModel";
 import {renderHook} from "@testing-library/react";
 
 describe('LoadingScreenProviderViewModel', ()=> {

@@ -15,6 +15,7 @@ import type {Item} from "../../Model/Item.ts";
 import {Settings, useSettings} from "../../Model/Settings.ts";
 import type {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
+import {useToast} from "./Provider/ToastProviderViewModel.ts";
 
 
 /**
@@ -27,8 +28,6 @@ export const usePasswordManagerViewModel = () => {
     const [automergeFacade, setAutomergeFacade] = useState<AutomergeFacade | null>(null);
     const [securityProvider] = useState(() => new SecurityProvider());
     const timeout = Settings.getSettings().getTimeoutLength() * 60000;
-    const [toastMessage, setToastMessage] = useState("");
-    const [toastVisible, setToastVisible] = useState(false);
     const [openedDatabaseName, setOpenedDatabaseName] = useState<string>("");
     const [oldP2PSize, setOldP2PSize] = useState<number>(settings.getConnectorsToAdapters().size);
     const [justSynced, setJustSynced] = useState<boolean>(false);
@@ -45,6 +44,8 @@ export const usePasswordManagerViewModel = () => {
         network: [new BroadcastChannelNetworkAdapter()],
         storage: new IndexedDBStorageAdapter()
     }));
+
+    const [showToast, removeToast] = useToast()
 
     //Whenever something about the synchronisation happens, the old adapters get removed and new ones get added.
     //This enables the repo to be kept as state while still changing the adapters
@@ -85,13 +86,9 @@ export const usePasswordManagerViewModel = () => {
 
     useEffect(() => {
         if (connectorsSize > oldP2PSize) {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
-            setToastMessage("Neue PeerToPeer Verbindung aufgebaut.");
-            setToastVisible(true);
-            setTimeout(() => {
-                setToastVisible(false);
-            }, 3000);
+            showToast("Neue PeerToPeer Verbindung aufgebaut.")
         }
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setOldP2PSize(connectorsSize);
     }, [connectorsSize, oldP2PSize]);
 
@@ -170,17 +167,21 @@ export const usePasswordManagerViewModel = () => {
         securityProvider.clearKey();
     }
 
+    const [toastId, setToastId] = useState<number>(-1)
+
     const onIdle = () => {
         if (Settings.getSettings().getTimeoutActive() && loggedIn) {
             closeLoggedIn();
-            setToastMessage("Der Nutzer wurde auf Grund von Inaktivität automatisch abgemeldet.");
-            setToastVisible(true);
+            removeToast(toastId);
+            const id = showToast("Der Nutzer wurde auf Grund von Inaktivität automatisch abgemeldet.", -1);
+            setToastId(id)
         }
     };
 
     const onAction = () => {
-        if (toastVisible) {
-            setToastVisible(false);
+        if (toastId >= 0) {
+            removeToast(toastId);
+            setToastId(-1);
         }
     };
 
@@ -194,8 +195,6 @@ export const usePasswordManagerViewModel = () => {
     return {
         repo,
         securityProvider,
-        toastMessage,
-        toastVisible,
         openedDatabaseName,
         loggedIn,
         justSynced,
@@ -207,6 +206,5 @@ export const usePasswordManagerViewModel = () => {
         setAutomergeFacade,
         getAutomergeFacade,
         closeLoggedIn,
-        setToastVisible,
     };
 };

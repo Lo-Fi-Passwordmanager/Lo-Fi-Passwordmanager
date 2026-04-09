@@ -7,6 +7,7 @@ import {
     SPECIAL,
     UPPER_CASE_LETTERS
 } from "../../../Utility/PasswordGenerator.ts";
+import {useToast} from "../Provider/ToastProviderViewModel.ts";
 
 export interface PasswordGenDialogProps {
     setNewPassword: (password: string) => void;
@@ -23,14 +24,13 @@ export const usePasswordGenViewModel = (setNewPassword: (password: string) => vo
     const [lowercase, setLowercase] = useState(true);
     const [numbers, setNumbers] = useState(true);
     const [special, setSpecial] = useState(true);
-    const [toastMessage, setToastMessage] = useState("");
-    const [toastVisible, setToastVisible] = useState(false);
     const [passwordGenOpen, setPasswordGenOpen] = useState(false);
+
+    const [showToast, _] = useToast();
 
     function handleConfirm() {
         if(!uppercase && !lowercase && !numbers && !special) {
-            setToastMessage("Keine Zeichengruppe ausgewählt!");
-            setToastVisible(true);
+            showToast("Keine Zeichengruppe ausgewählt!");
             return;
         }
         const characters: string[] = getCharacters(uppercase, lowercase, numbers, special);
@@ -77,12 +77,7 @@ export const usePasswordGenViewModel = (setNewPassword: (password: string) => vo
         lowercase,
         numbers,
         special,
-        toastMessage,
-        toastVisible,
         passwordGenOpen,
-
-        setToastVisible,
-        setToastMessage,
         setLength,
         toggleUppercase,
         toggleLowercase,

@@ -83,8 +83,6 @@ const ServerList: React.FC<{
                 <AddServerDialog
                     onAddServer={(name, url) => settingsViewModel.addSyncServer(name, url)}
                     onClose={() => settingsViewModel.setAddServerDialogOpen(false)}
-                    setShowToast={settingsViewModel.setShowToast}
-                    setToastMessage={settingsViewModel.setToastMessage}
                     servers={settingsViewModel.serverUrls}
                 />
             )}

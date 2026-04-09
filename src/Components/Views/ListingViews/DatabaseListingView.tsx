@@ -6,7 +6,6 @@ import DatabaseListingViewModel from "../../ViewModels/Listing/DatabaseListingVi
 import CopyButton from "../ButtonViews/CopyButton.tsx";
 import RenameDatabaseDialog from "../DialogViews/RenameDatabaseDialog.tsx";
 import ShareDatabaseQRDialog from "../DialogViews/ShareDatabaseQRDialog.tsx";
-import ToastDialog from "../DialogViews/ToastDialog.tsx";
 
 /**
  * View showing a listing of available databases with options to open, share, rename or delete them.
@@ -58,11 +57,6 @@ const DatabaseListingView: React.FC<{
                         </button>
                     </div>
                 ))}
-                <ToastDialog
-                    message="Datenbank ID in die Zwischenablage kopiert!"
-                    isVisible={viewModel.showToast}
-                    onClose={() => viewModel.setShowToast(false)}
-                />
             </div>
         );
     }
