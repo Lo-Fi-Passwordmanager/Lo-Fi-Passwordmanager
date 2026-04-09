@@ -1,6 +1,7 @@
 import React from "react";
 import {HiEye} from "react-icons/hi";
 import {HiEyeSlash} from "react-icons/hi2";
+import {useTranslation} from "react-i18next";
 
 /**
  * A button that toggles the visibility of a password
@@ -13,12 +14,13 @@ const EyeButton: React.FC<{
     size?: number;
 }> = ({hidePassword, toggleHidePassword, size}) => {
 
+    const { t } = useTranslation();
     if (!hidePassword) {
         return (
             <button className={`eyeButton ${hidePassword ? "" : "selected"}`}
                     onClick={() => toggleHidePassword()}
                     style={size ? {height: size, width: size} : {}}
-                    title={"Passwort verstecken"}
+                    title={t("pw_v_hide_pw")}
             >
                 <HiEye size={24}/>
             </button>
@@ -28,7 +30,7 @@ const EyeButton: React.FC<{
             <button className={`eyeButton ${hidePassword ? "" : "selected"}`}
                     onClick={() => toggleHidePassword()}
                     style={size ? {height: size, width: size} : {}}
-                    title={"Passwort anzeigen"}
+                    title={t("pw_v_show_pw")}
             >
                 <HiEyeSlash size={24}/>
             </button>

@@ -10,6 +10,7 @@ import {removeDatabase} from "../../../Utility/Storage.ts";
 import {useAutomergeFacade} from "../../../Utility/useAutomergeFacade.ts";
 import useDatabaseSettingsViewModel from "../../ViewModels/Dialog/DatabaseSettingsViewModel.ts";
 import CopyButton from "../ButtonViews/CopyButton.tsx";
+import {useTranslation} from "react-i18next";
 
 /**
  * The view that links to the {@link Settings} singleton and toggles its values.
@@ -22,6 +23,7 @@ const DatabaseSettingsView: React.FC<{
 
     const reactiveFacade = useAutomergeFacade(automergeFacade);
     const viewModel = useDatabaseSettingsViewModel(automergeFacade, reactiveFacade);
+    const {t} = useTranslation();
 
     return (
         <>
@@ -32,19 +34,19 @@ const DatabaseSettingsView: React.FC<{
                     <CopyButton
                         copyToClipboard={viewModel.copyURLToClipboard}
                         attributeValue={""}
-                        title="Datenbank ID in die Zwischenablage kopieren"
+                        title={t("settings_db_copy_id")}
                         style={{marginLeft: "0", width: "100%"}}
-                        content={"Datenbank ID kopieren"}
+                        content={t("settings_db_copy_id")}
                     />
                     <ShareDatabaseQRDialog name={openedDatabaseName!}
                                            url={(automergeFacade.automergeURL as string).replace("automerge:", "")}/>
                 </div>
                 <button onClick={viewModel.exportDatabase}>
-                    Verschlüsselt Exportieren
+                    {t("export_encrypted")}
                 </button>
 
                 <button onClick={viewModel.exportToCsvFile}>
-                    Unverschlüsselt Exportieren
+                    {t("export_unencrypted")}
                 </button>
 
 
@@ -55,7 +57,7 @@ const DatabaseSettingsView: React.FC<{
                     style={{gap: "0.2rem"}}
                     onClick={() => {
                         viewModel.setInDeletion(true);
-                    }}><HiTrash size={24}/> Datenbank lokal löschen
+                    }}><HiTrash size={24}/> {t("delete_db")}
                 </button>
 
                 {viewModel.inDeletion && (<DeleteConfirmationDialog

@@ -32,8 +32,8 @@ const RenameDatabaseDialog: React.FC<{
                         autoFocus
                     />
                     <div className={"confirm-cancel-buttons"}>
-                        <button className={"rectangle-button"} onClick={() => viewModel.handleConfirm()}>Bestätigen</button>
-                        <button className={"rectangle-button"} onClick={() => viewModel.setRenameDatabaseOpen(false)}>Abbrechen</button>
+                        <button className={"rectangle-button"} onClick={() => viewModel.handleConfirm()}>{t("button_confirm")}</button>
+                        <button className={"rectangle-button"} onClick={() => viewModel.setRenameDatabaseOpen(false)}>{t("button_cancel")}</button>
                     </div>
                 </Dialog>
             </>

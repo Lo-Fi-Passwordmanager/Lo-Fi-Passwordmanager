@@ -89,7 +89,7 @@ const EditableEntryView: React.FC<{
                             </button>
                             <button className={"rectangle-button cancel"}
                                     onClick={viewmodel.cancelSaving
-                                    }>Abbrechen
+                                    }>{t("button_cancel")}
                             </button>
                     </div>
                 </div>

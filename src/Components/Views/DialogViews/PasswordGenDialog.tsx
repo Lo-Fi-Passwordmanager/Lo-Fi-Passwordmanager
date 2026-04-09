@@ -53,8 +53,8 @@ const PasswordGenDialog: React.FC<PasswordGenDialogProps> = ({setNewPassword}: P
                     />
                 </div>
                 <div className="confirm-cancel-buttons">
-                    <button className={"rectangle-button"} onClick={viewModel.handleConfirm}>Bestätigen</button>
-                    <button className={"rectangle-button"} onClick={() => viewModel.setPasswordGenOpen(false)}>Abbrechen</button>
+                    <button className={"rectangle-button"} onClick={viewModel.handleConfirm}>{t("button_confirm")}</button>
+                    <button className={"rectangle-button"} onClick={() => viewModel.setPasswordGenOpen(false)}>{t("button_cancel")}</button>
                 </div>
                 <ToastDialog message={viewModel.toastMessage}
                              isVisible={viewModel.toastVisible}
