@@ -11,6 +11,7 @@ import Dialog from "./DialogViews/Dialog.tsx";
 import GenericQRDialog from "./DialogViews/GenericQRDialog.tsx";
 import GenericQRScannerDialog from "./DialogViews/GenericQRScannerDialog.tsx";
 import ServerList from "./ListingViews/ServerList.tsx";
+import {useTranslation} from "react-i18next";
 
 
 /**
@@ -24,6 +25,11 @@ const SettingsView: React.FC<{
     closeDatabase?: () => void,
 }> = ({automergeFacade, openedDbName, closeDatabase}) => {
     const viewModel = useSettingsViewModel();
+
+    const { i18n } = useTranslation();
+    const handleLanguageChange =  (e) => {
+        void i18n.changeLanguage(e.target.value);
+    };
 
     if (!viewModel.settingsOpen) {
         return (<>
@@ -65,6 +71,10 @@ const SettingsView: React.FC<{
                         <div className="settingsContainer">
                             <h3>Allgemeine Einstellungen</h3>
 
+                            <select onChange={handleLanguageChange} value={i18n.language}>
+                                <option value='en'>English</option>
+                                <option value=''>Deutsch</option>
+                            </select>
 
                             <label className="checkboxRow">
                                 <SliderCheckBox checked={viewModel.darkMode} toggleChecked={viewModel.toggleDarkMode}/>

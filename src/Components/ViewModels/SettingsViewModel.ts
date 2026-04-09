@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 
 import type {PeerjsNetworkAdapter} from "../../../customNetworkAdapter/PeerJsNetworkAdapter.ts";
 import {Settings, useSettings} from "../../Model/Settings";
+import {useTranslation} from "react-i18next";
 import {useToast} from "./Provider/ToastProviderViewModel.ts";
 
 

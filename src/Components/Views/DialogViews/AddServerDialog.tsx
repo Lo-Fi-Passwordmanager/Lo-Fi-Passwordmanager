@@ -2,6 +2,7 @@ import React from "react";
 
 import Dialog from "./Dialog.tsx";
 import useAddServerDialogViewModel from "../../ViewModels/Dialog/AddServerDialogViewModel.ts";
+import {useTranslation} from "react-i18next";
 
 /**
  * A dialog that allows the user to add a new server by specifying its name and URL.
@@ -18,9 +19,9 @@ const AddServerDialog: React.FC<{
 }> = ({onAddServer, servers, onClose}) => {
 
     const viewModel = useAddServerDialogViewModel(onAddServer, servers, onClose);
-
+    const {t} = useTranslation();
     return (
-        <Dialog title="Server hinzufügen" onCloseDialog={onClose}>
+        <Dialog title={t("add_server_title")} onCloseDialog={onClose}>
             <div className="addServerWrapper">
                 <label>Server Name:</label>
                 <input
@@ -28,17 +29,17 @@ const AddServerDialog: React.FC<{
                     type="text"
                     value={viewModel.name}
                     onChange={(e) => viewModel.setName(e.target.value)}
-                    placeholder="Mein Server"
+                    placeholder={t("add_server_placeholder_name")}
                 />
                 <label>Server URL:</label>
                 <input
                     type="text"
                     value={viewModel.url}
                     onChange={(e) => viewModel.setUrl(e.target.value)}
-                    placeholder="wss://my.sync-server.org"
+                    placeholder={t("add_server_placeholder_url")}
                 />
                 <button className={"rectangle-button dialog-confirm"} onClick={viewModel.handleAddServer}>
-                    Hinzufügen
+                    {t("button_add")}
                 </button>
             </div>
         </Dialog>

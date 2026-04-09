@@ -1,4 +1,5 @@
 import React, {type CSSProperties, useState} from "react";
+import {useTranslation} from "react-i18next";
 import {HiMiniClipboardDocumentCheck, HiMiniClipboardDocumentList} from "react-icons/hi2";
 
 import {addRelevance} from "../../../Utility/Storage.ts";
@@ -22,6 +23,7 @@ const CopyButton: React.FC<{
 }> = ({copyToClipboard, attributeValue, style, title, content, id}) => {
 
     const [clicked, setClicked] = useState(false);
+    const { t } = useTranslation();
 
     if (!clicked) {
         return (
@@ -31,7 +33,7 @@ const CopyButton: React.FC<{
                 void copyToClipboard(attributeValue)
                 if (id) addRelevance(id);
             }}
-                    title={title ? title : "In Zwischenablage kopieren"}
+                    title={title ? title : t("toast_clipboard_copy")}
                     style={style}
             >
                 {content ? <><HiMiniClipboardDocumentList size={24}/>&nbsp;{content} </> : <HiMiniClipboardDocumentList size={24}/>}

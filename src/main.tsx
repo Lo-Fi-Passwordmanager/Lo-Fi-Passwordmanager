@@ -5,6 +5,7 @@ import {createRoot} from "react-dom/client";
 import {LoadingScreenProvider} from "./Components/Views/Provider/LoadingScreenProvider.tsx";
 import PasswordManagerView from "./Components/Views/PasswodManagerView.tsx";
 import "./styles.css";
+import "./config/i18n";
 import {ToastProvider} from "./Components/Views/Provider/ToastProvider.tsx";
 
 

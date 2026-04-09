@@ -1,0 +1,42 @@
+{
+    "toast_clipboard_copy" : "In Zwischenablage kopieren",
+
+    "button_add" : "Hinzufügen",
+    "button_confirm" : "Bestätigen",
+    "button_cancel" : "Abbrechen",
+
+    "pw_v_hide_pw" : "Passwort verstecken",
+    "pw_v_show_pw" : "Passwort anzeigen",
+
+    "sorting_individual_change" : "Individuelle Sortierung anpassen",
+    "sorting_individual_regroup" : "Einträge und Ordner verschieben",
+
+    "add_server_title" : "Server hinzufügen",
+
+    "add_server_placeholder_name" : "Mein Server",
+    "add_server_placeholder_url" : "wss://my.sync-server.org",
+
+
+    "add_db_create_new_title" : "Neue Datenbank erstellen",
+    "add_db_create_choose_action" : "Aktion wählen:",
+    "add_db_create_action_new" : "Neue Datenbank erstellen",
+    "add_db_create_action_url" : "Existierende Datenbank laden",
+    "add_db_create_action_file" : "Datenbank verschlüsselt importieren",
+    "add_db_create_action_filedecrypt" : "Datenbank unverschlüsselt importieren",
+    "add_db_create_choose_file" : "Datei auswählen",
+
+    "add_db_placeholder_db_name" : "Datenbankname",
+    "add_db_placeholder_db_pw" : "Masterpasswort",
+    "add_db_placeholder_db_id" : "Datenbank ID",
+
+
+
+    "settings_db_copy_id" : "Datenbank ID kopieren",
+
+    "export_encrypted" : "Verschlüsselt Exportieren",
+    "export_unencrypted" : "Unverschlüsselt Exportieren",
+
+    "delete_db" : "Datenbank lokal löschen"
+
+
+}

@@ -72,9 +72,6 @@ const LoginView: React.FC<{
                 {/* Pop Up Dialog for creating a new Database */}
                 <CreateDatabaseDialog
                     isOpen={viewModel.isAddDialogOpen}
-                    title="Neue Datenbank erstellen"
-                    label1="Datenbankname"
-                    label2="Masterpasswort"
                     createDatabase={viewModel.createDatabase}
                     onCancel={viewModel.closeAddDialog}
                     importDatabaseFromURL={(name, url) => {
