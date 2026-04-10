@@ -1,4 +1,5 @@
 import React from "react";
+import {useTranslation} from "react-i18next";
 import {HiTrash, HiCheckCircle, HiDotsCircleHorizontal} from "react-icons/hi";
 import {HiMiniCog8Tooth, HiMiniMinus, HiMiniPlus} from "react-icons/hi2";
 
@@ -11,7 +12,6 @@ import Dialog from "./DialogViews/Dialog.tsx";
 import GenericQRDialog from "./DialogViews/GenericQRDialog.tsx";
 import GenericQRScannerDialog from "./DialogViews/GenericQRScannerDialog.tsx";
 import ServerList from "./ListingViews/ServerList.tsx";
-import {useTranslation} from "react-i18next";
 
 
 /**

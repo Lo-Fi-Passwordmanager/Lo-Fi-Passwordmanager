@@ -3,13 +3,13 @@ import type {Repo} from "@automerge/react";
 import {useEffect, useState} from "react";
 
 import {useLoadingScreen} from "./Provider/LoadingScreenProviderViewModel.ts";
+import {useToast} from "./Provider/ToastProviderViewModel.ts";
 import {Entry} from "../../Model/Entry.ts";
 import type {Item} from "../../Model/Item.ts";
 import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {loadFromCsv, uInt8ArrayFromFile} from "../../Utility/InputOutputUtil.ts";
 import type {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
 import {loadAllDatabases, removeDatabase, renameDatabase, storeDatabase} from "../../Utility/Storage.ts";
-import {useToast} from "./Provider/ToastProviderViewModel.ts";
 
 /**
  * ViewModel for the LoginView. Provides all data and functions required by the LoginView.

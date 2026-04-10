@@ -1,10 +1,10 @@
 import type {DataConnection} from "peerjs";
 import {type ChangeEventHandler, useEffect, useState} from "react";
+import {useTranslation} from "react-i18next";
 
 import type {PeerjsNetworkAdapter} from "../../../customNetworkAdapter/PeerJsNetworkAdapter.ts";
 import {Settings, useSettings} from "../../Model/Settings";
 import {useToast} from "./Provider/ToastProviderViewModel.ts";
-import {useTranslation} from "react-i18next";
 
 
 /**

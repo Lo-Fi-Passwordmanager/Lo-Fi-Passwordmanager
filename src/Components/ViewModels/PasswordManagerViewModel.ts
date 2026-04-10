@@ -9,13 +9,13 @@ import {
 import {useEffect, useState} from "react";
 import {useIdleTimer} from "react-idle-timer";
 
+import {useToast} from "./Provider/ToastProviderViewModel.ts";
 import {PeerjsNetworkAdapter} from "../../../customNetworkAdapter/PeerJsNetworkAdapter.ts";
 import type {AutomergeDoc} from "../../Model/Automerge/AutomergeDoc.ts";
 import type {Item} from "../../Model/Item.ts";
 import {Settings, useSettings} from "../../Model/Settings.ts";
 import type {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
-import {useToast} from "./Provider/ToastProviderViewModel.ts";
 
 
 /**

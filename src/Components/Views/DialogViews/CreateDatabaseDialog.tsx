@@ -1,11 +1,11 @@
 import type {AutomergeUrl} from "@automerge/automerge-repo";
 import React from "react";
+import {useTranslation} from "react-i18next";
 
 import Dialog from "./Dialog.tsx";
 import ShareDatabaseQRScannerDialog from "./ShareDatabaseQRScannerDialog.tsx";
 import {useCreateDatabaseViewModel} from "../../ViewModels/Dialog/CreateDatabaseViewModel.ts";
 import EyeButton from "../ButtonViews/EyeButton.tsx";
-import {useTranslation} from "react-i18next";
 
 const CreateDatabaseDialog: React.FC<{
     isOpen: boolean,

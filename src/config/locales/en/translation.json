@@ -47,7 +47,7 @@
     "confirm_delete": {
       "title": "Confirm deletion",
       "//commentar": "Wird in DeleteConfirmationDialog.tsx verwendet, mit den {{<var>}} kann man placeholder in die translations packen",
-      "text": "Do you really want to delete the {{delete_type}} &quot;<strong>{{item_title}}</strong>&quot;?"
+      "text": "Do you really want to delete the {{delete_type}} \"<strong>{{item_title}}</strong>\"?"
     }
   }
 }

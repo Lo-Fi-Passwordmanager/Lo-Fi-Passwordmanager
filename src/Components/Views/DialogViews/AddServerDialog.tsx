@@ -1,8 +1,8 @@
 import React from "react";
+import {useTranslation} from "react-i18next";
 
 import Dialog from "./Dialog.tsx";
 import useAddServerDialogViewModel from "../../ViewModels/Dialog/AddServerDialogViewModel.ts";
-import {useTranslation} from "react-i18next";
 
 /**
  * A dialog that allows the user to add a new server by specifying its name and URL.

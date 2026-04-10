@@ -1,4 +1,5 @@
 import React from "react";
+import {useTranslation} from "react-i18next";
 import {HiPencil} from "react-icons/hi";
 
 import Dialog from "./Dialog.tsx";
@@ -15,7 +16,7 @@ const RenameDatabaseDialog: React.FC<{
     renameDatabase: (oldName: string, newName: string) => void;
 }> = ({oldName, renameDatabase}) => {
     const viewModel = useRenameDatabaseViewModel(oldName, renameDatabase);
-
+    const {t} = useTranslation();
     if (viewModel.renameDatabaseOpen) {
         return (
             <>
@@ -24,7 +25,7 @@ const RenameDatabaseDialog: React.FC<{
                 onClick={() => viewModel.setRenameDatabaseOpen(true)}>
                 <HiPencil size={24}/>
             </button>
-            <Dialog title={"Datenbank umbenennen:"} onCloseDialog={() => viewModel.setRenameDatabaseOpen(false)}>
+            <Dialog title={t("rename_db.title")} onCloseDialog={() => viewModel.setRenameDatabaseOpen(false)}>
                     <input
                         type={"text"}
                         value={viewModel.newName}

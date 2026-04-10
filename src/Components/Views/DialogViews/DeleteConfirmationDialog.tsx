@@ -1,9 +1,9 @@
 import React from "react";
+import {Trans, useTranslation} from "react-i18next";
 import {HiTrash} from "react-icons/hi";
 
 import Dialog from "./Dialog.tsx";
 import type {Item} from "../../../Model/Item.ts";
-import {Trans, useTranslation} from "react-i18next";
 
 /**
  * A dialog that confirms the deletion of either an item or a database.
@@ -27,7 +27,7 @@ const DeleteConfirmationDialog: React.FC<{
         return null;
     } else if (database && onConfirmDb) {
         return (
-            <Dialog title={t("dialog.confirm_delete")} onCloseDialog={onClose}>
+            <Dialog title={t("dialog.confirm_delete.title")} onCloseDialog={onClose}>
                 <div className={"confirmDeleteWrapper"}>
             <span>
                 Die Datenbank &quot;<strong>{database}</strong>&quot; wirklich löschen?
@@ -47,17 +47,23 @@ const DeleteConfirmationDialog: React.FC<{
             <Dialog title={t("dialog.confirm_delete.title")} onCloseDialog={onClose}>
                 <div className={"confirmDeleteWrapper"}>
             <span>
-                <Trans i18nKey={"dialog.confirm_delete.text"} item_title={item.title} delete_type={item.isEntry() ? t("common.entry") : t("common.folder")}/>
+                <Trans i18nKey={"dialog.confirm_delete.text"}
+                       values={{
+                           delete_type: item.isEntry() ? t("common.entry") : t("common.folder"),
+                           item_title: item.title
+                       }}
+                />
             </span>
                     <div>
                         <button className={"rectangle-button delete dialog-confirm"}
                                 autoFocus
                                 onClick={() => onConfirmItem(item)}>
                             <HiTrash size={24}/> {t("button.delete")}
-                    </button>
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </Dialog>
-    );}
+            </Dialog>
+        );
+    }
 }
 export default DeleteConfirmationDialog;

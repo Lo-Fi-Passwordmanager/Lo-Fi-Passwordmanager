@@ -1,7 +1,7 @@
 import React from "react";
+import {useTranslation} from "react-i18next";
 import {HiEye} from "react-icons/hi";
 import {HiEyeSlash} from "react-icons/hi2";
-import {useTranslation} from "react-i18next";
 
 /**
  * A button that toggles the visibility of a password

@@ -1,4 +1,5 @@
 import React from "react";
+import {Trans, useTranslation} from "react-i18next";
 import {HiOutlineQrcode} from "react-icons/hi";
 import QRCode from "react-qr-code";
 
@@ -21,7 +22,7 @@ interface ShareDatabaseQRDialogProps {
  */
 const ShareDatabaseQRDialog: React.FC<ShareDatabaseQRDialogProps> = ({name, url}: ShareDatabaseQRDialogProps) => {
     const viewModel = useShareDatabaseQRViewModel(name, url);
-
+    const {t} = useTranslation();
     if (viewModel.shareQRCodeOpen) {
         return (
             <>
@@ -31,18 +32,17 @@ const ShareDatabaseQRDialog: React.FC<ShareDatabaseQRDialogProps> = ({name, url}
                 >
                     <HiOutlineQrcode size={24}/>
                 </button>
-                <Dialog title={"Datenbank teilen"} onCloseDialog={() => viewModel.setShareQRCodeOpen(false)}
+                <Dialog title={t("share_db.title")} onCloseDialog={() => viewModel.setShareQRCodeOpen(false)}
                         className="qrDialog">
-                    <p>Scanne den QR-Code auf einem anderen Gerät im &quot;Datenbank hinzufügen&quot; Dialog, um die
-                       Datenbank mit
-                       dem Namen &quot;{name}&quot;
-                       dort
-                       hinzuzufügen.</p>
+                    <p><Trans i18nKey={"share_db.scan_qr"}
+                              values={{
+                                  name: name
+                              }}
+                    /></p>
                     <label className="checkboxRow">
                         <SliderCheckBox checked={viewModel.shareName} toggleChecked={viewModel.toggleShareName}/>
-                        Name der Datenbank auch teilen
+                        {t("share_db.share_name")}
                     </label>
-
                     <QRCode value={viewModel.qrValue} className="qrCode"/>
                 </Dialog>
             </>

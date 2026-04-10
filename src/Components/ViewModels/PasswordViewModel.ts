@@ -8,6 +8,7 @@ import {
 } from "@dnd-kit/core";
 import {useEffect, useRef, useState} from "react";
 
+import {useToast} from "./Provider/ToastProviderViewModel.ts";
 import type {Folder} from "../../Model/Folder.ts";
 import type {Item} from "../../Model/Item.ts";
 import {Settings, useSettings} from "../../Model/Settings.ts";
@@ -22,7 +23,6 @@ import {
     saveIsAscending, storeIndividualSorting, storeIndividualSortingSetting
 } from "../../Utility/Storage.ts";
 import {useAutomergeFacade} from "../../Utility/useAutomergeFacade.ts";
-import {useToast} from "./Provider/ToastProviderViewModel.ts";
 
 /**
  * Criteria as enum by which items are sorted

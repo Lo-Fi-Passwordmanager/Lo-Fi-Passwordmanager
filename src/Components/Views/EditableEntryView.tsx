@@ -1,3 +1,4 @@
+import {t} from "i18next";
 import React from "react";
 
 import EyeButton from "./ButtonViews/EyeButton.tsx";
@@ -6,7 +7,6 @@ import Logo from "../../assets/logo_gelb.svg?inline";
 import {type Item} from "../../Model/Item.ts";
 import type {Attribute} from "../../Utility/AutomergeFacade.ts";
 import {useEditablePasswordViewModel} from "../ViewModels/EditablePasswordViewModel.ts";
-import {t} from "i18next";
 
 
 /**

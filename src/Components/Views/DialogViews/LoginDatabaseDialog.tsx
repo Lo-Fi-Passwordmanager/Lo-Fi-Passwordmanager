@@ -1,9 +1,9 @@
 import React from "react";
+import {useTranslation} from "react-i18next";
 
 import Dialog from "./Dialog.tsx";
 import {useLoginDatabaseViewModel} from "../../ViewModels/Dialog/LoginDatabaseViewModel.ts";
 import EyeButton from "../ButtonViews/EyeButton.tsx";
-import {t} from "i18next";
 
 /**
  * A dialog that asks the user to input credentials to log in to a database.
@@ -34,8 +34,8 @@ const LoginDatabaseDialog: React.FC<{
           toggleHidePassword
       }) => {
 
+    const {t} = useTranslation();
     const viewModel = useLoginDatabaseViewModel(isOpen, tryOpenDatabase);
-
     if (!isOpen) return null;
 
     return (

@@ -1,4 +1,5 @@
 import React from "react";
+import {useTranslation} from "react-i18next";
 import {HiTrash} from "react-icons/hi";
 
 import DeleteConfirmationDialog from "./DeleteConfirmationDialog.tsx";
@@ -9,7 +10,6 @@ import {removeDatabase} from "../../../Utility/Storage.ts";
 import {useAutomergeFacade} from "../../../Utility/useAutomergeFacade.ts";
 import useDatabaseSettingsViewModel from "../../ViewModels/Dialog/DatabaseSettingsViewModel.ts";
 import CopyButton from "../ButtonViews/CopyButton.tsx";
-import {useTranslation} from "react-i18next";
 
 /**
  * The view that links to the {@link Settings} singleton and toggles its values.

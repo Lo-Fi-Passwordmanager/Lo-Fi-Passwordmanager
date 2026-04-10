@@ -1,4 +1,5 @@
 import React, {type HTMLAttributes, type PropsWithChildren} from "react";
+import {useTranslation} from "react-i18next";
 
 import Dialog from "./Dialog.tsx";
 import {HistoryItem} from "./HistoryItem.tsx";
@@ -15,12 +16,13 @@ import {useHistoryViewModel} from "../../ViewModels/Dialog/HistoryViewModel.ts";
 export const HistoryDialog: React.FC<{
     automergeFacade: AutomergeFacade
 } & PropsWithChildren & HTMLAttributes<HTMLButtonElement>> = ({
-    automergeFacade,
-    children,
-    ...buttonProps
-}) => {
+                                                                  automergeFacade,
+                                                                  children,
+                                                                  ...buttonProps
+                                                              }) => {
 
     const viewModel = useHistoryViewModel(automergeFacade);
+    const {t} = useTranslation();
 
     return (
         <>
@@ -31,11 +33,11 @@ export const HistoryDialog: React.FC<{
                 }}
                 {...buttonProps}
             >
-                {children ?? "Änderungsverlauf"}
+                {children ?? t("history.title")}
             </button>
             {
                 viewModel.historyOpen &&
-                <Dialog title="Änderungsverlauf" onCloseDialog={() => viewModel.setHistoryOpen(false)}
+                <Dialog title={t("history.title")} onCloseDialog={() => viewModel.setHistoryOpen(false)}
                         className="historyDialog">
                     <div className="divider"/>
 
