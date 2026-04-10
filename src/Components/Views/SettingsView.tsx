@@ -25,11 +25,8 @@ const SettingsView: React.FC<{
     closeDatabase?: () => void,
 }> = ({automergeFacade, openedDbName, closeDatabase}) => {
     const viewModel = useSettingsViewModel();
-
     const { i18n } = useTranslation();
-    const handleLanguageChange =  (e) => {
-        void i18n.changeLanguage(e.target.value);
-    };
+
 
     if (!viewModel.settingsOpen) {
         return (<>
@@ -71,9 +68,9 @@ const SettingsView: React.FC<{
                         <div className="settingsContainer">
                             <h3>Allgemeine Einstellungen</h3>
 
-                            <select onChange={handleLanguageChange} value={i18n.language}>
+                            <select onChange={viewModel.handleLanguageChange} value={i18n.resolvedLanguage}>
                                 <option value='en'>English</option>
-                                <option value=''>Deutsch</option>
+                                <option value='de'>Deutsch</option>
                             </select>
 
                             <label className="checkboxRow">

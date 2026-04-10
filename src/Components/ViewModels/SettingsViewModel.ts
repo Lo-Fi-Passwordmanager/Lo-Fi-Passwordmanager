@@ -1,10 +1,10 @@
 import type {DataConnection} from "peerjs";
-import {useEffect, useState} from "react";
+import {type ChangeEventHandler, useEffect, useState} from "react";
 
 import type {PeerjsNetworkAdapter} from "../../../customNetworkAdapter/PeerJsNetworkAdapter.ts";
 import {Settings, useSettings} from "../../Model/Settings";
-import {useTranslation} from "react-i18next";
 import {useToast} from "./Provider/ToastProviderViewModel.ts";
+import {useTranslation} from "react-i18next";
 
 
 /**
@@ -38,6 +38,11 @@ export const useSettingsViewModel = () => {
     document.getElementsByTagName("html")[0]?.setAttribute("data-theme", darkMode ? "dark" : "light");
 
     const [showToast, _] = useToast();
+
+    const { i18n } = useTranslation();
+    const handleLanguageChange: ChangeEventHandler<HTMLSelectElement, HTMLSelectElement> =  (e) => {
+        void i18n.changeLanguage(e.target.value);
+    };
 
     useEffect(() => {
         settings.setDarkMode(darkMode);
@@ -228,6 +233,7 @@ export const useSettingsViewModel = () => {
         isLastActiveServer,
         copyToClipboard,
         toggleRecursiveDelete,
-        recursiveDelete
+        recursiveDelete,
+        handleLanguageChange
     };
 };
