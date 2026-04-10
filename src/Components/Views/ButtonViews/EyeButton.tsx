@@ -20,7 +20,7 @@ const EyeButton: React.FC<{
             <button className={`eyeButton ${hidePassword ? "" : "selected"}`}
                     onClick={() => toggleHidePassword()}
                     style={size ? {height: size, width: size} : {}}
-                    title={t("pw_v_hide_pw")}
+                    title={t("button.hide_password")}
             >
                 <HiEye size={24}/>
             </button>
@@ -30,7 +30,7 @@ const EyeButton: React.FC<{
             <button className={`eyeButton ${hidePassword ? "" : "selected"}`}
                     onClick={() => toggleHidePassword()}
                     style={size ? {height: size, width: size} : {}}
-                    title={t("pw_v_show_pw")}
+                    title={t("button.show_password")}
             >
                 <HiEyeSlash size={24}/>
             </button>

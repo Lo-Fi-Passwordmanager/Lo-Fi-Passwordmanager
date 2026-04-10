@@ -33,7 +33,7 @@ const CopyButton: React.FC<{
                 void copyToClipboard(attributeValue)
                 if (id) addRelevance(id);
             }}
-                    title={title ? title : t("toast_clipboard_copy")}
+                    title={title ? title : t("button.copy_clipboard")}
                     style={style}
             >
                 {content ? <><HiMiniClipboardDocumentList size={24}/>&nbsp;{content} </> : <HiMiniClipboardDocumentList size={24}/>}

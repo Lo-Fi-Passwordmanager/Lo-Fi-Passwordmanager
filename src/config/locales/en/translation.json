@@ -1,3 +1,53 @@
 {
-  "toast_clipboard_copy" : "Copy to clipboard"
+  "common":{
+    "copy_db_id" : "Copy database ID",
+    "delete_db" : "Delete database",
+    "entry": "Entry",
+    "folder": "Folder"
+  },
+  "button": {
+    "copy_clipboard" : "Copy to clipboard",
+    "add" : "Add",
+    "confirm" : "Confirm",
+    "cancel" : "Cancel",
+    "hide_password" : "Hide password",
+    "show_password" : "Show password",
+    "change_custom_sorting" : "Change custom sorting",
+    "regroup_items" : "Move entries and folders",
+    "delete": "Delete"
+  },
+  "add_server": {
+    "title" : "Add server",
+    "placeholder_name" : "My server",
+    "placeholder_url" : "wss://my.sync-server.org"
+  },
+  "add_database": {
+    "placeholder": {
+      "name" : "Database name",
+      "password" : "Master password",
+      "id" : "Database ID"
+    },
+    "create_new": {
+      "title" : "Add new Database",
+      "choose_action" : "Choose action:",
+      "choose_file" : "Select file",
+      "action": {
+        "new" : "Create new database",
+        "url" : "Load existing database",
+        "file_encrypted" : "Import encrypted database",
+        "file_plain" : "Import unencrypted database"
+      }
+    }
+  },
+  "settings": {
+    "export_encrypted" : "Export encrypted",
+    "export_unencrypted" : "Export unencrypted"
+  },
+  "dialog": {
+    "confirm_delete": {
+      "title": "Confirm deletion",
+      "//commentar": "Wird in DeleteConfirmationDialog.tsx verwendet, mit den {{<var>}} kann man placeholder in die translations packen",
+      "text": "Do you really want to delete the {{delete_type}} &quot;<strong>{{item_title}}</strong>&quot;?"
+    }
+  }
 }

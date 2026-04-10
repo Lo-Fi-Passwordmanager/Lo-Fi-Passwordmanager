@@ -6,6 +6,7 @@ import Logo from "../../assets/logo_gelb.svg?inline";
 import {type Item} from "../../Model/Item.ts";
 import type {Attribute} from "../../Utility/AutomergeFacade.ts";
 import {useEditablePasswordViewModel} from "../ViewModels/EditablePasswordViewModel.ts";
+import {t} from "i18next";
 
 
 /**
@@ -89,7 +90,7 @@ const EditableEntryView: React.FC<{
                             </button>
                             <button className={"rectangle-button cancel"}
                                     onClick={viewmodel.cancelSaving
-                                    }>{t("button_cancel")}
+                                    }>{t("button.cancel")}
                             </button>
                     </div>
                 </div>

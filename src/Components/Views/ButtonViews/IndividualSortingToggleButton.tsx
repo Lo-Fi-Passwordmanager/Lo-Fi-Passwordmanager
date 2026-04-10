@@ -17,7 +17,7 @@ const IndividualSortingToggleButton: React.FC<{
         return (
             <button className={"squareButton"}
                     onClick={() => toggleSorting()}
-                    title={t("sorting_individual_change")}
+                    title={t("button.change_custom_storing")}
             >
                 <HiMiniArrowsPointingOut size={24}/>
             </button>
@@ -26,7 +26,7 @@ const IndividualSortingToggleButton: React.FC<{
         return (
             <button className={"squareButton"}
                     onClick={() => toggleSorting()}
-                    title={t("sorting_individual_regroup")}
+                    title={t("button.regroup_items")}
             >
                 <HiMiniArrowsPointingIn size={24}/>
             </button>

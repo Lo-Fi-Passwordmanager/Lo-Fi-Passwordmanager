@@ -4,6 +4,7 @@ import {HiMiniPlus} from "react-icons/hi2";
 import Dialog from "./Dialog.tsx";
 import {type PasswordGenDialogProps, usePasswordGenViewModel} from "../../ViewModels/Dialog/PasswordGenViewModel.ts";
 import SliderCheckBox from "../ButtonViews/SliderCheckBox.tsx";
+import {t} from "i18next";
 
 /**
  * A dialog that allows the user to generate a new password with specified criteria.
@@ -52,8 +53,8 @@ const PasswordGenDialog: React.FC<PasswordGenDialogProps> = ({setNewPassword}: P
                     />
                 </div>
                 <div className="confirm-cancel-buttons">
-                    <button className={"rectangle-button"} onClick={viewModel.handleConfirm}>{t("button_confirm")}</button>
-                    <button className={"rectangle-button"} onClick={() => viewModel.setPasswordGenOpen(false)}>{t("button_cancel")}</button>
+                    <button className={"rectangle-button"} onClick={viewModel.handleConfirm}>{t("button.confirm")}</button>
+                    <button className={"rectangle-button"} onClick={() => viewModel.setPasswordGenOpen(false)}>{t("button.cancel")}</button>
                 </div>
             </Dialog>
         );

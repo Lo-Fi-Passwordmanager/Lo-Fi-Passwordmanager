@@ -3,6 +3,7 @@ import {HiTrash} from "react-icons/hi";
 
 import Dialog from "./Dialog.tsx";
 import type {Item} from "../../../Model/Item.ts";
+import {Trans, useTranslation} from "react-i18next";
 
 /**
  * A dialog that confirms the deletion of either an item or a database.
@@ -20,12 +21,13 @@ const DeleteConfirmationDialog: React.FC<{
     onConfirmDb?: (database: string) => void,
     onClose: () => void
 }> = ({database, item, onConfirmItem, onConfirmDb, onClose}) => {
+    const {t} = useTranslation();
 
     if (!item && !database) {
         return null;
     } else if (database && onConfirmDb) {
         return (
-            <Dialog title="Löschen bestätigen" onCloseDialog={onClose}>
+            <Dialog title={t("dialog.confirm_delete")} onCloseDialog={onClose}>
                 <div className={"confirmDeleteWrapper"}>
             <span>
                 Die Datenbank &quot;<strong>{database}</strong>&quot; wirklich löschen?
@@ -42,16 +44,16 @@ const DeleteConfirmationDialog: React.FC<{
         );
     } else if (item && onConfirmItem) {
         return (
-            <Dialog title="Löschen bestätigen" onCloseDialog={onClose}>
+            <Dialog title={t("dialog.confirm_delete.title")} onCloseDialog={onClose}>
                 <div className={"confirmDeleteWrapper"}>
             <span>
-                Den {item.isEntry() ? "Eintrag" : "Ordner"} &quot;<strong>{item.title}</strong>&quot; wirklich löschen?
+                <Trans i18nKey={"dialog.confirm_delete.text"} item_title={item.title} delete_type={item.isEntry() ? t("common.entry") : t("common.folder")}/>
             </span>
                     <div>
                         <button className={"rectangle-button delete dialog-confirm"}
                                 autoFocus
                                 onClick={() => onConfirmItem(item)}>
-                            <HiTrash size={24}/> Löschen
+                            <HiTrash size={24}/> {t("button.delete")}
                     </button>
                 </div>
             </div>

@@ -3,6 +3,7 @@ import React from "react";
 import Dialog from "./Dialog.tsx";
 import {useLoginDatabaseViewModel} from "../../ViewModels/Dialog/LoginDatabaseViewModel.ts";
 import EyeButton from "../ButtonViews/EyeButton.tsx";
+import {t} from "i18next";
 
 /**
  * A dialog that asks the user to input credentials to log in to a database.
@@ -59,8 +60,8 @@ const LoginDatabaseDialog: React.FC<{
                 <EyeButton hidePassword={hidePassword} toggleHidePassword={toggleHidePassword} size={49}/>
             </div>
             <div className="confirm-cancel-buttons">
-                <button className={"rectangle-button"} onClick={viewModel.handleConfirm}>{t("button_confirm")}</button>
-                <button className={"rectangle-button"} onClick={onCancel}>{t("button_cancel")}</button>
+                <button className={"rectangle-button"} onClick={viewModel.handleConfirm}>{t("button.confirm")}</button>
+                <button className={"rectangle-button"} onClick={onCancel}>{t("button.cancel")}</button>
             </div>
         </Dialog>
     );

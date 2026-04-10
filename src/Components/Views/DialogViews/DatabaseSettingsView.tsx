@@ -31,19 +31,19 @@ const DatabaseSettingsView: React.FC<{
                     <CopyButton
                         copyToClipboard={viewModel.copyURLToClipboard}
                         attributeValue={""}
-                        title={t("settings_db_copy_id")}
+                        title={t("common.copy_db_id")}
                         style={{marginLeft: "0", width: "100%"}}
-                        content={t("settings_db_copy_id")}
+                        content={t("common.copy_db_id")}
                     />
                     <ShareDatabaseQRDialog name={openedDatabaseName!}
                                            url={(automergeFacade.automergeURL as string).replace("automerge:", "")}/>
                 </div>
                 <button onClick={viewModel.exportDatabase}>
-                    {t("export_encrypted")}
+                    {t("settings.export_encrypted")}
                 </button>
 
                 <button onClick={viewModel.exportToCsvFile}>
-                    {t("export_unencrypted")}
+                    {t("settings.export_unencrypted")}
                 </button>
 
 

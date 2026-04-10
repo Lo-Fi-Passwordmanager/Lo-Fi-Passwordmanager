@@ -21,7 +21,7 @@ const AddServerDialog: React.FC<{
     const viewModel = useAddServerDialogViewModel(onAddServer, servers, onClose);
     const {t} = useTranslation();
     return (
-        <Dialog title={t("add_server_title")} onCloseDialog={onClose}>
+        <Dialog title={t("add_server.title")} onCloseDialog={onClose}>
             <div className="addServerWrapper">
                 <label>Server Name:</label>
                 <input
@@ -29,17 +29,17 @@ const AddServerDialog: React.FC<{
                     type="text"
                     value={viewModel.name}
                     onChange={(e) => viewModel.setName(e.target.value)}
-                    placeholder={t("add_server_placeholder_name")}
+                    placeholder={t("add_server.placeholder_name")}
                 />
                 <label>Server URL:</label>
                 <input
                     type="text"
                     value={viewModel.url}
                     onChange={(e) => viewModel.setUrl(e.target.value)}
-                    placeholder={t("add_server_placeholder_url")}
+                    placeholder={t("add_server.placeholder_url")}
                 />
                 <button className={"rectangle-button dialog-confirm"} onClick={viewModel.handleAddServer}>
-                    {t("button_add")}
+                    {t("button.add")}
                 </button>
             </div>
         </Dialog>

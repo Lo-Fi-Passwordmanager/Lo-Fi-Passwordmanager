@@ -34,7 +34,7 @@ const CreateDatabaseDialog: React.FC<{
     );
 
 
-    const {t} = useTranslation();
+    const {t} = useTranslation('translation');
 
     if (!isOpen) return null;
 
@@ -45,11 +45,11 @@ const CreateDatabaseDialog: React.FC<{
     };
 
     return (
-        <Dialog title={t("add_db_create_new_title")} onCloseDialog={onCancel}>
+        <Dialog title={t("add_database.create_new.title")} onCloseDialog={onCancel}>
             {/* Dropdown Menu Replacement */}
             <div className="dialogDropdownContainer" style={{marginBottom: "20px"}}>
                 <label htmlFor="import-type-select" style={{display: "block", marginBottom: "5px"}}>
-                    {t("add_db_create_choose_action")}
+                    {t("add_database.create_new.choose_action")}
                 </label>
                 <select
                     id="import-type-select"
@@ -57,31 +57,31 @@ const CreateDatabaseDialog: React.FC<{
                     onChange={(e) => viewModel.setSelectedImportType(e.target.value)}
                     style={{width: "100%"}}
                 >
-                    <option value="new">{t("add_db_create_action_new")}</option>
-                    <option value="url">{t("add_db_create_action_url")}</option>
-                    <option value="file">{t("add_db_create_action_file")}</option>
-                    <option value="filedecrypt">{t("add_db_create_action_filedecrypt")}</option>
+                    <option value="new">{t("add_database.create_new.action.new")}</option>
+                    <option value="url">{t("add_database.create_new.action.url")}</option>
+                    <option value="file">{t("add_database.create_new.action.file_encrypted")}</option>
+                    <option value="filedecrypt">{t("add_database.create_new.action.file_plain")}</option>
                 </select>
             </div>
 
             {viewModel.selectedImportType === "new" && (
                 <>
-                    <label>{t("add_db_placeholder_db_name")}</label>
+                    <label>{t("add_database.placeholder.name")}</label>
                     <input
                         type="text"
                         value={viewModel.field1}
                         onChange={(e) => viewModel.setField1(e.target.value)}
-                        placeholder={t("add_db_placeholder_db_name")}
+                        placeholder={t("add_database.placeholder.name")}
                         autoFocus
                         onKeyDown={handleKeyDown}
                     />
-                    <label>{t("add_db_placeholder_db_pw")}</label>
+                    <label>{t("add_database.placeholder.password")}</label>
                     <div className={"password-container"}>
                         <input
                             type={hidePassword ? "password" : "text"}
                             value={viewModel.field2}
                             onChange={(e) => viewModel.setField2(e.target.value)}
-                            placeholder={t("add_db_placeholder_db_pw")}
+                            placeholder={t("add_database.placeholder.password")}
                             onKeyDown={handleKeyDown}
                         />
                         <EyeButton hidePassword={hidePassword} toggleHidePassword={toggleHidePassword} size={49}/>
@@ -91,12 +91,12 @@ const CreateDatabaseDialog: React.FC<{
 
             {viewModel.selectedImportType === "url" && (
                 <>
-                    <label>{t("add_db_placeholder_db_name")}</label>
+                    <label>{t("add_database.placeholder.name")}</label>
                     <input
                         type="text"
                         value={viewModel.field1}
                         onChange={(e) => viewModel.setField1(e.target.value)}
-                        placeholder={t("add_db_placeholder_db_name")}
+                        placeholder={t("add_database.placeholder.name")}
                         autoFocus
                     />
                     <label>Datenbank ID</label>
@@ -106,7 +106,7 @@ const CreateDatabaseDialog: React.FC<{
                                 type="text"
                                 value={viewModel.field2}
                                 onChange={(e) => viewModel.setField2(e.target.value)}
-                                placeholder={t("add_db_placeholder_db_id")}
+                                placeholder={t("add_database.placeholder.id")}
                                 onKeyDown={handleKeyDown}
                             />
                             <ShareDatabaseQRScannerDialog setInputFields={(name, url) => {
@@ -120,33 +120,33 @@ const CreateDatabaseDialog: React.FC<{
 
             {(viewModel.selectedImportType === "file" || viewModel.selectedImportType === "filedecrypt") && (
                 <>
-                    <label>{t("add_db_placeholder_db_name")}</label>
+                    <label>{t("add_database.placeholder.name")}</label>
                     <input
                         type="text"
                         value={viewModel.field1}
                         onChange={(e) => viewModel.setField1(e.target.value)}
-                        placeholder={t("add_db_placeholder_db_name")}
+                        placeholder={t("add_database.placeholder.name")}
                         autoFocus
                     />
                     {viewModel.selectedImportType === "filedecrypt" &&
                         <>
-                            <label>{t("add_db_placeholder_db_pw")}</label>
+                            <label>{t("add_database.placeholder.password")}</label>
                             <div className={"password-container"}>
                                 <input
                                     type={hidePassword ? "password" : "text"}
                                     value={viewModel.field2}
                                     onChange={(e) => viewModel.setField2(e.target.value)}
-                                    placeholder={t("add_db_placeholder_db_pw")}
+                                    placeholder={t("add_database.placeholder.password")}
                                     onKeyDown={handleKeyDown}
                                 />
                                 <EyeButton hidePassword={hidePassword} toggleHidePassword={toggleHidePassword}
                                            size={49}/>
                             </div>
                         </>}
-                    <label>{t("add_db_create_choose_file")}</label>
+                    <label>{t("add_database.create_new.choose_file")}</label>
                     <label htmlFor="file-upload" className="file-upload">
                         {viewModel.targetFiles === null || viewModel.targetFiles.length < 1
-                            ? <span>{t("add_db_create_choose_file")}</span>
+                            ? <span>{t("add_database.create_new.choose_file")}</span>
                             : <span className={"visible"}>{viewModel.targetFiles[0].name}</span>
                         }
                     </label>
@@ -162,8 +162,8 @@ const CreateDatabaseDialog: React.FC<{
 
             {/* Shared Action Buttons */}
             <div className="confirm-cancel-buttons" style={{marginTop: "20px"}}>
-                <button className={"rectangle-button"} onClick={viewModel.handleConfirm}>{t("button_confirm")}</button>
-                <button className={"rectangle-button"} onClick={onCancel}>{t("button_cancel")}</button>
+                <button className={"rectangle-button"} onClick={viewModel.handleConfirm}>{t("button.confirm")}</button>
+                <button className={"rectangle-button"} onClick={onCancel}>{t("button.cancel")}</button>
             </div>
         </Dialog>
     );
