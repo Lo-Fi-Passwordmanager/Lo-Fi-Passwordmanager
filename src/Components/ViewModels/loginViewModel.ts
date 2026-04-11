@@ -23,13 +23,7 @@ import {useToast} from "./Provider/ToastProviderViewModel.ts";
  * @returns all data and functions required by the LoginView
  */
 export const useLoginViewModel = (
-    repo: Repo,
-    setLoggedIn: (value: boolean) => void,
-    setAutomergeFacade: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void,
-    securityProvider: SecurityProvider,
-    setOpenedDbName: ((value: (((prevState: string) => string) | string)) => void),
-    setToImportItems: (value: (((prevState: Item[]) => Item[]) | Item[])) => void
-) => {
+    repo: Repo, setLoggedIn: (value: boolean) => void, setAutomergeFacade: (value: (((prevState: (AutomergeFacade | null)) => (AutomergeFacade | null)) | AutomergeFacade | null)) => void, securityProvider: SecurityProvider, setOpenedDbName: ((value: (((prevState: string) => string) | string)) => void), setToImportItems: (value: (((prevState: Item[]) => Item[]) | Item[])) => void, param: string | undefined) => {
     // map of database names to their automerge urls
     const [databases, setDatabases] = useState(loadAllDatabases());
     // names of all available databases to show in the listing
@@ -37,7 +31,7 @@ export const useLoginViewModel = (
     // database that was clicked to be opened
     const [selectedDatabase, setSelectedDatabase] = useState<string | null>(null);
     // whether the dialog to add a new database is open
-    const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+    const [isAddDialogOpen, setIsAddDialogOpen] = useState<boolean>(false);
     // whether the dialog to open a database is open
     const [isEnterPasswordDialogOpen, setIsEnterPasswordDialogOpen] = useState(false);
     const [databaseToDelete, setDatabaseToDelete] = useState<string | null>(null);
@@ -56,7 +50,7 @@ export const useLoginViewModel = (
      * @param name the name of the database
      * @param masterPassword the masterpassword that gets used for encryption
      */
-     const createDatabase = (name: string, masterPassword: string) => {
+    const createDatabase = (name: string, masterPassword: string) => {
         setLoadingScreenActive(true);
         if (!isNameAvailable(name)) {
             setLoadingScreenActive(false);
