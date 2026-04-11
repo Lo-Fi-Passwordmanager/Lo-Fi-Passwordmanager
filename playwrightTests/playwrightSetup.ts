@@ -1,6 +1,6 @@
-import { test as base } from '@playwright/test'
-import fs from 'fs'
-import path from 'path'
+import {test as base} from "@playwright/test";
+import fs from "fs";
+import path from "path";
 
 export const test = base.extend({
     page: async ({ page }, use) => {

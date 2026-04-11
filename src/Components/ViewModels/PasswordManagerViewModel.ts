@@ -1,6 +1,10 @@
 import {decodeChange, getActorId} from "@automerge/automerge";
 import {
-    BroadcastChannelNetworkAdapter, type DocHandle, type DocHandleChangePayload, getChanges, getObjectId,
+    BroadcastChannelNetworkAdapter,
+    type DocHandle,
+    type DocHandleChangePayload,
+    getChanges,
+    getObjectId,
     IndexedDBStorageAdapter,
     type NetworkAdapterInterface,
     Repo,
@@ -10,7 +14,7 @@ import {useEffect, useState} from "react";
 import {useIdleTimer} from "react-idle-timer";
 
 import {useToast} from "./Provider/ToastProviderViewModel.ts";
-import {PeerjsNetworkAdapter} from "../../../customNetworkAdapter/PeerJsNetworkAdapter.ts";
+import {PeerjsNetworkAdapter} from "../../customNetworkAdapter/PeerJsNetworkAdapter.ts";
 import type {AutomergeDoc} from "../../Model/Automerge/AutomergeDoc.ts";
 import type {Item} from "../../Model/Item.ts";
 import {Settings, useSettings} from "../../Model/Settings.ts";
@@ -45,7 +49,7 @@ export const usePasswordManagerViewModel = () => {
         storage: new IndexedDBStorageAdapter()
     }));
 
-    const [showToast, removeToast] = useToast()
+    const [showToast, removeToast] = useToast();
 
     //Whenever something about the synchronisation happens, the old adapters get removed and new ones get added.
     //This enables the repo to be kept as state while still changing the adapters
@@ -86,11 +90,11 @@ export const usePasswordManagerViewModel = () => {
 
     useEffect(() => {
         if (connectorsSize > oldP2PSize) {
-            showToast("Neue PeerToPeer Verbindung aufgebaut.")
+            showToast("Neue PeerToPeer Verbindung aufgebaut.");
         }
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setOldP2PSize(connectorsSize);
-    }, [connectorsSize, oldP2PSize]);
+    }, [connectorsSize, oldP2PSize, showToast]);
 
     // recognize changes from remote
     useEffect(() => {
@@ -103,7 +107,7 @@ export const usePasswordManagerViewModel = () => {
             const localActorId = getActorId(payload.doc);
             const remoteDeleted: string[] = [];
 
-            const newChanges = getChanges(payload.patchInfo.before, payload.patchInfo.after)
+            const newChanges = getChanges(payload.patchInfo.before, payload.patchInfo.after);
 
             const changesFromRemote = newChanges.some(change => {
                 const decoded = decodeChange(change);
@@ -150,7 +154,7 @@ export const usePasswordManagerViewModel = () => {
             if (handle && typeof handleRemoteChange === "function") {
                 handle.off("change", handleRemoteChange);
             }
-        }
+        };
     }, [automergeFacade, itemsDeleted, repo]);
 
 
@@ -167,14 +171,14 @@ export const usePasswordManagerViewModel = () => {
         securityProvider.clearKey();
     }
 
-    const [toastId, setToastId] = useState<number>(-1)
+    const [toastId, setToastId] = useState<number>(-1);
 
     const onIdle = () => {
         if (Settings.getSettings().getTimeoutActive() && loggedIn) {
             closeLoggedIn();
             removeToast(toastId);
             const id = showToast("Der Nutzer wurde auf Grund von Inaktivität automatisch abgemeldet.", -1);
-            setToastId(id)
+            setToastId(id);
         }
     };
 
@@ -205,6 +209,6 @@ export const usePasswordManagerViewModel = () => {
         setLoggedIn,
         setAutomergeFacade,
         getAutomergeFacade,
-        closeLoggedIn,
+        closeLoggedIn
     };
 };

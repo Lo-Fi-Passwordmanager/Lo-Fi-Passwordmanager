@@ -1,17 +1,19 @@
 import Peer, {type DataConnection} from "peerjs";
 import {useEffect, useState} from "react";
 
-import {PeerjsNetworkAdapter} from "../../customNetworkAdapter/PeerJsNetworkAdapter.ts";
+import {PeerjsNetworkAdapter} from "../customNetworkAdapter/PeerJsNetworkAdapter.ts";
 import {
     loadDarkModeSetting,
-    loadP2PSetting, loadRmRfSetting,
+    loadP2PSetting,
+    loadRmRfSetting,
     loadSelectedServerURLs,
     loadServers,
     loadSynchronizationSettings,
     loadTimeoutLength,
     loadTimeoutSettings,
     storeDarkModeSetting,
-    storeP2PSetting, storeRmRfSetting,
+    storeP2PSetting,
+    storeRmRfSetting,
     storeSelectedServers,
     storeServers,
     storeSynchronizationSettings,
@@ -184,6 +186,7 @@ export class Settings {
     public getSynchronization(): boolean {
         return this._synchronization;
     }
+
     public getRecursiveDelete(): boolean {
         return this._recursiveDelete;
     }

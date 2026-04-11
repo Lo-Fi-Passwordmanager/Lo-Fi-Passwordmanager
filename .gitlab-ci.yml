@@ -46,7 +46,7 @@ playwright:
   allow_failure: true
   image: mcr.microsoft.com/playwright:v1.58.2-noble
   script:
-    - yarn e2e
+    - yarn playwright
 
 # Uploads the test report to the server
 test-report:
@@ -86,8 +86,8 @@ playwright-coverage-report:
       - ./playwright-coverage
   script:
     - chmod og= $ID_ED25519
-    - yarn e2e:coverage || true
-    - yarn e2e:report || true
+    - yarn playwright:coverage || true
+    - yarn playwright:report || true
     - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'cd /home/ubuntu/automerge/reports/playwright-coverage/ && rm -rf *'
     - scp -i $ID_ED25519 -o StrictHostKeyChecking=no -r ./playwright-coverage/** $SERVER_USER@$SERVER_IP:/home/ubuntu/automerge/reports/playwright-coverage/
     - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'cd /home/ubuntu/automerge/reports/playwright-coverage/ && sed -i "s/src=\"/src=\"ecov\//g" index.html && sed -i "s/href=\"/href=\"ecov\//g" index.html && sed -i "s/href=\"ecov\/https:\/\//href=\"https:\/\//g" index.html'
@@ -110,7 +110,7 @@ playwright-report:
       - ./playwright-report
   script:
     - chmod og= $ID_ED25519
-    - yarn e2e || true
+    - yarn playwright || true
     - ssh -i $ID_ED25519 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'cd /home/ubuntu/automerge/reports/playwright/ && rm -rf *'
     - scp -i $ID_ED25519 -o StrictHostKeyChecking=no -r ./playwright-report/** $SERVER_USER@$SERVER_IP:/home/ubuntu/automerge/reports/playwright/
 
