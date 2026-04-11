@@ -1,6 +1,7 @@
 import React, {type PropsWithChildren} from "react";
 import {HiOutlineQrcode} from "react-icons/hi";
-import QRCode from "react-qr-code";
+// @ts-expect-error This library has a problem with vite 8.0.0 and above, this seems to fix that
+import {QRCode} from "react-qr-code";
 
 import Dialog from "./Dialog.tsx";
 import {useGenericDialogViewModel} from "../../ViewModels/Dialog/GenericDialogViewModel.ts";
