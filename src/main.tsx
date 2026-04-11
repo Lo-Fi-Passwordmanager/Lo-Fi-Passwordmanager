@@ -5,6 +5,7 @@ import {createRoot} from "react-dom/client";
 import {LoadingScreenProvider} from "./Components/Views/Provider/LoadingScreenProvider.tsx";
 import PasswordManagerView from "./Components/Views/PasswodManagerView.tsx";
 import "./styles.css";
+import {BrowserRouter} from "react-router";
 import {ToastProvider} from "./Components/Views/Provider/ToastProvider.tsx";
 
 
@@ -18,10 +19,12 @@ declare global {
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
-        <LoadingScreenProvider>
-            <ToastProvider>
-                <PasswordManagerView/>
-            </ToastProvider>
-        </LoadingScreenProvider>
+        <BrowserRouter>
+            <LoadingScreenProvider>
+                <ToastProvider>
+                    <PasswordManagerView/>
+                </ToastProvider>
+            </LoadingScreenProvider>
+        </BrowserRouter>
     </StrictMode>
 );
