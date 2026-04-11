@@ -7,21 +7,22 @@ import type {
     NetworkAdapterInterface,
     PeerId,
     RepoMessage,
-    StorageId,
+    StorageId
 } from "@automerge/automerge-repo";
+
 export type {
     Message,
     NetworkAdapterEvents,
     NetworkAdapterInterface,
     PeerId,
     RepoMessage,
-    StorageId,
+    StorageId
 };
 
 /**
  * @peerjs
  */
-export type { DataConnection } from "peerjs";
+export type {DataConnection} from "peerjs";
 
 /**
  * @internal
@@ -29,7 +30,7 @@ export type { DataConnection } from "peerjs";
  *    MessageChannelNetworkAdapter
  *    https://github.com/automerge/automerge-repo/blob/main/packages/automerge-repo-network-messagechannel/src/index.ts
  */
-export type { PeerjsNetworkAdapter } from "./PeerJsNetworkAdapter.ts";
+export type {PeerjsNetworkAdapter} from "./PeerJsNetworkAdapter.ts";
 
 export type IODirection = "incoming" | "outgoing";
 export type NetworkMessage = ArriveMessage | WelcomeMessage | Message;

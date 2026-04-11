@@ -12,10 +12,10 @@ import {defineConfig, devices} from "@playwright/test";
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-    testDir: "./e2e",
+    testDir: "./playwrightTests",
     /* Run tests in files in parallel */
     fullyParallel: true,
-    /* Fail the build on CI if you accidentally left test.only in the source code. */
+    /* @ts-ignore Fail the build on CI if you accidentally left test.only in the source code. */
     forbidOnly: !!process.env.CI,
     /* Retry on CI only */
     retries: 2,
@@ -25,7 +25,7 @@ export default defineConfig({
     reporter: "html",
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
     use: {
-        /* Base URL to use in actions like `await page.goto('')`. */
+        /* @ts-ignore Base URL to use in actions like `await page.goto('')`. */
         baseURL: process.env.DEPLOYMENT_URL ?? "http://localhost:5173",
 
         /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
@@ -34,7 +34,7 @@ export default defineConfig({
 
     timeout: 30000,
 
-    /* Configure projects for major browsers */
+    /* @ts-ignore Configure projects for major browsers */
     projects: process.env.COVERAGE
         ? [
             {
@@ -55,6 +55,7 @@ export default defineConfig({
 
     // Run your local dev server before starting the tests */
     webServer: {
+        // @ts-ignore
         command: process.env.COVERAGE
             ? "cross-env E2E=true VITE_COVERAGE=true yarn dev"
             :

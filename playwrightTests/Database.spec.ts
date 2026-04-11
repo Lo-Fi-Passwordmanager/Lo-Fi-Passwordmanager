@@ -2,7 +2,7 @@ import {expect, test} from "./playwrightSetup";
 
 test("create a new DB, delete it and add it again via URL", async ({page}) => {
 
-    if (page.context().browser() && page.context().browser().browserType().name() == "chromium") {
+    if (page.context().browser() && page.context().browser()?.browserType().name() == "chromium") {
         await page.context().grantPermissions(["clipboard-read", "clipboard-write"]);
     }
 
@@ -112,7 +112,7 @@ test("create a Database and rename it", async ({page}) => {
 
 test("add a database with a link", async ({page}) => {
     await page.goto("");
-    await page.routeFromHAR("./e2e/har/findDatabase.har", {update: false});
+    await page.routeFromHAR("./playwrightTests/har/findDatabase.har", {update: false});
     await expect(page.getByRole("img", {name: "Passwortmanager Logo"})).toBeVisible();
 
     await page.getByRole("button", {name: "Neue Datenbank erstellen"}).click();
