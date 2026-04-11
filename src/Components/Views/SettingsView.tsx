@@ -1,5 +1,5 @@
 import React from "react";
-import {HiTrash, HiCheckCircle, HiDotsCircleHorizontal} from "react-icons/hi";
+import {HiCheckCircle, HiDotsCircleHorizontal, HiTrash} from "react-icons/hi";
 import {HiMiniCog8Tooth, HiMiniMinus, HiMiniPlus} from "react-icons/hi2";
 
 import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
@@ -154,11 +154,17 @@ const SettingsView: React.FC<{
                                                  justifyContent: "space-between",
                                                  width: "100%"
                                              }}> {/* for some reason are the styles from the css not applying */}
-                                            <div className={"input-with-qr-container"} style={{position:"relative", width: "100%"}}>
+                                            <div className={"input-with-qr-container"}
+                                                 style={{position: "relative", width: "100%"}}>
                                                 <input type="text"
-                                                   value={viewModel.remotePeerId}
-                                                   onChange={(e) => viewModel.setRemotePeerId(e.target.value)}
-                                                       style={{paddingRight: "40px", textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap"}}
+                                                       value={viewModel.remotePeerId}
+                                                       onChange={(e) => viewModel.setRemotePeerId(e.target.value)}
+                                                       style={{
+                                                           paddingRight: "40px",
+                                                           textOverflow: "ellipsis",
+                                                           overflow: "hidden",
+                                                           whiteSpace: "nowrap"
+                                                       }}
                                                 />
                                                 <GenericQRScannerDialog title={"Peer verbinden"}
                                                                         callback={(id: string) => viewModel.connectToPeer(id)}
@@ -178,37 +184,39 @@ const SettingsView: React.FC<{
 
                                 {viewModel.otherPeerMap.size > 0 && viewModel.P2P && (
                                     <>
-                                    <span>Verbundene Peers:</span>
-                                    <div className="scrollableContainer server-list">
+                                        <span>Verbundene Peers:</span>
+                                        <div className="scrollableContainer server-list">
 
-                                        {Array.from(viewModel.otherPeerMap.keys()).map((id) => (
-                                            <div className="server-item" key={id}>
-                                                <button
-                                                    style={{
-                                                        display: "block",
-                                                        whiteSpace: "nowrap",
-                                                        overflow: "hidden",
-                                                        textOverflow: "ellipsis",
-                                                        flex: 1
-                                                    }}
-                                                >
-                                                    <span>{id}</span>
-                                                </button>
+                                            {Array.from(viewModel.otherPeerMap.keys()).map((id) => (
+                                                <div className="server-item" key={id}>
+                                                    <button
+                                                        style={{
+                                                            display: "block",
+                                                            whiteSpace: "nowrap",
+                                                            overflow: "hidden",
+                                                            textOverflow: "ellipsis",
+                                                            flex: 1
+                                                        }}
+                                                    >
+                                                        <span>{id}</span>
+                                                    </button>
 
                                                     <span>
-                                                        {viewModel.otherPeerMap.get(id)![1].isReady() ? <HiCheckCircle/> : <HiDotsCircleHorizontal/>}
+                                                        {viewModel.otherPeerMap.get(id)![1].isReady() ?
+                                                            <HiCheckCircle/> : <HiDotsCircleHorizontal/>}
                                                     </span>
 
-                                                <button
-                                                    className="squareButton"
-                                                    onClick={() => void viewModel.removePeer(id)}
-                                                    title={"Peer entfernen"}
-                                                >
-                                                    <HiTrash size={24}/>
-                                                </button>
+                                                    <button
+                                                        className="squareButton"
+                                                        onClick={() => void viewModel.removePeer(id)}
+                                                        title={"Peer entfernen"}
+                                                    >
+                                                        <HiTrash size={24}/>
+                                                    </button>
                                                 </div>
                                             ))}
-                                        </div></>)}
+                                        </div>
+                                    </>)}
                             </div>
                         </div>
                     )}
@@ -294,9 +302,9 @@ const SettingsView: React.FC<{
                                 </button>
 
                                 <button
-                                    onClick={() => window.open("https://github.com/rosskhanas/react-qr-code", "_blank")}
+                                    onClick={() => window.open("https://github.com/zpao/qrcode.react", "_blank")}
                                     style={{padding: "8px 15px", cursor: "pointer"}}>
-                                    React QR Code
+                                    qrcode.react
                                 </button>
                             </div>
 
