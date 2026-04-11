@@ -21,7 +21,9 @@
     "integration": "cross-env INTEGRATION=true vitest run",
     "integration:coverage": "cross-env INTEGRATION=true vitest run --coverage",
     "predeploy": "yarn run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "translations:sort": "node scripts/sort_translations.js",
+    "translations:compare": "node scripts/compare_translations.js"
   },
   "dependencies": {
     "@automerge/automerge": "^3.2.2",
