@@ -1,6 +1,6 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {HiTrash, HiCheckCircle, HiDotsCircleHorizontal} from "react-icons/hi";
+import {HiCheckCircle, HiDotsCircleHorizontal, HiTrash} from "react-icons/hi";
 import {HiMiniCog8Tooth, HiMiniMinus, HiMiniPlus} from "react-icons/hi2";
 
 import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
@@ -25,7 +25,7 @@ const SettingsView: React.FC<{
     closeDatabase?: () => void,
 }> = ({automergeFacade, openedDbName, closeDatabase}) => {
     const viewModel = useSettingsViewModel();
-    const { i18n } = useTranslation();
+    const { i18n, t } = useTranslation();
 
 
     if (!viewModel.settingsOpen) {
@@ -46,18 +46,18 @@ const SettingsView: React.FC<{
             <div className="settings-layout">
                 {/* Sidebar Navigation */}
                 <aside className="settings-sidebar">
-                    <h2 style={{alignSelf: "flex-start"}}>Einstellungen</h2>
+                    <h2 style={{alignSelf: "flex-start"}}>{t("settings.title")}</h2>
                     <button className={`settings-tab ${viewModel.activeTab === "general" ? "active" : ""}`}
                             onClick={() => viewModel.setActiveTab("general")}>
-                        Allgemeine Einstellungen
+                        {t("settings.subsettings.general")}
                     </button>
                     <button className={`settings-tab ${viewModel.activeTab === "database" ? "active" : ""}`}
                             onClick={() => viewModel.setActiveTab("database")}>
-                        Datenbankeinstellungen
+                        {t("settings.subsettings.database")}
                     </button>
                     <button className={`settings-tab ${viewModel.activeTab === "about" ? "active" : ""}`}
                             onClick={() => viewModel.setActiveTab("about")}>
-                        Über die App
+                        {t("settings.subsettings.about")}
                     </button>
                 </aside>
 
@@ -66,44 +66,44 @@ const SettingsView: React.FC<{
                 <main className="scrollableContainer settings-content">
                     {viewModel.activeTab === "general" && (
                         <div className="settingsContainer">
-                            <h3>Allgemeine Einstellungen</h3>
+                            <h3>{t("settings.subsettings.general")}</h3>
 
                             <select onChange={viewModel.handleLanguageChange} value={i18n.resolvedLanguage}>
-                                <option value='en'>English</option>
-                                <option value='de'>Deutsch</option>
+                                <option value='en'>{t("settings.language.english")}</option>
+                                <option value='de'>{t("settings.language.german")}</option>
                             </select>
 
                             <label className="checkboxRow">
                                 <SliderCheckBox checked={viewModel.darkMode} toggleChecked={viewModel.toggleDarkMode}/>
-                                Dark-Mode
+                                {t("settings.toggles.dark_mode")}
                             </label>
 
                             <label className="checkboxRow">
                                 <SliderCheckBox checked={viewModel.synchronisation}
                                                 toggleChecked={viewModel.toggleSynchronisation}/>
-                                Server Synchronisation
+                                {t("settings.toggles.server_sync")}
                             </label>
 
                             <label className="checkboxRow">
                                 <SliderCheckBox checked={viewModel.P2P} toggleChecked={viewModel.toggleP2P}/>
-                                Peer-to-Peer Synchronisation
+                                {t("settings.toggles.p2p_sync")}
                             </label>
 
                             <label className="checkboxRow">
                                 <SliderCheckBox checked={viewModel.timeOutActive}
                                                 toggleChecked={viewModel.toggleTimeOutActive}/>
-                                Bei Inaktivität abmelden
+                                {t("settings.toggles.inactivity")}
                             </label>
 
                             <label className="checkboxRow">
                                 <SliderCheckBox checked={viewModel.recursiveDelete}
                                                 toggleChecked={() => viewModel.toggleRecursiveDelete()}/>
-                                Rekursives löschen von Ordnereinträgen
+                                {t("settings.toggles.recursive_delete")}
                             </label>
 
                             {viewModel.timeOutActive && (
                                 <div className={"timeout-setting"}>
-                                    <label>Minuten bis Abmeldung: </label>
+                                    <label>{t("settings.inactivity.title")}</label>
                                     <div className={"numberInput"}>
                                         <input type="number" style={{maxHeight: "2.5rem"}}
                                                value={viewModel.timeoutLength}
@@ -128,8 +128,8 @@ const SettingsView: React.FC<{
                                 {!viewModel.P2P ? null :
                                     <div className={"connection-settings"}>
 
-                                        <h4>Peer-To-Peer Verbindung</h4>
-                                        <label>Eigene Peer-ID:</label>
+                                        <h4>{t("settings.p2p.title")}</h4>
+                                        <label>{t("settings.p2p.own")}</label>
 
                                         <div style={{
                                             display: "flex",
@@ -144,15 +144,12 @@ const SettingsView: React.FC<{
                                                 attributeValue={viewModel.getPeerId()}
                                                 style={{marginLeft: "0"}}
                                             />
-                                            <GenericQRDialog title={"Peer-ID teilen"}
+                                            <GenericQRDialog title={t("settings.p2p.share")}
                                                              qrValue={viewModel.getPeerId()}>
-                                                <p>Scanne den QR-Code auf einem anderen Gerät in den Einstellungen
-                                                   unter &quot;Allgemeine
-                                                   Einstellungen&quot; &rarr; &quot;Peer-To-Peer
-                                                   Verbindung&quot;</p>
+                                                <p>{t("settings.p2p.scan_qr")}</p>
                                             </GenericQRDialog>
                                         </div>
-                                        <label>Fremde Peer-ID:</label>
+                                        <label>{t("settings.p2p.other_peer")}</label>
                                         <div className={"peer-connection-input"}
                                              style={{
                                                  display: "flex",
@@ -177,7 +174,7 @@ const SettingsView: React.FC<{
                                                 onClick={() => viewModel.connectToPeer()}
                                                 title={"Mit Peer verbinden"}
                                             >
-                                                Verbinden
+                                                {t("settings.p2p.connect")}
                                             </button>
                                         </div>
                                     </div>
@@ -185,7 +182,7 @@ const SettingsView: React.FC<{
 
                                 {viewModel.otherPeerMap.size > 0 && viewModel.P2P && (
                                     <>
-                                    <span>Verbundene Peers:</span>
+                                    <span>{t("settings.p2p.connected_peers")}</span>
                                     <div className="scrollableContainer server-list">
 
                                         {Array.from(viewModel.otherPeerMap.keys()).map((id) => (
@@ -222,13 +219,13 @@ const SettingsView: React.FC<{
 
                     {viewModel.activeTab === "database" && (
                         <div className="settingsContainer">
-                            <h3>Datenbankeinstellungen</h3>
+                            <h3>{t("settings.subsettings.database")}</h3>
                             {automergeFacade ? (
                                 <DatabaseSettingsView automergeFacade={automergeFacade}
                                                       openedDatabaseName={openedDbName}
                                                       closeDatabase={closeDatabase!}/>
                             ) : (
-                                <p>Bitte Datenbank auswählen.</p>
+                                <p>{t("settings.database.none")}</p>
                             )}
                         </div>
                     )}
@@ -242,23 +239,17 @@ const SettingsView: React.FC<{
                             gap: "20px"
                         }}>
                             <div>
-                                <h2 style={{marginBottom: "5px"}}>Über diese Anwendung</h2>
+                                <h2 style={{marginBottom: "5px"}}>{t("settings.subsettings.about")}</h2>
                             </div>
 
                             <section>
-                                <p><strong>Version:</strong> 1.0.0</p>
-                                <p><strong>Lizenz:</strong> MIT License</p>
+                                <p><strong>{t("settings.about.version")}</strong> 1.0.0</p>
+                                <p><strong>{t("settings.about.license")}</strong> MIT License</p>
                             </section>
 
                             <section className="about-section">
                                 <p>
-                                    Dies ist eine kollaborative Anwendung zur Datenverwaltung.
-                                    Dabei wird die Datenspeicherung und Übertragung mithilfe der Automerge
-                                    Bibliothek
-                                    implementiert.
-
-                                    Zusätzlich benutzt werden die Bibliotheken Idle Timer, React DnD Kit, React
-                                    Icons, QR Scanner und React QR Code.
+                                    {t("settings.about.info")}
                                 </p>
                             </section>
 
@@ -311,7 +302,7 @@ const SettingsView: React.FC<{
                                      style={{fontSize: "0.8em", opacity: 0.7, marginTop: "20px"}}>
                                 <p>Copyright © {new Date().getFullYear()}</p>
                                 <p style={{maxWidth: "500px"}}>
-                                    Die Software wird &quot;wie besehen&quot; bereitgestellt, ohne jegliche Haftung.
+                                    {t("settings.about.license_notice")}
                                     <br/>
                                     <a href={"https://opensource.org/license/mit"}>
                                         MIT-Lizenz

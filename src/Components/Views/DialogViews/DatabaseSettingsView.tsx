@@ -54,7 +54,7 @@ const DatabaseSettingsView: React.FC<{
                     style={{gap: "0.2rem"}}
                     onClick={() => {
                         viewModel.setInDeletion(true);
-                    }}><HiTrash size={24}/> {t("delete_db")}
+                    }}><HiTrash size={24}/> {t("common.delete_db")}
                 </button>
 
                 {viewModel.inDeletion && (<DeleteConfirmationDialog

@@ -3,7 +3,9 @@
     "copy_db_id": "Datenbank ID kopieren",
     "delete_db": "Datenbank lokal löschen",
     "entry": "Eintrag",
-    "folder": "Ordner"
+    "folder": "Ordner",
+    "new_entry": "Neuer Eintrag",
+    "new_folder": "Neuer Ordner"
   },
   "button": {
     "copy_clipboard": "In Zwischenablage kopieren",
@@ -40,6 +42,44 @@
     }
   },
   "settings": {
+    "title": "Einstellungen",
+    "subsettings": {
+      "general": "Allgemeine Einstellungen",
+      "database": "Datenbankeinstellungen",
+      "about": "Über die App"
+    },
+    "language": {
+      "english": "Englisch",
+      "german": "Deutsch"
+    },
+    "toggles": {
+      "dark_mode": "Dark-Mode",
+      "server_sync": "Server Synchronisation",
+      "p2p_sync": "Peer-to-Peer Synchronisation",
+      "inactivity": "Bei Inaktivität abmelden",
+      "recursive_delete": "Rekursives löschen von Ordnereinträgen"
+    },
+    "inactivity": {
+      "title": "Minuten bis Abmeldung:"
+    },
+    "p2p": {
+      "title": "Peer-To-Peer Verbindung",
+      "own": "Eigene Peer-ID:",
+      "share": "Peer-ID teilen",
+      "scan_qr": "Scanne den QR-Code auf einem anderen Gerät in den Einstellungen unter \"Einstellungen\" → \"Peer-To-Verbindung\"",
+      "connect": "Verbinden",
+      "connected_peers": "Verbundene Peers:",
+      "other_peer": "Fremde Peer-ID:"
+    },
+    "database": {
+      "none": "Bitte Datenbank auswählen."
+    },
+    "about": {
+      "version": "Version: ",
+      "license": "Lizenz: ",
+      "info": "Dies ist eine kollaborative Anwendung zur Datenverwaltung. Dabei wird die Datenspeicherung und Übertragung mithilfe der Automerge Bibliothek implementiert.\n Zusätzlich benutzt werden die Bibliotheken Idle Timer, React DnD Kit, React Icons, QR Scanner und React QR Code.",
+      "license_notice": "Die Software wird \"wie besehen\" bereitgestellt, ohne jegliche Haftung."
+    },
     "export_encrypted": "Verschlüsselt Exportieren",
     "export_unencrypted": "Unverschlüsselt Exportieren"
   },
@@ -71,7 +111,7 @@
   "loading": {
     "title": "Lädt"
   },
-  "pw_gen" : {
+  "pw_gen": {
     "length": "Passwort-Länge:",
     "uppercase": "Großbuchstaben:",
     "lowercase": "Kleinbuchstaben",
@@ -83,10 +123,13 @@
   },
   "share_db": {
     "title": "Datenbank teilen",
-    "scan_qr" : "Scanne den QR-Code auf einem anderen Gerät im \"Datenbank hinzufügen\" Dialog, um die Datenbank mit dem Namen \"{{name}}\" dort hinzuzufügen.",
+    "scan_qr": "Scanne den QR-Code auf einem anderen Gerät im \"Datenbank hinzufügen\" Dialog, um die Datenbank mit dem Namen \"{{name}}\" dort hinzuzufügen.",
     "share_name": "Name der Datenbank auch teilen",
-
     "import": "Datenbank importieren",
     "invalid_qr": "Ungültiger QR Code"
+  },
+  "just_synced": "Synchronisiert.",
+  "pw_view": {
+
   }
 }

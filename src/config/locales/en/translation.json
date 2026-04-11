@@ -1,53 +1,129 @@
 {
-  "common":{
-    "copy_db_id" : "Copy database ID",
-    "delete_db" : "Delete database",
+  "common": {
+    "copy_db_id": "Copy Database ID",
+    "delete_db": "Delete database locally",
     "entry": "Entry",
     "folder": "Folder"
   },
   "button": {
-    "copy_clipboard" : "Copy to clipboard",
-    "add" : "Add",
-    "confirm" : "Confirm",
-    "cancel" : "Cancel",
-    "hide_password" : "Hide password",
-    "show_password" : "Show password",
-    "change_custom_sorting" : "Change custom sorting",
-    "regroup_items" : "Move entries and folders",
+    "copy_clipboard": "Copy to clipboard",
+    "add": "Add",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "hide_password": "Hide password",
+    "show_password": "Show password",
+    "change_custom_sorting": "Adjust custom sorting",
+    "regroup_items": "Move entries and folders",
     "delete": "Delete"
   },
   "add_server": {
-    "title" : "Add server",
-    "placeholder_name" : "My server",
-    "placeholder_url" : "wss://my.sync-server.org"
+    "title": "Add server",
+    "placeholder_name": "My Server",
+    "placeholder_url": "wss://my.sync-server.org"
   },
   "add_database": {
     "placeholder": {
-      "name" : "Database name",
-      "password" : "Master password",
-      "id" : "Database ID"
+      "name": "Database name",
+      "password": "Master password",
+      "id": "Database ID"
     },
     "create_new": {
-      "title" : "Add new Database",
-      "choose_action" : "Choose action:",
-      "choose_file" : "Select file",
+      "title": "Add new database",
+      "choose_action": "Choose action:",
+      "choose_file": "Select file",
       "action": {
-        "new" : "Create new database",
-        "url" : "Load existing database",
-        "file_encrypted" : "Import encrypted database",
-        "file_plain" : "Import unencrypted database"
+        "new": "Create new database",
+        "url": "Load existing database",
+        "file_encrypted": "Import encrypted database",
+        "file_plain": "Import unencrypted database"
       }
     }
   },
   "settings": {
-    "export_encrypted" : "Export encrypted",
-    "export_unencrypted" : "Export unencrypted"
+    "title": "Settings",
+    "subsettings": {
+      "general": "General settings",
+      "database": "Database settings",
+      "about": "About the app"
+    },
+    "language": {
+      "english": "English",
+      "german": "German"
+    },
+    "toggles": {
+      "dark_mode": "Dark Mode",
+      "server_sync": "Server synchronization",
+      "p2p_sync": "Peer-to-Peer synchronization",
+      "inactivity": "Log out on inactivity",
+      "recursive_delete": "Recursive deletion of folder entries"
+    },
+    "inactivity": {
+      "title": "Minutes until logout:"
+    },
+    "p2p": {
+      "title": "Peer-To-Peer Connection",
+      "own": "Your Peer-ID:",
+      "share": "Share Peer-ID",
+      "scan_qr": "Scan the QR code on another device in the settings under \"Settings\" → \"Peer-to-Peer Connection\"",
+      "connect": "Connect",
+      "connected_peers": "Connected peers:"
+    },
+    "database": {
+      "none": "Please select a database."
+    },
+    "about": {
+      "version": "Version: ",
+      "license": "License: ",
+      "info": "This is a collaborative application for data management. Data storage and transmission are implemented using the Automerge library.\n In addition, the libraries Idle Timer, React DnD Kit, React Icons, QR Scanner, and React QR Code are used.",
+      "license_notice": "The software is provided \"as is\", without any liability."
+    },
+    "export_encrypted": "Export Encrypted",
+    "export_unencrypted": "Export Unencrypted"
   },
   "dialog": {
     "confirm_delete": {
       "title": "Confirm deletion",
-      "//commentar": "Wird in DeleteConfirmationDialog.tsx verwendet, mit den {{<var>}} kann man placeholder in die translations packen",
-      "text": "Do you really want to delete the {{delete_type}} \"<strong>{{item_title}}</strong>\"?"
+      "text": "Are you sure you want to delete the {{delete_type}} \"<strong>{{item_title}}</strong>\"?"
     }
-  }
+  },
+  "history": {
+    "title": "Change History",
+    "last_change": "Last change: ",
+    "delete": {
+      "folder": "Folder deleted",
+      "entry": "Entry deleted"
+    },
+    "update": {
+      "folder": "Folder edited",
+      "entry": "Entry edited"
+    },
+    "move": {
+      "folder": "Folder moved",
+      "entry": "Entry moved"
+    }
+  },
+  "item_creation": {
+    "title": "Create new element"
+  },
+  "loading": {
+    "title": "Loading"
+  },
+  "pw_gen": {
+    "length": "Password length:",
+    "uppercase": "Uppercase letters:",
+    "lowercase": "Lowercase letters:",
+    "numbers": "Numbers",
+    "special": "Special characters:"
+  },
+  "rename_db": {
+    "title": "Rename database:"
+  },
+  "share_db": {
+    "title": "Share database",
+    "scan_qr": "Scan the QR code on another device in the \"Add database\" dialog to add the database named \"{{name}}\" there.",
+    "share_name": "Also share the database name",
+    "import": "Import database",
+    "invalid_qr": "Invalid QR code"
+  },
+  "just_synced": "Synchronized."
 }

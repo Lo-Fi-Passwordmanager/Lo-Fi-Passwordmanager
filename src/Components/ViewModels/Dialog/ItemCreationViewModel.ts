@@ -3,6 +3,7 @@ import {useState} from "react";
 import {Entry} from "../../../Model/Entry.ts";
 import {Folder} from "../../../Model/Folder.ts";
 import type {Item} from "../../../Model/Item.ts";
+import {useTranslation} from "react-i18next";
 
 /**
  * The Viewmodel for {@link ItemCreationDialog}
@@ -20,15 +21,16 @@ export const useItemCreationViewModel = (
     const [url, setUrl] = useState("");
     const [note, setNote] = useState("");
     const [inPasswordGen, setInPasswordGen] = useState(false);
+    const {t} = useTranslation();
 
     function createEntry() {
-        const entry = new Entry("Neuer Eintrag", "willBeAutomaticallySet", new Date(), new Date(), "", "", "", "");
+        const entry = new Entry(t("common.new_entry"), "willBeAutomaticallySet", new Date(), new Date(), "", "", "", "");
         addItem(entry);
         cancelItemCreation();
     }
 
     function createFolder() {
-        const folder = new Folder("Neuer Ordner", "willBeAutomaticallySet", new Date(), new Date());
+        const folder = new Folder(t("common.new_folder"), "willBeAutomaticallySet", new Date(), new Date());
         addItem(folder);
         cancelItemCreation();
     }
