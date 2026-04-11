@@ -44,6 +44,8 @@ for (const locale of fs.readdirSync(LOCALE_PATH)) {
 }
 
 for (const locale of all_locales) {
+    let had_missing_keys = false;
+    let had_missing_locale = false;
     const local_missing_namespaces = structuredClone(all_namespaces);
     const folderPath = path.join(LOCALE_PATH, locale);
     for (const namespace_file of fs.readdirSync(folderPath)) {
@@ -52,8 +54,9 @@ for (const locale of all_locales) {
     if (local_missing_namespaces.size > 0) {
         console.log(`Locale "${locale}" is missing the following namespaces present in other languages:`);
         local_missing_namespaces.forEach((entry, _) => console.log(entry));
+        had_missing_locale = true;
+        console.log("");
     }
-    console.log("");
 
     let availabe_namespaces = all_namespaces.difference(local_missing_namespaces);
 
@@ -73,6 +76,7 @@ for (const locale of all_locales) {
         missing_keys.sort();
 
         if (missing_keys.length > 0) {
+            had_missing_keys = true;
             console.log(`[${locale}] ${namespace} is missing the following keys present in other languages:`);
 
             for (const key of missing_keys) {
@@ -80,7 +84,14 @@ for (const locale of all_locales) {
             }
         }
     }
-    console.log("------------------------------");
+
+    if (!had_missing_locale) {
+        console.log("");
+    }
+
+    if (had_missing_keys || had_missing_locale) {
+        console.log("------------------------------");
+    }
 }
 
 
