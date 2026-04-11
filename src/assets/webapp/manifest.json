@@ -11,6 +11,11 @@
       "src": "logo_gelb_192.png",
       "sizes": "192x192",
       "type": "image/png"
+    },
+    {
+      "src": "logo_gelb.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
     }
   ],
   "screenshots": [
