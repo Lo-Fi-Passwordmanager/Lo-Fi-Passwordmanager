@@ -82,6 +82,8 @@ for (const locale of all_locales) {
             for (const key of missing_keys) {
                 console.log(key);
             }
+        } else {
+            console.log(`[${locale}] ${namespace} is up to date`);
         }
     }
 

@@ -60,6 +60,8 @@
       "url": "URL:",
       "username": "Nombre de usuario:"
     },
+    "delete": "Eliminar",
+    "edit": "Editar",
     "none_selected": "Ninguna entrada seleccionada",
     "save": "Guardar"
   },

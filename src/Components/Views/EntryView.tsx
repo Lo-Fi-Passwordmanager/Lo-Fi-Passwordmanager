@@ -111,13 +111,13 @@ const EntryView: React.FC<{
                             onClick={setEditableView}
                             title={"Eintrag bearbeiten"}
                         >
-                            <HiPencil size={24}/> Bearbeiten
+                            <HiPencil size={24}/> {t("entry_view.edit")}
                         </button>
                         <button className={"rectangle-button delete"}
                                 onClick={() => deleteItem(item)}
                                 title={"Eintrag löschen"}
                         >
-                            <HiTrash size={24}/>Löschen
+                            <HiTrash size={24}/>{t("entry_view.delete")}
                         </button>
                     </div>
                 </div>
