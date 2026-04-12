@@ -1,5 +1,5 @@
 import React from "react";
-import {HiTrash, HiCheckCircle, HiDotsCircleHorizontal} from "react-icons/hi";
+import {HiCheckCircle, HiDotsCircleHorizontal, HiTrash} from "react-icons/hi";
 import {HiMiniCog8Tooth, HiMiniMinus, HiMiniPlus} from "react-icons/hi2";
 
 import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
@@ -239,9 +239,12 @@ const SettingsView: React.FC<{
                                                     backgroundColor: color,
                                                 }}
                                                 onClick={() => viewModel.changeColorScheme(index)}
-                                                title={`${key} auswählen`} />
+                                                title={`${key} auswählen`}/>
                                     ))}
                                 </div>
+                                <h4>Eigene Farbe</h4>
+                                <input type="color" value={viewModel.customColor}
+                                       onChange={(e) => viewModel.setCustomColor(e.target.value)}/>
                             </div>
                         </div>
                     )}

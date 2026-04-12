@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 
 import type {PeerjsNetworkAdapter} from "../../../customNetworkAdapter/PeerJsNetworkAdapter.ts";
 import {Settings, useSettings} from "../../Model/Settings";
-import {loadActiveColorIndex, storeActiveColorIndex} from "../../Utility/Storage.ts";
+import {loadActiveColorIndex, loadCustomColor, storeActiveColorIndex, storeCustomColor} from "../../Utility/Storage.ts";
 
 
 /**
@@ -11,7 +11,7 @@ import {loadActiveColorIndex, storeActiveColorIndex} from "../../Utility/Storage
  * It uses states to reload react when changing settings, so that they get applied
  */
 export const useSettingsViewModel = () => {
-
+    const CUSTOM_COLOR_NAME = "custom_color";
     const settings = Settings.getSettings();
     const settingsHook = useSettings();
     // Reactive state to store values during runtime
@@ -28,14 +28,16 @@ export const useSettingsViewModel = () => {
     const [showToast, setShowToast] = useState<boolean>(false);
     const [toastMessage, setToastMessage] = useState<string>("");
     const [remotePeerId, setRemotePeerId] = useState("");
-    const [otherPeerMap, setOtherPeerMap] = useState<Map<string, [DataConnection, PeerjsNetworkAdapter]>>(settings.getConnectorsToAdapters())
+    const [otherPeerMap, setOtherPeerMap] = useState<Map<string, [DataConnection, PeerjsNetworkAdapter]>>(settings.getConnectorsToAdapters());
+    const [customColor, setUpCustomColor] = useState<string>(loadCustomColor());
     const colorSchemes = new Map<string, string>([["Lo-Fi Green", "#306844"],
         ["Fern", "#477831"],
-        ["Dusk","#5C80BC"],
-        ["Cherry","#B80053"],
+        ["Dusk", "#5C80BC"],
+        ["Cherry", "#B80053"],
         ["Sakura", "#e86a89"],
         ["Sunflower", "#F1B42F"],
-        ["Granite", "#848482"]]);
+        ["Granite", "#848482"],
+        [CUSTOM_COLOR_NAME, customColor],]);
     const [activeColorIndex, setActiveColorIndex] = useState<number>(loadActiveColorIndex());
     document.documentElement.setAttribute("data-theme", darkMode ? "dark" : "light");
     document.documentElement.style.setProperty("--color", Array.from(colorSchemes.values())[activeColorIndex]);
@@ -192,6 +194,12 @@ export const useSettingsViewModel = () => {
         Settings.getSettings().addConnector(id ?? remotePeerId);
     }
 
+    function setCustomColor(color: string) {
+        setUpCustomColor(color);
+        colorSchemes.set(CUSTOM_COLOR_NAME, color);
+        storeCustomColor(color);
+    }
+
 
     return {
         darkMode,
@@ -208,7 +216,9 @@ export const useSettingsViewModel = () => {
         serverStates,
         activeColorIndex,
         colorSchemes,
+        customColor,
 
+        setCustomColor,
         setActiveTab,
         setConnection,
         toggleDarkMode,
