@@ -48,7 +48,7 @@ toggleIndividualSorting
             {/*Giving each element a specific grid column to align them properly*/}
 
             {/* Button to close the database and go back to the database selection */}
-            <button className={"squareButton"} title="Datenbank schließen"
+            <button className={"squareButton"} title={t("filtered_list.desc.close")}
                     style={{gridColumn: "span 1", justifySelf: "flex-start"}}
                     onClick={() => closeDatabase()}>
                 <HiLockClosed size={18}/>
@@ -58,23 +58,11 @@ toggleIndividualSorting
                    type="text" placeholder={t("filtered_list.placeholder_search")}
                    value={liveSearchValue}
                    onChange={(event => setLiveSearchValue(event.target.value))}
-                   title={"Nach Einträgen und Ordnern suchen"}/>
-            {/* Search bar to filter the list of entries and folders */}
-            {/*<button
-                    className={"squareButton"}
-                    disabled={inEditable}
-                    style={{gridColumn: "span 1"}}
-                    onClick={() => {
-                        setItemCreationDialog();
-                    }}
-                    title="Eintrag ins zuletzt geöffnete Verzeichnis hinzufügen"
-                >
-                    <HiMiniPlus size={24}/>
-                </button> */}
+                   title={t("filtered_list.desc.search")}/>
 
             <select style={{gridColumn: "span 2", width: "100%"}} value={curSortCriterion}
                     onChange={(e) => setCurSortCriterion(e.target.value as SortCriteria)}
-                    title={"Einträge und Ordner sortieren"}>
+                    title={t("filtered_list.desc.sort")}>
                 <option value="NAME">{t("filtered_list.alphabetical")}</option>
                 <option value="CREATED">{t("filtered_list.creation")}</option>
                 <option value="EDITED">{t("filtered_list.edited")}</option>
@@ -88,7 +76,7 @@ toggleIndividualSorting
                 style={{gridColumn: "span 1", justifySelf: "flex-end"}} onClick={() => {
                 toggleOrder()
             }}
-                title={isAscending ? "Absteigend sortieren" : "Aufsteigend sortieren"}>
+                title={isAscending ? t("filtered_list.desc.sort_asc") : t("filtered_list.desc.sort_des")}>
                 {isAscending ? <HiBarsArrowDown size={24}/> : <HiBarsArrowUp size={24}/>}
             </button> : <IndividualSortingToggleButton sorting={isIndividualSorting} toggleSorting={toggleIndividualSorting}/>}
         </div>

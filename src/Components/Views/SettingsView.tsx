@@ -32,7 +32,7 @@ const SettingsView: React.FC<{
     if (!viewModel.settingsOpen) {
         return (<>
             <button className="settingsButton" onClick={() => viewModel.setSettingsOpen(true)}
-                    title="Einstellungen öffnen">
+                    title={t("settings.desc.open")}>
                 <HiMiniCog8Tooth size={24}/>
             </button>
         </>);
@@ -117,11 +117,11 @@ const SettingsView: React.FC<{
                                                min="1"/>
                                         <button className={"squareButton"} style={{boxShadow: "none"}}
                                                 onClick={viewModel.decreaseTimeout}
-                                                title={"Zeit bis Abmeldung verringern"}><HiMiniMinus size={24}/>
+                                                title={t("settings.desc.decrease_timeout")}><HiMiniMinus size={24}/>
                                         </button>
                                         <button className={"squareButton"} style={{boxShadow: "none"}}
                                                 onClick={viewModel.increaseTimeout}
-                                                title={"Zeit bis Abmeldung erhöhen"}><HiMiniPlus size={24}/></button>
+                                                title={t("settings.desc.increase_timeout")}><HiMiniPlus size={24}/></button>
                                     </div>
                                 </div>
                             )}
@@ -184,7 +184,7 @@ const SettingsView: React.FC<{
                                             <button
                                                 className="rectangle-button"
                                                 onClick={() => viewModel.connectToPeer()}
-                                                title={"Mit Peer verbinden"}
+                                                title={t("settings.p2p.connect")}
                                             >
                                                 {t("settings.p2p.connect")}
                                             </button>

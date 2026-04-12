@@ -6,6 +6,7 @@ import DatabaseListingViewModel from "../../ViewModels/Listing/DatabaseListingVi
 import CopyButton from "../ButtonViews/CopyButton.tsx";
 import RenameDatabaseDialog from "../DialogViews/RenameDatabaseDialog.tsx";
 import ShareDatabaseQRDialog from "../DialogViews/ShareDatabaseQRDialog.tsx";
+import {useTranslation} from "react-i18next";
 
 /**
  * View showing a listing of available databases with options to open, share, rename or delete them.
@@ -27,9 +28,10 @@ const DatabaseListingView: React.FC<{
       }) => {
 
     const viewModel = DatabaseListingViewModel();
+    const {t} = useTranslation();
 
     if (databases.size === 0) {
-        return <div>Keine Datenbanken vorhanden</div>;
+        return <div>{t("login.no_database")}</div>;
     } else {
         return (
             <div className="DatabaseListing">
@@ -38,13 +40,13 @@ const DatabaseListingView: React.FC<{
                     <div className={"DatabaseAndOptions"} key={dbName}>
                         <button
                             onClick={() => openDatabase(dbName)}
-                            title="Datenbank öffnen">
+                            title={t("login.open")}>
                             {dbName}
                         </button>
                         <CopyButton
                             copyToClipboard={viewModel.copyToClipboard}
                             attributeValue={url}
-                            title="Datenbank ID in die Zwischenablage kopieren"
+                            title={t("login.desc.copy_id")}
                             style={{marginLeft: "0"}}
                         />
                         <ShareDatabaseQRDialog name={dbName} url={url}/>
@@ -52,7 +54,7 @@ const DatabaseListingView: React.FC<{
                         <button
                             className={"squareButton"}
                             onClick={() => removeDatabase(dbName)}
-                            title="Datenbank entfernen">
+                            title={t("login.desc.remove")}>
                             <HiTrash size={24}/>
                         </button>
                     </div>

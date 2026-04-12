@@ -35,13 +35,21 @@
     "entry": "Eintrag",
     "folder": "Ordner",
     "new_entry": "Neuer Eintrag",
-    "new_folder": "Neuer Ordner"
+    "new_folder": "Neuer Ordner",
+    "show_qr": "QR-Code anzeigen"
   },
   "dialog": {
     "confirm_delete": {
       "text": "Willst du den {{delete_type}} \"<strong>{{item_title}}</strong>\" wirklich löschen?",
       "title": "Löschen bestätigen"
     }
+  },
+  "dot_menu": {
+    "add": "Gegenstand hinzufügen",
+    "close": "Menü schließen",
+    "delete": "Ordner löschen",
+    "open": "Menü öffnen",
+    "rename": "Ordner umbennen"
   },
   "entry_view": {
     "attributes": {
@@ -52,12 +60,21 @@
       "url": "Url:",
       "username": "Benutzername:"
     },
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
     "none_selected": "Noch kein Eintrag ausgewählt",
     "save": "Speichern"
   },
   "filtered_list": {
     "alphabetical": "Alphabetisch",
     "creation": "Erstellungsdatum",
+    "desc": {
+      "close": "Datenbank schließen",
+      "search": "Nach Einträgen und Ordnern suchen",
+      "sort": "Einträge und Ordner sortieren",
+      "sort_asc": "Absteigend sortieren",
+      "sort_des": "Aufsteigend sortieren"
+    },
     "edited": "Bearbeitungsdatum",
     "found_entries": "Gefundene Einträge",
     "found_folders": "Gefundene Ordner",
@@ -67,9 +84,16 @@
     "relevance": "Relevanz"
   },
   "history": {
+    "add": {
+      "entry": "Eintrag erstellt",
+      "folder": "Ordner erstellt"
+    },
     "delete": {
       "entry": "Eintrag gelöscht",
       "folder": "Ordner gelöscht"
+    },
+    "desc": {
+      "open": "Verlauf öffnen"
     },
     "last_change": "Letzte Änderung: ",
     "move": {
@@ -90,6 +114,12 @@
     "title": "Lädt"
   },
   "login": {
+    "desc": {
+      "add": "Neue Datenbank erstellen",
+      "copy_id": "Datenbank ID in die Zwischenablage kopieren",
+      "remove": "Datenbank entfernen"
+    },
+    "no_database": "Keine Datenbanken vorhanden",
     "open": "Datenbank öffnen"
   },
   "pw_gen": {
@@ -116,6 +146,11 @@
     "database": {
       "none": "Bitte Datenbank auswählen."
     },
+    "desc": {
+      "decrease_timeout": "Zeit bis Abmeldung verringern",
+      "increase_timeout": "Zeit bis Abmeldung erhöhen",
+      "open": "Einstellungen öffnen"
+    },
     "export_encrypted": "Verschlüsselt Exportieren",
     "export_unencrypted": "Unverschlüsselt Exportieren",
     "inactivity": {
@@ -128,7 +163,7 @@
       "spanish": "Spanisch"
     },
     "p2p": {
-      "connect": "Verbinden",
+      "connect": "Mit Peer verbinden",
       "connected_peers": "Verbundene Peers:",
       "other_peer": "Fremde Peer-ID:",
       "own": "Eigene Peer-ID:",
@@ -141,6 +176,12 @@
         "placeholder_name": "Mein Server",
         "placeholder_url": "wss://my.sync-server.org",
         "title": "Server hinzufügen"
+      },
+      "desc": {
+        "add": "Sync Server hinzufügen",
+        "connected": "Verbunden",
+        "connecting": "Verbindung wird aufgebaut...",
+        "remove": "Server entfernen"
       },
       "title": "Synchronisationsserver"
     },

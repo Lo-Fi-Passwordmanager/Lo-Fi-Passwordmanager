@@ -7,8 +7,8 @@
         "new": "Create new database",
         "url": "Load existing database"
       },
-      "choose_action": "Choose action:",
-      "choose_file": "Choose file",
+      "choose_action": "Select action:",
+      "choose_file": "Select file",
       "title": "Add new database"
     },
     "placeholder": {
@@ -31,17 +31,25 @@
   "common": {
     "copied_clipboard": "Copied to clipboard.",
     "copy_db_id": "Copy database ID",
-    "delete_db": "Delete database locally",
+    "delete_db": "Delete local database",
     "entry": "Entry",
     "folder": "Folder",
     "new_entry": "New entry",
-    "new_folder": "New folder"
+    "new_folder": "New folder",
+    "show_qr": "Show QR code"
   },
   "dialog": {
     "confirm_delete": {
       "text": "Are you sure you want to delete the {{delete_type}} \"<strong>{{item_title}}</strong>\"?",
       "title": "Confirm deletion"
     }
+  },
+  "dot_menu": {
+    "add": "Add item",
+    "close": "Close menu",
+    "delete": "Delete folder",
+    "open": "Open menu",
+    "rename": "Rename folder"
   },
   "entry_view": {
     "attributes": {
@@ -52,24 +60,40 @@
       "url": "URL:",
       "username": "Username:"
     },
-    "none_selected": "No entry selected yet",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "none_selected": "No entry selected",
     "save": "Save"
   },
   "filtered_list": {
     "alphabetical": "Alphabetical",
     "creation": "Creation date",
+    "desc": {
+      "close": "Close database",
+      "search": "Search for entries and folders",
+      "sort": "Sort entries and folders",
+      "sort_asc": "Sort descending",
+      "sort_des": "Sort ascending"
+    },
     "edited": "Edit date",
-    "found_entries": "Found entries",
-    "found_folders": "Found folders",
+    "found_entries": "Entries found",
+    "found_folders": "Folders found",
     "individual": "Individual",
     "placeholder_search": "Search...",
     "recently": "Recently used",
     "relevance": "Relevance"
   },
   "history": {
+    "add": {
+      "entry": "Entry created",
+      "folder": "Folder created"
+    },
     "delete": {
       "entry": "Entry deleted",
       "folder": "Folder deleted"
+    },
+    "desc": {
+      "open": "Open history"
     },
     "last_change": "Last change: ",
     "move": {
@@ -90,6 +114,12 @@
     "title": "Loading"
   },
   "login": {
+    "desc": {
+      "add": "Create new database",
+      "copy_id": "Copy database ID to clipboard",
+      "remove": "Remove database"
+    },
+    "no_database": "No databases available",
     "open": "Open database"
   },
   "pw_gen": {
@@ -104,7 +134,7 @@
   },
   "settings": {
     "about": {
-      "info": "This is a collaborative data management application. Data storage and transfer are implemented using the Automerge library.\n Additionally, the libraries Idle Timer, React DnD Kit, React Icons, QR Scanner, and React QR Code are used.",
+      "info": "This is a collaborative data management application. Data storage and transmission are implemented using the Automerge library.\n Additionally, the libraries Idle Timer, React DnD Kit, React Icons, QR Scanner, and React QR Code are used.",
       "license": "License: ",
       "license_notice": "The software is provided \"as is\", without any liability.",
       "version": "Version: "
@@ -115,6 +145,11 @@
     },
     "database": {
       "none": "Please select a database."
+    },
+    "desc": {
+      "decrease_timeout": "Decrease time until logout",
+      "increase_timeout": "Increase time until logout",
+      "open": "Open settings"
     },
     "export_encrypted": "Export encrypted",
     "export_unencrypted": "Export unencrypted",
@@ -128,9 +163,9 @@
       "spanish": "Spanish"
     },
     "p2p": {
-      "connect": "Connect",
+      "connect": "Connect to peer",
       "connected_peers": "Connected peers:",
-      "other_peer": "External Peer ID:",
+      "other_peer": "Remote Peer ID:",
       "own": "Your Peer ID:",
       "scan_qr": "Scan the QR code on another device in the settings under \"Settings\" → \"Peer-to-Peer Connection\"",
       "share": "Share Peer ID",
@@ -142,7 +177,13 @@
         "placeholder_url": "wss://my.sync-server.org",
         "title": "Add server"
       },
-      "title": "Synchronization server"
+      "desc": {
+        "add": "Add sync server",
+        "connected": "Connected",
+        "connecting": "Connecting...",
+        "remove": "Remove server"
+      },
+      "title": "Synchronization Server"
     },
     "subsettings": {
       "about": "About the app",
@@ -152,18 +193,18 @@
     },
     "title": "Settings",
     "toggles": {
-      "dark_mode": "Dark mode",
+      "dark_mode": "Dark Mode",
       "inactivity": "Log out on inactivity",
-      "p2p_sync": "Peer-to-peer synchronization",
+      "p2p_sync": "Peer-to-Peer Synchronization",
       "recursive_delete": "Recursive deletion of folder entries",
-      "server_sync": "Server synchronization"
+      "server_sync": "Server Synchronization"
     }
   },
   "share_db": {
     "import": "Import database",
     "invalid_qr": "Invalid QR code",
     "scan_qr": "Scan the QR code on another device in the \"Add Database\" dialog to add the database named \"{{name}}\" there.",
-    "share_name": "Also share the name of the database",
+    "share_name": "Also share database name",
     "title": "Share database"
   }
 }

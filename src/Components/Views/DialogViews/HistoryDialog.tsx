@@ -26,7 +26,7 @@ export const HistoryDialog: React.FC<{
 
     return (
         <>
-            <button
+            <button title={t("history.desc.open")}
                 onClick={() => {
                     viewModel.setHistoryOpen(true);
                     void viewModel.loadHistory();

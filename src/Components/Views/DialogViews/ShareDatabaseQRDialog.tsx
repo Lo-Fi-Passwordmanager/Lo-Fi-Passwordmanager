@@ -23,6 +23,7 @@ interface ShareDatabaseQRDialogProps {
 const ShareDatabaseQRDialog: React.FC<ShareDatabaseQRDialogProps> = ({name, url}: ShareDatabaseQRDialogProps) => {
     const viewModel = useShareDatabaseQRViewModel(name, url);
     const {t} = useTranslation();
+
     if (viewModel.shareQRCodeOpen) {
         return (
             <>
@@ -52,7 +53,7 @@ const ShareDatabaseQRDialog: React.FC<ShareDatabaseQRDialogProps> = ({name, url}
         return (
             <button
                 className="squareButton"
-                title="QR-Code anzeigen"
+                title={t("common.show_qr")}
                 onClick={() => viewModel.setShareQRCodeOpen(true)}>
                 <HiOutlineQrcode size={24}/>
             </button>

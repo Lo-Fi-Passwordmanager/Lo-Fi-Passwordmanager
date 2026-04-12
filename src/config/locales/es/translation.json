@@ -3,12 +3,12 @@
     "create_new": {
       "action": {
         "file_encrypted": "Importar base de datos cifrada",
-        "file_plain": "Importar base de datos no cifrada",
+        "file_plain": "Importar base de datos sin cifrar",
         "new": "Crear nueva base de datos",
         "url": "Cargar base de datos existente"
       },
-      "choose_action": "Elegir acción:",
-      "choose_file": "Elegir archivo",
+      "choose_action": "Seleccionar acción:",
+      "choose_file": "Seleccionar archivo",
       "title": "Añadir nueva base de datos"
     },
     "placeholder": {
@@ -31,17 +31,25 @@
   "common": {
     "copied_clipboard": "Copiado al portapapeles.",
     "copy_db_id": "Copiar ID de la base de datos",
-    "delete_db": "Eliminar base de datos localmente",
+    "delete_db": "Eliminar base de datos local",
     "entry": "Entrada",
     "folder": "Carpeta",
     "new_entry": "Nueva entrada",
-    "new_folder": "Nueva carpeta"
+    "new_folder": "Nueva carpeta",
+    "show_qr": "Mostrar código QR"
   },
   "dialog": {
     "confirm_delete": {
-      "text": "¿Realmente quieres eliminar el {{delete_type}} \"<strong>{{item_title}}</strong>\"?",
+      "text": "¿Realmente deseas eliminar el/la {{delete_type}} \"<strong>{{item_title}}</strong>\"?",
       "title": "Confirmar eliminación"
     }
+  },
+  "dot_menu": {
+    "add": "Añadir elemento",
+    "close": "Cerrar menú",
+    "delete": "Eliminar carpeta",
+    "open": "Abrir menú",
+    "rename": "Cambiar nombre de carpeta"
   },
   "entry_view": {
     "attributes": {
@@ -52,12 +60,21 @@
       "url": "URL:",
       "username": "Nombre de usuario:"
     },
+    "delete": "Eliminar",
+    "edit": "Editar",
     "none_selected": "Ninguna entrada seleccionada",
     "save": "Guardar"
   },
   "filtered_list": {
     "alphabetical": "Alfabético",
     "creation": "Fecha de creación",
+    "desc": {
+      "close": "Cerrar base de datos",
+      "search": "Buscar entradas y carpetas",
+      "sort": "Ordenar entradas y carpetas",
+      "sort_asc": "Orden descendente",
+      "sort_des": "Orden ascendente"
+    },
     "edited": "Fecha de edición",
     "found_entries": "Entradas encontradas",
     "found_folders": "Carpetas encontradas",
@@ -67,9 +84,16 @@
     "relevance": "Relevancia"
   },
   "history": {
+    "add": {
+      "entry": "Entrada creada",
+      "folder": "Carpeta creada"
+    },
     "delete": {
       "entry": "Entrada eliminada",
       "folder": "Carpeta eliminada"
+    },
+    "desc": {
+      "open": "Abrir historial"
     },
     "last_change": "Último cambio: ",
     "move": {
@@ -90,6 +114,12 @@
     "title": "Cargando"
   },
   "login": {
+    "desc": {
+      "add": "Crear nueva base de datos",
+      "copy_id": "Copiar ID de base de datos al portapapeles",
+      "remove": "Quitar base de datos"
+    },
+    "no_database": "No hay bases de datos disponibles",
     "open": "Abrir base de datos"
   },
   "pw_gen": {
@@ -100,11 +130,11 @@
     "uppercase": "Mayúsculas:"
   },
   "rename_db": {
-    "title": "Renombrar base de datos:"
+    "title": "Cambiar nombre de la base de datos:"
   },
   "settings": {
     "about": {
-      "info": "Esta es una aplicación colaborativa de gestión de datos. El almacenamiento y la transferencia de datos se implementan mediante la biblioteca Automerge.\n Adicionalmente, se utilizan las bibliotecas Idle Timer, React DnD Kit, React Icons, QR Scanner y React QR Code.",
+      "info": "Esta es una aplicación colaborativa para la gestión de datos. El almacenamiento y la transferencia de datos se implementan mediante la biblioteca Automerge.\n Además, se utilizan las bibliotecas Idle Timer, React DnD Kit, React Icons, QR Scanner y React QR Code.",
       "license": "Licencia: ",
       "license_notice": "El software se proporciona \"tal cual\", sin ninguna responsabilidad.",
       "version": "Versión: "
@@ -115,6 +145,11 @@
     },
     "database": {
       "none": "Por favor, selecciona una base de datos."
+    },
+    "desc": {
+      "decrease_timeout": "Disminuir tiempo para cierre de sesión",
+      "increase_timeout": "Aumentar tiempo para cierre de sesión",
+      "open": "Abrir ajustes"
     },
     "export_encrypted": "Exportar cifrado",
     "export_unencrypted": "Exportar sin cifrar",
@@ -128,7 +163,7 @@
       "spanish": "Español"
     },
     "p2p": {
-      "connect": "Conectar",
+      "connect": "Conectar con par (Peer)",
       "connected_peers": "Pares conectados:",
       "other_peer": "ID de par ajeno:",
       "own": "ID de par propio:",
@@ -138,16 +173,22 @@
     },
     "server": {
       "add_server": {
-        "placeholder_name": "Mi servidor",
-        "placeholder_url": "wss://mi.servidor-sync.org",
+        "placeholder_name": "Mi Servidor",
+        "placeholder_url": "wss://mi.sync-server.org",
         "title": "Añadir servidor"
+      },
+      "desc": {
+        "add": "Añadir servidor de sincronización",
+        "connected": "Conectado",
+        "connecting": "Estableciendo conexión...",
+        "remove": "Quitar servidor"
       },
       "title": "Servidor de sincronización"
     },
     "subsettings": {
-      "about": "Sobre la aplicación",
+      "about": "Acerca de la App",
       "appearance": "Apariencia",
-      "database": "Ajustes de la base de datos",
+      "database": "Ajustes de base de datos",
       "general": "Ajustes generales"
     },
     "title": "Ajustes",
@@ -156,7 +197,7 @@
       "inactivity": "Cerrar sesión por inactividad",
       "p2p_sync": "Sincronización Peer-to-Peer",
       "recursive_delete": "Eliminación recursiva de entradas de carpeta",
-      "server_sync": "Sincronización con servidor"
+      "server_sync": "Sincronización por servidor"
     }
   },
   "share_db": {

@@ -1,6 +1,7 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {HiPencil, HiTrash} from "react-icons/hi";
 import {HiEllipsisVertical, HiMiniPlus} from "react-icons/hi2";
+import {useTranslation} from "react-i18next";
 
 /**
  * A 3-dot menu for folders which contains buttons to create an item, edit the title and delete the folder
@@ -18,6 +19,7 @@ const FolderMenu: React.FC<{
 }> = ({onDelete, onRename, onAdd, disabled}) => {
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
+    const {t} = useTranslation();
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -44,7 +46,7 @@ const FolderMenu: React.FC<{
                 <button
                     className="listViewTitleHeader menu button"
                     disabled={!isOpen}
-                    title="Eintrag hinzufügen"
+                    title={t("dot_menu.add")}
                     onClick={() => {
                         onAdd();
                         setIsOpen(false);
@@ -54,7 +56,7 @@ const FolderMenu: React.FC<{
                 <button
                     disabled={!isOpen}
                     className="listViewTitleHeader menu button"
-                    title="Ordner umbennen"
+                    title={t("dot_menu.rename")}
                     onClick={() => {
                         onRename();
                         setIsOpen(false);
@@ -63,7 +65,7 @@ const FolderMenu: React.FC<{
                 </button>
                 <button
                     className="listViewTitleHeader menu button"
-                    title="Ordner löschen"
+                    title={t("dot_menu.delete")}
                     disabled={!isOpen}
                     onClick={onDelete}>
                     <HiTrash size={24}/>
@@ -74,7 +76,7 @@ const FolderMenu: React.FC<{
                 className={`listViewTitleHeader button ${isOpen ? "active" : ""}`}
                 onClick={toggleMenu}
                 disabled={disabled}
-                title={isOpen ? "Menü schließen" : "Menü öffnen"}
+                title={isOpen ? t("dot_menu.close") : t("dot_menu.open")}
             >
                 <HiEllipsisVertical size={24}/>
             </button>

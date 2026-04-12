@@ -53,7 +53,7 @@ const LoginView: React.FC<{
                     {/* Button for adding new Database */}
                     <button
                         className={"squareButton"}
-                        title="Neue Datenbank erstellen"
+                        title={t("login.desc.add")}
                         onClick={viewModel.openAddDialog}>
                         <HiMiniPlus size={24}/>
                     </button>
