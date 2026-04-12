@@ -1,12 +1,12 @@
 import type {Repo} from "@automerge/react";
 import React from "react";
+import {useTranslation} from "react-i18next";
 import {HiMiniPlus} from "react-icons/hi2";
 
 import {useLoginViewModel} from "../ViewModels/loginViewModel.ts";
 import CreateDatabaseDialog from "./DialogViews/CreateDatabaseDialog.tsx";
 import DeleteConfirmationDialog from "./DialogViews/DeleteConfirmationDialog.tsx";
 import LoginDatabaseDialog from "./DialogViews/LoginDatabaseDialog.tsx";
-import ToastDialog from "./DialogViews/ToastDialog.tsx";
 import DatabaseListingView from "./ListingViews/DatabaseListingView.tsx";
 import PWMLogo from "../../assets/logo_gelb.svg?inline";
 import type {Item} from "../../Model/Item.ts";
@@ -31,6 +31,7 @@ const LoginView: React.FC<{
 }> = ({repo, setLoggedIn, setAutomergeFacade, securityProvider, setOpenedDbName, setToImportItems}) => {
 
     const viewModel = useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, securityProvider, setOpenedDbName, setToImportItems);
+    const {t} = useTranslation();
 
     return (
         <div className="loginView">
@@ -60,14 +61,12 @@ const LoginView: React.FC<{
                 {/* Popup Dialog for adding a new Database */}
                 <LoginDatabaseDialog
                     isOpen={viewModel.isEnterPasswordDialogOpen}
-                    title="Datenbank öffnen"
-                    label1="Masterpasswort"
+                    title={t("login.open")}
+                    label1={t("add_database.placeholder.password")}
                     tryOpenDatabase={(password, name?: string) => {
                         void viewModel.tryOpenDatabase(password, name)
                     }}
                     onCancel={viewModel.closeEnterPasswordDialog}
-                    setToastMessage={viewModel.setToastMessage}
-                    setShowToast={viewModel.setShowToast}
                     hidePassword={viewModel.hidePassword}
                     toggleHidePassword={viewModel.toggleHidePassword}
                 />
@@ -75,16 +74,11 @@ const LoginView: React.FC<{
                 {/* Pop Up Dialog for creating a new Database */}
                 <CreateDatabaseDialog
                     isOpen={viewModel.isAddDialogOpen}
-                    title="Neue Datenbank erstellen"
-                    label1="Datenbankname"
-                    label2="Masterpasswort"
                     createDatabase={viewModel.createDatabase}
                     onCancel={viewModel.closeAddDialog}
                     importDatabaseFromURL={(name, url) => {
                         void viewModel.importDatabaseFromURL(name, url);
                     }}
-                    setToastMessage={viewModel.setToastMessage}
-                    setShowToast={viewModel.setShowToast}
                     importDatabaseFromFile={(files, name) => {
                         void viewModel.importDatabaseFromFile(files, name);
                     }}
@@ -102,9 +96,6 @@ const LoginView: React.FC<{
                 />
 
             </main>
-            <ToastDialog message={viewModel.toastMessage}
-                         isVisible={viewModel.showToast}
-                         onClose={() => viewModel.setShowToast(false)}/>
         </div>
     );
 }

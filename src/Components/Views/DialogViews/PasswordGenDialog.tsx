@@ -1,8 +1,8 @@
 import React from "react";
+import {useTranslation} from "react-i18next";
 import {HiMiniPlus} from "react-icons/hi2";
 
 import Dialog from "./Dialog.tsx";
-import ToastDialog from "./ToastDialog.tsx";
 import {type PasswordGenDialogProps, usePasswordGenViewModel} from "../../ViewModels/Dialog/PasswordGenViewModel.ts";
 import SliderCheckBox from "../ButtonViews/SliderCheckBox.tsx";
 
@@ -13,11 +13,13 @@ import SliderCheckBox from "../ButtonViews/SliderCheckBox.tsx";
  */
 const PasswordGenDialog: React.FC<PasswordGenDialogProps> = ({setNewPassword}: PasswordGenDialogProps) => {
     const viewModel = usePasswordGenViewModel(setNewPassword);
+    const {t} = useTranslation();
+
     if (viewModel.passwordGenOpen) {
         return (
             <Dialog title={"Passwortgenerator"} onCloseDialog={() => viewModel.setPasswordGenOpen(false)}>
                 <div className={"passwordGen"}>
-                    <label>Passwort-Länge:</label>
+                    <label>{t("pw_gen.length")}</label>
                     <input
                         type="number"
                         value={viewModel.length}
@@ -27,25 +29,25 @@ const PasswordGenDialog: React.FC<PasswordGenDialogProps> = ({setNewPassword}: P
                         step="1"
                         autoFocus
                     />
-                    <label>Großbuchstaben:</label>
+                    <label>{t("pw_gen.uppercase")}</label>
                     <SliderCheckBox
                         checked={viewModel.uppercase}
                         toggleChecked={viewModel.toggleUppercase}
                         style={{justifySelf: "center"}}
-                        />
-                    <label>Kleinbuchstaben:</label>
+                    />
+                    <label>{t("pw_gen.lowercase")}</label>
                     <SliderCheckBox
                         checked={viewModel.lowercase}
                         toggleChecked={viewModel.toggleLowercase}
                         style={{justifySelf: "center"}}
                     />
-                    <label>Zahlen:</label>
+                    <label>{t("pw_gen.numbers")}</label>
                     <SliderCheckBox
                         checked={viewModel.numbers}
                         toggleChecked={viewModel.toggleNumbers}
                         style={{justifySelf: "center"}}
                     />
-                    <label>Sonderzeichen:</label>
+                    <label>{t("pw_gen.special")}</label>
                     <SliderCheckBox
                         checked={viewModel.special}
                         toggleChecked={viewModel.toggleSpecial}
@@ -53,12 +55,11 @@ const PasswordGenDialog: React.FC<PasswordGenDialogProps> = ({setNewPassword}: P
                     />
                 </div>
                 <div className="confirm-cancel-buttons">
-                    <button className={"rectangle-button"} onClick={viewModel.handleConfirm}>Bestätigen</button>
-                    <button className={"rectangle-button"} onClick={() => viewModel.setPasswordGenOpen(false)}>Abbrechen</button>
+                    <button className={"rectangle-button"}
+                            onClick={viewModel.handleConfirm}>{t("button.confirm")}</button>
+                    <button className={"rectangle-button"}
+                            onClick={() => viewModel.setPasswordGenOpen(false)}>{t("button.cancel")}</button>
                 </div>
-                <ToastDialog message={viewModel.toastMessage}
-                             isVisible={viewModel.toastVisible}
-                             onClose={() => viewModel.setToastVisible(false)} />
             </Dialog>
         );
     } else {

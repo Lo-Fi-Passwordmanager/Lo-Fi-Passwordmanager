@@ -1,15 +1,24 @@
 import type {DataConnection} from "peerjs";
-import {useEffect, useState} from "react";
+import {type ChangeEventHandler, useEffect, useState} from "react";
+import {useTranslation} from "react-i18next";
 
-import type {PeerjsNetworkAdapter} from "../../../customNetworkAdapter/PeerJsNetworkAdapter.ts";
+import {useToast} from "./Provider/ToastProviderViewModel.ts";
+import type {PeerjsNetworkAdapter} from "../../customNetworkAdapter/PeerJsNetworkAdapter.ts";
 import {Settings, useSettings} from "../../Model/Settings";
 import {loadActiveColorIndex, loadCustomColor, storeActiveColorIndex, storeCustomColor} from "../../Utility/Storage.ts";
 
 
 /**
+ * The type of the Setting Viewmodel
+ */
+export type SettingsViewModel = ReturnType<typeof useSettingsViewModel>
+
+/**
  * The ViewModel that is used for interfacing the {@link Settings} singleton.
  * It uses states to reload react when changing settings, so that they get applied
  */
+export const useSettingsViewModel = () => {
+
 export const useSettingsViewModel = () => {
     const CUSTOM_COLOR_NAME = "custom_color";
     const settings = Settings.getSettings();
@@ -25,8 +34,8 @@ export const useSettingsViewModel = () => {
     const [serverStates, setServerStates] = useState<Map<string, boolean>>(settings.getServerStates());
     const [addServerDialogOpen, setAddServerDialogOpen] = useState<boolean>(false);
     const [P2P, setP2P] = useState<boolean>(settings.getP2P());
-    const [showToast, setShowToast] = useState<boolean>(false);
-    const [toastMessage, setToastMessage] = useState<string>("");
+    const [recursiveDelete, setRecursiveDelete] = useState<boolean>(settings.getRecursiveDelete());
+    //On connecting to a remote peer, this is the id that will be used, if no other argument is given
     const [remotePeerId, setRemotePeerId] = useState("");
     const [otherPeerMap, setOtherPeerMap] = useState<Map<string, [DataConnection, PeerjsNetworkAdapter]>>(settings.getConnectorsToAdapters());
     const [customColor, setUpCustomColor] = useState<string>(loadCustomColor());
@@ -42,12 +51,20 @@ export const useSettingsViewModel = () => {
     document.documentElement.setAttribute("data-theme", darkMode ? "dark" : "light");
     document.documentElement.style.setProperty("--color", Array.from(colorSchemes.values())[activeColorIndex]);
 
+    const [showToast, _] = useToast();
+
+    const { i18n, t } = useTranslation();
+    const handleLanguageChange: ChangeEventHandler<HTMLSelectElement, HTMLSelectElement> =  (e) => {
+        void i18n.changeLanguage(e.target.value);
+    };
+
     useEffect(() => {
         settings.setDarkMode(darkMode);
         settings.setSynchronization(synchronisation);
         settings.setTimeoutActive(timeOutActive);
         settings.setTimeoutLength(timeoutLength);
-    }, [darkMode, synchronisation, timeOutActive, settings, timeoutLength]);
+        settings.setRecursiveDelete(recursiveDelete);
+    }, [darkMode, synchronisation, timeOutActive, settings, timeoutLength, recursiveDelete]);
 
     useEffect(() => {
         const handleUpdate = () => {
@@ -82,6 +99,10 @@ export const useSettingsViewModel = () => {
 
     function toggleSynchronisation() {
         setSynchronisation(!synchronisation);
+    }
+
+    function toggleRecursiveDelete() {
+        setRecursiveDelete(!recursiveDelete);
     }
 
     function addSyncServer(name: string, url: string) {
@@ -161,8 +182,7 @@ export const useSettingsViewModel = () => {
      * Copy the given text to the clipboard and show a toast message
      */
     function copyToClipboard(text: string) {
-        setToastMessage("In die Zwischenablage kopiert");
-        setShowToast(true);
+        showToast(t("common.copied_clipboard"));
         void navigator.clipboard.writeText(text);
     }
 
@@ -210,7 +230,6 @@ export const useSettingsViewModel = () => {
         activeTab,
         addServerDialogOpen,
         P2P,
-        toastMessage,
         showToast,
         serverUrls,
         serverStates,
@@ -234,8 +253,6 @@ export const useSettingsViewModel = () => {
         setAddServerDialogOpen,
         toggleSyncServer,
         toggleP2P,
-        setToastMessage,
-        setShowToast,
         remotePeerId,
         setRemotePeerId,
         connectToPeer,
@@ -244,6 +261,9 @@ export const useSettingsViewModel = () => {
         isLastServer,
         isLastActiveServer,
         copyToClipboard,
-        changeColorScheme
+        changeColorScheme,
+        toggleRecursiveDelete,
+        recursiveDelete,
+        handleLanguageChange
     };
 };

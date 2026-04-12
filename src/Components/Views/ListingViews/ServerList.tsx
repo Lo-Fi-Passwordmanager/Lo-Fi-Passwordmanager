@@ -1,6 +1,7 @@
 import {useRepo} from "@automerge/automerge-repo-react-hooks";
 import {WebSocketClientAdapter} from "@automerge/react";
 import React, {useEffect, useState} from "react";
+import {useTranslation} from "react-i18next";
 import {HiCheckCircle, HiDotsCircleHorizontal, HiTrash} from "react-icons/hi";
 import {HiMiniPlus} from "react-icons/hi2";
 
@@ -20,6 +21,8 @@ const ServerList: React.FC<{
     const repo = useRepo();
     const disabledClass = disabled ? "disabled" : "";
     const [connected, setConnected] = useState<string[]>([]);
+
+    const {t} = useTranslation();
 
     // check if serves are connected
     useEffect(() => {
@@ -44,10 +47,10 @@ const ServerList: React.FC<{
             repo.networkSubsystem.off("peer-disconnected", updateConnected);
         };
 
-        }, [repo.networkSubsystem, settingsViewModel.serverStates, settingsViewModel.serverUrls]);
+    }, [repo.networkSubsystem, settingsViewModel.serverStates, settingsViewModel.serverUrls]);
     return (
         <>
-            <h4>Synchronisationsserver</h4>
+            <h4>{t("settings.server.title")}</h4>
             <div className={`scrollableContainer server-list ${disabledClass}`}>
                 {Array.from(settingsViewModel.serverStates.keys()).map((server) => (
                     <div className="server-item" key={server}>
@@ -59,7 +62,8 @@ const ServerList: React.FC<{
                              onClick={() => void settingsViewModel.copyToClipboard(settingsViewModel.serverUrls.get(server) ?? "")}>
                             <span>{server}</span>
                         </div>
-                        {connected.includes(settingsViewModel.serverUrls.get(server)!) ? <HiCheckCircle/> : <HiDotsCircleHorizontal/>}
+                        {connected.includes(settingsViewModel.serverUrls.get(server)!) ? <HiCheckCircle/> :
+                            <HiDotsCircleHorizontal/>}
 
                         {!disabled && <button
                             className={`squareButton ${settingsViewModel.isLastServer() || settingsViewModel.isLastActiveServer(server) ? "disabled" : ""}`}
@@ -83,8 +87,6 @@ const ServerList: React.FC<{
                 <AddServerDialog
                     onAddServer={(name, url) => settingsViewModel.addSyncServer(name, url)}
                     onClose={() => settingsViewModel.setAddServerDialogOpen(false)}
-                    setShowToast={settingsViewModel.setShowToast}
-                    setToastMessage={settingsViewModel.setToastMessage}
                     servers={settingsViewModel.serverUrls}
                 />
             )}

@@ -1,4 +1,5 @@
 import React from "react";
+import {useTranslation} from "react-i18next";
 
 import Dialog from "./Dialog.tsx";
 import {type Item} from "../../../Model/Item.ts";
@@ -21,10 +22,10 @@ const ItemCreationDialog: React.FC<ItemCreationDialogProps> = ({
                                                                    cancelItemCreation,
                                                                }: ItemCreationDialogProps) => {
     const viewModel = useItemCreationViewModel(addItem, cancelItemCreation);
-
+    const {t} = useTranslation();
 
     return (<>
-            <Dialog title={"Neues Element erstellen"} onCloseDialog={cancelItemCreation}>
+            <Dialog title={t("item_creation.title")} onCloseDialog={cancelItemCreation}>
                 <Close className="closeIcon" color={"var(--text)"} onClick={cancelItemCreation}/>
                 <div className="item-creation-buttons">
                     <button className={"rectangle-button"} onClick={viewModel.createEntry}>Eintrag</button>

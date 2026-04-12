@@ -2,7 +2,8 @@ import type {AutomergeUrl} from "@automerge/automerge-repo";
 import type {Repo} from "@automerge/react";
 import {useEffect, useState} from "react";
 
-import {useLoadingScreen} from "./LoadingScreenProviderViewModel.ts";
+import {useLoadingScreen} from "./Provider/LoadingScreenProviderViewModel.ts";
+import {useToast} from "./Provider/ToastProviderViewModel.ts";
 import {Entry} from "../../Model/Entry.ts";
 import type {Item} from "../../Model/Item.ts";
 import {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
@@ -33,19 +34,17 @@ export const useLoginViewModel = (
     const [databases, setDatabases] = useState(loadAllDatabases());
     // names of all available databases to show in the listing
     const [databaseNames, setDatabaseNames] = useState<string[]>([]);
-
     // database that was clicked to be opened
     const [selectedDatabase, setSelectedDatabase] = useState<string | null>(null);
     // whether the dialog to add a new database is open
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
     // whether the dialog to open a database is open
     const [isEnterPasswordDialogOpen, setIsEnterPasswordDialogOpen] = useState(false);
-    const [showToast, setShowToast] = useState<boolean>(false);
-    const [toastMessage, setToastMessage] = useState<string>("");
     const [databaseToDelete, setDatabaseToDelete] = useState<string | null>(null);
     const [hidePassword, setHidePassword] = useState<boolean>(true);
 
     const setLoadingScreenActive = useLoadingScreen();
+    const [showToast, _] = useToast();
 
     // update the list of database names when the databases change
     useEffect(() => {
@@ -122,15 +121,13 @@ export const useLoginViewModel = (
             } catch (error) {
                 console.error(error);
                 setLoadingScreenActive(false);
-                setShowToast(true);
-                setToastMessage("Automerge konnte die Datenbank nicht laden!");
+                showToast("Automerge konnte die Datenbank nicht laden!");
                 return;
             }
 
             if (salt == null || validation == null) {
                 setLoadingScreenActive(false);
-                setShowToast(true);
-                setToastMessage("Automerge konnte die Datenbank nicht laden!");
+                showToast("Automerge konnte die Datenbank nicht laden!");
                 return;
             }
 
@@ -145,14 +142,12 @@ export const useLoginViewModel = (
                         setSelectedDatabase(null);
                     } else {
                         setLoadingScreenActive(false);
-                        setShowToast(true);
-                        setToastMessage("Falsches Masterpasswort!");
+                        showToast("Falsches Masterpasswort!");
                     }
                 } catch (error) {
                     console.error(error);
                     setLoadingScreenActive(false);
-                    setShowToast(true);
-                    setToastMessage("Die Datenbank konnte nicht geladen werden");
+                    showToast("Die Datenbank konnte nicht geladen werden");
                 }
             }, 0);
         }
@@ -214,8 +209,7 @@ export const useLoginViewModel = (
      */
     function isNameAvailable(name: string): boolean {
         if (databases.has(name)) {
-            setShowToast(true);
-            setToastMessage("Datenbank mit diesem Namen existiert bereits!");
+            showToast("Datenbank mit diesem Namen existiert bereits!");
             return false;
         }
         return true;
@@ -229,8 +223,7 @@ export const useLoginViewModel = (
     function isAutomergeUrlAvailable(url: AutomergeUrl) {
         for (const value of databases.values()) {
             if (value === url) {
-                setShowToast(true);
-                setToastMessage("Datenbank mit dieser Url existiert bereits!");
+                showToast("Datenbank mit dieser Url existiert bereits!");
                 return false;
             }
         }
@@ -268,21 +261,18 @@ export const useLoginViewModel = (
         }
 
         if (name === "" || name == null) {
-            setToastMessage("Bitte wähle einen Namen.");
-            setShowToast(true);
+            showToast("Bitte wähle einen Namen.");
             return;
         }
 
         if (!targetFiles) {
-            setToastMessage("Bitte wähle eine Datei.");
-            setShowToast(true);
+            showToast("Bitte wähle eine Datei.");
             return;
         }
 
         const binary = await uInt8ArrayFromFile(targetFiles);
         if (!binary) {
-            setToastMessage("Datei konnte nicht gelesen werden.");
-            setShowToast(true);
+            showToast("Datei konnte nicht gelesen werden.");
             return;
         }
 
@@ -353,13 +343,10 @@ export const useLoginViewModel = (
         isAddDialogOpen,
         isEnterPasswordDialogOpen,
         databases,
-        showToast,
-        toastMessage,
         databaseToDelete,
         hidePassword,
 
         importDatabaseFromFile,
-        setShowToast,
         createDatabase,
         tryOpenDatabase,
         closeDatabase,
@@ -368,7 +355,6 @@ export const useLoginViewModel = (
         openEnterPasswordDialog,
         closeEnterPasswordDialog,
         importDatabaseFromURL,
-        setToastMessage,
         changeDatabaseName,
         confirmDeleteDatabase,
         setDatabaseToDelete,

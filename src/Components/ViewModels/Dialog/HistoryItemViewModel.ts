@@ -1,4 +1,5 @@
 import {useState} from "react";
+import {useTranslation} from "react-i18next";
 
 import type {AutomergeEntry} from "../../../Model/Automerge/AutomergeEntry.ts";
 import type {HistoryEntry} from "../../../Model/Automerge/HistoryEntry.ts";
@@ -13,7 +14,7 @@ import type {SecurityProvider} from "../../../Utility/Security/SecurityProvider.
  */
 export const useHistoryItemViewModel = (historyEntry: HistoryEntry, securityProvider: SecurityProvider) => {
 
-
+    const {t} = useTranslation();
     const itemType = historyEntry.type;
     const name = securityProvider.decryptValue(historyEntry.item.name);
     const editedAt = new Date(historyEntry.item.editedAt * 1000);
@@ -102,17 +103,17 @@ export const useHistoryItemViewModel = (historyEntry: HistoryEntry, securityProv
         deleted: {
             icon: "✕",
             class: "status-deleted",
-            label: itemIsFolder ? "Ordner gelöscht" : "Eintrag gelöscht"
+            label: itemIsFolder ? t("history.delete.folder") : t("history.delete.entry")
         },
         update: {
             icon: "✎",
             class: "status-update",
-            label: itemIsFolder ? "Ordner bearbeitet" : "Eintrag bearbeitet"
+            label: itemIsFolder ? t("history.update.folder") : t("history.update.entry")
         },
         move: {
             icon: ">",
             class: "status-move",
-            label: itemIsFolder ? "Ordner verschoben" : "Eintrag verschoben"
+            label: itemIsFolder ? t("history.move.folder") : t("history.move.entry")
         }
     };
 

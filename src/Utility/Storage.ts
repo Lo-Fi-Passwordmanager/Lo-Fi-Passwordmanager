@@ -18,6 +18,7 @@ export const STORAGE_KEYS = {
     RECENTLY_USED: "recentlyUsed",
     ACTIVE_COLOR_INDEX: "active_color_index",
     CUSTOM_COLOR: "custom_color",
+    RECURSIVE_DELETE: "recursive_delete"
 } as const;
 
 // --- Generic Helpers ---
@@ -46,7 +47,6 @@ export function getFromStorage<T>(
         return defaultValue;
     }
     try {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const parsed = JSON.parse(raw);
         return transform ? transform(parsed) : (parsed as T);
     } catch (e) {
@@ -55,7 +55,7 @@ export function getFromStorage<T>(
     }
 }
 
-// Reusable hydration logic
+// Reusable hydration logic for Maps
 const asMap = <K, V>(data: any) => new Map<K, V>(data);
 
 // --- Database Operations ---
@@ -139,6 +139,9 @@ export const storeTimeoutLength = (v: number) => saveToStorage(STORAGE_KEYS.TIME
 
 export const loadP2PSetting = () => getFromStorage(STORAGE_KEYS.P2P, true);
 export const storeP2PSetting = (v: boolean) => saveToStorage(STORAGE_KEYS.P2P, v);
+
+export const loadRmRfSetting = () => getFromStorage(STORAGE_KEYS.RECURSIVE_DELETE, true);
+export const storeRmRfSetting = (v: boolean) => saveToStorage(STORAGE_KEYS.RECURSIVE_DELETE, v);
 
 export const loadActiveColorIndex = () => getFromStorage(STORAGE_KEYS.ACTIVE_COLOR_INDEX, 0);
 export const storeActiveColorIndex = (v: number) => saveToStorage(STORAGE_KEYS.ACTIVE_COLOR_INDEX, v);

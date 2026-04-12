@@ -1,5 +1,5 @@
 import {useRepo} from "@automerge/automerge-repo-react-hooks";
-import {DndContext, DragOverlay, pointerWithin} from "@dnd-kit/core";
+import {closestCorners, DndContext, DragOverlay} from "@dnd-kit/core";
 import React from "react";
 import {HiTrash} from "react-icons/hi";
 import {HiArrowLeftCircle} from "react-icons/hi2";
@@ -12,7 +12,6 @@ import type {AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
 import {usePasswordViewModel} from "../ViewModels/PasswordViewModel.ts";
 import DeleteConfirmationDialog from "./DialogViews/DeleteConfirmationDialog.tsx";
 import ItemCreationDialog from "./DialogViews/ItemCreationDialog.tsx";
-import ToastDialog from "./DialogViews/ToastDialog.tsx";
 import EditableEntryView from "./EditableEntryView.tsx";
 import FilteredListView from "./FilteredListView.tsx";
 import FolderMenu from "./MenuViews/FolderMenu.tsx";
@@ -90,7 +89,7 @@ const PasswordView: React.FC<PasswordViewProps> = ({
                         goToFolder={viewModel.goToItem}
                         getSortedChildren={viewModel.getSortedChildren}
                     />}
-                    <DndContext collisionDetection={pointerWithin}
+                    <DndContext collisionDetection={closestCorners}
                                 onDragEnd={viewModel.handleDragEnd}
                                 onDragStart={viewModel.onDragStart}
                                 sensors={viewModel.sensors}
@@ -178,12 +177,6 @@ const PasswordView: React.FC<PasswordViewProps> = ({
                 onConfirmItem={viewModel.confirmDeletion}
                 onClose={() => viewModel.setItemToDelete(null)}
             />}
-
-
-            {/*A Toast that may be called at any time with a given message*/}
-            <ToastDialog message={viewModel.toastMessage}
-                         isVisible={viewModel.toastVisible}
-                         onClose={() => viewModel.setToastVisible(false)}/>
 
         </div>
     );

@@ -1,0 +1,164 @@
+{
+  "add_database": {
+    "create_new": {
+      "action": {
+        "file_encrypted": "Importer une base de données chiffrée",
+        "file_plain": "Importer une base de données non chiffrée",
+        "new": "Créer une nouvelle base de données",
+        "url": "Charger une base de données existante"
+      },
+      "choose_action": "Sélectionner une action :",
+      "choose_file": "Choisir un fichier",
+      "title": "Ajouter une nouvelle base de données"
+    },
+    "placeholder": {
+      "id": "ID de la base de données",
+      "name": "Nom de la base de données",
+      "password": "Mot de passe maître"
+    }
+  },
+  "button": {
+    "add": "Ajouter",
+    "cancel": "Annuler",
+    "change_custom_sorting": "Ajuster le tri personnalisé",
+    "confirm": "Confirmer",
+    "copy_clipboard": "Copier dans le presse-papiers",
+    "delete": "Supprimer",
+    "hide_password": "Masquer le mot de passe",
+    "regroup_items": "Déplacer les entrées et dossiers",
+    "show_password": "Afficher le mot de passe"
+  },
+  "common": {
+    "copied_clipboard": "Copié dans le presse-papiers.",
+    "copy_db_id": "Copier l'ID de la base de données",
+    "delete_db": "Supprimer la base de données localement",
+    "entry": "Entrée",
+    "folder": "Dossier",
+    "new_entry": "Nouvelle entrée",
+    "new_folder": "Nouveau dossier"
+  },
+  "dialog": {
+    "confirm_delete": {
+      "text": "Voulez-vous vraiment supprimer le/la {{delete_type}} « <strong>{{item_title}}</strong> » ?",
+      "title": "Confirmer la suppression"
+    }
+  },
+  "entry_view": {
+    "attributes": {
+      "created_at": "Créé le : ",
+      "edited_at": "Modifié le : ",
+      "note": "Note :",
+      "password": "Mot de passe :",
+      "url": "URL :",
+      "username": "Nom d'utilisateur :"
+    },
+    "none_selected": "Aucune entrée sélectionnée",
+    "save": "Enregistrer"
+  },
+  "filtered_list": {
+    "alphabetical": "Alphabétique",
+    "creation": "Date de création",
+    "edited": "Date de modification",
+    "found_entries": "Entrées trouvées",
+    "found_folders": "Dossiers trouvés",
+    "individual": "Personnalisé",
+    "placeholder_search": "Rechercher...",
+    "recently": "Récemment utilisé",
+    "relevance": "Pertinence"
+  },
+  "history": {
+    "delete": {
+      "entry": "Entrée supprimée",
+      "folder": "Dossier supprimé"
+    },
+    "last_change": "Dernière modification : ",
+    "move": {
+      "entry": "Entrée déplacée",
+      "folder": "Dossier déplacé"
+    },
+    "title": "Historique des modifications",
+    "update": {
+      "entry": "Entrée modifiée",
+      "folder": "Dossier modifié"
+    }
+  },
+  "item_creation": {
+    "title": "Créer un nouvel élément"
+  },
+  "just_synced": "Synchronisé.",
+  "loading": {
+    "title": "Chargement"
+  },
+  "login": {
+    "open": "Ouvrir la base de données"
+  },
+  "pw_gen": {
+    "length": "Longueur du mot de passe :",
+    "lowercase": "Lettres minuscules :",
+    "numbers": "Chiffres :",
+    "special": "Caractères spéciaux :",
+    "uppercase": "Lettres majuscules :"
+  },
+  "rename_db": {
+    "title": "Renommer la base de données :"
+  },
+  "settings": {
+    "about": {
+      "info": "Ceci est une application collaborative de gestion de données. Le stockage et la transmission des données sont implémentés via la bibliothèque Automerge.\n De plus, les bibliothèques suivantes sont utilisées : Idle Timer, React DnD Kit, React Icons, QR Scanner et React QR Code.",
+      "license": "Licence : ",
+      "license_notice": "Le logiciel est fourni « tel quel », sans aucune garantie.",
+      "version": "Version : "
+    },
+    "database": {
+      "none": "Veuillez sélectionner une base de données."
+    },
+    "export_encrypted": "Exporter chiffré",
+    "export_unencrypted": "Exporter non chiffré",
+    "inactivity": {
+      "title": "Minutes avant déconnexion :"
+    },
+    "language": {
+      "english": "Anglais",
+      "french": "Français",
+      "german": "Allemand",
+      "spanish": "Espagnol"
+    },
+    "p2p": {
+      "connect": "Connecter",
+      "connected_peers": "Pairs connectés :",
+      "other_peer": "ID du pair distant :",
+      "own": "Votre ID de pair :",
+      "scan_qr": "Scannez le code QR d'un autre appareil sous « Paramètres » → « Connexion peer-to-peer »",
+      "share": "Partager l'ID de pair",
+      "title": "Connexion peer-to-peer"
+    },
+    "server": {
+      "add_server": {
+        "placeholder_name": "Mon serveur",
+        "placeholder_url": "wss://mon.serveur-synchro.org",
+        "title": "Ajouter un serveur"
+      },
+      "title": "Serveur de synchronisation"
+    },
+    "subsettings": {
+      "about": "À propos",
+      "database": "Paramètres de la base de données",
+      "general": "Paramètres généraux"
+    },
+    "title": "Paramètres",
+    "toggles": {
+      "dark_mode": "Mode sombre",
+      "inactivity": "Déconnexion en cas d'inactivité",
+      "p2p_sync": "Synchronisation peer-to-peer",
+      "recursive_delete": "Suppression récursive des entrées de dossier",
+      "server_sync": "Synchronisation serveur"
+    }
+  },
+  "share_db": {
+    "import": "Importer la base de données",
+    "invalid_qr": "Code QR invalide",
+    "scan_qr": "Scannez le code QR sur un autre appareil dans le dialogue « Ajouter une base de données » pour y ajouter la base de données nommée « {{name}} ».",
+    "share_name": "Partager également le nom de la base de données",
+    "title": "Partager la base de données"
+  }
+}

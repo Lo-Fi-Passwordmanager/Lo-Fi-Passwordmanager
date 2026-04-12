@@ -1,11 +1,12 @@
 import Peer, {type DataConnection} from "peerjs";
 import {useEffect, useState} from "react";
 
-import {PeerjsNetworkAdapter} from "../../customNetworkAdapter/PeerJsNetworkAdapter.ts";
+import {PeerjsNetworkAdapter} from "../customNetworkAdapter/PeerJsNetworkAdapter.ts";
 import {
     getFromStorage,
     loadDarkModeSetting,
     loadP2PSetting,
+    loadRmRfSetting,
     loadSelectedServerURLs,
     loadServers,
     loadSynchronizationSettings,
@@ -13,6 +14,7 @@ import {
     loadTimeoutSettings, STORAGE_KEYS,
     storeDarkModeSetting,
     storeP2PSetting,
+    storeRmRfSetting,
     storeSelectedServers,
     storeServers,
     storeSynchronizationSettings,
@@ -55,6 +57,7 @@ export class Settings {
     //name -- url
     private _servers: Map<string, string>;
     private _p2p: boolean;
+    private _recursiveDelete: boolean;
 
     private connectorsToAdapters: Map<string, [DataConnection, PeerjsNetworkAdapter]> = new Map();
 
@@ -69,6 +72,7 @@ export class Settings {
         this._activeServerURLs = loadSelectedServerURLs();
         this._p2p = loadP2PSetting();
         this.peer = new Peer();
+        this._recursiveDelete = loadRmRfSetting();
         this.connector = null as unknown as DataConnection;
 
         // Purge server URLs that are in active list, but not in server list
@@ -184,6 +188,10 @@ export class Settings {
         return this._synchronization;
     }
 
+    public getRecursiveDelete(): boolean {
+        return this._recursiveDelete;
+    }
+
     /**
      * Sets the value of synchronisation to the given value. If the its deactivated due to editing, the setting will not be stored in localStorage, so that it is only active for the current session
      * @param value the new value for the synchronisation setting
@@ -227,6 +235,12 @@ export class Settings {
     public setTimeoutLength(length: number) {
         this._timeoutLength = length;
         storeTimeoutLength(length);
+        this.notify();
+    }
+
+    public setRecursiveDelete(value: boolean) {
+        this._recursiveDelete = value;
+        storeRmRfSetting(value);
         this.notify();
     }
 

@@ -13,7 +13,8 @@ const VALIDATION_LENGTH = 32; //Length in Bytes of the Validation used for Login
  */
 export class KeyGen implements IKeyGen{
     generateKey(Password: string, Salt: Uint8Array): Uint8Array {
-        return scrypt(Password, Salt, SCRYPT_PARAMS);
+        const asd = scrypt(Password, Salt, SCRYPT_PARAMS);
+        return asd;
     }
 
     getNewSalt(): Uint8Array {

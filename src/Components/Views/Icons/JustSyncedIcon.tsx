@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {useTranslation} from "react-i18next";
 import {HiCheckCircle} from "react-icons/hi2";
 
 import LoadingSpinner from "./LoadingSpinner.tsx";
@@ -12,7 +13,7 @@ const JustSyncedIcon: React.FC<{
 }> = ({justSynced}) => {
 
     const [showCheckmark, setShowCheckmark] = useState<boolean>(false);
-
+    const {t} = useTranslation();
 useEffect(() => {
     setTimeout(() => {
         setShowCheckmark(true);
@@ -25,7 +26,7 @@ useEffect(() => {
 return (
     justSynced && <div className={"just-synced"}>
         {!showCheckmark? <LoadingSpinner header/> : <HiCheckCircle size={20} className={"check-mark"}/>}
-        Synchronisiert
+        {t("just_synced")}
     </div>
 )};
 export default JustSyncedIcon;

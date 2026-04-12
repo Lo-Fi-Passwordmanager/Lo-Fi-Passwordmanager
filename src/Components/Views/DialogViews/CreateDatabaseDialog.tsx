@@ -1,5 +1,6 @@
 import type {AutomergeUrl} from "@automerge/automerge-repo";
 import React from "react";
+import {useTranslation} from "react-i18next";
 
 import Dialog from "./Dialog.tsx";
 import ShareDatabaseQRScannerDialog from "./ShareDatabaseQRScannerDialog.tsx";
@@ -8,28 +9,18 @@ import EyeButton from "../ButtonViews/EyeButton.tsx";
 
 const CreateDatabaseDialog: React.FC<{
     isOpen: boolean,
-    title: string,
-    label1: string,
-    label2: string,
     createDatabase: (field1: string, field2: string) => void,
     onCancel: () => void,
     importDatabaseFromURL: (name: string, autoMergeUrl: AutomergeUrl) => void,
-    setToastMessage: (message: string) => void,
-    setShowToast: (show: boolean) => void,
     importDatabaseFromFile: (targetFiles: (FileList | null), name: string) => void
     hidePassword: boolean,
     toggleHidePassword: () => void,
     importUnencryptedDatabaseFromFile: (targetFiles: (FileList | null), name: string, password: string) => void
 }> = ({
           isOpen,
-          title,
-          label1,
-          label2,
           createDatabase,
           onCancel,
           importDatabaseFromURL,
-          setToastMessage,
-          setShowToast,
           importDatabaseFromFile,
           hidePassword,
           toggleHidePassword,
@@ -38,11 +29,12 @@ const CreateDatabaseDialog: React.FC<{
     const viewModel = useCreateDatabaseViewModel(
         createDatabase,
         importDatabaseFromURL,
-        setToastMessage,
-        setShowToast,
         importDatabaseFromFile,
         importUnencryptedDatabaseFromFile
     );
+
+
+    const {t} = useTranslation('translation');
 
     if (!isOpen) return null;
 
@@ -53,11 +45,11 @@ const CreateDatabaseDialog: React.FC<{
     };
 
     return (
-        <Dialog title={title} onCloseDialog={onCancel}>
+        <Dialog title={t("add_database.create_new.title")} onCloseDialog={onCancel}>
             {/* Dropdown Menu Replacement */}
             <div className="dialogDropdownContainer" style={{marginBottom: "20px"}}>
                 <label htmlFor="import-type-select" style={{display: "block", marginBottom: "5px"}}>
-                    Aktion wählen:
+                    {t("add_database.create_new.choose_action")}
                 </label>
                 <select
                     id="import-type-select"
@@ -65,31 +57,31 @@ const CreateDatabaseDialog: React.FC<{
                     onChange={(e) => viewModel.setSelectedImportType(e.target.value)}
                     style={{width: "100%"}}
                 >
-                    <option value="new">Neue Datenbank erstellen</option>
-                    <option value="url">Existierende Datenbank laden</option>
-                    <option value="file">Datenbank verschlüsselt importieren</option>
-                    <option value="filedecrypt">Datenbank unverschlüsselt importieren</option>
+                    <option value="new">{t("add_database.create_new.action.new")}</option>
+                    <option value="url">{t("add_database.create_new.action.url")}</option>
+                    <option value="file">{t("add_database.create_new.action.file_encrypted")}</option>
+                    <option value="filedecrypt">{t("add_database.create_new.action.file_plain")}</option>
                 </select>
             </div>
 
             {viewModel.selectedImportType === "new" && (
                 <>
-                    <label>{label1}</label>
+                    <label>{t("add_database.placeholder.name")}</label>
                     <input
                         type="text"
                         value={viewModel.field1}
                         onChange={(e) => viewModel.setField1(e.target.value)}
-                        placeholder={label1}
+                        placeholder={t("add_database.placeholder.name")}
                         autoFocus
                         onKeyDown={handleKeyDown}
                     />
-                    <label>{label2}</label>
+                    <label>{t("add_database.placeholder.password")}</label>
                     <div className={"password-container"}>
                         <input
                             type={hidePassword ? "password" : "text"}
                             value={viewModel.field2}
                             onChange={(e) => viewModel.setField2(e.target.value)}
-                            placeholder={label2}
+                            placeholder={t("add_database.placeholder.password")}
                             onKeyDown={handleKeyDown}
                         />
                         <EyeButton hidePassword={hidePassword} toggleHidePassword={toggleHidePassword} size={49}/>
@@ -99,12 +91,12 @@ const CreateDatabaseDialog: React.FC<{
 
             {viewModel.selectedImportType === "url" && (
                 <>
-                    <label>Name</label>
+                    <label>{t("add_database.placeholder.name")}</label>
                     <input
                         type="text"
                         value={viewModel.field1}
                         onChange={(e) => viewModel.setField1(e.target.value)}
-                        placeholder={"Name"}
+                        placeholder={t("add_database.placeholder.name")}
                         autoFocus
                     />
                     <label>Datenbank ID</label>
@@ -114,7 +106,7 @@ const CreateDatabaseDialog: React.FC<{
                                 type="text"
                                 value={viewModel.field2}
                                 onChange={(e) => viewModel.setField2(e.target.value)}
-                                placeholder={"Datenbank ID"}
+                                placeholder={t("add_database.placeholder.id")}
                                 onKeyDown={handleKeyDown}
                             />
                             <ShareDatabaseQRScannerDialog setInputFields={(name, url) => {
@@ -128,33 +120,33 @@ const CreateDatabaseDialog: React.FC<{
 
             {(viewModel.selectedImportType === "file" || viewModel.selectedImportType === "filedecrypt") && (
                 <>
-                    <label>Name</label>
+                    <label>{t("add_database.placeholder.name")}</label>
                     <input
                         type="text"
                         value={viewModel.field1}
                         onChange={(e) => viewModel.setField1(e.target.value)}
-                        placeholder={label1}
+                        placeholder={t("add_database.placeholder.name")}
                         autoFocus
                     />
                     {viewModel.selectedImportType === "filedecrypt" &&
                         <>
-                            <label>{label2}</label>
+                            <label>{t("add_database.placeholder.password")}</label>
                             <div className={"password-container"}>
                                 <input
                                     type={hidePassword ? "password" : "text"}
                                     value={viewModel.field2}
                                     onChange={(e) => viewModel.setField2(e.target.value)}
-                                    placeholder={label2}
+                                    placeholder={t("add_database.placeholder.password")}
                                     onKeyDown={handleKeyDown}
                                 />
                                 <EyeButton hidePassword={hidePassword} toggleHidePassword={toggleHidePassword}
                                            size={49}/>
                             </div>
                         </>}
-                    <label>Datei auswählen</label>
+                    <label>{t("add_database.create_new.choose_file")}</label>
                     <label htmlFor="file-upload" className="file-upload">
                         {viewModel.targetFiles === null || viewModel.targetFiles.length < 1
-                            ? <span>Datei auswählen</span>
+                            ? <span>{t("add_database.create_new.choose_file")}</span>
                             : <span className={"visible"}>{viewModel.targetFiles[0].name}</span>
                         }
                     </label>
@@ -170,8 +162,8 @@ const CreateDatabaseDialog: React.FC<{
 
             {/* Shared Action Buttons */}
             <div className="confirm-cancel-buttons" style={{marginTop: "20px"}}>
-                <button className={"rectangle-button"} onClick={viewModel.handleConfirm}>Bestätigen</button>
-                <button className={"rectangle-button"} onClick={onCancel}>Abbrechen</button>
+                <button className={"rectangle-button"} onClick={viewModel.handleConfirm}>{t("button.confirm")}</button>
+                <button className={"rectangle-button"} onClick={onCancel}>{t("button.cancel")}</button>
             </div>
         </Dialog>
     );

@@ -1,4 +1,5 @@
 import React from "react";
+import {useTranslation} from "react-i18next";
 import {HiOutlineQrcode} from "react-icons/hi";
 
 import Dialog from "./Dialog.tsx";
@@ -13,7 +14,7 @@ const ShareDatabaseQRScannerDialog: React.FC<{
     setInputFields: (name: string, url: string) => void
 }> = ({setInputFields}) => {
     const viewModel = useDatabaseQRScannerViewModel(setInputFields);
-
+    const {t} = useTranslation();
     if (viewModel.qrScannerOpen) {
         return (
             <>
@@ -23,10 +24,10 @@ const ShareDatabaseQRScannerDialog: React.FC<{
                     onClick={() => viewModel.setQRScannerOpen(true)}>
                     <HiOutlineQrcode size={24}/>
                 </button>
-                <Dialog title={"Datenbank importieren"} onCloseDialog={() => viewModel.setQRScannerOpen(false)}
+                <Dialog title={t("share_db.import")} onCloseDialog={() => viewModel.setQRScannerOpen(false)}
                         className="qrDialog">
                     <video id="qrVideo"/>
-                    {viewModel.scanError && <p id="error">Ungültiger QR Code</p>}
+                    {viewModel.scanError && <p id="error">{t("share_db.invalid_qr")}</p>}
                 </Dialog>
             </>
         );

@@ -1,5 +1,6 @@
 import React from "react";
-import {HiPencil, HiTrash, HiPlus} from "react-icons/hi";
+import {useTranslation} from "react-i18next";
+import {HiPencil, HiPlus, HiTrash} from "react-icons/hi";
 
 import CopyButton from "./ButtonViews/CopyButton.tsx";
 import EyeButton from "./ButtonViews/EyeButton.tsx";
@@ -26,12 +27,13 @@ const EntryView: React.FC<{
     hidePassword: boolean;
     toggleHidePassword: () => void;
 }> = ({item, deleteItem, copyAndClearClipboard, setEditableView, hidePassword, toggleHidePassword}) => {
+    const {t} = useTranslation();
 
     if (item.isFolder() || item.deleted) {
         return (
             <>
                 <div className={"entryViewNoSelection"}>
-                    <span>Noch kein Eintrag ausgewählt</span>
+                    <span>{t("entry_view.none_selected")}</span>
                     <img className="logo" style={{width: "40vmin", marginTop: "2em"}} src={Logo} alt={"Logo"}/>
                 </div>
             </>
@@ -48,23 +50,25 @@ const EntryView: React.FC<{
 
                     <div className={"scrollableContainer entryViewListing"}>
                         <div className={"entryViewAttribute"}>
-                            <span className={"attribute-title"}>Benutzername:</span>
+                            <span className={"attribute-title"}>{t("entry_view.attributes.username")}</span>
                             <span className={"attribute-value"} title={"Benutzername"}>{entry.username}</span>
-                            <CopyButton copyToClipboard={copyAndClearClipboard} attributeValue={entry.username} id={entry.id}/>
+                            <CopyButton copyToClipboard={copyAndClearClipboard} attributeValue={entry.username}
+                                        id={entry.id}/>
                         </div>
 
                         <div className={"entryViewAttribute"}>
-                            <span className={"attribute-title"}>Passwort:</span>
+                            <span className={"attribute-title"}>{t("entry_view.attributes.password")}</span>
                             <div className={"attribute-value"} style={{gridColumnEnd: "19"}}>
                                 <span title={"Passwort"}>{(hidePassword ? "●".repeat(8) : entry.password)}</span>
                             </div>
                             <EyeButton hidePassword={hidePassword} toggleHidePassword={toggleHidePassword}/>
-                            <CopyButton copyToClipboard={copyAndClearClipboard} attributeValue={entry.password} id={entry.id}/>
+                            <CopyButton copyToClipboard={copyAndClearClipboard} attributeValue={entry.password}
+                                        id={entry.id}/>
                         </div>
 
                         <div className={"entryViewAttribute"}>
                             {/* adds https://www. to the start of the link*/}
-                            <span className={"attribute-title"}>URL:</span>
+                            <span className={"attribute-title"}>{t("entry_view.attributes.url")}</span>
                             <a className={"attribute-value"}
                                href={(entry.url.startsWith("http") ? entry.url : ("https://" + entry.url))}
                                target="_blank" rel="noopener noreferrer"
@@ -73,11 +77,12 @@ const EntryView: React.FC<{
                             >
                                 {entry.url}
                             </a>
-                            <CopyButton copyToClipboard={copyAndClearClipboard} attributeValue={entry.url} id={entry.id}/>
+                            <CopyButton copyToClipboard={copyAndClearClipboard} attributeValue={entry.url}
+                                        id={entry.id}/>
                         </div>
 
                         <div className={"entryViewAttribute"}>
-                            <span className={"attribute-title"}>Notiz:</span>
+                            <span className={"attribute-title"}>{t("entry_view.attributes.note")}</span>
                             <span className={"attribute-value"} style={{
                                 height: "fit-content",
                                 whiteSpace: "normal",
@@ -117,8 +122,14 @@ const EntryView: React.FC<{
                     </div>
                 </div>
                 <div className="entryDateViewEntry">
-                    <span>Erstellt am: {item.createdAt.toLocaleString(undefined, {dateStyle: 'long', timeStyle: 'medium'})}</span>
-                    <span>Bearbeitet am: {item.editedAt.toLocaleString(undefined, {dateStyle: 'long', timeStyle: 'medium'})}</span>
+                    <span>{t("entry_view.attributes.created_at")}{item.createdAt.toLocaleString(undefined, {
+                        dateStyle: 'long',
+                        timeStyle: 'medium'
+                    })}</span>
+                    <span>{t("entry_view.attributes.edited_at")}{item.editedAt.toLocaleString(undefined, {
+                        dateStyle: 'long',
+                        timeStyle: 'medium'
+                    })}</span>
                 </div>
             </div>
         );

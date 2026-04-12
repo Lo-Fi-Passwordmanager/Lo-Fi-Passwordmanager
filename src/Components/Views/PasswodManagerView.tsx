@@ -3,7 +3,6 @@ import React, {Suspense} from "react";
 import {RiHistoryLine} from "react-icons/ri";
 
 import LoadingScreen from "./DialogViews/LoadingScreen.tsx";
-import ToastDialog from "./DialogViews/ToastDialog.tsx";
 import LoginView from "./LoginView.tsx";
 import PasswordView from "./PasswordView.tsx";
 import SettingsView from "./SettingsView.tsx";
@@ -19,7 +18,6 @@ const PasswordManagerView: React.FC = () => {
 
     const viewModel = usePasswordManagerViewModel();
 
-
     if (!viewModel.loggedIn) {
         return (
             <RepoContext.Provider value={viewModel.repo}>
@@ -31,9 +29,6 @@ const PasswordManagerView: React.FC = () => {
                            securityProvider={viewModel.securityProvider}
                            setOpenedDbName={viewModel.setOpenedDatabaseName}
                            setToImportItems={viewModel.setToImportItems}/>
-                <ToastDialog message={viewModel.toastMessage}
-                             isVisible={viewModel.toastVisible}
-                             onClose={() => viewModel}/>
             </RepoContext.Provider>
 
         );
@@ -65,9 +60,6 @@ const PasswordManagerView: React.FC = () => {
                                   justSynced={viewModel.justSynced}
                                   itemsToImport={viewModel.toImportItems}
                     />
-                    <ToastDialog message={viewModel.toastMessage}
-                                 isVisible={viewModel.toastVisible}
-                                 onClose={() => viewModel}/>
                 </RepoContext.Provider>
             </Suspense>
         );
