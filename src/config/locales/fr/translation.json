@@ -7,7 +7,7 @@
         "new": "Créer une nouvelle base de données",
         "url": "Charger une base de données existante"
       },
-      "choose_action": "Sélectionner une action :",
+      "choose_action": "Choisir une action :",
       "choose_file": "Choisir un fichier",
       "title": "Ajouter une nouvelle base de données"
     },
@@ -25,7 +25,7 @@
     "copy_clipboard": "Copier dans le presse-papiers",
     "delete": "Supprimer",
     "hide_password": "Masquer le mot de passe",
-    "regroup_items": "Déplacer les entrées et dossiers",
+    "regroup_items": "Déplacer les entrées et les dossiers",
     "show_password": "Afficher le mot de passe"
   },
   "common": {
@@ -39,7 +39,7 @@
   },
   "dialog": {
     "confirm_delete": {
-      "text": "Voulez-vous vraiment supprimer le/la {{delete_type}} « <strong>{{item_title}}</strong> » ?",
+      "text": "Voulez-vous vraiment supprimer le {{delete_type}} « <strong>{{item_title}}</strong> » ?",
       "title": "Confirmer la suppression"
     }
   },
@@ -61,7 +61,7 @@
     "edited": "Date de modification",
     "found_entries": "Entrées trouvées",
     "found_folders": "Dossiers trouvés",
-    "individual": "Personnalisé",
+    "individual": "Individuel",
     "placeholder_search": "Rechercher...",
     "recently": "Récemment utilisé",
     "relevance": "Pertinence"
@@ -94,8 +94,8 @@
   },
   "pw_gen": {
     "length": "Longueur du mot de passe :",
-    "lowercase": "Lettres minuscules :",
-    "numbers": "Chiffres :",
+    "lowercase": "Lettres minuscules",
+    "numbers": "Chiffres",
     "special": "Caractères spéciaux :",
     "uppercase": "Lettres majuscules :"
   },
@@ -104,16 +104,20 @@
   },
   "settings": {
     "about": {
-      "info": "Ceci est une application collaborative de gestion de données. Le stockage et la transmission des données sont implémentés via la bibliothèque Automerge.\n De plus, les bibliothèques suivantes sont utilisées : Idle Timer, React DnD Kit, React Icons, QR Scanner et React QR Code.",
+      "info": "Il s'agit d'une application collaborative de gestion de données. Le stockage et le transfert de données sont implémentés à l'aide de la bibliothèque Automerge.\n De plus, les bibliothèques Idle Timer, React DnD Kit, React Icons, QR Scanner et React QR Code sont utilisées.",
       "license": "Licence : ",
-      "license_notice": "Le logiciel est fourni « tel quel », sans aucune garantie.",
+      "license_notice": "Le logiciel est fourni « tel quel », sans aucune responsabilité.",
       "version": "Version : "
+    },
+    "appearance": {
+      "custom": "Couleur personnalisée :",
+      "scheme": "Schéma de couleurs"
     },
     "database": {
       "none": "Veuillez sélectionner une base de données."
     },
-    "export_encrypted": "Exporter chiffré",
-    "export_unencrypted": "Exporter non chiffré",
+    "export_encrypted": "Exporter en format chiffré",
+    "export_unencrypted": "Exporter en format non chiffré",
     "inactivity": {
       "title": "Minutes avant déconnexion :"
     },
@@ -128,20 +132,21 @@
       "connected_peers": "Pairs connectés :",
       "other_peer": "ID du pair distant :",
       "own": "Votre ID de pair :",
-      "scan_qr": "Scannez le code QR d'un autre appareil sous « Paramètres » → « Connexion peer-to-peer »",
+      "scan_qr": "Scannez le code QR d'un autre appareil dans les paramètres sous « Paramètres » → « Connexion Peer-to-Peer »",
       "share": "Partager l'ID de pair",
-      "title": "Connexion peer-to-peer"
+      "title": "Connexion Peer-to-Peer"
     },
     "server": {
       "add_server": {
         "placeholder_name": "Mon serveur",
-        "placeholder_url": "wss://mon.serveur-synchro.org",
+        "placeholder_url": "wss://mon.serveur-sync.org",
         "title": "Ajouter un serveur"
       },
       "title": "Serveur de synchronisation"
     },
     "subsettings": {
-      "about": "À propos",
+      "about": "À propos de l'application",
+      "appearance": "Apparence",
       "database": "Paramètres de la base de données",
       "general": "Paramètres généraux"
     },
@@ -149,15 +154,15 @@
     "toggles": {
       "dark_mode": "Mode sombre",
       "inactivity": "Déconnexion en cas d'inactivité",
-      "p2p_sync": "Synchronisation peer-to-peer",
-      "recursive_delete": "Suppression récursive des entrées de dossier",
+      "p2p_sync": "Synchronisation Peer-to-Peer",
+      "recursive_delete": "Suppression récursive des éléments du dossier",
       "server_sync": "Synchronisation serveur"
     }
   },
   "share_db": {
     "import": "Importer la base de données",
     "invalid_qr": "Code QR invalide",
-    "scan_qr": "Scannez le code QR sur un autre appareil dans le dialogue « Ajouter une base de données » pour y ajouter la base de données nommée « {{name}} ».",
+    "scan_qr": "Scannez le code QR sur un autre appareil dans la boîte de dialogue « Ajouter une base de données » pour y ajouter la base de données nommée « {{name}} ».",
     "share_name": "Partager également le nom de la base de données",
     "title": "Partager la base de données"
   }

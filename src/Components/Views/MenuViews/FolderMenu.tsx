@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from "react";
 import {HiPencil, HiTrash} from "react-icons/hi";
-import {HiMiniPlus} from "react-icons/hi2";
+import {HiEllipsisVertical, HiMiniPlus} from "react-icons/hi2";
 
 /**
  * A 3-dot menu for folders which contains buttons to create an item, edit the title and delete the folder
@@ -76,7 +76,7 @@ const FolderMenu: React.FC<{
                 disabled={disabled}
                 title={isOpen ? "Menü schließen" : "Menü öffnen"}
             >
-                ⋮
+                <HiEllipsisVertical size={24}/>
             </button>
         </div>
     );

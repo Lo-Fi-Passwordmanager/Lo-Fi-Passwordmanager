@@ -1,11 +1,4 @@
-import {
-    type DragEndEvent,
-    type DragStartEvent,
-    PointerSensor,
-    TouchSensor,
-    useSensor,
-    useSensors
-} from "@dnd-kit/core";
+import {type DragEndEvent, type DragStartEvent, PointerSensor, TouchSensor, useSensor, useSensors} from "@dnd-kit/core";
 import {useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 
@@ -18,10 +11,18 @@ import {type Attribute} from "../../Utility/AutomergeFacade.ts";
 import {
     addRecentlyUsed,
     addRelevance,
-    loadCurrentSortCriterion, loadIndividualSorting, loadIndividualSortingSetting,
-    loadIsAscending, loadRecentlyUsedSorting, loadRelevanceSorting, loadSynchronizationSettings,
+    getFromStorage,
+    loadCurrentSortCriterion,
+    loadIndividualSorting,
+    loadIndividualSortingSetting,
+    loadIsAscending,
+    loadRecentlyUsedSorting,
+    loadRelevanceSorting,
     saveCurrentSortCriterion,
-    saveIsAscending, storeIndividualSorting, storeIndividualSortingSetting
+    saveIsAscending,
+    STORAGE_KEYS,
+    storeIndividualSorting,
+    storeIndividualSortingSetting
 } from "../../Utility/Storage.ts";
 import {useAutomergeFacade} from "../../Utility/useAutomergeFacade.ts";
 
@@ -212,7 +213,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
      * Toggles the inEditable state and updates the synchronization setting accordingly
      */
     function toggleInEdit() {
-        if (loadSynchronizationSettings()) { // only toggle if sync is enabled beforehand
+        if (getFromStorage(STORAGE_KEYS.SYNCHRONISATION, true)) { // only toggle if sync is enabled beforehand
             settings.setSynchronization(inEditable, !inEditable);
         }
         setInEditable(!inEditable);

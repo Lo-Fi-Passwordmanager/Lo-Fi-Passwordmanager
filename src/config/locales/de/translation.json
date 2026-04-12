@@ -109,6 +109,10 @@
       "license_notice": "Die Software wird \"wie besehen\" bereitgestellt, ohne jegliche Haftung.",
       "version": "Version: "
     },
+    "appearance": {
+      "custom": "Eigene Farbe:",
+      "scheme": "Farbschema"
+    },
     "database": {
       "none": "Bitte Datenbank auswählen."
     },
@@ -142,6 +146,7 @@
     },
     "subsettings": {
       "about": "Über die App",
+      "appearance": "Erscheinungsbild",
       "database": "Datenbankeinstellungen",
       "general": "Allgemeine Einstellungen"
     },

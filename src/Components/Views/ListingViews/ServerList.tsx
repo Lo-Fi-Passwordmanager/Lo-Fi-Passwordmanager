@@ -5,7 +5,7 @@ import {useTranslation} from "react-i18next";
 import {HiCheckCircle, HiDotsCircleHorizontal, HiTrash} from "react-icons/hi";
 import {HiMiniPlus} from "react-icons/hi2";
 
-import type {SettingsViewModel} from "../../ViewModels/SettingsViewModel.ts";
+import type {useSettingsViewModel} from "../../ViewModels/SettingsViewModel.ts";
 import SliderCheckBox from "../ButtonViews/SliderCheckBox.tsx";
 import AddServerDialog from "../DialogViews/AddServerDialog.tsx";
 
@@ -14,7 +14,7 @@ import AddServerDialog from "../DialogViews/AddServerDialog.tsx";
  * The View for the list of synchronization servers in the settings. It allows the user to add, remove and toggle synchronization servers.
  */
 const ServerList: React.FC<{
-    settingsViewModel: SettingsViewModel
+    settingsViewModel: ReturnType<typeof useSettingsViewModel>,
     disabled?: boolean
 }> = ({settingsViewModel, disabled}) => {
 

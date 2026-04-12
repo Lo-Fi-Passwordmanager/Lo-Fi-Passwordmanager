@@ -5,6 +5,7 @@ import {useTranslation} from "react-i18next";
 import {useToast} from "./Provider/ToastProviderViewModel.ts";
 import type {PeerjsNetworkAdapter} from "../../customNetworkAdapter/PeerJsNetworkAdapter.ts";
 import {Settings, useSettings} from "../../Model/Settings";
+import {loadActiveColorIndex, loadCustomColor, storeActiveColorIndex, storeCustomColor} from "../../Utility/Storage.ts";
 
 
 /**
@@ -17,7 +18,7 @@ export type SettingsViewModel = ReturnType<typeof useSettingsViewModel>
  * It uses states to reload react when changing settings, so that they get applied
  */
 export const useSettingsViewModel = () => {
-
+    const CUSTOM_COLOR_NAME = "custom_color";
     const settings = Settings.getSettings();
     const settingsHook = useSettings();
     // Reactive state to store values during runtime
@@ -26,7 +27,7 @@ export const useSettingsViewModel = () => {
     const [timeOutActive, setTimeOutActive] = useState(settings.getTimeoutActive());
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [timeoutLength, setTimeoutLength] = useState(settings.getTimeoutLength());
-    const [activeTab, setActiveTab] = useState<"general" | "database" | "about">("general");
+    const [activeTab, setActiveTab] = useState<"general" | "appearance" | "database" | "about">("general");
     const [serverUrls, setServerUrls] = useState<Map<string, string>>(settings.getServerUrls());
     const [serverStates, setServerStates] = useState<Map<string, boolean>>(settings.getServerStates());
     const [addServerDialogOpen, setAddServerDialogOpen] = useState<boolean>(false);
@@ -35,7 +36,18 @@ export const useSettingsViewModel = () => {
     //On connecting to a remote peer, this is the id that will be used, if no other argument is given
     const [remotePeerId, setRemotePeerId] = useState("");
     const [otherPeerMap, setOtherPeerMap] = useState<Map<string, [DataConnection, PeerjsNetworkAdapter]>>(settings.getConnectorsToAdapters());
-    document.getElementsByTagName("html")[0]?.setAttribute("data-theme", darkMode ? "dark" : "light");
+    const [customColor, setUpCustomColor] = useState<string>(loadCustomColor());
+    const colorSchemes = new Map<string, string>([["Lo-Fi Green", "#306844"],
+        ["Fern", "#477831"],
+        ["Dusk", "#5C80BC"],
+        ["Cherry", "#B80053"],
+        ["Sakura", "#e86a89"],
+        ["Sunflower", "#F1B42F"],
+        ["Granite", "#848482"],
+        [CUSTOM_COLOR_NAME, customColor],]);
+    const [activeColorIndex, setActiveColorIndex] = useState<number>(loadActiveColorIndex());
+    document.documentElement.setAttribute("data-theme", darkMode ? "dark" : "light");
+    document.documentElement.style.setProperty("--color", Array.from(colorSchemes.values())[activeColorIndex]);
 
     const [showToast, _] = useToast();
 
@@ -137,6 +149,11 @@ export const useSettingsViewModel = () => {
         }, 50); // Timeout is needed to ensure that the synchronisation setting is updated before it is toggled on again
     }
 
+    function changeColorScheme(index: number) {
+        setActiveColorIndex(index);
+        storeActiveColorIndex(index);
+    }
+
     function toggleTimeOutActive() {
         setTimeOutActive(!timeOutActive);
     }
@@ -195,6 +212,12 @@ export const useSettingsViewModel = () => {
         Settings.getSettings().addConnector(id ?? remotePeerId);
     }
 
+    function setCustomColor(color: string) {
+        setUpCustomColor(color);
+        colorSchemes.set(CUSTOM_COLOR_NAME, color);
+        storeCustomColor(color);
+    }
+
 
     return {
         darkMode,
@@ -208,7 +231,11 @@ export const useSettingsViewModel = () => {
         showToast,
         serverUrls,
         serverStates,
+        activeColorIndex,
+        colorSchemes,
+        customColor,
 
+        setCustomColor,
         setActiveTab,
         setConnection,
         toggleDarkMode,
@@ -232,6 +259,7 @@ export const useSettingsViewModel = () => {
         isLastServer,
         isLastActiveServer,
         copyToClipboard,
+        changeColorScheme,
         toggleRecursiveDelete,
         recursiveDelete,
         handleLanguageChange

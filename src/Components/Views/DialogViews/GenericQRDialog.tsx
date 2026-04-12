@@ -1,9 +1,9 @@
+import {QRCodeSVG} from "qrcode.react";
 import React, {type PropsWithChildren} from "react";
 import {HiOutlineQrcode} from "react-icons/hi";
 
 import Dialog from "./Dialog.tsx";
 import {useGenericDialogViewModel} from "../../ViewModels/Dialog/GenericDialogViewModel.ts";
-import {QRCodeSVG} from "qrcode.react";
 
 // QRCode Generator https://github.com/rosskhanas/react-qr-code
 

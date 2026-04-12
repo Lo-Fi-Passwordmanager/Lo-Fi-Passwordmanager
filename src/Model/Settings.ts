@@ -3,14 +3,12 @@ import {useEffect, useState} from "react";
 
 import {PeerjsNetworkAdapter} from "../customNetworkAdapter/PeerJsNetworkAdapter.ts";
 import {
-    loadDarkModeSetting,
+    getFromStorage,
     loadP2PSetting,
     loadRmRfSetting,
     loadSelectedServerURLs,
     loadServers,
-    loadSynchronizationSettings,
-    loadTimeoutLength,
-    loadTimeoutSettings,
+    STORAGE_KEYS,
     storeDarkModeSetting,
     storeP2PSetting,
     storeRmRfSetting,
@@ -63,10 +61,10 @@ export class Settings {
     private listeners: SettingsListener[] = [];
 
     private constructor() {
-        this._synchronization = loadSynchronizationSettings();
-        this._darkMode = loadDarkModeSetting();
-        this._timeoutActive = loadTimeoutSettings();
-        this._timeoutLength = loadTimeoutLength();
+        this._synchronization = getFromStorage(STORAGE_KEYS.SYNCHRONISATION, true);
+        this._darkMode = getFromStorage(STORAGE_KEYS.DARK_MODE, true);
+        this._timeoutActive = getFromStorage(STORAGE_KEYS.TIMEOUT_ACTIVE, true);
+        this._timeoutLength = getFromStorage(STORAGE_KEYS.TIMEOUT_LENGTH, 10);
         this._servers = loadServers();
         this._activeServerURLs = loadSelectedServerURLs();
         this._p2p = loadP2PSetting();

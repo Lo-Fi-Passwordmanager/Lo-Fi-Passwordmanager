@@ -1,6 +1,6 @@
 import React from "react";
-import {HiCheckCircle, HiDotsCircleHorizontal, HiTrash} from "react-icons/hi";
 import {useTranslation} from "react-i18next";
+import {HiCheckCircle, HiDotsCircleHorizontal, HiTrash} from "react-icons/hi";
 import {HiMiniCog8Tooth, HiMiniMinus, HiMiniPlus} from "react-icons/hi2";
 
 import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
@@ -18,6 +18,7 @@ import ServerList from "./ListingViews/ServerList.tsx";
  * The View that represents the Settings Dialog and Button to open it
  * @param automergeFacade the current AutomergeFacade instance
  * @param openedDbName the name of the currently opened database
+ * @param closeDatabase a function to close the currently opened database
  */
 const SettingsView: React.FC<{
     automergeFacade?: AutomergeFacade | null,
@@ -51,6 +52,10 @@ const SettingsView: React.FC<{
                             onClick={() => viewModel.setActiveTab("general")}>
                         {t("settings.subsettings.general")}
                     </button>
+                    <button className={`settings-tab ${viewModel.activeTab === "appearance" ? "active" : ""}`}
+                            onClick={() => viewModel.setActiveTab("appearance")}>
+                        {t("settings.subsettings.appearance")}
+                    </button>
                     <button className={`settings-tab ${viewModel.activeTab === "database" ? "active" : ""}`}
                             onClick={() => viewModel.setActiveTab("database")}>
                         {t("settings.subsettings.database")}
@@ -74,11 +79,6 @@ const SettingsView: React.FC<{
                                 <option value='fr'>{t("settings.language.french")}</option>
                                 <option value='es'>{t("settings.language.spanish")}</option>
                             </select>
-
-                            <label className="checkboxRow">
-                                <SliderCheckBox checked={viewModel.darkMode} toggleChecked={viewModel.toggleDarkMode}/>
-                                {t("settings.toggles.dark_mode")}
-                            </label>
 
                             <label className="checkboxRow">
                                 <SliderCheckBox checked={viewModel.synchronisation}
@@ -121,14 +121,14 @@ const SettingsView: React.FC<{
                                     </div>
                                 </div>
                             )}
-                            <div className="connection-settings">
+                            <div className="sub-settings">
                                 {!viewModel.synchronisation ? null : (
                                     <ServerList settingsViewModel={viewModel}/>
                                 )}
 
 
                                 {!viewModel.P2P ? null :
-                                    <div className={"connection-settings"}>
+                                    <div className={"sub-settings"}>
 
                                         <h4>{t("settings.p2p.title")}</h4>
                                         <label>{t("settings.p2p.own")}</label>
@@ -223,6 +223,37 @@ const SettingsView: React.FC<{
                                             ))}
                                         </div>
                                     </>)}
+                            </div>
+                        </div>
+                    )}
+
+                    {viewModel.activeTab === "appearance" && (
+                        <div className="settingsContainer">
+                            <h3>Erscheinungsbildeinstellungen</h3>
+                            <div className={"sub-settings"}>
+                                <h4>Theme</h4>
+                                <label className="checkboxRow">
+                                    <SliderCheckBox checked={viewModel.darkMode}
+                                                    toggleChecked={viewModel.toggleDarkMode}/>
+                                    Dark-Mode
+                                </label>
+                            </div>
+                            <div className={"sub-settings"}>
+                                <h4>{t("settings.appearance.scheme")}</h4>
+                                <div className={"color-list"}>
+                                    {Array.from(viewModel.colorSchemes.entries()).map(([key, color], index) => (
+                                        <button key={index}
+                                                className={`color-scheme-button ${viewModel.activeColorIndex === index ? "selected" : ""}`}
+                                                style={{
+                                                    backgroundColor: color,
+                                                }}
+                                                onClick={() => viewModel.changeColorScheme(index)}
+                                                title={`${key} auswählen`}/>
+                                    ))}
+                                </div>
+                                <h4>{t("settings.appearance.custom")}</h4>
+                                <input type="color" value={viewModel.customColor}
+                                       onChange={(e) => viewModel.setCustomColor(e.target.value)}/>
                             </div>
                         </div>
                     )}

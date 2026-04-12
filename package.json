@@ -9,7 +9,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "build:deploy": "tsc -b && vite --config vite.config.deploy.ts build",
-    "lint": "eslint --max-warnings 0",
+    "lint": "eslint --max-warnings 0 --fix",
     "preview": "vite preview",
     "test": "vitest",
     "test:ci": "vitest run",

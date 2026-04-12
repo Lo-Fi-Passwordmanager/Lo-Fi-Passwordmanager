@@ -1,10 +1,11 @@
+import {QRCodeSVG} from "qrcode.react";
 import React from "react";
 import {Trans, useTranslation} from "react-i18next";
 import {HiOutlineQrcode} from "react-icons/hi";
+
 import Dialog from "./Dialog.tsx";
 import {useShareDatabaseQRViewModel} from "../../ViewModels/Dialog/ShareDatabaseQRViewModel.ts";
 import SliderCheckBox from "../ButtonViews/SliderCheckBox.tsx";
-import {QRCodeSVG} from "qrcode.react";
 
 // QRCode Generator https://github.com/rosskhanas/react-qr-code
 

@@ -1,62 +1,83 @@
-import type {AutomergeUrl} from "@automerge/automerge-repo";
+import type { AutomergeUrl } from "@automerge/automerge-repo";
 
-const SYNCHRONISATION = "synchronisation";
-const DARK_MODE = "dark_mode";
-const TIMEOUT_ACTIVE = "timeout_active";
-const TIMEOUT_LENGTH = "timeout_length";
-const RECURSIVE_DELETE = "rm_rf";
-const SERVER_LIST = "servers_list";
-const SELECTED_SERVER_URLS = "selected_server_urls";
-const CURRENT_SORT_CRITERIA = "currentSortCriterion";
-const SORT_IS_ASCENDING = "isAscending";
+// --- Constants ---
+export const STORAGE_KEYS = {
+    SYNCHRONISATION: "synchronisation",
+    DARK_MODE: "dark_mode",
+    TIMEOUT_ACTIVE: "timeout_active",
+    TIMEOUT_LENGTH: "timeout_length",
+    SERVER_LIST: "servers_list",
+    SELECTED_SERVER_URLS: "selected_server_urls",
+    CURRENT_SORT_CRITERIA: "currentSortCriterion",
+    SORT_IS_ASCENDING: "isAscending",
+    DATABASES: "databases",
+    P2P: "p2p",
+    RELEVANCE: "relevance",
+    INDIVIDUAL: "individual",
+    IS_INDIVIDUAL_SORTING: "is-individual-sorting",
+    RECENTLY_USED: "recentlyUsed",
+    ACTIVE_COLOR_INDEX: "active_color_index",
+    CUSTOM_COLOR: "custom_color",
+    RECURSIVE_DELETE: "recursive_delete"
+} as const;
+
+// --- Generic Helpers ---
 
 /**
- * Loads all database names with their automerge url from localStorage
- *
- * @returns map of database names to automerge urls
+ * Generic Save: Handles Map-to-Array conversion automatically
  */
-export function loadAllDatabases(): Map<string, AutomergeUrl> {
-    const rawDatabases = localStorage.getItem("databases");
-    if (!rawDatabases) {
-        return new Map();
+export function saveToStorage<T>(key: string, value: T): void {
+    const dataToStore = value instanceof Map
+        ? Array.from(value.entries())
+        : value;
+    localStorage.setItem(key, JSON.stringify(dataToStore));
+}
+
+/**
+ * Generic Load: Handles default values, JSON parsing, and Map hydration
+ */
+export function getFromStorage<T>(
+    key: string,
+    defaultValue: T,
+    transform?: (parsed: any) => T
+): T {
+    const raw = localStorage.getItem(key);
+    if (raw === null) {
+        saveToStorage(key, defaultValue);
+        return defaultValue;
     }
     try {
-        const parsedDatabases = new Map(JSON.parse(rawDatabases) as [string, AutomergeUrl][]);
-        return new Map(parsedDatabases);
+        const parsed = JSON.parse(raw);
+        return transform ? transform(parsed) : (parsed as T);
     } catch (e) {
-        console.error(e);
-        return new Map();
+        console.error(`Error parsing storage key "${key}":`, e);
+        return defaultValue;
     }
 }
 
-/**
- * Saves the database names with their automerge url to localStorage
- *
- * @param databases map of database names to automerge urls
- */
-export function saveDatabases(databases: Map<string, AutomergeUrl>): void {
-    const toStore = JSON.stringify(Array.from(databases.entries()));
-    localStorage.setItem("databases", toStore);
-}
+// Reusable hydration logic for Maps
+const asMap = <K, V>(data: any) => new Map<K, V>(data);
 
-/**
- * Stores a database name with its automerge url to localStorage
- *
- * @param name the name of the database
- * @param autoMergeUrl the automerge url of the database
- */
+// --- Database Operations ---
+
+export const loadAllDatabases = () =>
+    getFromStorage<Map<string, AutomergeUrl>>(STORAGE_KEYS.DATABASES, new Map(), asMap);
+
+export const saveDatabases = (databases: Map<string, AutomergeUrl>) =>
+    saveToStorage(STORAGE_KEYS.DATABASES, databases);
+
 export function storeDatabase(name: string, autoMergeUrl: AutomergeUrl): void {
     const databases = loadAllDatabases();
     databases.set(name, autoMergeUrl);
     saveDatabases(databases);
 }
 
-/**
- * Renames a database in localStorage
- *
- * @param oldName the current name of the database
- * @param newName the new name of the database
- */
+export function removeDatabase(name: string): void {
+    const databases = loadAllDatabases();
+    databases.delete(name);
+    saveDatabases(databases);
+}
+
 export function renameDatabase(oldName: string, newName: string): Map<string, AutomergeUrl> {
     const databases = loadAllDatabases();
     const autoMergeUrl = databases.get(oldName);
@@ -65,366 +86,88 @@ export function renameDatabase(oldName: string, newName: string): Map<string, Au
         databases.set(newName, autoMergeUrl);
         saveDatabases(databases);
         return databases;
-    } else {
-        throw new Error(`Database with name ${oldName} does not exist.`);
     }
+    throw new Error(`Database with name ${oldName} does not exist.`);
 }
 
-/**
- * Removes a database name and its automerge url from localStorage
- *
- * @param name the name of the database to remove
- */
-export function removeDatabase(name: string): void {
-    const databases = loadAllDatabases();
-    databases.delete(name);
-    saveDatabases(databases);
-}
+// --- Sort & Search Operations ---
 
-/**
- * Loads the current sort criterion from localStorage
- *
- * @returns the current sort criterion or null if not set
- */
-export function loadCurrentSortCriterion(): string | null {
-    return localStorage.getItem(CURRENT_SORT_CRITERIA);
-}
+export const loadCurrentSortCriterion = () => getFromStorage<string | null>(STORAGE_KEYS.CURRENT_SORT_CRITERIA, null);
+export const saveCurrentSortCriterion = (v: string) => saveToStorage(STORAGE_KEYS.CURRENT_SORT_CRITERIA, v);
 
-/**
- * Saves the current sort criterion to localStorage
- *
- * @param criterion the current sort criterion
- */
-export function saveCurrentSortCriterion(criterion: string): void {
-    localStorage.setItem(CURRENT_SORT_CRITERIA, criterion);
-}
+export const loadIsAscending = () => getFromStorage<boolean | null>(STORAGE_KEYS.SORT_IS_ASCENDING, null);
+export const saveIsAscending = (v: boolean) => saveToStorage(STORAGE_KEYS.SORT_IS_ASCENDING, v);
 
+export const loadRelevanceSorting = () =>
+    getFromStorage<Map<string, number>>(STORAGE_KEYS.RELEVANCE, new Map(), asMap);
 
-/**
- * Loads the isAscending flag from localStorage
- *
- * @returns the isAscending flag or null if not set
- */
-export function loadIsAscending(): boolean | null {
-    const value = localStorage.getItem(SORT_IS_ASCENDING);
-    if (value === null) {
-        return null;
-    }
-    return value === "true";
-}
-
-/**
- * Saves the isAscending flag to localStorage
- *
- * @param isAscending the isAscending flag
- */
-export function saveIsAscending(isAscending: boolean): void {
-    localStorage.setItem(SORT_IS_ASCENDING, isAscending.toString());
-}
-
-/**
- * Gets the selected server URL from localStorage, or stores and returns the default if not present
- *
- * @returns the selected server URL
- */
-export function loadSelectedServerURLs(): string[] {
-    const urls = localStorage.getItem(SELECTED_SERVER_URLS);
-    if (urls) {
-        return JSON.parse(urls) as string[];
-    } else {
-        localStorage.setItem(SELECTED_SERVER_URLS, JSON.stringify([import.meta.env.VITE_DEFAULT_SYNC_SERVER_URL]));
-        return [import.meta.env.VITE_DEFAULT_SYNC_SERVER_URL];
-    }
-}
-
-/**
- * Loads the list of servers from localStorage, or stores and returns the default list if not present
- *
- * @returns a map of server names to URLs
- */
-export function loadServers(): Map<string, string> {
-    const serverList = localStorage.getItem(SERVER_LIST);
-    if (serverList) {
-        const servers = new Map<string, string>();
-        (JSON.parse(serverList) as [[name: string, url: string]]).forEach(([name, url]: [string, string]) => {
-            servers.set(name, url);
-        });
-        return servers;
-    } else {
-        const defaultServers = new Map<string, string>([
-            [import.meta.env.VITE_DEFAULT_SYNC_SERVER_NAME, import.meta.env.VITE_DEFAULT_SYNC_SERVER_URL]
-        ]);
-        storeServers(defaultServers);
-        return defaultServers;
-    }
-}
-
-/** Stores the selected servers urls in localStorage
- *
- * @param serverURLs the server URLs to store
- */
-export function storeSelectedServers(serverURLs: string[]): void {
-    localStorage.setItem(SELECTED_SERVER_URLS, JSON.stringify(serverURLs));
-}
-
-/** stores the list of servers in localStorage
- *
- * @param servers a map of server names to URLs
- */
-export function storeServers(servers: Map<string, string>): void {
-    localStorage.setItem(SERVER_LIST, JSON.stringify(Array.from(servers.entries())));
-}
-
-/**
- * Loads the boolean for the synchronization setting from localStorage or stores and returns the default if not present
- *
- * @returns the synchronization setting
- */
-export function loadSynchronizationSettings(): boolean {
-    const synchronisation = localStorage.getItem(SYNCHRONISATION);
-    if (synchronisation) {
-        return JSON.parse(synchronisation) as boolean;
-    } else {
-        localStorage.setItem(SYNCHRONISATION, JSON.stringify(true));
-        return true;
-    }
-}
-
-/** stores the boolean for the synchronization setting in localStorage
- *
- * @param value the synchronization setting to store
- */
-export function storeSynchronizationSettings(value: boolean): void {
-    localStorage.setItem(SYNCHRONISATION, JSON.stringify(value));
-}
-
-/**
- * Loads the boolean for the dark mode setting from localStorage or stores and returns the default if not present
- *
- * @returns the dark mode setting
- */
-export function loadDarkModeSetting(): boolean {
-    const darkMode = localStorage.getItem(DARK_MODE);
-    if (darkMode) {
-        return JSON.parse(darkMode) as boolean;
-    } else {
-        localStorage.setItem(DARK_MODE, JSON.stringify(true));
-        return true;
-    }
-}
-
-/**
- * stores the boolean for the dark mode setting in localStorage
- *
- * @param value the dark mode setting to store
- */
-export function storeDarkModeSetting(value: boolean): void {
-    localStorage.setItem(DARK_MODE, JSON.stringify(value));
-}
-
-/**
- * Loads the boolean for the timeout active setting from localStorage or stores and returns the default if not present
- *
- * @returns the timeout active setting
- */
-export function loadTimeoutSettings(): boolean {
-    const timeoutActive = localStorage.getItem(TIMEOUT_ACTIVE);
-    if (timeoutActive) {
-        return JSON.parse(timeoutActive) as boolean;
-    } else {
-        localStorage.setItem(TIMEOUT_ACTIVE, JSON.stringify(true));
-        return true;
-    }
-}
-
-/**
- * stores the boolean for the timeout active setting in localStorage
- *
- * @param value the timeout active setting to store
- */
-export function storeTimeoutSettings(value: boolean): void {
-    localStorage.setItem(TIMEOUT_ACTIVE, JSON.stringify(value));
-}
-
-/**
- * Loads the timeout length from localStorage or stores and returns the default if not present
- *
- * @returns the timeout length
- */
-export function loadTimeoutLength(): number {
-    const timeoutLength = localStorage.getItem(TIMEOUT_LENGTH);
-    if (timeoutLength != null) {
-        return JSON.parse(timeoutLength) as number;
-    } else {
-        localStorage.setItem(TIMEOUT_LENGTH, JSON.stringify(10));
-        return 10;
-    }
-}
-
-/**
- * stores the timeout length in localStorage
- *
- * @param length the timeout length to store
- */
-export function storeTimeoutLength(length: number): void {
-    localStorage.setItem(TIMEOUT_LENGTH, JSON.stringify(length));
-}
-
-/**
- * Loads the boolean for the P2P setting from localStorage
- *
- * @returns the P2P setting
- */
-export function loadP2PSetting(): boolean {
-    const p2p = localStorage.getItem("p2p");
-    if (p2p != null) {
-        return JSON.parse(p2p) as boolean;
-    } else {
-        localStorage.setItem("p2p", JSON.stringify(true));
-        return true;
-    }
-}
-
-/**
- * stores the boolean for the P2P setting in localStorage
- *
- * @param isP2P the P2P boolean to store
- */
-export function storeP2PSetting(isP2P: boolean): void {
-    localStorage.setItem("p2p", JSON.stringify(isP2P));
-}
-
-
-/**
- * Loads the boolean for the recursive deletion setting from localStorage
- *
- * @returns the rf delete setting
- */
-export function loadRmRfSetting(): boolean {
-    const recursiveDelete = localStorage.getItem(RECURSIVE_DELETE);
-    if (recursiveDelete != null) {
-        return JSON.parse(recursiveDelete) as boolean;
-    } else {
-        localStorage.setItem(RECURSIVE_DELETE, JSON.stringify(true));
-        return true;
-    }
-}
-
-/**
- * stores the recursive deletion value in localStorage
- *
- * @param value the value to store
- */
-export function storeRmRfSetting(value: boolean): void {
-    localStorage.setItem(RECURSIVE_DELETE, JSON.stringify(value));
-}
-
-/**
- * Loads a map with item ids to their relevance
- */
-export function loadRelevanceSorting(): Map<string, number> {
-    const rawRelevance = localStorage.getItem("relevance");
-    if (!rawRelevance) {
-        return new Map();
-    }
-    try {
-        const parsedRelevance = new Map(JSON.parse(rawRelevance) as [string, number][]);
-        return new Map(parsedRelevance);
-    } catch (e) {
-        console.error(e);
-        return new Map();
-    }
-}
-
-/**
- * Increases the relevance of an item by 1
- * @param itemId the id of  the item
- */
 export function addRelevance(itemId: string): void {
     const relevance = loadRelevanceSorting();
-    const currentRelevance = relevance.get(itemId) ?? 0;
-    relevance.set(itemId, currentRelevance + 1);
-    localStorage.setItem("relevance", JSON.stringify(Array.from(relevance.entries())));
+    relevance.set(itemId, (relevance.get(itemId) ?? 0) + 1);
+    saveToStorage(STORAGE_KEYS.RELEVANCE, relevance);
 }
 
-/**
- * Loads a map with ids to their sorting index
- */
-export function loadIndividualSorting(): Map<string, number> {
-    const rawIndividuals = localStorage.getItem("individual");
-    if (!rawIndividuals) {
-        return new Map();
-    }
-    try {
-        const parsedIndividuals = new Map(JSON.parse(rawIndividuals) as [string, number][]);
-        return new Map(parsedIndividuals);
-    } catch (e) {
-        console.error(e);
-        return new Map();
-    }
-}
+// --- Server Operations ---
 
-/**
- * Stores the individual sorting map in localStorage
- *
- * @param newSorting the map with ids to their sorting index to store
- */
-export function storeIndividualSorting(newSorting: Map<string, number>): void {
-    localStorage.setItem("individual", JSON.stringify(Array.from(newSorting.entries())));
-}
+export const loadSelectedServerURLs = () =>
+    getFromStorage<string[]>(STORAGE_KEYS.SELECTED_SERVER_URLS, [import.meta.env.VITE_DEFAULT_SYNC_SERVER_URL]);
 
-/**
- * Loads the setting for individual sorting from localStorage or stores and returns the default if not present
- */
-export function loadIndividualSortingSetting(): boolean {
-    const rawIndividual  = localStorage.getItem("is-individual-sorting");
-    if (!rawIndividual) {
-        storeIndividualSortingSetting(true);
-        return true;
-    }
-    try {
-        return JSON.parse(rawIndividual) as boolean;
-    } catch (e) {
-        console.error(e);
-        storeIndividualSortingSetting(true);
-        return true;
-    }
-}
+export const storeSelectedServers = (urls: string[]) => saveToStorage(STORAGE_KEYS.SELECTED_SERVER_URLS, urls);
 
-/**
- * Stores the new setting for individual sorting to the localstorage
- * @param isIndividual the new setting
- */
-export function storeIndividualSortingSetting(isIndividual: boolean): void {
-    localStorage.setItem("is-individual-sorting", JSON.stringify(isIndividual));
-}
+export const loadServers = () =>
+    getFromStorage<Map<string, string>>(
+        STORAGE_KEYS.SERVER_LIST,
+        new Map([[import.meta.env.VITE_DEFAULT_SYNC_SERVER_NAME, import.meta.env.VITE_DEFAULT_SYNC_SERVER_URL]]),
+        asMap
+    );
 
-/**
- * Loads the recently used map with item ids to their date last used
- */
-export function loadRecentlyUsedSorting(): Map<string, Date> {
-    const rawRecentlyUsed = localStorage.getItem("recentlyUsed");
-    if (!rawRecentlyUsed) {
-        return new Map();
-    }
-    try {
-        const parsedRecentlyUsed = JSON.parse(rawRecentlyUsed) as [string, string][];
-        return new Map<string, Date>(
-            parsedRecentlyUsed.map(([key, dateString]) => {
-                return [key, new Date(dateString)];
-            }));
-    } catch (e) {
-        console.error(e);
-        return new Map();
-    }
-}
+export const storeServers = (servers: Map<string, string>) => saveToStorage(STORAGE_KEYS.SERVER_LIST, servers);
 
-/**
- * Updates the date last used of an item to the current date
- * @param id the id of the item to be updated
- */
+// --- Settings & UI ---
+
+export const loadSynchronizationSettings = () => getFromStorage(STORAGE_KEYS.SYNCHRONISATION, true);
+export const storeSynchronizationSettings = (v: boolean) => saveToStorage(STORAGE_KEYS.SYNCHRONISATION, v);
+
+export const loadDarkModeSetting = () => getFromStorage(STORAGE_KEYS.DARK_MODE, true);
+export const storeDarkModeSetting = (v: boolean) => saveToStorage(STORAGE_KEYS.DARK_MODE, v);
+
+export const loadTimeoutSettings = () => getFromStorage(STORAGE_KEYS.TIMEOUT_ACTIVE, true);
+export const storeTimeoutSettings = (v: boolean) => saveToStorage(STORAGE_KEYS.TIMEOUT_ACTIVE, v);
+
+export const loadTimeoutLength = () => getFromStorage(STORAGE_KEYS.TIMEOUT_LENGTH, 10);
+export const storeTimeoutLength = (v: number) => saveToStorage(STORAGE_KEYS.TIMEOUT_LENGTH, v);
+
+export const loadP2PSetting = () => getFromStorage(STORAGE_KEYS.P2P, true);
+export const storeP2PSetting = (v: boolean) => saveToStorage(STORAGE_KEYS.P2P, v);
+
+export const loadRmRfSetting = () => getFromStorage(STORAGE_KEYS.RECURSIVE_DELETE, true);
+export const storeRmRfSetting = (v: boolean) => saveToStorage(STORAGE_KEYS.RECURSIVE_DELETE, v);
+
+export const loadActiveColorIndex = () => getFromStorage(STORAGE_KEYS.ACTIVE_COLOR_INDEX, 0);
+export const storeActiveColorIndex = (v: number) => saveToStorage(STORAGE_KEYS.ACTIVE_COLOR_INDEX, v);
+
+export const loadCustomColor = () => getFromStorage(STORAGE_KEYS.CUSTOM_COLOR, "#FFFFFF");
+export const storeCustomColor = (v: string) => saveToStorage(STORAGE_KEYS.CUSTOM_COLOR, v);
+
+// --- Individual Sorting ---
+
+export const loadIndividualSorting = () => getFromStorage<Map<string, number>>(STORAGE_KEYS.INDIVIDUAL, new Map(), asMap);
+export const storeIndividualSorting = (v: Map<string, number>) => saveToStorage(STORAGE_KEYS.INDIVIDUAL, v);
+
+export const loadIndividualSortingSetting = () => getFromStorage(STORAGE_KEYS.IS_INDIVIDUAL_SORTING, true);
+export const storeIndividualSortingSetting = (v: boolean) => saveToStorage(STORAGE_KEYS.IS_INDIVIDUAL_SORTING, v);
+
+// --- Recently Used ---
+
+export const loadRecentlyUsedSorting = () =>
+    getFromStorage<Map<string, Date>>(
+        STORAGE_KEYS.RECENTLY_USED,
+        new Map(),
+        (data: [string, string][]) => new Map(data.map(([k, v]) => [k, new Date(v)]))
+    );
+
 export function addRecentlyUsed(id: string): void {
     const recently = loadRecentlyUsedSorting();
     recently.set(id, new Date());
-    localStorage.setItem("recentlyUsed", JSON.stringify(Array.from(recently.entries())));
+    saveToStorage(STORAGE_KEYS.RECENTLY_USED, recently);
 }
