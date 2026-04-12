@@ -317,7 +317,6 @@ button:focus-visible {
         padding: 10px;
         border-radius: var(--standard-radius);
         background-color: white;
-        margin-top: 15px;
         margin-bottom: 15px
     }
 }

@@ -1,11 +1,10 @@
 import React from "react";
 import {Trans, useTranslation} from "react-i18next";
 import {HiOutlineQrcode} from "react-icons/hi";
-import QRCode from "react-qr-code";
-
 import Dialog from "./Dialog.tsx";
 import {useShareDatabaseQRViewModel} from "../../ViewModels/Dialog/ShareDatabaseQRViewModel.ts";
 import SliderCheckBox from "../ButtonViews/SliderCheckBox.tsx";
+import {QRCodeSVG} from "qrcode.react";
 
 // QRCode Generator https://github.com/rosskhanas/react-qr-code
 
@@ -39,11 +38,12 @@ const ShareDatabaseQRDialog: React.FC<ShareDatabaseQRDialogProps> = ({name, url}
                                   name: name
                               }}
                     /></p>
-                    <label className="checkboxRow">
+                    <label className="checkboxRow" style={{marginBottom: "15px"}}>
                         <SliderCheckBox checked={viewModel.shareName} toggleChecked={viewModel.toggleShareName}/>
                         {t("share_db.share_name")}
                     </label>
-                    <QRCode value={viewModel.qrValue} className="qrCode"/>
+
+                    <QRCodeSVG value={viewModel.qrValue} size={256} className="qrCode"/>
                 </Dialog>
             </>
         );
