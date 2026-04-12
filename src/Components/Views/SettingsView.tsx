@@ -83,24 +83,28 @@ const SettingsView: React.FC<{
                             <label className="checkboxRow">
                                 <SliderCheckBox checked={viewModel.synchronisation}
                                                 toggleChecked={viewModel.toggleSynchronisation}/>
-                                {t("settings.toggles.server_sync")}
+                                <text>{t("settings.toggles.server_sync")}</text>
                             </label>
 
                             <label className="checkboxRow">
                                 <SliderCheckBox checked={viewModel.P2P} toggleChecked={viewModel.toggleP2P}/>
-                                {t("settings.toggles.p2p_sync")}
+                                <text>
+                                    {t("settings.toggles.p2p_sync")}
+                                </text>
                             </label>
 
                             <label className="checkboxRow">
                                 <SliderCheckBox checked={viewModel.timeOutActive}
                                                 toggleChecked={viewModel.toggleTimeOutActive}/>
-                                {t("settings.toggles.inactivity")}
+                                <text>{t("settings.toggles.inactivity")}</text>
                             </label>
 
                             <label className="checkboxRow">
                                 <SliderCheckBox checked={viewModel.recursiveDelete}
                                                 toggleChecked={() => viewModel.toggleRecursiveDelete()}/>
-                                {t("settings.toggles.recursive_delete")}
+                                <text>
+                                    {t("settings.toggles.recursive_delete")}
+                                </text>
                             </label>
 
                             {viewModel.timeOutActive && (
