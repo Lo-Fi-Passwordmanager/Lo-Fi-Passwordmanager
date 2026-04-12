@@ -1,4 +1,5 @@
 import React from "react";
+import {useTranslation} from "react-i18next";
 import {HiEye} from "react-icons/hi";
 import {HiEyeSlash} from "react-icons/hi2";
 
@@ -18,6 +19,7 @@ export const HistoryItem: React.FC<{
 }> = ({historyEntry, securityProvider}) => {
 
     const viewmodel = useHistoryItemViewModel(historyEntry, securityProvider);
+    const {t} = useTranslation();
 
     if (!historyEntry) return null;
     // Map types to visual config
@@ -35,7 +37,7 @@ export const HistoryItem: React.FC<{
                     <span className="timeline-date">
                         {viewmodel.itemType === "update"
                             ? viewmodel.editedAt.toLocaleDateString()
-                            : (viewmodel.itemType === "deleted") ? `Letzte Änderung: ${viewmodel.editedAt.toLocaleDateString()}` : viewmodel.createdAt.toLocaleDateString()}
+                            : (viewmodel.itemType === "deleted") ? (t("history.last_change") + viewmodel.editedAt.toLocaleDateString()) : viewmodel.createdAt.toLocaleDateString()}
                     </span>
                 </div>
 

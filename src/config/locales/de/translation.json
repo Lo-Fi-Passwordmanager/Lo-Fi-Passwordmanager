@@ -1,0 +1,164 @@
+{
+  "add_database": {
+    "create_new": {
+      "action": {
+        "file_encrypted": "verschlüsselte Datenbank importieren",
+        "file_plain": "unverschlüsselte Datenbank importieren",
+        "new": "Neue Datenbank erstellen",
+        "url": "Existierende Datenbank laden"
+      },
+      "choose_action": "Aktion wählen:",
+      "choose_file": "Datei auswählen",
+      "title": "Neue Datenbank hinzufügen"
+    },
+    "placeholder": {
+      "id": "Datenbank ID",
+      "name": "Datenbankname",
+      "password": "Masterpasswort"
+    }
+  },
+  "button": {
+    "add": "Hinzufügen",
+    "cancel": "Abbrechen",
+    "change_custom_sorting": "Individuelle Sortierung anpassen",
+    "confirm": "Bestätigen",
+    "copy_clipboard": "In Zwischenablage kopieren",
+    "delete": "Löschen",
+    "hide_password": "Passwort verstecken",
+    "regroup_items": "Einträge und Ordner verschieben",
+    "show_password": "Passwort anzeigen"
+  },
+  "common": {
+    "copied_clipboard": "In die Zwischenablage kopiert.",
+    "copy_db_id": "Datenbank ID kopieren",
+    "delete_db": "Datenbank lokal löschen",
+    "entry": "Eintrag",
+    "folder": "Ordner",
+    "new_entry": "Neuer Eintrag",
+    "new_folder": "Neuer Ordner"
+  },
+  "dialog": {
+    "confirm_delete": {
+      "text": "Willst du den {{delete_type}} \"<strong>{{item_title}}</strong>\" wirklich löschen?",
+      "title": "Löschen bestätigen"
+    }
+  },
+  "entry_view": {
+    "attributes": {
+      "created_at": "Erstellt am: ",
+      "edited_at": "Bearbeitet am: ",
+      "note": "Notiz:",
+      "password": "Passwort:",
+      "url": "Url:",
+      "username": "Benutzername:"
+    },
+    "none_selected": "Noch kein Eintrag ausgewählt",
+    "save": "Speichern"
+  },
+  "filtered_list": {
+    "alphabetical": "Alphabetisch",
+    "creation": "Erstellungsdatum",
+    "edited": "Bearbeitungsdatum",
+    "found_entries": "Gefundene Einträge",
+    "found_folders": "Gefundene Ordner",
+    "individual": "Individuell",
+    "placeholder_search": "Suchen...",
+    "recently": "Zuletzt verwendet",
+    "relevance": "Relevanz"
+  },
+  "history": {
+    "delete": {
+      "entry": "Eintrag gelöscht",
+      "folder": "Ordner gelöscht"
+    },
+    "last_change": "Letzte Änderung: ",
+    "move": {
+      "entry": "Eintrag verschoben",
+      "folder": "Ordner verschoben"
+    },
+    "title": "Änderungsverlauf",
+    "update": {
+      "entry": "Eintrag bearbeitet",
+      "folder": "Ordner bearbeitet"
+    }
+  },
+  "item_creation": {
+    "title": "Neues Element erstellen"
+  },
+  "just_synced": "Synchronisiert.",
+  "loading": {
+    "title": "Lädt"
+  },
+  "login": {
+    "open": "Datenbank öffnen"
+  },
+  "pw_gen": {
+    "length": "Passwort-Länge:",
+    "lowercase": "Kleinbuchstaben",
+    "numbers": "Zahlen",
+    "special": "Sonderzeichen:",
+    "uppercase": "Großbuchstaben:"
+  },
+  "rename_db": {
+    "title": "Datenbank umbenennen:"
+  },
+  "settings": {
+    "about": {
+      "info": "Dies ist eine kollaborative Anwendung zur Datenverwaltung. Dabei wird die Datenspeicherung und Übertragung mithilfe der Automerge Bibliothek implementiert.\n Zusätzlich benutzt werden die Bibliotheken Idle Timer, React DnD Kit, React Icons, QR Scanner und React QR Code.",
+      "license": "Lizenz: ",
+      "license_notice": "Die Software wird \"wie besehen\" bereitgestellt, ohne jegliche Haftung.",
+      "version": "Version: "
+    },
+    "database": {
+      "none": "Bitte Datenbank auswählen."
+    },
+    "export_encrypted": "Verschlüsselt Exportieren",
+    "export_unencrypted": "Unverschlüsselt Exportieren",
+    "inactivity": {
+      "title": "Minuten bis Abmeldung:"
+    },
+    "language": {
+      "english": "Englisch",
+      "french": "Französisch",
+      "german": "Deutsch",
+      "spanish": "Spanisch"
+    },
+    "p2p": {
+      "connect": "Verbinden",
+      "connected_peers": "Verbundene Peers:",
+      "other_peer": "Fremde Peer-ID:",
+      "own": "Eigene Peer-ID:",
+      "scan_qr": "Scanne den QR-Code auf einem anderen Gerät in den Einstellungen unter \"Einstellungen\" → \"Peer-To-Verbindung\"",
+      "share": "Peer-ID teilen",
+      "title": "Peer-To-Peer Verbindung"
+    },
+    "server": {
+      "add_server": {
+        "placeholder_name": "Mein Server",
+        "placeholder_url": "wss://my.sync-server.org",
+        "title": "Server hinzufügen"
+      },
+      "title": "Synchronisationsserver"
+    },
+    "subsettings": {
+      "about": "Über die App",
+      "database": "Datenbankeinstellungen",
+      "general": "Allgemeine Einstellungen"
+    },
+    "title": "Einstellungen",
+    "toggles": {
+      "dark_mode": "Dark-Mode",
+      "inactivity": "Bei Inaktivität abmelden",
+      "p2p_sync": "Peer-to-Peer Synchronisation",
+      "recursive_delete": "Rekursives löschen von Ordnereinträgen",
+      "server_sync": "Server Synchronisation"
+    }
+  },
+  "share_db": {
+    "import": "Datenbank importieren",
+    "invalid_qr": "Ungültiger QR Code",
+    "scan_qr": "Scanne den QR-Code auf einem anderen Gerät im \"Datenbank hinzufügen\" Dialog, um die Datenbank mit dem Namen \"{{name}}\" dort hinzuzufügen.",
+    "share_name": "Name der Datenbank auch teilen",
+    "title": "Datenbank teilen"
+  }
+}

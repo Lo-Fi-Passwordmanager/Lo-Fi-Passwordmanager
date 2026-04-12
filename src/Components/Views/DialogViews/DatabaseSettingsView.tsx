@@ -1,4 +1,5 @@
 import React from "react";
+import {useTranslation} from "react-i18next";
 import {HiTrash} from "react-icons/hi";
 
 import DeleteConfirmationDialog from "./DeleteConfirmationDialog.tsx";
@@ -21,6 +22,7 @@ const DatabaseSettingsView: React.FC<{
 
     const reactiveFacade = useAutomergeFacade(automergeFacade);
     const viewModel = useDatabaseSettingsViewModel(automergeFacade, reactiveFacade);
+    const {t} = useTranslation();
 
     return (
         <>
@@ -29,19 +31,19 @@ const DatabaseSettingsView: React.FC<{
                     <CopyButton
                         copyToClipboard={viewModel.copyURLToClipboard}
                         attributeValue={""}
-                        title="Datenbank ID in die Zwischenablage kopieren"
+                        title={t("common.copy_db_id")}
                         style={{marginLeft: "0", width: "100%"}}
-                        content={"Datenbank ID kopieren"}
+                        content={t("common.copy_db_id")}
                     />
                     <ShareDatabaseQRDialog name={openedDatabaseName!}
                                            url={(automergeFacade.automergeURL as string).replace("automerge:", "")}/>
                 </div>
                 <button onClick={viewModel.exportDatabase}>
-                    Verschlüsselt Exportieren
+                    {t("settings.export_encrypted")}
                 </button>
 
                 <button onClick={viewModel.exportToCsvFile}>
-                    Unverschlüsselt Exportieren
+                    {t("settings.export_unencrypted")}
                 </button>
 
 
@@ -52,7 +54,7 @@ const DatabaseSettingsView: React.FC<{
                     style={{gap: "0.2rem"}}
                     onClick={() => {
                         viewModel.setInDeletion(true);
-                    }}><HiTrash size={24}/> Datenbank lokal löschen
+                    }}><HiTrash size={24}/> {t("common.delete_db")}
                 </button>
 
                 {viewModel.inDeletion && (<DeleteConfirmationDialog

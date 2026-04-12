@@ -1,4 +1,5 @@
 import React from "react";
+import {useTranslation} from "react-i18next";
 
 import Dialog from "./Dialog.tsx";
 import {useLoginDatabaseViewModel} from "../../ViewModels/Dialog/LoginDatabaseViewModel.ts";
@@ -33,8 +34,8 @@ const LoginDatabaseDialog: React.FC<{
           toggleHidePassword
       }) => {
 
+    const {t} = useTranslation();
     const viewModel = useLoginDatabaseViewModel(isOpen, tryOpenDatabase);
-
     if (!isOpen) return null;
 
     return (
@@ -59,8 +60,8 @@ const LoginDatabaseDialog: React.FC<{
                 <EyeButton hidePassword={hidePassword} toggleHidePassword={toggleHidePassword} size={49}/>
             </div>
             <div className="confirm-cancel-buttons">
-                <button className={"rectangle-button"} onClick={viewModel.handleConfirm}>Bestätigen</button>
-                <button className={"rectangle-button"} onClick={onCancel}>Abbrechen</button>
+                <button className={"rectangle-button"} onClick={viewModel.handleConfirm}>{t("button.confirm")}</button>
+                <button className={"rectangle-button"} onClick={onCancel}>{t("button.cancel")}</button>
             </div>
         </Dialog>
     );

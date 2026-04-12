@@ -21,7 +21,9 @@
     "integration": "cross-env INTEGRATION=true vitest run",
     "integration:coverage": "cross-env INTEGRATION=true vitest run --coverage",
     "predeploy": "yarn run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "translations:sort": "node scripts/sort_translations.js",
+    "translations:compare": "node scripts/compare_translations.js"
   },
   "dependencies": {
     "@automerge/automerge": "^3.2.2",
@@ -32,9 +34,14 @@
     "@noble/ciphers": "^2.2.0",
     "@noble/hashes": "^2.2.0",
     "hdd": "^0.0.0",
+    "i18next": "^26.0.4",
+    "i18next-browser-languagedetector": "^8.2.1",
     "jsdom": "^29.0.2",
     "peerjs": "^1.5.5",
     "qr-scanner": "^1.4.2",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-i18next": "^17.0.2",
     "qrcode.react": "^4.2.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",

@@ -1,4 +1,5 @@
 import React from "react";
+import {useTranslation} from "react-i18next";
 import {HiEye} from "react-icons/hi";
 import {HiEyeSlash} from "react-icons/hi2";
 
@@ -13,12 +14,13 @@ const EyeButton: React.FC<{
     size?: number;
 }> = ({hidePassword, toggleHidePassword, size}) => {
 
+    const { t } = useTranslation();
     if (!hidePassword) {
         return (
             <button className={`eyeButton ${hidePassword ? "" : "selected"}`}
                     onClick={() => toggleHidePassword()}
                     style={size ? {height: size, width: size} : {}}
-                    title={"Passwort verstecken"}
+                    title={t("button.hide_password")}
             >
                 <HiEye size={24}/>
             </button>
@@ -28,7 +30,7 @@ const EyeButton: React.FC<{
             <button className={`eyeButton ${hidePassword ? "" : "selected"}`}
                     onClick={() => toggleHidePassword()}
                     style={size ? {height: size, width: size} : {}}
-                    title={"Passwort anzeigen"}
+                    title={t("button.show_password")}
             >
                 <HiEyeSlash size={24}/>
             </button>

@@ -7,7 +7,9 @@ import {
     useSensors
 } from "@dnd-kit/core";
 import {useEffect, useRef, useState} from "react";
+import {useTranslation} from "react-i18next";
 
+import {useToast} from "./Provider/ToastProviderViewModel.ts";
 import type {Folder} from "../../Model/Folder.ts";
 import type {Item} from "../../Model/Item.ts";
 import {Settings, useSettings} from "../../Model/Settings.ts";
@@ -22,7 +24,6 @@ import {
     saveIsAscending, storeIndividualSorting, storeIndividualSortingSetting
 } from "../../Utility/Storage.ts";
 import {useAutomergeFacade} from "../../Utility/useAutomergeFacade.ts";
-import {useToast} from "./Provider/ToastProviderViewModel.ts";
 
 /**
  * Criteria as enum by which items are sorted
@@ -70,6 +71,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
     const [activeCollapsed, setActiveCollapsed] = useState<boolean>(false);
 
     const [showToast, _] = useToast();
+    const {t} = useTranslation();
 
     // check if cur item got deleted from remote
     useEffect(() => {
@@ -80,7 +82,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
                 break;
             }
         }
-    }, [curItem, itemsDeleted]);
+    }, [curItem, itemsDeleted, showToast]);
 
     // if doc got changes from remote make sure the entry view is up to date
     useEffect(() => {
@@ -287,7 +289,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
             window.clearTimeout(clipboardTimerRef.current);
         }
 
-        showToast("In die Zwischenablage kopiert");
+        showToast(t("common.copied_clipboard"));
         void navigator.clipboard.writeText(text);
 
 

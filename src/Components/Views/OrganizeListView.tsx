@@ -1,4 +1,5 @@
 import React from 'react';
+import {useTranslation} from "react-i18next";
 import {HiBarsArrowDown, HiBarsArrowUp, HiLockClosed} from "react-icons/hi2";
 
 import {loadCurrentSortCriterion} from "../../Utility/Storage.ts";
@@ -39,6 +40,7 @@ const OrganizeListView: React.FC<{
     isIndividualSorting,
 toggleIndividualSorting
 }) => {
+    const {t} = useTranslation();
 
     return (
         <div className={"organizeListView"}>
@@ -53,7 +55,7 @@ toggleIndividualSorting
             </button>
 
             <input style={{gridColumn: "span 2", height: "2.5rem", minWidth: "100%"}}
-                   type="text" placeholder="Suchen..."
+                   type="text" placeholder={t("filtered_list.placeholder_search")}
                    value={liveSearchValue}
                    onChange={(event => setLiveSearchValue(event.target.value))}
                    title={"Nach Einträgen und Ordnern suchen"}/>
@@ -73,12 +75,12 @@ toggleIndividualSorting
             <select style={{gridColumn: "span 2", width: "100%"}} value={curSortCriterion}
                     onChange={(e) => setCurSortCriterion(e.target.value as SortCriteria)}
                     title={"Einträge und Ordner sortieren"}>
-                <option value="NAME">Alphabetisch</option>
-                <option value="CREATED">Erstellungsdatum</option>
-                <option value="EDITED">Bearbeitungsdatum</option>
-                <option value="RELEVANCE">Relevanz</option>
-                <option value="RECENTLY">Zuletzt verwendet</option>
-                <option value="INDIVIDUAL">Individuell</option>
+                <option value="NAME">{t("filtered_list.alphabetical")}</option>
+                <option value="CREATED">{t("filtered_list.creation")}</option>
+                <option value="EDITED">{t("filtered_list.edited")}</option>
+                <option value="RELEVANCE">{t("filtered_list.relevance")}</option>
+                <option value="RECENTLY">{t("filtered_list.recently")}</option>
+                <option value="INDIVIDUAL">{t("filtered_list.individual")}</option>
             </select>
 
             {loadCurrentSortCriterion() !== SortCriteria.Individual ? <button

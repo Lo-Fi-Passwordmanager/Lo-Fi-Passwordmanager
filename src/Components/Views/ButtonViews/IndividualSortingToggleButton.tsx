@@ -1,4 +1,5 @@
 import React from "react";
+import {useTranslation} from "react-i18next";
 import {HiMiniArrowsPointingIn, HiMiniArrowsPointingOut} from "react-icons/hi2";
 
 /**
@@ -10,12 +11,13 @@ const IndividualSortingToggleButton: React.FC<{
     sorting: boolean,
     toggleSorting: () => void,
 }> = ({sorting, toggleSorting}) => {
+    const {t} = useTranslation();
 
     if (!sorting) {
         return (
             <button className={"squareButton"}
                     onClick={() => toggleSorting()}
-                    title={"Individuelle Sortierung anpassen"}
+                    title={t("button.change_custom_storing")}
             >
                 <HiMiniArrowsPointingOut size={24}/>
             </button>
@@ -24,7 +26,7 @@ const IndividualSortingToggleButton: React.FC<{
         return (
             <button className={"squareButton"}
                     onClick={() => toggleSorting()}
-                    title={"Einträge und Ordner verschieben"}
+                    title={t("button.regroup_items")}
             >
                 <HiMiniArrowsPointingIn size={24}/>
             </button>
