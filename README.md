@@ -3,6 +3,8 @@
 Ein Local-First Passwortmanager aufgebaut um die Bibliothek [Automerge](https://automerge.org/).
 Das Projekt ist im Rahmen von PSE (Praxis der Softwareentwicklung) Projekt am KIT entstanden.
 
+&rarr; [Github-Pages Deployment](https://lo-fi-passwordmanager.github.io/Lo-Fi-Passwordmanager/)
+
 ## Entwicklung
 
 Um mit der Entwicklung zu starten, muss zunächst das Repository geklont werden. Weiterhin wird zum verwenden der
