@@ -1,9 +1,9 @@
 import {useState} from "react";
+import {useTranslation} from "react-i18next";
 
 import {Entry} from "../../../Model/Entry.ts";
 import {Folder} from "../../../Model/Folder.ts";
 import type {Item} from "../../../Model/Item.ts";
-import {useTranslation} from "react-i18next";
 
 /**
  * The Viewmodel for {@link ItemCreationDialog}

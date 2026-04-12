@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
+import {useTranslation} from "react-i18next";
 import {HiCheckCircle} from "react-icons/hi2";
 
 import LoadingSpinner from "./LoadingSpinner.tsx";
-import {useTranslation} from "react-i18next";
 
 /**
  * Icon that indicates that a merge just came in from another device

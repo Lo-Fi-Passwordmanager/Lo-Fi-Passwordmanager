@@ -39,7 +39,7 @@ export const useSettingsViewModel = () => {
 
     const [showToast, _] = useToast();
 
-    const { i18n } = useTranslation();
+    const { i18n, t } = useTranslation();
     const handleLanguageChange: ChangeEventHandler<HTMLSelectElement, HTMLSelectElement> =  (e) => {
         void i18n.changeLanguage(e.target.value);
     };
@@ -163,7 +163,7 @@ export const useSettingsViewModel = () => {
      * Copy the given text to the clipboard and show a toast message
      */
     function copyToClipboard(text: string) {
-        showToast("In die Zwischenablage kopiert");
+        showToast(t("common.copied_clipboard"));
         void navigator.clipboard.writeText(text);
     }
 

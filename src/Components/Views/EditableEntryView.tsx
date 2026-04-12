@@ -1,5 +1,5 @@
-import {t} from "i18next";
 import React from "react";
+import {useTranslation} from "react-i18next";
 
 import EyeButton from "./ButtonViews/EyeButton.tsx";
 import PasswordGenDialog from "./DialogViews/PasswordGenDialog.tsx";
@@ -28,12 +28,13 @@ const EditableEntryView: React.FC<{
 }> = ({item, updateItemAttribute, setEditableView, hidePassword, toggleHidePassword, createItem, setInCreation, inCreation}) => {
 
     const viewmodel = useEditablePasswordViewModel(item, updateItemAttribute, createItem, inCreation, setInCreation, setEditableView);
+    const {t} = useTranslation();
 
     if (item.isFolder() || item.deleted) {
         return (
             <>
                 <div className={"entryViewNoSelection"}>
-                    <span>Noch kein Eintrag ausgewählt</span>
+                    <span>{t("entry_view.none_selected")}</span>
                     <img className="logo" style={{width: "40vmin", marginTop: "2em"}} src={Logo} alt={"Logo"}/>
                 </div>
             </>
@@ -56,13 +57,13 @@ const EditableEntryView: React.FC<{
                     <div
                         className={"scrollableContainer entryViewListing"}>
                             <div className={"entryViewAttribute"}>
-                                <span className={"attribute-title"}>Benutzername:</span>
+                                <span className={"attribute-title"}>{t("entry_view.attributes.username")}</span>
                                 <input className={"attribute-value editing"}
                                        type={"text"} value={viewmodel.username}
                                        onChange={(e) => viewmodel.setUsername(e.target.value)}/>
                             </div>
                             <div className={"entryViewAttribute"}>
-                                <span className={"attribute-title"}>Passwort:</span>
+                                <span className={"attribute-title"}>{t("entry_view.attributes.password")}</span>
                                 <input className={"attribute-value editing"} style={{gridColumnEnd: "19"}}
                                        type={hidePassword ? "password" : "text"}
                                        value={viewmodel.password}
@@ -72,12 +73,12 @@ const EditableEntryView: React.FC<{
                                     setNewPassword={(password: string) => viewmodel.setPassword(password)}/>
                             </div>
                             <div className={"entryViewAttribute"}>
-                                <span className={"attribute-title"}>URL:</span>
+                                <span className={"attribute-title"}>{t("entry_view.attributes.url")}</span>
                                 <input className={"attribute-value editing"} type={"text"} value={viewmodel.url}
                                        onChange={(e) => viewmodel.setUrl(e.target.value)}/>
                             </div>
                             <div className={"entryViewAttribute"}>
-                                <span className={"attribute-title"}>Notiz:</span>
+                                <span className={"attribute-title"}>{t("entry_view.attributes.note")}</span>
                                 <input className={"attribute-value editing"} type={"text"} value={viewmodel.note}
                                        onChange={(e) => viewmodel.setNote(e.target.value)}/>
                             </div>
@@ -86,7 +87,7 @@ const EditableEntryView: React.FC<{
                             <button className={"rectangle-button"}
                                     onClick={
                                             viewmodel.saveEntry
-                                    }>Speichern
+                                    }>{t("entry_view.save")}
                             </button>
                             <button className={"rectangle-button cancel"}
                                     onClick={viewmodel.cancelSaving
@@ -95,8 +96,8 @@ const EditableEntryView: React.FC<{
                     </div>
                 </div>
                 <div className="entryDateViewEntry">
-                    <span>Erstellt am: {item.createdAt.toLocaleString(undefined, {dateStyle: 'long', timeStyle: 'medium'})}</span>
-                    <span>Bearbeitet am: {item.editedAt.toLocaleString(undefined, {dateStyle: 'long', timeStyle: 'medium'})}</span>
+                    <span>{t("entry_view.attributes.created_at")}{item.createdAt.toLocaleString(undefined, {dateStyle: 'long', timeStyle: 'medium'})}</span>
+                    <span>{t("entry_view.attributes.edited_at")}{item.editedAt.toLocaleString(undefined, {dateStyle: 'long', timeStyle: 'medium'})}</span>
                 </div>
             </div>
         );

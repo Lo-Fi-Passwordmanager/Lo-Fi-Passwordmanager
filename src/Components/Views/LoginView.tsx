@@ -1,5 +1,6 @@
 import type {Repo} from "@automerge/react";
 import React from "react";
+import {useTranslation} from "react-i18next";
 import {HiMiniPlus} from "react-icons/hi2";
 
 import {useLoginViewModel} from "../ViewModels/loginViewModel.ts";
@@ -30,6 +31,7 @@ const LoginView: React.FC<{
 }> = ({repo, setLoggedIn, setAutomergeFacade, securityProvider, setOpenedDbName, setToImportItems}) => {
 
     const viewModel = useLoginViewModel(repo, setLoggedIn, setAutomergeFacade, securityProvider, setOpenedDbName, setToImportItems);
+    const {t} = useTranslation();
 
     return (
         <div className="loginView">
@@ -59,8 +61,8 @@ const LoginView: React.FC<{
                 {/* Popup Dialog for adding a new Database */}
                 <LoginDatabaseDialog
                     isOpen={viewModel.isEnterPasswordDialogOpen}
-                    title="Datenbank öffnen"
-                    label1="Masterpasswort"
+                    title={t("login.open")}
+                    label1={t("add_database.placeholder.password")}
                     tryOpenDatabase={(password, name?: string) => {
                         void viewModel.tryOpenDatabase(password, name)
                     }}

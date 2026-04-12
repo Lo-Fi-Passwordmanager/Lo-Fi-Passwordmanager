@@ -1,4 +1,5 @@
 import React from 'react';
+import {useTranslation} from "react-i18next";
 
 import type {Entry} from "../../Model/Entry.ts";
 import type {Folder} from "../../Model/Folder.ts";
@@ -27,12 +28,13 @@ const FilteredListView: React.FC<{
 
     const filteredEntries = viewModel.getFilteredEntries();
     const filteredFolders = viewModel.getFilteredFolders();
+    const {t} = useTranslation();
 
     return (
         <div className="FilteredListView">
             <div>
                 <div className="FilteredListView__header">
-                    Gefundene Einträge
+                    {t("filtered_list.found_entries")}
                 </div>
                 {filteredEntries.map((item: Item, index: number) => {
                     return <div
@@ -40,7 +42,7 @@ const FilteredListView: React.FC<{
                         key={index}
                         onClick={() => setCurItem(item as Entry)}
                     >
-                        <span style={{marginLeft: "5px"}} /> <span>{item.title}</span>
+                        <span style={{marginLeft: "5px"}}/> <span>{item.title}</span>
                     </div>
                 })}
             </div>
@@ -48,7 +50,7 @@ const FilteredListView: React.FC<{
 
             <div>
                 <div className="FilteredListView__header">
-                    Gefundene Ordner
+                    {t("filtered_list.found_folders")}
                 </div>
                 {filteredFolders.map((item: Item, index: number) => {
                     return <div
@@ -56,7 +58,7 @@ const FilteredListView: React.FC<{
                         key={index}
                         onClick={() => goToFolder(item as Folder)}
                     >
-                        <span style={{marginLeft: "5px"}} /> <span>{item.title}</span>
+                        <span style={{marginLeft: "5px"}}/> <span>{item.title}</span>
                     </div>
                 })}
             </div>

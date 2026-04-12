@@ -5,7 +5,8 @@
     "entry": "Eintrag",
     "folder": "Ordner",
     "new_entry": "Neuer Eintrag",
-    "new_folder": "Neuer Ordner"
+    "new_folder": "Neuer Ordner",
+    "copied_clipboard": "In die Zwischenablage kopiert."
   },
   "button": {
     "copy_clipboard": "In Zwischenablage kopieren",
@@ -17,11 +18,6 @@
     "change_custom_sorting": "Individuelle Sortierung anpassen",
     "regroup_items": "Einträge und Ordner verschieben",
     "delete": "Löschen"
-  },
-  "add_server": {
-    "title": "Server hinzufügen",
-    "placeholder_name": "Mein Server",
-    "placeholder_url": "wss://my.sync-server.org"
   },
   "add_database": {
     "placeholder": {
@@ -70,6 +66,14 @@
       "connect": "Verbinden",
       "connected_peers": "Verbundene Peers:",
       "other_peer": "Fremde Peer-ID:"
+    },
+    "server": {
+      "title": "Synchronisationsserver",
+      "add_server": {
+        "title": "Server hinzufügen",
+        "placeholder_name": "Mein Server",
+        "placeholder_url": "wss://my.sync-server.org"
+      }
     },
     "database": {
       "none": "Bitte Datenbank auswählen."
@@ -129,7 +133,30 @@
     "invalid_qr": "Ungültiger QR Code"
   },
   "just_synced": "Synchronisiert.",
-  "pw_view": {
-
+  "entry_view": {
+    "none_selected": "Noch kein Eintrag ausgewählt",
+    "attributes": {
+      "username": "Benutzername:",
+      "password": "Passwort:",
+      "url": "Url:",
+      "note": "Notiz:",
+      "created_at": "Erstellt am: ",
+      "edited_at": "Bearbeitet am: "
+    },
+    "save": "Speichern"
+  },
+  "filtered_list": {
+    "found_entries": "Gefundene Einträge",
+    "found_folders": "Gefundene Ordner",
+    "placeholder_search": "Suchen...",
+    "alphabetical": "Alphabetisch",
+    "creation": "Erstellungsdatum",
+    "edited": "Bearbeitungsdatum",
+    "relevance": "Relevanz",
+    "recently": "Zuletzt verwendet",
+    "individual": "Individuell"
+  },
+  "login": {
+    "open": "Datenbank öffnen"
   }
 }
