@@ -7,8 +7,8 @@
         "new": "Create new database",
         "url": "Load existing database"
       },
-      "choose_action": "Select action:",
-      "choose_file": "Select file",
+      "choose_action": "Choose action:",
+      "choose_file": "Choose file",
       "title": "Add new database"
     },
     "placeholder": {
@@ -39,7 +39,7 @@
   },
   "dialog": {
     "confirm_delete": {
-      "text": "Do you really want to delete the {{delete_type}} \"<strong>{{item_title}}</strong>\"?",
+      "text": "Are you sure you want to delete the {{delete_type}} \"<strong>{{item_title}}</strong>\"?",
       "title": "Confirm deletion"
     }
   },
@@ -59,9 +59,9 @@
     "alphabetical": "Alphabetical",
     "creation": "Creation date",
     "edited": "Edit date",
-    "found_entries": "Entries found",
-    "found_folders": "Folders found",
-    "individual": "Custom",
+    "found_entries": "Found entries",
+    "found_folders": "Found folders",
+    "individual": "Individual",
     "placeholder_search": "Search...",
     "recently": "Recently used",
     "relevance": "Relevance"
@@ -83,7 +83,7 @@
     }
   },
   "item_creation": {
-    "title": "Create new element"
+    "title": "Create new item"
   },
   "just_synced": "Synced.",
   "loading": {
@@ -94,8 +94,8 @@
   },
   "pw_gen": {
     "length": "Password length:",
-    "lowercase": "Lowercase letters:",
-    "numbers": "Numbers:",
+    "lowercase": "Lowercase letters",
+    "numbers": "Numbers",
     "special": "Special characters:",
     "uppercase": "Uppercase letters:"
   },
@@ -104,10 +104,14 @@
   },
   "settings": {
     "about": {
-      "info": "This is a collaborative data management application. Data storage and transmission are implemented using the Automerge library.\n Additionally, the following libraries are used: Idle Timer, React DnD Kit, React Icons, QR Scanner, and React QR Code.",
+      "info": "This is a collaborative data management application. Data storage and transfer are implemented using the Automerge library.\n Additionally, the libraries Idle Timer, React DnD Kit, React Icons, QR Scanner, and React QR Code are used.",
       "license": "License: ",
       "license_notice": "The software is provided \"as is\", without any liability.",
       "version": "Version: "
+    },
+    "appearance": {
+      "custom": "Custom color:",
+      "scheme": "Color scheme"
     },
     "database": {
       "none": "Please select a database."
@@ -126,15 +130,15 @@
     "p2p": {
       "connect": "Connect",
       "connected_peers": "Connected peers:",
-      "other_peer": "Remote Peer ID:",
+      "other_peer": "External Peer ID:",
       "own": "Your Peer ID:",
-      "scan_qr": "Scan the QR code on another device under \"Settings\" → \"Peer-to-peer connection\"",
+      "scan_qr": "Scan the QR code on another device in the settings under \"Settings\" → \"Peer-to-Peer Connection\"",
       "share": "Share Peer ID",
-      "title": "Peer-to-peer connection"
+      "title": "Peer-to-Peer Connection"
     },
     "server": {
       "add_server": {
-        "placeholder_name": "My server",
+        "placeholder_name": "My Server",
         "placeholder_url": "wss://my.sync-server.org",
         "title": "Add server"
       },
@@ -142,12 +146,13 @@
     },
     "subsettings": {
       "about": "About the app",
+      "appearance": "Appearance",
       "database": "Database settings",
       "general": "General settings"
     },
     "title": "Settings",
     "toggles": {
-      "dark_mode": "Dark Mode",
+      "dark_mode": "Dark mode",
       "inactivity": "Log out on inactivity",
       "p2p_sync": "Peer-to-peer synchronization",
       "recursive_delete": "Recursive deletion of folder entries",
@@ -157,7 +162,7 @@
   "share_db": {
     "import": "Import database",
     "invalid_qr": "Invalid QR code",
-    "scan_qr": "Scan the QR code on another device in the \"Add database\" dialog to add the database named \"{{name}}\" there.",
+    "scan_qr": "Scan the QR code on another device in the \"Add Database\" dialog to add the database named \"{{name}}\" there.",
     "share_name": "Also share the name of the database",
     "title": "Share database"
   }

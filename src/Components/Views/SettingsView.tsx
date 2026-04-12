@@ -1,6 +1,6 @@
 import React from "react";
-import {HiCheckCircle, HiDotsCircleHorizontal, HiTrash} from "react-icons/hi";
 import {useTranslation} from "react-i18next";
+import {HiCheckCircle, HiDotsCircleHorizontal, HiTrash} from "react-icons/hi";
 import {HiMiniCog8Tooth, HiMiniMinus, HiMiniPlus} from "react-icons/hi2";
 
 import {type AutomergeFacade} from "../../Utility/AutomergeFacade.ts";
@@ -54,7 +54,7 @@ const SettingsView: React.FC<{
                     </button>
                     <button className={`settings-tab ${viewModel.activeTab === "appearance" ? "active" : ""}`}
                             onClick={() => viewModel.setActiveTab("appearance")}>
-                        Erscheinungsbild
+                        {t("settings.subsettings.appearance")}
                     </button>
                     <button className={`settings-tab ${viewModel.activeTab === "database" ? "active" : ""}`}
                             onClick={() => viewModel.setActiveTab("database")}>
@@ -239,7 +239,7 @@ const SettingsView: React.FC<{
                                 </label>
                             </div>
                             <div className={"sub-settings"}>
-                                <h4>Farbschema</h4>
+                                <h4>{t("settings.appearance.scheme")}</h4>
                                 <div className={"color-list"}>
                                     {Array.from(viewModel.colorSchemes.entries()).map(([key, color], index) => (
                                         <button key={index}
@@ -251,7 +251,7 @@ const SettingsView: React.FC<{
                                                 title={`${key} auswählen`}/>
                                     ))}
                                 </div>
-                                <h4>Eigene Farbe</h4>
+                                <h4>{t("settings.appearance.custom")}</h4>
                                 <input type="color" value={viewModel.customColor}
                                        onChange={(e) => viewModel.setCustomColor(e.target.value)}/>
                             </div>

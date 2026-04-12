@@ -3,12 +3,12 @@
     "create_new": {
       "action": {
         "file_encrypted": "Importar base de datos cifrada",
-        "file_plain": "Importar base de datos sin cifrar",
+        "file_plain": "Importar base de datos no cifrada",
         "new": "Crear nueva base de datos",
         "url": "Cargar base de datos existente"
       },
-      "choose_action": "Seleccionar acción:",
-      "choose_file": "Seleccionar archivo",
+      "choose_action": "Elegir acción:",
+      "choose_file": "Elegir archivo",
       "title": "Añadir nueva base de datos"
     },
     "placeholder": {
@@ -39,7 +39,7 @@
   },
   "dialog": {
     "confirm_delete": {
-      "text": "¿Realmente desea eliminar el/la {{delete_type}} \"<strong>{{item_title}}</strong>\"?",
+      "text": "¿Realmente quieres eliminar el {{delete_type}} \"<strong>{{item_title}}</strong>\"?",
       "title": "Confirmar eliminación"
     }
   },
@@ -61,7 +61,7 @@
     "edited": "Fecha de edición",
     "found_entries": "Entradas encontradas",
     "found_folders": "Carpetas encontradas",
-    "individual": "Personalizado",
+    "individual": "Individual",
     "placeholder_search": "Buscar...",
     "recently": "Usado recientemente",
     "relevance": "Relevancia"
@@ -94,28 +94,32 @@
   },
   "pw_gen": {
     "length": "Longitud de contraseña:",
-    "lowercase": "Letras minúsculas:",
-    "numbers": "Números:",
+    "lowercase": "Minúsculas",
+    "numbers": "Números",
     "special": "Caracteres especiales:",
-    "uppercase": "Letras mayúsculas:"
+    "uppercase": "Mayúsculas:"
   },
   "rename_db": {
     "title": "Renombrar base de datos:"
   },
   "settings": {
     "about": {
-      "info": "Esta es una aplicación colaborativa de gestión de datos. El almacenamiento y la transmisión de datos se implementan mediante la biblioteca Automerge.\n Además, se utilizan las siguientes bibliotecas: Idle Timer, React DnD Kit, React Icons, QR Scanner y React QR Code.",
+      "info": "Esta es una aplicación colaborativa de gestión de datos. El almacenamiento y la transferencia de datos se implementan mediante la biblioteca Automerge.\n Adicionalmente, se utilizan las bibliotecas Idle Timer, React DnD Kit, React Icons, QR Scanner y React QR Code.",
       "license": "Licencia: ",
       "license_notice": "El software se proporciona \"tal cual\", sin ninguna responsabilidad.",
       "version": "Versión: "
     },
+    "appearance": {
+      "custom": "Color personalizado:",
+      "scheme": "Esquema de colores"
+    },
     "database": {
-      "none": "Por favor, seleccione una base de datos."
+      "none": "Por favor, selecciona una base de datos."
     },
     "export_encrypted": "Exportar cifrado",
     "export_unencrypted": "Exportar sin cifrar",
     "inactivity": {
-      "title": "Minutos hasta cerrar sesión:"
+      "title": "Minutos hasta el cierre de sesión:"
     },
     "language": {
       "english": "Inglés",
@@ -126,30 +130,31 @@
     "p2p": {
       "connect": "Conectar",
       "connected_peers": "Pares conectados:",
-      "other_peer": "ID de par remoto:",
-      "own": "Su ID de par:",
-      "scan_qr": "Escanee el código QR en otro dispositivo en \"Ajustes\" → \"Conexión punto a punto\"",
+      "other_peer": "ID de par ajeno:",
+      "own": "ID de par propio:",
+      "scan_qr": "Escanea el código QR en otro dispositivo en los ajustes bajo \"Ajustes\" → \"Conexión Peer-to-Peer\"",
       "share": "Compartir ID de par",
-      "title": "Conexión punto a punto"
+      "title": "Conexión Peer-to-Peer"
     },
     "server": {
       "add_server": {
         "placeholder_name": "Mi servidor",
-        "placeholder_url": "wss://mi.servidor-sincro.org",
+        "placeholder_url": "wss://mi.servidor-sync.org",
         "title": "Añadir servidor"
       },
       "title": "Servidor de sincronización"
     },
     "subsettings": {
-      "about": "Acerca de la aplicación",
-      "database": "Ajustes de base de datos",
+      "about": "Sobre la aplicación",
+      "appearance": "Apariencia",
+      "database": "Ajustes de la base de datos",
       "general": "Ajustes generales"
     },
     "title": "Ajustes",
     "toggles": {
       "dark_mode": "Modo oscuro",
       "inactivity": "Cerrar sesión por inactividad",
-      "p2p_sync": "Sincronización punto a punto (P2P)",
+      "p2p_sync": "Sincronización Peer-to-Peer",
       "recursive_delete": "Eliminación recursiva de entradas de carpeta",
       "server_sync": "Sincronización con servidor"
     }
@@ -157,7 +162,7 @@
   "share_db": {
     "import": "Importar base de datos",
     "invalid_qr": "Código QR no válido",
-    "scan_qr": "Escanee el código QR en otro dispositivo en el diálogo \"Añadir base de datos\" para agregar allí la base de datos llamada \"{{name}}\".",
+    "scan_qr": "Escanea el código QR en otro dispositivo en el diálogo \"Añadir base de datos\" para añadir allí la base de datos con el nombre \"{{name}}\".",
     "share_name": "Compartir también el nombre de la base de datos",
     "title": "Compartir base de datos"
   }

@@ -18,8 +18,6 @@ export type SettingsViewModel = ReturnType<typeof useSettingsViewModel>
  * It uses states to reload react when changing settings, so that they get applied
  */
 export const useSettingsViewModel = () => {
-
-export const useSettingsViewModel = () => {
     const CUSTOM_COLOR_NAME = "custom_color";
     const settings = Settings.getSettings();
     const settingsHook = useSettings();

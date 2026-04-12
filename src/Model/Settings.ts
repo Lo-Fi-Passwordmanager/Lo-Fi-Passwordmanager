@@ -4,14 +4,11 @@ import {useEffect, useState} from "react";
 import {PeerjsNetworkAdapter} from "../customNetworkAdapter/PeerJsNetworkAdapter.ts";
 import {
     getFromStorage,
-    loadDarkModeSetting,
     loadP2PSetting,
     loadRmRfSetting,
     loadSelectedServerURLs,
     loadServers,
-    loadSynchronizationSettings,
-    loadTimeoutLength,
-    loadTimeoutSettings, STORAGE_KEYS,
+    STORAGE_KEYS,
     storeDarkModeSetting,
     storeP2PSetting,
     storeRmRfSetting,
