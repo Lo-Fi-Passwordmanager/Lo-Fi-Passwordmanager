@@ -71,6 +71,8 @@ const SettingsView: React.FC<{
                             <select onChange={viewModel.handleLanguageChange} value={i18n.resolvedLanguage}>
                                 <option value='en'>{t("settings.language.english")}</option>
                                 <option value='de'>{t("settings.language.german")}</option>
+                                <option value='fr'>{t("settings.language.french")}</option>
+                                <option value='es'>{t("settings.language.spanish")}</option>
                             </select>
 
                             <label className="checkboxRow">
@@ -313,7 +315,7 @@ const SettingsView: React.FC<{
                                     {t("settings.about.license_notice")}
                                     <br/>
                                     <a href={"https://opensource.org/license/mit"}>
-                                        MIT-Lizenz
+                                        MIT-License
                                     </a>
                                 </p>
                             </section>
