@@ -4,6 +4,7 @@ import {HiOutlineQrcode} from "react-icons/hi";
 
 import Dialog from "./Dialog.tsx";
 import {useGenericDialogViewModel} from "../../ViewModels/Dialog/GenericDialogViewModel.ts";
+import {useTranslation} from "react-i18next";
 
 // QRCode Generator https://github.com/rosskhanas/react-qr-code
 
@@ -18,11 +19,12 @@ interface GenericQRDialogProps {
  * @param qrValue The value the QR Code should contain.
  */
 const GenericQRDialog: React.FC<GenericQRDialogProps & PropsWithChildren> = ({
-    title,
-    qrValue,
-    children
-}: GenericQRDialogProps & PropsWithChildren) => {
+                                                                                 title,
+                                                                                 qrValue,
+                                                                                 children
+                                                                             }: GenericQRDialogProps & PropsWithChildren) => {
     const viewModel = useGenericDialogViewModel();
+    const {t} = useTranslation();
 
     if (viewModel.isOpen) {
         return (
@@ -44,7 +46,7 @@ const GenericQRDialog: React.FC<GenericQRDialogProps & PropsWithChildren> = ({
         return (
             <button
                 className="squareButton"
-                title="QR-Code anzeigen"
+                title={t("common.show_qr")}
                 onClick={() => viewModel.setIsOpen(true)}>
                 <HiOutlineQrcode size={24}/>
             </button>

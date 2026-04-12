@@ -62,14 +62,15 @@ const ServerList: React.FC<{
                              onClick={() => void settingsViewModel.copyToClipboard(settingsViewModel.serverUrls.get(server) ?? "")}>
                             <span>{server}</span>
                         </div>
-                        {connected.includes(settingsViewModel.serverUrls.get(server)!) ? <HiCheckCircle/> :
-                            <HiDotsCircleHorizontal/>}
+                        {connected.includes(settingsViewModel.serverUrls.get(server)!) ? <HiCheckCircle
+                                title={t("settings.server.desc.connected")}/> :
+                            <HiDotsCircleHorizontal title={t("settings.server.desc.connecting")}/>}
 
                         {!disabled && <button
                             className={`squareButton ${settingsViewModel.isLastServer() || settingsViewModel.isLastActiveServer(server) ? "disabled" : ""}`}
                             disabled={settingsViewModel.isLastServer() || settingsViewModel.isLastActiveServer(server)}
                             onClick={() => settingsViewModel.removeSyncServer(server)}
-                            title={"Server entfernen"}
+                            title={t("settings.server.desc.remove")}
                         >
                             <HiTrash size={24}/>
                         </button>}
@@ -80,8 +81,9 @@ const ServerList: React.FC<{
                 className="squareButton"
                 onClick={() => settingsViewModel.setAddServerDialogOpen(true)}
                 style={{alignSelf: "center"}}
+                title={t("settings.server.desc.add")}
             >
-                <HiMiniPlus size={24} title={"Sync Server hinzufügen"}/>
+                <HiMiniPlus size={24}/>
             </button>}
             {settingsViewModel.addServerDialogOpen && (
                 <AddServerDialog

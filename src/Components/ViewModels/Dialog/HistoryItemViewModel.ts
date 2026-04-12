@@ -99,7 +99,7 @@ export const useHistoryItemViewModel = (historyEntry: HistoryEntry, securityProv
     }
 
     const config = {
-        new: {icon: "✦", class: "status-new", label: itemIsFolder ? "Ordner erstellt" : "Eintrag erstellt"},
+        new: {icon: "✦", class: "status-new", label: itemIsFolder ? t("history.add.folder") : t("history.add.entry")},
         deleted: {
             icon: "✕",
             class: "status-deleted",
