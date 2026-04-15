@@ -9,6 +9,8 @@
       },
       "choose_action": "Aktion wählen:",
       "choose_file": "Datei auswählen",
+      "empty_field": "Bitte alle Felder ausfüllen.",
+      "invalid_id": "Keine valide AutomergeUrl.",
       "title": "Neue Datenbank hinzufügen"
     },
     "placeholder": {
@@ -29,6 +31,7 @@
     "show_password": "Passwort anzeigen"
   },
   "common": {
+    "clear_clipboard": "Zwischenablage gelöscht.",
     "copied_clipboard": "In die Zwischenablage kopiert.",
     "copy_db_id": "Datenbank ID kopieren",
     "delete_db": "Datenbank lokal löschen",
@@ -36,7 +39,8 @@
     "folder": "Ordner",
     "new_entry": "Neuer Eintrag",
     "new_folder": "Neuer Ordner",
-    "show_qr": "QR-Code anzeigen"
+    "show_qr": "QR-Code anzeigen",
+    "waiting_clear_clipboard": "Löschen der Zwischenablage ausstehend (bitte Tab fokussieren)"
   },
   "dialog": {
     "confirm_delete": {
@@ -60,8 +64,10 @@
       "url": "Url:",
       "username": "Benutzername:"
     },
+    "current_entry_deleted": "Der aktuell ausgewählte Eintrag wurde gelöscht",
     "delete": "Löschen",
     "edit": "Bearbeiten",
+    "leave_first": "Bitte zuerst die Bearbeitungsansicht verlassen",
     "none_selected": "Noch kein Eintrag ausgewählt",
     "save": "Speichern"
   },
@@ -119,12 +125,22 @@
       "copy_id": "Datenbank ID in die Zwischenablage kopieren",
       "remove": "Datenbank entfernen"
     },
+    "duplicate_id": "Datenbank mit dieser Url existiert bereits!",
+    "duplicate_name": "Datenbank mit diesem Namen existiert bereits!",
+    "new_db": "Neue Datenbank",
     "no_database": "Keine Datenbanken vorhanden",
-    "open": "Datenbank öffnen"
+    "no_file": "Bitte Datei auswählen.",
+    "no_load": "Die Datenbank konnte nicht geladen werden!",
+    "no_name": "Bitte Namen eingeben",
+    "no_pw": "Bitte ein Passwort eingeben.",
+    "open": "Datenbank öffnen",
+    "wrong_file": "Datei konnte nicht gelesen werden.",
+    "wrong_pw": "Falsches Masterpasswort!"
   },
   "pw_gen": {
     "length": "Passwort-Länge:",
     "lowercase": "Kleinbuchstaben",
+    "none": "Keine Zeichengruppe ausgewählt!",
     "numbers": "Zahlen",
     "special": "Sonderzeichen:",
     "uppercase": "Großbuchstaben:"
@@ -152,8 +168,10 @@
       "open": "Einstellungen öffnen"
     },
     "export_encrypted": "Verschlüsselt Exportieren",
+    "export_success": "Erfolgreich exportiert",
     "export_unencrypted": "Unverschlüsselt Exportieren",
     "inactivity": {
+      "logout": "Der Nutzer wurde auf Grund von Inaktivität automatisch abgemeldet.",
       "title": "Minuten bis Abmeldung:"
     },
     "language": {
@@ -165,6 +183,7 @@
     "p2p": {
       "connect": "Mit Peer verbinden",
       "connected_peers": "Verbundene Peers:",
+      "new": "Neue PeerToPeer Verbindung aufgebaut.",
       "other_peer": "Fremde Peer-ID:",
       "own": "Eigene Peer-ID:",
       "scan_qr": "Scanne den QR-Code auf einem anderen Gerät in den Einstellungen unter \"Einstellungen\" → \"Peer-To-Verbindung\"",
@@ -173,6 +192,10 @@
     },
     "server": {
       "add_server": {
+        "duplicate_name": "Ein Server mit diesem Namen existiert bereits.",
+        "duplicate_url": "Ein Server mit dieser URL existiert bereits.",
+        "empty_url": "Name und URL dürfen nicht leer sein.",
+        "invalid_url": "Invalide URL. Bitte gültige Websocket URL eingeben.",
         "placeholder_name": "Mein Server",
         "placeholder_url": "wss://my.sync-server.org",
         "title": "Server hinzufügen"

@@ -1,6 +1,7 @@
 import type {AutomergeUrl} from "@automerge/automerge-repo";
 import type {Repo} from "@automerge/react";
 import {useEffect, useState} from "react";
+import {useTranslation} from "react-i18next";
 
 import {useLoadingScreen} from "./Provider/LoadingScreenProviderViewModel.ts";
 import {useToast} from "./Provider/ToastProviderViewModel.ts";
@@ -45,6 +46,7 @@ export const useLoginViewModel = (
 
     const setLoadingScreenActive = useLoadingScreen();
     const [showToast, _] = useToast();
+    const {t} = useTranslation();
 
     // update the list of database names when the databases change
     useEffect(() => {
@@ -56,7 +58,7 @@ export const useLoginViewModel = (
      * @param name the name of the database
      * @param masterPassword the masterpassword that gets used for encryption
      */
-     const createDatabase = (name: string, masterPassword: string) => {
+    const createDatabase = (name: string, masterPassword: string) => {
         setLoadingScreenActive(true);
         if (!isNameAvailable(name)) {
             setLoadingScreenActive(false);
@@ -121,13 +123,13 @@ export const useLoginViewModel = (
             } catch (error) {
                 console.error(error);
                 setLoadingScreenActive(false);
-                showToast("Automerge konnte die Datenbank nicht laden!");
+                showToast(t("login.no_load"));
                 return;
             }
 
             if (salt == null || validation == null) {
                 setLoadingScreenActive(false);
-                showToast("Automerge konnte die Datenbank nicht laden!");
+                showToast(t("login.no_load"));
                 return;
             }
 
@@ -142,12 +144,12 @@ export const useLoginViewModel = (
                         setSelectedDatabase(null);
                     } else {
                         setLoadingScreenActive(false);
-                        showToast("Falsches Masterpasswort!");
+                        showToast(t("login.wrong_pw"));
                     }
                 } catch (error) {
                     console.error(error);
                     setLoadingScreenActive(false);
-                    showToast("Die Datenbank konnte nicht geladen werden");
+                    showToast(t("login.no_load"));
                 }
             }, 0);
         }
@@ -209,7 +211,7 @@ export const useLoginViewModel = (
      */
     function isNameAvailable(name: string): boolean {
         if (databases.has(name)) {
-            showToast("Datenbank mit diesem Namen existiert bereits!");
+            showToast(t("login.duplicate_name"));
             return false;
         }
         return true;
@@ -223,7 +225,7 @@ export const useLoginViewModel = (
     function isAutomergeUrlAvailable(url: AutomergeUrl) {
         for (const value of databases.values()) {
             if (value === url) {
-                showToast("Datenbank mit dieser Url existiert bereits!");
+                showToast(t("login.duplicate_id"));
                 return false;
             }
         }
@@ -261,23 +263,23 @@ export const useLoginViewModel = (
         }
 
         if (name === "" || name == null) {
-            showToast("Bitte wähle einen Namen.");
+            showToast("login.no_name");
             return;
         }
 
         if (!targetFiles) {
-            showToast("Bitte wähle eine Datei.");
+            showToast("login.no_file");
             return;
         }
 
         const binary = await uInt8ArrayFromFile(targetFiles);
         if (!binary) {
-            showToast("Datei konnte nicht gelesen werden.");
+            showToast(t("login.wrong_file"));
             return;
         }
 
         const handle = repo.import(binary);
-        const dbName = name || "Neue Datenbank";
+        const dbName = name || t("login.new_db");
         storeDatabase(dbName, handle.url);
         setSelectedDatabase(dbName);
         setIsAddDialogOpen(false);
@@ -285,7 +287,6 @@ export const useLoginViewModel = (
     }
 
     async function importUnencryptedDatabaseFromFile(targetFiles: FileList | null, name: string, password: string) {
-        console.error("FIXME")
         if (!targetFiles) {
             return;
         }
@@ -304,7 +305,6 @@ export const useLoginViewModel = (
         }
         createDatabase(name, password);
         setToImportItems(newItems);
-        //FIXME hier implementieren, wie nach öffnen Einträge eingesetzt werden
     }
 
     function parseCsvLineToItem(line: string): Item | undefined {

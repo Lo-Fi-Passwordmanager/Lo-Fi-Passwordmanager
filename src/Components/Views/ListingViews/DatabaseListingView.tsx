@@ -1,12 +1,12 @@
 import type {AutomergeUrl} from "@automerge/automerge-repo";
 import React from "react";
+import {useTranslation} from "react-i18next";
 import {HiTrash} from "react-icons/hi";
 
 import DatabaseListingViewModel from "../../ViewModels/Listing/DatabaseListingViewModel.ts";
 import CopyButton from "../ButtonViews/CopyButton.tsx";
 import RenameDatabaseDialog from "../DialogViews/RenameDatabaseDialog.tsx";
 import ShareDatabaseQRDialog from "../DialogViews/ShareDatabaseQRDialog.tsx";
-import {useTranslation} from "react-i18next";
 
 /**
  * View showing a listing of available databases with options to open, share, rename or delete them.

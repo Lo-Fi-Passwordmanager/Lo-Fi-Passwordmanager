@@ -19,7 +19,7 @@ const useDatabaseSettingsViewModel = (automergeFacade: AutomergeFacade, reactive
 
     function exportDatabase(): void {
         void saveFile(automergeFacade.exportAutomergeToBinary());
-        showToast("Erfolgreich exportiert")
+        showToast(t("settings.export_success"))
     }
 
     function exportToCsvFile() {

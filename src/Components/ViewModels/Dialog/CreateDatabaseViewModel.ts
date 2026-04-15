@@ -1,6 +1,7 @@
 import type {AutomergeUrl} from "@automerge/automerge-repo";
 import {isValidAutomergeUrl} from "@automerge/react";
 import {useState} from "react";
+import {useTranslation} from "react-i18next";
 
 import {useToast} from "../Provider/ToastProviderViewModel.ts";
 
@@ -28,6 +29,7 @@ export const useCreateDatabaseViewModel = (
     const [targetFiles, setTargetFiles] = useState<FileList | null>(null);
 
     const [showToast, _] = useToast();
+    const {t} = useTranslation();
 
 
     /**
@@ -43,14 +45,14 @@ export const useCreateDatabaseViewModel = (
             importUnencryptedDatabaseFromFile(targetFiles, field1, field2);
         } else {
             if (!field1 || !field2) {
-                showToast("Bitte alle Felder ausfüllen.");
+                showToast(t("add_database.create_new.empty_field"));
                 return;
             }
             if (selectedImportType === "new") {
                 createDatabase(field1, field2);
             } else if (selectedImportType === "url") {
                 if (!isValidAutomergeUrl(("automerge:" + field2) as AutomergeUrl)) {
-                    showToast("Keine valide AutomergeUrl.");
+                    showToast(t("add_database.create_new.invalid_id"));
                     return;
                 }
                 storeDatabase(field1, ("automerge:" + field2) as AutomergeUrl);

@@ -1,4 +1,5 @@
 import React from "react";
+import {useTranslation} from "react-i18next";
 
 import {useToast} from "../Provider/ToastProviderViewModel.ts";
 
@@ -18,19 +19,20 @@ const useAddServerDialogViewModel = (
     const [name, setName] = React.useState("");
     const [url, setUrl] = React.useState("");
     const [showToast, _] = useToast()
+    const {t} = useTranslation();
 
     const handleAddServer = () => {
         if (name.trim() === "" || url.trim() === "") {
-            showToast("Name und URL dürfen nicht leer sein.");
+            showToast(t("settings.server.add_server.empyt_url"));
             return;
         } else if (servers.get(name.trim())) {
-            showToast("Ein Server mit diesem Namen existiert bereits.");
+            showToast(t("settings.server.add_server.duplicate_name"));
             return;
         } else if ((new Set(servers.values())).has(url.trim())) {
-            showToast(`Ein Server mit dieser URL existiert bereits.`);
+            showToast(t("settings.server.add_server.duplicate_url"));
             return;
         } else if (!validateWsUrl(url.trim())) {
-            showToast("Invalide URL. Bitte gültige Websocket URL eingeben.");
+            showToast(t("settings.server.add_server.invalid_url"));
             return;
         }
 

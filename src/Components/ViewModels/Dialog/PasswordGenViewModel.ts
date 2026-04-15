@@ -1,4 +1,5 @@
 import {useState} from "react";
+import {useTranslation} from "react-i18next";
 
 import {
     generatePassword,
@@ -27,10 +28,11 @@ export const usePasswordGenViewModel = (setNewPassword: (password: string) => vo
     const [passwordGenOpen, setPasswordGenOpen] = useState(false);
 
     const [showToast, _] = useToast();
+    const {t} = useTranslation();
 
     function handleConfirm() {
         if(!uppercase && !lowercase && !numbers && !special) {
-            showToast("Keine Zeichengruppe ausgewählt!");
+            showToast(t("pw_gen.none"));
             return;
         }
         const characters: string[] = getCharacters(uppercase, lowercase, numbers, special);

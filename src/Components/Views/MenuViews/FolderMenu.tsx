@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
+import {useTranslation} from "react-i18next";
 import {HiPencil, HiTrash} from "react-icons/hi";
 import {HiEllipsisVertical, HiMiniPlus} from "react-icons/hi2";
-import {useTranslation} from "react-i18next";
 
 /**
  * A 3-dot menu for folders which contains buttons to create an item, edit the title and delete the folder

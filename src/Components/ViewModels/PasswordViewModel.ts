@@ -79,7 +79,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
         for (const id of itemsDeleted) {
             if (curItem.id === id && curItem.isEntry()) {
                 curItem.deleted = true;
-                showToast("Der aktuell ausgewählte Eintrag wurde gelöscht");
+                showToast(t("entry_view.current_entry_deleted"));
                 break;
             }
         }
@@ -298,15 +298,15 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
         clipboardTimerRef.current = window.setTimeout(() => {
             if (document.hasFocus()) {
                 void navigator.clipboard.writeText("");
-                showToast("Zwischenablage gelöscht");
+                showToast(t("common.clear_clipboard"));
                 clipboardTimerRef.current = null;
             } else {
                 // If user is away, wait until they come back
-                showToast("Löschen ausstehend (bitte Tab fokussieren)");
+                showToast(t("common.waiting_clear_clipboard"));
                 window.addEventListener("focus",
                     () => {
                         void navigator.clipboard.writeText("");
-                        showToast("Zwischenablage gelöscht");
+                        showToast(t("common.clear_clipboard"));
                     },
                     {once: true});
                 clipboardTimerRef.current = null;
@@ -592,7 +592,7 @@ export const usePasswordViewModel = (automergeFacade: AutomergeFacade, itemsDele
         if (!inEditable) {
             setCurItem(getRootFolder());
         } else {
-            showToast("Bitte zuerst die Bearbeitungsansicht verlassen");
+            showToast(t("entry_view.leave_first"));
         }
     }
 

@@ -3,12 +3,14 @@
     "create_new": {
       "action": {
         "file_encrypted": "Importar base de datos cifrada",
-        "file_plain": "Importar base de datos sin cifrar",
+        "file_plain": "Importar base de datos no cifrada",
         "new": "Crear nueva base de datos",
         "url": "Cargar base de datos existente"
       },
-      "choose_action": "Seleccionar acción:",
+      "choose_action": "Elegir acción:",
       "choose_file": "Seleccionar archivo",
+      "empty_field": "Por favor, complete todos los campos.",
+      "invalid_id": "No es una AutomergeUrl válida.",
       "title": "Añadir nueva base de datos"
     },
     "placeholder": {
@@ -29,18 +31,20 @@
     "show_password": "Mostrar contraseña"
   },
   "common": {
+    "clear_clipboard": "Portapapeles borrado.",
     "copied_clipboard": "Copiado al portapapeles.",
     "copy_db_id": "Copiar ID de la base de datos",
-    "delete_db": "Eliminar base de datos local",
+    "delete_db": "Eliminar base de datos localmente",
     "entry": "Entrada",
     "folder": "Carpeta",
     "new_entry": "Nueva entrada",
     "new_folder": "Nueva carpeta",
-    "show_qr": "Mostrar código QR"
+    "show_qr": "Mostrar código QR",
+    "waiting_clear_clipboard": "Borrando portapapeles pendiente (por favor, enfoque la pestaña)"
   },
   "dialog": {
     "confirm_delete": {
-      "text": "¿Realmente deseas eliminar el/la {{delete_type}} \"<strong>{{item_title}}</strong>\"?",
+      "text": "¿Realmente desea eliminar el {{delete_type}} \"<strong>{{item_title}}</strong>\"?",
       "title": "Confirmar eliminación"
     }
   },
@@ -49,7 +53,7 @@
     "close": "Cerrar menú",
     "delete": "Eliminar carpeta",
     "open": "Abrir menú",
-    "rename": "Cambiar nombre de carpeta"
+    "rename": "Renombrar carpeta"
   },
   "entry_view": {
     "attributes": {
@@ -57,12 +61,14 @@
       "edited_at": "Editado el: ",
       "note": "Nota:",
       "password": "Contraseña:",
-      "url": "URL:",
+      "url": "Url:",
       "username": "Nombre de usuario:"
     },
+    "current_entry_deleted": "La entrada seleccionada actualmente ha sido eliminada",
     "delete": "Eliminar",
     "edit": "Editar",
-    "none_selected": "Ninguna entrada seleccionada",
+    "leave_first": "Por favor, salga primero de la vista de edición",
+    "none_selected": "Aún no se ha seleccionado ninguna entrada",
     "save": "Guardar"
   },
   "filtered_list": {
@@ -116,21 +122,31 @@
   "login": {
     "desc": {
       "add": "Crear nueva base de datos",
-      "copy_id": "Copiar ID de base de datos al portapapeles",
-      "remove": "Quitar base de datos"
+      "copy_id": "Copiar ID de la base de datos al portapapeles",
+      "remove": "Eliminar base de datos"
     },
+    "duplicate_id": "¡Ya existe una base de datos con esta URL!",
+    "duplicate_name": "¡Ya existe una base de datos con este nombre!",
+    "new_db": "Nueva base de datos",
     "no_database": "No hay bases de datos disponibles",
-    "open": "Abrir base de datos"
+    "no_file": "Por favor, seleccione un archivo.",
+    "no_load": "¡No se pudo cargar la base de datos!",
+    "no_name": "Por favor, introduzca un nombre",
+    "no_pw": "Por favor, introduzca una contraseña.",
+    "open": "Abrir base de datos",
+    "wrong_file": "No se pudo leer el archivo.",
+    "wrong_pw": "¡Contraseña maestra incorrecta!"
   },
   "pw_gen": {
     "length": "Longitud de contraseña:",
     "lowercase": "Minúsculas",
+    "none": "¡Ningún grupo de caracteres seleccionado!",
     "numbers": "Números",
     "special": "Caracteres especiales:",
     "uppercase": "Mayúsculas:"
   },
   "rename_db": {
-    "title": "Cambiar nombre de la base de datos:"
+    "title": "Renombrar base de datos:"
   },
   "settings": {
     "about": {
@@ -140,21 +156,23 @@
       "version": "Versión: "
     },
     "appearance": {
-      "custom": "Color personalizado:",
+      "custom": "Color propio:",
       "scheme": "Esquema de colores"
     },
     "database": {
-      "none": "Por favor, selecciona una base de datos."
+      "none": "Por favor, seleccione una base de datos."
     },
     "desc": {
-      "decrease_timeout": "Disminuir tiempo para cierre de sesión",
-      "increase_timeout": "Aumentar tiempo para cierre de sesión",
+      "decrease_timeout": "Reducir tiempo hasta cierre de sesión",
+      "increase_timeout": "Aumentar tiempo hasta cierre de sesión",
       "open": "Abrir ajustes"
     },
     "export_encrypted": "Exportar cifrado",
-    "export_unencrypted": "Exportar sin cifrar",
+    "export_success": "Exportado con éxito",
+    "export_unencrypted": "Exportar no cifrado",
     "inactivity": {
-      "title": "Minutos hasta el cierre de sesión:"
+      "logout": "El usuario ha cerrado sesión automáticamente por inactividad.",
+      "title": "Minutos hasta cierre de sesión:"
     },
     "language": {
       "english": "Inglés",
@@ -163,25 +181,30 @@
       "spanish": "Español"
     },
     "p2p": {
-      "connect": "Conectar con par (Peer)",
+      "connect": "Conectar con par (peer)",
       "connected_peers": "Pares conectados:",
+      "new": "Nueva conexión Peer-To-Peer establecida.",
       "other_peer": "ID de par ajeno:",
       "own": "ID de par propio:",
-      "scan_qr": "Escanea el código QR en otro dispositivo en los ajustes bajo \"Ajustes\" → \"Conexión Peer-to-Peer\"",
+      "scan_qr": "Escanee el código QR en otro dispositivo en los ajustes bajo \"Ajustes\" → \"Conexión Peer-To-Peer\"",
       "share": "Compartir ID de par",
-      "title": "Conexión Peer-to-Peer"
+      "title": "Conexión Peer-To-Peer"
     },
     "server": {
       "add_server": {
-        "placeholder_name": "Mi Servidor",
-        "placeholder_url": "wss://mi.sync-server.org",
+        "duplicate_name": "Ya existe un servidor con este nombre.",
+        "duplicate_url": "Ya existe un servidor con esta URL.",
+        "empty_url": "El nombre y la URL no pueden estar vacíos.",
+        "invalid_url": "URL inválida. Por favor, introduzca una URL websocket válida.",
+        "placeholder_name": "Mi servidor",
+        "placeholder_url": "wss://mi.servidor-sync.org",
         "title": "Añadir servidor"
       },
       "desc": {
         "add": "Añadir servidor de sincronización",
         "connected": "Conectado",
         "connecting": "Estableciendo conexión...",
-        "remove": "Quitar servidor"
+        "remove": "Eliminar servidor"
       },
       "title": "Servidor de sincronización"
     },
@@ -197,13 +220,13 @@
       "inactivity": "Cerrar sesión por inactividad",
       "p2p_sync": "Sincronización Peer-to-Peer",
       "recursive_delete": "Eliminación recursiva de entradas de carpeta",
-      "server_sync": "Sincronización por servidor"
+      "server_sync": "Sincronización de servidor"
     }
   },
   "share_db": {
     "import": "Importar base de datos",
     "invalid_qr": "Código QR no válido",
-    "scan_qr": "Escanea el código QR en otro dispositivo en el diálogo \"Añadir base de datos\" para añadir allí la base de datos con el nombre \"{{name}}\".",
+    "scan_qr": "Escanee el código QR en otro dispositivo en el diálogo \"Añadir base de datos\" para añadir allí la base de datos con el nombre \"{{name}}\".",
     "share_name": "Compartir también el nombre de la base de datos",
     "title": "Compartir base de datos"
   }

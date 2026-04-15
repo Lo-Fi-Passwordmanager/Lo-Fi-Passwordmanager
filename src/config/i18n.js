@@ -14,7 +14,7 @@ i18n.use(initReactI18next).use(LanguageDetector).init({
         es: { translation: esTranslations },
     },
     defaultNS: 'translation',
-    fallbackLng: 'de',
+    fallbackLng: 'en',
     interpolation: {
         escapeValue: false,
     },

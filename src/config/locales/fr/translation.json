@@ -2,13 +2,15 @@
   "add_database": {
     "create_new": {
       "action": {
-        "file_encrypted": "Importer une base de données chiffrée",
-        "file_plain": "Importer une base de données non chiffrée",
+        "file_encrypted": "Importer une base de données cryptée",
+        "file_plain": "Importer une base de données non cryptée",
         "new": "Créer une nouvelle base de données",
         "url": "Charger une base de données existante"
       },
       "choose_action": "Choisir une action :",
       "choose_file": "Choisir un fichier",
+      "empty_field": "Veuillez remplir tous les champs.",
+      "invalid_id": "Url Automerge non valide.",
       "title": "Ajouter une nouvelle base de données"
     },
     "placeholder": {
@@ -25,22 +27,24 @@
     "copy_clipboard": "Copier dans le presse-papiers",
     "delete": "Supprimer",
     "hide_password": "Masquer le mot de passe",
-    "regroup_items": "Déplacer entrées et dossiers",
+    "regroup_items": "Déplacer les entrées et dossiers",
     "show_password": "Afficher le mot de passe"
   },
   "common": {
+    "clear_clipboard": "Presse-papiers effacé.",
     "copied_clipboard": "Copié dans le presse-papiers.",
     "copy_db_id": "Copier l'ID de la base de données",
-    "delete_db": "Supprimer la base de données locale",
+    "delete_db": "Supprimer la base de données localement",
     "entry": "Entrée",
     "folder": "Dossier",
     "new_entry": "Nouvelle entrée",
     "new_folder": "Nouveau dossier",
-    "show_qr": "Afficher le code QR"
+    "show_qr": "Afficher le code QR",
+    "waiting_clear_clipboard": "Effacement du presse-papiers en attente (veuillez focaliser l'onglet)"
   },
   "dialog": {
     "confirm_delete": {
-      "text": "Voulez-vous vraiment supprimer le/la {{delete_type}} \"<strong>{{item_title}}</strong>\" ?",
+      "text": "Voulez-vous vraiment supprimer le {{delete_type}} \"<strong>{{item_title}}</strong>\" ?",
       "title": "Confirmer la suppression"
     }
   },
@@ -57,12 +61,14 @@
       "edited_at": "Modifié le : ",
       "note": "Note :",
       "password": "Mot de passe :",
-      "url": "URL :",
+      "url": "Url :",
       "username": "Nom d'utilisateur :"
     },
+    "current_entry_deleted": "L'entrée actuellement sélectionnée a été supprimée",
     "delete": "Supprimer",
     "edit": "Modifier",
-    "none_selected": "Aucune entrée sélectionnée",
+    "leave_first": "Veuillez d'abord quitter le mode édition",
+    "none_selected": "Aucune entrée sélectionnée pour le moment",
     "save": "Enregistrer"
   },
   "filtered_list": {
@@ -80,7 +86,7 @@
     "found_folders": "Dossiers trouvés",
     "individual": "Individuel",
     "placeholder_search": "Rechercher...",
-    "recently": "Récemment utilisés",
+    "recently": "Récemment utilisé",
     "relevance": "Pertinence"
   },
   "history": {
@@ -116,44 +122,56 @@
   "login": {
     "desc": {
       "add": "Créer une nouvelle base de données",
-      "copy_id": "Copier l'ID de la base de données",
+      "copy_id": "Copier l'ID de la base de données dans le presse-papiers",
       "remove": "Supprimer la base de données"
     },
+    "duplicate_id": "Une base de données avec cette URL existe déjà !",
+    "duplicate_name": "Une base de données avec ce nom existe déjà !",
+    "new_db": "Nouvelle base de données",
     "no_database": "Aucune base de données disponible",
-    "open": "Ouvrir la base de données"
+    "no_file": "Veuillez choisir un fichier.",
+    "no_load": "La base de données n'a pas pu être chargée !",
+    "no_name": "Veuillez entrer un nom",
+    "no_pw": "Veuillez entrer un mot de passe.",
+    "open": "Ouvrir la base de données",
+    "wrong_file": "Le fichier n'a pas pu être lu.",
+    "wrong_pw": "Mot de passe maître incorrect !"
   },
   "pw_gen": {
     "length": "Longueur du mot de passe :",
-    "lowercase": "Minuscules",
+    "lowercase": "Lettres minuscules",
+    "none": "Aucun groupe de caractères sélectionné !",
     "numbers": "Chiffres",
     "special": "Caractères spéciaux :",
-    "uppercase": "Majuscules :"
+    "uppercase": "Lettres majuscules :"
   },
   "rename_db": {
     "title": "Renommer la base de données :"
   },
   "settings": {
     "about": {
-      "info": "Ceci est une application collaborative de gestion de données. Le stockage et la transmission des données sont implémentés via la bibliothèque Automerge.\n De plus, les bibliothèques Idle Timer, React DnD Kit, React Icons, QR Scanner et React QR Code sont utilisées.",
+      "info": "Il s'agit d'une application collaborative de gestion de données. Le stockage et le transfert de données sont implémentés à l'aide de la bibliothèque Automerge.\n En outre, les bibliothèques Idle Timer, React DnD Kit, React Icons, QR Scanner et React QR Code sont utilisées.",
       "license": "Licence : ",
-      "license_notice": "Le logiciel est fourni \"en l'état\", sans aucune responsabilité.",
+      "license_notice": "Le logiciel est fourni \"tel quel\", sans aucune garantie.",
       "version": "Version : "
     },
     "appearance": {
       "custom": "Couleur personnalisée :",
-      "scheme": "Thème de couleurs"
+      "scheme": "Schéma de couleurs"
     },
     "database": {
       "none": "Veuillez sélectionner une base de données."
     },
     "desc": {
-      "decrease_timeout": "Diminuer le délai avant déconnexion",
-      "increase_timeout": "Augmenter le délai avant déconnexion",
+      "decrease_timeout": "Diminuer le temps avant déconnexion",
+      "increase_timeout": "Augmenter le temps avant déconnexion",
       "open": "Ouvrir les paramètres"
     },
-    "export_encrypted": "Exporter chiffré",
-    "export_unencrypted": "Exporter non chiffré",
+    "export_encrypted": "Exporter crypté",
+    "export_success": "Exporté avec succès",
+    "export_unencrypted": "Exporter non crypté",
     "inactivity": {
+      "logout": "L'utilisateur a été déconnecté automatiquement pour cause d'inactivité.",
       "title": "Minutes avant déconnexion :"
     },
     "language": {
@@ -163,22 +181,27 @@
       "spanish": "Espagnol"
     },
     "p2p": {
-      "connect": "Se connecter à un pair (Peer)",
+      "connect": "Se connecter au pair",
       "connected_peers": "Pairs connectés :",
+      "new": "Nouvelle connexion Peer-To-Peer établie.",
       "other_peer": "ID du pair distant :",
       "own": "Votre ID de pair :",
-      "scan_qr": "Scannez le code QR d'un autre appareil dans les réglages sous \"Paramètres\" → \"Connexion Peer-to-Peer\"",
-      "share": "Partager l'ID de pair",
-      "title": "Connexion Peer-to-Peer"
+      "scan_qr": "Scannez le code QR d'un autre appareil dans les paramètres sous \"Paramètres\" → \"Connexion Peer-To-Peer\"",
+      "share": "Partager l'ID du pair",
+      "title": "Connexion Peer-To-Peer"
     },
     "server": {
       "add_server": {
-        "placeholder_name": "Mon Serveur",
-        "placeholder_url": "wss://my.sync-server.org",
+        "duplicate_name": "Un serveur avec ce nom existe déjà.",
+        "duplicate_url": "Un serveur avec cette URL existe déjà.",
+        "empty_url": "Le nom et l'URL ne peuvent pas être vides.",
+        "invalid_url": "URL invalide. Veuillez saisir une URL websocket valide.",
+        "placeholder_name": "Mon serveur",
+        "placeholder_url": "wss://mon.serveur-sync.org",
         "title": "Ajouter un serveur"
       },
       "desc": {
-        "add": "Ajouter un serveur de sync",
+        "add": "Ajouter un serveur de synchronisation",
         "connected": "Connecté",
         "connecting": "Connexion en cours...",
         "remove": "Supprimer le serveur"
@@ -186,9 +209,9 @@
       "title": "Serveur de synchronisation"
     },
     "subsettings": {
-      "about": "À propos de l'app",
+      "about": "À propos de l'application",
       "appearance": "Apparence",
-      "database": "Paramètres de base de données",
+      "database": "Paramètres de la base de données",
       "general": "Paramètres généraux"
     },
     "title": "Paramètres",
@@ -196,7 +219,7 @@
       "dark_mode": "Mode sombre",
       "inactivity": "Déconnexion en cas d'inactivité",
       "p2p_sync": "Synchronisation Peer-to-Peer",
-      "recursive_delete": "Suppression récursive du contenu des dossiers",
+      "recursive_delete": "Suppression récursive des entrées de dossier",
       "server_sync": "Synchronisation par serveur"
     }
   },

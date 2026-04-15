@@ -7,8 +7,10 @@
         "new": "Create new database",
         "url": "Load existing database"
       },
-      "choose_action": "Select action:",
+      "choose_action": "Choose action:",
       "choose_file": "Select file",
+      "empty_field": "Please fill in all fields.",
+      "invalid_id": "Not a valid AutomergeUrl.",
       "title": "Add new database"
     },
     "placeholder": {
@@ -29,18 +31,20 @@
     "show_password": "Show password"
   },
   "common": {
+    "clear_clipboard": "Clipboard cleared.",
     "copied_clipboard": "Copied to clipboard.",
     "copy_db_id": "Copy database ID",
-    "delete_db": "Delete local database",
+    "delete_db": "Delete database locally",
     "entry": "Entry",
     "folder": "Folder",
     "new_entry": "New entry",
     "new_folder": "New folder",
-    "show_qr": "Show QR code"
+    "show_qr": "Show QR code",
+    "waiting_clear_clipboard": "Pending clipboard clearing (please focus tab)"
   },
   "dialog": {
     "confirm_delete": {
-      "text": "Are you sure you want to delete the {{delete_type}} \"<strong>{{item_title}}</strong>\"?",
+      "text": "Do you really want to delete the {{delete_type}} \"<strong>{{item_title}}</strong>\"?",
       "title": "Confirm deletion"
     }
   },
@@ -57,12 +61,14 @@
       "edited_at": "Edited on: ",
       "note": "Note:",
       "password": "Password:",
-      "url": "URL:",
+      "url": "Url:",
       "username": "Username:"
     },
+    "current_entry_deleted": "The currently selected entry has been deleted",
     "delete": "Delete",
     "edit": "Edit",
-    "none_selected": "No entry selected",
+    "leave_first": "Please exit edit mode first",
+    "none_selected": "No entry selected yet",
     "save": "Save"
   },
   "filtered_list": {
@@ -75,7 +81,7 @@
       "sort_asc": "Sort descending",
       "sort_des": "Sort ascending"
     },
-    "edited": "Edit date",
+    "edited": "Editing date",
     "found_entries": "Entries found",
     "found_folders": "Folders found",
     "individual": "Individual",
@@ -107,7 +113,7 @@
     }
   },
   "item_creation": {
-    "title": "Create new item"
+    "title": "Create new element"
   },
   "just_synced": "Synced.",
   "loading": {
@@ -119,12 +125,22 @@
       "copy_id": "Copy database ID to clipboard",
       "remove": "Remove database"
     },
+    "duplicate_id": "A database with this URL already exists!",
+    "duplicate_name": "A database with this name already exists!",
+    "new_db": "New database",
     "no_database": "No databases available",
-    "open": "Open database"
+    "no_file": "Please select a file.",
+    "no_load": "The database could not be loaded!",
+    "no_name": "Please enter a name",
+    "no_pw": "Please enter a password.",
+    "open": "Open database",
+    "wrong_file": "File could not be read.",
+    "wrong_pw": "Incorrect master password!"
   },
   "pw_gen": {
     "length": "Password length:",
     "lowercase": "Lowercase letters",
+    "none": "No character group selected!",
     "numbers": "Numbers",
     "special": "Special characters:",
     "uppercase": "Uppercase letters:"
@@ -151,9 +167,11 @@
       "increase_timeout": "Increase time until logout",
       "open": "Open settings"
     },
-    "export_encrypted": "Export encrypted",
-    "export_unencrypted": "Export unencrypted",
+    "export_encrypted": "Export Encrypted",
+    "export_success": "Exported successfully",
+    "export_unencrypted": "Export Unencrypted",
     "inactivity": {
+      "logout": "The user was automatically logged out due to inactivity.",
       "title": "Minutes until logout:"
     },
     "language": {
@@ -165,14 +183,19 @@
     "p2p": {
       "connect": "Connect to peer",
       "connected_peers": "Connected peers:",
-      "other_peer": "Remote Peer ID:",
+      "new": "New peer-to-peer connection established.",
+      "other_peer": "External Peer ID:",
       "own": "Your Peer ID:",
-      "scan_qr": "Scan the QR code on another device in the settings under \"Settings\" → \"Peer-to-Peer Connection\"",
+      "scan_qr": "Scan the QR code on another device in the settings under \"Settings\" → \"Peer-To-Peer Connection\"",
       "share": "Share Peer ID",
-      "title": "Peer-to-Peer Connection"
+      "title": "Peer-To-Peer Connection"
     },
     "server": {
       "add_server": {
+        "duplicate_name": "A server with this name already exists.",
+        "duplicate_url": "A server with this URL already exists.",
+        "empty_url": "Name and URL must not be empty.",
+        "invalid_url": "Invalid URL. Please enter a valid websocket URL.",
         "placeholder_name": "My Server",
         "placeholder_url": "wss://my.sync-server.org",
         "title": "Add server"
@@ -180,7 +203,7 @@
       "desc": {
         "add": "Add sync server",
         "connected": "Connected",
-        "connecting": "Connecting...",
+        "connecting": "Establishing connection...",
         "remove": "Remove server"
       },
       "title": "Synchronization Server"
@@ -195,15 +218,15 @@
     "toggles": {
       "dark_mode": "Dark Mode",
       "inactivity": "Log out on inactivity",
-      "p2p_sync": "Peer-to-Peer Synchronization",
+      "p2p_sync": "Peer-to-peer synchronization",
       "recursive_delete": "Recursive deletion of folder entries",
-      "server_sync": "Server Synchronization"
+      "server_sync": "Server synchronization"
     }
   },
   "share_db": {
     "import": "Import database",
     "invalid_qr": "Invalid QR code",
-    "scan_qr": "Scan the QR code on another device in the \"Add Database\" dialog to add the database named \"{{name}}\" there.",
+    "scan_qr": "Scan the QR code on another device in the \"Add database\" dialog to add the database named \"{{name}}\" there.",
     "share_name": "Also share database name",
     "title": "Share database"
   }

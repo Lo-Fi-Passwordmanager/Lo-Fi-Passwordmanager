@@ -11,6 +11,7 @@ import {
     WebSocketClientAdapter
 } from "@automerge/react";
 import {useEffect, useState} from "react";
+import {useTranslation} from "react-i18next";
 import {useIdleTimer} from "react-idle-timer";
 
 import {useToast} from "./Provider/ToastProviderViewModel.ts";
@@ -27,7 +28,7 @@ import {SecurityProvider} from "../../Utility/Security/SecurityProvider.ts";
  */
 export const usePasswordManagerViewModel = () => {
     const settings = useSettings();
-
+    const {t} = useTranslation();
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
     const [automergeFacade, setAutomergeFacade] = useState<AutomergeFacade | null>(null);
     const [securityProvider] = useState(() => new SecurityProvider());
@@ -90,7 +91,7 @@ export const usePasswordManagerViewModel = () => {
 
     useEffect(() => {
         if (connectorsSize > oldP2PSize) {
-            showToast("Neue PeerToPeer Verbindung aufgebaut.");
+            showToast(t("p2p.new"));
         }
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setOldP2PSize(connectorsSize);
@@ -177,7 +178,7 @@ export const usePasswordManagerViewModel = () => {
         if (Settings.getSettings().getTimeoutActive() && loggedIn) {
             closeLoggedIn();
             removeToast(toastId);
-            const id = showToast("Der Nutzer wurde auf Grund von Inaktivität automatisch abgemeldet.", -1);
+            const id = showToast(t("settings.inactivity.logout"), -1);
             setToastId(id);
         }
     };

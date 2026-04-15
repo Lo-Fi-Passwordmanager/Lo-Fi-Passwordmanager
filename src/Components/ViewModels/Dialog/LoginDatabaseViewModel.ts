@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import {useTranslation} from "react-i18next";
 
 import {useToast} from "../Provider/ToastProviderViewModel.ts";
 
@@ -14,6 +15,7 @@ export const useLoginDatabaseViewModel = (isOpen: boolean,
 
     const [field1, setField1] = useState("");
     const [showToast, _] = useToast()
+    const {t} = useTranslation();
 
     /**
      * Resets the input fields when the dialog is opened
@@ -29,7 +31,7 @@ export const useLoginDatabaseViewModel = (isOpen: boolean,
      */
     const handleConfirm = () => {
         if (!field1) {
-            showToast("Bitte ein Passwort eingeben.");
+            showToast(t("login.no_pw"));
             return;
         }
         tryOpenDatabase(field1);
