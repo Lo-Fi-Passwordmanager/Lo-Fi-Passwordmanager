@@ -60,8 +60,8 @@
       "url": "URL:",
       "username": "Username:"
     },
-    "delete": "Eliminar",
-    "edit": "Editar",
+    "delete": "Delete",
+    "edit": "Edit",
     "none_selected": "No entry selected",
     "save": "Save"
   },
